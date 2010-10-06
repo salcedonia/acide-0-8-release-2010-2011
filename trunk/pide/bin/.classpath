@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="des/|des/doc/|des/examples/|des/license/|des/sp311/BIN/|des/sp311/LIBRARY/|des/systems/ciao/|des/systems/gnu/|des/systems/sicstus/|des/systems/swi/|toy/|toy/docs/|toy/examples/|toy/examples/apifd/|toy/examples/cflpfd/|toy/examples/cflpr/|toy/examples/debug/|toy/examples/failure/|toy/examples/flp/|toy/examples/fp/|toy/examples/h_constr/|toy/examples/io_file/|toy/examples/io_graphic/|toy/examples/lp/|toy/examples/tads/|toy/exec/|toy/exec/Linux/|toy/exec/Solaris/|toy/exec/Windows/|toy/include/|toy/javaTree/|toy/SP311/|toy/SP311/BIN/|toy/SP311/LIBRARY/|toy/SP311/LIBRARY/CLPFD/|toy/SP311/LIBRARY/CLPR/|hugs98/|hugs98/demos/|hugs98/demos/prolog/|hugs98/docs/|hugs98/docs/hugs/|hugs98/docs/library/|hugs98/docs/libs/|hugs98/docs/report/|hugs98/icons/|hugs98/lib/|hugs98/lib/exts/|hugs98/lib/hugs/|hugs98/lib/win32/|hugs98/src/|hugs98/src/bcc32/|hugs98/src/djgpp2/|hugs98/src/mac/|hugs98/src/msc/|hugs98/src/resource/|hugs98/src/resource/Release/|hugs98/src/unix/|hugs98/src/win32/" kind="src" path=""/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/cglib-nodep-2.1_3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/jmock-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/joda-time-1.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/junit-3.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/stax-1.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/xml-writer-0.2.jar"/>
+	<classpathentry kind="lib" path="lib/xom-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/xpp3_min-1.1.3.4.O.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,2 @@
+DESDE LA CARPETA pide/bin
+jar cfm acide.jar manifiesto.txt *.*

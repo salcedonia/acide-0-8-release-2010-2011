@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Sealed: true
+Main-Class: principal.Acide
+Class-Path: lib\xpp3_min-1.1.3.4.O.jar

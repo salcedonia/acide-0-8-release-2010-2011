@@ -1,0 +1,4 @@
+He implementado la clase explrador para que reconozca el arbol de 
+directorios dentro de la propia carpeta de PIDE, ya que si tomo como raiz 
+c: el tiempo de generacion del arbol es inaceptable. Cuando configuremos 
+la carpeta de trabajo o workspace de PIDE, esa sara la raiz.
