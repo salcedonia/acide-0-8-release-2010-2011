@@ -1,0 +1,5 @@
+flight(mad,par).
+flight(par, ny).
+flight(lon, ny).
+
+notflight(X,Y) :- not(flight(X,Y)).

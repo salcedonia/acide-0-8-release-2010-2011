@@ -1,0 +1,42 @@
+% Relations
+a(a1).
+a(a2).
+a(a3).
+
+b(b1).
+b(b2).
+b(a1).
+
+c(a1,b2).
+c(a1,a1).
+c(a2,b2).
+
+% (Extended) Relational Algebra Operations
+
+% pi(X)(c(X,Y))
+projection(X) :- c(X,Y).
+
+%sigma(X=a2)(a)
+selection(X) :- a(X), X=a2.
+
+% a X b
+cartesian(X,Y) :- a(X), b(Y).
+
+% a |x| b
+inner_join(X) :- a(X), b(X).
+
+% a =|x| b
+left_join(X,Y) :- lj(a(X), b(Y), X=Y).
+
+% a |x|= b
+right_join(X,Y) :- rj(a(X), b(Y), X=Y).
+
+% a =|x|= b
+full_join(X,Y) :- fj(a(X), b(Y), X=Y).
+
+% a U b
+union(X) :- a(X) ; b(X).
+
+% a - b
+difference(X) :- a(X), not(b(X)).
+

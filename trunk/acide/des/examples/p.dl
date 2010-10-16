@@ -1,0 +1,2 @@
+br_is_even :-
+  not(next(X,Y)).
