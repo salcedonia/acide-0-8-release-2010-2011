@@ -1,6 +1,0 @@
-             planet
-          -/   +|   +\
-intermediate  orbits  star
-    +/ +\
-orbits  orbits
-

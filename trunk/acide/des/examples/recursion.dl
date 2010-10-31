@@ -1,5 +1,0 @@
-% Basic Recursion Problems
-% Query: p(1)
-p(0).
-p(X) :- p(X).
-p(1).

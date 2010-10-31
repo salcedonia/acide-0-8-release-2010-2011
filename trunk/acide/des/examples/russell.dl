@@ -1,4 +1,0 @@
-shaves(barber,M) :- man(M), not(shaves(M,M)).
-man(barber).
-man(mayor).
-shaved(M) :- shaves(barber,M).
