@@ -1,0 +1,674 @@
+<es.configuration.programmingLanguage.ProgrammingLanguage>
+  <__logger>
+    <name>LogAcide</name>
+    <level serialization="custom">
+      <unserializable-parents/>
+      <org.apache.log4j.Level>
+        <default/>
+        <int>-2147483648</int>
+        <int>7</int>
+        <string>ALL</string>
+      </org.apache.log4j.Level>
+    </level>
+    <parent class="org.apache.log4j.spi.RootLogger">
+      <name>root</name>
+      <level serialization="custom">
+        <unserializable-parents/>
+        <org.apache.log4j.Level>
+          <default/>
+          <int>10000</int>
+          <int>7</int>
+          <string>DEBUG</string>
+        </org.apache.log4j.Level>
+      </level>
+      <repository class="org.apache.log4j.Hierarchy">
+        <defaultFactory class="org.apache.log4j.DefaultCategoryFactory"/>
+        <listeners/>
+        <ht>
+          <entry>
+            <org.apache.log4j.CategoryKey>
+              <name>LogAcide</name>
+              <hashCache>2050144900</hashCache>
+            </org.apache.log4j.CategoryKey>
+            <org.apache.log4j.Logger reference="../../../../.."/>
+          </entry>
+        </ht>
+        <root class="org.apache.log4j.spi.RootLogger" reference="../.."/>
+        <rendererMap>
+          <map/>
+        </rendererMap>
+        <thresholdInt>-2147483648</thresholdInt>
+        <threshold reference="../../../level"/>
+        <emittedNoAppenderWarning>false</emittedNoAppenderWarning>
+        <emittedNoResourceBundleWarning>false</emittedNoResourceBundleWarning>
+      </repository>
+      <additive>true</additive>
+    </parent>
+    <repository class="org.apache.log4j.Hierarchy" reference="../parent/repository"/>
+    <aai>
+      <appenderList>
+        <org.apache.log4j.RollingFileAppender>
+          <maxFileSize>102400</maxFileSize>
+          <maxBackupIndex>2</maxBackupIndex>
+          <fileAppend>false</fileAppend>
+          <fileName>.//log/logfile.txt</fileName>
+          <bufferedIO>false</bufferedIO>
+          <bufferSize>8192</bufferSize>
+          <immediateFlush>true</immediateFlush>
+          <qw class="org.apache.log4j.helpers.CountingQuietWriter">
+            <count>2338</count>
+            <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler">
+              <WARN__PREFIX>log4j warning: </WARN__PREFIX>
+              <ERROR__PREFIX>log4j error: </ERROR__PREFIX>
+              <firstTime>true</firstTime>
+            </errorHandler>
+            <out class="java.io.OutputStreamWriter">
+              <se>
+                <isOpen>true</isOpen>
+                <cs class="charset">windows-1252</cs>
+                <encoder class="sun.nio.cs.MS1252$Encoder">
+                  <index1>
+                    <short>0</short>
+                    <short>256</short>
+                    <short>461</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>698</short>
+                    <short>920</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                    <short>403</short>
+                  </index1>
+                  <index2>&#x0;	
+&#x0D; !&quot;#$%&amp;&apos;()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0; ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;??&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;??&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;?&#x0;&#x0;&#x0;&#x0;??&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;?&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;?&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;?&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;??&#x0;&#x0;&#x0;???&#x0;???&#x0;???&#x0;&#x0;&#x0;?&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;?&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;??&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;?&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;?&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;&#x0;</index2>
+                  <mask1>65280</mask1>
+                  <mask2>255</mask2>
+                  <shift>8</shift>
+                  <sgp>
+                    <character>0</character>
+                    <error>
+                      <type>0</type>
+                      <length>0</length>
+                    </error>
+                    <isPair>false</isPair>
+                  </sgp>
+                  <charset class="charset" reference="../../cs"/>
+                  <averageBytesPerChar>1.0</averageBytesPerChar>
+                  <maxBytesPerChar>1.0</maxBytesPerChar>
+                  <replacement>Pw==</replacement>
+                  <malformedInputAction>
+                    <name>REPLACE</name>
+                  </malformedInputAction>
+                  <unmappableCharacterAction reference="../malformedInputAction"/>
+                  <state>1</state>
+                  <cachedDecoder>
+                    <queue class="java.lang.ref.ReferenceQueue$Null">
+                      <lock/>
+                      <queueLength>0</queueLength>
+                    </queue>
+                    <next class="java.lang.ref.WeakReference" reference=".."/>
+                  </cachedDecoder>
+                </encoder>
+                <bb class="java.nio.HeapByteBuffer">
+                  <hb>MTggb2N0IDIwMTAgMjA6NDU6NDgsMzcxIFtBV1QtRXZlbnRRdWV1ZS0wXSBJTkZPICBMb2dBY2lk
+ZSAtIEluaWNpYWxpemFuZG8gdmVudGFuYSBkZSBjb25maWd1cmFjafNuIGzpeGljYS4uLgpsbE9u
+Lm1lbnVDZmcKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</hb>
+                  <offset>0</offset>
+                  <isReadOnly>false</isReadOnly>
+                  <bigEndian>true</bigEndian>
+                  <nativeByteOrder>false</nativeByteOrder>
+                  <mark>-1</mark>
+                  <position>0</position>
+                  <limit>8192</limit>
+                  <capacity>8192</capacity>
+                  <address>0</address>
+                </bb>
+                <out class="java.io.FileOutputStream">
+                  <fd>
+                    <fd>-1</fd>
+                    <handle>3384</handle>
+                  </fd>
+                  <append>false</append>
+                </out>
+                <haveLeftoverChar>false</haveLeftoverChar>
+                <leftoverChar null="true"/>
+                <writeBufferSize>1024</writeBufferSize>
+                <lock class="java.io.OutputStreamWriter" reference="../.."/>
+              </se>
+              <writeBufferSize>1024</writeBufferSize>
+              <lock class="java.io.FileOutputStream" reference="../se/out"/>
+            </out>
+            <writeBufferSize>1024</writeBufferSize>
+            <lock class="java.io.OutputStreamWriter" reference="../out"/>
+          </qw>
+          <layout class="org.apache.log4j.PatternLayout">
+            <BUF__SIZE>256</BUF__SIZE>
+            <MAX__CAPACITY>1024</MAX__CAPACITY>
+            <sbuf>18 oct 2010 20:45:48,371 [AWT-EventQueue-0] INFO  LogAcide - Inicializando ventana de configuración léxica...
+</sbuf>
+            <pattern>%d{date} [%t] %-5p %c - %m
+</pattern>
+            <head class="org.apache.log4j.helpers.PatternParser$DatePatternConverter">
+              <df class="org.apache.log4j.helpers.DateTimeDateFormat">
+                <shortMonths>
+                  <string>ene</string>
+                  <string>feb</string>
+                  <string>mar</string>
+                  <string>abr</string>
+                  <string>may</string>
+                  <string>jun</string>
+                  <string>jul</string>
+                  <string>ago</string>
+                  <string>sep</string>
+                  <string>oct</string>
+                  <string>nov</string>
+                  <string>dic</string>
+                  <string></string>
+                </shortMonths>
+                <calendar>
+                  <time>1287427548371</time>
+                  <timezone>Europe/Paris</timezone>
+                </calendar>
+              </df>
+              <date>2010-10-18 20:45:48.371 CEST</date>
+              <next class="org.apache.log4j.helpers.PatternParser$LiteralPatternConverter">
+                <literal> [</literal>
+                <next class="org.apache.log4j.helpers.PatternParser$BasicPatternConverter">
+                  <type>2001</type>
+                  <next class="org.apache.log4j.helpers.PatternParser$LiteralPatternConverter">
+                    <literal>] </literal>
+                    <next class="org.apache.log4j.helpers.PatternParser$BasicPatternConverter">
+                      <type>2002</type>
+                      <next class="org.apache.log4j.helpers.PatternParser$LiteralPatternConverter">
+                        <literal> </literal>
+                        <next class="org.apache.log4j.helpers.PatternParser$CategoryPatternConverter">
+                          <outer-class>
+                            <state>0</state>
+                            <currentLiteral>
+</currentLiteral>
+                            <patternLength>27</patternLength>
+                            <i>27</i>
+                            <head class="org.apache.log4j.helpers.PatternParser$DatePatternConverter" reference="../../../../../../../.."/>
+                            <tail class="org.apache.log4j.helpers.PatternParser$LiteralPatternConverter">
+                              <literal>
+</literal>
+                              <min>-1</min>
+                              <max>2147483647</max>
+                              <leftAlign>false</leftAlign>
+                            </tail>
+                            <formattingInfo>
+                              <min>-1</min>
+                              <max>2147483647</max>
+                              <leftAlign>false</leftAlign>
+                            </formattingInfo>
+                            <pattern>%d{date} [%t] %-5p %c - %m
+</pattern>
+                          </outer-class>
+                          <precision>0</precision>
+                          <next class="org.apache.log4j.helpers.PatternParser$LiteralPatternConverter">
+                            <literal> - </literal>
+                            <next class="org.apache.log4j.helpers.PatternParser$BasicPatternConverter">
+                              <type>2004</type>
+                              <next class="org.apache.log4j.helpers.PatternParser$LiteralPatternConverter" reference="../../../outer-class/tail"/>
+                              <min>-1</min>
+                              <max>2147483647</max>
+                              <leftAlign>false</leftAlign>
+                            </next>
+                            <min>-1</min>
+                            <max>2147483647</max>
+                            <leftAlign>false</leftAlign>
+                          </next>
+                          <min>-1</min>
+                          <max>2147483647</max>
+                          <leftAlign>false</leftAlign>
+                        </next>
+                        <min>-1</min>
+                        <max>2147483647</max>
+                        <leftAlign>false</leftAlign>
+                      </next>
+                      <min>5</min>
+                      <max>2147483647</max>
+                      <leftAlign>true</leftAlign>
+                    </next>
+                    <min>-1</min>
+                    <max>2147483647</max>
+                    <leftAlign>false</leftAlign>
+                  </next>
+                  <min>-1</min>
+                  <max>2147483647</max>
+                  <leftAlign>false</leftAlign>
+                </next>
+                <min>-1</min>
+                <max>2147483647</max>
+                <leftAlign>false</leftAlign>
+              </next>
+              <min>-1</min>
+              <max>2147483647</max>
+              <leftAlign>false</leftAlign>
+            </head>
+          </layout>
+          <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler" reference="../qw/errorHandler"/>
+          <closed>false</closed>
+        </org.apache.log4j.RollingFileAppender>
+      </appenderList>
+    </aai>
+    <additive>true</additive>
+  </__logger>
+  <__languageName>Default</__languageName>
+  <__languagePath>C:\Documents and Settings\Salcedonia\Mis documentos\acide\configuration\lexical\default.xml</__languagePath>
+  <__isCompiledOrInterpreted>false</__isCompiledOrInterpreted>
+  <__tokenList>
+    <__list>
+      <__list/>
+    </__list>
+  </__tokenList>
+  <__validExtensions>
+    <__list>
+      <__list>
+        <string>cpp</string>
+        <string>h</string>
+      </__list>
+    </__list>
+  </__validExtensions>
+  <__dividerList>
+    <__list>
+      <__list/>
+    </__list>
+  </__dividerList>
+  <__comments>
+    <__lineComment></__lineComment>
+    <__lineCommentColor>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+      <alpha>255</alpha>
+    </__lineCommentColor>
+  </__comments>
+</es.configuration.programmingLanguage.ProgrammingLanguage>

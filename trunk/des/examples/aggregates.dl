@@ -1,0 +1,147 @@
+% Datalog aggregates
+
+% employee(Name,Department,Salary)
+employee(anderson,accounting,1200).
+employee(andrews,accounting,1200).
+employee(arlingon,accounting,1000).
+employee(nolan,null,null).
+employee(norton,null,null).
+employee(randall,resources,800).
+employee(sanders,sales,null).
+employee(silver,sales,1000).
+employee(smith,sales,1000).
+employee(steel,sales,1020).
+employee(sullivan,sales,null).
+
+
+% Number of employees
+total_employees(T) :- 
+  count(employee(N,D,S),T).
+
+% Employees with assigned salary
+active_employees(T) :-
+  count(employee(N,D,S),S,T).
+
+% Sum of salaries
+sum_salary(Sum) :-
+  sum(employee(N,D,S),S,Sum).
+
+% Average salary
+avg_salary(AS) :-
+  avg(employee(N,D,S),S,AS).
+
+% Minimum salary
+min_salary(M) :-
+  min(employee(N,D,S),S,M).
+
+% Maximum salary
+max_salary(M) :-
+  max(employee(N,D,S),S,M).
+
+% Number of employees whose salary is greater than twice the average salary
+emp_sal_gt_avg(C) :-
+  count((employee(N,D,S),avg(employee(N1,D1,S1),S1,A),S>A),C).
+
+% Number of employees by department
+total_employees(D,T) :-
+  count(employee(N,D,S),T).
+
+% Employees with assigned salary by department
+active_employees(D,T) :-
+  count(employee(N,D,S),S,T).
+
+% Sum of salaries by department
+sum_salary(D,Sum) :-
+  sum(employee(N,D,S),S,Sum).
+
+% Average salary by department
+avg_salary(D,AS) :-
+  avg(employee(N,D,S),S,AS).
+
+% Minimum salary by department
+min_salary(D,M) :-
+  min(employee(N,D,S),S,M).
+
+% Maximum salary by department
+max_salary(D,M) :-
+  max(employee(N,D,S),S,M).
+
+% Number of employees whose salary is greater than the average salary
+emp_sal_gt_avg(D,C) :-
+  count((employee(N,D,S),avg(employee(N1,D1,S1),S1,A),S>A),C).
+
+% Test Queries:
+
+% total_employees(T)
+% active_employees(T)
+% sum_salary(Sum)
+% avg_salary(AS)
+% min_salary(M)
+% max_salary(M)
+% emp_sal_gt_avg(C)
+% total_employees(D,T)
+% active_employees(D,T)
+% sum_salary(D,Sum)
+% avg_salary(D,AS)
+% min_salary(D,M)
+% max_salary(D,M)
+% emp_sal_gt_avg(D,C)
+
+
+% DES-Datalog> emp_sal_gt_avg(C)
+
+% {
+% }
+% Info: 0 tuples computed.
+
+% DES-Datalog> /listing emp_sal_get_avg
+
+
+% DES-Datalog> /listing emp_sal_gt_avg 
+
+% emp_sal_gt_avg(C) :-
+%   count((employee(N,D,S),(avg(employee(N1,D1,S1),S1,A),S > A)),C).
+
+% DES-Datalog> /development on
+
+% Info: Development listings are on.
+
+% DES-Datalog> /listing emp_sal_gt_avg
+
+% '$p2'(N,D,S,N1,D1,S1,A) :-
+%   employee(N,D,S),
+%   avg(employee(N1,D1,S1),S1,A),
+%   S > A.
+% emp_sal_gt_avg(C) :-
+%   count('$p2'(N,D,S,N1,D1,S1,A),[],C).
+
+% DES-Datalog> '$p2'(N,D,S,N1,D1,S1,A)
+
+% {
+% }
+% Info: 0 tuples computed.
+
+% DES-Datalog> employee(N,D,S),avg(employee(N1,D1,S1),S1,A),S > A
+
+% Info: Processing:
+%   answer(N,D,S,A) :-
+%     employee(N,D,S),
+%     avg(employee(N1,D1,S1),S1,[],A),
+%     S > A.
+% {
+%   answer(a_a,accounting,1200,1033.3333333333333),
+%   answer(a_brown,accounting,1200,1033.3333333333333)
+% }
+% Info: 2 tuples computed.
+
+% DES-Datalog> c(X,C):-count((p(X,Y),Y>3),C)
+
+% Info: Processing:
+%   c(X,C)
+% in the program context of the exploded query:
+%   c(X,C) :-
+%     count('$p0'(Y,X),[X],C).
+%   '$p0'(Y,X) :-
+%     p(X,Y),
+%     Y > 3.
+% Exception: Non ground argument(s) found in goal c(A,0)

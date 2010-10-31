@@ -1,0 +1,8 @@
+% Mutual recursion
+
+p(a).
+p(b).
+q(c).
+q(d).
+p(X) :- q(X).
+q(X) :- p(X).

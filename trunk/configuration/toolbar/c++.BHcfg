@@ -1,0 +1,2 @@
+]N] show options ]C] bcc32 ]T] show options ]B] false ]I] ]F]
+]N] complie ]C] bcc32 -tW $activeFile$ ]T] compile a file ]B] false ]I] ]F]

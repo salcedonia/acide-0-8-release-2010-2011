@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="UTF-8"?><infoDebug><tree>
+   <node type="pr">
+     <predicate_name>br_is_even     </predicate_name>
+       <input_element>
+br_is_even
+       </input_element>
+
+
+   </node>
+   <children>
+<tree>
+   <node type="cl">
+     <predicate_name>br_is_even     </predicate_name>
+       <input_element>
+br_is_even
+       </input_element>
+
+
+     <rule>br_is_even:-even(_G124),not(next(_G124,_G129))     </rule>
+     <line_begin>29     </line_begin>
+     <line_end>31     </line_end>
+   </node>
+   <children>
+<tree>
+   <node type="pr">
+     <predicate_name>even(_G124)     </predicate_name>
+       <input_element>
+even(_G189)
+       </input_element>
+
+       <output_element>
+even(nil)
+       </output_element>
+
+   </node>
+   <children>
+<tree>
+   <node type="fact">
+     <predicate_name>even(_G124)     </predicate_name>
+       <input_element>
+even(_G189)
+       </input_element>
+
+       <output_element>
+even(nil), (20,22),_G251
+       </output_element>
+
+   </node>
+   <children>
+   </children>
+</tree>
+<tree>
+   <node type="cl">
+     <predicate_name>even(_G193)     </predicate_name>
+       <input_element>
+even(_G189)
+       </input_element>
+
+
+     <rule>even(_G193):-odd(_G198),next(_G198,_G193)     </rule>
+     <line_begin>23     </line_begin>
+     <line_end>23     </line_end>
+   </node>
+   <children>
+<tree>
+   <node type="pr">
+     <predicate_name>odd(_G198)     </predicate_name>
+       <input_element>
+odd(_G292)
+       </input_element>
+
+       <output_element>
+odd(b)
+       </output_element>
+
+   </node>
+   <children>
+<tree>
+   <node type="cl">
+     <predicate_name>odd(_G296)     </predicate_name>
+       <input_element>
+odd(_G292)
+       </input_element>
+
+       <output_element>
+odd(b)
+       </output_element>
+
+     <rule>odd(_G296):-even(_G301),next(_G301,_G296)     </rule>
+     <line_begin>25     </line_begin>
+     <line_end>27     </line_end>
+   </node>
+   <children>
+<tree>
+   <node type="dup">
+     <predicate_name>even(_G301)     </predicate_name>
+       <input_element>
+even(_G372)
+       </input_element>
+
+       <output_element>
+even(nil)
+       </output_element>
+
+     <reference>_G380     </reference>
+   </node>
+   <children>
+   </children>
+</tree>
+<tree>
+   <node type="pr_list">
+     <predicate_name>next(_G301,_G296)     </predicate_name>
+       <input_element>
+next(nil,_G296)
+       </input_element>
+
+       <output_element>
+next(nil,b)
+       </output_element>
+
+   </node>
+   <children>
+<tree>
+   <node type="pr">
+     <predicate_name>next(nil,_G494)     </predicate_name>
+       <input_element>
+next(nil,_G296)
+       </input_element>
+
+       <output_element>
+next(nil,b)
+       </output_element>
+
+   </node>
+   <children>
+<tree>
+   <node type="cl">
+     <predicate_name>next(nil,_G426)     </predicate_name>
+       <input_element>
+next(nil,_G296)
+       </input_element>
+
+
+     <rule>next(nil,_G426):-br(nil),br(_G426),nil<_G426,not(between(nil,_G426))     </rule>
+     <line_begin>10     </line_begin>
+     <line_end>12     </line_end>
+   </node>
+   <children>
+<tree>
+   <node type="pr">
+     <predicate_name>br(nil)     </predicate_name>
+       <input_element>
+br(nil)
+       </input_element>
+
+
+   </node>
+   <children>
+<tree>
+   <node type="fact">
+     <predicate_name>br(nil)     </predicate_name>
+       <input_element>
+br(nil)
+       </input_element>
+
+
+   </node>
+   <children>
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+<tree>
+   <node type="cl">
+     <predicate_name>next(nil,_G398)     </predicate_name>
+       <input_element>
+next(nil,_G296)
+       </input_element>
+
+       <output_element>
+next(nil,b)
+       </output_element>
+
+     <rule>next(nil,_G398):-br(_G398),not(has_preceding(_G398))     </rule>
+     <line_begin>14     </line_begin>
+     <line_end>14     </line_end>
+   </node>
+   <children>
+<tree>
+   <node type="pr">
+     <predicate_name>br(_G398)     </predicate_name>
+       <input_element>
+br(_G588)
+       </input_element>
+
+       <output_element>
+br(a)
+       </output_element>
+       <output_element>
+br(b)
+       </output_element>
+
+   </node>
+   <children>
+<tree>
+   <node type="fact">
+     <predicate_name>br(_G398)     </predicate_name>
+       <input_element>
+br(_G588)
+       </input_element>
+
+       <output_element>
+br(a), (37,39),_G634
+       </output_element>
+       <output_element>
+br(b), (40,40),_G620
+       </output_element>
+
+   </node>
+   <children>
+   </children>
+</tree>
+
+   </children>
+</tree>
+<tree>
+   <node type="pr_list">
+     <predicate_name>not(has_preceding(_G398))     </predicate_name>
+       <input_element>
+not(has_preceding(a))
+       </input_element>
+       <input_element>
+not(has_preceding(b))
+       </input_element>
+
+       <output_element>
+not(has_preceding(b))
+       </output_element>
+
+   </node>
+   <children>
+<tree>
+   <node type="pr">
+     <predicate_name>has_preceding(a)     </predicate_name>
+       <input_element>
+has_preceding(a)
+       </input_element>
+
+       <output_element>
+has_preceding(a)
+       </output_element>
+
+   </node>
+   <children>
+<tree>
+   <node type="cl">
+     <predicate_name>has_preceding(a)     </predicate_name>
+       <input_element>
+has_preceding(a)
+       </input_element>
+
+       <output_element>
+has_preceding(a)
+       </output_element>
+
+     <rule>has_preceding(a):-br(a),br(_G675),_G675>a     </rule>
+     <line_begin>16     </line_begin>
+     <line_end>18     </line_end>
+   </node>
+   <children>
+<tree>
+   <node type="pr">
+     <predicate_name>br(a)     </predicate_name>
+       <input_element>
+br(a)
+       </input_element>
+
+       <output_element>
+br(a)
+       </output_element>
+
+   </node>
+   <children>
+<tree>
+   <node type="fact">
+     <predicate_name>br(a)     </predicate_name>
+       <input_element>
+br(a)
+       </input_element>
+
+       <output_element>
+br(a), (37,39),_G792
+       </output_element>
+
+   </node>
+   <children>
+   </children>
+</tree>
+
+   </children>
+</tree>
+<tree>
+   <node type="pr_list">
+     <predicate_name>br(_G675)     </predicate_name>
+       <input_element>
+br(_G675)
+       </input_element>
+
+       <output_element>
+br(a)
+       </output_element>
+       <output_element>
+br(b)
+       </output_element>
+
+   </node>
+   <children>
+<tree>
+   <node type="dup">
+     <predicate_name>br(_G835)     </predicate_name>
+       <input_element>
+br(_G675)
+       </input_element>
+
+       <output_element>
+br(a)
+       </output_element>
+       <output_element>
+br(b)
+       </output_element>
+
+     <reference>_G843     </reference>
+   </node>
+   <children>
+   </children>
+</tree>
+
+   </children>
+</tree>
+<tree>
+   <node type="pr_list">
+     <predicate_name>_G675>a     </predicate_name>
+       <input_element>
+a>a
+       </input_element>
+       <input_element>
+b>a
+       </input_element>
+
+       <output_element>
+b>a
+       </output_element>
+
+   </node>
+   <children>
+
+
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+<tree>
+   <node type="pr">
+     <predicate_name>has_preceding(b)     </predicate_name>
+       <input_element>
+has_preceding(b)
+       </input_element>
+
+
+   </node>
+   <children>
+<tree>
+   <node type="cl">
+     <predicate_name>has_preceding(b)     </predicate_name>
+       <input_element>
+has_preceding(b)
+       </input_element>
+
+
+     <rule>has_preceding(b):-br(b),br(_G937),_G937>b     </rule>
+     <line_begin>16     </line_begin>
+     <line_end>18     </line_end>
+   </node>
+   <children>
+<tree>
+   <node type="pr">
+     <predicate_name>br(b)     </predicate_name>
+       <input_element>
+br(b)
+       </input_element>
+
+       <output_element>
+br(b)
+       </output_element>
+
+   </node>
+   <children>
+<tree>
+   <node type="fact">
+     <predicate_name>br(b)     </predicate_name>
+       <input_element>
+br(b)
+       </input_element>
+
+       <output_element>
+br(b), (40,40),_G1033
+       </output_element>
+
+   </node>
+   <children>
+   </children>
+</tree>
+
+   </children>
+</tree>
+<tree>
+   <node type="pr_list">
+     <predicate_name>br(_G937)     </predicate_name>
+       <input_element>
+br(_G937)
+       </input_element>
+
+       <output_element>
+br(a)
+       </output_element>
+       <output_element>
+br(b)
+       </output_element>
+
+   </node>
+   <children>
+<tree>
+   <node type="dup">
+     <predicate_name>br(_G1076)     </predicate_name>
+       <input_element>
+br(_G937)
+       </input_element>
+
+       <output_element>
+br(a)
+       </output_element>
+       <output_element>
+br(b)
+       </output_element>
+
+     <reference>_G1084     </reference>
+   </node>
+   <children>
+   </children>
+</tree>
+
+   </children>
+</tree>
+<tree>
+   <node type="pr_list">
+     <predicate_name>_G937>b     </predicate_name>
+       <input_element>
+a>b
+       </input_element>
+       <input_element>
+b>b
+       </input_element>
+
+
+   </node>
+   <children>
+
+
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+<tree>
+   <node type="pr_list">
+     <predicate_name>next(_G198,_G193)     </predicate_name>
+       <input_element>
+next(b,_G193)
+       </input_element>
+
+
+   </node>
+   <children>
+<tree>
+   <node type="pr">
+     <predicate_name>next(b,_G1231)     </predicate_name>
+       <input_element>
+next(b,_G193)
+       </input_element>
+
+
+   </node>
+   <children>
+<tree>
+   <node type="cl">
+     <predicate_name>next(b,_G1169)     </predicate_name>
+       <input_element>
+next(b,_G193)
+       </input_element>
+
+
+     <rule>next(b,_G1169):-br(b),br(_G1169),b<_G1169,not(between(b,_G1169))     </rule>
+     <line_begin>10     </line_begin>
+     <line_end>12     </line_end>
+   </node>
+   <children>
+<tree>
+   <node type="dup">
+     <predicate_name>br(b)     </predicate_name>
+       <input_element>
+br(b)
+       </input_element>
+
+       <output_element>
+br(b)
+       </output_element>
+
+     <reference>_G1277     </reference>
+   </node>
+   <children>
+   </children>
+</tree>
+<tree>
+   <node type="pr_list">
+     <predicate_name>br(_G1169)     </predicate_name>
+       <input_element>
+br(_G1169)
+       </input_element>
+
+       <output_element>
+br(a)
+       </output_element>
+       <output_element>
+br(b)
+       </output_element>
+
+   </node>
+   <children>
+<tree>
+   <node type="dup">
+     <predicate_name>br(_G1314)     </predicate_name>
+       <input_element>
+br(_G1169)
+       </input_element>
+
+       <output_element>
+br(a)
+       </output_element>
+       <output_element>
+br(b)
+       </output_element>
+
+     <reference>_G1322     </reference>
+   </node>
+   <children>
+   </children>
+</tree>
+
+   </children>
+</tree>
+<tree>
+   <node type="pr_list">
+     <predicate_name>b<_G1169     </predicate_name>
+       <input_element>
+b<a
+       </input_element>
+       <input_element>
+b<b
+       </input_element>
+
+
+   </node>
+   <children>
+
+
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+<tree>
+   <node type="pr_list">
+     <predicate_name>not(next(_G124,_G129))     </predicate_name>
+       <input_element>
+not(next(nil,_G129))
+       </input_element>
+
+
+   </node>
+   <children>
+<tree>
+   <node type="dup">
+     <predicate_name>next(nil,_G1411)     </predicate_name>
+       <input_element>
+next(nil,_G129)
+       </input_element>
+
+       <output_element>
+next(nil,b)
+       </output_element>
+
+     <reference>_G1420     </reference>
+   </node>
+   <children>
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+   </children>
+</tree>
+
+<file name="c:/fernan/research/bddeduc/des/releases/des2.0.1/des2.0.1swi/des/examples/parity.dl">
+<namefile>c:/fernan/research/bddeduc/des/releases/des2.0.1/des2.0.1swi/des/examples</namefile>
+</file></infoDebug>

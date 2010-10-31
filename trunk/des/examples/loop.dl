@@ -1,0 +1,7 @@
+% A non-terminating program with the query loop(X)
+
+
+loop(0).
+loop(X) :-
+  loop(Y),
+  X is Y+1.
