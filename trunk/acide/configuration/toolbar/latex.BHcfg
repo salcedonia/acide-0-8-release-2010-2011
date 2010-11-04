@@ -1,0 +1,7 @@
+]N] LaTeX ]C] latex $mainFileName$\$mainFilePaht$ ]T] LaTeX Compiler ]B] false ]I] ]F]
+]N] BibTeX ]C] bibtex $mainFileName$ ]T] BibTeX Bibliography ]B] false ]I] ]F]
+]N] dvi2pdf ]C] dvipdfm $mainFileName$ ]T] dvi2pdf ]B] false ]I] ]F]
+]N] Yap ]C] yap $mainFilePath$\$mainFileName$ ]T] Yet Another Previewer ]B] false ]I] ]F]
+]N] TeXify ]C] elatex.bat $mainFileName$ ]T] LaTex+BibTeX+LaTeX+LaTeX ]B] false ]I] ]F]
+]N] Acrobat ]C] "C:\Archivos de programa\Adobe\Acrobat 7.0\Acrobat\acrobat" $mainFilePath$\$mainFileName$.pdf ]T] Acrobat Reader ]B] false ]I] ]F]
+]N] PDFLaTeX ]C] pdflatex $mainFile$ ]T] dvi2pdf ]B] false ]I] ]F]

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>ACIDE Configuration</comment>
+<entry key="defaultAcideProject">./configuration/project/default.acidePrj</entry>
+<entry key="previousMenuConfiguration">./configuration/menu/defaultAllOn.menuCfg</entry>
+<entry key="currentGrammar">/Users/javiersalcedogomez/Documents/Universidad/Erasmus/Final Thesis/ACIDE0.8/acide/./configuration/grammars/bytes3.jar</entry>
+<entry key="outputConfiguration">./configuration/output/configuration.xml</entry>
+<entry key="currentToolBarConfiguration">./configuration/toolbar/default.BHcfg</entry>
+<entry key="previousToolBarConfiguration">./configuration/toolbar/default.BHcfg</entry>
+<entry key="currentMenuConfiguration">./configuration/menu/defaultAllOn.menuCfg</entry>
+<entry key="language">spanish</entry>
+<entry key="javaPath"/>
+<entry key="jarPath"/>
+<entry key="defaultPath">/Users/javiersalcedogomez/ACIDE0.8Sources/asd</entry>
+<entry key="languagePath">/Users/javiersalcedogomez/Documents/Universidad/Erasmus/Final Thesis/ACIDE0.8/acide/./configuration/lexical/default.xml</entry>
+<entry key="javacPath"/>
+<entry key="previousGrammar">./configuration/grammars/bytes.jar</entry>
+</properties>
