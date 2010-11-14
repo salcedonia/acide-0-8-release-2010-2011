@@ -1,0 +1,17 @@
+/AbstractReferenceMarshaller.java/1.1/Wed Mar 28 18:09:22 2007//
+/AbstractReferenceUnmarshaller.java/1.1/Wed Mar 28 18:09:22 2007//
+/BaseException.java/1.1/Wed Mar 28 18:09:22 2007//
+/DefaultConverterLookup.java/1.1/Wed Mar 28 18:09:22 2007//
+/JVM.java/1.1/Wed Mar 28 18:09:22 2007//
+/MapBackedDataHolder.java/1.1/Wed Mar 28 18:09:22 2007//
+/ReferenceByIdMarshaller.java/1.1/Wed Mar 28 18:09:22 2007//
+/ReferenceByIdMarshallingStrategy.java/1.1/Wed Mar 28 18:09:22 2007//
+/ReferenceByIdUnmarshaller.java/1.1/Wed Mar 28 18:09:22 2007//
+/ReferenceByXPathMarshaller.java/1.1/Wed Mar 28 18:09:22 2007//
+/ReferenceByXPathMarshallingStrategy.java/1.1/Wed Mar 28 18:09:22 2007//
+/ReferenceByXPathUnmarshaller.java/1.1/Wed Mar 28 18:09:22 2007//
+/SequenceGenerator.java/1.1/Wed Mar 28 18:09:22 2007//
+/TreeMarshaller.java/1.1/Wed Mar 28 18:09:22 2007//
+/TreeMarshallingStrategy.java/1.1/Wed Mar 28 18:09:22 2007//
+/TreeUnmarshaller.java/1.1/Wed Mar 28 18:09:22 2007//
+D/util////
