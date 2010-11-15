@@ -1,9 +1,0 @@
-// $ANTLR 2.7.7 (2006-11-01): grammar.g -> GrammarLexerTokenTypes.txt$
-GrammarLexer    // output token vocab name
-LPAREN=4
-RPAREN=5
-PLUS=6
-MINUS=7
-STAR=8
-INT=9
-WS=10
