@@ -1,0 +1,886 @@
+package gui.menu.configuration.toolBar.gui;
+
+import gui.mainWindow.MainWindow;
+import gui.menu.configuration.toolBar.utils.ToolBarTableModel;
+import gui.toolBar.ToolBar;
+
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.ResourceBundle;
+import java.util.Vector;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import language.Language;
+import operations.log.Log;
+
+import properties.PropertiesManager;
+
+import es.configuration.toolBar.ModifiableCommand;
+import es.configuration.toolBar.ModifiableCommandList;
+import es.text.TextFile;
+
+/************************************************************************																
+ * Tool bar configuration window of ACIDE - A Configurable IDE											
+ *					
+ * 		   <p>															
+ *         <b>ACIDE - A Configurable IDE</b>							
+ *         </p>															
+ *         <p>															
+ *         <b>Official web site:</b> @see http://acide.sourceforge.net	
+ *         </p>   
+ *           									
+ ************************************************************************
+ * @author <ul>															
+ *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
+ *         <li><b>Version 0.1-0.6:</b>									
+ *         <ul>															
+ *         Diego Cardiel Freire											
+ *         </ul>														
+ *         <ul>															
+ *         Juan José Ortiz Sánchez										
+ *         </ul>														
+ *         <ul>															
+ *         Delfín Rupérez Cañas											
+ *         </ul>														
+ *         </li>														
+ *         <li><b>Version 0.7:</b>										
+ *         <ul>															
+ *         Miguel Martín Lázaro											
+ *         </ul>														
+ *         </li>														
+ *         <li><b>Version 0.8:</b>										
+ *         <ul>															
+ *         Javier Salcedo Gómez											
+ *         </ul>														
+ *         </li>														
+ *         </ul>														
+ ************************************************************************																	
+ * @version 0.8	
+ * @see JFrame																													
+ ***********************************************************************/
+public class ToolBarConfigurationWindow extends JFrame {
+
+	/**
+	 * Class serial version UID
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * Image file for the icon of the window
+	 */
+	private static final String ICON = "./resources/images/icon.png";
+	/**
+	 * Command panel
+	 */
+	private JPanel _commandPanel;
+	/**
+	 * List panel
+	 */
+	private JPanel _listPanel;
+	/**
+	 * Button panel
+	 */
+	private JPanel _buttonPanel;
+	/**
+	 * Icon buttons panel
+	 */
+	private JPanel _iconButtonsPanel;
+	/**
+	 * List buttons panel
+	 */
+	private JPanel _listButtonsPanel;
+	/**
+	 * Name label
+	 */
+	private JLabel _nameLabel;
+	/**
+	 * Table of tool bar commands
+	 */
+	private JTable _table;
+	/**
+	 * Table scroll panel
+	 */
+	private JScrollPane _tableScrollPane;
+	/**
+	 * Save button
+	 */
+	private JButton _saveButton;
+	/**
+	 * Load button
+	 */
+	private JButton _loadButton;
+	/**
+	 * Accept button
+	 */
+	private JButton _acceptButton;
+	/**
+	 * Cancel button
+	 */
+	private JButton _cancelButton;
+	/**
+	 * Name text field
+	 */
+	private final JTextField _nameTextField;
+	/**
+	 * Command label
+	 */
+	private JLabel _commandLabel;
+	/**
+	 * Command text field
+	 */
+	private final JTextField _commandTextField;
+	/**
+	 * Italic label
+	 */
+	private JLabel _italicLabel;
+	/**
+	 * Help text label
+	 */
+	private JLabel _helpTextLabel;
+	/**
+	 * Help text text field
+	 */
+	private final JTextField _helpTextTextField;
+	/**
+	 * Image label
+	 */
+	private JLabel _imageLabel;
+	/**
+	 * Image text field
+	 */
+	private final JTextField _imageTextField;
+	/**
+	 * Note label
+	 */
+	private JLabel _noteLabel;
+	/**
+	 * Add button
+	 */
+	private JButton _addButton;
+	/**
+	 * Examine button
+	 */
+	private JButton _examineButton;
+	/**
+	 * Quit button
+	 */
+	private JButton _quitButton;
+	/**
+	 * Modify button
+	 */
+	private JButton _modifyButton;
+	/**
+	 * Tool bar command list
+	 */
+	private Vector<ModifiableCommand> _commandList;
+	/**
+	 * Tool bar command matrix table
+	 */
+	private String[][] _commandMatrixTable;
+	/**
+	 * Row show
+	 */
+	private int _rowShown;
+	/**
+	 * Tool bar table model
+	 */
+	private ToolBarTableModel _model;
+	/**
+	 * Table columns
+	 */
+	private String[] _tableColumns;
+	/**
+	 * Flag that indicates if the changes are saved
+	 */
+	private static boolean _areChangesSaved;
+
+	/**
+	 * Class constructor
+	 * 
+	 * @param isModified
+	 *            indicates if the tool bar configuration window has to be used
+	 *            for modifying the tool bar configuration or not
+	 */
+	public ToolBarConfigurationWindow(boolean isModified) {
+
+		super();
+
+		_areChangesSaved = true;
+
+		// Gets the language
+		Language language = Language.getInstance();
+
+		try {
+			language.getLanguage(PropertiesManager.getProperty("language"));
+		} catch (Exception exception) {
+			
+			// Updates the log
+			Log.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+
+		// Gets the labels
+		final ResourceBundle labels = language.getLabels();
+
+		// Updates the log
+		Log.getLog().info(labels.getString("s132"));
+
+		// TABLE COLUMNS
+		_tableColumns = new String[4];
+		_tableColumns[0] = labels.getString("s260");
+		_tableColumns[1] = labels.getString("s261");
+		_tableColumns[2] = labels.getString("s262");
+		_tableColumns[3] = labels.getString("s263");
+
+		// COMMAND PANEL
+		_commandPanel = new JPanel();
+		_commandPanel.setLayout(new GridBagLayout());
+
+		// LIST PANEL
+		_listPanel = new JPanel();
+		_listPanel.setLayout(new GridBagLayout());
+
+		// BUTTON PANEL
+		_buttonPanel = new JPanel();
+		_buttonPanel.setLayout(new GridBagLayout());
+
+		// ICON BUTTON PANEL
+		_iconButtonsPanel = new JPanel();
+		_iconButtonsPanel.setLayout(new GridBagLayout());
+
+		// LIST BUTTON PANEL
+		_listButtonsPanel = new JPanel();
+		_listButtonsPanel.setLayout(new GridBagLayout());
+
+		// NAME
+		_nameLabel = new JLabel(labels.getString("s133"), JLabel.LEFT);
+		_nameTextField = new JTextField();
+
+		// COMMAND
+		_commandLabel = new JLabel(labels.getString("s134"), JLabel.LEFT);
+		_commandTextField = new JTextField();
+
+		// ITALIC LABEL
+		_italicLabel = new JLabel(labels.getString("s146"), JLabel.CENTER);
+		_italicLabel.setFont(new Font(_nameLabel.getFont().getFontName(),
+				Font.ITALIC, _nameLabel.getFont().getSize()));
+
+		// HELP TEXT
+		_helpTextLabel = new JLabel(labels.getString("s135"), JLabel.LEFT);
+		_helpTextTextField = new JTextField();
+
+		// IMAGE
+		_imageLabel = new JLabel(labels.getString("s136"), JLabel.LEFT);
+		_imageTextField = new JTextField();
+		_noteLabel = new JLabel(labels.getString("s139"), JLabel.CENTER);
+
+		// ADD BUTTON
+		_addButton = new JButton(labels.getString("s137"));
+		_addButton.setToolTipText(labels.getString("s138"));
+
+		// EXAMINE BUTTON
+		_examineButton = new JButton(labels.getString("s142"));
+		_examineButton.setToolTipText(labels.getString("s143"));
+
+		// QUIT BUTTON
+		_quitButton = new JButton(labels.getString("s148"));
+		_quitButton.setToolTipText(labels.getString("s149"));
+
+		// MODIFY BUTTON
+		_modifyButton = new JButton(labels.getString("s257"));
+		_modifyButton.setToolTipText(labels.getString("s258"));
+
+		// ADD THE COMPONENTS TO THE WINDOW WITH THE LAYOUT
+		GridBagConstraints constraints = new GridBagConstraints();
+
+		// COMMAND PANEL
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.insets = new Insets(5, 5, 5, 5);
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		_commandPanel.add(_nameLabel, constraints);
+		constraints.gridx = 1;
+		constraints.ipadx = 200;
+		constraints.ipady = 5;
+		_commandPanel.add(_nameTextField, constraints);
+		constraints.ipadx = 0;
+		constraints.ipady = 0;
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		_commandPanel.add(_commandLabel, constraints);
+		constraints.gridx = 1;
+		constraints.ipady = 5;
+		_commandPanel.add(_commandTextField, constraints);
+		constraints.gridx = 0;
+		constraints.gridy = 2;
+		constraints.ipady = 0;
+		constraints.gridwidth = 3;
+		_commandPanel.add(_italicLabel, constraints);
+		constraints.gridy = 3;
+		constraints.gridwidth = 1;
+		_commandPanel.add(_helpTextLabel, constraints);
+		constraints.gridx = 1;
+		constraints.ipady = 5;
+		_commandPanel.add(_helpTextTextField, constraints);
+		constraints.gridx = 0;
+		constraints.gridy = 4;
+		constraints.ipady = 0;
+		_commandPanel.add(_imageLabel, constraints);
+		constraints.gridx = 1;
+		constraints.ipady = 5;
+		_commandPanel.add(_imageTextField, constraints);
+		constraints.gridx = 2;
+		constraints.ipady = 0;
+		_commandPanel.add(_examineButton, constraints);
+		constraints.gridy = 5;
+		constraints.gridwidth = 3;
+		constraints.gridx = 0;
+		_commandPanel.add(_noteLabel, constraints);
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		constraints.ipadx = 0;
+		constraints.ipady = 0;
+		constraints.insets = new Insets(5, 5, 5, 5);
+
+		// ICON BUTTONS PANEL
+		_iconButtonsPanel.add(_addButton, constraints);
+		constraints.gridx = 1;
+		_iconButtonsPanel.add(_modifyButton, constraints);
+		constraints.gridx = 2;
+		_iconButtonsPanel.add(_quitButton, constraints);
+
+		_commandList = new Vector<ModifiableCommand>();
+		_commandMatrixTable = new String[_commandList.size()][4];
+		_model = new ToolBarTableModel();
+
+		setToolBarTableMatrix();
+
+		_model.setValues(_tableColumns, _commandMatrixTable);
+		_table = new JTable(_model);
+		_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		_table.setPreferredScrollableViewportSize(new Dimension(300, 100));
+		_tableScrollPane = new JScrollPane(_table);
+
+		// SAVE BUTTON
+		_saveButton = new JButton(labels.getString("s150"));
+		_saveButton.setToolTipText(labels.getString("s151"));
+
+		// LOAD BUTTON
+		_loadButton = new JButton(labels.getString("s152"));
+		_loadButton.setToolTipText(labels.getString("s153"));
+
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		constraints.ipadx = 150;
+		constraints.ipady = 40;
+		constraints.insets = new Insets(5, 5, 5, 5);
+		constraints.gridy = 1;
+		_listPanel.add(_tableScrollPane, constraints);
+
+		// ACCEPT BUTTON
+		_acceptButton = new JButton(labels.getString("s154"));
+		_acceptButton.setToolTipText(labels.getString("s155"));
+
+		// CANCEL BUTTON
+		_cancelButton = new JButton(labels.getString("s162"));
+		_cancelButton.setToolTipText(labels.getString("s163"));
+
+		// Listeners
+		_acceptButton.addActionListener(new ActionListener() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
+			 * ActionEvent)
+			 */
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+
+				// ASK TO THE USER IF WANTS TO SAVE THE CHANGES
+				int choosenOption = JOptionPane.showConfirmDialog(null,
+						labels.getString("s996"), labels.getString("s995"),
+						JOptionPane.YES_NO_OPTION);
+
+				if (choosenOption == JOptionPane.YES_OPTION) {
+
+					// MODIFY THE CURRENT TOOL BAR
+					_modifyButton.doClick();
+
+					// SET THE LIST
+					ModifiableCommandList.setList(_commandList);
+					String newName = "./configuration/toolbar/lastModified.TBcfg";
+					ModifiableCommandList.saveList(newName);
+
+					try {
+
+						// SET THE PREVIOUS TOOL BAR CONFIGURATION
+						String previous = PropertiesManager
+								.getProperty("currentToolBarConfiguration");
+
+						if (!previous.endsWith("lastModified.TBcfg"))
+							PropertiesManager.setProperty(
+									"previousToolBarConfiguration", previous);
+
+						// SET THE CURRENT TOOL BAR
+						PropertiesManager.setProperty(
+								"currentToolBarConfiguration", newName);
+
+						// BUILDS THE TOOL BAR
+						ToolBar.buildStaticToolBar();
+						ToolBar.buildModifiableToolBar();
+
+						// UPDATES THE MAIN WINDOW
+						_areChangesSaved = false;
+						MainWindow.getInstance().validate();
+						MainWindow.getInstance().repaint();
+
+						// CLOSES THE WINDOW
+						dispose();
+						MainWindow.getInstance().setEnabled(true);
+						MainWindow.getInstance().setAlwaysOnTop(true);
+						MainWindow.getInstance().setAlwaysOnTop(false);
+
+						// ENABLES THE SAVE TOOL BAR MENU OPTION
+						MainWindow.getInstance().getMenu().getConfiguration()
+								.getToolBar().getSaveToolBar().setEnabled(true);
+
+						// UPDATES THE TOOL BAR
+						Log.getLog().info(labels.getString("s170"));
+
+					} catch (Exception exception) {
+
+						// ERROR MESSAGE
+						JOptionPane.showMessageDialog(null, exception.getMessage(),
+								labels.getString("s909"),
+								JOptionPane.ERROR_MESSAGE);
+
+						// Updates the log
+						Log.getLog().error(exception.getMessage());
+					}
+				} else
+					// CANCEL THE ACTION
+					_cancelButton.doClick();
+			}
+		});
+
+		// CANCEL BUTTON
+		_cancelButton.addActionListener(new ActionListener() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
+			 * ActionEvent)
+			 */
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+
+				// Updates the log
+				Log.getLog().info(labels.getString("s164"));
+
+				// CLOSE THE WINDOW
+				dispose();
+
+				MainWindow.getInstance().setEnabled(true);
+				MainWindow.getInstance().setAlwaysOnTop(true);
+				MainWindow.getInstance().setAlwaysOnTop(false);
+			}
+		});
+
+		// QUIT BUTTON
+		_quitButton.addActionListener(new ActionListener() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
+			 * ActionEvent)
+			 */
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+
+				// CHECK IF THERE IS A SELECTED ROW IN THE TABLE
+				int selectedRow = _table.getSelectedRow();
+
+				// IF THERE IS A SELECTED ROW
+				if (selectedRow != -1) {
+
+					// REMOVES THE COMMAND
+					_commandList.remove(selectedRow);
+
+					// UPDATES THE TOOL BAR TABLE MATRIX
+					setToolBarTableMatrix();
+				} else {
+
+					// ERROR MESSAGE
+					JOptionPane.showMessageDialog(null,
+							labels.getString("s156"), labels.getString("s157"),
+							JOptionPane.ERROR_MESSAGE);
+				}
+
+				// UPDATES THE TABLE MODEL
+				_model.setValues(_tableColumns, _commandMatrixTable);
+				_model.fireTableDataChanged();
+
+				// Updates the log
+				Log.getLog().info(labels.getString("s168"));
+			}
+		});
+
+		// ADD BUTTON
+		_addButton.addActionListener(new ActionListener() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
+			 * ActionEvent)
+			 */
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+
+				String name = _nameTextField.getText();
+				String command = _commandTextField.getText();
+				String helpText = _helpTextTextField.getText();
+				String image = _imageTextField.getText();
+				
+				// NO EMPTY NAME AND COMMAND ARE ACCEPTED
+				if (!name.matches("") && !command.matches("")) {
+					
+					ModifiableCommand editableToolBarCommand;
+					
+					// SET THE IMAGE
+					if (image.equals(""))
+						editableToolBarCommand = new ModifiableCommand(name,
+								command, helpText);
+					else
+						editableToolBarCommand = new ModifiableCommand(name,
+								command, helpText, true, image);
+					
+					// ADD THE COMMAND TO THE LIST
+					_commandList.add(editableToolBarCommand);
+					
+					// ADD THE COMMAND
+					addCommand(editableToolBarCommand);
+
+					// UPDATES THE MODEL
+					_model.setValues(_tableColumns, _commandMatrixTable);
+					_model.fireTableDataChanged();
+
+					// Updates the log
+					Log.getLog().info(labels.getString("s167"));
+				}
+				else
+					if(name.matches(""))
+						JOptionPane.showMessageDialog(null, labels.getString("s997"), labels.getString("s995"), JOptionPane.ERROR_MESSAGE);
+					else
+						if(command.matches(""))
+							JOptionPane.showMessageDialog(null, labels.getString("s998"), labels.getString("s995"), JOptionPane.ERROR_MESSAGE);
+			}
+		});
+
+		// EXAMINE BUTTON
+		_examineButton.addActionListener(new ActionListener() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
+			 * ActionEvent)
+			 */
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				TextFile file = new TextFile();
+				String path = file.read();
+				_imageTextField.setText(path);
+			}
+		});
+
+		// TABLE
+		_table.getSelectionModel().addListSelectionListener(
+				new ListSelectionListener() {
+					/*
+					 * (non-Javadoc)
+					 * 
+					 * @see
+					 * javax.swing.event.ListSelectionListener#valueChanged(
+					 * javax.swing.event.ListSelectionEvent)
+					 */
+					@Override
+					public void valueChanged(ListSelectionEvent listSelectionEvent) {
+
+						ListSelectionModel listSelectionModel = (ListSelectionModel) listSelectionEvent
+								.getSource();
+
+						// THERE ARE SELECTED ROWS
+						if (!listSelectionModel.isSelectionEmpty()) {
+
+							_rowShown = listSelectionModel
+									.getMinSelectionIndex();
+
+							_nameTextField
+									.setText(_commandMatrixTable[_rowShown][0]);
+							_commandTextField
+									.setText(_commandMatrixTable[_rowShown][1]);
+							_helpTextTextField
+									.setText(_commandMatrixTable[_rowShown][2]);
+							_imageTextField
+									.setText(_commandMatrixTable[_rowShown][3]);
+						}
+					}
+				});
+
+		// MODIFY BUTTON
+		_modifyButton.addActionListener(new ActionListener() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
+			 * ActionEvent)
+			 */
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+
+				String name = _nameTextField.getText();
+				String command = _commandTextField.getText();
+				String helpText = _helpTextTextField.getText();
+				String image = _imageTextField.getText();
+				ModifiableCommand editableToolBarCommand;
+
+				if (image.equals("")) {
+					editableToolBarCommand = new ModifiableCommand(name,
+							command, helpText);
+					_commandList.set(_rowShown, editableToolBarCommand);
+				} else {
+					editableToolBarCommand = new ModifiableCommand(name,
+							command, helpText, true, image);
+					_commandList.set(_rowShown, editableToolBarCommand);
+				}
+
+				modifyToolBarMatrixTable(editableToolBarCommand);
+				_model.setValues(_tableColumns, _commandMatrixTable);
+				_model.fireTableDataChanged();
+
+				// Updates the log
+				Log.getLog().info(labels.getString("s259"));
+			}
+		});
+
+		ActionListener escapePressed = new ActionListener() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
+			 * ActionEvent)
+			 */
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+
+				// CLOSES THE WINDOW
+				dispose();
+				MainWindow.getInstance().setEnabled(true);
+				MainWindow.getInstance().setAlwaysOnTop(true);
+				MainWindow.getInstance().setAlwaysOnTop(false);
+			}
+		};
+		_cancelButton.registerKeyboardAction(escapePressed, "EscapeKey",
+				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true),
+				JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+		// LOADS THE COMMAND LIST
+		if (isModified) {
+			try {
+
+				String current = PropertiesManager
+						.getProperty("currentToolBarConfiguration");
+				ModifiableCommandList.loadAuxList(current);
+				_commandList = ModifiableCommandList.getAuxList();
+				setToolBarTableMatrix();
+				_model.setValues(_tableColumns, _commandMatrixTable);
+				_model.fireTableDataChanged();
+
+			} catch (Exception exception) {
+
+				// ERROR MESSAGE
+				JOptionPane.showMessageDialog(null, exception.getMessage(),
+						labels.getString("s269"), JOptionPane.ERROR_MESSAGE);
+				
+				// Updates the log
+				Log.getLog().error(exception.getMessage());
+			}
+		}
+
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		constraints.ipadx = 0;
+		constraints.ipady = 0;
+		constraints.insets = new Insets(5, 5, 5, 5);
+		_buttonPanel.add(_acceptButton, constraints);
+		constraints.gridx = 1;
+		_buttonPanel.add(_cancelButton, constraints);
+
+		// SET THE ICON
+		setIconImage(new ImageIcon(ICON).getImage());
+
+		// SET THE LAYOUT
+		setLayout(new GridBagLayout());
+
+		// SET THE TITLE
+		if (isModified) {
+
+			// GET THE NAME OF THE CURRENT TOOL BAR CONFIGURATION
+			String path = null;
+			try {
+				path = PropertiesManager
+						.getProperty("currentToolBarConfiguration");
+				int index = path.lastIndexOf("\\");
+				if (index == -1)
+					index = path.lastIndexOf("/");
+				path = path.substring(index + 1, path.length() - 6);
+			} catch (Exception exception) {
+
+				// ERROR MESSAGE
+				JOptionPane.showMessageDialog(null, exception.getMessage(),
+						labels.getString("s295"), JOptionPane.ERROR_MESSAGE);
+				
+				// Updates the log
+				Log.getLog().error(exception.getMessage());
+			}
+			setTitle(labels.getString("s147") + " - " + path);
+		} else
+			setTitle(labels.getString("s910"));
+
+		// ADD THE PANELS TO THE FRAME
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		add(_commandPanel, constraints);
+		constraints.gridy = 1;
+		add(_iconButtonsPanel, constraints);
+		constraints.gridy = 2;
+		add(_listPanel, constraints);
+		constraints.gridy = 3;
+		add(_buttonPanel, constraints);
+		setResizable(false);
+		pack();
+
+		// CENTER THE LOCATION
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension frameSize = getSize();
+		setLocation((screenSize.width - frameSize.width) / 2,
+				(screenSize.height - frameSize.height) / 2);
+
+		setVisible(true);
+
+		// Updates the log
+		Log.getLog().info(labels.getString("s207"));
+	}
+
+	/**
+	 * Sets the data for the tool bar command table matrix
+	 */
+	private void setToolBarTableMatrix() {
+
+		String[][] data = new String[_commandList.size()][4];
+		ModifiableCommand command;
+		for (int j = 0; j < _commandList.size(); j++) {
+			command = _commandList.get(j);
+			data[j][0] = command.getName();
+			data[j][1] = command.getCommand();
+			data[j][2] = command.getHelpText();
+			if (command.getHasIcon())
+				data[j][3] = command.getIcon();
+			else
+				data[j][3] = "";
+		}
+		_commandMatrixTable = data;
+	}
+
+	/**
+	 * Adds a string command tool bar to the matrix
+	 * 
+	 * @param modifiableCommand
+	 *            new modifiable command to add
+	 */
+	private void addCommand(ModifiableCommand modifiableCommand) {
+
+		String[][] aux = new String[_commandList.size()][4];
+
+		for (int j = 0; j < _commandMatrixTable.length; j++) {
+			aux[j] = _commandMatrixTable[j];
+		}
+
+		aux[_commandMatrixTable.length][0] = modifiableCommand.getName();
+		aux[_commandMatrixTable.length][1] = modifiableCommand.getCommand();
+		aux[_commandMatrixTable.length][2] = modifiableCommand.getHelpText();
+		if (modifiableCommand.getHasIcon())
+			aux[_commandMatrixTable.length][3] = modifiableCommand.getIcon();
+		else
+			aux[_commandMatrixTable.length][3] = "";
+		_commandMatrixTable = aux;
+	}
+
+	/**
+	 * Modifies the tool bar matrix table at with the new data from the
+	 * modifiable command given as a parameter
+	 * 
+	 * @param modifiableCommand
+	 *            modifiable command which contains the data to modify the
+	 *            matrix table
+	 */
+	private void modifyToolBarMatrixTable(ModifiableCommand modifiableCommand) {
+
+		_commandMatrixTable[_rowShown][0] = modifiableCommand.getName();
+		_commandMatrixTable[_rowShown][1] = modifiableCommand.getCommand();
+		_commandMatrixTable[_rowShown][2] = modifiableCommand.getHelpText();
+		if (modifiableCommand.getHasIcon())
+			_commandMatrixTable[_rowShown][3] = modifiableCommand.getIcon();
+		else
+			_commandMatrixTable[_rowShown][3] = "";
+	}
+
+	/**
+	 * Returns the are change saved flag
+	 * 
+	 * @return the are change saved flag
+	 */
+	public static boolean areChangesSaved() {
+		return _areChangesSaved;
+	}
+
+	/**
+	 * Sets a new value to the are change saved flag
+	 * 
+	 * @param areChangesSaved
+	 *            new value to set
+	 */
+	public static void setAreChangesSaved(boolean areChangesSaved) {
+		_areChangesSaved = areChangesSaved;
+	}
+}

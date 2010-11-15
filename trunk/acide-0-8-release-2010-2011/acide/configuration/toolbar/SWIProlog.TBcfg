@@ -1,0 +1,4 @@
+]N] consult ]C] consult($activeFile$). ]T] Consults the selected file ]B] false ]I] ]F]
+]N] listing ]C] listing. ]T] Lists the contents of the database ]B] false ]I] ]F]
+]N] shell ]C] shell. g]T] Opens an OS shell ]B] false ]I] ]F]
+]N] pwd ]C] working_directory(X,X). ]T] Displays the current folder ]B] false ]I] ]F]
