@@ -1,0 +1,12 @@
+//------------------------------//
+//	FOR DEVELOPERS	 //
+//------------------------------//
+
+For developers who are going to use Eclipse for the development of ACIDE:
+The class com.thoughtworks.xstream.converters.reflection.Sun14ReflectionProvider is going to 
+throw an error like The type [X] is not accessible due to restriction on required library [Y].
+
+In order to fix it you will have to configure the compilance settings of Eclipse to set that
+kind of exceptions like warnings and not as errors:
+	--> Deprecated and restricted API		
+	--> Forbidden reference --> Warning

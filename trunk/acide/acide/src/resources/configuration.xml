@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>ACIDE Configuration</comment>
+<entry key="defaultAcideProject"> .acidePrj</entry>
+<entry key="previousMenuConfiguration">C:\Documents and Settings\Salcedonia\Escritorio\acide-0-8-release-2010-2011\acide\configuration\menu\defaultAllOn.menuCfg</entry>
+<entry key="currentGrammar">./configuration/grammars/bytes.jar</entry>
+<entry key="outputConfiguration">./configuration/output/configuration.xml</entry>
+<entry key="currentToolBarConfiguration">C:\Documents and Settings\Salcedonia\Escritorio\acide-0-8-release-2010-2011\acide\configuration\toolbar\mig.TBcfg</entry>
+<entry key="previousToolBarConfiguration">./configuration/toolbar/default.TBcfg</entry>
+<entry key="currentMenuConfiguration">C:\Documents and Settings\Salcedonia\Escritorio\acide-0-8-release-2010-2011\acide\configuration\menu\defaultAllOn.menuCfg</entry>
+<entry key="language">english</entry>
+<entry key="javaPath"/>
+<entry key="jarPath"/>
+<entry key="defaultPath">C:\Documents and Settings\Salcedonia\Escritorio\retrieve_logs_1652.sql</entry>
+<entry key="languagePath">C:\Documents and Settings\Salcedonia\Escritorio\acide-0-8-release-2010-2011\acide\configuration\lexical\default.xml</entry>
+<entry key="javacPath"/>
+<entry key="previousGrammar">./configuration/grammars/bytes.jar</entry>
+</properties>
