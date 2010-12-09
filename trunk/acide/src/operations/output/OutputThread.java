@@ -126,14 +126,14 @@ public class OutputThread extends Thread {
 			inputThread.start();
 
 			// WAIT UNTIL THIS THREAD FINISHES HIS JOB
-			try {
+			/*try {
 				_process.waitFor();
 			} catch (InterruptedException exception) {
 
 				// Updates the log
 				AcideLog.getLog().error(exception.getMessage());
 				exception.printStackTrace();
-			}
+			}*/
 		}
 	}
 

@@ -1,8 +1,6 @@
 package gui.fileEditor.fileEditorManager.listeners;
 
-import es.explorer.ExplorerFile;
 import es.text.TextFile;
-import gui.fileEditor.fileEditorManager.AcideFileEditorManager;
 import gui.mainWindow.MainWindow;
 
 import java.awt.event.MouseAdapter;
@@ -10,11 +8,9 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ResourceBundle;
 
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
-import javax.swing.tree.TreePath;
 
 import language.AcideLanguage;
 import operations.log.AcideLog;
@@ -89,13 +85,12 @@ public class AcideFileEditorManagerMouseClickListener extends MouseAdapter {
 	 */
 	private void mouseEventListener(MouseEvent mouseEvent) {
 
-		final AcideFileEditorManager editorManager = MainWindow.getInstance()
-				.getFileEditorManager();
-
 		// If there are opened editors
-		if (editorManager.getTabbedPane().getComponentCount() != 0) {
+		if (MainWindow.getInstance().getFileEditorManager().getTabbedPane()
+				.getComponentCount() != 0) {
 
-			String selectedEditorPath = editorManager.getSelectedFileEditorPanel()
+			String selectedEditorPath = MainWindow.getInstance()
+					.getFileEditorManager().getSelectedFileEditorPanel()
 					.getAbsolutePath();
 
 			// Sets the focus on the selected editor
@@ -108,21 +103,27 @@ public class AcideFileEditorManagerMouseClickListener extends MouseAdapter {
 				@Override
 				public void run() {
 
-					if (editorManager.getSelectedFileEditorPanelIndex() != -1) {
+					if (MainWindow.getInstance().getFileEditorManager()
+							.getSelectedFileEditorPanelIndex() != -1) {
 
 						// Gets the active text pane
-						JTextPane activeTextPane = editorManager
-						.getFileEditorPanelAt(
-								editorManager.getSelectedFileEditorPanelIndex())
-						.getActiveTextEditionArea();
-						
+						JTextPane activeTextPane = MainWindow
+								.getInstance()
+								.getFileEditorManager()
+								.getFileEditorPanelAt(
+										MainWindow
+												.getInstance()
+												.getFileEditorManager()
+												.getSelectedFileEditorPanelIndex())
+								.getActiveTextEditionArea();
+
 						// Sets the caret position at its position
-						activeTextPane.setCaretPosition(
-										activeTextPane.getCaretPosition());
+						activeTextPane.setCaretPosition(activeTextPane
+								.getCaretPosition());
 
 						// Sets the caret visible
 						activeTextPane.getCaret().setVisible(true);
-						
+
 						// Sets the focus on the active text component
 						activeTextPane.requestFocusInWindow();
 					}
@@ -134,10 +135,12 @@ public class AcideFileEditorManagerMouseClickListener extends MouseAdapter {
 
 				File f = new File(selectedEditorPath);
 
-				if ((f.lastModified() != editorManager.getSelectedFileEditorPanel()
+				if ((f.lastModified() != MainWindow.getInstance()
+						.getFileEditorManager().getSelectedFileEditorPanel()
 						.getLastChange())
-						|| (f.length() != editorManager.getSelectedFileEditorPanel()
-								.getLastSize())) {
+						|| (f.length() != MainWindow.getInstance()
+								.getFileEditorManager()
+								.getSelectedFileEditorPanel().getLastSize())) {
 
 					// Gets the language
 					AcideLanguage language = AcideLanguage.getInstance();
@@ -155,198 +158,47 @@ public class AcideFileEditorManagerMouseClickListener extends MouseAdapter {
 					// Gets the labels
 					ResourceBundle labels = language.getLabels();
 
+					// Ask to the user for saving 
 					int chosenOption = JOptionPane.showConfirmDialog(null,
 							labels.getString("s65"));
 
-					if (chosenOption == 0) {
+					// OK OPTION
+					if (chosenOption == JOptionPane.OK_OPTION) {
 
 						TextFile newTextFile = new TextFile();
-						editorManager.getSelectedFileEditorPanel().loadText(
-								newTextFile.load(selectedEditorPath));
-						editorManager.getSelectedFileEditorPanel().setLastChange(
-								f.lastModified());
-						editorManager.getSelectedFileEditorPanel().setLastSize(
-								f.length());
+						MainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.loadText(newTextFile.load(selectedEditorPath));
+						MainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.setLastChange(f.lastModified());
+						MainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.setLastSize(f.length());
 					} else {
-						editorManager.getSelectedFileEditorPanel().setLastChange(
-								f.lastModified());
-						editorManager.getSelectedFileEditorPanel().setLastSize(
-								f.length());
+						
+						// NO OPTION
+						MainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.setLastChange(f.lastModified());
+						MainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.setLastSize(f.length());
 					}
 				}
 			}
 		}
 
-		if (editorManager.getSelectedFileEditorPanel() != null) {
+		// Updates the status bar with the type of file selected in the file
+		// editor
+		MainWindow.getInstance().getStatusBar()
+				.updatesStatusBarFromFileEditor();
 
-			// Updates the status bar
-			MainWindow
-					.getInstance()
-					.getStatusBar()
-					.setMessage(
-							MainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel().getAbsolutePath());
-
-			for (int i = 0; i < MainWindow.getInstance()
-					.getProjectConfiguration().getNumFilesFromList(); i++) {
-
-				if (MainWindow
-						.getInstance()
-						.getProjectConfiguration()
-						.getFileAt(i)
-						.getPath()
-						.equals(MainWindow.getInstance().getFileEditorManager()
-								.getSelectedFileEditorPanel().getAbsolutePath()))
-
-					if (MainWindow.getInstance().getProjectConfiguration()
-							.getFileAt(i).isCompilableFile())
-
-						if (MainWindow.getInstance().getProjectConfiguration()
-								.getFileAt(i).isMainFile())
-
-							// MAIN FILE
-							MainWindow
-									.getInstance()
-									.getStatusBar()
-									.setMessage(
-											MainWindow.getInstance()
-													.getFileEditorManager()
-													.getSelectedFileEditorPanel()
-													.getAbsolutePath()
-													+ " <MAIN>");
-						else
-
-							// COMPILABLE FILE
-							MainWindow
-									.getInstance()
-									.getStatusBar()
-									.setMessage(
-											MainWindow.getInstance()
-													.getFileEditorManager()
-													.getSelectedFileEditorPanel()
-													.getAbsolutePath()
-													+ " <COMPILABLE>");
-					else
-
-						// Updates the status bar
-						MainWindow
-								.getInstance()
-								.getStatusBar()
-								.setMessage(
-										MainWindow.getInstance()
-												.getFileEditorManager()
-												.getSelectedFileEditorPanel()
-												.getAbsolutePath());
-			}
-
-			// Default configuration
-			if (MainWindow.getInstance().getProjectConfiguration()
-					.isDefaultProject()) {
-
-				// Checks the type
-				if (MainWindow.getInstance().getFileEditorManager()
-						.getSelectedFileEditorPanel().isCompilerFile())
-
-					if (MainWindow.getInstance().getFileEditorManager()
-							.getSelectedFileEditorPanel().isMainFile())
-
-						// MAIN FILE
-						MainWindow
-								.getInstance()
-								.getStatusBar()
-								.setMessage(
-										MainWindow.getInstance()
-												.getFileEditorManager()
-												.getSelectedFileEditorPanel()
-												.getAbsolutePath()
-												+ " <MAIN>");
-					else
-
-						// COMPILABLE FILE
-						MainWindow
-								.getInstance()
-								.getStatusBar()
-								.setMessage(
-										MainWindow.getInstance()
-												.getFileEditorManager()
-												.getSelectedFileEditorPanel()
-												.getAbsolutePath()
-												+ " <COMPILABLE>");
-				else
-					// Updates the status bar
-					MainWindow
-							.getInstance()
-							.getStatusBar()
-							.setMessage(
-									MainWindow.getInstance()
-											.getFileEditorManager()
-											.getSelectedFileEditorPanel()
-											.getAbsolutePath());
-			}
-		}
-
-		// Puts the selected file in the editor if there
-		// is not an opened project
-
-		// Not default project
-		if (!MainWindow.getInstance().getProjectConfiguration()
-				.isDefaultProject()) {
-
-			// Editor selected?
-			if (editorManager.getSelectedFileEditorPanel() != null) {
-
-				ExplorerFile f = new ExplorerFile();
-				int index = -1;
-
-				// Searches for the file in the explorer tree
-				for (int position = 0; position < MainWindow.getInstance()
-						.getProjectConfiguration().getNumFilesFromList(); position++) {
-
-					// Does the file belong to the project?
-					if (MainWindow
-							.getInstance()
-							.getProjectConfiguration()
-							.getFileAt(position)
-							.getPath()
-							.equals(MainWindow.getInstance()
-									.getFileEditorManager().getSelectedFileEditorPanel()
-									.getAbsolutePath())) {
-
-						f = MainWindow.getInstance().getProjectConfiguration()
-								.getFileAt(position);
-
-						for (int m = 0; m < MainWindow.getInstance()
-								.getProjectConfiguration()
-								.getNumFilesFromList() + 1; m++) {
-
-							if (MainWindow.getInstance().getExplorer()
-									.getTree().getPathForRow(m)
-									.getLastPathComponent().toString()
-									.equals(f.getLastPathComponent())) {
-
-								index = m;
-							}
-						}
-					}
-				}
-
-				TreePath currentSelection = MainWindow.getInstance()
-						.getExplorer().getTree().getPathForRow(index);
-				MainWindow.getInstance().getExplorer().getTree()
-						.setSelectionPath(currentSelection);
-			}
-		}
+		// Selects the node in the tree that matches with the clicked file
+		// editor
+		MainWindow.getInstance().getExplorer().selectTreeNodeFromFileEditor();
 
 		// Updates the button icons
-		if (MainWindow.getInstance().getFileEditorManager().getNumFileEditorPanels() > 0) {
-
-			int selectedEditorIndex = MainWindow.getInstance()
-					.getFileEditorManager().getSelectedFileEditorPanelIndex();
-
-			ImageIcon icon = (ImageIcon) editorManager.getTabbedPane()
-					.getIconAt(selectedEditorIndex);
-			MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel()
-					.setIcon(icon);
-		}
+		MainWindow.getInstance().getFileEditorManager().updatesButtonIcons();
 	}
 }

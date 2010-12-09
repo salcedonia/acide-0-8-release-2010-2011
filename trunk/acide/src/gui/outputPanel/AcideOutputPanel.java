@@ -1,6 +1,7 @@
 package gui.outputPanel;
 
 import es.configuration.output.OutputConfiguration;
+import gui.listeners.AcideKeyboardListenerForMenus;
 import gui.mainWindow.MainWindow;
 import gui.outputPanel.listeners.AcideOutputPanelFocusListener;
 import gui.outputPanel.listeners.AcideOutputPanelKeyboardListener;
@@ -24,13 +25,12 @@ import javax.swing.event.CaretListener;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.JTextComponent;
 
-import operations.listeners.*;
 import operations.log.AcideLog;
 import operations.output.OutputThread;
 import resources.ResourceManager;
 
 /************************************************************************
- * ACIDE - A Configurable IDE output panel.
+ * ACIDE - A Configurable IDE acide output panel.
  * 
  * <p>
  * <b>ACIDE - A Configurable IDE</b>

@@ -56,13 +56,13 @@ import resources.ResourceManager;
 public class ShowHelpMenuItemListener implements ActionListener {
 
 	/**
-	 * Help URL of the help file in Spanish
+	 * Help URL of the help file in Spanish.
 	 */
-	private final static String SPANISH_HELP_URL = "./resources/help/userGuideSpanish.doc";
+	private final static String SPANISH_HELP_URL = "resources/help/ayuda.txt";
 	/**
-	 * Help URL of the help file in English
+	 * Help URL of the help file in English.
 	 */
-	private final static String ENGLISH_HELP_URL = "./resources/help/userGuideEnglish.doc";
+	private final static String ENGLISH_HELP_URL = "resources/help/help.txt";
 	
 	/*
 	 * (non-Javadoc)

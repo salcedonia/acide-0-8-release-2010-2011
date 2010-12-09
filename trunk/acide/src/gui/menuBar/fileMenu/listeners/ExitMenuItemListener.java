@@ -1,9 +1,9 @@
 package gui.menuBar.fileMenu.listeners;
 
-import gui.mainWindow.MainWindow;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import es.configuration.project.workbench.AcideWorkbenchManager;
 
 /************************************************************************																
  * Exit menu item listener.											
@@ -55,6 +55,8 @@ public class ExitMenuItemListener implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
-		MainWindow.getInstance().closingOperation();
+		
+		// Saves the workbench manager
+		AcideWorkbenchManager.getInstance().saveWorkbenchConfiguration();
 	}
 }

@@ -92,5 +92,23 @@ public class AcideTextEditorTextEditionAreaKeyboardListener extends KeyAdapter {
 	@Override
 	public void keyReleased(KeyEvent keyEvent) {
 
+		AcideFileEditorPanel selectedEditor = MainWindow.getInstance()
+		.getFileEditorManager().getSelectedFileEditorPanel();
+		
+		if (selectedEditor.getTextEditionPanelList().get(0)
+				.getBraceMatcher() != -1) {
+			selectedEditor.getSyntaxDocument().removeBrace(selectedEditor.getTextEditionPanelList().get(0)
+					.getBraceMatcher());
+			selectedEditor.getTextEditionPanelList().get(0)
+			.setBraceMatcher(-1);
+		}
+		
+		if (selectedEditor.getTextEditionPanelList().get(1)
+				.getBraceMatcher() != -1) {
+			selectedEditor.getSyntaxDocument().removeBrace(selectedEditor.getTextEditionPanelList().get(1)
+					.getBraceMatcher());
+			selectedEditor.getTextEditionPanelList().get(1)
+			.setBraceMatcher(-1);
+		}
 	};
 }

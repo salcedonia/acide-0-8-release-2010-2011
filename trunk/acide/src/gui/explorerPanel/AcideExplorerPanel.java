@@ -5,12 +5,11 @@ import javax.swing.tree.*;
 
 import language.AcideLanguage;
 
-import operations.listeners.AcideKeyboardListener;
-import operations.listeners.AcideKeyboardListenerForMenus;
 import operations.log.AcideLog;
 import resources.ResourceManager;
 
 
+import es.explorer.ExplorerFile;
 import es.text.ValidExtensions;
 import java.awt.*;
 import java.io.*;
@@ -23,6 +22,8 @@ import gui.explorerPanel.listeners.AcideExplorerPanelKeyboardListener;
 import gui.explorerPanel.listeners.AcideExplorerPanelPopupMenuListener;
 import gui.explorerPanel.popup.AcideExplorerPanelPopupMenu;
 import gui.explorerPanel.utils.ExtendedTreeCellRenderer;
+import gui.listeners.AcideKeyboardListener;
+import gui.listeners.AcideKeyboardListenerForMenus;
 import gui.mainWindow.MainWindow;
 
 /************************************************************************																
@@ -270,10 +271,10 @@ public class AcideExplorerPanel extends JPanel {
 	 */
 	public void disposeExplorer() {
 
-		_explorerSize = MainWindow.getInstance().getSplitPaneVertical()
+		_explorerSize = MainWindow.getInstance().getVerticalSplitPane()
 				.getDividerLocation();
-		MainWindow.getInstance().getSplitPaneVertical().setDividerLocation(0);
-		MainWindow.getInstance().getSplitPaneVertical().getLeftComponent()
+		MainWindow.getInstance().getVerticalSplitPane().setDividerLocation(0);
+		MainWindow.getInstance().getVerticalSplitPane().getLeftComponent()
 				.setVisible(false);
 	}
 
@@ -282,9 +283,9 @@ public class AcideExplorerPanel extends JPanel {
 	 */
 	public void showExplorer() {
 
-		MainWindow.getInstance().getSplitPaneVertical()
+		MainWindow.getInstance().getVerticalSplitPane()
 				.setDividerLocation(_explorerSize);
-		MainWindow.getInstance().getSplitPaneVertical().getLeftComponent()
+		MainWindow.getInstance().getVerticalSplitPane().getLeftComponent()
 				.setVisible(true);
 	}
 
@@ -327,5 +328,66 @@ public class AcideExplorerPanel extends JPanel {
 	 */
 	public AcideExplorerPanelPopupMenu getPopupMenu() {
 		return _popupMenu;
+	}
+	
+	/**
+	 * Selects the explorer tree node that matches with the currently selected
+	 * file editor panel.
+	 */
+	public void selectTreeNodeFromFileEditor(){
+		
+		// Not default project
+		if (!MainWindow.getInstance().getProjectConfiguration()
+				.isDefaultProject()) {
+
+			// Editor selected?
+			if (MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel() != null) {
+
+				ExplorerFile exporerFile = new ExplorerFile();
+				int explorerFileIndex = -1;
+
+				// Searches for the file in the explorer tree
+				for (int position = 0; position < MainWindow.getInstance()
+						.getProjectConfiguration().getNumFilesFromList(); position++) {
+
+					// Does the file belong to the project?
+					if (MainWindow
+							.getInstance()
+							.getProjectConfiguration()
+							.getFileAt(position)
+							.getPath()
+							.equals(MainWindow.getInstance()
+									.getFileEditorManager().getSelectedFileEditorPanel()
+									.getAbsolutePath())) {
+
+						// Gets the explorer file from the project configuration
+						exporerFile = MainWindow.getInstance().getProjectConfiguration()
+								.getFileAt(position);
+
+						for (int index = 0; index < MainWindow.getInstance()
+								.getProjectConfiguration()
+								.getNumFilesFromList() + 1; index++) {
+
+							if (MainWindow.getInstance().getExplorer()
+									.getTree().getPathForRow(index)
+									.getLastPathComponent().toString()
+									.equals(exporerFile.getLastPathComponent())) {
+
+								// Gets the index
+								explorerFileIndex = index;
+							}
+						}
+					}
+				}
+
+				// Gets the current selection in the tree
+				TreePath currentSelection = MainWindow.getInstance()
+						.getExplorer().getTree().getPathForRow(explorerFileIndex);
+				
+				// Selects the node in the explorer tree
+				MainWindow.getInstance().getExplorer().getTree()
+						.setSelectionPath(currentSelection);
+			}
+		}
 	}
 }

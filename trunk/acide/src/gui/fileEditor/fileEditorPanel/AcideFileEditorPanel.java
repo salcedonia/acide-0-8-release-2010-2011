@@ -365,7 +365,7 @@ public class AcideFileEditorPanel extends JPanel {
 	 * 
 	 * @return the file name.
 	 */
-	public CharSequence getFileName() {
+	public String getFileName() {
 		int index = _path.lastIndexOf("\\");
 		if (index == -1)
 			index = _path.lastIndexOf("/");

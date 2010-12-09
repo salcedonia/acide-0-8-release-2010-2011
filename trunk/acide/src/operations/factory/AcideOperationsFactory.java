@@ -1,7 +1,6 @@
 package operations.factory;
 
 import es.configuration.project.AcideProjectConfiguration;
-import es.configuration.project.workbench.AcideWorkbenchConfigurationLoader;
 import gui.menuBar.editMenu.utils.SearchEngine;
 import gui.menuBar.fileMenu.utils.PrinterManager;
 
@@ -101,15 +100,5 @@ public class AcideOperationsFactory {
 	public PrinterManager buildPrinterManager(JTextComponent component,
 			boolean page, boolean date) {
 		return new PrinterManager(component, page, date);
-	}
-
-	/**
-	 * Builds the project launcher of ACIDE - A Configurable IDE.
-	 * 
-	 * @return the project launcher of ACIDE - A Configurable IDE.
-	 * @see AcideWorkbenchConfigurationLoader
-	 */
-	public static AcideWorkbenchConfigurationLoader buildAcideWorkbenchConfigurationLoader() {
-		return new AcideWorkbenchConfigurationLoader();
 	}
 }

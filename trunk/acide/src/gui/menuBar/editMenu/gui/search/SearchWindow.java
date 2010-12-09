@@ -1,5 +1,6 @@
 package gui.menuBar.editMenu.gui.search;
 
+import gui.listeners.AcideKeyboardListener;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.editMenu.utils.SearchDirection;
 import gui.menuBar.editMenu.utils.SearchEngine;
@@ -29,7 +30,6 @@ import javax.swing.border.TitledBorder;
 
 import language.AcideLanguage;
 import operations.factory.AcideOperationsFactory;
-import operations.listeners.AcideKeyboardListener;
 import operations.log.AcideLog;
 import resources.ResourceManager;
 
@@ -157,7 +157,7 @@ public class SearchWindow extends JFrame {
 	/**
 	 * Result of the operation.
 	 */
-	private int _result;
+	private int _matchStartPosition;
 	/**
 	 * Selected text.
 	 */
@@ -529,7 +529,7 @@ public class SearchWindow extends JFrame {
 	 * @return the result.
 	 */
 	public int getResult() {
-		return _result;
+		return _matchStartPosition;
 	}
 
 	/**
@@ -539,7 +539,7 @@ public class SearchWindow extends JFrame {
 	 *            new value to set.
 	 */
 	public void setResult(int result) {
-		_result = result;
+		_matchStartPosition = result;
 	}
 
 	/**
@@ -808,7 +808,7 @@ public class SearchWindow extends JFrame {
 			_currentDocument = -1;
 			_initialPosition = -1;
 			_selectedText = null;
-			_result = -1;
+			_matchStartPosition = -1;
 			_isFirst = true;
 
 			SearchWindow searchWindow = SearchWindow.getInstance();
@@ -852,25 +852,25 @@ public class SearchWindow extends JFrame {
 
 					_selectedEditorIndex = -1;
 					_counter = 0;
-					_result = -1;
+					_matchStartPosition = -1;
 					_selectedText = null;
 					selectedEditor = _mainWindow.getFileEditorManager()
 							.getSelectedFileEditorPanelIndex();
-					_result = _mainWindow.getFileEditorManager()
+					_matchStartPosition = _mainWindow.getFileEditorManager()
 							.getFileEditorPanelAt(selectedEditor).getActiveTextEditionArea()
 							.getCaretPosition();
 
 					// BACKWARD DIRECTION
 					if (direction == SearchDirection.BACKWARD) {
-						_result = _mainWindow.getFileEditorManager()
+						_matchStartPosition = _mainWindow.getFileEditorManager()
 								.getFileEditorPanelAt(selectedEditor).getActiveTextEditionArea()
 								.getSelectionStart();
 					}
 					selectedEditor = _mainWindow.getFileEditorManager()
 							.getSelectedFileEditorPanelIndex();
 
-					_result = _search.search(
-							_result,
+					_matchStartPosition = _search.search(
+							_matchStartPosition,
 							_searchTextField.getText(),
 							_mainWindow.getFileEditorManager()
 									.getFileEditorPanelAt(selectedEditor).getTextEditionAreaContent(),
@@ -878,14 +878,14 @@ public class SearchWindow extends JFrame {
 							_regularExpressionsCheckBox.isSelected(),
 							_completeWordsCheckBox.isSelected(), direction);
 
-					if (_result != -1) {
+					if (_matchStartPosition != -1) {
 
 						_mainWindow
 								.getFileEditorManager()
 								.getFileEditorPanelAt(
 										_mainWindow.getFileEditorManager()
 												.getSelectedFileEditorPanelIndex())
-								.selectText(_result,
+								.selectText(_matchStartPosition,
 										_searchTextField.getText().length());
 
 						// Updates the log
@@ -910,7 +910,7 @@ public class SearchWindow extends JFrame {
 											_mainWindow.getFileEditorManager()
 													.getSelectedFileEditorPanelIndex())
 									.selectText(
-											_result,
+											_matchStartPosition,
 											_search.getRegularExpresion()
 													.length());
 
@@ -960,21 +960,21 @@ public class SearchWindow extends JFrame {
 						_finalPosition = _mainWindow.getFileEditorManager()
 								.getFileEditorPanelAt(selectedEditor).getActiveTextEditionArea()
 								.getSelectionEnd();
-						_result = 0;
+						_matchStartPosition = 0;
 
 						if (direction == SearchDirection.BACKWARD)
-							_result = _finalPosition;
+							_matchStartPosition = _finalPosition;
 						if ((_regularExpressionsCheckBox.isSelected())
 								&& (direction != SearchDirection.BACKWARD))
-							_result = _initialPosition;
+							_matchStartPosition = _initialPosition;
 					} else {
-						_result = _mainWindow.getFileEditorManager()
+						_matchStartPosition = _mainWindow.getFileEditorManager()
 								.getFileEditorPanelAt(selectedEditor).getActiveTextEditionArea()
 								.getCaretPosition()
 								- _initialPosition;
 
 						if (direction == SearchDirection.BACKWARD) {
-							_result = _mainWindow.getFileEditorManager()
+							_matchStartPosition = _mainWindow.getFileEditorManager()
 									.getFileEditorPanelAt(selectedEditor).getActiveTextEditionArea()
 									.getSelectionStart()
 									- _initialPosition;
@@ -989,19 +989,19 @@ public class SearchWindow extends JFrame {
 						_mainWindow.getStatusBar().setMessage(
 								labels.getString("s616"));
 					} else {
-						_result = _search.search(_result,
+						_matchStartPosition = _search.search(_matchStartPosition,
 								_searchTextField.getText(), _selectedText,
 								_caseSensitiveCheckBox.isSelected(),
 								_regularExpressionsCheckBox.isSelected(),
 								_completeWordsCheckBox.isSelected(), direction);
 
-						if (_result != -1) {
+						if (_matchStartPosition != -1) {
 							_mainWindow
 									.getFileEditorManager()
 									.getFileEditorPanelAt(
 											_mainWindow.getFileEditorManager()
 													.getSelectedFileEditorPanelIndex())
-									.selectText(_result + _initialPosition,
+									.selectText(_matchStartPosition + _initialPosition,
 											_searchTextField.getText().length());
 
 							// Updates the log
@@ -1027,7 +1027,7 @@ public class SearchWindow extends JFrame {
 														.getFileEditorManager()
 														.getSelectedFileEditorPanelIndex())
 										.selectText(
-												_result + _initialPosition,
+												_matchStartPosition + _initialPosition,
 												_search.getRegularExpresion()
 														.length());
 
@@ -1067,9 +1067,9 @@ public class SearchWindow extends JFrame {
 								_currentDocumentRadioButton.setSelected(true);
 
 								if (direction != SearchDirection.BACKWARD)
-									_result = _finalPosition;
+									_matchStartPosition = _finalPosition;
 								else
-									_result = _initialPosition;
+									_matchStartPosition = _initialPosition;
 								_searchButton.doClick();
 							}
 						}
@@ -1095,15 +1095,15 @@ public class SearchWindow extends JFrame {
 					if (_isEnd == false) {
 
 						if (direction == SearchDirection.FORWARD)
-							_result = _mainWindow.getFileEditorManager()
+							_matchStartPosition = _mainWindow.getFileEditorManager()
 									.getFileEditorPanelAt(_selectedEditorIndex)
 									.getActiveTextEditionArea().getCaretPosition();
 						if (direction == SearchDirection.BACKWARD)
-							_result = _mainWindow.getFileEditorManager()
+							_matchStartPosition = _mainWindow.getFileEditorManager()
 									.getFileEditorPanelAt(_selectedEditorIndex)
 									.getActiveTextEditionArea().getSelectionStart();
 						if (direction == SearchDirection.BOTH) {
-							_result = _mainWindow.getFileEditorManager()
+							_matchStartPosition = _mainWindow.getFileEditorManager()
 									.getFileEditorPanelAt(_selectedEditorIndex)
 									.getActiveTextEditionArea().getCaretPosition();
 						}
@@ -1113,8 +1113,8 @@ public class SearchWindow extends JFrame {
 						if (direction == SearchDirection.BOTH)
 							auxDirection = SearchDirection.FORWARD;
 
-						_result = _search.search(
-								_result,
+						_matchStartPosition = _search.search(
+								_matchStartPosition,
 								_searchTextField.getText(),
 								_mainWindow.getFileEditorManager()
 										.getFileEditorPanelAt(_selectedEditorIndex)
@@ -1126,14 +1126,14 @@ public class SearchWindow extends JFrame {
 
 						if ((_isCycle)
 								&& (_selectedEditorIndex == _currentDocument)
-								&& (_result >= _currentPosition))
+								&& (_matchStartPosition >= _currentPosition))
 							_isEnd = true;
 						else if ((_isCycle)
 								&& (_selectedEditorIndex == _currentDocument)
-								&& (_result == -1))
+								&& (_matchStartPosition == -1))
 							_isEnd = true;
 
-						if (_result != -1) {
+						if (_matchStartPosition != -1) {
 
 							_counter++;
 
@@ -1143,7 +1143,7 @@ public class SearchWindow extends JFrame {
 										.getFileEditorManager()
 										.getFileEditorPanelAt(_selectedEditorIndex)
 										.selectText(
-												_result,
+												_matchStartPosition,
 												_searchTextField.getText()
 														.length());
 
@@ -1166,7 +1166,7 @@ public class SearchWindow extends JFrame {
 										.getFileEditorManager()
 										.getFileEditorPanelAt(_selectedEditorIndex)
 										.selectText(
-												_result,
+												_matchStartPosition,
 												_search.getRegularExpresion()
 														.length());
 								// Updates the log

@@ -21,14 +21,12 @@ import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 
 import language.AcideLanguage;
 import operations.log.AcideLog;
@@ -85,65 +83,69 @@ public class OutputConfigurationWindow extends JFrame {
 	 */
 	private static final ImageIcon ICON = new ImageIcon("./resources/images/icon.png");
 	/**
-	 * Main panel of the window.
+	 * Output configuration window main panel of the window.
 	 */
 	private JPanel _mainPanel;
 	/**
-	 * Button panel.
+	 * Output configuration window button panel.
 	 */
 	private JPanel _buttonPanel;
 	/**
-	 * Echo command label.
+	 * Output configuration window echo command label.
 	 */
 	private JLabel _echoCommandLabel;
 	/**
-	 * Shell path label.
+	 * Output configuration window shell path label.
 	 */
 	private JLabel _shellPathLabel;
 	/**
-	 * Exit command text field.
+	 * Output configuration window exit command text field.
 	 */
 	private JLabel _exitCommandLabel;
 	/**
-	 * Shell directory label.
+	 * Output configuration window shell directory label.
 	 */
 	private final JLabel _shellDirectoryLabel;
 	/**
-	 * Shell path text field.
+	 * Output configuration window shell path text field.
 	 */
 	private final JTextField _shellPathTextField;
 	/**
-	 * Exit command text field.
+	 * Output configuration window exit command text field.
 	 */
 	private final JTextField _exitCommandTextField;
 	/**
-	 * Shell directory text field.
+	 * Output configuration window shell directory text field.
 	 */
 	private final JTextField _shellDirectoryTextField;
 	/**
-	 * Manual path label.
+	 * Output configuration window manual path label.
 	 */
 	private JLabel _manualPathLabel;
 	/**
-	 * Manual path label.
+	 * Output configuration window manual path label.
 	 */
 	private final JCheckBox _manualPathCheckBox;
 	/**
-	 * Echo command check box.
+	 * Output configuration window echo command check box.
 	 */
 	private final JCheckBox _echoCommandCheckBox;
 	/**
-	 * Apply button.
+	 * Output configuration window apply button.
 	 */
 	private JButton _applyButton;
 	/**
-	 * Examine button.
+	 * Output configuration window examine button.
 	 */
 	private JButton _examineButton;
 	/**
-	 * Examine 2 button.
+	 * Output configuration window examine 2 button.
 	 */
 	private final JButton _examine2Button;
+	/**
+	 * Output configuration window cancel button.
+	 */
+	private JButton _cancelButton;
 
 	/**
 	 * Creates a new output configuration window.
@@ -177,7 +179,7 @@ public class OutputConfigurationWindow extends JFrame {
 		
 		// BUTTON PANEL
 		_buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
+		
 		// SHELL DIRECTORY
 		_shellDirectoryLabel = new JLabel(labels.getString("s337"), JLabel.LEFT);
 		_shellDirectoryTextField = new JTextField();
@@ -246,6 +248,11 @@ public class OutputConfigurationWindow extends JFrame {
 		_applyButton.setMnemonic(KeyEvent.VK_A);
 		_applyButton.setToolTipText(labels.getString("s336"));
 
+		// CANCEL BUTTON
+		_cancelButton = new JButton(labels.getString("s178"));
+		_cancelButton.setVerticalTextPosition(AbstractButton.CENTER);
+		_cancelButton.setHorizontalTextPosition(AbstractButton.LEADING);
+		
 		// EXAMINE BUTTON
 		_examineButton = new JButton(labels.getString("s142"));
 		_examineButton.setToolTipText(labels.getString("s301"));
@@ -342,7 +349,7 @@ public class OutputConfigurationWindow extends JFrame {
 
 					File path = new File(_shellPathTextField.getText());
 
-					// IF THE SELECTED SHELL EXISTS
+					// If the selected path exists
 					if (path.exists()) {
 
 						// SHELL DIRECTORY
@@ -373,46 +380,58 @@ public class OutputConfigurationWindow extends JFrame {
 							OutputConfiguration.getInstance()
 									.setShellDirectory(calculatedPath);
 						}
+						
+						// ECHO COMMAND
+						OutputConfiguration.getInstance().setEchoCommand(
+								_echoCommandCheckBox.isSelected());
 
-						// UPDATE THE PROJECT CONFIGURATION
-						MainWindow.getInstance().getOutput().resetOutput();
-
-						// SHELL PATH
+						// EXIT COMMAND
+						OutputConfiguration.getInstance().setExitCommand(
+								_exitCommandTextField.getText());
+						
+						// Sets the shell path
 						OutputConfiguration.getInstance().setShellPath(
 								_shellPathTextField.getText());
+						
+						// Resets the output
+						MainWindow.getInstance().getOutput().resetOutput();
 
 					} else {
 
-						// ERROR MESSAGE
+						// Shows an error message
 						JOptionPane.showMessageDialog(null,
 								labels.getString("s993"), "Error",
 								JOptionPane.ERROR_MESSAGE);
 
-						// SHELL PATH
+						// Sets the shell path to null
 						OutputConfiguration.getInstance().setShellPath("null");
-					}
-					// ECHO COMMAND
-					OutputConfiguration.getInstance().setEchoCommand(
-							_echoCommandCheckBox.isSelected());
+						
+						// ECHO COMMAND
+						OutputConfiguration.getInstance().setEchoCommand(
+								_echoCommandCheckBox.isSelected());
 
-					// EXIT COMMAND
-					OutputConfiguration.getInstance().setExitCommand(
-							_exitCommandTextField.getText());
+						// EXIT COMMAND
+						OutputConfiguration.getInstance().setExitCommand(
+								_exitCommandTextField.getText());
+					}
 
 					// Updates the RESOURCE MANAGER
 					ResourceManager.getInstance().setProperty("outputConfiguration",
 							"./configuration/output/configuration.xml");
 					OutputConfiguration.getInstance().save();
 
-					// NOT DEFAULT PROJECT
+					// Not default project
 					if (!MainWindow.getInstance().getProjectConfiguration()
 							.isDefaultProject())
 
-						// THE PROJECT HAS BEEN MODIFIED
+						// The project has been modified
 						MainWindow.getInstance().getProjectConfiguration()
 								.setIsModified(true);
 
+					// If the project window configuration has been configured
 					if (MainWindow.getInstance().getProjectWindowConfiguration() != null)
+						
+						// The paths have been defined
 						MainWindow.getInstance().getProjectWindowConfiguration()
 								.setAreShellPathsDefined(true);
 
@@ -422,33 +441,26 @@ public class OutputConfigurationWindow extends JFrame {
 					AcideLog.getLog().error(exception.getMessage());
 					exception.printStackTrace();
 				}
-				
+								
 				// Closes the window
 				dispose();
 			}
 		});
 
-		ActionListener actionListener = new ActionListener() {
+		_cancelButton.addActionListener(new ActionListener(){
 			/*
 			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
+			 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				
+					
 				// Closes the window
-				dispose();
-			}
-		};
-
-		_applyButton.registerKeyboardAction(actionListener, "EscapeKey",
-				KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0,
-						true), JComponent.WHEN_IN_FOCUSED_WINDOW);
-
-		// SET THE COMPONENTS WITH THE LAYOUT
+				dispose();	
+			}	
+		});
+		
+		// Sets the components with the layout
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.BOTH;
 
@@ -515,8 +527,11 @@ public class OutputConfigurationWindow extends JFrame {
 		
 		// BUTTON PANEL
 		_buttonPanel.add(_applyButton);
+		_buttonPanel.add(_cancelButton);
+		constraints.insets = new Insets(0, 0, 0, 0);
+		constraints.gridwidth = 2;
 		constraints.gridx = 0;
-		constraints.gridy = 1;
+		constraints.gridy = 5;
 		add(_buttonPanel, constraints);
 
 		// FRAME

@@ -1,12 +1,12 @@
 prueba
-C:\Documents and Settings\Salcedonia\Escritorio\acide-0-8-release-2010-2011\acide\configuration\lexical\batch.xml
+./configuration/lexical/default.xml
 ./configuration/grammars/bytes.jar
 null
 null
 ./configuration/output/configuration.xml
 english
-C:\Documents and Settings\Salcedonia\Escritorio\acide-0-8-release-2010-2011\acide\configuration\menu\defaultAllOn.menuCfg
-C:\Documents and Settings\Salcedonia\Escritorio\acide-0-8-release-2010-2011\acide\configuration\toolbar\default.TBcfg
+./configuration/menu/defaultAllOn.menuCfg
+C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\toolbar\default.TBcfg
 true
 true
 1292
@@ -15,7 +15,7 @@ true
 -4
 248
 481
-0
+1
 4
 C:\Documents and Settings\Salcedonia\Escritorio\ups.txt
 ups.txt

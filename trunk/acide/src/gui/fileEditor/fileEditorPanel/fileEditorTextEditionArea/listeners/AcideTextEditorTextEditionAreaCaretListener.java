@@ -124,9 +124,6 @@ public class AcideTextEditorTextEditionAreaCaretListener implements CaretListene
 				.setColumns(numLinesMessage.length());
 		MainWindow.getInstance().getStatusBar().getNumLinesMessage()
 				.setText(numLinesMessage);
-
-		MainWindow.getInstance().validate();
-		MainWindow.getInstance().repaint();
 		
 		try {
 			if (selectedEditor.getTextEditionPanelList().get(0)

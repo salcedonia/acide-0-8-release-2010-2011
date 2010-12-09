@@ -4,6 +4,7 @@ import es.configuration.toolBar.shellComandToolBar.ShellCommandList;
 import es.text.TextFileFilter;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.configurationMenu.toolBarMenu.gui.ToolBarConfigurationWindow;
+import gui.toolBarPanel.AcideToolBarPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -95,7 +96,7 @@ public class LoadToolBarMenuItemListener implements ActionListener{
 			try {
 				ShellCommandList.loadList(toolBarFile);
 				ShellCommandList.loadAuxList(toolBarFile);
-				MainWindow.getInstance().buildToolBar();
+				AcideToolBarPanel.buildAcideToolBarPanel();
 				
 				// Updates the RESOURCE MANAGER
 				ResourceManager.getInstance().setProperty(

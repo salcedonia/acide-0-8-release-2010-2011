@@ -40,44 +40,44 @@ import es.configuration.toolBar.shellComandToolBar.ShellCommand;
 import es.configuration.toolBar.shellComandToolBar.ShellCommandList;
 import es.text.TextFile;
 
-/************************************************************************																
+/************************************************************************
  * Tool bar configuration window of ACIDE - A Configurable IDE.
- *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
- * @version 0.8	
- * @see JFrame																													
+ * 
+ * <p>
+ * <b>ACIDE - A Configurable IDE</b>
+ * </p>
+ * <p>
+ * <b>Official web site:</b> @see http://acide.sourceforge.net
+ * </p>
+ * 
+ ************************************************************************ 
+ * @author <ul>
+ *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
+ *         <li><b>Version 0.1-0.6:</b>
+ *         <ul>
+ *         Diego Cardiel Freire
+ *         </ul>
+ *         <ul>
+ *         Juan José Ortiz Sánchez
+ *         </ul>
+ *         <ul>
+ *         Delfín Rupérez Cañas
+ *         </ul>
+ *         </li>
+ *         <li><b>Version 0.7:</b>
+ *         <ul>
+ *         Miguel Martín Lázaro
+ *         </ul>
+ *         </li>
+ *         <li><b>Version 0.8:</b>
+ *         <ul>
+ *         Javier Salcedo Gómez
+ *         </ul>
+ *         </li>
+ *         </ul>
+ ************************************************************************ 
+ * @version 0.8
+ * @see JFrame
  ***********************************************************************/
 public class ToolBarConfigurationWindow extends JFrame {
 
@@ -88,7 +88,8 @@ public class ToolBarConfigurationWindow extends JFrame {
 	/**
 	 * Tool bar configuration window image icon.
 	 */
-	private static final ImageIcon ICON = new ImageIcon("./resources/images/icon.png");
+	private static final ImageIcon ICON = new ImageIcon(
+			"./resources/images/icon.png");
 	/**
 	 * Command panel.
 	 */
@@ -213,6 +214,11 @@ public class ToolBarConfigurationWindow extends JFrame {
 	 * Flag that indicates if the changes are saved.
 	 */
 	private static boolean _areChangesSaved;
+	/**
+	 * Flag that indicates if there are changes in the window. The changes are
+	 * applied only when the user selects the add, modify or quit button.
+	 */
+	private static boolean _areThereChanges;
 
 	/**
 	 * Creates a new tool bar configuration window.
@@ -226,14 +232,16 @@ public class ToolBarConfigurationWindow extends JFrame {
 		super();
 
 		_areChangesSaved = true;
+		_areThereChanges = false;
 
 		// Gets the language
 		AcideLanguage language = AcideLanguage.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(ResourceManager.getInstance().getProperty(
+					"language"));
 		} catch (Exception exception) {
-			
+
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
 			exception.printStackTrace();
@@ -255,7 +263,7 @@ public class ToolBarConfigurationWindow extends JFrame {
 		// FRAME
 		setIconImage(ICON.getImage());
 		setLayout(new GridBagLayout());
-		
+
 		// COMMAND PANEL
 		_commandPanel = new JPanel();
 		_commandPanel.setLayout(new GridBagLayout());
@@ -266,7 +274,7 @@ public class ToolBarConfigurationWindow extends JFrame {
 
 		// BUTTON PANEL
 		_buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		
+
 		// ICON BUTTON PANEL
 		_iconButtonsPanel = new JPanel();
 		_iconButtonsPanel.setLayout(new GridBagLayout());
@@ -422,76 +430,83 @@ public class ToolBarConfigurationWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 
-				// Asks the user if wants to save the changes 
-				int choosenOption = JOptionPane.showConfirmDialog(null,
-						labels.getString("s996"), labels.getString("s995"),
-						JOptionPane.YES_NO_CANCEL_OPTION);
-
-				switch(choosenOption){
-				
-				// YES
-				case JOptionPane.YES_OPTION: 
+				// If there have been changes ask for saving the changes
+				if (_areThereChanges) {
 					
-					// Modifies the current tool bar
-					_modifyButton.doClick();
+					// Asks the user if wants to save the changes
+					int choosenOption = JOptionPane.showConfirmDialog(null,
+							labels.getString("s996"), labels.getString("s995"),
+							JOptionPane.YES_NO_CANCEL_OPTION);
 
-					// Sets the list
-					ShellCommandList.setList(_commandList);
-					String newName = "./configuration/toolbar/lastModified.TBcfg";
-					ShellCommandList.saveList(newName);
+					switch (choosenOption) {
 
-					try {
+					// YES
+					case JOptionPane.YES_OPTION:
 
-						// Sets the previous tool bar configuration
-						String previous = ResourceManager
-								.getInstance().getProperty("currentToolBarConfiguration");
+						// Modifies the current tool bar
+						_modifyButton.doClick();
 
-						if (!previous.endsWith("lastModified.TBcfg"))
-							
+						// Sets the list
+						ShellCommandList.setList(_commandList);
+						String newName = "./configuration/toolbar/lastModified.TBcfg";
+						ShellCommandList.saveList(newName);
+
+						try {
+
+							// Sets the previous tool bar configuration
+							String previous = ResourceManager.getInstance()
+									.getProperty("currentToolBarConfiguration");
+
+							if (!previous.endsWith("lastModified.TBcfg"))
+
+								// Updates the RESOURCE MANAGER
+								ResourceManager.getInstance().setProperty(
+										"previousToolBarConfiguration",
+										previous);
+
 							// Updates the RESOURCE MANAGER
 							ResourceManager.getInstance().setProperty(
-									"previousToolBarConfiguration", previous);
+									"currentToolBarConfiguration", newName);
 
-						// Updates the RESOURCE MANAGER
-						ResourceManager.getInstance().setProperty(
-								"currentToolBarConfiguration", newName);
+							// Builds the tool bar
+							MainWindow.getInstance().buildToolBar();
+							_areChangesSaved = false;
+							MainWindow.getInstance().validate();
+							MainWindow.getInstance().repaint();
 
-						// Builds the tool bar
-						MainWindow.getInstance().buildToolBar();
-						_areChangesSaved = false;
-						MainWindow.getInstance().validate();
-						MainWindow.getInstance().repaint();
+							// Closes the window
+							dispose();
+							MainWindow.getInstance().setEnabled(true);
+							MainWindow.getInstance().setAlwaysOnTop(true);
+							MainWindow.getInstance().setAlwaysOnTop(false);
 
-						// Closes the window
-						dispose();
-						MainWindow.getInstance().setEnabled(true);
-						MainWindow.getInstance().setAlwaysOnTop(true);
-						MainWindow.getInstance().setAlwaysOnTop(false);
+							// Enables the save tool bar menu option
+							MainWindow.getInstance().getMenu()
+									.getConfiguration().getToolBar()
+									.getSaveToolBar().setEnabled(true);
 
-						// Enables the save tool bar menu option
-						MainWindow.getInstance().getMenu().getConfiguration()
-								.getToolBar().getSaveToolBar().setEnabled(true);
+							// Updates the tool bar
+							AcideLog.getLog().info(labels.getString("s170"));
 
-						// Updates the tool bar
-						AcideLog.getLog().info(labels.getString("s170"));
+						} catch (Exception exception) {
 
-					} catch (Exception exception) {
+							// Error message
+							JOptionPane.showMessageDialog(null,
+									exception.getMessage(),
+									labels.getString("s909"),
+									JOptionPane.ERROR_MESSAGE);
 
-						// Error message
-						JOptionPane.showMessageDialog(null, exception.getMessage(),
-								labels.getString("s909"),
-								JOptionPane.ERROR_MESSAGE);
+							// Updates the log
+							AcideLog.getLog().error(exception.getMessage());
+						}
 
-						// Updates the log
-						AcideLog.getLog().error(exception.getMessage());
+						break;
+
+					// NO
+					case JOptionPane.NO_OPTION:
+						_cancelButton.doClick();
+						break;
 					}
-					
-					break;
-					
-				// NO
-				case JOptionPane.NO_OPTION: 
-					_cancelButton.doClick();
-					break;
 				}
 			}
 		});
@@ -533,26 +548,29 @@ public class ToolBarConfigurationWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 
-				// CHECK IF THERE IS A SELECTED ROW IN THE TABLE
+				// Checks if there is a selected row in the table
 				int selectedRow = _table.getSelectedRow();
 
-				// IF THERE IS A SELECTED ROW
+				// If there is a selected row
 				if (selectedRow != -1) {
 
-					// REMOVES THE COMMAND
+					// Removes the command
 					_commandList.remove(selectedRow);
 
-					// UPDATES THE TOOL BAR TABLE MATRIX
+					// Updates the tool bar table matrix
 					setToolBarTableMatrix();
+
+					// There are changes
+					_areThereChanges = true;
 				} else {
 
-					// ERROR MESSAGE
+					// Error message
 					JOptionPane.showMessageDialog(null,
 							labels.getString("s156"), labels.getString("s157"),
 							JOptionPane.ERROR_MESSAGE);
 				}
 
-				// UPDATES THE TABLE MODEL
+				// Updates the table model
 				_model.setValues(_tableColumns, _commandMatrixTable);
 				_model.fireTableDataChanged();
 
@@ -577,39 +595,46 @@ public class ToolBarConfigurationWindow extends JFrame {
 				String command = _commandTextField.getText();
 				String helpText = _helpTextTextField.getText();
 				String image = _imageTextField.getText();
-				
-				// NO EMPTY NAME AND COMMAND ARE ACCEPTED
+
+				// No empty name and command are accepted
 				if (!name.matches("") && !command.matches("")) {
-					
+
 					ShellCommand editableToolBarCommand;
-					
-					// SET THE IMAGE
+
+					// Sets the image
 					if (image.equals(""))
 						editableToolBarCommand = new ShellCommand(name,
 								command, helpText);
 					else
 						editableToolBarCommand = new ShellCommand(name,
 								command, helpText, true, image);
-					
-					// ADD THE COMMAND TO THE LIST
+
+					// Adds the command to the list
 					_commandList.add(editableToolBarCommand);
-					
-					// ADD THE COMMAND
+
+					// Adds the command
 					addCommand(editableToolBarCommand);
 
-					// UPDATES THE MODEL
+					// Updates the model
 					_model.setValues(_tableColumns, _commandMatrixTable);
 					_model.fireTableDataChanged();
 
+					// There are changes
+					_areThereChanges = true;
+
 					// Updates the log
 					AcideLog.getLog().info(labels.getString("s167"));
-				}
-				else
-					if(name.matches(""))
-						JOptionPane.showMessageDialog(null, labels.getString("s997"), labels.getString("s995"), JOptionPane.ERROR_MESSAGE);
-					else
-						if(command.matches(""))
-							JOptionPane.showMessageDialog(null, labels.getString("s998"), labels.getString("s995"), JOptionPane.ERROR_MESSAGE);
+				} else
+
+				// Error messages
+				if (name.matches(""))
+					JOptionPane.showMessageDialog(null,
+							labels.getString("s997"), labels.getString("s995"),
+							JOptionPane.ERROR_MESSAGE);
+				else if (command.matches(""))
+					JOptionPane.showMessageDialog(null,
+							labels.getString("s998"), labels.getString("s995"),
+							JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
@@ -641,12 +666,13 @@ public class ToolBarConfigurationWindow extends JFrame {
 					 * javax.swing.event.ListSelectionEvent)
 					 */
 					@Override
-					public void valueChanged(ListSelectionEvent listSelectionEvent) {
+					public void valueChanged(
+							ListSelectionEvent listSelectionEvent) {
 
 						ListSelectionModel listSelectionModel = (ListSelectionModel) listSelectionEvent
 								.getSource();
 
-						// THERE ARE SELECTED ROWS
+						// There are selected rows
 						if (!listSelectionModel.isSelectionEmpty()) {
 
 							_rowShown = listSelectionModel
@@ -683,18 +709,21 @@ public class ToolBarConfigurationWindow extends JFrame {
 				ShellCommand editableToolBarCommand;
 
 				if (image.equals("")) {
-					editableToolBarCommand = new ShellCommand(name,
-							command, helpText);
+					editableToolBarCommand = new ShellCommand(name, command,
+							helpText);
 					_commandList.set(_rowShown, editableToolBarCommand);
 				} else {
-					editableToolBarCommand = new ShellCommand(name,
-							command, helpText, true, image);
+					editableToolBarCommand = new ShellCommand(name, command,
+							helpText, true, image);
 					_commandList.set(_rowShown, editableToolBarCommand);
 				}
 
 				modifyToolBarMatrixTable(editableToolBarCommand);
 				_model.setValues(_tableColumns, _commandMatrixTable);
 				_model.fireTableDataChanged();
+
+				// There have been changes
+				_areThereChanges = true;
 
 				// Updates the log
 				AcideLog.getLog().info(labels.getString("s259"));
@@ -712,7 +741,7 @@ public class ToolBarConfigurationWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 
-				// CLOSES THE WINDOW
+				// Closes the window
 				dispose();
 				MainWindow.getInstance().setEnabled(true);
 				MainWindow.getInstance().setAlwaysOnTop(true);
@@ -723,12 +752,12 @@ public class ToolBarConfigurationWindow extends JFrame {
 				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
 
-		// LOADS THE COMMAND LIST
+		// Loads the command list
 		if (isModified) {
 			try {
 
-				String current = ResourceManager
-						.getInstance().getProperty("currentToolBarConfiguration");
+				String current = ResourceManager.getInstance().getProperty(
+						"currentToolBarConfiguration");
 				ShellCommandList.loadAuxList(current);
 				_commandList = ShellCommandList.getAuxList();
 				setToolBarTableMatrix();
@@ -737,33 +766,33 @@ public class ToolBarConfigurationWindow extends JFrame {
 
 			} catch (Exception exception) {
 
-				// ERROR MESSAGE
+				// Error message
 				JOptionPane.showMessageDialog(null, exception.getMessage(),
 						labels.getString("s269"), JOptionPane.ERROR_MESSAGE);
-				
+
 				// Updates the log
 				AcideLog.getLog().error(exception.getMessage());
 			}
 		}
 
-		// SET THE TITLE
+		// Sets the title
 		if (isModified) {
 
-			// GET THE NAME OF THE CURRENT TOOL BAR CONFIGURATION
+			// Gets the name of the current tool bar configuration
 			String path = null;
 			try {
-				path = ResourceManager
-						.getInstance().getProperty("currentToolBarConfiguration");
+				path = ResourceManager.getInstance().getProperty(
+						"currentToolBarConfiguration");
 				int index = path.lastIndexOf("\\");
 				if (index == -1)
 					index = path.lastIndexOf("/");
 				path = path.substring(index + 1, path.length() - 6);
 			} catch (Exception exception) {
 
-				// ERROR MESSAGE
+				// Error message
 				JOptionPane.showMessageDialog(null, exception.getMessage(),
 						labels.getString("s295"), JOptionPane.ERROR_MESSAGE);
-				
+
 				// Updates the log
 				AcideLog.getLog().error(exception.getMessage());
 			}
@@ -771,7 +800,7 @@ public class ToolBarConfigurationWindow extends JFrame {
 		} else
 			setTitle(labels.getString("s910"));
 
-		// ADD THE PANELS TO THE FRAME
+		// Adds the panels to the frame with the layout
 		constraints.insets = new Insets(5, 5, 5, 5);
 		constraints.ipadx = 0;
 		constraints.ipady = 0;
@@ -784,7 +813,7 @@ public class ToolBarConfigurationWindow extends JFrame {
 		constraints.gridy = 2;
 		add(_listPanel, constraints);
 		constraints.gridy = 3;
-		
+
 		// BUTTON PANEL
 		_buttonPanel.add(_acceptButton, constraints);
 		_buttonPanel.add(_cancelButton, constraints);
@@ -792,7 +821,7 @@ public class ToolBarConfigurationWindow extends JFrame {
 		setResizable(false);
 		pack();
 
-		// CENTER THE LOCATION
+		// Centers the location
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension frameSize = getSize();
 		setLocation((screenSize.width - frameSize.width) / 2,

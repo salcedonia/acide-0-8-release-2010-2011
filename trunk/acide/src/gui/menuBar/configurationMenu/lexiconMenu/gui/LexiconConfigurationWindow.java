@@ -1,5 +1,6 @@
 package gui.menuBar.configurationMenu.lexiconMenu.gui;
 
+import gui.listeners.AcideWindowListener;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.configurationMenu.lexiconMenu.utils.LexiconTableModel;
 import gui.menuBar.configurationMenu.lexiconMenu.utils.LexiconTableSorter;
@@ -52,7 +53,6 @@ import operations.lexicon.Comments;
 import operations.lexicon.DelimiterList;
 import operations.lexicon.TokenType;
 import operations.lexicon.TokenTypeList;
-import operations.listeners.AcideWindowListener;
 import operations.log.AcideLog;
 import resources.ResourceManager;
 

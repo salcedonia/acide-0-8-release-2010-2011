@@ -1,17 +1,17 @@
 package main;
 
-import java.util.ResourceBundle;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import language.AcideLanguage;
-
-import es.configuration.project.workbench.AcideWorkbenchConfigurationLoader;
-
-import operations.factory.AcideOperationsFactory;
-import operations.log.AcideLog;
-import resources.ResourceManager;
+import es.configuration.project.workbench.AcideWorkbenchManager;
 import gui.mainWindow.MainWindow;
 import gui.splashScreen.AcideSplashScreen;
+
+import java.util.ResourceBundle;
+
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import language.AcideLanguage;
+import operations.log.AcideLog;
+import resources.ResourceManager;
 
 /************************************************************************
  * Main class of ACIDE - A Configurable IDE.
@@ -65,7 +65,6 @@ public class Acide {
 	 * @param args
 	 *            entry arguments for the application.
 	 */
-	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
 
 		// Shows the splash screen
@@ -135,40 +134,17 @@ public class Acide {
 
 		AcideSplashScreen.setProgressBar(12);
 
-
-		// Wait a little while
-		try {
-			Thread.sleep(800);
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-		}
-
 		// Builds the main window and sets the Listeners
 		MainWindow.getInstance().getMenu().setListeners();
 
 		AcideSplashScreen.setProgressBar(99);
 
-		// Gets the ACIDE - A Configurable IDE workbench configuration
-		AcideWorkbenchConfigurationLoader workbenchConfiguration = AcideOperationsFactory
-				.getInstance().buildAcideWorkbenchConfigurationLoader();
-		
-		// Loads the workbench configuration
-		workbenchConfiguration
-				.loadMainWindowWorkbenchConfiguration(workbenchConfiguration
-						.getConfigurationFileContent());
+		// Loads the ACIDE - A Configurable IDE workbench configuration
+		AcideWorkbenchManager.getInstance()
+				.loadMainWindowWorkbenchConfiguration(
+						AcideWorkbenchManager.getInstance()
+								.getConfigurationFileContent());
 
-		// Waits a little time
-		try {
-			Thread.sleep(1000);
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-		
 		AcideSplashScreen.setProgressBar(100);
 
 		// Closes the splash screen

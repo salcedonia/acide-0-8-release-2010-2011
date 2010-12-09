@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 
 import es.text.ExtensionFilter;
 import es.text.TextFile;
+import gui.listeners.AcideWindowListener;
 import gui.mainWindow.MainWindow;
 
 import javax.swing.BorderFactory;
@@ -27,7 +28,6 @@ import javax.swing.border.TitledBorder;
 
 import language.AcideLanguage;
 
-import operations.listeners.AcideWindowListener;
 import operations.log.AcideLog;
 import resources.ResourceManager;
 

@@ -1,5 +1,6 @@
 package gui.menuBar.projectMenu.listeners;
 
+import es.configuration.project.workbench.AcideWorkbenchManager;
 import es.explorer.ExplorerFile;
 import gui.mainWindow.MainWindow;
 
@@ -62,8 +63,8 @@ public class CompileMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Closes the default project
-		MainWindow.getInstance().closeDefaultProject();
+		// Saves the file editor panel configuration
+		AcideWorkbenchManager.getInstance().saveFileEditorPanelConfiguration();
 
 		try {
 			

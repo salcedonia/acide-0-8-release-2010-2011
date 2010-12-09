@@ -1,5 +1,6 @@
 package gui.statusBarPanel;
 
+import gui.mainWindow.MainWindow;
 import gui.statusBarPanel.listeners.AcideStatusBarPopupMenuListener;
 import gui.statusBarPanel.popup.AcideStatusBarPopupMenu;
 
@@ -474,5 +475,120 @@ public class AcideStatusBar{
 	 */
 	public JTextField getNumLinesMessage() {
 		return _numberOfLinesMessage;
+	}
+
+	/**
+	 * Updates the status bar with the message of the type of file that is 
+	 * currently selected in the file editor.
+	 */
+	public void updatesStatusBarFromFileEditor() {
+		
+		if (MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel() != null) {
+
+			// Updates the status bar
+			MainWindow
+					.getInstance()
+					.getStatusBar()
+					.setMessage(
+							MainWindow.getInstance().getFileEditorManager()
+									.getSelectedFileEditorPanel().getAbsolutePath());
+
+			for (int i = 0; i < MainWindow.getInstance()
+					.getProjectConfiguration().getNumFilesFromList(); i++) {
+
+				if (MainWindow
+						.getInstance()
+						.getProjectConfiguration()
+						.getFileAt(i)
+						.getPath()
+						.equals(MainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel().getAbsolutePath()))
+
+					if (MainWindow.getInstance().getProjectConfiguration()
+							.getFileAt(i).isCompilableFile())
+
+						if (MainWindow.getInstance().getProjectConfiguration()
+								.getFileAt(i).isMainFile())
+
+							// MAIN FILE
+							MainWindow
+									.getInstance()
+									.getStatusBar()
+									.setMessage(
+											MainWindow.getInstance()
+													.getFileEditorManager()
+													.getSelectedFileEditorPanel()
+													.getAbsolutePath()
+													+ " <MAIN>");
+						else
+
+							// COMPILABLE FILE
+							MainWindow
+									.getInstance()
+									.getStatusBar()
+									.setMessage(
+											MainWindow.getInstance()
+													.getFileEditorManager()
+													.getSelectedFileEditorPanel()
+													.getAbsolutePath()
+													+ " <COMPILABLE>");
+					else
+
+						// Updates the status bar
+						MainWindow
+								.getInstance()
+								.getStatusBar()
+								.setMessage(
+										MainWindow.getInstance()
+												.getFileEditorManager()
+												.getSelectedFileEditorPanel()
+												.getAbsolutePath());
+			}
+
+			// Default configuration
+			if (MainWindow.getInstance().getProjectConfiguration()
+					.isDefaultProject()) {
+
+				// Checks the type
+				if (MainWindow.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanel().isCompilerFile())
+
+					if (MainWindow.getInstance().getFileEditorManager()
+							.getSelectedFileEditorPanel().isMainFile())
+
+						// MAIN FILE
+						MainWindow
+								.getInstance()
+								.getStatusBar()
+								.setMessage(
+										MainWindow.getInstance()
+												.getFileEditorManager()
+												.getSelectedFileEditorPanel()
+												.getAbsolutePath()
+												+ " <MAIN>");
+					else
+
+						// COMPILABLE FILE
+						MainWindow
+								.getInstance()
+								.getStatusBar()
+								.setMessage(
+										MainWindow.getInstance()
+												.getFileEditorManager()
+												.getSelectedFileEditorPanel()
+												.getAbsolutePath()
+												+ " <COMPILABLE>");
+				else
+					// Updates the status bar
+					MainWindow
+							.getInstance()
+							.getStatusBar()
+							.setMessage(
+									MainWindow.getInstance()
+											.getFileEditorManager()
+											.getSelectedFileEditorPanel()
+											.getAbsolutePath());
+			}
+		}
 	}
 }

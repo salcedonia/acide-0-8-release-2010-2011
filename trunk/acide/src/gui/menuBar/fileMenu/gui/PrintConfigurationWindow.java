@@ -1,5 +1,6 @@
 package gui.menuBar.fileMenu.gui;
 
+import gui.listeners.AcideWindowListener;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.fileMenu.utils.PrinterManager;
 
@@ -24,7 +25,6 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import language.AcideLanguage;
-import operations.listeners.AcideWindowListener;
 import operations.log.AcideLog;
 import resources.ResourceManager;
 

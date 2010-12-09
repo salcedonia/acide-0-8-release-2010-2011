@@ -5,6 +5,7 @@ import es.configuration.output.OutputConfiguration;
 import es.explorer.ExplorerFile;
 import es.text.ExtensionFilter;
 import es.text.TextFile;
+import gui.listeners.AcideWindowListener;
 import gui.mainWindow.MainWindow;
 
 import java.awt.FlowLayout;
@@ -36,7 +37,6 @@ import operations.factory.AcideIOFactory;
 import operations.lexicon.Comments;
 import operations.lexicon.DelimiterList;
 import operations.lexicon.TokenTypeList;
-import operations.listeners.AcideWindowListener;
 import operations.log.AcideLog;
 import resources.ResourceManager;
 
@@ -88,7 +88,8 @@ public class NewProjectConfigurationWindow extends JFrame {
 	/**
 	 * New project configuration window image icon.
 	 */
-	private static final ImageIcon ICON = new ImageIcon("./resources/images/icon.png");
+	private static final ImageIcon ICON = new ImageIcon(
+			"./resources/images/icon.png");
 	/**
 	 * New project configuration window main panel.
 	 */
@@ -194,7 +195,8 @@ public class NewProjectConfigurationWindow extends JFrame {
 		// Gets the language
 		AcideLanguage language = AcideLanguage.getInstance();
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(ResourceManager.getInstance().getProperty(
+					"language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -226,8 +228,8 @@ public class NewProjectConfigurationWindow extends JFrame {
 
 		// LANGUAGE CONFIGURATION PANEL
 		_languageConfigurationPanel = new JPanel();
-		_languageConfigurationPanel.setBorder(BorderFactory.createTitledBorder(null,
-				labels.getString("s590"), TitledBorder.LEADING,
+		_languageConfigurationPanel.setBorder(BorderFactory.createTitledBorder(
+				null, labels.getString("s590"), TitledBorder.LEADING,
 				TitledBorder.DEFAULT_POSITION));
 		_languageConfigurationPanel.setLayout(new GridBagLayout());
 
@@ -320,7 +322,8 @@ public class NewProjectConfigurationWindow extends JFrame {
 				TokenTypeList.getInstance().reset();
 				DelimiterList.getInstance().reset();
 				Comments.getInstance().reset();
-				AcideGUIFactory.getInstance().buildNewLexiconConfigurationWindow();
+				AcideGUIFactory.getInstance()
+						.buildNewLexiconConfigurationWindow();
 			}
 		});
 
@@ -339,8 +342,8 @@ public class NewProjectConfigurationWindow extends JFrame {
 				// Gets the language
 				AcideLanguage language = AcideLanguage.getInstance();
 				try {
-					language.getLanguage(ResourceManager
-							.getInstance().getProperty("language"));
+					language.getLanguage(ResourceManager.getInstance()
+							.getProperty("language"));
 				} catch (Exception exception) {
 
 					// Updates the log
@@ -383,8 +386,8 @@ public class NewProjectConfigurationWindow extends JFrame {
 				// Gets the language
 				AcideLanguage language = AcideLanguage.getInstance();
 				try {
-					language.getLanguage(ResourceManager
-							.getInstance().getProperty("language"));
+					language.getLanguage(ResourceManager.getInstance()
+							.getProperty("language"));
 				} catch (Exception exception) {
 
 					// Updates the log
@@ -435,8 +438,8 @@ public class NewProjectConfigurationWindow extends JFrame {
 				// Gets the language
 				AcideLanguage language = AcideLanguage.getInstance();
 				try {
-					language.getLanguage(ResourceManager
-							.getInstance().getProperty("language"));
+					language.getLanguage(ResourceManager.getInstance()
+							.getProperty("language"));
 				} catch (Exception exception) {
 
 					// Updates the log
@@ -511,8 +514,8 @@ public class NewProjectConfigurationWindow extends JFrame {
 				// Gets the language
 				AcideLanguage language = AcideLanguage.getInstance();
 				try {
-					language.getLanguage(ResourceManager
-							.getInstance().getProperty("language"));
+					language.getLanguage(ResourceManager.getInstance()
+							.getProperty("language"));
 				} catch (Exception exception) {
 
 					// Updates the log
@@ -523,21 +526,22 @@ public class NewProjectConfigurationWindow extends JFrame {
 				// Gets the labels
 				ResourceBundle labels = language.getLabels();
 
-				// IF THE REQUIRED PARAMETERS ARE SET
+				// If the required parameters are set
 				if (!_nameTextField.getText().equals("")
 						&& !_lexicalConfigurationNameLabel.getText().contains(
-								labels.getString("s598"))
-						&& !_grammarConfigurationNameLabel.getText().contains(
 								labels.getString("s598"))) {
+					// && !_grammarConfigurationNameLabel.getText().contains(
+					// labels.getString("s598"))) {
 
 					boolean overwrite = true;
 
+					// Gets the project name to check if we are overwriting it
 					String txtFile = "";
 					String separator = "\\";
 
-					int index1 = _workspaceTextField.getText().lastIndexOf(
-							separator);
-					if (index1 == -1)
+					int slashLastIndex = _workspaceTextField.getText()
+							.lastIndexOf(separator);
+					if (slashLastIndex == -1)
 						separator = "/";
 
 					txtFile = _workspaceTextField.getText() + separator
@@ -548,33 +552,49 @@ public class NewProjectConfigurationWindow extends JFrame {
 
 					File fileProject = new File(txtFile);
 
-					// IF THE FILE EXISTS
+					// If the file exists
 					if (fileProject.exists()) {
 
-						int result = JOptionPane.showConfirmDialog(null,
+						// Ask to the user if he wants to save it
+						int choosenOption = JOptionPane.showConfirmDialog(null,
 								labels.getString("s955"),
 								labels.getString("s953"),
 								JOptionPane.YES_NO_OPTION);
 
-						if (result == JOptionPane.NO_OPTION)
+						// If he chooses no
+						if (choosenOption == JOptionPane.NO_OPTION)
+							// We are not overwriting
 							overwrite = false;
 					}
 
+					// If we are overwriting
 					if (overwrite) {
 
-						// SET THE COMPILER PATHS
+						// If the compiler paths are not defined
 						if (!_areCompilerPathsDefined) {
+
+							// Sets the compiler path in the configuration as
+							// null
 							MainWindow.getInstance().getProjectConfiguration()
 									.setCompilerPath(null);
+
+							// Sets the compiler arguments in the configuration
+							// as null
 							MainWindow.getInstance().getProjectConfiguration()
 									.setCompilerArguments(null);
 						} else {
+
+							// Sets the compiler path in the configuration as
+							// null
 							if (MainWindow.getInstance()
 									.getProjectConfiguration()
 									.getCompilerPath().equals(""))
 								MainWindow.getInstance()
 										.getProjectConfiguration()
 										.setCompilerPath(null);
+
+							// Sets the compiler arguments in the configuration
+							// as null
 							if (MainWindow.getInstance()
 									.getProjectConfiguration()
 									.getCompilerArguments().equals(""))
@@ -583,27 +603,37 @@ public class NewProjectConfigurationWindow extends JFrame {
 										.setCompilerArguments(null);
 						}
 
-						// SET THE SHELL PATHS
+						// If the shell paths are not defined
 						if (!_areShellPathsDefined) {
+							
+							// Sets the shell path in the configuration
+							// as null
 							OutputConfiguration.getInstance()
 									.setShellPath(null);
+							
+							// Sets the shell directory in the configuration
+							// as null
 							OutputConfiguration.getInstance()
 									.setShellDirectory(null);
 						} else {
 
 							if (OutputConfiguration.getInstance()
 									.getShellPath().equals(""))
+								// Sets the shell path in the configuration
+								// as null
 								OutputConfiguration.getInstance().setShellPath(
 										null);
 
 							if (OutputConfiguration.getInstance()
 									.getShellDirectory().equals(""))
+								// Sets the shell directory in the configuration
+								// as null
 								OutputConfiguration.getInstance()
 										.setShellDirectory(null);
 						}
 
 						// SHELL EXIT COMMAND
-						OutputConfiguration.getInstance().setExitCommand(null);
+						OutputConfiguration.getInstance().setExitCommand("null");
 
 						// SHELL ECHO COMMAND
 						OutputConfiguration.getInstance().setEchoCommand(false);
@@ -624,7 +654,7 @@ public class NewProjectConfigurationWindow extends JFrame {
 										.getTextComponent().getFont()
 										.getFontName());
 
-						// PARSE THE FONT STYLE FROM INT TO STRING
+						// Parse the font style from int to string
 						String fontStyleString = "";
 						switch (MainWindow.getInstance().getOutput()
 								.getTextComponent().getFont().getStyle()) {
@@ -653,7 +683,7 @@ public class NewProjectConfigurationWindow extends JFrame {
 												.getTextComponent().getFont()
 												.getSize());
 
-						// SET THE LEXICAL CONFIGURATION
+						// LEXICAL CONFIGURATION
 						MainWindow.getInstance().getProjectConfiguration()
 								.removeFiles();
 						MainWindow.getInstance().getProjectConfiguration()
@@ -662,17 +692,24 @@ public class NewProjectConfigurationWindow extends JFrame {
 								.getString("s598"))) {
 							try {
 								_lexicalConfigurationName = ResourceManager
-										.getInstance().getProperty("languagePath");
-							} catch (Exception e1) {
+										.getInstance().getProperty(
+												"languagePath");
+							} catch (Exception exception) {
 
+								// Updates the log
+								AcideLog.getLog().error(exception.getMessage());
+								exception.printStackTrace();
 							}
 						}
 
+						// Sets the project configuration
 						MainWindow
 								.getInstance()
 								.getProjectConfiguration()
 								.setLexicalConfiguration(
 										_lexicalConfigurationName);
+
+						// Is not the first save
 						MainWindow.getInstance().getProjectConfiguration()
 								.setFirstSave(false);
 
@@ -681,7 +718,7 @@ public class NewProjectConfigurationWindow extends JFrame {
 								labels.getString("s615")
 										+ _nameTextField.getText());
 
-						// BUILD THE EXPLORER
+						// Builds the explorer
 						MainWindow.getInstance().getExplorer().getRoot()
 								.removeAllChildren();
 
@@ -697,10 +734,10 @@ public class NewProjectConfigurationWindow extends JFrame {
 
 						try {
 
-							TextFile projectTextFile = AcideIOFactory.getInstance()
-									.buildFile();
+							TextFile projectTextFile = AcideIOFactory
+									.getInstance().buildFile();
 
-							// NOT DEFAULT PROJECT
+							// Not default project
 							if (!MainWindow.getInstance()
 									.getProjectConfiguration()
 									.isDefaultProject()) {
@@ -725,14 +762,16 @@ public class NewProjectConfigurationWindow extends JFrame {
 
 								// MENU CONFIGURATION
 								String currentMenu = ResourceManager
-										.getInstance().getProperty("currentMenuConfiguration");
+										.getInstance().getProperty(
+												"currentMenuConfiguration");
 								MainWindow.getInstance()
 										.getProjectConfiguration()
 										.setMenu(currentMenu);
 
 								// TOOLBAR CONFIGURATION
 								String currentToolBar = ResourceManager
-										.getInstance().getProperty("currentToolBarConfiguration");
+										.getInstance().getProperty(
+												"currentToolBarConfiguration");
 								MainWindow.getInstance()
 										.getProjectConfiguration()
 										.setToolBar(currentToolBar);
@@ -751,15 +790,16 @@ public class NewProjectConfigurationWindow extends JFrame {
 								MainWindow.getInstance()
 										.getProjectConfiguration()
 										.setFirstSave(true);
-								
+
 								// Updates the RESOURCE MANAGER
 								ResourceManager.getInstance().setProperty(
 										"defaultAcideProject", file);
-								
-								// Updates the RESOURCE MANAGER
-								ResourceManager.getInstance().setProperty("defaultPath",
-										file);
 
+								// Updates the RESOURCE MANAGER
+								ResourceManager.getInstance().setProperty(
+										"defaultPath", file);
+
+								// The project configuration has not been modified yet
 								MainWindow.getInstance()
 										.getProjectConfiguration()
 										.setIsModified(false);
@@ -771,22 +811,25 @@ public class NewProjectConfigurationWindow extends JFrame {
 							exception.printStackTrace();
 						}
 
-						// BUILD THE EXPLORER
+						// Builds the EXPLORER
 						MainWindow.getInstance().getExplorer().getRoot()
 								.add(defaultMutableTreeNode);
 						MainWindow.getInstance().setTitle(
 								labels.getString("s425") + " - "
 										+ _nameTextField.getText());
 
-						// ADD ALL THE EDITORS
+						// Adds all the editors currently opened
 						for (int i = 0; i < MainWindow.getInstance()
-								.getFileEditorManager().getNumFileEditorPanels(); i++) {
+								.getFileEditorManager()
+								.getNumFileEditorPanels(); i++) {
 
-							// EXCEPT THE NEW FILE AND THE LOG TAB
-							if (!MainWindow.getInstance().getFileEditorManager()
+							// Except the NEW FILE and the LOG tab
+							if (!MainWindow.getInstance()
+									.getFileEditorManager()
 									.getFileEditorPanelAt(i).isNewFile()
 									&& !MainWindow.getInstance()
-											.getFileEditorManager().getFileEditorPanelAt(i)
+											.getFileEditorManager()
+											.getFileEditorPanelAt(i)
 											.isLogFile()) {
 
 								explorerFile = new ExplorerFile();
@@ -795,9 +838,11 @@ public class NewProjectConfigurationWindow extends JFrame {
 										.getFileEditorPanelAt(i).isMainFile());
 								explorerFile.setIsCompilableFile(MainWindow
 										.getInstance().getFileEditorManager()
-										.getFileEditorPanelAt(i).isCompilerFile());
+										.getFileEditorPanelAt(i)
+										.isCompilerFile());
 								explorerFile.setPath(MainWindow.getInstance()
-										.getFileEditorManager().getFileEditorPanelAt(i)
+										.getFileEditorManager()
+										.getFileEditorPanelAt(i)
 										.getAbsolutePath());
 								explorerFile.setParent(defaultMutableTreeNode
 										.toString());
@@ -805,7 +850,8 @@ public class NewProjectConfigurationWindow extends JFrame {
 										.getProjectConfiguration()
 										.addFile(explorerFile);
 								String file = MainWindow.getInstance()
-										.getFileEditorManager().getFileEditorPanelAt(i)
+										.getFileEditorManager()
+										.getFileEditorPanelAt(i)
 										.getAbsolutePath();
 
 								String fileName = "";
@@ -873,36 +919,46 @@ public class NewProjectConfigurationWindow extends JFrame {
 						// Closes the window
 						dispose();
 
+						// Shows the explorer if it has to do it
 						if (!MainWindow.getInstance().getMenu().getView()
 								.getShowExplorerPanel().isSelected())
 							MainWindow.getInstance().getExplorer()
 									.showExplorer();
 
+						// Updates the view options
 						MainWindow.getInstance().getMenu().getView()
 								.getShowExplorerPanel().setSelected(true);
 						MainWindow.getInstance().getMenu().getView()
 								.getShowShellWindow().setSelected(true);
+
+						// Enables the project menu
 						MainWindow.getInstance().getMenu().enableProjectMenu();
 					}
-				} else
+				} else {
 
-				// WARNING MESSAGES
-				if (_nameTextField.getText().equals(""))
-					JOptionPane.showMessageDialog(null,
-							labels.getString("s973"), labels.getString("s972"),
-							JOptionPane.WARNING_MESSAGE);
+					if (_nameTextField.getText().equals(""))
+						// Shows a warning message
+						JOptionPane.showMessageDialog(null,
+								labels.getString("s973"),
+								labels.getString("s972"),
+								JOptionPane.WARNING_MESSAGE);
 
-				if (_lexicalConfigurationNameLabel.getText().contains(
-						labels.getString("s598")))
-					JOptionPane.showMessageDialog(null,
-							labels.getString("s974"), labels.getString("s972"),
-							JOptionPane.WARNING_MESSAGE);
+					if (_lexicalConfigurationNameLabel.getText().contains(
+							labels.getString("s598")))
+						// Shows a warning message
+						JOptionPane.showMessageDialog(null,
+								labels.getString("s974"),
+								labels.getString("s972"),
+								JOptionPane.WARNING_MESSAGE);
 
-				if (_grammarConfigurationNameLabel.getText().contains(
-						labels.getString("s598")))
-					JOptionPane.showMessageDialog(null,
-							labels.getString("s975"), labels.getString("s972"),
-							JOptionPane.WARNING_MESSAGE);
+					if (_grammarConfigurationNameLabel.getText().contains(
+							labels.getString("s598")))
+						// Shows a warning message
+						JOptionPane.showMessageDialog(null,
+								labels.getString("s975"),
+								labels.getString("s972"),
+								JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		});
 
@@ -921,8 +977,8 @@ public class NewProjectConfigurationWindow extends JFrame {
 				// Gets the language
 				AcideLanguage language = AcideLanguage.getInstance();
 				try {
-					language.getLanguage(ResourceManager
-							.getInstance().getProperty("language"));
+					language.getLanguage(ResourceManager.getInstance()
+							.getProperty("language"));
 				} catch (Exception exception) {
 
 					// Updates the log
@@ -936,6 +992,7 @@ public class NewProjectConfigurationWindow extends JFrame {
 				// Updates the log
 				AcideLog.getLog().info(labels.getString("s614"));
 
+				// Enables the main window again
 				MainWindow.getInstance().setEnabled(true);
 
 				// Closes the window
@@ -969,7 +1026,8 @@ public class NewProjectConfigurationWindow extends JFrame {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				AcideGUIFactory.getInstance().buildCompilerConfigurationWindow();
+				AcideGUIFactory.getInstance()
+						.buildCompilerConfigurationWindow();
 			}
 		});
 
@@ -1092,14 +1150,16 @@ public class NewProjectConfigurationWindow extends JFrame {
 	/**
 	 * Loads the default grammar.
 	 * 
-	 * @param labels labels to display in the selected language.
+	 * @param labels
+	 *            labels to display in the selected language.
 	 */
 	private void loadDefaultGrammar(ResourceBundle labels) {
 
 		String grammarFile = "./configuration/grammars/bytes.jar";
-		
+
 		// Updates the RESOURCE MANAGER
-		ResourceManager.getInstance().setProperty("currentGrammar", grammarFile);
+		ResourceManager.getInstance()
+				.setProperty("currentGrammar", grammarFile);
 
 		// Updates the log
 		AcideLog.getLog().info(labels.getString("s243") + " " + grammarFile);

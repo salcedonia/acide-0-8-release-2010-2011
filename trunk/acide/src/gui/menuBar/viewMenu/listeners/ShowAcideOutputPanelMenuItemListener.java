@@ -54,13 +54,13 @@ public class ShowAcideOutputPanelMenuItemListener implements ActionListener{
 	public void actionPerformed(ActionEvent actionEvent) {
 		
 		if (MainWindow.getInstance().getMenu().getView().getShowOutputPanel().isSelected()) {
-			MainWindow.getInstance().getSplitPaneHorizontal().setDividerLocation(MainWindow.getInstance().getMenu().getView().getShellSize());
-			MainWindow.getInstance().getSplitPaneHorizontal().getBottomComponent()
+			MainWindow.getInstance().getHorizontalSplitPane().setDividerLocation(MainWindow.getInstance().getMenu().getView().getShellSize());
+			MainWindow.getInstance().getHorizontalSplitPane().getBottomComponent()
 					.setVisible(true);
 		} else {
-			MainWindow.getInstance().getMenu().getView().setShellSize(MainWindow.getInstance().getSplitPaneHorizontal().getDividerLocation());
-			MainWindow.getInstance().getSplitPaneHorizontal().setDividerLocation(0);
-			MainWindow.getInstance().getSplitPaneHorizontal().getBottomComponent()
+			MainWindow.getInstance().getMenu().getView().setShellSize(MainWindow.getInstance().getHorizontalSplitPane().getDividerLocation());
+			MainWindow.getInstance().getHorizontalSplitPane().setDividerLocation(0);
+			MainWindow.getInstance().getHorizontalSplitPane().getBottomComponent()
 					.setVisible(false);
 		}
 		

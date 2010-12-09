@@ -7,6 +7,8 @@ import java.awt.Adjustable;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 
+import javax.swing.SwingUtilities;
+
 /************************************************************************
  * Editor panel adjustment listener.
  * 
@@ -46,7 +48,8 @@ import java.awt.event.AdjustmentListener;
  * @version 0.8
  * @see AdjustmentListener
  ***********************************************************************/
-public class AcideTextEditorTextEditionAreaAdjustmentListener implements AdjustmentListener {
+public class AcideTextEditorTextEditionAreaAdjustmentListener implements
+		AdjustmentListener {
 
 	/*
 	 * (non-Javadoc)
@@ -55,123 +58,181 @@ public class AcideTextEditorTextEditionAreaAdjustmentListener implements Adjustm
 	 * .event.AdjustmentEvent)
 	 */
 	@Override
-	public void adjustmentValueChanged(AdjustmentEvent adjustmentEvent) {
+	public void adjustmentValueChanged(final AdjustmentEvent adjustmentEvent) {
 
-		AcideFileEditorPanel selectedEditor = MainWindow.getInstance()
-				.getFileEditorManager().getSelectedFileEditorPanel();
-		Adjustable source = adjustmentEvent.getAdjustable();
+		SwingUtilities.invokeLater(new Runnable() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see java.lang.Runnable#run()
+			 */
+			@Override
+			public void run() {
+				
+				final AcideFileEditorPanel selectedEditor = MainWindow
+						.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanel();
+				final Adjustable source = adjustmentEvent.getAdjustable();
 
-		if (adjustmentEvent.getValueIsAdjusting()) {
+				if (adjustmentEvent.getValueIsAdjusting()) {
 
-			// VERTICAL VALUE 1
-			selectedEditor
-					.getTextEditionPanelList()
-					.get(0)
-					.setVerticalValue(
-							selectedEditor.getTextEditionPanelList().get(0)
+					// VERTICAL VALUE 1
+					selectedEditor
+							.getTextEditionPanelList()
+							.get(0)
+							.setVerticalValue(
+									selectedEditor.getTextEditionPanelList()
+											.get(0).getScrollPane()
+											.getVerticalScrollBar().getValue());
+
+					// HORIZONTAL VALUE 1
+					selectedEditor
+							.getTextEditionPanelList()
+							.get(0)
+							.setHorizontalValue(
+									selectedEditor.getTextEditionPanelList()
+											.get(0).getScrollPane()
+											.getHorizontalScrollBar()
+											.getValue());
+
+					// VERTICAL VALUE 2
+					selectedEditor
+							.getTextEditionPanelList()
+							.get(1)
+							.setVerticalValue(
+									selectedEditor.getTextEditionPanelList()
+											.get(1).getScrollPane()
+											.getVerticalScrollBar().getValue());
+
+					// HORIZONTAL VALUE 2
+					selectedEditor
+							.getTextEditionPanelList()
+							.get(1)
+							.setHorizontalValue(
+									selectedEditor.getTextEditionPanelList()
+											.get(1).getScrollPane()
+											.getHorizontalScrollBar()
+											.getValue());
+					return;
+				}
+				int orientation = source.getOrientation();
+				if (orientation == Adjustable.HORIZONTAL) {
+				} else {
+				}
+				int type = adjustmentEvent.getAdjustmentType();
+				switch (type) {
+				case AdjustmentEvent.UNIT_INCREMENT:
+					break;
+				case AdjustmentEvent.UNIT_DECREMENT:
+					break;
+				case AdjustmentEvent.BLOCK_INCREMENT:
+					break;
+				case AdjustmentEvent.BLOCK_DECREMENT:
+					break;
+				case AdjustmentEvent.TRACK:
+					break;
+				}
+
+				if (selectedEditor != null) {
+					// EDITOR1 is focused
+					if (selectedEditor.getTextEditionPanelList().get(0)
+							.getScrollPane().isFocusOwner()
+							|| selectedEditor.getTextEditionPanelList().get(0)
 									.getScrollPane().getVerticalScrollBar()
-									.getValue());
-
-			// HORIZONTAL VALUE 1
-			selectedEditor
-					.getTextEditionPanelList()
-					.get(0)
-					.setHorizontalValue(
-							selectedEditor.getTextEditionPanelList().get(0)
+									.isFocusOwner()
+							|| selectedEditor.getTextEditionPanelList().get(0)
 									.getScrollPane().getHorizontalScrollBar()
-									.getValue());
+									.isFocusOwner()) {
 
-			// VERTICAL VALUE 2
-			selectedEditor
-					.getTextEditionPanelList()
-					.get(1)
-					.setVerticalValue(
-							selectedEditor.getTextEditionPanelList().get(1)
+						// Updates the values
+						selectedEditor
+								.getTextEditionPanelList()
+								.get(1)
+								.getScrollPane()
+								.getVerticalScrollBar()
+								.setValue(
+										selectedEditor
+												.getTextEditionPanelList()
+												.get(1).getVerticalValue());
+						selectedEditor
+								.getTextEditionPanelList()
+								.get(1)
+								.getScrollPane()
+								.getHorizontalScrollBar()
+								.setValue(
+										selectedEditor
+												.getTextEditionPanelList()
+												.get(1).getHorizontalValue());
+						selectedEditor
+								.getTextEditionPanelList()
+								.get(0)
+								.setVerticalValue(
+										selectedEditor
+												.getTextEditionPanelList()
+												.get(0).getScrollPane()
+												.getVerticalScrollBar()
+												.getValue());
+						selectedEditor
+								.getTextEditionPanelList()
+								.get(0)
+								.setHorizontalValue(
+										selectedEditor
+												.getTextEditionPanelList()
+												.get(0).getScrollPane()
+												.getHorizontalScrollBar()
+												.getValue());
+					}
+
+					// EDITOR2 is focused
+					if (selectedEditor.getTextEditionPanelList().get(1)
+							.getScrollPane().isFocusOwner()
+							|| selectedEditor.getTextEditionPanelList().get(1)
 									.getScrollPane().getVerticalScrollBar()
-									.getValue());
-
-			// HORIZONTAL VALUE 2
-			selectedEditor
-					.getTextEditionPanelList()
-					.get(1)
-					.setHorizontalValue(
-							selectedEditor.getTextEditionPanelList().get(1)
+									.isFocusOwner()
+							|| selectedEditor.getTextEditionPanelList().get(1)
 									.getScrollPane().getHorizontalScrollBar()
-									.getValue());
-			return;
-		}
-		int orientation = source.getOrientation();
-		if (orientation == Adjustable.HORIZONTAL) {
-		} else {
-		}
-		int type = adjustmentEvent.getAdjustmentType();
-		switch (type) {
-		case AdjustmentEvent.UNIT_INCREMENT:
-			break;
-		case AdjustmentEvent.UNIT_DECREMENT:
-			break;
-		case AdjustmentEvent.BLOCK_INCREMENT:
-			break;
-		case AdjustmentEvent.BLOCK_DECREMENT:
-			break;
-		case AdjustmentEvent.TRACK:
-			break;
-		}
+									.isFocusOwner()) {
 
-		// EDITOR1 is focused
-		if (selectedEditor.getTextEditionPanelList().get(0).getScrollPane().isFocusOwner()
-				|| selectedEditor.getTextEditionPanelList().get(0)
-				.getScrollPane().getVerticalScrollBar()
-						.isFocusOwner()
-				|| selectedEditor.getTextEditionPanelList().get(0)
-				.getScrollPane().getHorizontalScrollBar()
-						.isFocusOwner()) {
-
-			// Updates the values
-			selectedEditor.getTextEditionPanelList().get(1)
-			.getScrollPane().getVerticalScrollBar()
-					.setValue(selectedEditor.getTextEditionPanelList().get(1)
-							.getVerticalValue());
-			selectedEditor.getTextEditionPanelList().get(1)
-			.getScrollPane().getHorizontalScrollBar()
-					.setValue(selectedEditor.getTextEditionPanelList().get(1)
-							.getHorizontalValue());
-			selectedEditor.getTextEditionPanelList().get(0)
-			.setVerticalValue(selectedEditor.getTextEditionPanelList().get(0)
-					.getScrollPane()
-					.getVerticalScrollBar().getValue());
-			selectedEditor.getTextEditionPanelList().get(0)
-			.setHorizontalValue(selectedEditor.getTextEditionPanelList().get(0)
-					.getScrollPane()
-					.getHorizontalScrollBar().getValue());
-		}
-
-		// EDITOR2 is focused
-		if (selectedEditor.getTextEditionPanelList().get(1).getScrollPane().isFocusOwner()
-				|| selectedEditor.getTextEditionPanelList().get(1)
-				.getScrollPane().getVerticalScrollBar()
-						.isFocusOwner()
-				|| selectedEditor.getTextEditionPanelList().get(1)
-				.getScrollPane().getHorizontalScrollBar()
-					.isFocusOwner()) {
-
-			// Updates the values
-			selectedEditor.getTextEditionPanelList().get(0)
-			.getScrollPane().getVerticalScrollBar()
-					.setValue(selectedEditor.getTextEditionPanelList().get(0)
-							.getVerticalValue());
-			selectedEditor.getTextEditionPanelList().get(0)
-			.getScrollPane().getHorizontalScrollBar()
-					.setValue(selectedEditor.getTextEditionPanelList().get(0)
-							.getHorizontalValue());
-			selectedEditor.getTextEditionPanelList().get(1)
-			.setVerticalValue(selectedEditor.getTextEditionPanelList().get(1)
-					.getScrollPane()
-					.getVerticalScrollBar().getValue());
-			selectedEditor.getTextEditionPanelList().get(1)
-			.setHorizontalValue(selectedEditor.getTextEditionPanelList().get(1)
-					.getScrollPane()
-					.getHorizontalScrollBar().getValue());
-		}
+						// Updates the values
+						selectedEditor
+								.getTextEditionPanelList()
+								.get(0)
+								.getScrollPane()
+								.getVerticalScrollBar()
+								.setValue(
+										selectedEditor
+												.getTextEditionPanelList()
+												.get(0).getVerticalValue());
+						selectedEditor
+								.getTextEditionPanelList()
+								.get(0)
+								.getScrollPane()
+								.getHorizontalScrollBar()
+								.setValue(
+										selectedEditor
+												.getTextEditionPanelList()
+												.get(0).getHorizontalValue());
+						selectedEditor
+								.getTextEditionPanelList()
+								.get(1)
+								.setVerticalValue(
+										selectedEditor
+												.getTextEditionPanelList()
+												.get(1).getScrollPane()
+												.getVerticalScrollBar()
+												.getValue());
+						selectedEditor
+								.getTextEditionPanelList()
+								.get(1)
+								.setHorizontalValue(
+										selectedEditor
+												.getTextEditionPanelList()
+												.get(1).getScrollPane()
+												.getHorizontalScrollBar()
+												.getValue());
+					}
+				}
+			}
+		});
 	}
 }

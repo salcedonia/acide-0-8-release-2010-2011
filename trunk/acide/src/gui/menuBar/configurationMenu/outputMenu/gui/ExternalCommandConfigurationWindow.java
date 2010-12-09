@@ -24,7 +24,6 @@ import java.util.StringTokenizer;
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -32,7 +31,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 
 import language.AcideLanguage;
 import operations.log.AcideLog;
@@ -153,6 +151,10 @@ public class ExternalCommandConfigurationWindow extends JFrame{
 	 * Apply button.
 	 */
 	private JButton _applyButton;
+	/**
+	 * Cancel button.
+	 */
+	private JButton _cancelButton;
 	/**
 	 * Examine button.
 	 */
@@ -547,7 +549,11 @@ public class ExternalCommandConfigurationWindow extends JFrame{
 			}
 		});
 
-		ActionListener actionListener = new ActionListener() {
+		// CANCEL BUTTON
+		_cancelButton = new JButton(_labels.getString("s178"));
+		_cancelButton.setVerticalTextPosition(AbstractButton.CENTER);
+		_cancelButton.setHorizontalTextPosition(AbstractButton.LEADING);
+		_cancelButton.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
 			 * 
@@ -561,13 +567,9 @@ public class ExternalCommandConfigurationWindow extends JFrame{
 				// Closes the window
 				dispose();
 			}
-		};
+		});
 
-		_applyButton.registerKeyboardAction(actionListener, "EscapeKey",
-				KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0,
-						true), JComponent.WHEN_IN_FOCUSED_WINDOW);
-
-		// SET THE COMPONENTS WITH THE LAYOUT
+		// Sets the components with the layout
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.anchor = GridBagConstraints.EAST;
@@ -643,6 +645,8 @@ public class ExternalCommandConfigurationWindow extends JFrame{
 		
 		// BUTTON PANEL
 		_buttonPanel.add(_applyButton);
+		_buttonPanel.add(_cancelButton);
+		constraints.insets = new Insets(0, 0, 0, 0);
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		add(_buttonPanel, constraints);

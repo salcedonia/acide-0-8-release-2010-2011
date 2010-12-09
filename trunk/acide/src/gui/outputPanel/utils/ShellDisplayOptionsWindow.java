@@ -1,6 +1,7 @@
 package gui.outputPanel.utils;
 
 import es.configuration.output.OutputConfiguration;
+import gui.listeners.AcideWindowListener;
 import gui.mainWindow.MainWindow;
 
 import java.awt.BorderLayout;
@@ -35,7 +36,6 @@ import javax.swing.event.ChangeListener;
 
 import language.AcideLanguage;
 
-import operations.listeners.AcideWindowListener;
 import operations.log.AcideLog;
 import resources.ResourceManager;
 
@@ -129,56 +129,56 @@ public class ShellDisplayOptionsWindow extends JFrame {
 	 */
 	private JComboBox _fontComboBox;
 	/**
-	 * Controls panel.
+	 * Shell display options window controls panel.
 	 */
 	private JPanel _controlsPanel;
 	/**
-	 * Content panel.
+	 * Shell display options window content panel.
 	 */
 	private JPanel _mainPanel;
 	/**
-	 * Button panel.
+	 * Shell display options window button panel.
 	 */
 	private JPanel _buttonPanel;
 	/**
-	 * Accept button.
+	 * Shell display options window accept button.
 	 */
 	private JButton _acceptButton;
 	/**
-	 * Cancel button.
+	 * Shell display options window cancel button.
 	 */
 	private JButton _cancelButton;
 	/**
-	 * Style plain Radio Button.
+	 * Shell display options window style plain Radio Button.
 	 */
 	private JRadioButton _stylePlainRadioButton;
 	/**
-	 * Style italic radio button.
+	 * Shell display options window style italic radio button.
 	 */
 	private JRadioButton _styleItalicRadioButton;
 	/**
-	 * Style bold radio button.
+	 * Shell display options window style bold radio button.
 	 */
 	private JRadioButton _styleBoldRadioButton;
 	/**
-	 * Style italic + bold radio button.
+	 * Shell display options window style italic + bold radio button.
 	 */
 	private JRadioButton _styleItalicBoldRadioButton;
 	/**
-	 * Style button group.
+	 * Shell display options window style button group.
 	 */
 	private ButtonGroup _styleGroup;
 	/**
-	 * Foreground button.
+	 * Shell display options window foreground button.
 	 */
 	private JButton _foregroundButton;
 	/**
-	 * Background button.
+	 * Shell display options window background button.
 	 */
 	private JButton _backgroundButton;
 
 	/**
-	 * Class constructor.
+	 * Creates a new shell display options window.
 	 */
 	public ShellDisplayOptionsWindow() {
 
@@ -194,27 +194,27 @@ public class ShellDisplayOptionsWindow extends JFrame {
 			exception.printStackTrace();
 		}
 
-		// Gets the labels TO DISPLAY
+		// Gets the labels
 		final ResourceBundle labels = language.getLabels();
 
 		MainWindow.getInstance().setEnabled(false);
 
-		// CREATE A PANEL WHERE DISPLAY THE FONTS
+		// Creates a panel where display the fonts
 		_displayArea = new PreviewPanel(INITIAL_FONTNAME, INITIAL_STYLE,
 				INITIAL_SIZE, INITIAL_FOREGROUND, INITIAL_BACKGROUND);
 
-		// GET ALL THE FONT FAMILIES
+		// Gets all the font families
 		String[] fontNames = GraphicsEnvironment.getLocalGraphicsEnvironment()
 				.getAvailableFontFamilyNames();
 
-		// MAKE THE VECTOR WITH ALL FONTS THAT CAN DISPLAY BASIC CHARS
+		// Makes the vector with all fonts that can display the basic chars
 		Vector<String> visFonts = new Vector<String>(fontNames.length);
 
 		for (String fontName : fontNames) {
 
 			Font f = new Font(fontName, Font.PLAIN, 12);
 
-			// DISPLAY ONLY FONTS THAT HAVE THE ALPHABETIC CHARACTERS
+			// Display only fonts that have the alphabetic characters
 			if (f.canDisplay('a'))
 				visFonts.add(fontName);
 		}
@@ -260,7 +260,7 @@ public class ShellDisplayOptionsWindow extends JFrame {
 			_styleItalicBoldRadioButton = new JRadioButton(
 					"Font.BOLD+Font.ITALIC", false);
 
-		// ADD THE BUTTONS TO A BUTTON GROUP
+		// Adds the buttons to the button group
 		_styleGroup = new ButtonGroup();
 		_styleGroup.add(_stylePlainRadioButton);
 		_styleGroup.add(_styleItalicRadioButton);
@@ -416,7 +416,7 @@ public class ShellDisplayOptionsWindow extends JFrame {
 				// Updates the log
 				AcideLog.getLog().info("989");
 
-				// APPLY THE CHANGES TO THE OUTPUT IN THE MAIN WINDOW
+				// Apply the changes to the output in the main window
 				MainWindow.getInstance().getOutput().getTextComponent()
 						.setFont(
 								new Font(_displayArea.getFontName(),
@@ -429,21 +429,18 @@ public class ShellDisplayOptionsWindow extends JFrame {
 				MainWindow.getInstance().getOutput().getTextComponent()
 				.setCaretColor(_displayArea.getForeground());
 		
-				// NOT DEFAULT PROJECT
+				// Not default project
 				if(!MainWindow.getInstance().getProjectConfiguration().isDefaultProject())
 					MainWindow.getInstance().getProjectConfiguration().setIsModified(true);
 				
 				// Saves the output configuration
 				OutputConfiguration.getInstance().save();
 					
-				// SET THE MAIN WINDOW ENABLED AGAIN
+				// Set the main window enabled again
 				MainWindow.getInstance().setEnabled(true);
 
-				// CLOSES THE WINDOW
+				// Closes the window
 				dispose();
-				
-				// ENABLES THE MAIN WINDOW AGAIN
-				MainWindow.getInstance().setEnabled(true);
 			}
 		});
 
@@ -458,10 +455,10 @@ public class ShellDisplayOptionsWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 				
-				// CLOSES THE WINDOW
+				// Closes the window
 				dispose();
 				
-				// ENABLES THE MAIN WINDOW AGAIN
+				// Enables the main window again
 				MainWindow.getInstance().setEnabled(true);
 			}
 		};
@@ -488,10 +485,10 @@ public class ShellDisplayOptionsWindow extends JFrame {
 				// Updates the log
 				AcideLog.getLog().info("988");
 
-				// CLOSES THE WINDOW
+				// Closes window
 				dispose();
 				
-				// ENABLES THE MAIN WINDOW AGAIN
+				// Enables the main window again
 				MainWindow.getInstance().setEnabled(true);
 			}
 		});
@@ -505,7 +502,7 @@ public class ShellDisplayOptionsWindow extends JFrame {
 		_mainPanel.add(_buttonPanel, BorderLayout.SOUTH);
 		_mainPanel.setBorder(new EmptyBorder(12, 12, 12, 12));
 
-		// SET THE WINDOW CHARACTERISTICS
+		// FRAME
 		addWindowListener(new AcideWindowListener());
 		setContentPane(_mainPanel);
 		setTitle(labels.getString("s977"));
@@ -514,7 +511,6 @@ public class ShellDisplayOptionsWindow extends JFrame {
 		setVisible(true);
 		setResizable(false);
 		pack();
-		setLocationRelativeTo(null);
 	}
 
 	/**

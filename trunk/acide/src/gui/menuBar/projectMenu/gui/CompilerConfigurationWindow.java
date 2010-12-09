@@ -1,7 +1,9 @@
 package gui.menuBar.projectMenu.gui;
 
+import es.configuration.project.workbench.AcideWorkbenchManager;
 import es.text.ExtensionFilter;
 import es.text.TextFile;
+import gui.listeners.AcideWindowListener;
 import gui.mainWindow.MainWindow;
 
 import java.awt.FlowLayout;
@@ -25,7 +27,6 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import language.AcideLanguage;
-import operations.listeners.AcideWindowListener;
 import operations.log.AcideLog;
 import resources.ResourceManager;
 
@@ -398,8 +399,11 @@ public class CompilerConfigurationWindow extends JFrame {
 		setLocationRelativeTo(null);
 		addWindowListener(new AcideWindowListener());
 		
+		// Disables the main window
 		MainWindow.getInstance().setEnabled(false);
-		MainWindow.getInstance().closeDefaultProject();
+		
+		// Saves the file editor panel configuration
+		AcideWorkbenchManager.getInstance().saveFileEditorPanelConfiguration();
 	}
 
 	/************************************************************************																

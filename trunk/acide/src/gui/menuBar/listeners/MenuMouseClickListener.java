@@ -160,8 +160,8 @@ public class MenuMouseClickListener extends MouseAdapter {
 					.isDefaultProject()) {
 
 				// Gets the number of the editors
-				int numberEditors = MainWindow.getInstance().getFileEditorManager()
-						.getNumFileEditorPanels();
+				int numberEditors = MainWindow.getInstance()
+						.getFileEditorManager().getNumFileEditorPanels();
 
 				// If there are opened editor
 				if (numberEditors > 0) {
@@ -182,7 +182,8 @@ public class MenuMouseClickListener extends MouseAdapter {
 					if (!MainWindow.getInstance().getFileEditorManager()
 							.getSelectedFileEditorPanel().isCompilerFile()
 							|| (MainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel().isCompilerFile() && MainWindow
+									.getSelectedFileEditorPanel()
+									.isCompilerFile() && MainWindow
 									.getInstance().getFileEditorManager()
 									.getSelectedFileEditorPanel().isMainFile()))
 						MainWindow.getInstance().getMenu().getProject()
@@ -218,7 +219,8 @@ public class MenuMouseClickListener extends MouseAdapter {
 			if (numberEditors > 0) {
 
 				// If there is a modified opened editor
-				if (MainWindow.getInstance().getFileEditorManager().isRedButton())
+				if (MainWindow.getInstance().getFileEditorManager()
+						.isRedButton())
 
 					// Enables the save file menu item
 					MainWindow.getInstance().getMenu().getFile().getSaveFile()
@@ -226,87 +228,92 @@ public class MenuMouseClickListener extends MouseAdapter {
 			}
 
 			// Gets the selected editor index
-			int selectedEditorIndex = MainWindow.getInstance().getFileEditorManager()
-					.getSelectedFileEditorPanelIndex();
-			
+			int selectedEditorIndex = MainWindow.getInstance()
+					.getFileEditorManager().getSelectedFileEditorPanelIndex();
+
 			// Start checking from the last opened editor
 			MainWindow.getInstance().getFileEditorManager()
 					.setSelectedFileEditorPanelAt(numberEditors - 1);
-			
+
 			for (int index = numberEditors - 1; index >= 0; index--) {
-				
+
 				MainWindow.getInstance().getFileEditorManager()
 						.setSelectedFileEditorPanelAt(index);
-				
+
 				// If the file is modified
-				if (MainWindow.getInstance().getFileEditorManager().isRedButton()) {
-					
+				if (MainWindow.getInstance().getFileEditorManager()
+						.isRedButton()) {
+
 					// Enables the save all files menu item
 					MainWindow.getInstance().getMenu().getFile()
 							.getSaveAllFiles().setEnabled(true);
 				}
 			}
-			
+
 			// Restores the original selected editor
-			MainWindow.getInstance().getFileEditorManager().setSelectedFileEditorPanelAt(selectedEditorIndex);
+			MainWindow.getInstance().getFileEditorManager()
+					.setSelectedFileEditorPanelAt(selectedEditorIndex);
 		}
 
 		// EDIT MENU
 		if (MainWindow.getInstance().getMenu().getEdit().isSelected()) {
-			
+
 			// Disables the undo menu item
 			MainWindow.getInstance().getMenu().getEdit().getUndo()
 					.setEnabled(false);
-			
+
 			// Disables the redo menu item
 			MainWindow.getInstance().getMenu().getEdit().getRedo()
 					.setEnabled(false);
-			
+
 			// Disables the copy menu item
 			MainWindow.getInstance().getMenu().getEdit().getCopy()
 					.setEnabled(false);
-			
+
 			// Disables the paste menu item
 			MainWindow.getInstance().getMenu().getEdit().getPaste()
 					.setEnabled(false);
-			
+
 			// Disables the cut menu item
 			MainWindow.getInstance().getMenu().getEdit().getCut()
 					.setEnabled(false);
 
 			// Gets the selected editor index
-			int selectedEditorIndex = MainWindow.getInstance().getFileEditorManager()
-					.getSelectedFileEditorPanelIndex();
-			
-			if (MainWindow.getInstance().getFileEditorManager().getFileEditorPanelAt(selectedEditorIndex).getUndoManager()
+			int selectedEditorIndex = MainWindow.getInstance()
+					.getFileEditorManager().getSelectedFileEditorPanelIndex();
+
+			if (MainWindow.getInstance().getFileEditorManager()
+					.getFileEditorPanelAt(selectedEditorIndex).getUndoManager()
 					.canUndo()) {
-				
+
 				// Enables the undo menu item
 				MainWindow.getInstance().getMenu().getEdit().getUndo()
 						.setEnabled(true);
 			}
-			
-			if (MainWindow.getInstance().getFileEditorManager().getFileEditorPanelAt(selectedEditorIndex).getUndoManager().canRedo()) {
-				
+
+			if (MainWindow.getInstance().getFileEditorManager()
+					.getFileEditorPanelAt(selectedEditorIndex).getUndoManager()
+					.canRedo()) {
+
 				// Disables the redo menu item
 				MainWindow.getInstance().getMenu().getEdit().getRedo()
 						.setEnabled(true);
 			}
-			
+
 			// If the system clipboard is not empty
 			if (Toolkit.getDefaultToolkit().getSystemClipboard()
 					.getContents(null) != null) {
-				
+
 				if (!MainWindow.getInstance().getOutput().getTextComponent()
 						.hasFocus())
-					
+
 					// Enables the paste menu item
 					MainWindow.getInstance().getMenu().getEdit().getPaste()
 							.setEnabled(true);
 				else if (MainWindow.getInstance().getOutput()
 						.getTextComponent().getSelectionStart() >= MainWindow
 						.getInstance().getOutput().getPromptCaretPosition())
-					
+
 					// Enables the paste menu item
 					MainWindow.getInstance().getMenu().getEdit().getPaste()
 							.setEnabled(true);
@@ -336,10 +343,11 @@ public class MenuMouseClickListener extends MouseAdapter {
 						MainWindow.getInstance().getMenu().getEdit().getCut()
 								.setEnabled(true);
 				} else if (MainWindow.getInstance().getFileEditorManager()
-						.getSelectedFileEditorPanel().getActiveTextEditionArea().hasFocus()
+						.getSelectedFileEditorPanel()
+						.getActiveTextEditionArea().hasFocus()
 						&& MainWindow.getInstance().getFileEditorManager()
-								.getSelectedFileEditorPanel().getActiveTextEditionArea()
-								.getSelectedText() != null) {
+								.getSelectedFileEditorPanel()
+								.getActiveTextEditionArea().getSelectedText() != null) {
 
 					// Enables the copy menu item
 					MainWindow.getInstance().getMenu().getEdit().getCopy()
@@ -354,15 +362,15 @@ public class MenuMouseClickListener extends MouseAdapter {
 				// We can copy from the output
 				if (MainWindow.getInstance().getOutput().getTextComponent()
 						.getSelectedText() != null) {
-					
+
 					// Enables the copy menu item
 					MainWindow.getInstance().getMenu().getEdit().getCopy()
 							.setEnabled(true);
-					
+
 					if (MainWindow.getInstance().getOutput().getTextComponent()
 							.getSelectionStart() >= MainWindow.getInstance()
 							.getOutput().getPromptCaretPosition())
-						
+
 						// Enables the cut menu item
 						MainWindow.getInstance().getMenu().getEdit().getCut()
 								.setEnabled(true);

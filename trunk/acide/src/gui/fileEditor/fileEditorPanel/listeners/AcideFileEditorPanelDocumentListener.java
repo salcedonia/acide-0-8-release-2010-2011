@@ -57,6 +57,15 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 	@Override
 	public void insertUpdate(DocumentEvent documentEvent) {
 
+		// Gets the selected editor index
+		final int selectedEditorIndex = MainWindow.getInstance()
+				.getFileEditorManager().getSelectedFileEditorPanelIndex();
+
+		// Gets the selected editor undo manager
+		final UndoManager undoManager = MainWindow.getInstance()
+				.getFileEditorManager()
+				.getFileEditorPanelAt(selectedEditorIndex).getUndoManager();
+
 		SwingUtilities.invokeLater(new Runnable() {
 			/*
 			 * (non-Javadoc)
@@ -65,15 +74,6 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 			 */
 			@Override
 			public void run() {
-
-				// Gets the selected editor index
-				int selectedEditorIndex = MainWindow.getInstance()
-						.getFileEditorManager().getSelectedFileEditorPanelIndex();
-
-				// Gets the selected editor undo manager
-				UndoManager undoManager = MainWindow.getInstance()
-						.getFileEditorManager()
-						.getFileEditorPanelAt(selectedEditorIndex).getUndoManager();
 
 				if (undoManager.canUndo()) {
 
@@ -118,6 +118,15 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 	@Override
 	public void removeUpdate(DocumentEvent documentEvent) {
 
+		// Gets the selected editor index
+		final int selectedEditorIndex = MainWindow.getInstance()
+				.getFileEditorManager().getSelectedFileEditorPanelIndex();
+
+		// Gets the selected editor undo manager
+		final UndoManager undoManager = MainWindow.getInstance()
+				.getFileEditorManager()
+				.getFileEditorPanelAt(selectedEditorIndex).getUndoManager();
+
 		SwingUtilities.invokeLater(new Runnable() {
 			/*
 			 * (non-Javadoc)
@@ -126,15 +135,7 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 			 */
 			@Override
 			public void run() {
-				// Gets the selected editor index
-				int selectedEditorIndex = MainWindow.getInstance()
-						.getFileEditorManager().getSelectedFileEditorPanelIndex();
-
-				// Gets the selected editor undo manager
-				UndoManager undoManager = MainWindow.getInstance()
-						.getFileEditorManager()
-						.getFileEditorPanelAt(selectedEditorIndex).getUndoManager();
-
+				
 				if (undoManager.canUndo()) {
 
 					// Sets the red icon to the close button
@@ -178,6 +179,15 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 	@Override
 	public void changedUpdate(DocumentEvent documentEvent) {
 
+		// Gets the selected editor index
+		final int selectedEditorIndex = MainWindow.getInstance()
+				.getFileEditorManager().getSelectedFileEditorPanelIndex();
+
+		// Gets the selected editor undo manager
+		final UndoManager undoManager = MainWindow.getInstance()
+				.getFileEditorManager()
+				.getFileEditorPanelAt(selectedEditorIndex).getUndoManager();
+
 		SwingUtilities.invokeLater(new Runnable() {
 			/*
 			 * (non-Javadoc)
@@ -186,15 +196,7 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 			 */
 			@Override
 			public void run() {
-				// Gets the selected editor index
-				int selectedEditorIndex = MainWindow.getInstance()
-						.getFileEditorManager().getSelectedFileEditorPanelIndex();
-
-				// Gets the selected editor undo manager
-				UndoManager undoManager = MainWindow.getInstance()
-						.getFileEditorManager()
-						.getFileEditorPanelAt(selectedEditorIndex).getUndoManager();
-
+				
 				if (undoManager.canUndo()) {
 
 					// Sets the red icon to the close button

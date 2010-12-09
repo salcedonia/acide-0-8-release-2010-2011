@@ -9,44 +9,43 @@ import java.util.ArrayList;
 import operations.log.AcideLog;
 import resources.ResourceManager;
 
-
-/************************************************************************																
- * Project configuration of ACIDE - A Configurable IDE.											
- *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
- * @version 0.8																														
+/************************************************************************
+ * Project configuration of ACIDE - A Configurable IDE.
+ * 
+ * <p>
+ * <b>ACIDE - A Configurable IDE</b>
+ * </p>
+ * <p>
+ * <b>Official web site:</b> @see http://acide.sourceforge.net
+ * </p>
+ * 
+ ************************************************************************ 
+ * @author <ul>
+ *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
+ *         <li><b>Version 0.1-0.6:</b>
+ *         <ul>
+ *         Diego Cardiel Freire
+ *         </ul>
+ *         <ul>
+ *         Juan José Ortiz Sánchez
+ *         </ul>
+ *         <ul>
+ *         Delfín Rupérez Cañas
+ *         </ul>
+ *         </li>
+ *         <li><b>Version 0.7:</b>
+ *         <ul>
+ *         Miguel Martín Lázaro
+ *         </ul>
+ *         </li>
+ *         <li><b>Version 0.8:</b>
+ *         <ul>
+ *         Javier Salcedo Gómez
+ *         </ul>
+ *         </li>
+ *         </ul>
+ ************************************************************************ 
+ * @version 0.8
  ***********************************************************************/
 public class AcideProjectConfiguration {
 
@@ -195,55 +194,31 @@ public class AcideProjectConfiguration {
 
 		// MAIN WINDOW WIDTH
 		fileContent = fileContent + MainWindow.getInstance().getWidth() + "\n";
-		
+
 		// MAIN WINDOW HEIGHT
 		fileContent = fileContent + MainWindow.getInstance().getHeight() + "\n";
-		
+
 		// MAIN WINDOW X
 		fileContent = fileContent + MainWindow.getInstance().getX() + "\n";
-		
+
 		// MAIN WINDOW Y
 		fileContent = fileContent + MainWindow.getInstance().getY() + "\n";
-		
+
 		// MAIN WINDOW VERTICAL SPLIT PANEL
 		fileContent = fileContent
-				+ MainWindow.getInstance().getSplitPaneVertical()
+				+ MainWindow.getInstance().getVerticalSplitPane()
 						.getDividerLocation() + "\n";
-		
+
 		// MAIN WINDOW HORIZONTAL SPLIT PANEL
 		fileContent = fileContent
-				+ MainWindow.getInstance().getSplitPaneHorizontal()
+				+ MainWindow.getInstance().getHorizontalSplitPane()
 						.getDividerLocation() + "\n";
 
-		// SELECTED EDITOR
-		
-		// Avoids the new and the log tab if they are displayed and selects the previous
-		// opened tab
-		int selectedEditorIndex = MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanelIndex() ;
-		
+		// SELECTED EDITOR	
+		fileContent = fileContent + MainWindow.getInstance()
+		.getFileEditorManager().getSelectedFileEditorPanelIndex() + "\n";
 
-		// if(MainWindow.getInstance().getFileEditorManager().getSelectedEditor().isNewFile()){
-		//
-		// selectedEditorIndex--;
-		//
-		// if(selectedEditorIndex != -1 &&
-		// MainWindow.getInstance().getFileEditorManager().getEditorAt(selectedEditorIndex).isLogFile())
-		// selectedEditorIndex--;
-		// }
-		// else
-		// if(MainWindow.getInstance().getFileEditorManager().getSelectedEditor().isLogFile()){
-		//
-		// selectedEditorIndex--;
-		//
-		// if(selectedEditorIndex != -1 &&
-		// MainWindow.getInstance().getFileEditorManager().getEditorAt(selectedEditorIndex).isNewFile())
-		// selectedEditorIndex--;
-		// }
-					
-		fileContent = fileContent
-		+ selectedEditorIndex + "\n";
-		
-		// Files associated to the project
+		// FILES ASSOCIATED TO THE PROJECT
 		fileContent = fileContent + getNumFilesFromList() + "\n";
 
 		for (int i = 0; i < _fileList.size(); i++) {
@@ -271,10 +246,11 @@ public class AcideProjectConfiguration {
 			TextFile textFile = new TextFile();
 
 			try {
-				path = ResourceManager.getInstance().getProperty("defaultAcideProject");
+				path = ResourceManager.getInstance().getProperty(
+						"defaultAcideProject");
 				fileContent = textFile.load(path);
 			} catch (Exception exception) {
-				
+
 				// Updates the Log
 				AcideLog.getLog().error(exception.getMessage());
 				exception.printStackTrace();
@@ -285,28 +261,28 @@ public class AcideProjectConfiguration {
 
 			// MAIN WINDOW WIDTH
 			lines[11] = Integer.toString(MainWindow.getInstance().getWidth());
-			
+
 			// MAIN WINDOW HEIGHT
 			lines[12] = Integer.toString(MainWindow.getInstance().getHeight());
-			
+
 			// MAIN WINDOW X
 			lines[13] = Integer.toString(MainWindow.getInstance().getX());
-			
+
 			// MAIN WINDOW Y
 			lines[14] = Integer.toString(MainWindow.getInstance().getY());
-			
+
 			// MAIN WINDOW VERTICAL SPLIT PANEL
 			lines[15] = Integer.toString(MainWindow.getInstance()
-					.getSplitPaneVertical().getDividerLocation());
-			
+					.getVerticalSplitPane().getDividerLocation());
+
 			// MAIN WINDOW HORIZONTAL SPLIT PANEL
 			lines[16] = Integer.toString(MainWindow.getInstance()
-					.getSplitPaneHorizontal().getDividerLocation());
+					.getHorizontalSplitPane().getDividerLocation());
 
 			// MAIN WINDOW SELECTED EDITOR
 			lines[17] = Integer.toString(MainWindow.getInstance()
 					.getFileEditorManager().getSelectedFileEditorPanelIndex());
-			
+
 			// Rebuilds the file content
 			String newFileContent = "";
 			for (int i = 0; i < lines.length; i++)
@@ -315,10 +291,10 @@ public class AcideProjectConfiguration {
 			// Saves the text in the file
 			try {
 				textFile.save(
-						ResourceManager.getInstance().getProperty("defaultAcideProject"),
-						newFileContent);
+						ResourceManager.getInstance().getProperty(
+								"defaultAcideProject"), newFileContent);
 			} catch (Exception exception) {
-				
+
 				// Updates the Log
 				AcideLog.getLog().error(exception.getMessage());
 				exception.printStackTrace();
@@ -337,9 +313,10 @@ public class AcideProjectConfiguration {
 		// Gets the project configuration
 		String project = null;
 		try {
-			project = ResourceManager.getInstance().getProperty("defaultAcideProject");
+			project = ResourceManager.getInstance().getProperty(
+					"defaultAcideProject");
 		} catch (Exception exception) {
-			
+
 			// Updates the Log
 			AcideLog.getLog().error(exception.getMessage());
 			exception.printStackTrace();
@@ -472,7 +449,7 @@ public class AcideProjectConfiguration {
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		cond = fileContent.substring(initialPosition, finalPosition);
 		_selectedEditorIndex = Integer.parseInt(cond);
-		
+
 		// RELATED FILES
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);

@@ -2,6 +2,7 @@ package gui.fileEditor.fileEditorManager;
 
 import gui.fileEditor.fileEditorManager.listeners.AcideFileEditorManagerChangeListener;
 import gui.fileEditor.fileEditorManager.listeners.AcideFileEditorManagerMouseClickListener;
+import gui.fileEditor.fileEditorManager.utils.gui.DragAndDropTabbedPane;
 import gui.fileEditor.fileEditorManager.utils.logic.testPlaf.TestPlaf;
 import gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
 import gui.fileEditor.fileEditorPanel.popup.AcideEditorPopupMenu;
@@ -65,7 +66,7 @@ public class AcideFileEditorManager {
 	/**
 	 * TabbedPane for the editor.
 	 */
-	private JTabbedPane _tabbedPane;
+	private DragAndDropTabbedPane _tabbedPane;
 	/**
 	 * TestPlaf for the editor.
 	 */
@@ -76,7 +77,7 @@ public class AcideFileEditorManager {
 	private AcideEditorPopupMenu _popupMenu;
 
 	/**
-	 * Creates a new editor manager.
+	 * Creates a new file editor manager.
 	 */
 	public AcideFileEditorManager() {
 
@@ -98,7 +99,7 @@ public class AcideFileEditorManager {
 
 		try {
 
-			_tabbedPane = new JTabbedPane();
+			_tabbedPane = new DragAndDropTabbedPane();
 			_testPlaf = new TestPlaf();
 			_tabbedPane.setUI(_testPlaf);
 			_tabbedPane.addMouseListener(new AcideFileEditorManagerMouseClickListener());
@@ -247,27 +248,10 @@ public class AcideFileEditorManager {
 			// If it is already opened, sets the focus on it
 			setSelectedFileEditorPanelAt(position);
 		}
-
-		/* Sets the cursor in the first position of the editor.
-		 * This method is used in order to avoid the Java BUG with the 
-		 * JTabbedPane, JTextPane and the display of the caret position on it.
-		 */
-		SwingUtilities.invokeLater(new Runnable() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
-
-				// TODO: Sustituir por el valor guardado en la configuración
-				
-				// Sets the caret position in the first position of the text pane
-				getSelectedFileEditorPanel().getActiveTextEditionArea()
-						.setCaretPosition(0);
-			}
-		});
+		
+		// Sets the caret position in the first position of the text pane
+		getSelectedFileEditorPanel().getActiveTextEditionArea()
+				.setCaretPosition(0);
 	}
 
 	/**
@@ -303,7 +287,7 @@ public class AcideFileEditorManager {
 	 * 
 	 * @return the editor builder tabbedPane.
 	 */
-	public JTabbedPane getTabbedPane() {
+	public DragAndDropTabbedPane getTabbedPane() {
 		return _tabbedPane;
 	}
 
@@ -786,6 +770,29 @@ public class AcideFileEditorManager {
 								.getFileAt(i).setIsMainFile(false);
 				}
 			}
+		}
+	}
+
+	/**
+	 * Updates the button icons of the selected file editor in the tabbed pane.
+	 */
+	public void updatesButtonIcons() {
+
+		if (MainWindow.getInstance().getFileEditorManager()
+				.getNumFileEditorPanels() > 0) {
+
+			// Gets the selected editor index
+			int selectedEditorIndex = MainWindow.getInstance()
+					.getFileEditorManager().getSelectedFileEditorPanelIndex();
+
+			// Gets the current image icon
+			ImageIcon icon = (ImageIcon) MainWindow.getInstance()
+					.getFileEditorManager().getTabbedPane()
+					.getIconAt(selectedEditorIndex);
+
+			// Sets the current image icon
+			MainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().setIcon(icon);
 		}
 	}
 }

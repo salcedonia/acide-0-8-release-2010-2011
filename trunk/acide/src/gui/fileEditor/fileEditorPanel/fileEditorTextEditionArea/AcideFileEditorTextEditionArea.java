@@ -9,6 +9,9 @@ import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideT
 import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideTextEditorTextEditionAreaMouseDoubleClickListener;
 import gui.fileEditor.fileEditorPanel.listeners.AcideFileEditorPanelDocumentListener;
 import gui.fileEditor.fileEditorPanel.popup.AcideEditorPanelPopupMenuListener;
+import gui.listeners.AcideKeyboardListener;
+import gui.listeners.AcideKeyboardListenerForMenus;
+import gui.listeners.AcideMouseListener;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -18,14 +21,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.plaf.basic.BasicArrowButton;
 
-import operations.listeners.AcideKeyboardListener;
-import operations.listeners.AcideKeyboardListenerForMenus;
-import operations.listeners.AcideMouseListener;
-
 /************************************************************************
  * Text edition area of ACIDE - A Configurable IDE. Creates the panel which
- * contains the line number panel and the editable text area for modifying
- * the file contents.
+ * contains the line number panel and the editable text area for modifying the
+ * file contents.
  * 
  * <p>
  * <b>ACIDE - A Configurable IDE</b>
@@ -62,7 +61,7 @@ import operations.listeners.AcideMouseListener;
  ************************************************************************ 
  * @version 0.8
  ***********************************************************************/
-public class AcideFileEditorTextEditionArea{
+public class AcideFileEditorTextEditionArea {
 
 	/**
 	 * Text edition area class serial version UID.
@@ -112,23 +111,28 @@ public class AcideFileEditorTextEditionArea{
 	/**
 	 * Creates a new text edition area.
 	 * 
-	 * @param syntaxDocument text syntax document.
+	 * @param syntaxDocument
+	 *            text syntax document.
 	 */
 	public AcideFileEditorTextEditionArea(SyntaxDocument syntaxDocument) {
-		
+
 		_braceMatcher = -1;
 		_verticalValue = 0;
 		_horizontalValue = 0;
 
 		// Builds the text area for edition
 		buildEditor(syntaxDocument);
-
-		_textPane.addKeyListener(new AcideTextEditorTextEditionAreaKeyboardListener());
-		_textPane.addMouseListener(new AcideEditorPanelPopupMenuListener());
-		_textPane.addMouseListener(new AcideTextEditorTextEditionAreaMouseDoubleClickListener());
-
-		_scrollPane = new JScrollPane(_textPane);
 		
+		_textPane
+				.addKeyListener(new AcideTextEditorTextEditionAreaKeyboardListener());
+		_textPane.addMouseListener(new AcideEditorPanelPopupMenuListener());
+		_textPane
+				.addMouseListener(new AcideTextEditorTextEditionAreaMouseDoubleClickListener());
+		
+		// Adds the line painter
+		//LinePainter linePainter = new LinePainter(_textPane);
+		_scrollPane = new JScrollPane(_textPane);
+
 		// Creates the line number
 		_lineNumberPanel = new LineNumberComponent(_textPane);
 
@@ -140,11 +144,14 @@ public class AcideFileEditorTextEditionArea{
 		// so they are used as part of the text pane
 		_mouseClickListener = new AcideTextEditorTextEditionAreaMouseClickListener();
 
-		_scrollPane.getVerticalScrollBar().addMouseListener(_mouseClickListener);
-		_scrollPane.getHorizontalScrollBar().addMouseListener(_mouseClickListener);
+		_scrollPane.getVerticalScrollBar()
+				.addMouseListener(_mouseClickListener);
+		_scrollPane.getHorizontalScrollBar().addMouseListener(
+				_mouseClickListener);
 		_scrollPane.addMouseListener(_mouseClickListener);
 
-		Component verticalComponents[] = _scrollPane.getVerticalScrollBar().getComponents();
+		Component verticalComponents[] = _scrollPane.getVerticalScrollBar()
+				.getComponents();
 		for (int i = 0; i < verticalComponents.length; i++)
 			if (verticalComponents[i] instanceof BasicArrowButton)
 				verticalComponents[i].addMouseListener(_mouseClickListener);
@@ -162,21 +169,23 @@ public class AcideFileEditorTextEditionArea{
 		_scrollPane.setMinimumSize(new Dimension(0, 0));
 
 		_adjustmentListener = new AcideTextEditorTextEditionAreaAdjustmentListener();
-		_scrollPane.getVerticalScrollBar().addAdjustmentListener(_adjustmentListener);
-		
+		_scrollPane.getVerticalScrollBar().addAdjustmentListener(
+				_adjustmentListener);
+
 		_textPane.addKeyListener(new AcideKeyboardListener());
 		_textPane.addMouseListener(new AcideMouseListener());
-		_textPane.addKeyListener(new AcideKeyboardListenerForMenus());	
+		_textPane.addKeyListener(new AcideKeyboardListenerForMenus());
 	}
-	
+
 	/**
 	 * Builds the text edition area text pane.
 	 * 
-	 * @param syntaxDocument file editor manager syntax document.
+	 * @param syntaxDocument
+	 *            file editor manager syntax document.
 	 * @return the text edition area text pane.
 	 */
 	protected void buildEditor(SyntaxDocument syntaxDocument) {
-	
+
 		_textPane = new JTextPane(syntaxDocument) {
 
 			/**

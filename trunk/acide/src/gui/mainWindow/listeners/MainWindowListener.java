@@ -1,7 +1,6 @@
 package gui.mainWindow.listeners;
 
-import gui.mainWindow.MainWindow;
-
+import es.configuration.project.workbench.AcideWorkbenchManager;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -55,6 +54,8 @@ public class MainWindowListener extends WindowAdapter {
 	 */
 	@Override
 	public void windowClosing(WindowEvent windowEvent) {
-		MainWindow.getInstance().closingOperation();
+		
+		// Saves the workbench configuration
+		AcideWorkbenchManager.getInstance().saveWorkbenchConfiguration();
 	}
 }
