@@ -640,23 +640,23 @@ public class NewProjectConfigurationWindow extends JFrame {
 
 						// SHELL BACKGROUND COLOR
 						OutputConfiguration.getInstance().setBackgroundColor(
-								MainWindow.getInstance().getOutput()
+								MainWindow.getInstance().getOutputPanel()
 										.getTextComponent().getBackground());
 
 						// SHELL FOREGROUND COLOR
 						OutputConfiguration.getInstance().setForegroundColor(
-								MainWindow.getInstance().getOutput()
+								MainWindow.getInstance().getOutputPanel()
 										.getTextComponent().getForeground());
 
 						// SHELL FONT NAME
 						OutputConfiguration.getInstance().setFontName(
-								MainWindow.getInstance().getOutput()
+								MainWindow.getInstance().getOutputPanel()
 										.getTextComponent().getFont()
 										.getFontName());
 
 						// Parse the font style from int to string
 						String fontStyleString = "";
-						switch (MainWindow.getInstance().getOutput()
+						switch (MainWindow.getInstance().getOutputPanel()
 								.getTextComponent().getFont().getStyle()) {
 						case Font.PLAIN:
 							fontStyleString = "Font.PLAIN";
@@ -679,7 +679,7 @@ public class NewProjectConfigurationWindow extends JFrame {
 						// SHELL FONT SIZE
 						OutputConfiguration.getInstance()
 								.setFontSize(
-										MainWindow.getInstance().getOutput()
+										MainWindow.getInstance().getOutputPanel()
 												.getTextComponent().getFont()
 												.getSize());
 
@@ -719,7 +719,7 @@ public class NewProjectConfigurationWindow extends JFrame {
 										+ _nameTextField.getText());
 
 						// Builds the explorer
-						MainWindow.getInstance().getExplorer().getRoot()
+						MainWindow.getInstance().getExplorerPanel().getRoot()
 								.removeAllChildren();
 
 						ExplorerFile explorerFile = new ExplorerFile();
@@ -812,7 +812,7 @@ public class NewProjectConfigurationWindow extends JFrame {
 						}
 
 						// Builds the EXPLORER
-						MainWindow.getInstance().getExplorer().getRoot()
+						MainWindow.getInstance().getExplorerPanel().getRoot()
 								.add(defaultMutableTreeNode);
 						MainWindow.getInstance().setTitle(
 								labels.getString("s425") + " - "
@@ -896,24 +896,24 @@ public class NewProjectConfigurationWindow extends JFrame {
 								.getInstance()
 								.getProjectConfiguration()
 								.setSplitPaneVerticalDividerLocation(
-										MainWindow.getInstance().getExplorer()
+										MainWindow.getInstance().getExplorerPanel()
 												.getWidth());
 						MainWindow
 								.getInstance()
 								.getProjectConfiguration()
 								.setSplitPaneHorizontalDividerLocation(
-										MainWindow.getInstance().getOutput()
+										MainWindow.getInstance().getOutputPanel()
 												.getHeight());
 
 						MainWindow.getInstance().validate();
 						MainWindow.getInstance().repaint();
-						MainWindow.getInstance().getExplorer().getPopupMenu()
+						MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 								.getAddFile().setEnabled(true);
-						MainWindow.getInstance().getExplorer().getPopupMenu()
+						MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 								.getSaveProject().setEnabled(true);
-						MainWindow.getInstance().getExplorer().getTreeModel()
+						MainWindow.getInstance().getExplorerPanel().getTreeModel()
 								.reload();
-						MainWindow.getInstance().getExplorer().expandTree();
+						MainWindow.getInstance().getExplorerPanel().expandTree();
 						MainWindow.getInstance().setEnabled(true);
 
 						// Closes the window
@@ -922,7 +922,7 @@ public class NewProjectConfigurationWindow extends JFrame {
 						// Shows the explorer if it has to do it
 						if (!MainWindow.getInstance().getMenu().getView()
 								.getShowExplorerPanel().isSelected())
-							MainWindow.getInstance().getExplorer()
+							MainWindow.getInstance().getExplorerPanel()
 									.showExplorer();
 
 						// Updates the view options
@@ -933,6 +933,9 @@ public class NewProjectConfigurationWindow extends JFrame {
 
 						// Enables the project menu
 						MainWindow.getInstance().getMenu().enableProjectMenu();
+						
+						// Enables the open all files menu item
+						MainWindow.getInstance().getMenu().getFile().getOpenAllFiles().setEnabled(true);		
 					}
 				} else {
 

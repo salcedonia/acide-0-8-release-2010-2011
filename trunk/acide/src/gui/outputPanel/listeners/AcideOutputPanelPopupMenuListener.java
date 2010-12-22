@@ -75,7 +75,7 @@ public class AcideOutputPanelPopupMenuListener extends MouseAdapter {
 	 */
 	private void maybeShowPopup(MouseEvent mouseEvent) {
 
-		AcideOutputPanel outputPanel = MainWindow.getInstance().getOutput();
+		AcideOutputPanel outputPanel = MainWindow.getInstance().getOutputPanel();
 		
 		if (mouseEvent.isPopupTrigger()) {
 

@@ -372,11 +372,11 @@ public class OutputConfiguration {
 					fontStyle = Font.BOLD + Font.ITALIC;
 
 				// Updates the OUTPUT
-				MainWindow.getInstance().getOutput().getTextComponent()
+				MainWindow.getInstance().getOutputPanel().getTextComponent()
 						.setBackground(_backgroundColor);
-				MainWindow.getInstance().getOutput().getTextComponent()
+				MainWindow.getInstance().getOutputPanel().getTextComponent()
 						.setForeground(_foregroundColor);
-				MainWindow.getInstance().getOutput().getTextComponent()
+				MainWindow.getInstance().getOutputPanel().getTextComponent()
 						.setFont(new Font(_fontName, fontStyle, _fontSize));
 
 				// Updates the RESOURCE MANAGER
@@ -398,11 +398,11 @@ public class OutputConfiguration {
 		// SO THERE IS NO NEED TO DO IT AGAIN
 
 		// FONT NAME
-		_fontName = MainWindow.getInstance().getOutput().getTextComponent()
+		_fontName = MainWindow.getInstance().getOutputPanel().getTextComponent()
 				.getFont().getFontName();
 
 		// Parses the font style to String
-		int fontStyle = MainWindow.getInstance().getOutput().getTextComponent()
+		int fontStyle = MainWindow.getInstance().getOutputPanel().getTextComponent()
 				.getFont().getStyle();
 
 		switch (fontStyle) {
@@ -422,15 +422,15 @@ public class OutputConfiguration {
 		}
 
 		// FONT SIZE
-		_fontSize = MainWindow.getInstance().getOutput().getTextComponent()
+		_fontSize = MainWindow.getInstance().getOutputPanel().getTextComponent()
 				.getFont().getSize();
 
 		// FOREGROUND COLOR
-		_foregroundColor = MainWindow.getInstance().getOutput()
+		_foregroundColor = MainWindow.getInstance().getOutputPanel()
 				.getTextComponent().getForeground();
 
 		// BACKGROUND COLOR
-		_backgroundColor = MainWindow.getInstance().getOutput()
+		_backgroundColor = MainWindow.getInstance().getOutputPanel()
 				.getTextComponent().getBackground();
 
 		XStream xStream = new XStream();

@@ -134,8 +134,8 @@ public class Acide {
 
 		AcideSplashScreen.setProgressBar(12);
 
-		// Builds the main window and sets the Listeners
-		MainWindow.getInstance().getMenu().setListeners();
+		// Builds the main window
+		MainWindow.getInstance();
 
 		AcideSplashScreen.setProgressBar(99);
 

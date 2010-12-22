@@ -1,17 +1,24 @@
 package gui.toolBarPanel;
 
-import es.configuration.toolBar.shellComandToolBar.ShellCommand;
-import es.configuration.toolBar.shellComandToolBar.ShellCommandList;
-import gui.mainWindow.MainWindow;
+import gui.toolBarPanel.shellCommandToolBar.ShellCommandToolBar;
+import gui.toolBarPanel.staticToolBar.StaticToolBar;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ResourceBundle;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JToolBar;
 
 import language.AcideLanguage;
-
 import operations.log.AcideLog;
 import resources.ResourceManager;
 
@@ -54,94 +61,227 @@ import resources.ResourceManager;
  * @version 0.8
  * @see JPanel
  ***********************************************************************/
-public class AcideToolBarPanel{
+public class AcideToolBarPanel extends JPanel {
 
 	/**
-	 * Image of the new file button.
+	 * Acide tool bar panel class serial version UID.
 	 */
-	private static final String NEW_FILE = "./resources/icons/toolBar/newFile.png";
+	private static final long serialVersionUID = 1L;
 	/**
-	 * Image of the open file button.
+	 * Main window image icon.
 	 */
-	private static final String OPEN_FILE = "./resources/icons/toolBar/openFile.png";
+	private static final ImageIcon LEFT_IMAGE_ICON = new ImageIcon(
+			"./resources/icons/toolBar/left.png");
 	/**
-	 * Image of the save file button.
+	 * Main window image icon.
 	 */
-	private static final String SAVE_FILE = "./resources/icons/toolBar/saveFile.png";
-	/**
-	 * Image of the save all files button.
-	 */
-	private static final String SAVE_ALL_FILES = "./resources/icons/toolBar/saveAllFiles.png";
-	/**
-	 * Image of the new project button.
-	 */
-	private static final String NEW_PROJECT = "./resources/icons/toolBar/newProject.png";
-	/**
-	 * Image of the open project button.
-	 */
-	private static final String OPEN_PROJECT = "./resources/icons/toolBar/openProject.png";
-	/**
-	 * Image of the save project button.
-	 */
-	private static final String SAVE_PROJECT = "./resources/icons/toolBar/saveProject.png";
+	private static final ImageIcon RIGHT_IMAGE_ICON = new ImageIcon(
+			"./resources/icons/toolBar/right.png");
 	/**
 	 * Command tool bar.
 	 */
-	private static JToolBar _toolBar = new JToolBar();
+	private JToolBar _toolBar;
 	/**
-	 * New file button.
+	 * Tool bar scroll pane which contains the tool bar itself.
 	 */
-	private static JButton _btnNewFile;
+	private JScrollPane _toolBarScrollPane;
 	/**
-	 * Open file button.
+	 * Button left panel. It is used to encapsulate the button into it
+	 * so the programmer can define the preferred size of the button.
+	 * Otherwise because of the BorderLayout of the main panel displays
+	 * the button without it.
 	 */
-	private static JButton _btnOpenFile;
+	private JPanel _buttonLeftPanel;
 	/**
-	 * Save file button.
+	 * Button right panel. It is used to encapsulate the button into it
+	 * so the programmer can define the preferred size of the button.
+	 * Otherwise because of the BorderLayout of the main panel displays
+	 * the button without it.
 	 */
-	private static JButton _btnSaveFile;
+	private JPanel _buttonRightPanel;
 	/**
-	 * Save all files button.
+	 * Scroll left button.
 	 */
-	private static JButton _btnSaveAllFiles;
+	private JButton _scrollLeftButton;
 	/**
-	 * New project button.
+	 * Scroll right button.
 	 */
-	private static JButton _btnNewProject;
+	private JButton _scrollRightButton;
 	/**
-	 * Open project button.
+	 * Point component X used for calculating the place where the scroll bar
+	 * has to be settled down. 
 	 */
-	private static JButton _btnOpenProject;
+	private int _pointX;
 	/**
-	 * Save project button.
+	 * Total width of the toolbar menu.
 	 */
-	private static JButton _btnSaveProject;
-	
+	private int _totalWidth;
+	/**
+	 * Point where the scroll bar has to be settled down.
+	 */
+	private Point point;
+	/**
+	 * Increment used for the displacement.
+	 */
+	private final int INCREMENT = 20;
+
+	/**
+	 * Creates a new Acide tool bar panel.
+	 */
+	public AcideToolBarPanel() {
+
+		super(new BorderLayout());
+
+		point = new Point(0, 0);
+
+		// TOOL BAR
+		_toolBar = new JToolBar();
+		_toolBar.setFloatable(false);
+	}
+
+	/**
+	 * Creates the components.
+	 */
+	private void initComponents() {
+
+		// SCROLL LEFT BUTTON
+		_scrollLeftButton = new JButton(LEFT_IMAGE_ICON);
+		_scrollLeftButton.setPreferredSize(new Dimension(30,32));
+		_scrollLeftButton.addActionListener(new ActionListener() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
+			 * ActionEvent)
+			 */
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+
+				// If is is below the threshold 
+				if (_pointX - INCREMENT >= 0)
+					
+					// Decrements normally
+					_pointX -= INCREMENT;
+				else
+					// Then takes the minimum value
+					_pointX = 0;
+
+				// Updates the point
+				point.x = _pointX;
+				
+				// Moves to the calculated point
+				_toolBarScrollPane.getViewport().setViewPosition(point);
+				
+				// Tells to the scroll pane to move there
+				_toolBarScrollPane.validate();
+			}
+		});
+		_buttonLeftPanel = new JPanel();
+		_buttonLeftPanel.add(_scrollLeftButton);
+		add(_buttonLeftPanel, BorderLayout.LINE_START);
+
+		// SCROLL RIGHT BUTTON
+		_scrollRightButton = new JButton(RIGHT_IMAGE_ICON);
+		_scrollRightButton.setPreferredSize(new Dimension(30,32));
+		_scrollRightButton.addActionListener(new ActionListener() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
+			 * ActionEvent)
+			 */
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+
+				// If it is below the bounds
+				if(_pointX + INCREMENT < _toolBarScrollPane.getVisibleRect().width)	
+					// Increments normally
+					_pointX += INCREMENT;
+					
+				// Updates the point
+				point.x = _pointX;
+				
+				// Moves to the calculated point
+				_toolBarScrollPane.getViewport().setViewPosition(point);
+				
+				// Tells to the scroll pane to move there
+				_toolBarScrollPane.validate();
+			}
+		});
+		_buttonRightPanel = new JPanel();
+		_buttonRightPanel.add(_scrollRightButton);
+		add(_buttonRightPanel, BorderLayout.LINE_END);
+		
+
+		// TOOL BAR SCROLL PANE
+		_toolBarScrollPane = new JScrollPane();
+		_toolBarScrollPane
+				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		_toolBarScrollPane
+				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		_toolBarScrollPane.setViewportView(_toolBar);
+		add(_toolBarScrollPane, BorderLayout.CENTER);
+	}
+
 	/**
 	 * Builds the Acide tool bar panel.
 	 * 
 	 * @return the Acide tool bar panel.
 	 */
-	public static JToolBar buildAcideToolBarPanel(){
-		
-		buildStaticToolBar();
-		buildModifiableToolBar();
-		
-		return _toolBar;
+	public void buildAcideToolBarPanel() {
+
+		// Builds the static tool bar
+		addStaticToolBar(StaticToolBar.getInstance().build());
+
+		// Builds the modifiable tool bar
+		addShellCommandToolBar(ShellCommandToolBar.getInstance().build());
+
+		// Creates the components
+		initComponents();
+
+		// Add the component listener so it can resizes when it changes
+		_toolBarScrollPane.addComponentListener(new ComponentAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.ComponentListener#componentResized(java.awt.event
+			 * .ComponentEvent)
+			 */
+			@Override
+			public void componentResized(ComponentEvent componentEvent) {
+
+				_totalWidth = _toolBar.getBounds().width;
+				if (getBounds().width < _totalWidth) {
+					// added left/right buttons for side scrolling
+					_scrollLeftButton.setVisible(true);
+					_scrollRightButton.setVisible(true);
+				} else {
+					_scrollLeftButton.setVisible(false);
+					_scrollRightButton.setVisible(false);
+					_pointX = 0;
+				}
+				validate();
+			}
+		});
 	}
-	
+
 	/**
-	 * Builds the tool bar of the application
+	 * Adds a shell command given as a parameter to the tool bar.
 	 * 
-	 * @return the tool bar of the application
+	 * @param shellCommandToolBar
+	 *            new shell command to add.
 	 */
-	public static JToolBar buildStaticToolBar() {
+	public void addShellCommandToolBar(ShellCommandToolBar shellCommandToolBar) {
 
 		// Gets the language
 		AcideLanguage language = AcideLanguage.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(ResourceManager.getInstance().getProperty(
+					"language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -153,197 +293,31 @@ public class AcideToolBarPanel{
 		final ResourceBundle labels = language.getLabels();
 
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s102"));
+		AcideLog.getLog().info(labels.getString("s130"));
+		_toolBar.addSeparator();
 
-		// NEW FILE BUTTON
-		_btnNewFile = new JButton(new ImageIcon(NEW_FILE));
-		_btnNewFile.setToolTipText(labels.getString("s103"));
-		_btnNewFile.addActionListener(new ActionListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				MainWindow.getInstance().getMenu().getFile().getNewFile()
-						.doClick();
-			}
-		});
+		// Adds the static buttons
+		for (JButton staticButton : shellCommandToolBar)
+			_toolBar.add(staticButton);
 
-		// OPEN FILE BUTTON
-		_btnOpenFile = new JButton(new ImageIcon(OPEN_FILE));
-		_btnOpenFile.setToolTipText(labels.getString("s106"));
-		_btnOpenFile.addActionListener(new ActionListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				MainWindow.getInstance().getMenu().getFile().getOpenFile()
-						.doClick();
-			}
-		});
-
-		// SAVE FILE BUTTON
-		_btnSaveFile = new JButton(new ImageIcon(SAVE_FILE));
-		_btnSaveFile.setToolTipText(labels.getString("s114"));
-		_btnSaveFile.addActionListener(new ActionListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				MainWindow.getInstance().getMenu().getFile().getSaveFile()
-						.setEnabled(true);
-				MainWindow.getInstance().getMenu().getFile().getSaveFile()
-						.doClick();
-			}
-		});
-
-		// SAVE ALL FILES BUTTON
-		_btnSaveAllFiles = new JButton(new ImageIcon(SAVE_ALL_FILES));
-		_btnSaveAllFiles.setToolTipText(labels.getString("s229"));
-		_btnSaveAllFiles.addActionListener(new ActionListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				MainWindow.getInstance().getMenu().getFile().getSaveAllFiles()
-						.setEnabled(true);
-				MainWindow.getInstance().getMenu().getFile().getSaveAllFiles()
-						.doClick();
-			}
-		});
-
-		// NEW PROJECT BUTTON
-		_btnNewProject = new JButton(new ImageIcon(NEW_PROJECT));
-		_btnNewProject.setToolTipText(labels.getString("s122"));
-		_btnNewProject.addActionListener(new ActionListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				MainWindow.getInstance().getMenu().getProject().getNewProject()
-						.doClick();
-			}
-		});
-
-		// OPEN PROJECT BUTTON
-		_btnOpenProject = new JButton(new ImageIcon(OPEN_PROJECT));
-		_btnOpenProject.setToolTipText(labels.getString("s123"));
-		_btnOpenProject.addActionListener(new ActionListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				MainWindow.getInstance().getMenu().getProject()
-						.getOpenProject().doClick();
-			}
-		});
-
-		// SAVE PROJECT BUTTON
-		_btnSaveProject = new JButton(new ImageIcon(SAVE_PROJECT));
-		_btnSaveProject.setToolTipText(labels.getString("s124"));
-		_btnSaveProject.addActionListener(new ActionListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				MainWindow.getInstance().getMenu().getProject()
-						.getSaveProject().setEnabled(true);
-				MainWindow.getInstance().getMenu().getProject()
-						.getSaveProject().doClick();
-			}
-		});
-
-		/*
-		 * JButton analyzeSintButton = new JButton(labels.getString("s206"));
-		 * analyzeSintButton.addActionListener(new ActionListener() { public
-		 * void actionPerformed(ActionEvent e) { /* boolean recException =
-		 * false; boolean tokException = false; boolean noException = true;
-		 */
-		// Ventana v = Ventana.getInstance();
-		// String text = v.getCreadorEditor().dameEditorI(
-		// v.getCreadorEditor().getEditorSeleccionado())
-		// .getEditor().getText();
-		// Prueba.analyze(text);
-		// C:\jdk1.5.0_05\jre1.5.0_05\bin\java -jar acide.jar principal.Acide
-		/*
-		 * try { String currentGrammar =
-		 * PropertiesManager.getProperty("currentGrammar"); String javaPath =
-		 * PropertiesManager.getProperty("javaPath");
-		 * //Runtime.getRuntime().exec("\"" + javaPath + "\" -jar \"" +
-		 * currentGrammar + "\" operaciones.sintacticas.Analyzer");
-		 * ProcessThread p = new ProcessThread(); Output s = new Output(false);
-		 * p.executeCommand("cmd",".","\"" + javaPath + "\" -jar \"" +
-		 * currentGrammar + "\" operaciones.sintacticas.Analyzer","exit",s);
-		 * System.out.println("\"" + javaPath + "\" -jar \"" + currentGrammar +
-		 * "\" operaciones.sintacticas.Analyzer"); JFrame output = new
-		 * JFrame(labels.getString("s946")); output.add(s); output.setSize(new
-		 * Dimension(300,400)); output.setVisible(true); } catch (Exception e1)
-		 * {
-		 * JOptionPane.showMessageDialog(null,"Error analyzer","Error",JOptionPane
-		 * .ERROR_MESSAGE); } } });
-		 */
-		
-		// Adds the buttons
-		_toolBar.removeAll();
-		_toolBar.add(_btnNewFile);
-		_toolBar.add(_btnOpenFile);
-		_toolBar.add(_btnSaveFile);
-		_toolBar.add(_btnSaveAllFiles);
-		_toolBar.add(_btnNewProject);
-		_toolBar.add(_btnOpenProject);
-		_toolBar.add(_btnSaveProject);
-		
+		// Updates the log
 		AcideLog.getLog().info(labels.getString("s125"));
-		return _toolBar;
 	}
 
 	/**
-	 * Builds the modifiable command tool bar
+	 * Adds the static tool bar command given as a parameter to the tool bar.
 	 * 
-	 * @return the modifiable command tool bar
-	 * @see JToolBar
+	 * @param staticToolBar
+	 *            static tool bar command to add.
 	 */
-	public static JToolBar buildModifiableToolBar() {
+	public void addStaticToolBar(StaticToolBar staticToolBar) {
 
 		// Gets the language
 		AcideLanguage language = AcideLanguage.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(ResourceManager.getInstance().getProperty(
+					"language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -352,55 +326,16 @@ public class AcideToolBarPanel{
 		}
 
 		// Gets the labels
-		ResourceBundle labels = language.getLabels();
+		final ResourceBundle labels = language.getLabels();
+
+		// Removes the previous components
+		_toolBar.removeAll();
+
+		// Adds the static buttons
+		for (JButton staticButton : staticToolBar)
+			_toolBar.add(staticButton);
 
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s130"));
-		_toolBar.addSeparator();
-
-		JButton button;
-
-		for (int i = 0; i < ShellCommandList.getSize(); i++) {
-
-			final ShellCommand command = ShellCommandList
-					.getCommandAt(i);
-
-			// SET THE ICON OF THE COMMAND
-			if (command.getHasIcon())
-				button = new JButton(new ImageIcon(command.getIcon()));
-			else
-			// SET THE NAME OF THE COMMAND
-			if (!(command.getName().equals("")))
-				button = new JButton(command.getName());
-			else
-				button = new JButton((new Integer(i + 1)).toString());
-
-			// SET TOOL TIP TEXT OF THE COMMAND
-			if (!(command.getHintText().equals("")))
-				button.setToolTipText(command.getHintText());
-
-			// ADD THE BUTTON
-			_toolBar.add(button);
-
-			// SET THE ACTION LISTENER
-			button.addActionListener(new ActionListener() {
-				/*
-				 * (non-Javadoc)
-				 * 
-				 * @see
-				 * java.awt.event.ActionListener#actionPerformed(java.awt.event
-				 * .ActionEvent)
-				 */
-				@Override
-				public void actionPerformed(ActionEvent actionEvent) {
-					MainWindow.getInstance().getOutput()
-							.executeCommand(command.getAction());
-				}
-			});
-		}
-
-		// Updates the log
-		AcideLog.getLog().info(labels.getString("s131"));
-		return _toolBar;
+		AcideLog.getLog().info(labels.getString("s125"));
 	}
 }

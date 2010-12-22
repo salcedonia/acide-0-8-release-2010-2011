@@ -14,7 +14,6 @@ import language.AcideLanguage;
 import operations.log.AcideLog;
 import resources.ResourceManager;
 
-
 import java.io.File;
 import java.util.ResourceBundle;
 
@@ -102,8 +101,10 @@ public class AcideFileEditorManager {
 			_tabbedPane = new DragAndDropTabbedPane();
 			_testPlaf = new TestPlaf();
 			_tabbedPane.setUI(_testPlaf);
-			_tabbedPane.addMouseListener(new AcideFileEditorManagerMouseClickListener());
-			_tabbedPane.addChangeListener(new AcideFileEditorManagerChangeListener());
+			_tabbedPane
+					.addMouseListener(new AcideFileEditorManagerMouseClickListener());
+			_tabbedPane
+					.addChangeListener(new AcideFileEditorManagerChangeListener());
 
 			// POPUP
 			buildPopupMenu();
@@ -124,7 +125,8 @@ public class AcideFileEditorManager {
 	}
 
 	/**
-	 * Creates a new file editor panel tab with the name, tool tip and type specified.
+	 * Creates a new file editor panel tab with the name, tool tip and type
+	 * specified.
 	 * 
 	 * @param name
 	 *            name of the tab.
@@ -157,8 +159,9 @@ public class AcideFileEditorManager {
 		}
 
 		// Adds the popup menu
-		_tabbedPane.addMouseListener(new AcideFileEditorManagerMouseClickListener());
-		
+		_tabbedPane
+				.addMouseListener(new AcideFileEditorManagerMouseClickListener());
+
 		// The new tab is the selected one
 		_tabbedPane.setSelectedIndex(_tabbedPane.getTabCount() - 1);
 	}
@@ -174,7 +177,8 @@ public class AcideFileEditorManager {
 	}
 
 	/**
-	 * Returns the file editor panel at the position of the list given as a parameter.
+	 * Returns the file editor panel at the position of the list given as a
+	 * parameter.
 	 * 
 	 * @param pos
 	 *            position of the editor to return.
@@ -248,7 +252,7 @@ public class AcideFileEditorManager {
 			// If it is already opened, sets the focus on it
 			setSelectedFileEditorPanelAt(position);
 		}
-		
+
 		// Sets the caret position in the first position of the text pane
 		getSelectedFileEditorPanel().getActiveTextEditionArea()
 				.setCaretPosition(0);
@@ -352,7 +356,8 @@ public class AcideFileEditorManager {
 				.getTestPlaf()
 				.getCloseButtonAt(
 						MainWindow.getInstance().getFileEditorManager()
-								.getSelectedFileEditorPanelIndex()).isRedButton();
+								.getSelectedFileEditorPanelIndex())
+				.isRedButton();
 	}
 
 	/**
@@ -385,20 +390,20 @@ public class AcideFileEditorManager {
 	 */
 	public void setCompilableFile() {
 
-		if (!MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel()
-				.isCompilerFile()
+		if (!MainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanel().isCompilerFile()
 				|| (MainWindow.getInstance().getFileEditorManager()
 						.getSelectedFileEditorPanel().isCompilerFile() && MainWindow
-						.getInstance().getFileEditorManager().getSelectedFileEditorPanel()
-						.isMainFile())) {
+						.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanel().isMainFile())) {
 
 			// Default project
 			if (MainWindow.getInstance().getProjectConfiguration()
 					.isDefaultProject()) {
 
 				// Sets the file as compiled
-				MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel()
-						.setCompilerFile(true);
+				MainWindow.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanel().setCompilerFile(true);
 
 				// If it is already a MAIN FILE
 				if (MainWindow.getInstance().getFileEditorManager()
@@ -418,8 +423,10 @@ public class AcideFileEditorManager {
 							.getProjectConfiguration()
 							.getFileAt(i)
 							.getPath()
-							.equals(MainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel().getAbsolutePath()))
+							.equals(MainWindow.getInstance()
+									.getFileEditorManager()
+									.getSelectedFileEditorPanel()
+									.getAbsolutePath()))
 						// Marks it as COMPILABLE FILE
 						MainWindow.getInstance().getProjectConfiguration()
 								.getFileAt(i).setIsCompilableFile(true);
@@ -449,14 +456,15 @@ public class AcideFileEditorManager {
 						.getStatusBar()
 						.setMessage(
 								MainWindow.getInstance().getFileEditorManager()
-										.getSelectedFileEditorPanel().getAbsolutePath()
+										.getSelectedFileEditorPanel()
+										.getAbsolutePath()
 										+ " <COMPILABLE>");
 			} else {
 
 				// Not default project
 
-				MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel()
-						.setCompilerFile(true);
+				MainWindow.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanel().setCompilerFile(true);
 
 				if (MainWindow.getInstance().getFileEditorManager()
 						.getSelectedFileEditorPanel().isMainFile())
@@ -472,7 +480,8 @@ public class AcideFileEditorManager {
 						.getStatusBar()
 						.setMessage(
 								MainWindow.getInstance().getFileEditorManager()
-										.getSelectedFileEditorPanel().getAbsolutePath()
+										.getSelectedFileEditorPanel()
+										.getAbsolutePath()
 										+ " <COMPILABLE>");
 
 				// Search for the file into the project configuration file list
@@ -485,8 +494,10 @@ public class AcideFileEditorManager {
 							.getProjectConfiguration()
 							.getFileAt(i)
 							.getPath()
-							.equals(MainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel().getAbsolutePath())) {
+							.equals(MainWindow.getInstance()
+									.getFileEditorManager()
+									.getSelectedFileEditorPanel()
+									.getAbsolutePath())) {
 
 						// Marks it as COMPILABLE FILE
 						MainWindow.getInstance().getProjectConfiguration()
@@ -506,7 +517,8 @@ public class AcideFileEditorManager {
 								.getFileEditorManager()
 								.getTabbedPane()
 								.setIconAt(
-										MainWindow.getInstance()
+										MainWindow
+												.getInstance()
 												.getFileEditorManager()
 												.getSelectedFileEditorPanelIndex(),
 										new ImageIcon(
@@ -523,14 +535,14 @@ public class AcideFileEditorManager {
 	public void unsetCompilableFile() {
 
 		// If it is COMPILABLE FILE and not MAIN FILE
-		if (MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel()
-				.isCompilerFile()
+		if (MainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanel().isCompilerFile()
 				&& !MainWindow.getInstance().getFileEditorManager()
 						.getSelectedFileEditorPanel().isMainFile()) {
 
 			// Sets COMPILER FILE to false
-			MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel()
-					.setCompilerFile(false);
+			MainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().setCompilerFile(false);
 
 			// Updates the status bar
 			MainWindow
@@ -538,7 +550,8 @@ public class AcideFileEditorManager {
 					.getStatusBar()
 					.setMessage(
 							MainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel().getAbsolutePath());
+									.getSelectedFileEditorPanel()
+									.getAbsolutePath());
 
 			// Quits the icon tab
 			MainWindow
@@ -567,8 +580,10 @@ public class AcideFileEditorManager {
 							.getProjectConfiguration()
 							.getFileAt(i)
 							.getPath()
-							.equals(MainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel().getAbsolutePath()))
+							.equals(MainWindow.getInstance()
+									.getFileEditorManager()
+									.getSelectedFileEditorPanel()
+									.getAbsolutePath()))
 						// Sets the COMPILABLE FILE as false
 						MainWindow.getInstance().getProjectConfiguration()
 								.getFileAt(i).setIsCompilableFile(false);
@@ -583,46 +598,48 @@ public class AcideFileEditorManager {
 	public void setMainFile() {
 
 		// IF it is not MAIN FILE
-		if (!MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel()
-				.isMainFile()) {
+		if (!MainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanel().isMainFile()) {
 
 			// Removes the previous MAIN FILE
 			for (int i = 0; i < MainWindow.getInstance().getFileEditorManager()
 					.getNumFileEditorPanels(); i++) {
 
 				// Finds the previous MAIN FILE
-				if (MainWindow.getInstance().getFileEditorManager().getFileEditorPanelAt(i)
-						.isMainFile()) {
+				if (MainWindow.getInstance().getFileEditorManager()
+						.getFileEditorPanelAt(i).isMainFile()) {
 
 					// Sets MAIN FILE as false
-					MainWindow.getInstance().getFileEditorManager().getFileEditorPanelAt(i)
-							.setMainFile(false);
+					MainWindow.getInstance().getFileEditorManager()
+							.getFileEditorPanelAt(i).setMainFile(false);
 
 					// Sets COMPILER FILE as false
-					MainWindow.getInstance().getFileEditorManager().getFileEditorPanelAt(i)
-							.setCompilerFile(false);
+					MainWindow.getInstance().getFileEditorManager()
+							.getFileEditorPanelAt(i).setCompilerFile(false);
 
 					// Updates the status bar
 					MainWindow
 							.getInstance()
 							.getStatusBar()
 							.setMessage(
-									MainWindow.getInstance().getFileEditorManager()
-											.getFileEditorPanelAt(i).getAbsolutePath());
+									MainWindow.getInstance()
+											.getFileEditorManager()
+											.getFileEditorPanelAt(i)
+											.getAbsolutePath());
 
 					// Removes the tab icon
-					MainWindow.getInstance().getFileEditorManager().getTabbedPane()
-							.setIconAt(i, null);
+					MainWindow.getInstance().getFileEditorManager()
+							.getTabbedPane().setIconAt(i, null);
 				}
 			}
 
 			// Sets MAIN FILE as true
-			MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel()
-					.setMainFile(true);
+			MainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().setMainFile(true);
 
 			// Sets COMPILER FILE as true
-			MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel()
-					.setCompilerFile(true);
+			MainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().setCompilerFile(true);
 
 			// Updates the status bar
 			MainWindow
@@ -630,7 +647,8 @@ public class AcideFileEditorManager {
 					.getStatusBar()
 					.setMessage(
 							MainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel().getAbsolutePath()
+									.getSelectedFileEditorPanel()
+									.getAbsolutePath()
 									+ " <MAIN>");
 
 			// Not default project
@@ -647,8 +665,10 @@ public class AcideFileEditorManager {
 							.getProjectConfiguration()
 							.getFileAt(i)
 							.getPath()
-							.equals(MainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel().getAbsolutePath())) {
+							.equals(MainWindow.getInstance()
+									.getFileEditorManager()
+									.getSelectedFileEditorPanel()
+									.getAbsolutePath())) {
 
 						for (int j = 0; j < MainWindow.getInstance()
 								.getProjectConfiguration().getFileListSize(); j++) {
@@ -703,7 +723,8 @@ public class AcideFileEditorManager {
 								.getFileEditorManager()
 								.getTabbedPane()
 								.setIconAt(
-										MainWindow.getInstance()
+										MainWindow
+												.getInstance()
 												.getFileEditorManager()
 												.getSelectedFileEditorPanelIndex(),
 										new ImageIcon(
@@ -720,12 +741,12 @@ public class AcideFileEditorManager {
 	public void unsetMainFile() {
 
 		// If it is MAIN FILE
-		if (MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel()
-				.isMainFile()) {
+		if (MainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanel().isMainFile()) {
 
 			// Sets the MAIN FILE as false
-			MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel()
-					.setMainFile(false);
+			MainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().setMainFile(false);
 
 			// Updates the status bar
 			MainWindow
@@ -733,7 +754,8 @@ public class AcideFileEditorManager {
 					.getStatusBar()
 					.setMessage(
 							MainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel().getAbsolutePath());
+									.getSelectedFileEditorPanel()
+									.getAbsolutePath());
 
 			// Quits the tab icon
 			MainWindow
@@ -763,8 +785,10 @@ public class AcideFileEditorManager {
 							.getProjectConfiguration()
 							.getFileAt(i)
 							.getPath()
-							.equals(MainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel().getAbsolutePath()))
+							.equals(MainWindow.getInstance()
+									.getFileEditorManager()
+									.getSelectedFileEditorPanel()
+									.getAbsolutePath()))
 						// Sets MAIN FILE as false
 						MainWindow.getInstance().getProjectConfiguration()
 								.getFileAt(i).setIsMainFile(false);
@@ -794,5 +818,22 @@ public class AcideFileEditorManager {
 			MainWindow.getInstance().getFileEditorManager()
 					.getSelectedFileEditorPanel().setIcon(icon);
 		}
+	}
+
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public int getIndexOfFileEditorPanel(String name) {
+
+		for (int index = 0; index < _tabbedPane.getTabCount(); index++){
+			
+			String fileEditorPanelName = ((AcideFileEditorPanel)_tabbedPane.getComponentAt(index)).getFileName();
+			
+			if(fileEditorPanelName != null && name != null && fileEditorPanelName.matches(name))
+				return index;
+		}
+		return -1;
 	}
 }

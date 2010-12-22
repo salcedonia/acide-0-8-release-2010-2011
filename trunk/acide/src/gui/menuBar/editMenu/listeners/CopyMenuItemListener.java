@@ -87,6 +87,6 @@ public class CopyMenuItemListener implements ActionListener {
 							MainWindow.getInstance().getFileEditorManager()
 									.getSelectedFileEditorPanelIndex()).getActiveTextEditionArea()
 					.copy();
-		MainWindow.getInstance().getOutput().getTextComponent().copy();
+		MainWindow.getInstance().getOutputPanel().getTextComponent().copy();
 	}
 }

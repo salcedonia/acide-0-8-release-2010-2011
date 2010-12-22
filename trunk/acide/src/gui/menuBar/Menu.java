@@ -180,25 +180,7 @@ public class Menu {
 		
 		// HELP
 		_help.setText(labels.getString("s7"));	
-		_help.setLanguageLabels();
-		
-		/*depurar.setText(labels.getString("s20"));
-		depurar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
-				ActionEvent.ALT_MASK));
-		compilador.setText(labels.getString("s31"));
-		compilador.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
-				ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
-		interprete.setText(labels.getString("s32"));
-		interprete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I,
-				ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
-		parser.setText(labels.getString("s33"));
-		parser.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
-				ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
-				
-		nuevaConfLenguaje.setText(labels.getString("s37"));
-		nuevaConfLenguaje.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
-				ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));*/	
-		
+		_help.setLanguageLabels();		
 	}
 
 	/**
@@ -315,6 +297,7 @@ public class Menu {
 		// FILE MENU
 		if (MenuConfiguration.getInstance().getIsDisplayed(FileMenu.NEW_FILE_NAME)
 				|| MenuConfiguration.getInstance().getIsDisplayed(FileMenu.OPEN_FILE_NAME)
+				|| MenuConfiguration.getInstance().getIsDisplayed(FileMenu.OPEN_ALL_FILES_NAME)
 				|| MenuConfiguration.getInstance().getIsDisplayed(FileMenu.SAVE_FILE_AS_NAME)
 				|| MenuConfiguration.getInstance().getIsDisplayed(FileMenu.SAVE_FILE_NAME)
 				|| MenuConfiguration.getInstance().getIsDisplayed(FileMenu.SAVE_ALL_FILES_NAME)
@@ -601,8 +584,7 @@ public class Menu {
 	 * 
 	 * @return the file menu.
 	 */
-	public FileMenu getFile() {
-		
+	public FileMenu getFile() {	
 		return _file;
 	}
 	

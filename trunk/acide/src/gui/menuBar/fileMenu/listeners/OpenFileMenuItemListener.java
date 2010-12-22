@@ -1,22 +1,16 @@
 package gui.menuBar.fileMenu.listeners;
 
-import es.text.TextFile;
-import gui.mainWindow.MainWindow;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
-
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.AbstractDocument.DefaultDocumentEvent;
-import javax.swing.undo.UndoableEdit;
 
 import language.AcideLanguage;
 import operations.factory.AcideIOFactory;
 import operations.log.AcideLog;
 import resources.ResourceManager;
+import es.text.TextFile;
+import gui.mainWindow.MainWindow;
+import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
 
 /************************************************************************																
  * Open file menu item listener.											
@@ -198,47 +192,14 @@ public class OpenFileMenuItemListener implements ActionListener {
 					AcideLog.getLog().info(labels.getString("s85") + filePath
 							+ labels.getString("s86"));
 
-					// UNDO REDO
+					// Enables the file menu
 					MainWindow.getInstance().getMenu().enableFileMenu();
+
+					// Enables the edit menu
 					MainWindow.getInstance().getMenu().enableEditMenu();
-					DefaultStyledDocument document = MainWindow.getInstance()
-							.getFileEditorManager().getSelectedFileEditorPanel()
-							.getSyntaxDocument();
-
-					document.addUndoableEditListener(new UndoableEditListener() {
-
-						/*
-						 * (non-Javadoc)
-						 * 
-						 * @seejavax.swing.event.UndoableEditListener#
-						 * undoableEditHappened
-						 * (javax.swing.event.UndoableEditEvent)
-						 */
-						@Override
-						public void undoableEditHappened(
-								UndoableEditEvent undoableEditEvent) {
-
-							// Gets the undoable edit
-							UndoableEdit edit = undoableEditEvent.getEdit();
-
-							if (edit instanceof DefaultDocumentEvent
-									&& ((DefaultDocumentEvent) edit)
-											.getType() == DefaultDocumentEvent.EventType.CHANGE) {
-								return;
-							} else {
-								// Gets the selected editor index
-								int selectedEditorIndex = MainWindow.getInstance()
-								.getFileEditorManager()
-								.getSelectedFileEditorPanelIndex();
-								
-								// Set the edit property over the selected editor undo manager
-								MainWindow.getInstance()
-								.getFileEditorManager()
-								.getFileEditorPanelAt(selectedEditorIndex)
-								.getUndoManager().addEdit(undoableEditEvent
-										.getEdit());							}
-						}
-					});
+					
+					// Updates the undo manager
+					AcideUndoRedoManager.getInstance().update();
 
 					// Sets the caret in the first position of the editor
 					MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel().getActiveTextEditionArea().setCaretPosition(0);

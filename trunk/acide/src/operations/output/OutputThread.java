@@ -113,12 +113,12 @@ public class OutputThread extends Thread {
 			// CREATE THE ERROR STREAM
 			OutputProcessThread errorGobbler = new OutputProcessThread(
 					_process.getErrorStream(), MainWindow.getInstance()
-							.getOutput());
+							.getOutputPanel());
 
 			// CREATE THE OUTPUT STREAM
 			OutputProcessThread outputGobbler = new OutputProcessThread(
 					_process.getInputStream(), MainWindow.getInstance()
-							.getOutput());
+							.getOutputPanel());
 
 			// STARTS THE THREADS
 			errorGobbler.start();

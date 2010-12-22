@@ -96,7 +96,7 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 			MainWindow.getInstance().getProjectConfiguration().setIsModified(true);
 			
 			// Gets the selection in the explorer
-			TreePath currentSelection = MainWindow.getInstance().getExplorer().getTree()
+			TreePath currentSelection = MainWindow.getInstance().getExplorerPanel().getTree()
 					.getSelectionPath();
 			
 			// Something selected
@@ -120,7 +120,7 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 					if (parent != null) {
 						
 						// Removes the node
-						MainWindow.getInstance().getExplorer().getTreeModel()
+						MainWindow.getInstance().getExplorerPanel().getTreeModel()
 								.removeNodeFromParent(currentNode);
 						
 						ArrayList<String> contRemove = new ArrayList<String>();
@@ -131,13 +131,13 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 										.getName()))) {
 							
 							// Updates the explorer popup menu 
-							MainWindow.getInstance().getExplorer().getPopupMenu()
+							MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 									.getAddFile().setEnabled(false);
-							MainWindow.getInstance().getExplorer().getPopupMenu()
+							MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 									.getSaveProject().setEnabled(false);
-							MainWindow.getInstance().getExplorer().getPopupMenu()
+							MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 									.getRemoveFile().setEnabled(false);
-							MainWindow.getInstance().getExplorer().getPopupMenu()
+							MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 									.getDeleteFile().setEnabled(false);
 							
 							MainWindow.getInstance().setTitle(labels.getString("s425")
@@ -271,14 +271,14 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 
 		// UPDATES THE EXPLORER POPUP MENU
 		if (MainWindow.getInstance().getProjectConfiguration().getNumFilesFromList() > 0) {
-			MainWindow.getInstance().getExplorer().getPopupMenu().getRemoveFile()
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getRemoveFile()
 					.setEnabled(true);
-			MainWindow.getInstance().getExplorer().getPopupMenu().getDeleteFile()
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getDeleteFile()
 					.setEnabled(true);
 		} else {
-			MainWindow.getInstance().getExplorer().getPopupMenu().getRemoveFile()
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getRemoveFile()
 					.setEnabled(false);
-			MainWindow.getInstance().getExplorer().getPopupMenu().getDeleteFile()
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getDeleteFile()
 					.setEnabled(false);
 		}
 	}

@@ -997,13 +997,13 @@ public class ReplaceWindow extends JFrame {
 
 						// Updates the log
 						AcideLog.getLog().info(labels.getString("s573"));
-						
+
 						// Warning message
 						replaceGUI.setTop(false);
 						JOptionPane.showMessageDialog(null,
 								labels.getString("s573"));
 						replaceGUI.setTop(true);
-						
+
 						// Updates the status bar
 						mainWindow.getStatusBar().setMessage(
 								labels.getString("s573"));
@@ -1055,13 +1055,13 @@ public class ReplaceWindow extends JFrame {
 					}
 
 					if (_selectedText == null) {
-						
+
 						// Warning message
 						replaceGUI.setTop(false);
 						JOptionPane.showMessageDialog(null,
 								labels.getString("s616"));
 						replaceGUI.setTop(true);
-						
+
 						// Updates the status bar
 						mainWindow.getStatusBar().setMessage(
 								labels.getString("s616"));
@@ -1136,18 +1136,18 @@ public class ReplaceWindow extends JFrame {
 
 							// Updates the log
 							AcideLog.getLog().info(labels.getString("s573"));
-							
+
 							// Warning message
 							replaceGUI.setTop(false);
 							JOptionPane.showMessageDialog(null,
 									labels.getString("s573"));
-							
+
 							// Updates the status bar
 							mainWindow.getStatusBar().setMessage(
 									labels.getString("s573"));
 
-							int chosenOption = JOptionPane.showConfirmDialog(null,
-									labels.getString("s575"));
+							int chosenOption = JOptionPane.showConfirmDialog(
+									null, labels.getString("s575"));
 							replaceGUI.setTop(true);
 
 							if (chosenOption == JOptionPane.OK_OPTION) {
@@ -1288,7 +1288,7 @@ public class ReplaceWindow extends JFrame {
 							// Updates the status bar
 							mainWindow.getStatusBar().setMessage(
 									labels.getString("s573"));
-							
+
 							// Sets the caret position in the first position
 							mainWindow.getFileEditorManager()
 									.getFileEditorPanelAt(_selectedEditorIndex)
@@ -1378,24 +1378,24 @@ public class ReplaceWindow extends JFrame {
 					if (_isEnd && _isFirstSearch) {
 
 						if (_counter == 0) {
-							
+
 							// Warning message
 							replaceGUI.setTop(false);
 							JOptionPane.showMessageDialog(null,
 									labels.getString("s576"));
 							replaceGUI.setTop(true);
-							
+
 							// Updates the status bar
 							mainWindow.getStatusBar().setMessage(
 									labels.getString("s576"));
 						} else {
-							
+
 							// Shows message
 							replaceGUI.setTop(false);
 							JOptionPane.showMessageDialog(null,
 									labels.getString("s586"));
 							replaceGUI.setTop(true);
-							
+
 							// Updates the status bar
 							mainWindow.getStatusBar().setMessage(
 									labels.getString("s586"));
@@ -1737,6 +1737,15 @@ public class ReplaceWindow extends JFrame {
 	 ***********************************************************************/
 	class ReplaceAllButtonListener implements ActionListener {
 
+		/**
+		 * Local number of replacements.
+		 */
+		private int _localNumberOfReplacements = 0;
+		/**
+		 * Global number of replacements.
+		 */
+		private int _globalNumberOfReplacements = 0;
+		
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -1782,7 +1791,7 @@ public class ReplaceWindow extends JFrame {
 					.getFileEditorPanelAt(selectedEditorIndex)
 					.getActiveTextEditionArea().getText().length();
 
-			int numberOfReplacements = 0;
+			_globalNumberOfReplacements = 0;
 
 			// SELECTED TEXT SEARCH
 			if (_selectedTextRadioButton.isSelected()) {
@@ -1793,56 +1802,61 @@ public class ReplaceWindow extends JFrame {
 						.getActiveTextEditionArea().getSelectedText() != null) {
 
 					// Gets the number of replacements
-					numberOfReplacements = StringUtils.countMatches(MainWindow
+					_globalNumberOfReplacements = StringUtils.countMatches(MainWindow
 							.getInstance().getFileEditorManager()
 							.getFileEditorPanelAt(selectedEditorIndex)
 							.getActiveTextEditionArea().getText(),
 							_replaceTextField.getText());
 
-					// Gets the selection start
-					int selectionStart = MainWindow.getInstance()
-							.getFileEditorManager()
-							.getFileEditorPanelAt(selectedEditorIndex)
-							.getActiveTextEditionArea().getSelectionStart();
-
-					// Gets the selected editor text
-					selectedEditorText = MainWindow.getInstance()
-							.getFileEditorManager()
-							.getFileEditorPanelAt(selectedEditorIndex)
-							.getActiveTextEditionArea().getSelectedText();
-
-					// Gets the selection size
-					int selectionSize = selectionStart
-							+ selectedEditorText.length();
-					String text = MainWindow.getInstance()
-							.getFileEditorManager()
-							.getFileEditorPanelAt(selectedEditorIndex)
-							.getActiveTextEditionArea().getText();
-
-					// Gets the text before the selected text
-					textBeforeSelectedText = text.substring(0, selectionStart);
-
-					// Gets the text after the selected text
-					textAfterSelectedText = text.substring(selectionSize,
-							selectedEditorTextSize);
-
 					// If there are replacements
-					if (numberOfReplacements > 0)
+					if (_globalNumberOfReplacements > 0) {
+
+						// Gets the selection start
+						int selectionStart = MainWindow.getInstance()
+								.getFileEditorManager()
+								.getFileEditorPanelAt(selectedEditorIndex)
+								.getActiveTextEditionArea().getSelectionStart();
+
+						// Gets the selected editor text
+						selectedEditorText = MainWindow.getInstance()
+								.getFileEditorManager()
+								.getFileEditorPanelAt(selectedEditorIndex)
+								.getActiveTextEditionArea().getSelectedText();
+
+						// Gets the selection size
+						int selectionSize = selectionStart
+								+ selectedEditorText.length();
+						String text = MainWindow.getInstance()
+								.getFileEditorManager()
+								.getFileEditorPanelAt(selectedEditorIndex)
+								.getActiveTextEditionArea().getText();
+
+						// Gets the text before the selected text
+						textBeforeSelectedText = text.substring(0,
+								selectionStart);
+
+						// Gets the text after the selected text
+						textAfterSelectedText = text.substring(selectionSize,
+								selectedEditorTextSize);
+
 						// REPLACE ALL
 						textReplaced = selectedEditorText.replaceAll(
 								_replaceTextField.getText(),
 								_replacedTextField.getText());
 
-					// Builds the final text replaced
-					String temporalText = textBeforeSelectedText
-							.concat(textReplaced);
-					textReplaced = null;
-					textReplaced = temporalText.concat(textAfterSelectedText);
+						// Builds the final text replaced
+						String temporalText = textBeforeSelectedText
+								.concat(textReplaced);
+						textReplaced = null;
+						textReplaced = temporalText
+								.concat(textAfterSelectedText);
 
-					// Updates the selected editor text with the text
-					MainWindow.getInstance().getFileEditorManager()
-							.getFileEditorPanelAt(selectedEditorIndex)
-							.getActiveTextEditionArea().setText(textReplaced);
+						// Updates the selected editor text with the text
+						MainWindow.getInstance().getFileEditorManager()
+								.getFileEditorPanelAt(selectedEditorIndex)
+								.getActiveTextEditionArea()
+								.setText(textReplaced);
+					}
 				}
 			}
 
@@ -1850,25 +1864,26 @@ public class ReplaceWindow extends JFrame {
 			if (_currentDocumentRadioButton.isSelected()) {
 
 				// Gets the number of replacements
-				numberOfReplacements = StringUtils.countMatches(MainWindow
+				_globalNumberOfReplacements = StringUtils.countMatches(MainWindow
 						.getInstance().getFileEditorManager()
 						.getFileEditorPanelAt(selectedEditorIndex)
 						.getActiveTextEditionArea().getText(),
 						_replaceTextField.getText());
 
-				// Gets the selected editor index
-				selectedEditorIndex = MainWindow.getInstance()
-						.getFileEditorManager()
-						.getSelectedFileEditorPanelIndex();
-
-				// Gets the selected editor text
-				selectedEditorText = MainWindow.getInstance()
-						.getFileEditorManager()
-						.getFileEditorPanelAt(selectedEditorIndex)
-						.getActiveTextEditionArea().getText();
-
 				// If there are replacements
-				if (numberOfReplacements > 0)
+				if (_globalNumberOfReplacements > 0) {
+
+					// Gets the selected editor index
+					selectedEditorIndex = MainWindow.getInstance()
+							.getFileEditorManager()
+							.getSelectedFileEditorPanelIndex();
+
+					// Gets the selected editor text
+					selectedEditorText = MainWindow.getInstance()
+							.getFileEditorManager()
+							.getFileEditorPanelAt(selectedEditorIndex)
+							.getActiveTextEditionArea().getText();
+
 					// REPLACE ALL
 					MainWindow
 							.getInstance()
@@ -1880,11 +1895,13 @@ public class ReplaceWindow extends JFrame {
 											_replaceTextField.getText(),
 											_replacedTextField.getText()));
 
-				// Updates the log
-				AcideLog.getLog().info(
-						labels.getString("s582") + _replaceTextField.getText()
-								+ labels.getString("s580")
-								+ _replacedTextField.getText());
+					// Updates the log
+					AcideLog.getLog().info(
+							labels.getString("s582")
+									+ _replaceTextField.getText()
+									+ labels.getString("s580")
+									+ _replacedTextField.getText());
+				}
 
 			} else
 
@@ -1906,7 +1923,7 @@ public class ReplaceWindow extends JFrame {
 						.getFileEditorManager().getNumFileEditorPanels();
 
 				// Initializes the number of replacements
-				numberOfReplacements = 0;
+				_globalNumberOfReplacements = 0;
 
 				// For each one of the opened editors
 				for (int editorIndex = 0; editorIndex < numEditors; editorIndex++) {
@@ -1921,15 +1938,19 @@ public class ReplaceWindow extends JFrame {
 					MainWindow.getInstance().getFileEditorManager()
 							.setSelectedFileEditorPanelAt(editorIndex);
 
-					// Updates the number of replacements
-					numberOfReplacements += StringUtils.countMatches(MainWindow
-							.getInstance().getFileEditorManager()
-							.getFileEditorPanelAt(editorIndex)
-							.getActiveTextEditionArea().getText(),
+					// Gets the number of replacements
+					_localNumberOfReplacements = StringUtils.countMatches(
+							MainWindow.getInstance().getFileEditorManager()
+									.getFileEditorPanelAt(editorIndex)
+									.getActiveTextEditionArea().getText(),
 							_replaceTextField.getText());
 
 					// If there are replacements
-					if (numberOfReplacements > 0)
+					if (_localNumberOfReplacements > 0) {
+						
+						// Updates the number of replacements
+						_globalNumberOfReplacements += _localNumberOfReplacements;
+
 						// REPLACES ALL
 						MainWindow
 								.getInstance()
@@ -1940,6 +1961,7 @@ public class ReplaceWindow extends JFrame {
 										selectedEditorText.replaceAll(
 												_replaceTextField.getText(),
 												_replacedTextField.getText()));
+					}
 				}
 
 				// Sets the original selected editor index
@@ -1955,7 +1977,7 @@ public class ReplaceWindow extends JFrame {
 
 			// Informs of the number of replacements
 			JOptionPane.showMessageDialog(ReplaceWindow.getInstance(),
-					labels.getString("s1000") + numberOfReplacements,
+					labels.getString("s1000") + _globalNumberOfReplacements,
 					labels.getString("s572"), JOptionPane.INFORMATION_MESSAGE);
 
 			// Updates the status bar
@@ -1963,12 +1985,13 @@ public class ReplaceWindow extends JFrame {
 					.getInstance()
 					.getStatusBar()
 					.setMessage(
-							labels.getString("s1000") + numberOfReplacements);
+							labels.getString("s1000") + _globalNumberOfReplacements);
 
 			// Puts the default cursor
 			MainWindow.getInstance().setCursor(
 					Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
+			// Updates the main window
 			MainWindow.getInstance().validate();
 			MainWindow.getInstance().repaint();
 		}

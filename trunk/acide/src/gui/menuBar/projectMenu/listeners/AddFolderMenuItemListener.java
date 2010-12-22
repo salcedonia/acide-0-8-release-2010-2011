@@ -89,7 +89,7 @@ public class AddFolderMenuItemListener implements ActionListener {
 		if (newFolder != null && !newFolder.matches("")) {
 			
 			// Gets the selected node in the explorer tree
-			TreePath path = MainWindow.getInstance().getExplorer().getTree()
+			TreePath path = MainWindow.getInstance().getExplorerPanel().getTree()
 					.getSelectionPath();
 
 			// Creates the explorer folder
@@ -108,7 +108,7 @@ public class AddFolderMenuItemListener implements ActionListener {
 
 				// If it is a file and not a directory
 				if (!folder.isDirectory()) {
-					folderPath = MainWindow.getInstance().getExplorer().getRoot()
+					folderPath = MainWindow.getInstance().getExplorerPanel().getRoot()
 							.getNextNode();
 					folder = (ExplorerFile) folderPath.getUserObject();
 				}
@@ -117,7 +117,7 @@ public class AddFolderMenuItemListener implements ActionListener {
 				
 				// File selected 
 				
-				folderPath = MainWindow.getInstance().getExplorer().getRoot().getNextNode();
+				folderPath = MainWindow.getInstance().getExplorerPanel().getRoot().getNextNode();
 				folder = (ExplorerFile) folderPath.getUserObject();
 			}
 
@@ -136,8 +136,8 @@ public class AddFolderMenuItemListener implements ActionListener {
 			node.setAllowsChildren(true);
 			folderPath.add(node);
 			folderPath.setAllowsChildren(true);
-			MainWindow.getInstance().getExplorer().getTreeModel().reload();
-			MainWindow.getInstance().getExplorer().expandTree();
+			MainWindow.getInstance().getExplorerPanel().getTreeModel().reload();
+			MainWindow.getInstance().getExplorerPanel().expandTree();
 			MainWindow.getInstance().getProjectConfiguration().setIsModified(true);
 		}
 	}

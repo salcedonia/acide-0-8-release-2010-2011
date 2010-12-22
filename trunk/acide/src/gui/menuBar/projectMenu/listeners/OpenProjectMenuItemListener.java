@@ -1,5 +1,20 @@
 package gui.menuBar.projectMenu.listeners;
 
+import java.awt.Cursor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import language.AcideLanguage;
+import operations.factory.AcideIOFactory;
+import operations.log.AcideLog;
+import resources.ResourceManager;
 import es.configuration.lexicon.LexiconConfiguration;
 import es.configuration.menu.MenuConfiguration;
 import es.configuration.output.OutputConfiguration;
@@ -10,27 +25,7 @@ import es.text.TextFile;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.configurationMenu.menuMenu.gui.MenuConfigurationWindow;
 import gui.menuBar.configurationMenu.toolBarMenu.gui.ToolBarConfigurationWindow;
-
-import java.awt.Cursor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.AbstractDocument.DefaultDocumentEvent;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.undo.UndoableEdit;
-
-import language.AcideLanguage;
-import operations.factory.AcideIOFactory;
-import operations.log.AcideLog;
-import resources.ResourceManager;
+import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
 
 /************************************************************************
  * Open project menu item listener.
@@ -153,12 +148,17 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 				// If OK
 				if (chosenOption == JOptionPane.OK_OPTION) {
+					
+					// Enables the save project menu item
 					MainWindow.getInstance().getMenu().getProject()
 							.getSaveProject().setEnabled(true);
+					
+					// Does the save project menu item action
 					MainWindow.getInstance().getMenu().getProject()
 							.getSaveProject().doClick();
-				} else if (chosenOption == JOptionPane.CANCEL_OPTION)
-					cancelOptionSelected = true;
+				} else 
+					if (chosenOption != JOptionPane.NO_OPTION)
+						cancelOptionSelected = true;
 			}
 
 			// If the user does not select the cancel option
@@ -218,7 +218,10 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 				// Enables the project menu
 				MainWindow.getInstance().getMenu().enableProjectMenu();
-
+				
+				// Enables the open all files menu item
+				MainWindow.getInstance().getMenu().getFile().getOpenAllFiles().setEnabled(true);
+				
 				// Updates the MAIN WINDOW
 				MainWindow.getInstance().validate();
 				MainWindow.getInstance().repaint();
@@ -239,7 +242,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 	public void loadExplorerConfiguration(ResourceBundle labels) {
 
 		// Removes all the nodes in the tree
-		MainWindow.getInstance().getExplorer().getRoot().removeAllChildren();
+		MainWindow.getInstance().getExplorerPanel().getRoot().removeAllChildren();
 
 		// Creates the folder with the name of the project
 		ExplorerFile explorerFile = new ExplorerFile();
@@ -259,7 +262,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 		DefaultMutableTreeNode explorerTree = new DefaultMutableTreeNode(
 				explorerFile);
 		explorerTree.setAllowsChildren(true);
-		MainWindow.getInstance().getExplorer().getRoot().add(explorerTree);
+		MainWindow.getInstance().getExplorerPanel().getRoot().add(explorerTree);
 		ArrayList<DefaultMutableTreeNode> listdir = new ArrayList<DefaultMutableTreeNode>();
 
 		// Adds the associated project files to the explorer
@@ -304,28 +307,28 @@ public class OpenProjectMenuItemListener implements ActionListener {
 		}
 
 		// Updates the tree structure
-		MainWindow.getInstance().getExplorer().getTreeModel().reload();
-		MainWindow.getInstance().getExplorer().expandTree();
+		MainWindow.getInstance().getExplorerPanel().getTreeModel().reload();
+		MainWindow.getInstance().getExplorerPanel().expandTree();
 
 		// If there are files associated to the project
 		if (MainWindow.getInstance().getProjectConfiguration()
 				.getNumFilesFromList() > 0) {
 
 			// Enables the remove file menu item
-			MainWindow.getInstance().getExplorer().getPopupMenu()
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 					.getRemoveFile().setEnabled(true);
 
 			// Enables the delete file menu item
-			MainWindow.getInstance().getExplorer().getPopupMenu()
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 					.getDeleteFile().setEnabled(true);
 		} else {
 
 			// Disables the remove file menu item
-			MainWindow.getInstance().getExplorer().getPopupMenu()
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 					.getRemoveFile().setEnabled(false);
 
 			// Disables the delete file menu item
-			MainWindow.getInstance().getExplorer().getPopupMenu()
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 					.getDeleteFile().setEnabled(false);
 		}
 
@@ -337,7 +340,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 		if (!MainWindow.getInstance().getMenu().getView()
 				.getShowExplorerPanel().isSelected())
 			// Shows the explorer
-			MainWindow.getInstance().getExplorer().showExplorer();
+			MainWindow.getInstance().getExplorerPanel().showExplorer();
 	}
 
 	/**
@@ -522,7 +525,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 		// Resets the output
 		// MainWindow.getInstance().getOutput().executeExitCommand();
-		MainWindow.getInstance().getOutput().resetOutput();
+		MainWindow.getInstance().getOutputPanel().resetOutput();
 
 		// Updates the MAIN WINDOW
 		MainWindow.getInstance().validate();
@@ -549,7 +552,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 					.getProjectConfiguration().getToolBar();
 
 			// Loads the command list from the configuration file
-			ShellCommandList.loadList(currentToolBarConfiguration);
+			ShellCommandList.loadFinalList(currentToolBarConfiguration);
 
 			// Updates the RESOURCE MANAGER
 			ResourceManager.getInstance().setProperty(
@@ -573,7 +576,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 			try {
 
 				// Loads the command list from the configuration file
-				ShellCommandList.loadList(currentToolBarConfiguration2);
+				ShellCommandList.loadFinalList(currentToolBarConfiguration2);
 
 				// Error message
 				JOptionPane.showMessageDialog(null,
@@ -595,7 +598,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 					// Loads the command list from the configuration file
 					ShellCommandList
-							.loadList("./configuration/toolbar/default.TBcfg");
+							.loadFinalList("./configuration/toolbar/default.TBcfg");
 				} catch (Exception exception2) {
 
 					// Updates the log
@@ -616,7 +619,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 		}
 
 		// Builds the tool bar
-		MainWindow.getInstance().buildToolBar();
+		MainWindow.getInstance().buildToolBarPanel();
 
 		// Enables the save tool bar menu item
 		MainWindow.getInstance().getMenu().getConfiguration().getToolBar()
@@ -769,7 +772,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 									filePath.length());
 						}
 
-						// If the file was opened
+						// If it is the default project and it has to be opened
 						if (MainWindow.getInstance().getProjectConfiguration()
 								.isDefaultProject()
 								|| MainWindow.getInstance()
@@ -877,43 +880,14 @@ public class OpenProjectMenuItemListener implements ActionListener {
 								}
 							}
 
-							// UNDO REDO
-							DefaultStyledDocument document = MainWindow
-									.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel()
-									.getSyntaxDocument();
+							// Enables the file menu
+							MainWindow.getInstance().getMenu().enableFileMenu();
 
-							document.addUndoableEditListener(new UndoableEditListener() {
-								/*
-								 * (non-Javadoc)
-								 * 
-								 * @see javax.swing.event.UndoableEditListener#
-								 * undoableEditHappened
-								 * (javax.swing.event.UndoableEditEvent)
-								 */
-								public void undoableEditHappened(
-										UndoableEditEvent undoableEditEvent) {
-
-									UndoableEdit edit = undoableEditEvent
-											.getEdit();
-
-									if (!((edit instanceof DefaultDocumentEvent) && (((DefaultDocumentEvent) edit)
-											.getType() == DefaultDocumentEvent.EventType.CHANGE))) {
-
-										// Sets the edit property over the
-										// selected
-										// editor undo manager
-										MainWindow
-												.getInstance()
-												.getFileEditorManager()
-												.getSelectedFileEditorPanel()
-												.getUndoManager()
-												.addEdit(
-														undoableEditEvent
-																.getEdit());
-									}
-								}
-							});
+							// Enables the edit menu
+							MainWindow.getInstance().getMenu().enableEditMenu();
+							
+							// Updates the undo manager
+							AcideUndoRedoManager.getInstance().update();
 						}
 
 						// The project configuration has been modified
@@ -963,7 +937,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 							.getActiveTextEditionArea().requestFocusInWindow();
 
 					// Selects the tree node
-					MainWindow.getInstance().getExplorer()
+					MainWindow.getInstance().getExplorerPanel()
 							.selectTreeNodeFromFileEditor();
 					
 					// Updates the status bar with the selected editor

@@ -4,7 +4,6 @@ import es.configuration.project.AcideProjectConfiguration;
 import es.configuration.toolBar.shellComandToolBar.ShellCommandList;
 import gui.explorerPanel.AcideExplorerPanel;
 import gui.fileEditor.fileEditorManager.AcideFileEditorManager;
-import gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
 import gui.mainWindow.listeners.MainWindowListener;
 import gui.menuBar.Menu;
 import gui.menuBar.projectMenu.gui.NewProjectConfigurationWindow;
@@ -20,9 +19,7 @@ import java.util.ResourceBundle;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.JToolBar;
 
 import language.AcideLanguage;
 import operations.factory.AcideGUIFactory;
@@ -76,7 +73,7 @@ public class MainWindow extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * Main window icon.
+	 * Main window image icon.
 	 */
 	private static final ImageIcon ICON = new ImageIcon(
 			"./resources/images/icon.png");
@@ -87,27 +84,27 @@ public class MainWindow extends JFrame {
 	/**
 	 * Main window editor builder.
 	 */
-	private AcideFileEditorManager _editorBuilder;
+	private AcideFileEditorManager _fileEditorManager;
 	/**
 	 * Main window menu.
 	 */
 	private Menu _menu;
 	/**
-	 * Main window output shell.
+	 * Main window output panel.
 	 */
-	private AcideOutputPanel _output;
+	private AcideOutputPanel _outputPanel;
 	/**
 	 * Main window status bar.
 	 */
 	private AcideStatusBar _statusBar;
 	/**
-	 * Main window explorer.
+	 * Main window explorer panel.
 	 */
-	private AcideExplorerPanel _explorer;
+	private AcideExplorerPanel _explorerPanel;
 	/**
-	 * Main window tool bar.
+	 * Main window tool bar panel.
 	 */
-	private JToolBar _toolBar;
+	private AcideToolBarPanel _toolBarPanel;
 	/**
 	 * Project configuration of the application.
 	 */
@@ -117,13 +114,13 @@ public class MainWindow extends JFrame {
 	 */
 	private NewProjectConfigurationWindow _projectGUI;
 	/**
-	 * Vertical split panel of the main window.
+	 * Main window vertical split panel.
 	 */
-	private JSplitPane _splitPaneVertical;
+	private JSplitPane _verticalSplitPanel;
 	/**
-	 * Horizontal split panel of the main window.
+	 * Main window horizontal split panel.
 	 */
-	private JSplitPane _splitPaneHorizontal;
+	private JSplitPane _horizontalSplitPanel;
 
 	/**
 	 * Returns the unique main window class instance.
@@ -165,86 +162,71 @@ public class MainWindow extends JFrame {
 		AcideSplashScreen.setProgressBar(27);
 		AcideLog.getLog().info(labels.getString("s67"));
 
-		AcideSplashScreen.setProgressBar(32);
-
-		JPanel contentPane;
 		AcideSplashScreen.setProgressBar(35);
-
-		contentPane = (JPanel) getContentPane();
-		AcideSplashScreen.setProgressBar(40);
 
 		// Sets the title
 		setTitle(labels.getString("s425"));
 		AcideSplashScreen.setProgressBar(42);
 
-		// Creates the factory to build the rest of the components
-		AcideGUIFactory _guiFactory = AcideGUIFactory.getInstance();
-		AcideSplashScreen.setProgressBar(43);
-
-		// MENU
-		_menu = _guiFactory.buildMenu();
-		AcideSplashScreen.setProgressBar(45);
-
-		// EXPLORER
-		_explorer = _guiFactory.buildAcideExplorerPanel();
-		AcideSplashScreen.setProgressBar(47);
-
-		// EDITOR
-		_editorBuilder = _guiFactory.buildAcideFileEditorManager();
-		AcideSplashScreen.setProgressBar(50);
-
-		// OUTPUT
-		_output = _guiFactory.buildAcideOutputPanel();
-		AcideSplashScreen.setProgressBar(52);
-
-		// STATUS BAR
-		_statusBar = _guiFactory.buildAcideStatusBar();
-		AcideSplashScreen.setProgressBar(55);
-
-		contentPane.add(_statusBar.getStatusBar(), BorderLayout.SOUTH);
-		AcideSplashScreen.setProgressBar(57);
-
-		// TOOLBAR
-		buildToolBar();
-		AcideSplashScreen.setProgressBar(60);
-
-		AcideOperationsFactory operationsFactory = AcideOperationsFactory
-				.getInstance();
-		AcideSplashScreen.setProgressBar(62);
-
 		// PROJECT CONFIGURATION
-		_projectConfiguration = operationsFactory.buildProjectConfiguration();
-		AcideSplashScreen.setProgressBar(65);
+		_projectConfiguration = AcideOperationsFactory.getInstance()
+				.buildProjectConfiguration();
+		AcideSplashScreen.setProgressBar(45);
+		
+		// MENU
+		_menu = AcideGUIFactory.getInstance().buildMenu();
+		AcideSplashScreen.setProgressBar(47);
 
 		// MENU BAR
 		setJMenuBar(_menu.getMenuBar());
+		AcideSplashScreen.setProgressBar(50);
+		
+		// EXPLORER
+		_explorerPanel = AcideGUIFactory.getInstance().buildAcideExplorerPanel();
+		AcideSplashScreen.setProgressBar(53);
+
+		// EDITOR
+		_fileEditorManager = AcideGUIFactory.getInstance().buildAcideFileEditorManager();
+		AcideSplashScreen.setProgressBar(57);
+
+		// OUTPUT
+		_outputPanel = AcideGUIFactory.getInstance().buildAcideOutputPanel();
+		AcideSplashScreen.setProgressBar(60);
+
+		// STATUS BAR
+		_statusBar = AcideGUIFactory.getInstance().buildAcideStatusBar();
+		AcideSplashScreen.setProgressBar(63);
+
+		add(_statusBar.getStatusBar(), BorderLayout.SOUTH);
+		AcideSplashScreen.setProgressBar(65);
+
+		// TOOLBAR
+		buildToolBarPanel();
 		AcideSplashScreen.setProgressBar(67);
 
-		// TOOL BAR
-		contentPane.add(_toolBar, BorderLayout.NORTH);
-		AcideSplashScreen.setProgressBar(70);
-
-		_splitPaneVertical = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				_explorer, _editorBuilder.getTabbedPane());
+		// VERTICAL SPLIT PANEL
+		_verticalSplitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+				_explorerPanel, _fileEditorManager.getTabbedPane());
 		AcideSplashScreen.setProgressBar(72);
 
-		_splitPaneVertical.setResizeWeight(0.05);
+		_verticalSplitPanel.setResizeWeight(0.05);
 		AcideSplashScreen.setProgressBar(75);
 
-		_splitPaneVertical.setContinuousLayout(true);
+		_verticalSplitPanel.setContinuousLayout(true);
 		AcideSplashScreen.setProgressBar(77);
 
-		_splitPaneHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-				_splitPaneVertical, _output);
+		// HORIZONTAL SPLIT PANEL
+		_horizontalSplitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+				_verticalSplitPanel, _outputPanel);
 		AcideSplashScreen.setProgressBar(80);
 
-		_splitPaneHorizontal.setResizeWeight(0.9);
+		_horizontalSplitPanel.setResizeWeight(0.9);
 		AcideSplashScreen.setProgressBar(82);
 
-		_splitPaneHorizontal.setContinuousLayout(true);
+		_horizontalSplitPanel.setContinuousLayout(true);
 		AcideSplashScreen.setProgressBar(85);
 
-		contentPane.add(_splitPaneHorizontal, BorderLayout.CENTER);
+		add(_horizontalSplitPanel, BorderLayout.CENTER);
 		AcideSplashScreen.setProgressBar(87);
 
 		// Do not close automatically
@@ -256,16 +238,17 @@ public class MainWindow extends JFrame {
 
 		// Adds the Listeners
 		addWindowListener(new MainWindowListener());
+		setMenuListeners();
 
 		// Updates the log
 		AcideLog.getLog().info(labels.getString("s66"));
 	}
 
 	/**
-	 * Builds the ToolBar of the main window with the different types of tool
+	 * Builds the main window tool bar panel with the different types of tool
 	 * bars in the application.
 	 */
-	public void buildToolBar() {
+	public void buildToolBarPanel() {
 
 		// Gets the language
 		AcideLanguage language = AcideLanguage.getInstance();
@@ -290,7 +273,7 @@ public class MainWindow extends JFrame {
 			ShellCommandList.clear();
 			currentToolBarConfiguration = ResourceManager.getInstance()
 					.getProperty("currentToolBarConfiguration");
-			ShellCommandList.loadList(currentToolBarConfiguration);
+			ShellCommandList.loadFinalList(currentToolBarConfiguration);
 
 			// Updates the RESOURCE MANAGER
 			ResourceManager.getInstance().setProperty(
@@ -309,7 +292,11 @@ public class MainWindow extends JFrame {
 					+ currentToolBarConfiguration.substring(index + 1,
 							currentToolBarConfiguration.length());
 			try {
-				ShellCommandList.loadList(name);
+
+				// Load the command list
+				ShellCommandList.loadFinalList(name);
+
+				// Information message
 				JOptionPane.showMessageDialog(null,
 						labels.getString("s958") + currentToolBarConfiguration
 								+ labels.getString("s957") + name);
@@ -326,7 +313,9 @@ public class MainWindow extends JFrame {
 
 					// Loads the default grammar configuration
 					ShellCommandList
-							.loadList("./configuration/toolbar/default.TBcfg");
+							.loadFinalList("./configuration/toolbar/default.TBcfg");
+
+					// Information message
 					JOptionPane.showMessageDialog(
 							null,
 							labels.getString("s958")
@@ -354,57 +343,41 @@ public class MainWindow extends JFrame {
 			AcideLog.getLog().error(labels.getString("s127"));
 		}
 
-		// Builds the tool bar
-		_toolBar = AcideToolBarPanel.buildAcideToolBarPanel();
+		// Updates the tool bar panel
+		updateToolBarPanel();
 	}
 
 	/**
-	 * Returns the editor of the main window.
+	 * Returns the main window output panel.
 	 * 
-	 * @return the editor of the main window.
+	 * @return the main window output panel.
 	 */
-	public AcideFileEditorPanel getEditor() {
-		return (AcideFileEditorPanel) _editorBuilder.getFileEditorPanelAt(0);
+	public AcideOutputPanel getOutputPanel() {
+		return _outputPanel;
 	}
 
 	/**
-	 * Returns the output of the main window.
+	 * Returns the main window menu.
 	 * 
-	 * @return the output of the main window.
-	 */
-	public AcideOutputPanel getOutput() {
-		return _output;
-	}
-
-	/**
-	 * Disable the main window.
-	 */
-	public void disableMainWindow() {
-		setEnabled(false);
-	}
-
-	/**
-	 * Returns the menu of the main window.
-	 * 
-	 * @return the menu of the main window.
+	 * @return the main window menu.
 	 */
 	public Menu getMenu() {
 		return _menu;
 	}
 
 	/**
-	 * Returns the editor of the main window.
+	 * Returns the file editor manager of the main window.
 	 * 
-	 * @return the editor of the main window.
+	 * @return the file editor manager of the main window.
 	 */
 	public AcideFileEditorManager getFileEditorManager() {
-		return _editorBuilder;
+		return _fileEditorManager;
 	}
 
 	/**
-	 * Returns the project configuration of the main window.
+	 * Returns the main window project configuration.
 	 * 
-	 * @return the project configuration of the main window.
+	 * @return the main window project configuration.
 	 */
 	public AcideProjectConfiguration getProjectConfiguration() {
 		return _projectConfiguration;
@@ -413,40 +386,40 @@ public class MainWindow extends JFrame {
 	/**
 	 * Set the Listeners for the menu of the main window.
 	 */
-	public void setListenersMenu() {
+	public void setMenuListeners() {
 		_menu.setListeners();
 	}
 
 	/**
-	 * Returns the explorer of the main window.
+	 * Returns the explorer panel of the main window.
 	 * 
-	 * @return the explorer of the main window.
+	 * @return the explorer panel of the main window.
 	 */
-	public AcideExplorerPanel getExplorer() {
-		return _explorer;
+	public AcideExplorerPanel getExplorerPanel() {
+		return _explorerPanel;
 	}
 
 	/**
-	 * Set a new value for the explorer of the main window.
+	 * Set a new value for the main window explorer panel.
 	 * 
-	 * @param explorer
+	 * @param explorerPanel
 	 *            new value to set.
 	 */
-	public void setExplorer(AcideExplorerPanel explorer) {
-		_explorer = explorer;
+	public void setExplorerPanel(AcideExplorerPanel explorerPanel) {
+		_explorerPanel = explorerPanel;
 	}
 
 	/**
-	 * Returns the projectGUI of the main window.
+	 * Returns the main window projectGUI.
 	 * 
-	 * @return the projectGUI of the main window.
+	 * @return the main window projectGUI.
 	 */
 	public NewProjectConfigurationWindow getProjectWindowConfiguration() {
 		return _projectGUI;
 	}
 
 	/**
-	 * Sets a new value for the projectGUI of the main window.
+	 * Sets a new value for the main window projectGUI.
 	 * 
 	 * @param projectGUI
 	 *            new value to set.
@@ -456,9 +429,9 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
-	 * Returns the status bar of the main window.
+	 * Returns the main window status bar.
 	 * 
-	 * @return the status bar of the main window.
+	 * @return the main window status bar.
 	 */
 	public AcideStatusBar getStatusBar() {
 		return _statusBar;
@@ -470,7 +443,7 @@ public class MainWindow extends JFrame {
 	 * @return the horizontal split pane of the main window.
 	 */
 	public JSplitPane getHorizontalSplitPane() {
-		return _splitPaneHorizontal;
+		return _horizontalSplitPanel;
 	}
 
 	/**
@@ -480,35 +453,73 @@ public class MainWindow extends JFrame {
 	 *            new value to set.
 	 */
 	public void setSplitPaneHorizontal(JSplitPane splitPaneHorizontal) {
-		_splitPaneHorizontal = splitPaneHorizontal;
+		_horizontalSplitPanel = splitPaneHorizontal;
 	}
 
 	/**
-	 * Sets a new value for the explorer size of the main window.
+	 * Sets a new value for the main window explorer panel size.
 	 * 
-	 * @param splitPaneHorizontal
+	 * @param size
 	 *            new value to set.
 	 */
-	public void setExplorerSize(int size) {
-		_explorer.setExplorerSize(size);
+	public void setExplorerPanelSize(int size) {
+		_explorerPanel.setExplorerSize(size);
 	}
 
 	/**
-	 * Returns the vertical split pane of the main window.
+	 * Returns the main window vertical split panel.
 	 * 
-	 * @return The vertical split pane of the main window.
+	 * @return the main window vertical split panel.
 	 */
 	public JSplitPane getVerticalSplitPane() {
-		return _splitPaneVertical;
+		return _verticalSplitPanel;
 	}
 
 	/**
-	 * Set a new value for the vertical split panel of the main window.
+	 * Set a new value for the main window vertical split panel.
 	 * 
 	 * @param splitPaneVertical
 	 *            new value to set.
 	 */
 	public void setSplitPaneVertical(JSplitPane splitPaneVertical) {
-		_splitPaneVertical = splitPaneVertical;
+		_verticalSplitPanel = splitPaneVertical;
+	}
+
+	/**
+	 * Returns the main window tool bar panel.
+	 * 
+	 * @return the main window tool bar panel.
+	 */
+	public AcideToolBarPanel getToolBarPanel() {
+		return _toolBarPanel;
+	}
+
+	/**
+	 * Sets a new value to the main window tool bar panel.
+	 * 
+	 * @param toolBar
+	 *            new value to set.
+	 */
+	public void setToolBarPanel(AcideToolBarPanel toolBar) {
+		_toolBarPanel = toolBar;
+	}
+	
+	/**
+	 * Updates the tool bar panel. Removes the tool bar panel if exists, and
+	 * builds it, adding it to the main window afterwards.
+	 */
+	public void updateToolBarPanel(){
+		
+		if(_toolBarPanel != null)
+			remove(_toolBarPanel);
+		
+		// Creates the tool bar
+		_toolBarPanel = new AcideToolBarPanel();
+		
+		// Builds the tool bar panel
+		_toolBarPanel.buildAcideToolBarPanel();
+		
+		// Adds the tool bar panel to the main window
+		add(_toolBarPanel, BorderLayout.NORTH);
 	}
 }

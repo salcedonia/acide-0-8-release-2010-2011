@@ -2,6 +2,7 @@ package gui.menuBar.listeners;
 
 import es.explorer.ExplorerFile;
 import gui.mainWindow.MainWindow;
+import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
 
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
@@ -101,7 +102,7 @@ public class MenuMouseClickListener extends MouseAdapter {
 				MainWindow.getInstance().getMenu().getProject()
 						.getSaveProject().setEnabled(true);
 
-			TreePath path = MainWindow.getInstance().getExplorer().getTree()
+			TreePath path = MainWindow.getInstance().getExplorerPanel().getTree()
 					.getSelectionPath();
 			DefaultMutableTreeNode filePath;
 			ExplorerFile explorerFile;
@@ -278,22 +279,16 @@ public class MenuMouseClickListener extends MouseAdapter {
 			MainWindow.getInstance().getMenu().getEdit().getCut()
 					.setEnabled(false);
 
-			// Gets the selected editor index
-			int selectedEditorIndex = MainWindow.getInstance()
-					.getFileEditorManager().getSelectedFileEditorPanelIndex();
-
-			if (MainWindow.getInstance().getFileEditorManager()
-					.getFileEditorPanelAt(selectedEditorIndex).getUndoManager()
-					.canUndo()) {
+			// UNDO MENU ITEM
+			if (AcideUndoRedoManager.getInstance().canUndo()) {
 
 				// Enables the undo menu item
 				MainWindow.getInstance().getMenu().getEdit().getUndo()
 						.setEnabled(true);
 			}
 
-			if (MainWindow.getInstance().getFileEditorManager()
-					.getFileEditorPanelAt(selectedEditorIndex).getUndoManager()
-					.canRedo()) {
+			// REDO MENU ITEM
+			if (AcideUndoRedoManager.getInstance().canRedo()) {
 
 				// Disables the redo menu item
 				MainWindow.getInstance().getMenu().getEdit().getRedo()
@@ -304,15 +299,15 @@ public class MenuMouseClickListener extends MouseAdapter {
 			if (Toolkit.getDefaultToolkit().getSystemClipboard()
 					.getContents(null) != null) {
 
-				if (!MainWindow.getInstance().getOutput().getTextComponent()
+				if (!MainWindow.getInstance().getOutputPanel().getTextComponent()
 						.hasFocus())
 
 					// Enables the paste menu item
 					MainWindow.getInstance().getMenu().getEdit().getPaste()
 							.setEnabled(true);
-				else if (MainWindow.getInstance().getOutput()
+				else if (MainWindow.getInstance().getOutputPanel()
 						.getTextComponent().getSelectionStart() >= MainWindow
-						.getInstance().getOutput().getPromptCaretPosition())
+						.getInstance().getOutputPanel().getPromptCaretPosition())
 
 					// Enables the paste menu item
 					MainWindow.getInstance().getMenu().getEdit().getPaste()
@@ -326,18 +321,18 @@ public class MenuMouseClickListener extends MouseAdapter {
 			// If there are opened editors
 			if (editor > 0) {
 
-				if (MainWindow.getInstance().getOutput().getTextComponent()
+				if (MainWindow.getInstance().getOutputPanel().getTextComponent()
 						.hasFocus()
-						&& MainWindow.getInstance().getOutput()
+						&& MainWindow.getInstance().getOutputPanel()
 								.getTextComponent().getSelectedText() != null) {
 
 					// Enables the copy menu item
 					MainWindow.getInstance().getMenu().getEdit().getCopy()
 							.setEnabled(true);
 
-					if (MainWindow.getInstance().getOutput().getTextComponent()
+					if (MainWindow.getInstance().getOutputPanel().getTextComponent()
 							.getSelectionStart() >= MainWindow.getInstance()
-							.getOutput().getPromptCaretPosition())
+							.getOutputPanel().getPromptCaretPosition())
 
 						// Enables the cut menu item
 						MainWindow.getInstance().getMenu().getEdit().getCut()
@@ -360,16 +355,16 @@ public class MenuMouseClickListener extends MouseAdapter {
 			} else {
 
 				// We can copy from the output
-				if (MainWindow.getInstance().getOutput().getTextComponent()
+				if (MainWindow.getInstance().getOutputPanel().getTextComponent()
 						.getSelectedText() != null) {
 
 					// Enables the copy menu item
 					MainWindow.getInstance().getMenu().getEdit().getCopy()
 							.setEnabled(true);
 
-					if (MainWindow.getInstance().getOutput().getTextComponent()
+					if (MainWindow.getInstance().getOutputPanel().getTextComponent()
 							.getSelectionStart() >= MainWindow.getInstance()
-							.getOutput().getPromptCaretPosition())
+							.getOutputPanel().getPromptCaretPosition())
 
 						// Enables the cut menu item
 						MainWindow.getInstance().getMenu().getEdit().getCut()
@@ -383,7 +378,7 @@ public class MenuMouseClickListener extends MouseAdapter {
 				.getInstance()
 				.getMenu()
 				.setIsShellFocus(
-						MainWindow.getInstance().getOutput().getTextComponent()
+						MainWindow.getInstance().getOutputPanel().getTextComponent()
 								.isFocusOwner());
 	}
 }

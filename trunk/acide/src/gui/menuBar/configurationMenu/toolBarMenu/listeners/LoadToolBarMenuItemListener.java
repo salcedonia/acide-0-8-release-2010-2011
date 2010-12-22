@@ -4,7 +4,6 @@ import es.configuration.toolBar.shellComandToolBar.ShellCommandList;
 import es.text.TextFileFilter;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.configurationMenu.toolBarMenu.gui.ToolBarConfigurationWindow;
-import gui.toolBarPanel.AcideToolBarPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -94,15 +93,21 @@ public class LoadToolBarMenuItemListener implements ActionListener{
 			String toolBarFile = fileChooser.getSelectedFile().getAbsolutePath();
 			
 			try {
-				ShellCommandList.loadList(toolBarFile);
-				ShellCommandList.loadAuxList(toolBarFile);
-				AcideToolBarPanel.buildAcideToolBarPanel();
+				
+				// Loads the lists
+				ShellCommandList.loadFinalList(toolBarFile);
+				ShellCommandList.loadTemporalList(toolBarFile);
+				MainWindow.getInstance().updateToolBarPanel();
 				
 				// Updates the RESOURCE MANAGER
 				ResourceManager.getInstance().setProperty(
 						"currentToolBarConfiguration", toolBarFile);
+				
+				// Updates the MAIN WINDOW
 				MainWindow.getInstance().validate();
 				MainWindow.getInstance().repaint();
+				
+				// Disables the tool bar save menu item
 				MainWindow.getInstance().getMenu().getConfiguration().getToolBar().getSaveToolBar().setEnabled(false);
 				
 				// Updates the log

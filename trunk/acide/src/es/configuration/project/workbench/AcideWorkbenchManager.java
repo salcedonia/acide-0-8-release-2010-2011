@@ -7,12 +7,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
-import javax.swing.text.AbstractDocument.DefaultDocumentEvent;
-import javax.swing.text.DefaultStyledDocument;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.undo.UndoableEdit;
 
 import language.AcideLanguage;
 import operations.factory.AcideIOFactory;
@@ -23,6 +18,7 @@ import es.configuration.output.OutputConfiguration;
 import es.explorer.ExplorerFile;
 import es.text.TextFile;
 import gui.mainWindow.MainWindow;
+import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
 
 /************************************************************************
  * Handles the workbench configuration of ACIDE - A Configurable IDE. Loads
@@ -211,17 +207,11 @@ public class AcideWorkbenchManager {
 							filePath.length());
 				}
 
-				// If the file is already opened
+				// If it is the default project or the file is has to be opened
 				if (MainWindow.getInstance().getProjectConfiguration()
 						.isDefaultProject()
 						|| MainWindow.getInstance().getProjectConfiguration()
 								.getFileAt(index).isOpened()) {
-
-					// Enables the file menu
-					MainWindow.getInstance().getMenu().enableFileMenu();
-
-					// Enables the edit menu
-					MainWindow.getInstance().getMenu().enableEditMenu();
 
 					// Updates the status bar
 					MainWindow
@@ -304,36 +294,14 @@ public class AcideWorkbenchManager {
 						}
 					}
 
-					// UNDO REDO
-					DefaultStyledDocument document = MainWindow.getInstance()
-							.getFileEditorManager()
-							.getSelectedFileEditorPanel().getSyntaxDocument();
+					// Enables the file menu
+					MainWindow.getInstance().getMenu().enableFileMenu();
 
-					document.addUndoableEditListener(new UndoableEditListener() {
-						/*
-						 * (non-Javadoc)
-						 * 
-						 * @see javax.swing.event.UndoableEditListener#
-						 * undoableEditHappened
-						 * (javax.swing.event.UndoableEditEvent)
-						 */
-						public void undoableEditHappened(
-								UndoableEditEvent undoableEditEvent) {
-
-							UndoableEdit edit = undoableEditEvent.getEdit();
-
-							if (!((edit instanceof DefaultDocumentEvent) && (((DefaultDocumentEvent) edit)
-									.getType() == DefaultDocumentEvent.EventType.CHANGE))) {
-
-								// Sets the edit property over the selected
-								// editor undo manager
-								MainWindow.getInstance().getFileEditorManager()
-										.getSelectedFileEditorPanel()
-										.getUndoManager()
-										.addEdit(undoableEditEvent.getEdit());
-							}
-						}
-					});
+					// Enables the edit menu
+					MainWindow.getInstance().getMenu().enableEditMenu();
+					
+					// Updates the undo manager
+					AcideUndoRedoManager.getInstance().update();
 				}
 
 				// The project configuration has been modified
@@ -392,7 +360,7 @@ public class AcideWorkbenchManager {
 							.getActiveTextEditionArea().requestFocusInWindow();
 
 					// Selects the tree node
-					MainWindow.getInstance().getExplorer()
+					MainWindow.getInstance().getExplorerPanel()
 							.selectTreeNodeFromFileEditor();
 
 					// Updates the status bar with the selected editor
@@ -529,10 +497,14 @@ public class AcideWorkbenchManager {
 
 		// Not default project
 		if (!MainWindow.getInstance().getProjectConfiguration()
-				.isDefaultProject())
+				.isDefaultProject()){
 
 			// Enables the project menu
 			MainWindow.getInstance().getMenu().enableProjectMenu();
+			
+			// Enables the open all files menu item
+			MainWindow.getInstance().getMenu().getFile().getOpenAllFiles().setEnabled(true);
+		}
 	}
 
 	/**
@@ -594,9 +566,9 @@ public class AcideWorkbenchManager {
 				explorerFile.setIsDirectory(true);
 
 				// Enables the explorer menu options
-				MainWindow.getInstance().getExplorer().getPopupMenu()
+				MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 						.getAddFile().setEnabled(true);
-				MainWindow.getInstance().getExplorer().getPopupMenu()
+				MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 						.getRemoveFile().setEnabled(true);
 
 				// Sets the project title
@@ -607,11 +579,11 @@ public class AcideWorkbenchManager {
 										.getProjectConfiguration().getName());
 
 				// Builds the EXPLORER TREE with all the associated files
-				MainWindow.getInstance().getExplorer().getRoot()
+				MainWindow.getInstance().getExplorerPanel().getRoot()
 						.removeAllChildren();
 				DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(
 						explorerFile);
-				MainWindow.getInstance().getExplorer().getRoot()
+				MainWindow.getInstance().getExplorerPanel().getRoot()
 						.add(defaultMutableTreeNode);
 				ArrayList<DefaultMutableTreeNode> directoryList = new ArrayList<DefaultMutableTreeNode>();
 
@@ -656,11 +628,11 @@ public class AcideWorkbenchManager {
 						}
 					}
 				}
-				MainWindow.getInstance().getExplorer().getTreeModel().reload();
-				MainWindow.getInstance().getExplorer().expandTree();
-				MainWindow.getInstance().getExplorer().getPopupMenu()
+				MainWindow.getInstance().getExplorerPanel().getTreeModel().reload();
+				MainWindow.getInstance().getExplorerPanel().expandTree();
+				MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 						.getAddFile().setEnabled(true);
-				MainWindow.getInstance().getExplorer().getPopupMenu()
+				MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 						.getSaveProject().setEnabled(true);
 
 				// If it has more than 0 files associated
@@ -668,10 +640,10 @@ public class AcideWorkbenchManager {
 						.getNumFilesFromList() > 0)
 
 					// Allows to remove files in the EXPLORER menu
-					MainWindow.getInstance().getExplorer().getPopupMenu()
+					MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 							.getRemoveFile().setEnabled(true);
 				else
-					MainWindow.getInstance().getExplorer().getPopupMenu()
+					MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 							.getRemoveFile().setEnabled(false);
 
 				// Saves the default configuration
@@ -723,10 +695,10 @@ public class AcideWorkbenchManager {
 		}
 
 		// Sets the shell display options
-		MainWindow.getInstance().getOutput().updateShellDisplayOptions();
+		MainWindow.getInstance().getOutputPanel().updateShellDisplayOptions();
 
 		// Resets the output
-		MainWindow.getInstance().getOutput().resetOutput();
+		MainWindow.getInstance().getOutputPanel().resetOutput();
 	}
 
 	/**
@@ -1092,7 +1064,7 @@ public class AcideWorkbenchManager {
 					// Saves the output configuration
 					OutputConfiguration.getInstance().save();
 					// Closes the output
-					MainWindow.getInstance().getOutput().executeExitCommand();
+					MainWindow.getInstance().getOutputPanel().executeExitCommand();
 
 					// Updates the configuration
 					try {

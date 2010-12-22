@@ -1,16 +1,5 @@
 package gui.menuBar.editMenu;
 
-import es.configuration.menu.MenuConfiguration;
-import gui.menuBar.editMenu.listeners.CopyMenuItemListener;
-import gui.menuBar.editMenu.listeners.CutMenuItemListener;
-import gui.menuBar.editMenu.listeners.GoToLineMenuItemListener;
-import gui.menuBar.editMenu.listeners.PasteMenuItemListener;
-import gui.menuBar.editMenu.listeners.RedoMenuItemListener;
-import gui.menuBar.editMenu.listeners.ReplaceMenuItemListener;
-import gui.menuBar.editMenu.listeners.SearchMenuItemListener;
-import gui.menuBar.editMenu.listeners.SelectAllMenuItemListener;
-import gui.menuBar.editMenu.listeners.UndoMenuItemListener;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Locale;
@@ -22,9 +11,18 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import language.AcideLanguage;
-
 import operations.log.AcideLog;
 import resources.ResourceManager;
+import es.configuration.menu.MenuConfiguration;
+import gui.menuBar.editMenu.listeners.CopyMenuItemListener;
+import gui.menuBar.editMenu.listeners.CutMenuItemListener;
+import gui.menuBar.editMenu.listeners.GoToLineMenuItemListener;
+import gui.menuBar.editMenu.listeners.PasteMenuItemListener;
+import gui.menuBar.editMenu.listeners.RedoMenuItemListener;
+import gui.menuBar.editMenu.listeners.ReplaceMenuItemListener;
+import gui.menuBar.editMenu.listeners.SearchMenuItemListener;
+import gui.menuBar.editMenu.listeners.SelectAllMenuItemListener;
+import gui.menuBar.editMenu.listeners.UndoMenuItemListener;
 
 /************************************************************************
  * Edit menu of ACIDE - A Configurable IDE.
@@ -179,7 +177,7 @@ public class EditMenu extends JMenu {
 	 * Replace menu item.
 	 */
 	private JMenuItem _replace;
-
+	
 	/**
 	 * Creates a new edit menu.
 	 */

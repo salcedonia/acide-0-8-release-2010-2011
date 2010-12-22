@@ -87,7 +87,7 @@ public class CutMenuItemListener implements ActionListener {
 							MainWindow.getInstance().getFileEditorManager()
 									.getSelectedFileEditorPanelIndex()).getActiveTextEditionArea()
 					.cut();
-		MainWindow.getInstance().getOutput().getTextComponent().cut();
+		MainWindow.getInstance().getOutputPanel().getTextComponent().cut();
 	}
 }
 

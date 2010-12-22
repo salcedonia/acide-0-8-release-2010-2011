@@ -4,18 +4,18 @@ prueba
 null
 null
 ./configuration/output/configuration.xml
-english
+spanish
 ./configuration/menu/defaultAllOn.menuCfg
-C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\toolbar\default.TBcfg
+C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\toolbar\des.TBcfg
 true
 true
-1292
-777
--4
--4
-248
-481
-1
+674
+703
+394
+27
+139
+458
+0
 4
 C:\Documents and Settings\Salcedonia\Escritorio\ups.txt
 ups.txt
@@ -30,7 +30,7 @@ prueba
 false
 false
 false
-true
+false
 C:\Documents and Settings\Salcedonia\Escritorio\sdad
 sdad
 prueba

@@ -1,8 +1,65 @@
-]N] consult ]C] consult($activeFile$). ]T] Consults the selected file ]B] false ]I] ]F]
-]N] listing ]C] listing. ]T] Lists the contents of the database ]B] false ]I] ]F]
-]N] shell ]C] shell. g]T] Opens an OS shell ]B] false ]I] ]F]
-]N] pwd ]C] working_directory(X,X). ]T] Displays the current folder ]B] false ]I] ]F]
-]N] clpfd ]C] use_module(library(clpfd)). ]T] Loads finite domain constraint library ]B] false ]I] ]F]
-]N] clpr ]C] use_module(library(clpr)). ]T] Loads arithmetical constraint library ]B] false ]I] ]F]
-]N] lists ]C] use_module(library(lists)). ]T] Loads list library ]B] false ]I] ]F]
-]N] help ]C] help. ]T] Shows the help ]B] false ]I] ]F]
+// Command consult
+name = consult
+action = consult($activeFile$).
+hintText = Consults the selected file
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command listing
+name = listing
+action = listing.
+hintText = Lists the contents of the database
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command shell
+name = shell
+action = shell.
+hintText = Opens an OS shell
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command pwd
+name = pwd
+action = working_directory(X,X).
+hintText = Displays the current folder
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command clpfd
+name = clpfd
+action = use_module(library(clpfd)).
+hintText = Loads finite domain constraint library
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command clpr
+name = clpr
+action = use_module(library(clpr)).
+hintText = Loads arithmetical constraint library
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command lists
+name = lists
+action = use_module(library(lists)).
+hintText = Loads list library
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command help
+name = help
+action = help.
+hintText = Shows the help
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// End

@@ -162,19 +162,19 @@ public class AcideExplorerPanelKeyboardListener extends KeyAdapter {
 
 		// NOW THE SELECTED ELEMENT IS THE PREVIOUS IN THE TREE
 		case KeyEvent.VK_UP:
-			setFocusEditorFile(MainWindow.getInstance().getExplorer().getTree().getPathForRow(MainWindow.getInstance().getExplorer().getTree()
+			setFocusEditorFile(MainWindow.getInstance().getExplorerPanel().getTree().getPathForRow(MainWindow.getInstance().getExplorerPanel().getTree()
 					.getLeadSelectionRow() - 1));
 			break;
 
 		// NOW THE SELECTED ELEMENT IS THE NEXT IN THE TREE
 		case KeyEvent.VK_DOWN:
-			setFocusEditorFile(MainWindow.getInstance().getExplorer().getTree().getPathForRow(MainWindow.getInstance().getExplorer().getTree()
+			setFocusEditorFile(MainWindow.getInstance().getExplorerPanel().getTree().getPathForRow(MainWindow.getInstance().getExplorerPanel().getTree()
 					.getLeadSelectionRow() + 1));
 			break;
 
 		// THE SELECTED ELEMENT IS THE ACTUAL
 		case KeyEvent.VK_ENTER:
-			setFocusEditorFile(MainWindow.getInstance().getExplorer().getTree().getSelectionPath());
+			setFocusEditorFile(MainWindow.getInstance().getExplorerPanel().getTree().getSelectionPath());
 			break;
 		}
 	}

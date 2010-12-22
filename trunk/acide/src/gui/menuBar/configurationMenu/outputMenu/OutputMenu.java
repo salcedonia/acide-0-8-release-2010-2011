@@ -2,6 +2,7 @@ package gui.menuBar.configurationMenu.outputMenu;
 
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
@@ -71,6 +72,10 @@ public class OutputMenu extends JMenu {
 	 */
 	public static final String SHELL_DISPLAY_OPTIONS_NAME = "Shell Display Options";
 	/**
+	 * Shell display options menu item image icon.
+	 */
+	private final static ImageIcon SHELL_DISPLAY_OPTIONS_IMAGE = new ImageIcon("./resources/icons/menu/configuration/output/displaySettings.png");
+	/**
 	 * Configure menu item.
 	 */
 	private JMenuItem _configure;
@@ -91,7 +96,7 @@ public class OutputMenu extends JMenu {
 		// MENU ITEM
 		_configure = new JMenuItem();
 		_externalCommand = new JMenuItem();
-		_shellDisplayOptions = new JMenuItem();
+		_shellDisplayOptions = new JMenuItem(SHELL_DISPLAY_OPTIONS_IMAGE);
 		
 		setLanguageLabels();
 	}

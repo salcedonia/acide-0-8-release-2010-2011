@@ -54,9 +54,9 @@ public class ShowAcideExplorerPanelMenuItemListener implements ActionListener{
 	public void actionPerformed(ActionEvent actionEvent) {
 		
 		if (MainWindow.getInstance().getMenu().getView().getShowExplorerPanel().isSelected())
-			MainWindow.getInstance().getExplorer().showExplorer();
+			MainWindow.getInstance().getExplorerPanel().showExplorer();
 		else
-			MainWindow.getInstance().getExplorer().disposeExplorer();
+			MainWindow.getInstance().getExplorerPanel().disposeExplorer();
 
 		// Not default project
 		if (!MainWindow.getInstance().getProjectConfiguration().isDefaultProject())

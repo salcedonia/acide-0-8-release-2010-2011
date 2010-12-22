@@ -330,7 +330,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 
 					if (file != null) {
 
-						TreePath path = MainWindow.getInstance().getExplorer()
+						TreePath path = MainWindow.getInstance().getExplorerPanel()
 								.getTree().getSelectionPath();
 						DefaultMutableTreeNode filePath;
 						ExplorerFile fc;
@@ -344,12 +344,12 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 							// File selected
 							if (!fc.isDirectory()) {
 								filePath = MainWindow.getInstance()
-										.getExplorer().getRoot().getNextNode();
+										.getExplorerPanel().getRoot().getNextNode();
 								fc = (ExplorerFile) filePath.getUserObject();
 							}
 
 						} else {
-							filePath = MainWindow.getInstance().getExplorer()
+							filePath = MainWindow.getInstance().getExplorerPanel()
 									.getRoot().getNextNode();
 							fc = (ExplorerFile) filePath.getUserObject();
 						}
@@ -396,13 +396,13 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 							filePath.add(defaultMutableTreeNode);
 							MainWindow.getInstance().validate();
 							MainWindow.getInstance().repaint();
-							MainWindow.getInstance().getExplorer()
+							MainWindow.getInstance().getExplorerPanel()
 									.getTreeModel().reload();
-							MainWindow.getInstance().getExplorer().expandTree();
-							MainWindow.getInstance().getExplorer()
+							MainWindow.getInstance().getExplorerPanel().expandTree();
+							MainWindow.getInstance().getExplorerPanel()
 									.getPopupMenu().getRemoveFile()
 									.setEnabled(true);
-							MainWindow.getInstance().getExplorer()
+							MainWindow.getInstance().getExplorerPanel()
 									.getPopupMenu().getDeleteFile()
 									.setEnabled(true);
 							MainWindow.getInstance().getProjectConfiguration()
@@ -462,7 +462,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 									.getProjectConfiguration()
 									.getNumFilesFromList() + 1; position2++) {
 								
-								if (MainWindow.getInstance().getExplorer()
+								if (MainWindow.getInstance().getExplorerPanel()
 										.getTree().getPathForRow(position2)
 										.getLastPathComponent().toString()
 										.equals(explorerFile.getLastPathComponent())) {
@@ -475,7 +475,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 
 					// Gets the selected tree node
 					TreePath currentSelection = MainWindow.getInstance()
-							.getExplorer().getTree().getPathForRow(posExplorer);
+							.getExplorerPanel().getTree().getPathForRow(posExplorer);
 
 					// Something selected
 					if (currentSelection != null) {
@@ -496,7 +496,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 							if (parent != null) {
 
 								// Removes the node parent
-								MainWindow.getInstance().getExplorer()
+								MainWindow.getInstance().getExplorerPanel()
 										.getTreeModel()
 										.removeNodeFromParent(currentNode);
 
@@ -576,16 +576,16 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 							.getNumFilesFromList() > 0) {
 						
 						// UPDATES THE EXPLORER POPUP MENU 
-						MainWindow.getInstance().getExplorer().getPopupMenu()
+						MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 								.getRemoveFile().setEnabled(true);
-						MainWindow.getInstance().getExplorer().getPopupMenu()
+						MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 								.getDeleteFile().setEnabled(true);
 					} else {
 						
 						// UPDATES THE EXPLORER POPUP MENU
-						MainWindow.getInstance().getExplorer().getPopupMenu()
+						MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 								.getRemoveFile().setEnabled(false);
-						MainWindow.getInstance().getExplorer().getPopupMenu()
+						MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 								.getDeleteFile().setEnabled(false);
 					}
 				}
@@ -679,7 +679,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 										.getProjectConfiguration()
 										.getNumFilesFromList() + 1; position2++) {
 
-									if (MainWindow.getInstance().getExplorer()
+									if (MainWindow.getInstance().getExplorerPanel()
 											.getTree().getPathForRow(position2)
 											.getLastPathComponent().toString()
 											.equals(explorerFile.getLastPathComponent())) {
@@ -692,7 +692,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 
 						// GET THE SELECTED NODE
 						TreePath currentSelection = MainWindow.getInstance()
-								.getExplorer().getTree().getPathForRow(posExplorer);
+								.getExplorerPanel().getTree().getPathForRow(posExplorer);
 
 						// BELONGS TO THE PROJECT
 						if (currentSelection != null) {
@@ -713,7 +713,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 								if (parent != null) {
 
 									// REMOVE THE PARENT
-									MainWindow.getInstance().getExplorer()
+									MainWindow.getInstance().getExplorerPanel()
 											.getTreeModel()
 											.removeNodeFromParent(currentNode);
 
@@ -786,19 +786,19 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 								.getNumFilesFromList() > 0) {
 							
 							// UPDATES THE EXPLORER POPUP MENU
-							MainWindow.getInstance().getExplorer()
+							MainWindow.getInstance().getExplorerPanel()
 									.getPopupMenu().getRemoveFile()
 									.setEnabled(true);
-							MainWindow.getInstance().getExplorer()
+							MainWindow.getInstance().getExplorerPanel()
 									.getPopupMenu().getDeleteFile()
 									.setEnabled(true);
 						} else {
 							
 							// UPDATES THE EXPLORER POPUP MENU
-							MainWindow.getInstance().getExplorer()
+							MainWindow.getInstance().getExplorerPanel()
 									.getPopupMenu().getRemoveFile()
 									.setEnabled(false);
-							MainWindow.getInstance().getExplorer()
+							MainWindow.getInstance().getExplorerPanel()
 									.getPopupMenu().getDeleteFile()
 									.setEnabled(false);
 						}

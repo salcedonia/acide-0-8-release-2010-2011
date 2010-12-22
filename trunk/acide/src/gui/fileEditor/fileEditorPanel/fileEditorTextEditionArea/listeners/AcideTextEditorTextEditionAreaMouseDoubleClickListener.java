@@ -115,7 +115,7 @@ public class AcideTextEditorTextEditionAreaMouseDoubleClickListener extends Mous
 
 						if (MainWindow
 								.getInstance()
-								.getExplorer()
+								.getExplorerPanel()
 								.getTree()
 								.getPathForRow(positionProject)
 								.getLastPathComponent()
@@ -130,8 +130,8 @@ public class AcideTextEditorTextEditionAreaMouseDoubleClickListener extends Mous
 
 			// Selects the file in the explorer tree
 			TreePath currentSelection = MainWindow.getInstance()
-					.getExplorer().getTree().getPathForRow(index);
-			MainWindow.getInstance().getExplorer().getTree()
+					.getExplorerPanel().getTree().getPathForRow(index);
+			MainWindow.getInstance().getExplorerPanel().getTree()
 					.setSelectionPath(currentSelection);
 		}
 	}

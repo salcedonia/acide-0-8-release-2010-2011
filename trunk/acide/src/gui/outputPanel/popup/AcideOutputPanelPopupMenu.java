@@ -59,21 +59,25 @@ import language.AcideLanguage;
 public class AcideOutputPanelPopupMenu extends JPopupMenu {
 
 	/**
-	 * Class serial version UID.
+	 * Acide output panel popup menu class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
 	 * Image file for the copy menu item.
 	 */
-	private final static String COPY = "./resources/icons/menu/edit/copy.png";
+	private final static ImageIcon COPY_IMAGE = new ImageIcon("./resources/icons/menu/edit/copy.png");
 	/**
 	 * Image file for the paste menu item.
 	 */
-	private final static String PASTE = "./resources/icons/menu/edit/paste.png";
+	private final static ImageIcon PASTE_IMAGE = new ImageIcon("./resources/icons/menu/edit/paste.png");
 	/**
 	 * image file for the cut menu item.
 	 */
-	private final static String CUT = "./resources/icons/menu/edit/cut.png";
+	private final static ImageIcon CUT_IMAGE = new ImageIcon("./resources/icons/menu/edit/cut.png");
+	/**
+	 * Shell display options menu item image icon.
+	 */
+	private final static ImageIcon SHELL_DISPLAY_OPTIONS_IMAGE = new ImageIcon("./resources/icons/menu/configuration/output/displaySettings.png");
 	/**
 	 * Copy menu item.
 	 */
@@ -124,7 +128,7 @@ public class AcideOutputPanelPopupMenu extends JPopupMenu {
 		final ResourceBundle labels = language.getLabels();
 
 		// OUTPUT EDITOR
-		_shellDisplayOptions = new JMenuItem(labels.getString("s986"));
+		_shellDisplayOptions = new JMenuItem(labels.getString("s986"), SHELL_DISPLAY_OPTIONS_IMAGE);
 		_shellDisplayOptions.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -142,7 +146,7 @@ public class AcideOutputPanelPopupMenu extends JPopupMenu {
 		addSeparator();
 
 		// COPY
-		_copy = new JMenuItem(labels.getString("s187"), new ImageIcon(COPY));
+		_copy = new JMenuItem(labels.getString("s187"), COPY_IMAGE);
 		_copy.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -153,13 +157,13 @@ public class AcideOutputPanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				MainWindow.getInstance().getOutput().getTextComponent().copy();
+				MainWindow.getInstance().getOutputPanel().getTextComponent().copy();
 			}
 		});
 		add(_copy);
 
 		// CUT
-		_cut = new JMenuItem(labels.getString("s188"), new ImageIcon(CUT));
+		_cut = new JMenuItem(labels.getString("s188"), CUT_IMAGE);
 		_cut.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -171,17 +175,17 @@ public class AcideOutputPanelPopupMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 
-				if (MainWindow.getInstance().getOutput().getTextComponent()
+				if (MainWindow.getInstance().getOutputPanel().getTextComponent()
 						.getSelectionStart() >= MainWindow.getInstance()
-						.getOutput().getPromptCaretPosition())
-					MainWindow.getInstance().getOutput().getTextComponent()
+						.getOutputPanel().getPromptCaretPosition())
+					MainWindow.getInstance().getOutputPanel().getTextComponent()
 							.cut();
 			}
 		});
 		add(_cut);
 
 		// PASTE
-		_paste = new JMenuItem(labels.getString("s189"), new ImageIcon(PASTE));
+		_paste = new JMenuItem(labels.getString("s189"), PASTE_IMAGE);
 		_paste.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -193,10 +197,10 @@ public class AcideOutputPanelPopupMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 
-				if (MainWindow.getInstance().getOutput().getTextComponent()
+				if (MainWindow.getInstance().getOutputPanel().getTextComponent()
 						.getSelectionStart() >= MainWindow.getInstance()
-						.getOutput().getPromptCaretPosition())
-					MainWindow.getInstance().getOutput().getTextComponent()
+						.getOutputPanel().getPromptCaretPosition())
+					MainWindow.getInstance().getOutputPanel().getTextComponent()
 							.paste();
 			}
 		});
@@ -235,7 +239,7 @@ public class AcideOutputPanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				MainWindow.getInstance().getOutput().resetOutput();
+				MainWindow.getInstance().getOutputPanel().resetOutput();
 			}
 		});
 		add(_reset);
@@ -252,7 +256,7 @@ public class AcideOutputPanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				MainWindow.getInstance().getOutput().clearOutputBuffer();
+				MainWindow.getInstance().getOutputPanel().clearOutputBuffer();
 			}
 		});
 		add(_clearConsoleBuffer);

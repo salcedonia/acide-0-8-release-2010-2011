@@ -170,7 +170,7 @@ public class NewProjectFileMenuItemListener implements ActionListener {
 
 			if (file != null && file != " ") {
 
-				TreePath path = MainWindow.getInstance().getExplorer()
+				TreePath path = MainWindow.getInstance().getExplorerPanel()
 						.getTree().getSelectionPath();
 				DefaultMutableTreeNode filePath;
 				ExplorerFile explorerFile;
@@ -184,7 +184,7 @@ public class NewProjectFileMenuItemListener implements ActionListener {
 
 					// File selected
 					if (!explorerFile.isDirectory()) {
-						filePath = MainWindow.getInstance().getExplorer()
+						filePath = MainWindow.getInstance().getExplorerPanel()
 								.getRoot().getNextNode();
 						explorerFile = (ExplorerFile) filePath.getUserObject();
 					}
@@ -192,7 +192,7 @@ public class NewProjectFileMenuItemListener implements ActionListener {
 				} else {
 
 					// Nothing selected
-					filePath = MainWindow.getInstance().getExplorer()
+					filePath = MainWindow.getInstance().getExplorerPanel()
 							.getRoot().getNextNode();
 					explorerFile = (ExplorerFile) filePath.getUserObject();
 				}
@@ -222,12 +222,12 @@ public class NewProjectFileMenuItemListener implements ActionListener {
 				filePath.add(d);
 				MainWindow.getInstance().validate();
 				MainWindow.getInstance().repaint();
-				MainWindow.getInstance().getExplorer().getTreeModel()
+				MainWindow.getInstance().getExplorerPanel().getTreeModel()
 						.reload();
-				MainWindow.getInstance().getExplorer().expandTree();
-				MainWindow.getInstance().getExplorer().getPopupMenu()
+				MainWindow.getInstance().getExplorerPanel().expandTree();
+				MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 						.getRemoveFile().setEnabled(true);
-				MainWindow.getInstance().getExplorer().getPopupMenu()
+				MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 						.getDeleteFile().setEnabled(true);
 				MainWindow.getInstance().getProjectConfiguration()
 						.setIsModified(true);

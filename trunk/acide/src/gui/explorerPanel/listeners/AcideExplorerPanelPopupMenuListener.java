@@ -81,7 +81,7 @@ public class AcideExplorerPanelPopupMenuListener extends MouseAdapter{
 
 		if (mouseEvent.isPopupTrigger()) {
 
-			AcideExplorerPanel explorerPanel = MainWindow.getInstance().getExplorer();
+			AcideExplorerPanel explorerPanel = MainWindow.getInstance().getExplorerPanel();
 			
 			// Default project
 			if (MainWindow.getInstance().getProjectConfiguration()
@@ -115,7 +115,7 @@ public class AcideExplorerPanelPopupMenuListener extends MouseAdapter{
 						.isModified())
 					explorerPanel.getPopupMenu().getSaveProject().setEnabled(true);
 
-				TreePath path = MainWindow.getInstance().getExplorer()
+				TreePath path = MainWindow.getInstance().getExplorerPanel()
 						.getTree().getSelectionPath();
 
 				DefaultMutableTreeNode filePath;

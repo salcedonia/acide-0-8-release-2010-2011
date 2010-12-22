@@ -62,7 +62,7 @@ public class SetMainFileMenuItemListener implements ActionListener {
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		// Gets the selection in the explorer tree
-		TreePath explorerSelection = MainWindow.getInstance().getExplorer().getTree()
+		TreePath explorerSelection = MainWindow.getInstance().getExplorerPanel().getTree()
 				.getSelectionPath();
 		DefaultMutableTreeNode filePath;
 		ExplorerFile explorerFile;

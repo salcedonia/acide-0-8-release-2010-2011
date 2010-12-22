@@ -4,18 +4,14 @@ import es.explorer.ExplorerFile;
 import es.text.TextFile;
 import gui.fileEditor.fileEditorManager.AcideFileEditorManager;
 import gui.mainWindow.MainWindow;
+import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.SwingUtilities;
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
-import javax.swing.text.Document;
-import javax.swing.text.AbstractDocument.DefaultDocumentEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
-import javax.swing.undo.UndoableEdit;
 
 /************************************************************************
  * ACIDE - A Configurable IDE explorer panel double click listener.
@@ -70,7 +66,7 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 		if (mouseEvent.getClickCount() == 2) {
 
 			// Gets the selected node
-			TreePath selectedNode = MainWindow.getInstance().getExplorer()
+			TreePath selectedNode = MainWindow.getInstance().getExplorerPanel()
 					.getTree()
 					.getPathForLocation(mouseEvent.getX(), mouseEvent.getY());
 
@@ -181,64 +177,26 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 						editorBuilder.newTab(explorerFile.getPath(),
 								explorerFile.getPath(), fileContent, true, t);
 
-						// UNDO REDO
+						// Enables the file menu
 						MainWindow.getInstance().getMenu().enableFileMenu();
+						
+						// Enables the edit menu
 						MainWindow.getInstance().getMenu().enableEditMenu();
-						int selectedEditorIndex = MainWindow.getInstance()
-								.getFileEditorManager()
-								.getSelectedFileEditorPanelIndex();
-						Document document = MainWindow.getInstance()
-								.getFileEditorManager()
-								.getFileEditorPanelAt(selectedEditorIndex)
-								.getActiveTextEditionArea().getDocument();
-						document.addUndoableEditListener(new UndoableEditListener() {
-							/*
-							 * (non-Javadoc)
-							 * 
-							 * @see javax.swing.event.UndoableEditListener#
-							 * undoableEditHappened
-							 * (javax.swing.event.UndoableEditEvent)
-							 */
-							@Override
-							public void undoableEditHappened(
-									UndoableEditEvent undoableEditEvent) {
-
-								UndoableEdit edit = undoableEditEvent.getEdit();
-								if (edit instanceof DefaultDocumentEvent
-										&& ((DefaultDocumentEvent) edit)
-												.getType() == DefaultDocumentEvent.EventType.CHANGE) {
-									return;
-								} else {
-
-									// Gets the selected editor index
-									int selectedEditorIndex = MainWindow
-											.getInstance()
-											.getFileEditorManager()
-											.getSelectedFileEditorPanelIndex();
-
-									// Set the edit property over the selected
-									// editor undo manager
-									MainWindow
-											.getInstance()
-											.getFileEditorManager()
-											.getFileEditorPanelAt(selectedEditorIndex)
-											.getUndoManager()
-											.addEdit(
-													undoableEditEvent.getEdit());
-								}
-							}
-						});
+						
+						// Updates the undo manager
+						AcideUndoRedoManager.getInstance().update();
 
 						// Sets the focus on the selected file at the editor
-						for (int i = 0; i < MainWindow.getInstance().getFileEditorManager()
+						for (int i = 0; i < MainWindow.getInstance()
+								.getFileEditorManager()
 								.getNumFileEditorPanels(); i++) {
-							
+
 							final int index = i;
-							
+
 							if (MainWindow.getInstance().getFileEditorManager()
 									.getFileEditorPanelAt(i).getAbsolutePath()
 									.equals(explorerFile.getPath())) {
-								
+
 								SwingUtilities.invokeLater(new Runnable() {
 									/*
 									 * (non-Javadoc)
@@ -247,19 +205,22 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 									 */
 									@Override
 									public void run() {
-										
+
 										// Sets the focus on the text area
-										MainWindow
-											.getInstance()
-											.getFileEditorManager().getFileEditorPanelAt(index).getActiveTextEditionArea().requestFocusInWindow();
+										MainWindow.getInstance()
+												.getFileEditorManager()
+												.getFileEditorPanelAt(index)
+												.getActiveTextEditionArea()
+												.requestFocusInWindow();
 									}
 								});
 							}
 						}
 
+						// Updates the main window
 						MainWindow.getInstance().validate();
 						MainWindow.getInstance().repaint();
-						
+
 						// Sets the file status in the project configuration
 						for (int pos = 0; pos < MainWindow.getInstance()
 								.getProjectConfiguration().getFileListSize(); pos++) {
@@ -271,7 +232,7 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 										.getFileAt(pos).setIsOpened(true);
 							}
 						}
-						
+
 						// The project has been modified
 						MainWindow.getInstance().getProjectConfiguration()
 								.setIsModified(true);
@@ -279,9 +240,9 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 				} else {
 
 					// If it is already opened
-					
+
 					final int editorIndex = posEditor;
-					
+
 					SwingUtilities.invokeLater(new Runnable() {
 						/*
 						 * (non-Javadoc)
@@ -290,19 +251,20 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 						 */
 						@Override
 						public void run() {
-							
+
 							// Sets the selected editor
 							MainWindow.getInstance().getFileEditorManager()
 									.setSelectedFileEditorPanelAt(editorIndex);
-							
+
 							// Sets the focus on the text component
-							MainWindow
-								.getInstance()
-								.getFileEditorManager().getFileEditorPanelAt(editorIndex).getActiveTextEditionArea().requestFocusInWindow();
-		
+							MainWindow.getInstance().getFileEditorManager()
+									.getFileEditorPanelAt(editorIndex)
+									.getActiveTextEditionArea()
+									.requestFocusInWindow();
+
 						}
 					});
-					
+
 				}
 			}
 		}

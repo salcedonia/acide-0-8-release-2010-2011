@@ -154,9 +154,11 @@ public class AcideOutputPanel extends JPanel {
 			_selectionSize = 0;
 
 			// Listeners
-			_textComponent.addKeyListener(new AcideOutputPanelKeyboardListener());
+			_textComponent
+					.addKeyListener(new AcideOutputPanelKeyboardListener());
 			_textComponent.addKeyListener(new AcideKeyboardListenerForMenus());
-			_textComponent.addFocusListener(new AcideOutputPanelFocusListener());
+			_textComponent
+					.addFocusListener(new AcideOutputPanelFocusListener());
 			_textComponent.addCaretListener(new CaretListener() {
 				/**
 				 * Update the caret position, setting it always after the prompt
@@ -175,7 +177,7 @@ public class AcideOutputPanel extends JPanel {
 					}
 				}
 			});
-			
+
 			_textComponent.setFont(new Font("Monospaced", Font.PLAIN, 12));
 			_textComponent.setForeground(Color.BLACK);
 			_textComponent.setCaretColor(Color.BLACK);
@@ -203,7 +205,8 @@ public class AcideOutputPanel extends JPanel {
 		_historicMaximumIndex = 0;
 
 		// Text component listener
-		_textComponent.addMouseListener(new AcideOutputPanelPopupMenuListener());
+		_textComponent
+				.addMouseListener(new AcideOutputPanelPopupMenuListener());
 
 		// INIT THE POPUP MENU
 		buildPopupMenu();
@@ -347,8 +350,10 @@ public class AcideOutputPanel extends JPanel {
 	 * 
 	 * @param command
 	 *            command to execute.
+	 * @param parameter
+	 *            parameter to use.
 	 */
-	public void executeCommand(String command) {
+	public void executeCommand(String command, String parameter) {
 
 		if (_processThread.getWriter() != null) {
 			try {
@@ -396,33 +401,36 @@ public class AcideOutputPanel extends JPanel {
 					// Not default project
 
 					// Searches for the MAIN FILE
-					int posMainEditor = -1;
-					for (int pos = 0; pos < MainWindow.getInstance()
-							.getProjectConfiguration().getNumFilesFromList(); pos++) {
+					int mainFileEditorPanelIndex = -1;
+					for (int index = 0; index < MainWindow.getInstance()
+							.getProjectConfiguration().getNumFilesFromList(); index++) {
 						if (MainWindow.getInstance().getProjectConfiguration()
-								.getFileAt(pos).isMainFile())
-							posMainEditor = pos;
+								.getFileAt(index).isMainFile())
+							mainFileEditorPanelIndex = index;
 					}
 
 					// If exists
-					if (posMainEditor != -1) {
+					if (mainFileEditorPanelIndex != -1) {
 						command = command.replace("$mainFile$", MainWindow
 								.getInstance().getProjectConfiguration()
-								.getFileAt(posMainEditor).getPath());
+								.getFileAt(mainFileEditorPanelIndex).getPath());
 						command = command.replace("$mainFilePath$", MainWindow
 								.getInstance().getProjectConfiguration()
-								.getFileAt(posMainEditor).getFilePath());
+								.getFileAt(mainFileEditorPanelIndex)
+								.getFilePath());
 						command = command.replace("$mainFileExt$", MainWindow
 								.getInstance().getProjectConfiguration()
-								.getFileAt(posMainEditor).getFileExt());
+								.getFileAt(mainFileEditorPanelIndex)
+								.getFileExt());
 						command = command.replace("$mainFileName$", MainWindow
 								.getInstance().getProjectConfiguration()
-								.getFileAt(posMainEditor).getFileName());
+								.getFileAt(mainFileEditorPanelIndex)
+								.getFileName());
 					}
 				}
 
 				// Executes the command
-				sendCommandToOutput(command);
+				sendCommandToOutput(command, parameter);
 
 			} catch (Exception exception) {
 
@@ -438,19 +446,21 @@ public class AcideOutputPanel extends JPanel {
 	 * 
 	 * @param command
 	 *            command to execute in the output writer.
+	 * @param parameter
+	 *            parameter to use.
 	 */
-	public void sendCommandToOutput(String command) {
+	public void sendCommandToOutput(String command, String parameter) {
 
 		try {
 			_selectionSize = 0;
 			_echoCommand = command;
 
 			// Send the command to the output shell
-			_processThread.getWriter().write(command + "\n");
+			_processThread.getWriter().write(command + " " + parameter + "\n");
 			_processThread.getWriter().flush();
 
 			// Updates the historic
-			updateHistoric(command);
+			updateHistoric(command + " " + parameter);
 
 		} catch (IOException exception) {
 
@@ -461,7 +471,8 @@ public class AcideOutputPanel extends JPanel {
 	}
 
 	/**
-	 * Updates the ACIDE - A Configurable IDE output historic with the new executed command.
+	 * Updates the ACIDE - A Configurable IDE output historic with the new
+	 * executed command.
 	 * 
 	 * @param command
 	 *            executed command.

@@ -228,8 +228,7 @@ public class CloseButtonActionListener extends AbstractAction {
 				MainWindow.getInstance().getStatusBar().setMessage("");
 			}
 			else
-				if(chosenOption == JOptionPane.CANCEL_OPTION)
-					isCancelOption = true;
+				isCancelOption = true;
 		} else {
 
 			// Is not modified

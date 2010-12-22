@@ -196,7 +196,7 @@ public class AcideFileEditorManagerMouseClickListener extends MouseAdapter {
 
 		// Selects the node in the tree that matches with the clicked file
 		// editor
-		MainWindow.getInstance().getExplorer().selectTreeNodeFromFileEditor();
+		MainWindow.getInstance().getExplorerPanel().selectTreeNodeFromFileEditor();
 
 		// Updates the button icons
 		MainWindow.getInstance().getFileEditorManager().updatesButtonIcons();

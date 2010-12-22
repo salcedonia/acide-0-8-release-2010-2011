@@ -154,6 +154,10 @@ public class MenuConfigurationWindow extends JFrame {
 	 */
 	private final JCheckBox _openFileCheckBox;
 	/**
+	 * Menu configuration window open all files check box.
+	 */
+	private final JCheckBox _openAllFilesCheckBox;
+	/**
 	 * Menu configuration window save file as check box.
 	 */
 	private final JCheckBox _saveFileAsCheckBox;
@@ -507,6 +511,7 @@ public class MenuConfigurationWindow extends JFrame {
 				TitledBorder.DEFAULT_POSITION));
 		_newFileCheckBox = new JCheckBox(labels.getString("s8"));
 		_openFileCheckBox = new JCheckBox(labels.getString("s9"));
+		_openAllFilesCheckBox = new JCheckBox(labels.getString("s1004"));
 		_saveFileAsCheckBox = new JCheckBox(labels.getString("s10"));
 		_saveFileCheckBox = new JCheckBox(labels.getString("s617"));
 		_saveAllFilesCheckBox = new JCheckBox(labels.getString("s217"));
@@ -515,7 +520,7 @@ public class MenuConfigurationWindow extends JFrame {
 		_printFileCheckBox = new JCheckBox(labels.getString("s624"));
 		_exitCheckBox = new JCheckBox(labels.getString("s13"));
 
-		// EDICION PANEL
+		// EDIT PANEL
 		_editPanel = new JPanel();
 		_editPanel.setLayout(new GridLayout(0, 3));
 		_editPanel.setBorder(BorderFactory.createTitledBorder(null,
@@ -854,6 +859,7 @@ public class MenuConfigurationWindow extends JFrame {
 				// FILE MENU
 				_newFileCheckBox.setSelected(true);
 				_openFileCheckBox.setSelected(true);
+				_openAllFilesCheckBox.setSelected(true);
 				_saveFileAsCheckBox.setSelected(true);
 				_saveFileCheckBox.setSelected(true);
 				_saveAllFilesCheckBox.setSelected(true);
@@ -961,6 +967,7 @@ public class MenuConfigurationWindow extends JFrame {
 				// FILE MENU
 				_newFileCheckBox.setSelected(false);
 				_openFileCheckBox.setSelected(false);
+				_openAllFilesCheckBox.setSelected(false);
 				_saveFileAsCheckBox.setSelected(false);
 				_saveFileCheckBox.setSelected(false);
 				_saveAllFilesCheckBox.setSelected(false);
@@ -1077,6 +1084,7 @@ public class MenuConfigurationWindow extends JFrame {
 		// ADDS THE COMPONENTS WITH THE LAYOUT TO THE WINDOW
 		_filePanel.add(_newFileCheckBox);
 		_filePanel.add(_openFileCheckBox);
+		_filePanel.add(_openAllFilesCheckBox);
 		_filePanel.add(_saveFileAsCheckBox);
 		_filePanel.add(_saveFileCheckBox);
 		_filePanel.add(_saveAllFilesCheckBox);
@@ -1219,6 +1227,8 @@ public class MenuConfigurationWindow extends JFrame {
 				.getInstance().getIsDisplayed(FileMenu.NEW_FILE_NAME));
 		_openFileCheckBox.setSelected(MenuConfiguration
 				.getInstance().getIsDisplayed(FileMenu.OPEN_FILE_NAME));
+		_openAllFilesCheckBox.setSelected(MenuConfiguration
+				.getInstance().getIsDisplayed(FileMenu.OPEN_ALL_FILES_NAME));
 		_saveFileAsCheckBox.setSelected(MenuConfiguration
 				.getInstance().getIsDisplayed(FileMenu.SAVE_FILE_AS_NAME));
 		_saveFileCheckBox.setSelected(MenuConfiguration

@@ -1,5 +1,7 @@
 package es.configuration.toolBar.shellComandToolBar;
 
+import gui.toolBarPanel.shellCommandToolBar.ParameterType;
+
 /************************************************************************																
  * Handles the shell tool bar command of ACIDE - A Configurable IDE.											
  *					
@@ -59,6 +61,10 @@ public class ShellCommand {
 	 * Flag that indicates if it has icon or not.
 	 */
 	private boolean _hasIcon;
+	/**
+	 * Shell command parameter type.
+	 */
+	private ParameterType _parameterType;
 
 	/**
 	 * Creates a new sell tool bar command.
@@ -68,6 +74,7 @@ public class ShellCommand {
 		_action = "";
 		_hintText = "";
 		_hasIcon = false;
+		_parameterType = ParameterType.NONE;
 	}
 
 	/**
@@ -78,12 +85,34 @@ public class ShellCommand {
 	 *            shell command name.
 	 * @param hintText
 	 *            shell command hint text.
+	 * @param parameterType shell command parameter type.
 	 */
-	public ShellCommand(String name, String hintText) {
+	public ShellCommand(String name, String hintText, ParameterType parameterType) {
 		_name = name;
 		_action = "";
 		_hintText = hintText;
 		_hasIcon = false;
+		_parameterType = parameterType;
+	}
+
+	/**
+	 * Creates a new sell tool bar command with a new name, action and hint text
+	 * given as parameters.
+	 * 
+	 * @param name
+	 *            shell command name.
+	 * @param action
+	 *            shell command action.
+	 * @param hintText
+	 *            shell command hint text.
+	 * @param parameterType shell command extra parameter flag.
+	 */
+	public ShellCommand(String name, String action, String hintText, ParameterType parameterType) {
+		_name = name;
+		_action = action;
+		_hintText = hintText;
+		_hasIcon = false;
+		_parameterType = parameterType;
 	}
 
 	/**
@@ -102,8 +131,36 @@ public class ShellCommand {
 		_action = action;
 		_hintText = hintText;
 		_hasIcon = false;
+		_parameterType = ParameterType.NONE;
 	}
-
+	
+	/**
+	 * Creates a new sell tool bar command with a new name, action, hint text
+	 * and icon given as parameters.
+	 * 
+	 * @param name
+	 *            shell command name.
+	 * @param action
+	 *            shell command action.
+	 * @param hintText
+	 *            shell command hint text.
+	 * @param hasIcon
+	 *            indicates if the configurable tool bar command has icon or
+	 *            not.
+	 * @param icon
+	 *            shell command icon.
+	 * @param parameterType shell command extra parameter flag.
+	 */
+	public ShellCommand(String name, String action, String hintText,
+			boolean hasIcon, String icon, ParameterType parameterType) {
+		_name = name;
+		_action = action;
+		_hintText = hintText;
+		_icon = icon;
+		_hasIcon = hasIcon;
+		_parameterType = parameterType;
+	}
+	
 	/**
 	 * Creates a new sell tool bar command with a new name, action, hint text
 	 * and icon given as parameters.
@@ -127,6 +184,7 @@ public class ShellCommand {
 		_hintText = hintText;
 		_icon = icon;
 		_hasIcon = hasIcon;
+		_parameterType = ParameterType.NONE;
 	}
 
 	/**
@@ -222,5 +280,23 @@ public class ShellCommand {
 	 */
 	public void setHasIcon(boolean hasIcon) {
 		_hasIcon = hasIcon;
+	}
+
+	/**
+	 * Returns the shell command parameter type.
+	 * 
+	 * @return the shell command parameter type.
+	 */
+	public ParameterType getParameterType() {
+		return _parameterType;
+	}
+	
+	/**
+	 * Sets a new value to the shell command parameter type.
+	 * 
+	 * @param parameterType new value to set.
+	 */
+	public void setParameterType(ParameterType parameterType){
+		_parameterType = parameterType;
 	}
 }

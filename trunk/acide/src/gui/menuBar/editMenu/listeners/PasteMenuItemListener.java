@@ -85,7 +85,7 @@ public class PasteMenuItemListener implements ActionListener {
 		if (numEditors > 0) {
 
 			if (MainWindow.getInstance().getMenu().isShellFocused())
-				MainWindow.getInstance().getOutput().getTextComponent().paste();
+				MainWindow.getInstance().getOutputPanel().getTextComponent().paste();
 			else
 				MainWindow
 						.getInstance()
@@ -95,7 +95,7 @@ public class PasteMenuItemListener implements ActionListener {
 										.getSelectedFileEditorPanelIndex()).getActiveTextEditionArea()
 						.paste();
 		} else {
-			MainWindow.getInstance().getOutput().getTextComponent().paste();
+			MainWindow.getInstance().getOutputPanel().getTextComponent().paste();
 		}
 	}
 }

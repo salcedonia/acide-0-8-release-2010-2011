@@ -79,7 +79,7 @@ public class CloseProjecMenuItemtListener implements ActionListener {
 		// Gets the labels
 		ResourceBundle labels = language.getLabels();
 
-		boolean isCancelOption = false;
+		boolean isCancelOptionSelected = false;
 
 		// If the project has been modified
 		if (MainWindow.getInstance().getProjectConfiguration().isModified()) {
@@ -90,45 +90,42 @@ public class CloseProjecMenuItemtListener implements ActionListener {
 					JOptionPane.YES_NO_CANCEL_OPTION);
 
 			// If OK
-			if (chosenOption != JOptionPane.CANCEL_OPTION) {
+			if (chosenOption == JOptionPane.OK_OPTION) {
 
-				if (chosenOption == JOptionPane.OK_OPTION) {
-					
-					// Enables the save project menu item
-					MainWindow.getInstance().getMenu().getProject()
-							.getSaveProject().setEnabled(true);
+				// Enables the save project menu item
+				MainWindow.getInstance().getMenu().getProject()
+						.getSaveProject().setEnabled(true);
 
-					// Save the project
-					MainWindow.getInstance().getMenu().getProject()
-							.getSaveProject().doClick();
-				}
-			} else
-				isCancelOption = true;
+				// Save the project
+				MainWindow.getInstance().getMenu().getProject()
+						.getSaveProject().doClick();
+			} else if (chosenOption != JOptionPane.NO_OPTION)
+				isCancelOptionSelected = true;
 		}
 
-		if (!isCancelOption) {
-			
+		if (!isCancelOptionSelected) {
+
 			// Removes all the nodes in the explorer tree
-			MainWindow.getInstance().getExplorer().getRoot()
+			MainWindow.getInstance().getExplorerPanel().getRoot()
 					.removeAllChildren();
 
 			// Reloads the explorer tree model
-			MainWindow.getInstance().getExplorer().getTreeModel().reload();
+			MainWindow.getInstance().getExplorerPanel().getTreeModel().reload();
 
 			// Disables the add file menu item in the explorer popup menu
-			MainWindow.getInstance().getExplorer().getPopupMenu().getAddFile()
-					.setEnabled(false);
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu()
+					.getAddFile().setEnabled(false);
 
 			// Disables the save project menu item in the explorer popup menu
-			MainWindow.getInstance().getExplorer().getPopupMenu()
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 					.getSaveProject().setEnabled(false);
 
 			// Disables the remove file menu item in the explorer popup menu
-			MainWindow.getInstance().getExplorer().getPopupMenu()
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 					.getRemoveFile().setEnabled(false);
 
 			// Disables the delete file menu item in the explorer popup menu
-			MainWindow.getInstance().getExplorer().getPopupMenu()
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 					.getDeleteFile().setEnabled(false);
 
 			// Save the main window parameters
@@ -168,6 +165,9 @@ public class CloseProjecMenuItemtListener implements ActionListener {
 			// Disables the project menu
 			MainWindow.getInstance().getMenu().disableProjectMenu();
 
+			// Disables the open all files menu item
+			MainWindow.getInstance().getMenu().getFile().getOpenAllFiles().setEnabled(false);
+			
 			// Updates the status bar
 			MainWindow.getInstance().getStatusBar().setMessage("");
 		}

@@ -1,2 +1,17 @@
-]N] show options ]C] bcc32 ]T] show options ]B] false ]I] ]F]
-]N] complie ]C] bcc32 -tW $activeFile$ ]T] compile a file ]B] false ]I] ]F]
+// Command show options
+name = show options
+action = bcc32
+hintText = show options
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command compile
+name = compile
+action = bcc32 -tW $activeFile$
+hintText = compile a file
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// End

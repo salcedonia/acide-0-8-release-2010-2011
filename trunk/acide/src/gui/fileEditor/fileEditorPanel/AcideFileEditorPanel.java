@@ -16,8 +16,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
-import javax.swing.undo.UndoManager;
-
 import language.AcideLanguage;
 import operations.log.AcideLog;
 import resources.ResourceManager;
@@ -121,9 +119,9 @@ public class AcideFileEditorPanel extends JPanel {
 	 */
 	private Icon _icon;
 	/**
-	 * File editor panel undo manager.
+	 * File disk copy. Used to determine the color of the close button.
 	 */
-	private UndoManager _undoManager = new UndoManager();
+	private String _fileDiskCopy;
 
 	/**
 	 * Creates a new file editor panel.
@@ -185,12 +183,12 @@ public class AcideFileEditorPanel extends JPanel {
 
 			add(_horizontalSplitPane);
 
-			// Updates the log
-			AcideLog.getLog().info(labels.getString("s318"));
-
 			_path = null;
 			_lastChange = 0;
 			_lastSize = 0;
+
+			// Updates the log
+			AcideLog.getLog().info(labels.getString("s318"));
 
 		} catch (Exception exception) {
 
@@ -234,6 +232,10 @@ public class AcideFileEditorPanel extends JPanel {
 		_textEditionAreaList.get(_activeTextEditionArea).getTextPane()
 				.getDocument().addDocumentListener(_documentListener);
 
+		// Updates the file disk copy with the new content
+		setFileDiskCopy(text);
+
+		// Updates the MAIN WINDOW
 		revalidate();
 		repaint();
 	}
@@ -285,6 +287,10 @@ public class AcideFileEditorPanel extends JPanel {
 		_textEditionAreaList.get(_activeTextEditionArea).getTextPane()
 				.getDocument().addDocumentListener(_documentListener);
 
+		// Updates the file disk copy with the new content
+		setFileDiskCopy(textContent);
+
+		// Updates the MAIN WINDOW
 		MainWindow.getInstance().validate();
 		MainWindow.getInstance().repaint();
 	}
@@ -366,14 +372,18 @@ public class AcideFileEditorPanel extends JPanel {
 	 * @return the file name.
 	 */
 	public String getFileName() {
-		int index = _path.lastIndexOf("\\");
-		if (index == -1)
-			index = _path.lastIndexOf("/");
 
-		// If the file doesn't have an extension
-		if (_path.lastIndexOf(".") == -1)
-			return _path.substring(index + 1, _path.length());
-		return _path.substring(index + 1, _path.lastIndexOf("."));
+		if (_path != null) {
+			int index = _path.lastIndexOf("\\");
+			if (index == -1)
+				index = _path.lastIndexOf("/");
+
+			// If the file doesn't have an extension
+			if (_path.lastIndexOf(".") == -1)
+				return _path.substring(index + 1, _path.length());
+			return _path.substring(index + 1, _path.lastIndexOf("."));
+		}
+		return "";
 	}
 
 	/**
@@ -568,23 +578,41 @@ public class AcideFileEditorPanel extends JPanel {
 	}
 
 	/**
-	 * Returns the undo-redo manager.
+	 * Returns the file disk copy.
 	 * 
-	 * @return the undo-redo manager.
-	 * @see UndoManager
+	 * @return the file disk copy.
 	 */
-	public UndoManager getUndoManager() {
-		return _undoManager;
+	public String getFileDiskCopy() {
+		return _fileDiskCopy;
 	}
 
 	/**
-	 * Sets a new value to the undo-redo manager.
+	 * Sets a new value for the file disk copy.
 	 * 
-	 * @param undoManager
+	 * @param fileDiskCopy
 	 *            new value to set.
-	 * @see UndoManager
 	 */
-	public void setUndoManager(UndoManager undoManager) {
-		_undoManager = undoManager;
+	public void setFileDiskCopy(String fileDiskCopy) {
+		_fileDiskCopy = "";
+		_fileDiskCopy = _fileDiskCopy + fileDiskCopy;
+	}
+
+	/**
+	 * Checks if the file content given as a parameter is equal to the file copy
+	 * disk. This method is used to determine if the file has been modified in
+	 * order to set the green button or the red button to an opened file in the
+	 * file editor.
+	 * 
+	 * @param fileContent
+	 *            text to compare within.
+	 * 
+	 * @return true if the text given as a parameter is equal to the file disk
+	 *         copy and false in other case.
+	 */
+	public boolean isEqualToFileDiskCopy(String fileContent) {
+
+		if (_fileDiskCopy != null)
+			return _fileDiskCopy.equals(fileContent);
+		return true;
 	}
 }

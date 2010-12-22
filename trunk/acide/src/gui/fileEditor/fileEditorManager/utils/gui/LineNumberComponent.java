@@ -53,7 +53,7 @@ import operations.log.AcideLog;
 public class LineNumberComponent extends JComponent{
 	
 	/**
-	 * Line number serial version UID.
+	 * Line number component class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
@@ -118,13 +118,13 @@ public class LineNumberComponent extends JComponent{
 				_component = this;
 			}
 			else{
-				setFont( component.getFont() );
+				setFont(component.getFont());
 				_component = component;
 			}
 
-			setBackground( DEFAULT_BACKGROUND );
-			setForeground( DEFAULT_FOREGROUND );
-			setPreferredWidth( 99 );
+			setBackground(DEFAULT_BACKGROUND);
+			setForeground(DEFAULT_FOREGROUND);
+			setPreferredWidth(99);
 		} catch (RuntimeException exception) {
 			
 			// Updates the log

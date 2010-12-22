@@ -64,7 +64,7 @@ import operations.log.AcideLog;
 public class SyntaxDocument extends DefaultStyledDocument {
 
 	/**
-	 * Class serial version UID.
+	 * Syntax document class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
@@ -98,12 +98,13 @@ public class SyntaxDocument extends DefaultStyledDocument {
 
 	/**
 	 * Creates a new syntax document.
+	 * @param fileEditorPanel 
 	 */
 	@SuppressWarnings("unchecked")
 	public SyntaxDocument() {
 
 		super();
-
+		
 		ResourceBundle labels = AcideLanguage.getInstance().getLabels();
 
 		try {

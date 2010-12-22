@@ -79,6 +79,7 @@ public class SaveFileAsMenuItemListener implements ActionListener {
 		// Gets the labels
 		ResourceBundle labels = language.getLabels();
 
+		// Creates the file to be saved
 		TextFile textFile = AcideIOFactory.getInstance().buildFile();
 		String f = " ";
 
@@ -90,6 +91,7 @@ public class SaveFileAsMenuItemListener implements ActionListener {
 			// If the file is not empty
 			if (!f.equals(" ")) {
 
+				// Try to save the file content
 				boolean result = textFile.save(f, MainWindow.getInstance()
 						.getFileEditorManager().getSelectedFileEditorPanel().getTextEditionAreaContent());
 
@@ -130,13 +132,26 @@ public class SaveFileAsMenuItemListener implements ActionListener {
 					File explorerFile = new File(MainWindow.getInstance()
 							.getFileEditorManager().getSelectedFileEditorPanel()
 							.getAbsolutePath());
+					
+					// Sets the last change
 					MainWindow.getInstance().getFileEditorManager()
 							.getSelectedFileEditorPanel().setLastChange(
 									explorerFile.lastModified());
+					
+					// Sets the last size
 					MainWindow.getInstance().getFileEditorManager()
 							.getSelectedFileEditorPanel().setLastSize(
 									explorerFile.length());
-
+					
+					// Updates the file disk copy
+					MainWindow
+							.getInstance()
+							.getFileEditorManager()
+							.getSelectedFileEditorPanel()
+							.setFileDiskCopy(
+									MainWindow.getInstance().getFileEditorManager()
+											.getSelectedFileEditorPanel()
+											.getTextEditionAreaContent());
 				} else
 					// Updates the log
 					AcideLog.getLog().info(labels.getString("s95") + f);

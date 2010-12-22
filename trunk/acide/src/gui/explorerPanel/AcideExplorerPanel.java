@@ -368,7 +368,7 @@ public class AcideExplorerPanel extends JPanel {
 								.getProjectConfiguration()
 								.getNumFilesFromList() + 1; index++) {
 
-							if (MainWindow.getInstance().getExplorer()
+							if (MainWindow.getInstance().getExplorerPanel()
 									.getTree().getPathForRow(index)
 									.getLastPathComponent().toString()
 									.equals(exporerFile.getLastPathComponent())) {
@@ -382,10 +382,10 @@ public class AcideExplorerPanel extends JPanel {
 
 				// Gets the current selection in the tree
 				TreePath currentSelection = MainWindow.getInstance()
-						.getExplorer().getTree().getPathForRow(explorerFileIndex);
+						.getExplorerPanel().getTree().getPathForRow(explorerFileIndex);
 				
 				// Selects the node in the explorer tree
-				MainWindow.getInstance().getExplorer().getTree()
+				MainWindow.getInstance().getExplorerPanel().getTree()
 						.setSelectionPath(currentSelection);
 			}
 		}

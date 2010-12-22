@@ -92,7 +92,7 @@ public class RemoveFileMenuItemListener implements ActionListener {
 		if (chosenOption == JOptionPane.OK_OPTION) {
 
 			// Gets the selection over the explorer tree
-			TreePath currentSelection = MainWindow.getInstance().getExplorer().getTree()
+			TreePath currentSelection = MainWindow.getInstance().getExplorerPanel().getTree()
 					.getSelectionPath();
 
 			// If something has been selected
@@ -116,7 +116,7 @@ public class RemoveFileMenuItemListener implements ActionListener {
 					if (parent != null) {
 						
 						// Removes the node
-						MainWindow.getInstance().getExplorer().getTreeModel()
+						MainWindow.getInstance().getExplorerPanel().getTreeModel()
 								.removeNodeFromParent(currentNode);
 						
 						// Searches for the file in the explorer
@@ -216,16 +216,16 @@ public class RemoveFileMenuItemListener implements ActionListener {
 		if (MainWindow.getInstance().getProjectConfiguration().getNumFilesFromList() > 0) {
 			
 			// Updates the explorer popup menu
-			MainWindow.getInstance().getExplorer().getPopupMenu().getRemoveFile()
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getRemoveFile()
 					.setEnabled(true);
-			MainWindow.getInstance().getExplorer().getPopupMenu().getDeleteFile()
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getDeleteFile()
 					.setEnabled(true);
 		} else {
 			
 			// Updates the explorer popup menu
-			MainWindow.getInstance().getExplorer().getPopupMenu().getRemoveFile()
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getRemoveFile()
 					.setEnabled(false);
-			MainWindow.getInstance().getExplorer().getPopupMenu().getDeleteFile()
+			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getDeleteFile()
 					.setEnabled(false);
 		}
 	}

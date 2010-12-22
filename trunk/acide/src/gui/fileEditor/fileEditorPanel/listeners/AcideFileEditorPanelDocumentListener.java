@@ -5,7 +5,6 @@ import gui.mainWindow.MainWindow;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.undo.UndoManager;
 
 /************************************************************************
  * Editor panel document listener.
@@ -56,57 +55,7 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 	 */
 	@Override
 	public void insertUpdate(DocumentEvent documentEvent) {
-
-		// Gets the selected editor index
-		final int selectedEditorIndex = MainWindow.getInstance()
-				.getFileEditorManager().getSelectedFileEditorPanelIndex();
-
-		// Gets the selected editor undo manager
-		final UndoManager undoManager = MainWindow.getInstance()
-				.getFileEditorManager()
-				.getFileEditorPanelAt(selectedEditorIndex).getUndoManager();
-
-		SwingUtilities.invokeLater(new Runnable() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
-
-				if (undoManager.canUndo()) {
-
-					// Sets the red icon to the close button
-					MainWindow.getInstance().getFileEditorManager()
-							.getTestPlaf()
-							.getCloseButtonAt(selectedEditorIndex)
-							.setRedCloseButton();
-
-					// Enables the save as menu item
-					MainWindow.getInstance().getMenu().getFile()
-							.getSaveFileAs().setEnabled(true);
-
-					// The project configuration has been modified
-					MainWindow.getInstance().getProjectConfiguration()
-							.setIsModified(true);
-				} else {
-					// Sets the green icon to the close button
-					MainWindow.getInstance().getFileEditorManager()
-							.getTestPlaf()
-							.getCloseButtonAt(selectedEditorIndex)
-							.setGreenCloseButton();
-
-					// Enables the save as menu item
-					MainWindow.getInstance().getMenu().getFile()
-							.getSaveFileAs().setEnabled(false);
-
-					// The project configuration has been modified
-					MainWindow.getInstance().getProjectConfiguration()
-							.setIsModified(false);
-				}
-			}
-		});
+		updatesEditorAndProjectState(documentEvent);
 	}
 
 	/*
@@ -117,57 +66,7 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 	 */
 	@Override
 	public void removeUpdate(DocumentEvent documentEvent) {
-
-		// Gets the selected editor index
-		final int selectedEditorIndex = MainWindow.getInstance()
-				.getFileEditorManager().getSelectedFileEditorPanelIndex();
-
-		// Gets the selected editor undo manager
-		final UndoManager undoManager = MainWindow.getInstance()
-				.getFileEditorManager()
-				.getFileEditorPanelAt(selectedEditorIndex).getUndoManager();
-
-		SwingUtilities.invokeLater(new Runnable() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
-				
-				if (undoManager.canUndo()) {
-
-					// Sets the red icon to the close button
-					MainWindow.getInstance().getFileEditorManager()
-							.getTestPlaf()
-							.getCloseButtonAt(selectedEditorIndex)
-							.setRedCloseButton();
-
-					// Enables the save as menu item
-					MainWindow.getInstance().getMenu().getFile()
-							.getSaveFileAs().setEnabled(true);
-
-					// The project configuration has been modified
-					MainWindow.getInstance().getProjectConfiguration()
-							.setIsModified(true);
-				} else {
-					// Sets the green icon to the close button
-					MainWindow.getInstance().getFileEditorManager()
-							.getTestPlaf()
-							.getCloseButtonAt(selectedEditorIndex)
-							.setGreenCloseButton();
-
-					// Enables the save as menu item
-					MainWindow.getInstance().getMenu().getFile()
-							.getSaveFileAs().setEnabled(false);
-
-					// The project configuration has been modified
-					MainWindow.getInstance().getProjectConfiguration()
-							.setIsModified(false);
-				}
-			}
-		});
+		updatesEditorAndProjectState(documentEvent);
 	}
 
 	/*
@@ -178,15 +77,18 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 	 */
 	@Override
 	public void changedUpdate(DocumentEvent documentEvent) {
+		updatesEditorAndProjectState(documentEvent);
+	}
 
-		// Gets the selected editor index
-		final int selectedEditorIndex = MainWindow.getInstance()
-				.getFileEditorManager().getSelectedFileEditorPanelIndex();
+	/**
+	 * Updates the close button and the modification project state.
+	 */
+	public void updatesEditorAndProjectState(final DocumentEvent documentEvent) {
 
-		// Gets the selected editor undo manager
-		final UndoManager undoManager = MainWindow.getInstance()
+		// Gets the selected file editor panel index
+		final int selectedFileEditorPanelIndex = MainWindow.getInstance()
 				.getFileEditorManager()
-				.getFileEditorPanelAt(selectedEditorIndex).getUndoManager();
+				.getSelectedFileEditorPanelIndex();
 
 		SwingUtilities.invokeLater(new Runnable() {
 			/*
@@ -196,36 +98,49 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 			 */
 			@Override
 			public void run() {
+
+				if (selectedFileEditorPanelIndex != -1) {
 				
-				if (undoManager.canUndo()) {
+					// Gets the current content
+					String fileContent = MainWindow.getInstance()
+							.getFileEditorManager()
+							.getFileEditorPanelAt(selectedFileEditorPanelIndex)
+							.getTextEditionAreaContent();
 
-					// Sets the red icon to the close button
-					MainWindow.getInstance().getFileEditorManager()
-							.getTestPlaf()
-							.getCloseButtonAt(selectedEditorIndex)
-							.setRedCloseButton();
+					// If has been changes in the file
+					if (!MainWindow.getInstance().getFileEditorManager()
+							.getFileEditorPanelAt(selectedFileEditorPanelIndex)
+							.isEqualToFileDiskCopy(fileContent)) {
 
-					// Enables the save as menu item
-					MainWindow.getInstance().getMenu().getFile()
-							.getSaveFileAs().setEnabled(true);
+						// Sets the red icon to the close button
+						MainWindow.getInstance().getFileEditorManager()
+								.getTestPlaf()
+								.getCloseButtonAt(selectedFileEditorPanelIndex)
+								.setRedCloseButton();
 
-					// The project configuration has been modified
-					MainWindow.getInstance().getProjectConfiguration()
-							.setIsModified(true);
-				} else {
-					// Sets the green icon to the close button
-					MainWindow.getInstance().getFileEditorManager()
-							.getTestPlaf()
-							.getCloseButtonAt(selectedEditorIndex)
-							.setGreenCloseButton();
+						// Enables the save as menu item
+						MainWindow.getInstance().getMenu().getFile()
+								.getSaveFileAs().setEnabled(true);
 
-					// Enables the save as menu item
-					MainWindow.getInstance().getMenu().getFile()
-							.getSaveFileAs().setEnabled(false);
+						// The project configuration has been modified
+						MainWindow.getInstance().getProjectConfiguration()
+								.setIsModified(true);
+					} else {
 
-					// The project configuration has been modified
-					MainWindow.getInstance().getProjectConfiguration()
-							.setIsModified(false);
+						// Sets the red icon to the close button
+						MainWindow.getInstance().getFileEditorManager()
+								.getTestPlaf()
+								.getCloseButtonAt(selectedFileEditorPanelIndex)
+								.setGreenCloseButton();
+
+						// Enables the save as menu item
+						MainWindow.getInstance().getMenu().getFile()
+								.getSaveFileAs().setEnabled(false);
+
+						// The project configuration has been modified
+						MainWindow.getInstance().getProjectConfiguration()
+								.setIsModified(false);
+					}
 				}
 			}
 		});

@@ -123,8 +123,6 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 
 		// Updates the status bar
 		MainWindow.getInstance().getStatusBar().getNumLinesMessage()
-				.setColumns(numLinesMessage.length() + 10);
-		MainWindow.getInstance().getStatusBar().getNumLinesMessage()
 				.setText(numLinesMessage);
 	}
 

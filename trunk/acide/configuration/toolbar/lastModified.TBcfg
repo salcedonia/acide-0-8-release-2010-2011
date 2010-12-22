@@ -1,3 +1,25 @@
-]N] dir ]C] dir ]T] Directory Listing ]B] false ]I] ]F]
-]N] pwd ]C] cd ]T] Current Directory ]B] false ]I] ]F]
-]N] type ]C] type $activeFile$ ]T] Type Current File ]B] false ]I] ]F]
+// Command dir
+name = dir
+action = dir
+hintText = Directory Listing
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command cd
+name = cd
+action = cd
+hintText = Current Directory
+hasIcon = false
+icon = 
+parameterType = DIRECTORY
+
+// Command type
+name = type
+action = type $activeFile$
+hintText = Type Current File
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// End

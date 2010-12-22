@@ -345,7 +345,7 @@ public class OutputConfigurationWindow extends JFrame {
 					ResourceBundle labels = AcideLanguage.getInstance().getLabels();
 
 					// Exits the output
-					MainWindow.getInstance().getOutput().executeExitCommand();
+					MainWindow.getInstance().getOutputPanel().executeExitCommand();
 
 					File path = new File(_shellPathTextField.getText());
 
@@ -394,7 +394,7 @@ public class OutputConfigurationWindow extends JFrame {
 								_shellPathTextField.getText());
 						
 						// Resets the output
-						MainWindow.getInstance().getOutput().resetOutput();
+						MainWindow.getInstance().getOutputPanel().resetOutput();
 
 					} else {
 

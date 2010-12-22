@@ -60,7 +60,7 @@ public class AcideExplorerPanelClickMouseListener extends MouseAdapter {
 	public void mouseClicked(MouseEvent mouseEvent) {
 
 		// Gets the selected node from the explorer tree
-		TreePath selectedNode = MainWindow.getInstance().getExplorer().getTree().getPathForLocation(mouseEvent.getX(),
+		TreePath selectedNode = MainWindow.getInstance().getExplorerPanel().getTree().getPathForLocation(mouseEvent.getX(),
 				mouseEvent.getY());
 
 		if (selectedNode != null) {

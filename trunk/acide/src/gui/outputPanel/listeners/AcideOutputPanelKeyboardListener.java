@@ -59,7 +59,7 @@ public class AcideOutputPanelKeyboardListener implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent keyEvent) {
 
-		AcideOutputPanel outputPanel = MainWindow.getInstance().getOutput();
+		AcideOutputPanel outputPanel = MainWindow.getInstance().getOutputPanel();
 		
 		if (outputPanel.getTextComponent() != null) {
 
@@ -79,7 +79,7 @@ public class AcideOutputPanelKeyboardListener implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent keyEvent) {
 
-		AcideOutputPanel outputPanel = MainWindow.getInstance().getOutput();
+		AcideOutputPanel outputPanel = MainWindow.getInstance().getOutputPanel();
 		
 		if (outputPanel.getTextComponent() != null) {
 
@@ -109,7 +109,7 @@ public class AcideOutputPanelKeyboardListener implements KeyListener {
 				if (keyEvent.getKeyChar() == '\n') {
 
 					if (outputPanel.getProcessThread().getWriter() != null)
-						outputPanel.sendCommandToOutput(command);
+						outputPanel.sendCommandToOutput(command, "");
 				}
 				break;
 
@@ -230,7 +230,7 @@ public class AcideOutputPanelKeyboardListener implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent keyEvent) {
 
-		AcideOutputPanel outputPanel = MainWindow.getInstance().getOutput();
+		AcideOutputPanel outputPanel = MainWindow.getInstance().getOutputPanel();
 		
 		if (outputPanel.getTextComponent() != null)
 			

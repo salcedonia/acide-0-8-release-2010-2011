@@ -1,12 +1,12 @@
 package gui.menuBar.editMenu.listeners;
 
 import gui.mainWindow.MainWindow;
+import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.UndoManager;
 
 import operations.log.AcideLog;
 
@@ -62,24 +62,19 @@ public class RedoMenuItemListener implements ActionListener {
 
 		try {
 
-			// Gets the selected editor index
-			int selectedEditorIndex = MainWindow.getInstance()
+			// Gets the selected file editor panel index
+			int selectedFileEditorPanelIndex = MainWindow.getInstance()
 					.getFileEditorManager().getSelectedFileEditorPanelIndex();
 
 			// If there are opened editors
-			if (selectedEditorIndex != -1) {
+			if (selectedFileEditorPanelIndex != -1) {
 				
-				// Gets the selected editor undo manager
-				UndoManager selectedEditorUndoManager = MainWindow
-						.getInstance().getFileEditorManager()
-						.getFileEditorPanelAt(selectedEditorIndex).getUndoManager();
-
-				if (selectedEditorUndoManager.canRedo())
-					selectedEditorUndoManager.redo();
+				if (AcideUndoRedoManager.getInstance().canRedo())
+					AcideUndoRedoManager.getInstance().redo();
 
 				// Updates the redo menu item option
 				MainWindow.getInstance().getMenu().getEdit().getUndo()
-						.setEnabled(selectedEditorUndoManager.canRedo());
+						.setEnabled(AcideUndoRedoManager.getInstance().canRedo());
 			}
 		} catch (CannotRedoException exception) {
 

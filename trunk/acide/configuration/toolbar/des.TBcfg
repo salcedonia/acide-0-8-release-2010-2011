@@ -1,18 +1,153 @@
-]N] consult ]C] /consult $activeFile$ ]T] Consults the selected file ]B] false ]I] ]F]
-]N] listing ]C] /listing ]T] Lists the contents of the database ]B] false ]I] ]F]
-]N] pdg ]C] /pdg ]T] Lists the predicate dependency graph ]B] false ]I] ]F]
-]N] strata ]C] /strata ]T] Lists the strata ]B] false ]I] ]F]
-]N] abolish ]C] /abolish ]T] Abolish all the database rules ]B] false ]I] ]F]
-]N] list_et ]C] /list_et ]T] List the extension table contents ]B] false ]I] ]F]
-]N] clear_et ]C] /clear_et ]T] Clear the extension table ]B] false ]I] ]F]
-]N] cd ]C] /cd ]T] Sets the current folder to the installation folder ]B] false ]I] ]F]
-]N] ls ]C] /ls ]T] Lists the contents of the current folder ]B] false ]I] ]F]
-]N] pwd ]C] /pwd ]T] Displays the current folder ]B] false ]I] ]F]
-]N] log ]C] /log ]T] Displays the current log, if any ]B] false ]I] ]F]
-]N] nolog ]C] /nolog ]T] Disables logging ]B] false ]I] ]F]
-]N] verbose ]C] /verbose ]T] Enables verbose output ]B] false ]I] ]F]
-]N] noverbose ]C] /noverbose ]T] Disables verbose output ]B] false ]I] ]F]
-]N] version ]C] /version ]T] Displays the current system version ]B] false ]I] ]F]
-]N] builtins ]C] /builtins ]T] Lists predefined operators ]B] false ]I] ]F]
-]N] help ]C] /help ]T] Shows the help ]B] false ]I] ]F]
-]N] exit ]C] /exit ]T] Exit the output ]B] false ]I] ]F]
+// Command consult
+name = consult
+action = /consult $activeFile$
+hintText = Consults the selected file
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command listing
+name = listing
+action = /listing
+hintText = Lists the contents of the database
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command pdg
+name = pdg
+action = /pdg
+hintText = Lists the predicate dependency graph
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command strata
+name = strata
+action = /strata
+hintText = Lists the strata
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command strata
+name = strata
+action = /strata
+hintText = Lists the strata
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command abolish
+name = abolish
+action = /abolish
+hintText = Abolish all the database rules
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command list_et
+name = list_et
+action = /list_et
+hintText = List the extension table contents
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command clear_et
+name = clear_et
+action = /clear_et
+hintText = Clear the extension table
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command cd
+name = cd
+action = /cd
+hintText = Sets the current folder to the installation folder
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command ls
+name = ls
+action = /ls
+hintText = Lists the contents of the current folder
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command pwd
+name = pwd
+action = /pwd
+hintText = Displays the current folder
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command log
+name = log
+action = /log
+hintText = Displays the current log, if any
+hasIcon = false
+icon = 
+hasExtraParameter = false
+
+// Command nolog
+name = nolog
+action = /nolog
+hintText = Disables logging
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command verbose
+name = verbose
+action = /verbose
+hintText = Enables verbose output
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command noverbose
+name = noverbose
+action = /noverbose
+hintText = Disables verbose output
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command version
+name = version
+action = /version
+hintText = Displays the current system version
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command builtins
+name = builtins
+action = /builtins
+hintText = Lists predefined operators
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command help
+name = help
+action = /help
+hintText = Shows the help
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// Command exit
+name = exit
+action = /exit
+hintText = Exit the output
+hasIcon = false
+icon = 
+parameterType = NONE
+
+// End

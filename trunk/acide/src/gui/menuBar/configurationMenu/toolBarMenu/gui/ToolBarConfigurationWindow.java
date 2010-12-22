@@ -1,8 +1,5 @@
 package gui.menuBar.configurationMenu.toolBarMenu.gui;
 
-import gui.mainWindow.MainWindow;
-import gui.menuBar.configurationMenu.toolBarMenu.utils.ToolBarTableModel;
-
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -21,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -33,12 +31,13 @@ import javax.swing.event.ListSelectionListener;
 
 import language.AcideLanguage;
 import operations.log.AcideLog;
-
 import resources.ResourceManager;
-
 import es.configuration.toolBar.shellComandToolBar.ShellCommand;
 import es.configuration.toolBar.shellComandToolBar.ShellCommandList;
 import es.text.TextFile;
+import gui.mainWindow.MainWindow;
+import gui.menuBar.configurationMenu.toolBarMenu.utils.ToolBarTableModel;
+import gui.toolBarPanel.shellCommandToolBar.ParameterType;
 
 /************************************************************************
  * Tool bar configuration window of ACIDE - A Configurable IDE.
@@ -123,6 +122,10 @@ public class ToolBarConfigurationWindow extends JFrame {
 	 */
 	private JScrollPane _tableScrollPane;
 	/**
+	 * Modify button.
+	 */
+	private JButton _modifyButton;
+	/**
 	 * Save button.
 	 */
 	private JButton _saveButton;
@@ -145,11 +148,11 @@ public class ToolBarConfigurationWindow extends JFrame {
 	/**
 	 * Command label.
 	 */
-	private JLabel _commandLabel;
+	private JLabel _actionLabel;
 	/**
 	 * Command text field.
 	 */
-	private final JTextField _commandTextField;
+	private final JTextField _actionTextField;
 	/**
 	 * Italic label.
 	 */
@@ -157,23 +160,27 @@ public class ToolBarConfigurationWindow extends JFrame {
 	/**
 	 * Help text label.
 	 */
-	private JLabel _helpTextLabel;
+	private JLabel _hintTextLabel;
 	/**
 	 * Help text text field.
 	 */
-	private final JTextField _helpTextTextField;
+	private final JTextField _hintTextTextField;
 	/**
 	 * Image label.
 	 */
-	private JLabel _imageLabel;
+	private JLabel _iconLabel;
 	/**
 	 * Image text field.
 	 */
-	private final JTextField _imageTextField;
+	private final JTextField _iconTextField;
 	/**
-	 * Note label.
+	 * Extra parameter label.
 	 */
-	private JLabel _noteLabel;
+	private JLabel _extraParameterLabel;
+	/**
+	 * Extra parameter list.
+	 */
+	private JList _extraParameterList;
 	/**
 	 * Add button.
 	 */
@@ -186,10 +193,6 @@ public class ToolBarConfigurationWindow extends JFrame {
 	 * Quit button.
 	 */
 	private JButton _quitButton;
-	/**
-	 * Modify button.
-	 */
-	private JButton _modifyButton;
 	/**
 	 * Tool bar command list.
 	 */
@@ -205,7 +208,7 @@ public class ToolBarConfigurationWindow extends JFrame {
 	/**
 	 * Tool bar table model.
 	 */
-	private ToolBarTableModel _model;
+	private ToolBarTableModel _tableModel;
 	/**
 	 * Table columns.
 	 */
@@ -254,11 +257,12 @@ public class ToolBarConfigurationWindow extends JFrame {
 		AcideLog.getLog().info(labels.getString("s132"));
 
 		// TABLE COLUMNS
-		_tableColumns = new String[4];
+		_tableColumns = new String[5];
 		_tableColumns[0] = labels.getString("s260");
 		_tableColumns[1] = labels.getString("s261");
 		_tableColumns[2] = labels.getString("s262");
 		_tableColumns[3] = labels.getString("s263");
+		_tableColumns[4] = labels.getString("s1003");
 
 		// FRAME
 		setIconImage(ICON.getImage());
@@ -287,23 +291,35 @@ public class ToolBarConfigurationWindow extends JFrame {
 		_nameLabel = new JLabel(labels.getString("s133"), JLabel.LEFT);
 		_nameTextField = new JTextField();
 
-		// COMMAND
-		_commandLabel = new JLabel(labels.getString("s134"), JLabel.LEFT);
-		_commandTextField = new JTextField();
+		// ACTION
+		_actionLabel = new JLabel(labels.getString("s134"), JLabel.LEFT);
+		_actionTextField = new JTextField();
 
 		// ITALIC LABEL
 		_italicLabel = new JLabel(labels.getString("s146"), JLabel.CENTER);
 		_italicLabel.setFont(new Font(_nameLabel.getFont().getFontName(),
 				Font.ITALIC, _nameLabel.getFont().getSize()));
 
-		// HELP TEXT
-		_helpTextLabel = new JLabel(labels.getString("s135"), JLabel.LEFT);
-		_helpTextTextField = new JTextField();
+		// HINT TEXT
+		_hintTextLabel = new JLabel(labels.getString("s135"), JLabel.LEFT);
+		_hintTextTextField = new JTextField();
 
-		// IMAGE
-		_imageLabel = new JLabel(labels.getString("s136"), JLabel.LEFT);
-		_imageTextField = new JTextField();
-		_noteLabel = new JLabel(labels.getString("s139"), JLabel.CENTER);
+		// ICON
+		_iconLabel = new JLabel(labels.getString("s136"), JLabel.LEFT);
+		_iconTextField = new JTextField();
+
+		// EXTRA PARAMETER LABEL
+		_extraParameterLabel = new JLabel(labels.getString("s139"), JLabel.CENTER);
+
+		// EXTRA PARAMETER LIST
+		String[] data = { labels.getString("s1005"), labels.getString("s1006"),
+				labels.getString("s1007"), labels.getString("s1008") };
+		_extraParameterList = new JList(data);
+		_extraParameterList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		_extraParameterList.setLayoutOrientation(JList.VERTICAL);
+		_extraParameterList.setVisibleRowCount(-1);
+		JScrollPane listScrollPane = new JScrollPane(_extraParameterList);
+		listScrollPane.setPreferredSize(new Dimension(70,75));
 
 		// ADD BUTTON
 		_addButton = new JButton(labels.getString("s137"));
@@ -338,10 +354,10 @@ public class ToolBarConfigurationWindow extends JFrame {
 		constraints.ipady = 0;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		_commandPanel.add(_commandLabel, constraints);
+		_commandPanel.add(_actionLabel, constraints);
 		constraints.gridx = 1;
 		constraints.ipady = 5;
-		_commandPanel.add(_commandTextField, constraints);
+		_commandPanel.add(_actionTextField, constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		constraints.ipady = 0;
@@ -349,32 +365,37 @@ public class ToolBarConfigurationWindow extends JFrame {
 		_commandPanel.add(_italicLabel, constraints);
 		constraints.gridy = 3;
 		constraints.gridwidth = 1;
-		_commandPanel.add(_helpTextLabel, constraints);
+		_commandPanel.add(_hintTextLabel, constraints);
 		constraints.gridx = 1;
 		constraints.ipady = 5;
-		_commandPanel.add(_helpTextTextField, constraints);
+		_commandPanel.add(_hintTextTextField, constraints);
 		constraints.gridx = 0;
 		constraints.gridy = 4;
 		constraints.ipady = 0;
-		_commandPanel.add(_imageLabel, constraints);
+		_commandPanel.add(_iconLabel, constraints);
 		constraints.gridx = 1;
 		constraints.ipady = 5;
-		_commandPanel.add(_imageTextField, constraints);
+		_commandPanel.add(_iconTextField, constraints);
 		constraints.gridx = 2;
 		constraints.ipady = 0;
 		_commandPanel.add(_examineButton, constraints);
-		constraints.gridy = 5;
+		constraints.gridx = 0;
 		constraints.gridwidth = 3;
+		constraints.gridy = 5;
+		_commandPanel.add(_extraParameterLabel, constraints);
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.fill = GridBagConstraints.NONE;
 		constraints.gridx = 0;
-		_commandPanel.add(_noteLabel, constraints);
-		constraints.gridx = 0;
+		constraints.gridy = 6;
+		_commandPanel.add(listScrollPane, constraints);
+		
+		// ICON BUTTONS PANEL
+		constraints.fill = GridBagConstraints.BOTH;
 		constraints.gridy = 0;
 		constraints.gridwidth = 1;
 		constraints.ipadx = 0;
 		constraints.ipady = 0;
 		constraints.insets = new Insets(5, 5, 5, 5);
-
-		// ICON BUTTONS PANEL
 		_iconButtonsPanel.add(_addButton, constraints);
 		constraints.gridx = 1;
 		_iconButtonsPanel.add(_modifyButton, constraints);
@@ -382,13 +403,13 @@ public class ToolBarConfigurationWindow extends JFrame {
 		_iconButtonsPanel.add(_quitButton, constraints);
 
 		_commandList = new Vector<ShellCommand>();
-		_commandMatrixTable = new String[_commandList.size()][4];
-		_model = new ToolBarTableModel();
+		_commandMatrixTable = new String[_commandList.size()][5];
+		_tableModel = new ToolBarTableModel();
 
 		setToolBarTableMatrix();
 
-		_model.setValues(_tableColumns, _commandMatrixTable);
-		_table = new JTable(_model);
+		_tableModel.setValues(_tableColumns, _commandMatrixTable);
+		_table = new JTable(_tableModel);
 		_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		_table.setPreferredScrollableViewportSize(new Dimension(300, 100));
 		_tableScrollPane = new JScrollPane(_table);
@@ -432,7 +453,7 @@ public class ToolBarConfigurationWindow extends JFrame {
 
 				// If there have been changes ask for saving the changes
 				if (_areThereChanges) {
-					
+
 					// Asks the user if wants to save the changes
 					int choosenOption = JOptionPane.showConfirmDialog(null,
 							labels.getString("s996"), labels.getString("s995"),
@@ -443,13 +464,10 @@ public class ToolBarConfigurationWindow extends JFrame {
 					// YES
 					case JOptionPane.YES_OPTION:
 
-						// Modifies the current tool bar
-						_modifyButton.doClick();
-
 						// Sets the list
-						ShellCommandList.setList(_commandList);
+						ShellCommandList.setFinalList(_commandList);
 						String newName = "./configuration/toolbar/lastModified.TBcfg";
-						ShellCommandList.saveList(newName);
+						ShellCommandList.saveFinalList(newName);
 
 						try {
 
@@ -469,12 +487,12 @@ public class ToolBarConfigurationWindow extends JFrame {
 									"currentToolBarConfiguration", newName);
 
 							// Builds the tool bar
-							MainWindow.getInstance().buildToolBar();
+							MainWindow.getInstance().buildToolBarPanel();
 							_areChangesSaved = false;
 							MainWindow.getInstance().validate();
 							MainWindow.getInstance().repaint();
 
-							// Closes the window
+							// Closes the tool bar configuration window
 							dispose();
 							MainWindow.getInstance().setEnabled(true);
 							MainWindow.getInstance().setAlwaysOnTop(true);
@@ -507,7 +525,19 @@ public class ToolBarConfigurationWindow extends JFrame {
 						_cancelButton.doClick();
 						break;
 					}
+				} else {
+
+					// Closes the tool bar configuration window
+					dispose();
+
+					// Enables the main window
+					MainWindow.getInstance().setEnabled(true);
+
+					// Shows the main window
+					MainWindow.getInstance().setAlwaysOnTop(true);
+					MainWindow.getInstance().setAlwaysOnTop(false);
 				}
+
 			}
 		});
 
@@ -529,10 +559,69 @@ public class ToolBarConfigurationWindow extends JFrame {
 				// Closes the window
 				dispose();
 
-				// Returns to the main window
+				// Closes the tool bar configuration window
+				dispose();
+
+				// Enables the main window
 				MainWindow.getInstance().setEnabled(true);
+
+				// Shows the main window
 				MainWindow.getInstance().setAlwaysOnTop(true);
 				MainWindow.getInstance().setAlwaysOnTop(false);
+			}
+		});
+
+		// MODIFY BUTTON
+		_modifyButton.addActionListener(new ActionListener() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
+			 * ActionEvent)
+			 */
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+
+				// Gets the language
+				AcideLanguage language = AcideLanguage.getInstance();
+
+				try {
+					language.getLanguage(ResourceManager.getInstance()
+							.getProperty("language"));
+				} catch (Exception exception) {
+
+					// Updates the log
+					AcideLog.getLog().error(exception.getMessage());
+					exception.printStackTrace();
+				}
+
+				// Gets the labels
+				final ResourceBundle labels = language.getLabels();
+
+				String name = _nameTextField.getText();
+				String action = _actionTextField.getText();
+				String hintText = _hintTextTextField.getText();
+				String icon = _iconTextField.getText();
+				String extraParameterString = (String) _extraParameterList.getSelectedValue();
+
+				// Creates the new shell command to update
+				ShellCommand shellCommand = new ShellCommand(name, action,
+						hintText, !icon.matches(""), icon, ParameterType.fromStringToEnum(extraParameterString));
+
+				// Updates the shell command list
+				_commandList.set(_rowShown, shellCommand);
+
+				// There are changes
+				_areThereChanges = true;
+
+				// Updates the table in the configuration window
+				modifyToolBarMatrixTable(shellCommand);
+				_tableModel.setValues(_tableColumns, _commandMatrixTable);
+				_tableModel.fireTableDataChanged();
+
+				// Updates the log
+				AcideLog.getLog().info(labels.getString("s259"));
 			}
 		});
 
@@ -549,13 +638,13 @@ public class ToolBarConfigurationWindow extends JFrame {
 			public void actionPerformed(ActionEvent actionEvent) {
 
 				// Checks if there is a selected row in the table
-				int selectedRow = _table.getSelectedRow();
+				_rowShown = _table.getSelectedRow();
 
 				// If there is a selected row
-				if (selectedRow != -1) {
+				if (_rowShown != -1) {
 
 					// Removes the command
-					_commandList.remove(selectedRow);
+					_commandList.remove(_rowShown);
 
 					// Updates the tool bar table matrix
 					setToolBarTableMatrix();
@@ -571,8 +660,8 @@ public class ToolBarConfigurationWindow extends JFrame {
 				}
 
 				// Updates the table model
-				_model.setValues(_tableColumns, _commandMatrixTable);
-				_model.fireTableDataChanged();
+				_tableModel.setValues(_tableColumns, _commandMatrixTable);
+				_tableModel.fireTableDataChanged();
 
 				// Updates the log
 				AcideLog.getLog().info(labels.getString("s168"));
@@ -592,9 +681,10 @@ public class ToolBarConfigurationWindow extends JFrame {
 			public void actionPerformed(ActionEvent actionEvent) {
 
 				String name = _nameTextField.getText();
-				String command = _commandTextField.getText();
-				String helpText = _helpTextTextField.getText();
-				String image = _imageTextField.getText();
+				String command = _actionTextField.getText();
+				String helpText = _hintTextTextField.getText();
+				String image = _iconTextField.getText();
+				String extraParameterString = (String) _extraParameterList.getSelectedValue();
 
 				// No empty name and command are accepted
 				if (!name.matches("") && !command.matches("")) {
@@ -604,10 +694,10 @@ public class ToolBarConfigurationWindow extends JFrame {
 					// Sets the image
 					if (image.equals(""))
 						editableToolBarCommand = new ShellCommand(name,
-								command, helpText);
+								command, helpText, ParameterType.fromStringToEnum(extraParameterString));
 					else
 						editableToolBarCommand = new ShellCommand(name,
-								command, helpText, true, image);
+								command, helpText, true, image, ParameterType.fromStringToEnum(extraParameterString));
 
 					// Adds the command to the list
 					_commandList.add(editableToolBarCommand);
@@ -616,8 +706,8 @@ public class ToolBarConfigurationWindow extends JFrame {
 					addCommand(editableToolBarCommand);
 
 					// Updates the model
-					_model.setValues(_tableColumns, _commandMatrixTable);
-					_model.fireTableDataChanged();
+					_tableModel.setValues(_tableColumns, _commandMatrixTable);
+					_tableModel.fireTableDataChanged();
 
 					// There are changes
 					_areThereChanges = true;
@@ -649,15 +739,17 @@ public class ToolBarConfigurationWindow extends JFrame {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
+
 				TextFile file = new TextFile();
 				String path = file.read();
-				_imageTextField.setText(path);
+				_iconTextField.setText(path);
 			}
 		});
 
 		// TABLE
 		_table.getSelectionModel().addListSelectionListener(
 				new ListSelectionListener() {
+
 					/*
 					 * (non-Javadoc)
 					 * 
@@ -669,66 +761,50 @@ public class ToolBarConfigurationWindow extends JFrame {
 					public void valueChanged(
 							ListSelectionEvent listSelectionEvent) {
 
+						// Gets the list selection model
 						ListSelectionModel listSelectionModel = (ListSelectionModel) listSelectionEvent
 								.getSource();
 
 						// There are selected rows
 						if (!listSelectionModel.isSelectionEmpty()) {
 
+							// Gets the row selected
 							_rowShown = listSelectionModel
 									.getMinSelectionIndex();
 
+							// NAME
 							_nameTextField
 									.setText(_commandMatrixTable[_rowShown][0]);
-							_commandTextField
+
+							// ACTION
+							_actionTextField
 									.setText(_commandMatrixTable[_rowShown][1]);
-							_helpTextTextField
+
+							// HINT TEXT
+							_hintTextTextField
 									.setText(_commandMatrixTable[_rowShown][2]);
-							_imageTextField
+
+							// ICON
+							_iconTextField
 									.setText(_commandMatrixTable[_rowShown][3]);
+
+							// EXTRA PARAMETER
+							if (_commandMatrixTable[_rowShown][4]
+									.matches(labels.getString("s1005")))
+								_extraParameterList.setSelectedIndex(0);
+							else if (_commandMatrixTable[_rowShown][4]
+									.matches(labels.getString("s1006")))
+								_extraParameterList.setSelectedIndex(1);
+							else
+								if (_commandMatrixTable[_rowShown][4]
+									.matches(labels.getString("s1007")))
+									_extraParameterList.setSelectedIndex(2);
+								else if (_commandMatrixTable[_rowShown][4]
+									.matches(labels.getString("s1008")))
+									_extraParameterList.setSelectedIndex(3);
 						}
 					}
 				});
-
-		// MODIFY BUTTON
-		_modifyButton.addActionListener(new ActionListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-
-				String name = _nameTextField.getText();
-				String command = _commandTextField.getText();
-				String helpText = _helpTextTextField.getText();
-				String image = _imageTextField.getText();
-				ShellCommand editableToolBarCommand;
-
-				if (image.equals("")) {
-					editableToolBarCommand = new ShellCommand(name, command,
-							helpText);
-					_commandList.set(_rowShown, editableToolBarCommand);
-				} else {
-					editableToolBarCommand = new ShellCommand(name, command,
-							helpText, true, image);
-					_commandList.set(_rowShown, editableToolBarCommand);
-				}
-
-				modifyToolBarMatrixTable(editableToolBarCommand);
-				_model.setValues(_tableColumns, _commandMatrixTable);
-				_model.fireTableDataChanged();
-
-				// There have been changes
-				_areThereChanges = true;
-
-				// Updates the log
-				AcideLog.getLog().info(labels.getString("s259"));
-			}
-		});
 
 		ActionListener escapePressed = new ActionListener() {
 			/*
@@ -740,12 +816,7 @@ public class ToolBarConfigurationWindow extends JFrame {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-
-				// Closes the window
-				dispose();
-				MainWindow.getInstance().setEnabled(true);
-				MainWindow.getInstance().setAlwaysOnTop(true);
-				MainWindow.getInstance().setAlwaysOnTop(false);
+				_acceptButton.doClick();
 			}
 		};
 		_cancelButton.registerKeyboardAction(escapePressed, "EscapeKey",
@@ -754,15 +825,26 @@ public class ToolBarConfigurationWindow extends JFrame {
 
 		// Loads the command list
 		if (isModified) {
+
 			try {
 
-				String current = ResourceManager.getInstance().getProperty(
-						"currentToolBarConfiguration");
-				ShellCommandList.loadAuxList(current);
-				_commandList = ShellCommandList.getAuxList();
+				// Gets the current tool bar configuration
+				String currentToolBarConfiguration = ResourceManager
+						.getInstance().getProperty(
+								"currentToolBarConfiguration");
+
+				// Loads the shell command auxiliar list
+				ShellCommandList.loadTemporalList(currentToolBarConfiguration);
+				_commandList = ShellCommandList.getTemporalList();
+
+				// Updates the tool bar table matrix
 				setToolBarTableMatrix();
-				_model.setValues(_tableColumns, _commandMatrixTable);
-				_model.fireTableDataChanged();
+
+				// Updates the table model data
+				_tableModel.setValues(_tableColumns, _commandMatrixTable);
+
+				// Refresh the table model
+				_tableModel.fireTableDataChanged();
 
 			} catch (Exception exception) {
 
@@ -838,17 +920,49 @@ public class ToolBarConfigurationWindow extends JFrame {
 	 */
 	private void setToolBarTableMatrix() {
 
-		String[][] data = new String[_commandList.size()][4];
+		// Gets the language
+		AcideLanguage language = AcideLanguage.getInstance();
+
+		try {
+			language.getLanguage(ResourceManager.getInstance().getProperty(
+					"language"));
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+
+		// Gets the labels
+		final ResourceBundle labels = language.getLabels();
+		
+		String[][] data = new String[_commandList.size()][5];
 		ShellCommand command;
 		for (int j = 0; j < _commandList.size(); j++) {
 			command = _commandList.get(j);
+
+			// NAME
 			data[j][0] = command.getName();
+
+			// ACTION
 			data[j][1] = command.getAction();
+
+			// HINT TEXT
 			data[j][2] = command.getHintText();
+
+			// ICON
 			if (command.getHasIcon())
 				data[j][3] = command.getIcon();
 			else
 				data[j][3] = "";
+
+			// EXTRA PARAMETER
+			switch(command.getParameterType()){
+			case NONE: data[j][4] = labels.getString("s1005"); break;
+			case TEXT: data[j][4] = labels.getString("s1006"); break;
+			case FILE: data[j][4] = labels.getString("s1007"); break;
+			case DIRECTORY: data[j][4] = labels.getString("s1008"); break;
+			}
 		}
 		_commandMatrixTable = data;
 	}
@@ -856,44 +970,108 @@ public class ToolBarConfigurationWindow extends JFrame {
 	/**
 	 * Adds a string command tool bar to the matrix.
 	 * 
-	 * @param modifiableCommand
-	 *            new modifiable command to add.
+	 * @param shellCommand
+	 *            new shell command to add.
 	 */
-	private void addCommand(ShellCommand modifiableCommand) {
+	private void addCommand(ShellCommand shellCommand) {
 
-		String[][] aux = new String[_commandList.size()][4];
+		// Gets the language
+		AcideLanguage language = AcideLanguage.getInstance();
+
+		try {
+			language.getLanguage(ResourceManager.getInstance().getProperty(
+					"language"));
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+
+		// Gets the labels
+		final ResourceBundle labels = language.getLabels();
+		
+		String[][] aux = new String[_commandList.size()][5];
 
 		for (int j = 0; j < _commandMatrixTable.length; j++) {
 			aux[j] = _commandMatrixTable[j];
 		}
 
-		aux[_commandMatrixTable.length][0] = modifiableCommand.getName();
-		aux[_commandMatrixTable.length][1] = modifiableCommand.getAction();
-		aux[_commandMatrixTable.length][2] = modifiableCommand.getHintText();
-		if (modifiableCommand.getHasIcon())
-			aux[_commandMatrixTable.length][3] = modifiableCommand.getIcon();
+		// NAME
+		aux[_commandMatrixTable.length][0] = shellCommand.getName();
+
+		// ACTION
+		aux[_commandMatrixTable.length][1] = shellCommand.getAction();
+
+		// HINT TEXT
+		aux[_commandMatrixTable.length][2] = shellCommand.getHintText();
+
+		// ICON
+		if (shellCommand.getHasIcon())
+			aux[_commandMatrixTable.length][3] = shellCommand.getIcon();
 		else
 			aux[_commandMatrixTable.length][3] = "";
+
+		// EXTRA PARAMETER
+		switch(shellCommand.getParameterType()){
+		case NONE: aux[_commandMatrixTable.length][4] = labels.getString("s1005"); break;
+		case TEXT: aux[_commandMatrixTable.length][4] = labels.getString("s1006"); break;
+		case FILE: aux[_commandMatrixTable.length][4] = labels.getString("s1007"); break;
+		case DIRECTORY: aux[_commandMatrixTable.length][4] = labels.getString("s1008"); break;
+		}
+
+		// Updates the current matrix table
 		_commandMatrixTable = aux;
 	}
 
 	/**
 	 * Modifies the tool bar matrix table at with the new data from the
-	 * modifiable command given as a parameter.
+	 * shell command given as a parameter.
 	 * 
-	 * @param modifiableCommand
-	 *            modifiable command which contains the data to modify the
+	 * @param shellCommand
+	 *            shell command which contains the data to modify the
 	 *            matrix table.
 	 */
-	private void modifyToolBarMatrixTable(ShellCommand modifiableCommand) {
+	private void modifyToolBarMatrixTable(ShellCommand shellCommand) {
 
-		_commandMatrixTable[_rowShown][0] = modifiableCommand.getName();
-		_commandMatrixTable[_rowShown][1] = modifiableCommand.getAction();
-		_commandMatrixTable[_rowShown][2] = modifiableCommand.getHintText();
-		if (modifiableCommand.getHasIcon())
-			_commandMatrixTable[_rowShown][3] = modifiableCommand.getIcon();
+		// Gets the language
+		AcideLanguage language = AcideLanguage.getInstance();
+
+		try {
+			language.getLanguage(ResourceManager.getInstance().getProperty(
+					"language"));
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+
+		// Gets the labels
+		final ResourceBundle labels = language.getLabels();
+		
+		// NAME
+		_commandMatrixTable[_rowShown][0] = shellCommand.getName();
+
+		// ACTION
+		_commandMatrixTable[_rowShown][1] = shellCommand.getAction();
+
+		// HINT TEXT
+		_commandMatrixTable[_rowShown][2] = shellCommand.getHintText();
+
+		// ICON
+		if (shellCommand.getHasIcon())
+			_commandMatrixTable[_rowShown][3] = shellCommand.getIcon();
 		else
 			_commandMatrixTable[_rowShown][3] = "";
+
+		// EXTRA PARAMETER
+		switch(shellCommand.getParameterType()){
+		case NONE: _commandMatrixTable[_rowShown][4] = labels.getString("s1005"); break;
+		case TEXT: _commandMatrixTable[_rowShown][4] = labels.getString("s1006"); break;
+		case FILE: _commandMatrixTable[_rowShown][4] = labels.getString("s1007"); break;
+		case DIRECTORY: _commandMatrixTable[_rowShown][4] = labels.getString("s1008"); break;
+		}
 	}
 
 	/**
