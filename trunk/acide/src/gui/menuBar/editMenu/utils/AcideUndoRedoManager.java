@@ -1,6 +1,33 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.editMenu.utils;
-
-import gui.mainWindow.MainWindow;
 
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
@@ -9,45 +36,12 @@ import javax.swing.text.AbstractDocument.DefaultDocumentEvent;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
-/************************************************************************
+/**
  * Undo redo manager of ACIDE - A Configurable IDE.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see UndoManager
- ***********************************************************************/
+ */
 public class AcideUndoRedoManager extends UndoManager {
 
 	/**
@@ -82,12 +76,8 @@ public class AcideUndoRedoManager extends UndoManager {
 	 * Adds a new undoable event to the undo redo manager of the new file
 	 * which has been opened in the file editor panel.
 	 */
-	public void update(){
+	public void update(DefaultStyledDocument document){
 			
-		// Gets the syntax document of the selected file editor panel
-		DefaultStyledDocument document = MainWindow.getInstance()
-				.getFileEditorManager().getSelectedFileEditorPanel().getSyntaxDocument();
-		
 		// Adds the undoable edit listener to support undoable events on it
 		document.addUndoableEditListener(new UndoableEditListener() {
 			/*

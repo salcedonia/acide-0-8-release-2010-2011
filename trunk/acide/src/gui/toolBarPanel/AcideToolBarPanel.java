@@ -1,9 +1,39 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.toolBarPanel;
 
-import gui.toolBarPanel.shellCommandToolBar.ShellCommandToolBar;
-import gui.toolBarPanel.staticToolBar.StaticToolBar;
+import gui.toolBarPanel.consoleCommandToolBar.AcideConsoleCommandToolBar;
+import gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -18,115 +48,90 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
-/************************************************************************
- * Tool bar panel of ACIDE - A Configurable IDE.
+/**
+ * ACIDE - A Configurable IDE tool bar panel.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see JPanel
- ***********************************************************************/
+ */
 public class AcideToolBarPanel extends JPanel {
 
 	/**
-	 * Acide tool bar panel class serial version UID.
+	 * ACIDE - A Configurable IDE tool bar panel class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * Main window image icon.
+	 * ACIDE - A Configurable IDE tool bar panel image icon.
 	 */
 	private static final ImageIcon LEFT_IMAGE_ICON = new ImageIcon(
 			"./resources/icons/toolBar/left.png");
 	/**
-	 * Main window image icon.
+	 * ACIDE - A Configurable IDE tool bar panel image icon.
 	 */
 	private static final ImageIcon RIGHT_IMAGE_ICON = new ImageIcon(
 			"./resources/icons/toolBar/right.png");
 	/**
-	 * Command tool bar.
+	 * ACIDE - A Configurable IDE tool bar panel tool bar.
 	 */
 	private JToolBar _toolBar;
 	/**
-	 * Tool bar scroll pane which contains the tool bar itself.
+	 * ACIDE - A Configurable IDE tool bar panel tool bar scroll pane which
+	 * contains the tool bar itself.
 	 */
 	private JScrollPane _toolBarScrollPane;
 	/**
-	 * Button left panel. It is used to encapsulate the button into it
-	 * so the programmer can define the preferred size of the button.
-	 * Otherwise because of the BorderLayout of the main panel displays
-	 * the button without it.
+	 * ACIDE - A Configurable IDE tool bar panel button left panel.
+	 * 
+	 * It is used to encapsulate the button into it so the programmer can define
+	 * the preferred size of the button. Otherwise because of the BorderLayout
+	 * of the main panel displays the button without it.
 	 */
 	private JPanel _buttonLeftPanel;
 	/**
-	 * Button right panel. It is used to encapsulate the button into it
-	 * so the programmer can define the preferred size of the button.
-	 * Otherwise because of the BorderLayout of the main panel displays
-	 * the button without it.
+	 * ACIDE - A Configurable IDE tool bar panel button right panel.
+	 * 
+	 * It is used to encapsulate the button into it so the programmer can define
+	 * the preferred size of the button. Otherwise because of the BorderLayout
+	 * of the main panel displays the button without it.
 	 */
 	private JPanel _buttonRightPanel;
 	/**
-	 * Scroll left button.
+	 * ACIDE - A Configurable IDE tool bar panel scroll left button.
 	 */
 	private JButton _scrollLeftButton;
 	/**
-	 * Scroll right button.
+	 * ACIDE - A Configurable IDE tool bar panel scroll right button.
 	 */
 	private JButton _scrollRightButton;
 	/**
-	 * Point component X used for calculating the place where the scroll bar
-	 * has to be settled down. 
+	 * ACIDE - A Configurable IDE tool bar panel point component X.
+	 * 
+	 * It is used for calculating the place where the scroll bar has to be
+	 * settled down.
 	 */
 	private int _pointX;
 	/**
-	 * Total width of the toolbar menu.
+	 * ACIDE - A Configurable IDE tool bar panel total width of the toolbar
+	 * menu.
 	 */
 	private int _totalWidth;
 	/**
-	 * Point where the scroll bar has to be settled down.
+	 * ACIDE - A Configurable IDE tool bar panel point where the scroll bar has
+	 * to be settled down.
 	 */
 	private Point point;
 	/**
-	 * Increment used for the displacement.
+	 * ACIDE - A Configurable IDE tool bar panel increment used for the
+	 * displacement.
 	 */
 	private final int INCREMENT = 20;
 
 	/**
-	 * Creates a new Acide tool bar panel.
+	 * Creates a new ACIDE - A Configurable IDE tool bar panel.
 	 */
 	public AcideToolBarPanel() {
 
@@ -140,13 +145,13 @@ public class AcideToolBarPanel extends JPanel {
 	}
 
 	/**
-	 * Creates the components.
+	 * Creates the ACIDE - A Configurable IDE tool bar panel components.
 	 */
 	private void initComponents() {
 
 		// SCROLL LEFT BUTTON
 		_scrollLeftButton = new JButton(LEFT_IMAGE_ICON);
-		_scrollLeftButton.setPreferredSize(new Dimension(30,32));
+		_scrollLeftButton.setPreferredSize(new Dimension(30, 32));
 		_scrollLeftButton.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -158,9 +163,9 @@ public class AcideToolBarPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 
-				// If is is below the threshold 
+				// If is is below the threshold
 				if (_pointX - INCREMENT >= 0)
-					
+
 					// Decrements normally
 					_pointX -= INCREMENT;
 				else
@@ -169,10 +174,10 @@ public class AcideToolBarPanel extends JPanel {
 
 				// Updates the point
 				point.x = _pointX;
-				
+
 				// Moves to the calculated point
 				_toolBarScrollPane.getViewport().setViewPosition(point);
-				
+
 				// Tells to the scroll pane to move there
 				_toolBarScrollPane.validate();
 			}
@@ -183,7 +188,7 @@ public class AcideToolBarPanel extends JPanel {
 
 		// SCROLL RIGHT BUTTON
 		_scrollRightButton = new JButton(RIGHT_IMAGE_ICON);
-		_scrollRightButton.setPreferredSize(new Dimension(30,32));
+		_scrollRightButton.setPreferredSize(new Dimension(30, 32));
 		_scrollRightButton.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -196,16 +201,16 @@ public class AcideToolBarPanel extends JPanel {
 			public void actionPerformed(ActionEvent actionEvent) {
 
 				// If it is below the bounds
-				if(_pointX + INCREMENT < _toolBarScrollPane.getVisibleRect().width)	
+				if (_pointX + INCREMENT < _toolBarScrollPane.getVisibleRect().width)
 					// Increments normally
 					_pointX += INCREMENT;
-					
+
 				// Updates the point
 				point.x = _pointX;
-				
+
 				// Moves to the calculated point
 				_toolBarScrollPane.getViewport().setViewPosition(point);
-				
+
 				// Tells to the scroll pane to move there
 				_toolBarScrollPane.validate();
 			}
@@ -213,7 +218,6 @@ public class AcideToolBarPanel extends JPanel {
 		_buttonRightPanel = new JPanel();
 		_buttonRightPanel.add(_scrollRightButton);
 		add(_buttonRightPanel, BorderLayout.LINE_END);
-		
 
 		// TOOL BAR SCROLL PANE
 		_toolBarScrollPane = new JScrollPane();
@@ -226,17 +230,15 @@ public class AcideToolBarPanel extends JPanel {
 	}
 
 	/**
-	 * Builds the Acide tool bar panel.
-	 * 
-	 * @return the Acide tool bar panel.
+	 * Builds the ACIDE - A Configurable IDE tool bar panel.
 	 */
 	public void buildAcideToolBarPanel() {
 
 		// Builds the static tool bar
-		addStaticToolBar(StaticToolBar.getInstance().build());
+		addStaticToolBar(AcideStaticToolBar.getInstance().build());
 
 		// Builds the modifiable tool bar
-		addShellCommandToolBar(ShellCommandToolBar.getInstance().build());
+		addConsoleCommandToolBar(AcideConsoleCommandToolBar.getInstance().build());
 
 		// Creates the components
 		initComponents();
@@ -256,11 +258,11 @@ public class AcideToolBarPanel extends JPanel {
 				_totalWidth = _toolBar.getBounds().width;
 				if (getBounds().width < _totalWidth) {
 					// added left/right buttons for side scrolling
-					_scrollLeftButton.setVisible(true);
-					_scrollRightButton.setVisible(true);
+					_buttonLeftPanel.setVisible(true);
+					_buttonRightPanel.setVisible(true);
 				} else {
-					_scrollLeftButton.setVisible(false);
-					_scrollRightButton.setVisible(false);
+					_buttonLeftPanel.setVisible(false);
+					_buttonRightPanel.setVisible(false);
 					_pointX = 0;
 				}
 				validate();
@@ -269,18 +271,20 @@ public class AcideToolBarPanel extends JPanel {
 	}
 
 	/**
-	 * Adds a shell command given as a parameter to the tool bar.
+	 * Adds a console command given as a parameter to the ACIDE - A Configurable
+	 * IDE tool bar panel.
 	 * 
-	 * @param shellCommandToolBar
-	 *            new shell command to add.
+	 * @param consoleCommandToolBar
+	 *            new console command to add.
 	 */
-	public void addShellCommandToolBar(ShellCommandToolBar shellCommandToolBar) {
+	public void addConsoleCommandToolBar(
+			AcideConsoleCommandToolBar consoleCommandToolBar) {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty(
+			language.getLanguage(AcideResourceManager.getInstance().getProperty(
 					"language"));
 		} catch (Exception exception) {
 
@@ -296,27 +300,28 @@ public class AcideToolBarPanel extends JPanel {
 		AcideLog.getLog().info(labels.getString("s130"));
 		_toolBar.addSeparator();
 
-		// Adds the static buttons
-		for (JButton staticButton : shellCommandToolBar)
-			_toolBar.add(staticButton);
+		// Adds the console command buttons
+		for (Component consoleCommandButton : consoleCommandToolBar)
+			_toolBar.add(consoleCommandButton);
 
 		// Updates the log
 		AcideLog.getLog().info(labels.getString("s125"));
 	}
 
 	/**
-	 * Adds the static tool bar command given as a parameter to the tool bar.
+	 * Adds the static tool bar command given as a parameter to the ACIDE - A
+	 * Configurable IDE tool bar panel.
 	 * 
 	 * @param staticToolBar
 	 *            static tool bar command to add.
 	 */
-	public void addStaticToolBar(StaticToolBar staticToolBar) {
+	public void addStaticToolBar(AcideStaticToolBar staticToolBar) {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty(
+			language.getLanguage(AcideResourceManager.getInstance().getProperty(
 					"language"));
 		} catch (Exception exception) {
 
@@ -332,7 +337,7 @@ public class AcideToolBarPanel extends JPanel {
 		_toolBar.removeAll();
 
 		// Adds the static buttons
-		for (JButton staticButton : staticToolBar)
+		for (Component staticButton : staticToolBar)
 			_toolBar.add(staticButton);
 
 		// Updates the log

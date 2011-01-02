@@ -1,8 +1,37 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.projectMenu.listeners;
 
+import es.configuration.project.AcideProjectConfiguration;
 import es.configuration.project.workbench.AcideWorkbenchManager;
-import es.explorer.ExplorerFile;
-import gui.mainWindow.MainWindow;
+import es.project.AcideProjectFile;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,45 +41,12 @@ import javax.swing.JOptionPane;
 
 import operations.log.AcideLog;
 
-/************************************************************************																
- * Compile menu item listener.											
+/**																
+ * ACIDE -A Configurable IDE project menu compile menu item listener.											
  *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
  * @version 0.8	
  * @see ActionListener																													
- ***********************************************************************/
+ */
 public class CompileMenuItemListener implements ActionListener {
 
 	/*
@@ -69,23 +65,23 @@ public class CompileMenuItemListener implements ActionListener {
 		try {
 			
 			// Is it possible to compile
-			if (MainWindow.getInstance().getProjectConfiguration().isCheckCompiler()) {
+			if (AcideProjectConfiguration.getInstance().isCheckCompiler()) {
 
 				String fileToCompile = "";
 
-				for (int i = 0; i < MainWindow.getInstance().getProjectConfiguration()
+				for (int i = 0; i < AcideProjectConfiguration.getInstance()
 						.getNumFilesFromList(); i++) {
 					
 					// IS COMPILABLE?
-					if (MainWindow.getInstance().getProjectConfiguration().getFileAt(i)
+					if (AcideProjectConfiguration.getInstance().getFileAt(i)
 							.isCompilableFile()){
 					
 						fileToCompile = fileToCompile
 								+ "\""
-								+ MainWindow.getInstance().getProjectConfiguration()
-										.getFileAt(i).getPath()
+								+ AcideProjectConfiguration.getInstance()
+										.getFileAt(i).getAbsolutePath()
 								+ "\""
-								+ MainWindow.getInstance().getProjectConfiguration()
+								+ AcideProjectConfiguration.getInstance()
 										.getSeparatorFile();
 					}
 				}
@@ -95,49 +91,46 @@ public class CompileMenuItemListener implements ActionListener {
 							fileToCompile.length() - 1);
 					
 					// If the compiler path has been defined
-					if (MainWindow.getInstance().getProjectConfiguration()
+					if (AcideProjectConfiguration.getInstance()
 							.getCompilerPath() != null)
 						
 						// EXECUTES THE COMPILATION
-						Runtime.getRuntime().exec(MainWindow.getInstance().getProjectConfiguration()
+						Runtime.getRuntime().exec(AcideProjectConfiguration.getInstance()
 								.getCompilerPath()
 								+ " "
-								+ MainWindow.getInstance().getProjectConfiguration()
+								+ AcideProjectConfiguration.getInstance()
 										.getCompilerArguments()
 								+ " "
 								+ fileToCompile);
 				}
 			} else {
 				
-				String extension = MainWindow.getInstance().getProjectConfiguration()
+				String extension = AcideProjectConfiguration.getInstance()
 						.getFileExtension();
 				
-				for (int i = 0; i < MainWindow.getInstance().getProjectConfiguration()
+				for (int i = 0; i < AcideProjectConfiguration.getInstance()
 						.getNumFilesFromList(); i++) {
 					
-					ExplorerFile file = MainWindow.getInstance()
-							.getProjectConfiguration().getFileAt(i);
+					AcideProjectFile file = AcideProjectConfiguration.getInstance().getFileAt(i);
 					
 					// Is not a directory
 					if (!file.isDirectory()) {
 						
 						// Gets the extension
-						String name = file.getPath();
+						String name = file.getAbsolutePath();
 						String ext = name.substring(
 								name.lastIndexOf(".") + 1, name.length());
 						
 						if (ext.equals(extension)) {
 							
-							if (MainWindow.getInstance().getProjectConfiguration()
+							if (AcideProjectConfiguration.getInstance()
 									.getCompilerPath() != null) {
 								
 								// EXECUTES THE COMPILATION
-								Runtime.getRuntime().exec(MainWindow.getInstance()
-										.getProjectConfiguration()
+								Runtime.getRuntime().exec(AcideProjectConfiguration.getInstance()
 										.getCompilerPath()
 										+ " "
-										+ MainWindow.getInstance()
-												.getProjectConfiguration()
+										+ AcideProjectConfiguration.getInstance()
 												.getCompilerArguments()
 										+ " \"" + name + "\"");
 							}

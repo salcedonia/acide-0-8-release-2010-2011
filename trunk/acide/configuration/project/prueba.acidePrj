@@ -1,22 +1,16 @@
 prueba
-./configuration/lexical/default.xml
+C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\project\prueba.acidePrj
+./configuration/window/configuration.xml
+C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\lexicon\des.xml
 ./configuration/grammars/bytes.jar
 null
 null
-./configuration/output/configuration.xml
-spanish
+./configuration/console/configuration.xml
+english
 ./configuration/menu/defaultAllOn.menuCfg
 C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\toolbar\des.TBcfg
-true
-true
-674
-703
-394
-27
-139
-458
-0
-4
+C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\fileEditor\configuration.xml
+6
 C:\Documents and Settings\Salcedonia\Escritorio\ups.txt
 ups.txt
 prueba
@@ -28,9 +22,9 @@ C:\Documents and Settings\Salcedonia\Escritorio\ds
 ds
 prueba
 false
+true
 false
-false
-false
+true
 C:\Documents and Settings\Salcedonia\Escritorio\sdad
 sdad
 prueba
@@ -42,6 +36,20 @@ C:\Documents and Settings\Salcedonia\Escritorio\aj.txt
 aj.txt
 prueba
 false
+false
+false
 true
+C:\Documents and Settings\Salcedonia\Escritorio\Nuevo Documento de textoasdasdasdasdasdasdasdasdas.txt
+Nuevo Documento de textoasdasdasdasdasdasdasdasdas.txt
+prueba
+false
+false
+false
+true
+C:\Documents and Settings\Salcedonia\Escritorio\p1asdasdasdasdasdasdsdasdasdasdasdasdasdasdasdasdasdasdasd.txt
+p1asdasdasdasdasdasdsdasdasdasdasdasdasdasdasdasdasdasdasd.txt
+prueba
+false
+false
 false
 true

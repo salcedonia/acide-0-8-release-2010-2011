@@ -1,6 +1,35 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.fileMenu;
 
-import es.configuration.menu.MenuConfiguration;
+import es.configuration.menu.AcideMenuConfiguration;
 import es.text.TextFile;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.fileMenu.listeners.CloseAllFilesMenuItemListener;
@@ -25,51 +54,18 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 
 import operations.factory.AcideIOFactory;
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
-/************************************************************************
+/**
  * File menu of ACIDE - A Configurable IDE.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see JMenu
- ***********************************************************************/
+ */
 public class FileMenu extends JMenu {
 
 	/**
@@ -228,10 +224,10 @@ public class FileMenu extends JMenu {
 	public void setLanguageLabels() {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty(
+			language.getLanguage(AcideResourceManager.getInstance().getProperty(
 					"language"));
 		} catch (Exception exception) {
 			exception.printStackTrace();
@@ -311,74 +307,74 @@ public class FileMenu extends JMenu {
 	 * @param language
 	 *            selected language.
 	 */
-	public void buildMenu(ResourceBundle labels, AcideLanguage language) {
+	public void buildMenu(ResourceBundle labels, AcideLanguageManager language) {
 
 		removeAll();
 
-		if (MenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME))
 			add(_newFile);
-		if (MenuConfiguration.getInstance().getIsDisplayed(OPEN_FILE_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(OPEN_FILE_NAME))
 			add(_openFile);
-		if (MenuConfiguration.getInstance().getIsDisplayed(OPEN_ALL_FILES_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(OPEN_ALL_FILES_NAME))
 			add(_openAllFiles);
-		if (MenuConfiguration.getInstance().getIsDisplayed(CLOSE_FILE_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(CLOSE_FILE_NAME))
 			add(_closeFile);
-		if (MenuConfiguration.getInstance()
+		if (AcideMenuConfiguration.getInstance()
 				.getIsDisplayed(CLOSE_ALL_FILES_NAME))
 			add(_closeAllFiles);
-		if ((MenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(
+		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						OPEN_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(
-						CLOSE_FILE_NAME) || MenuConfiguration.getInstance()
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						CLOSE_FILE_NAME) || AcideMenuConfiguration.getInstance()
 				.getIsDisplayed(CLOSE_ALL_FILES_NAME))
-				&& (MenuConfiguration.getInstance().getIsDisplayed(
+				&& (AcideMenuConfiguration.getInstance().getIsDisplayed(
 						SAVE_FILE_NAME)
-						|| MenuConfiguration.getInstance().getIsDisplayed(
-								SAVE_FILE_AS_NAME) || MenuConfiguration
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								SAVE_FILE_AS_NAME) || AcideMenuConfiguration
 						.getInstance().getIsDisplayed(SAVE_ALL_FILES_NAME)))
 			addSeparator();
-		if (MenuConfiguration.getInstance().getIsDisplayed(SAVE_FILE_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_FILE_NAME))
 			add(_saveFile);
-		if (MenuConfiguration.getInstance().getIsDisplayed(SAVE_FILE_AS_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_FILE_AS_NAME))
 			add(_saveFileAs);
-		if (MenuConfiguration.getInstance().getIsDisplayed(SAVE_ALL_FILES_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_ALL_FILES_NAME))
 			add(_saveAllFiles);
-		if ((MenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(
+		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						OPEN_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						CLOSE_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						CLOSE_ALL_FILES_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						SAVE_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(
-						SAVE_FILE_AS_NAME) || MenuConfiguration.getInstance()
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						SAVE_FILE_AS_NAME) || AcideMenuConfiguration.getInstance()
 				.getIsDisplayed(SAVE_ALL_FILES_NAME))
-				&& (MenuConfiguration.getInstance()
+				&& (AcideMenuConfiguration.getInstance()
 						.getIsDisplayed(PRINT_FILE_NAME)))
 			addSeparator();
 
-		if (MenuConfiguration.getInstance().getIsDisplayed(PRINT_FILE_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(PRINT_FILE_NAME))
 			add(_printFile);
 
-		if ((MenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(
+		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						SAVE_FILE_AS_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						SAVE_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						SAVE_ALL_FILES_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						PRINT_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(
-						CLOSE_FILE_NAME) || MenuConfiguration.getInstance()
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						CLOSE_FILE_NAME) || AcideMenuConfiguration.getInstance()
 				.getIsDisplayed(CLOSE_ALL_FILES_NAME))
-				&& MenuConfiguration.getInstance().getIsDisplayed(EXIT_NAME))
+				&& AcideMenuConfiguration.getInstance().getIsDisplayed(EXIT_NAME))
 			addSeparator();
 
-		if (MenuConfiguration.getInstance().getIsDisplayed(EXIT_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(EXIT_NAME))
 			add(_exit);
 	}
 
@@ -427,10 +423,10 @@ public class FileMenu extends JMenu {
 	public int saveOrSaveAS() {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty(
+			language.getLanguage(AcideResourceManager.getInstance().getProperty(
 					"language"));
 		} catch (Exception exception) {
 
@@ -591,10 +587,10 @@ public class FileMenu extends JMenu {
 	public void enableSaveFileAs() {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty(
+			language.getLanguage(AcideResourceManager.getInstance().getProperty(
 					"language"));
 		} catch (Exception exception) {
 

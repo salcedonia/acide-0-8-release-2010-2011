@@ -1,5 +1,35 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.fileEditor.fileEditorManager.utils.logic.closeButton.listeners;
 
+import es.configuration.project.AcideProjectConfiguration;
 import es.text.TextFile;
 import gui.fileEditor.fileEditorManager.utils.logic.closeButton.CloseButton;
 import gui.mainWindow.MainWindow;
@@ -11,59 +41,26 @@ import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.UIResource;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 import operations.factory.AcideIOFactory;
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
-/************************************************************************
- * Close button action listener.
+/**
+ * ACIDE - A Configurable IDE close button action listener.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see UIResource
  * @see AbstractAction
- ***********************************************************************/
+ */
 public class CloseButtonActionListener extends AbstractAction {
 
 	/**
-	 * Close button action listener class serial version UID.
+	 * ACIDE - A Configurable IDE close button action listener class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * Close button editor index.
+	 * ACIDE - A Configurable IDE close button editor index.
 	 */
 	private int _index;
 
@@ -88,12 +85,12 @@ public class CloseButtonActionListener extends AbstractAction {
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		boolean isCancelOption = false;
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty(
+			language.getLanguage(AcideResourceManager.getInstance().getProperty(
 					"language"));
 		} catch (Exception exception) {
 
@@ -162,7 +159,7 @@ public class CloseButtonActionListener extends AbstractAction {
 
 							// Updates the status bar
 							MainWindow.getInstance().getStatusBar()
-									.setMessage("");
+									.setStatusMessage(" ");
 						}
 					}
 				} else {
@@ -189,29 +186,26 @@ public class CloseButtonActionListener extends AbstractAction {
 				}
 
 				// Sets opened to false to the project file
-				for (int filPos = 0; filPos < MainWindow.getInstance()
-						.getProjectConfiguration().getFileListSize(); filPos++) {
+				for (int filPos = 0; filPos < AcideProjectConfiguration.getInstance().getFileListSize(); filPos++) {
 
-					if (MainWindow
-							.getInstance()
-							.getProjectConfiguration()
+					if (AcideProjectConfiguration.getInstance()
 							.getFileAt(filPos)
-							.getPath()
+							.getAbsolutePath()
 							.equals(MainWindow.getInstance()
 									.getFileEditorManager()
 									.getFileEditorPanelAt(_index)
 									.getAbsolutePath())) {
-						MainWindow.getInstance().getProjectConfiguration()
+						AcideProjectConfiguration.getInstance()
 								.getFileAt(filPos).setIsOpened(false);
 					}
 				}
 
 				// If it is not the default project
-				if (!MainWindow.getInstance().getProjectConfiguration()
+				if (!AcideProjectConfiguration.getInstance()
 						.isDefaultProject())
 
 					// Sets the project to modified
-					MainWindow.getInstance().getProjectConfiguration()
+					AcideProjectConfiguration.getInstance()
 							.setIsModified(true);
 
 				// Removes the tab
@@ -225,7 +219,7 @@ public class CloseButtonActionListener extends AbstractAction {
 						.remove(_index);
 
 				// Updates the status bar
-				MainWindow.getInstance().getStatusBar().setMessage("");
+				MainWindow.getInstance().getStatusBar().setStatusMessage(" ");
 			}
 			else
 				isCancelOption = true;
@@ -234,27 +228,24 @@ public class CloseButtonActionListener extends AbstractAction {
 			// Is not modified
 
 			// Sets opened to false to the project file
-			for (int filePos = 0; filePos < MainWindow.getInstance()
-					.getProjectConfiguration().getFileListSize(); filePos++) {
+			for (int filePos = 0; filePos < AcideProjectConfiguration.getInstance().getFileListSize(); filePos++) {
 
-				if (MainWindow
-						.getInstance()
-						.getProjectConfiguration()
+				if (AcideProjectConfiguration.getInstance()
 						.getFileAt(filePos)
-						.getPath()
+						.getAbsolutePath()
 						.equals(MainWindow.getInstance().getFileEditorManager()
 								.getFileEditorPanelAt(_index).getAbsolutePath())) {
-					MainWindow.getInstance().getProjectConfiguration()
+					AcideProjectConfiguration.getInstance()
 							.getFileAt(filePos).setIsOpened(false);
 				}
 			}
 
 			// Not default project
-			if (!MainWindow.getInstance().getProjectConfiguration()
+			if (!AcideProjectConfiguration.getInstance()
 					.isDefaultProject())
 
 				// Sets the project ot modified
-				MainWindow.getInstance().getProjectConfiguration()
+				AcideProjectConfiguration.getInstance()
 						.setIsModified(true);
 
 			// Removes the tab
@@ -262,7 +253,7 @@ public class CloseButtonActionListener extends AbstractAction {
 					.remove(_index);
 
 			// Updates the status bar
-			MainWindow.getInstance().getStatusBar().setMessage("");
+			MainWindow.getInstance().getStatusBar().setStatusMessage(" ");
 		}
 
 		// No more tabs?

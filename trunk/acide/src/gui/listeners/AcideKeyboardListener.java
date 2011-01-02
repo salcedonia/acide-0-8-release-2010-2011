@@ -1,8 +1,37 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.listeners;
 
 import gui.mainWindow.MainWindow;
-import gui.menuBar.editMenu.gui.replace.ReplaceWindow;
-import gui.menuBar.editMenu.gui.search.SearchWindow;
+import gui.menuBar.editMenu.gui.replace.AcideReplaceWindow;
+import gui.menuBar.editMenu.gui.search.AcideSearchWindow;
 
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
@@ -11,47 +40,14 @@ import java.util.Locale;
 
 import utils.OSValidator;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 
-/************************************************************************
+/**
  * ACIDE - A Configurable IDE keyboard listener.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see KeyAdapter
- ***********************************************************************/
+ */
 public class AcideKeyboardListener extends KeyAdapter {
 
 	/*
@@ -63,26 +59,44 @@ public class AcideKeyboardListener extends KeyAdapter {
 	public void keyPressed(KeyEvent keyEvent) {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		String selectedText = null;
-		int numEditor = MainWindow.getInstance().getFileEditorManager()
+		
+		// Gets the selected file editor panel index
+		int selectedFileEditorPanelIndex = MainWindow.getInstance().getFileEditorManager()
 				.getSelectedFileEditorPanelIndex();
 
 		// ESCAPE
 		if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			if (SearchWindow.getInstance().isFocused())
-				SearchWindow.getInstance().dispose();
-			if (ReplaceWindow.getInstance().isFocused())
-				ReplaceWindow.getInstance().dispose();
+			
+			// If the Search window is focused
+			if (AcideSearchWindow.getInstance().isFocused())
+				
+				// Closes it
+				AcideSearchWindow.getInstance().dispose();
+			
+			// If the Replace window is focused
+			if (AcideReplaceWindow.getInstance().isFocused())
+				
+				// Closes it
+				AcideReplaceWindow.getInstance().dispose();
 		}
 
 		// ENTER
 		if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
-			if (SearchWindow.getInstance().isFocused())
-				SearchWindow.getInstance().getSearchButton().doClick();
-			if (ReplaceWindow.getInstance().isFocused())
-				ReplaceWindow.getInstance().getSearchButton().doClick();
+			
+			// If the Search window is focused
+			if (AcideSearchWindow.getInstance().isFocused())
+				
+				// Does the search button action in the search window
+				AcideSearchWindow.getInstance().getSearchButton().doClick();
+			
+			// If the Search window is focused
+			if (AcideReplaceWindow.getInstance().isFocused())
+				
+				// Does the search button action in the replace window
+				AcideReplaceWindow.getInstance().getSearchButton().doClick();
 		}
 
 		// F3 -> FORWARD SEARCH
@@ -90,173 +104,248 @@ public class AcideKeyboardListener extends KeyAdapter {
 
 			// Gets the selected in the active editor
 			selectedText = MainWindow.getInstance().getFileEditorManager()
-					.getFileEditorPanelAt(numEditor).getActiveTextEditionArea()
+					.getFileEditorPanelAt(selectedFileEditorPanelIndex).getActiveTextEditionArea()
 					.getSelectedText();
 
 			// If there is something selected
 			if (selectedText != null) {
 
-				SearchWindow.getInstance().setSearchTextFieldText(selectedText);
-				SearchWindow.getInstance().setCurrentDocumentRadioButton(true);
+				// Updates the selected text
+				AcideSearchWindow.getInstance().setSearchTextFieldText(selectedText);
+				
+				// Enables the current document radio button in the search window
+				AcideSearchWindow.getInstance().setCurrentDocumentRadioButton(true);
 				
 				// SHIFT + F3 -> BACKWARD SEARCH 
 				if (keyEvent.isShiftDown())
-
-					SearchWindow.getInstance().setBackwardRadioButton(true);
+					
+					// Enables the backward radio button
+					AcideSearchWindow.getInstance().setBackwardRadioButton(true);
 				else 
-					SearchWindow.getInstance().setForwardRadioButton(true);
+					// Enables the forward radio button
+					AcideSearchWindow.getInstance().setForwardRadioButton(true);
 				
-				// SEARCH
-				SearchWindow.getInstance().getSearchButton().doClick();
+				// Does the search in the selected direction
+				AcideSearchWindow.getInstance().getSearchButton().doClick();
 			}
 		}
 
 		// SEARCH
-		SearchWindow.getInstance().setCurrentPosition(-2);
-		SearchWindow.getInstance().setIsCycle(false);
-		SearchWindow.getInstance().setIsEnd(false);
-		SearchWindow.getInstance().getSearch().setTemporalPosition(-2);
-		SearchWindow.getInstance().getSearch().setIsCycle(false);
-		SearchWindow.getInstance().setIsCycle(false);
-		SearchWindow.getInstance().setSelectedText(null);
-		SearchWindow.setIsFirst(true);
+		AcideSearchWindow.getInstance().setCurrentPosition(-2);
+		AcideSearchWindow.getInstance().setIsCycle(false);
+		AcideSearchWindow.getInstance().setIsEnd(false);
+		AcideSearchWindow.getInstance().getSearch().setTemporalPosition(-2);
+		AcideSearchWindow.getInstance().getSearch().setIsCycle(false);
+		AcideSearchWindow.getInstance().setIsCycle(false);
+		AcideSearchWindow.getInstance().setSelectedText(null);
+		AcideSearchWindow.setIsFirst(true);
+		
+		// If there is selected text
 		if (selectedText != null) {
-			SearchWindow.getInstance().getSelectedTextRadioButton()
+			
+			// Enables the selected text radio button in the search window
+			AcideSearchWindow.getInstance().getSelectedTextRadioButton()
 					.setSelected(true);
-			SearchWindow.getInstance().getAllRadioButton().setEnabled(false);
+			
+			// Disables the all radio button in the search window
+			AcideSearchWindow.getInstance().getAllRadioButton().setEnabled(false);
 		} else {
-			SearchWindow.getInstance().getCurrentDocumentRadioButton()
+			
+			// Enables the current document radio button in the search window
+			AcideSearchWindow.getInstance().getCurrentDocumentRadioButton()
 					.setSelected(true);
-			SearchWindow.getInstance().getAllRadioButton().setEnabled(true);
+			
+			// Enables the all radio button in the search window
+			AcideSearchWindow.getInstance().getAllRadioButton().setEnabled(true);
 		}
-		// REPLACE
-		ReplaceWindow.getInstance().setCurrentPosition(-2);
-		ReplaceWindow.getInstance().setIsCycle(false);
-		ReplaceWindow.getInstance().setIsEnd(false);
-		ReplaceWindow.getInstance().getSearch().setTemporalPosition(-2);
-		ReplaceWindow.getInstance().getSearch().setIsCycle(false);
-		ReplaceWindow.getInstance().setIsCycle(false);
-		ReplaceWindow.getInstance().setSelectedText(null);
-		ReplaceWindow.setIsFirstSearch(true);
-		ReplaceWindow.setIsFirstReplacement(true);
-		if (selectedText != null) {
-			ReplaceWindow.getInstance().getSelectedTextRadioButton()
-					.setSelected(true);
-			ReplaceWindow.getInstance().getAllRadioButton().setEnabled(false);
-		} else {
-			ReplaceWindow.getInstance().getCurrentDocumentRadioButton()
-					.setSelected(false);
-			ReplaceWindow.getInstance().getAllRadioButton().setEnabled(true);
-		}
-
-		// SEARCH
+		
+		// If the user press CTRL + F in English or CTRL + B in Spanish
 		if (((language.getCurrentLocale().equals(new Locale("en", "EN"))) && (keyEvent
 				.isControlDown() && keyEvent.getKeyCode() == KeyEvent.VK_F))
 				|| ((language.getCurrentLocale().equals(new Locale("es", "ES"))) && (keyEvent
 						.isControlDown() && keyEvent.getKeyCode() == KeyEvent.VK_B))) {
+			
+			// Gets the selected text
 			selectedText = MainWindow.getInstance().getFileEditorManager()
-					.getFileEditorPanelAt(numEditor).getActiveTextEditionArea()
+					.getFileEditorPanelAt(selectedFileEditorPanelIndex).getActiveTextEditionArea()
 					.getSelectedText();
-			if (SearchWindow.getInstance().isVisible())
-				SearchWindow.getInstance().dispose();
+			
+			// If the search window is visible
+			if (AcideSearchWindow.getInstance().isVisible())
+				
+				// Closes it
+				AcideSearchWindow.getInstance().dispose();
+			
+			// If there is selected text
 			if (selectedText != null) {
-				SearchWindow.getInstance().getSelectedTextRadioButton()
+				
+				// Enables the selected text radio button in the search window
+				AcideSearchWindow.getInstance().getSelectedTextRadioButton()
 						.setSelected(true);
-				SearchWindow.getInstance().getAllRadioButton()
+				
+				// Disables the all radio button in the search window
+				AcideSearchWindow.getInstance().getAllRadioButton()
 						.setEnabled(false);
-				SearchWindow.getInstance().setSearchTextFieldText("");
+				
+				// Sets the search text field to empty in the search window
+				AcideSearchWindow.getInstance().setSearchTextFieldText("");
 
 			} else {
-				SearchWindow.getInstance().getCurrentDocumentRadioButton()
+				
+				// Disables the current document radio button in the search window
+				AcideSearchWindow.getInstance().getCurrentDocumentRadioButton()
 						.setSelected(false);
-				SearchWindow.getInstance().getAllRadioButton().setEnabled(true);
-				SearchWindow.getInstance().setSearchTextFieldText("");
+				
+				// Enables the all radio button in the search window
+				AcideSearchWindow.getInstance().getAllRadioButton().setEnabled(true);
+				
+				// Sets the search text field to empty in the search window
+				AcideSearchWindow.getInstance().setSearchTextFieldText("");
 			}
 		}
-
+		
 		// REPLACE
+		AcideReplaceWindow.getInstance().setCurrentPosition(-2);
+		AcideReplaceWindow.getInstance().setIsCycle(false);
+		AcideReplaceWindow.getInstance().setIsEnd(false);
+		AcideReplaceWindow.getInstance().getSearch().setTemporalPosition(-2);
+		AcideReplaceWindow.getInstance().getSearch().setIsCycle(false);
+		AcideReplaceWindow.getInstance().setIsCycle(false);
+		AcideReplaceWindow.getInstance().setSelectedText(null);
+		AcideReplaceWindow.setIsFirstSearch(true);
+		AcideReplaceWindow.setIsFirstReplacement(true);
+		
+		// If there is selected text
+		if (selectedText != null) {
+			
+			// Enables the selected text radio button in the replace window
+			AcideReplaceWindow.getInstance().getSelectedTextRadioButton()
+					.setSelected(true);
+			
+			// Disables the all radio button in the replace window
+			AcideReplaceWindow.getInstance().getAllRadioButton().setEnabled(false);
+		} else {
+			
+			// Disables the current document radio button in the replace window
+			AcideReplaceWindow.getInstance().getCurrentDocumentRadioButton()
+					.setSelected(false);
+			
+			// Enables the all radio button in the replace window
+			AcideReplaceWindow.getInstance().getAllRadioButton().setEnabled(true);
+		}
+
+		// If the user press CTRL + L in English or CTRL + R in Spanish
 		if (((language.getCurrentLocale().equals(new Locale("en", "EN"))) && (keyEvent
 				.isControlDown() && keyEvent.getKeyCode() == KeyEvent.VK_L))
 				|| ((language.getCurrentLocale().equals(new Locale("es", "ES"))) && (keyEvent
 						.isControlDown() && keyEvent.getKeyCode() == KeyEvent.VK_R))) {
-			if (ReplaceWindow.getInstance().isVisible())
-				ReplaceWindow.getInstance().dispose();
+			
+			// If the replace window is visible
+			if (AcideReplaceWindow.getInstance().isVisible())
+				
+				// Closes it
+				AcideReplaceWindow.getInstance().dispose();
+			
+			// Initializes the selected text
 			selectedText = null;
-			numEditor = MainWindow.getInstance().getFileEditorManager()
+			
+			// Gets the selected file editor panel index
+			selectedFileEditorPanelIndex = MainWindow.getInstance().getFileEditorManager()
 					.getSelectedFileEditorPanelIndex();
+			
+			// Updates the selected text
 			selectedText = MainWindow.getInstance().getFileEditorManager()
-					.getFileEditorPanelAt(numEditor).getActiveTextEditionArea()
+					.getFileEditorPanelAt(selectedFileEditorPanelIndex).getActiveTextEditionArea()
 					.getSelectedText();
+			
+			// If there is selected text
 			if (selectedText != null) {
-				ReplaceWindow.getInstance().getSelectedTextRadioButton()
+				
+				// Enables the selected text radio button in the replace window
+				AcideReplaceWindow.getInstance().getSelectedTextRadioButton()
 						.setSelected(true);
-				ReplaceWindow.getInstance().getAllRadioButton()
+				
+				// Disables the all radio button in the replace window
+				AcideReplaceWindow.getInstance().getAllRadioButton()
 						.setEnabled(false);
-				ReplaceWindow.getInstance().setReplaceTextField("");
+				
+				// Sets the replace text field to empty in the replace window
+				AcideReplaceWindow.getInstance().setReplaceTextField("");
 			} else {
-				ReplaceWindow.getInstance().getCurrentDocumentRadioButton()
+				
+				// Enables the current document radio button in the replace window
+				AcideReplaceWindow.getInstance().getCurrentDocumentRadioButton()
 						.setSelected(true);
-				ReplaceWindow.getInstance().getAllRadioButton()
+				
+				// Enables the all radio button in the replace window
+				AcideReplaceWindow.getInstance().getAllRadioButton()
 						.setEnabled(true);
-				ReplaceWindow.getInstance().setReplaceTextField("");
+				
+				// Sets the replace text field to empty in the replace window
+				AcideReplaceWindow.getInstance().setReplaceTextField("");
 			}
 		}
-
+		
 		// CAPS LOCK
 		if (keyEvent.getKeyCode() == KeyEvent.VK_CAPS_LOCK) {
 
-			// CAPS LOCK ONLY VALID IN WINDOWS
+			// CAPS LOCK only valid in WINDOWS
 			if (OSValidator.isWindows()) {
+				
+				// Gets the state
 				boolean state = Toolkit.getDefaultToolkit().getLockingKeyState(
 						keyEvent.getKeyCode());
-				if (state)
+				
+				// Always the opposite
+				if (!state)
 					MainWindow.getInstance().getStatusBar().setCapsLock("CAPS");
 				else
-					MainWindow.getInstance().getStatusBar().setCapsLock("");
+					MainWindow.getInstance().getStatusBar().setCapsLock("    ");
 			} else
-				MainWindow.getInstance().getStatusBar().setCapsLock("");
-
-			MainWindow.getInstance().validate();
-			MainWindow.getInstance().repaint();
-
+				MainWindow.getInstance().getStatusBar().setCapsLock("    ");
 		}
 
 		// NUM LOCK
 		if (keyEvent.getKeyCode() == KeyEvent.VK_NUM_LOCK) {
 
-			// NUM LOCK ONLY VALID IN WINDOWS
+			// NUM LOCK only valid WINDOWS
 			if (OSValidator.isWindows()) {
 
+				// Gets the state
 				boolean state = Toolkit.getDefaultToolkit().getLockingKeyState(
 						keyEvent.getKeyCode());
-				if (state)
-					MainWindow.getInstance().getStatusBar().setNumLock("NUM");
+				
+				// Always the opposite
+				if (!state)
+					MainWindow.getInstance().getStatusBar().setNumLockMessage("NUM");
 				else
-					MainWindow.getInstance().getStatusBar().setNumLock("");
+					MainWindow.getInstance().getStatusBar().setNumLockMessage("   ");
 			} else
-				MainWindow.getInstance().getStatusBar().setNumLock("");
-
-			MainWindow.getInstance().validate();
-			MainWindow.getInstance().repaint();
+				MainWindow.getInstance().getStatusBar().setNumLockMessage("   ");
 		}
 
 		// SCROLL LOCK
 		if (keyEvent.getKeyCode() == KeyEvent.VK_SCROLL_LOCK) {
 
-			// SCROLL LOCK ONLY VALID IN WINDOWS
+			// SCROLL LOCK only valid in WINDOWS
 			if (OSValidator.isWindows()) {
+				
+				// Gets the state
 				boolean state = Toolkit.getDefaultToolkit().getLockingKeyState(
 						keyEvent.getKeyCode());
-				if (state)
+				
+				// Always the opposite
+				if (!state)
 					MainWindow.getInstance().getStatusBar()
-							.setScrollLock("SCROLL");
+							.setScrollLockMessage("SCROLL");
 				else
-					MainWindow.getInstance().getStatusBar().setScrollLock("");
+					MainWindow.getInstance().getStatusBar().setScrollLockMessage("     ");
 			} else
-				MainWindow.getInstance().getStatusBar().setScrollLock("");
-
-			MainWindow.getInstance().validate();
-			MainWindow.getInstance().repaint();
+				MainWindow.getInstance().getStatusBar().setScrollLockMessage("     ");
 		}
+		
+		// Updates the main window
+		MainWindow.getInstance().validate();
+		MainWindow.getInstance().repaint();
 	}
 }

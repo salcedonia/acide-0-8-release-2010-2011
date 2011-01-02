@@ -1,69 +1,65 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package operations.factory;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
+import gui.consolePanel.AcideConsolePanel;
+import gui.consolePanel.utils.AcideConsoleDisplayOptionsWindow;
 import gui.explorerPanel.AcideExplorerPanel;
 import gui.fileEditor.fileEditorManager.AcideFileEditorManager;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.Menu;
-import gui.menuBar.configurationMenu.grammarMenu.gui.GrammarConfigurationWindow;
-import gui.menuBar.configurationMenu.lexiconMenu.gui.LexiconConfigurationWindow;
-import gui.menuBar.configurationMenu.menuMenu.gui.MenuConfigurationWindow;
-import gui.menuBar.configurationMenu.outputMenu.gui.ExternalCommandConfigurationWindow;
-import gui.menuBar.configurationMenu.outputMenu.gui.OutputConfigurationWindow;
-import gui.menuBar.configurationMenu.toolBarMenu.gui.ToolBarConfigurationWindow;
-import gui.menuBar.editMenu.gui.replace.ReplaceWindow;
-import gui.menuBar.editMenu.gui.search.SearchWindow;
+import gui.menuBar.configurationMenu.consoleMenu.gui.AcideExternalCommandConfigurationWindow;
+import gui.menuBar.configurationMenu.consoleMenu.gui.AcideConsoleConfigurationWindow;
+import gui.menuBar.configurationMenu.grammarMenu.gui.AcideGrammarConfigurationWindow;
+import gui.menuBar.configurationMenu.lexiconMenu.gui.AcideLexiconConfigurationWindow;
+import gui.menuBar.configurationMenu.menuMenu.gui.AcideMenuConfigurationWindow;
+import gui.menuBar.configurationMenu.toolBarMenu.gui.AcideToolBarConfigurationWindow;
+import gui.menuBar.editMenu.gui.replace.AcideReplaceWindow;
+import gui.menuBar.editMenu.gui.search.AcideSearchWindow;
 import gui.menuBar.fileMenu.gui.PrintConfigurationWindow;
-import gui.menuBar.helpMenu.gui.AboutUsWindow;
-import gui.menuBar.projectMenu.gui.CompilerConfigurationWindow;
-import gui.menuBar.projectMenu.gui.ExecutionConfigurationWindow;
-import gui.menuBar.projectMenu.gui.NewLexiconConfigurationWindow;
-import gui.menuBar.projectMenu.gui.NewProjectConfigurationWindow;
+import gui.menuBar.helpMenu.gui.AcideAboutUsWindow;
+import gui.menuBar.projectMenu.gui.AcideCompilerConfigurationWindow;
+import gui.menuBar.projectMenu.gui.AcideExecutionConfigurationWindow;
+import gui.menuBar.projectMenu.gui.AcideNewLexiconConfigurationWindow;
+import gui.menuBar.projectMenu.gui.AcideNewProjectConfigurationWindow;
 import gui.menuBar.viewMenu.utils.AcideLogTab;
-import gui.outputPanel.AcideOutputPanel;
-import gui.outputPanel.utils.ShellDisplayOptionsWindow;
 import gui.statusBarPanel.AcideStatusBar;
 import gui.toolBarPanel.AcideToolBarPanel;
 
-/************************************************************************																
+/**																
  * ACIDE - A Configurable IDE class which creates the GUI components of the
  * application.											
  *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
  * @version 0.8																														
- ***********************************************************************/
+ */
 public class AcideGUIFactory {
 
 	/**
@@ -83,80 +79,80 @@ public class AcideGUIFactory {
 	}
 
 	/**
-	 * Builds the main window of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE main window.
 	 * 
-	 * @return the main window of ACIDE - A Configurable IDE.
+	 * @return the ACIDE - A Configurable IDE main window.
 	 * @see MainWindow
 	 */
-	public MainWindow buildMainWindow() {
+	public MainWindow buildAcideMainWindow() {
 		return new MainWindow();
 	}
 
 	/**
-	 * Builds the menu of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE menu.
 	 * 
-	 * @return the menu of ACIDE - A Configurable IDE.
+	 * @return the ACIDE - A Configurable IDE menu.
 	 * @see Menu
 	 */
-	public Menu buildMenu() {
+	public Menu buildAcideMenu() {
 		return new Menu();
 	}
 
 	/**
-	 * Builds the about us window of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE about us window.
 	 * 
-	 * @return the about us window of ACIDE - A Configurable IDE.
-	 * @see AboutUsWindow
+	 * @return the ACIDE - A Configurable IDE about us window.
+	 * @see AcideAboutUsWindow
 	 */
-	public AboutUsWindow buildAboutUsWindow() {
-		return new AboutUsWindow();
+	public AcideAboutUsWindow buildAcideAboutUsWindow() {
+		return new AcideAboutUsWindow();
 	}
 
 	/**
-	 * Builds the replace window of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE replace window.
 	 * 
-	 * @return the replace window of ACIDE - A Configurable IDE.
-	 * @see ReplaceWindow
+	 * @return the ACIDE - A Configurable IDE replace window.
+	 * @see AcideReplaceWindow
 	 */
-	public ReplaceWindow buildReplaceWindow() {
-		return new ReplaceWindow();
+	public AcideReplaceWindow buildAcideReplaceWindow() {
+		return new AcideReplaceWindow();
 	}
 
 	/**
-	 * Builds the search window of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE search window.
 	 * 
-	 * @return the search window of ACIDE - A Configurable IDE.
-	 * @see SearchWindow
+	 * @return the ACIDE - A Configurable IDE search window.
+	 * @see AcideSearchWindow
 	 */
-	public SearchWindow buildSearchWindow() {
-		return new SearchWindow();
+	public AcideSearchWindow buildAcideSearchWindow() {
+		return new AcideSearchWindow();
 	}
 
 	/**
-	 * Builds the tool bar of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE tool bar panel.
 	 * 
-	 * @return the tool bar of ACIDE - A Configurable IDE.
+	 * @return the ACIDE - A Configurable IDE tool bar panel.
 	 * @see AcideToolBarPanel
 	 */
-	public AcideToolBarPanel buildToolBar() {
+	public AcideToolBarPanel buildAcideToolBarPanel() {
 		return new AcideToolBarPanel();
 	}
 
 	/**
-	 * Builds the output of ACIDE - A Configurable IDE initially modifiable by
+	 * Builds the ACIDE - A Configurable IDE console panel initially modifiable by
 	 * default.
 	 * 
-	 * @return the output of ACIDE - A Configurable IDE.
-	 * @see AcideOutputPanel
+	 * @return the ACIDE - A Configurable IDE console panel.
+	 * @see AcideConsolePanel
 	 */
-	public AcideOutputPanel buildAcideOutputPanel() {
-		return new AcideOutputPanel(true);
+	public AcideConsolePanel buildAcideConsolePanel() {
+		return new AcideConsolePanel(true);
 	}
 
 	/**
-	 * Builds the explorer of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE explorer panel.
 	 * 
-	 * @return the explorer of ACIDE - A Configurable IDE.
+	 * @return the ACIDE - A Configurable IDE explorer panel.
 	 * @see AcideExplorerPanel
 	 */
 	public AcideExplorerPanel buildAcideExplorerPanel() {
@@ -164,56 +160,54 @@ public class AcideGUIFactory {
 	}
 
 	/**
-	 * Build the menu configuration window of ACIDE - A Configurable IDE.
+	 * Build the ACIDE - A Configurable IDE menu configuration window.
 	 * 
 	 * @param forModify
 	 *            indicates if the menu configuration window has to be used to
 	 *            modify the menu configuration or not.
-	 * @return the menu configuration window of ACIDE - A Configurable IDE.
-	 * @see MenuConfigurationWindow
+	 * @return the ACIDE - A Configurable IDE menu configuration window.
+	 * @see AcideMenuConfigurationWindow
 	 */
-	public MenuConfigurationWindow buildMenuGUI(boolean forModify) {
-		return new MenuConfigurationWindow(forModify);
+	public AcideMenuConfigurationWindow buildAcideMenuConfigurationWindow(boolean forModify) {
+		return new AcideMenuConfigurationWindow(forModify);
 	}
 
 	/**
-	 * Builds the grammar configuration window of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE grammar configuration window.
 	 * 
 	 * @param forModify
 	 *            indicates if the grammar configuration window has to be used
 	 *            to modify the grammar configuration or not.
-	 * @return The grammar configuration window of ACIDE - A Configurable IDE.
-	 * @see GrammarConfigurationWindow
+	 * @return the ACIDE - A Configurable IDE grammar configuration window.
+	 * @see AcideGrammarConfigurationWindow
 	 */
-	public GrammarConfigurationWindow buildGrammarGUI(boolean forModify) {
-		return new GrammarConfigurationWindow(forModify);
+	public AcideGrammarConfigurationWindow buildAcideGrammarConfigurationWindow(boolean forModify) {
+		return new AcideGrammarConfigurationWindow(forModify);
 	}
 
 	/**
-	 * Builds the lexicon configuration window of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE lexicon configuration window.
 	 * 
-	 * @return the lexicon configuration window of ACIDE - A Configurable IDE.
-	 * @see LexiconConfigurationWindow
+	 * @return the ACIDE - A Configurable IDE lexicon configuration window.
+	 * @see AcideLexiconConfigurationWindow
 	 */
-	public LexiconConfigurationWindow buildLexiconConfigurationWindow() {
-		return new LexiconConfigurationWindow();
+	public AcideLexiconConfigurationWindow buildAcideLexiconConfigurationWindow() {
+		return new AcideLexiconConfigurationWindow();
 	}
 
 	/**
-	 * Builds the editor manager of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE file editor manager.
 	 * 
-	 * @return the editor manager of ACIDE - A Configurable IDE.
+	 * @return the ACIDE - A Configurable IDE file editor manager.
 	 */
 	public AcideFileEditorManager buildAcideFileEditorManager() {
 		return new AcideFileEditorManager();
 	}
 
 	/**
-	 * Builds the log tab to be displayed on the editor of ACIDE - A
-	 * Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE log tab to be displayed on the file editor.
 	 * 
-	 * @return the log tab to be displayed on the editor of ACIDE - A
-	 *         Configurable IDE.
+	 * @return the ACIDE - A Configurable IDE log tab to be displayed on the file editor.
 	 * @see AcideLogTab
 	 */
 	public AcideLogTab buildAcideLogTab() {
@@ -221,78 +215,73 @@ public class AcideGUIFactory {
 	}
 
 	/**
-	 * Builds the language of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE language manager.
 	 * 
-	 * @return the language of ACIDE - A Configurable IDE.
-	 * @see AcideLanguage
+	 * @return the ACIDE - A Configurable IDE language manager.
+	 * @see AcideLanguageManager
 	 */
-	public AcideLanguage buildAcideLanguage() {
-		return new AcideLanguage();
+	public AcideLanguageManager buildAcideLanguageManager() {
+		return new AcideLanguageManager();
 	}
 
 	/**
-	 * Build the new lexicon configuration window of ACIDE - A Configurable IDE.
+	 * Build the ACIDE - A Configurable IDE new lexicon configuration window.
 	 * 
-	 * @return the new lexicon configuration window of ACIDE - A Configurable
-	 *         IDE.
-	 * @see NewLexiconConfigurationWindow
+	 * @return the ACIDE - A Configurable IDE new lexicon configuration window.
+	 * @see AcideNewLexiconConfigurationWindow
 	 */
-	public NewLexiconConfigurationWindow buildNewLexiconConfigurationWindow() {
-		return new NewLexiconConfigurationWindow();
+	public AcideNewLexiconConfigurationWindow buildAcideNewLexiconConfigurationWindow() {
+		return new AcideNewLexiconConfigurationWindow();
 	}
 
 	/**
-	 * Builds the new project configuration window of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE new project configuration window.
 	 * 
-	 * @return the new project configuration window of ACIDE - A Configurable
-	 *         IDE.
-	 * @see NewProjectConfigurationWindow
+	 * @return the ACIDE - A Configurable IDE new project configuration window.
+	 * @see AcideNewProjectConfigurationWindow
 	 */
-	public NewProjectConfigurationWindow buildNewProjectConfigurationWindow() {
-		return new NewProjectConfigurationWindow();
+	public AcideNewProjectConfigurationWindow buildNewProjectConfigurationWindow() {
+		return new AcideNewProjectConfigurationWindow();
 	}
 
 	/**
-	 * Builds the output configuration window of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE console configuration window.
 	 * 
-	 * @return the output configuration window of ACIDE - A Configurable IDE.
-	 * @see OutputConfigurationWindow
+	 * @return the ACIDE - A Configurable IDE console configuration window.
+	 * @see AcideConsoleConfigurationWindow
 	 */
-	public OutputConfigurationWindow buildOutputConfigurationWindow() {
-		return new OutputConfigurationWindow();
+	public AcideConsoleConfigurationWindow buildAcideConsoleConfigurationWindow() {
+		return new AcideConsoleConfigurationWindow();
 	}
 
 	/**
-	 * Builds the external command configuration window of ACIDE - A
-	 * Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE external command configuration window.
 	 * 
-	 * @return the ExternalCommand configuration window of ACIDE - A
-	 *         Configurable IDE.
-	 * @see ExternalCommandConfigurationWindow
+	 * @return the ACIDE - A Configurable IDE externalCommand configuration window.
+	 * @see AcideExternalCommandConfigurationWindow
 	 */
-	public ExternalCommandConfigurationWindow buildExternalCommandConfigurationWindow() {
-		return new ExternalCommandConfigurationWindow();
+	public AcideExternalCommandConfigurationWindow buildAcideExternalCommandConfigurationWindow() {
+		return new AcideExternalCommandConfigurationWindow();
 	}
 
 	/**
-	 * Builds the tool bar configuration window of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE tool bar configuration window.
 	 * 
 	 * @param forModify
 	 *            indicates if the tool bar configuration window has to be used
 	 *            to modify the tool bar configuration or not.
-	 * @return the tool bar command configuration window of ACIDE - A
-	 *         Configurable IDE.
-	 * @see ToolBarConfigurationWindow
+	 * @return the ACIDE - A Configurable IDE tool bar command configuration window.
+	 * @see AcideToolBarConfigurationWindow
 	 */
-	public ToolBarConfigurationWindow buildToolBarConfigurationWindow(
+	public AcideToolBarConfigurationWindow buildAcideToolBarConfigurationWindow(
 			boolean forModify) {
-		return new ToolBarConfigurationWindow(forModify);
+		return new AcideToolBarConfigurationWindow(forModify);
 	}
 
 	/**
-	 * Builds the status bar of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE status bar.
 	 * 
-	 * @return The status bar of ACIDE - A Configurable IDE.
+	 * @return the ACIDE - A Configurable IDE status bar.
 	 * @see AcideStatusBar
 	 */
 	public AcideStatusBar buildAcideStatusBar() {
@@ -300,9 +289,9 @@ public class AcideGUIFactory {
 	}
 
 	/**
-	 * Builds the print configuration window of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE print configuration window.
 	 * 
-	 * @return the print configuration window of ACIDE - A Configurable IDE.
+	 * @return the ACIDE - A Configurable IDE print configuration window.
 	 * @see PrintConfigurationWindow
 	 */
 	public PrintConfigurationWindow buildPrintConfigurationWindow() {
@@ -310,34 +299,32 @@ public class AcideGUIFactory {
 	}
 
 	/**
-	 * Builds the execution configuration window of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE execution configuration window.
 	 * 
-	 * @return the execution configuration window of ACIDE - A Configurable IDE.
-	 * @see ExecutionConfigurationWindow
+	 * @return the ACIDE - A Configurable IDE execution configuration window.
+	 * @see AcideExecutionConfigurationWindow
 	 */
-	public ExecutionConfigurationWindow buildExecutionConfigurationWindow() {
-		return new ExecutionConfigurationWindow();
+	public AcideExecutionConfigurationWindow buildAcideExecutionConfigurationWindow() {
+		return new AcideExecutionConfigurationWindow();
 	}
 
 	/**
-	 * Builds the compiler configuration window of ACIDE - A Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE compiler configuration window.
 	 * 
-	 * @return the compiler configuration window of ACIDE - A Configurable IDE.
-	 * @see CompilerConfigurationWindow
+	 * @return the ACIDE - A Configurable IDE compiler configuration window.
+	 * @see AcideCompilerConfigurationWindow
 	 */
-	public CompilerConfigurationWindow buildCompilerConfigurationWindow() {
-		return new CompilerConfigurationWindow();
+	public AcideCompilerConfigurationWindow buildAcideCompilerConfigurationWindow() {
+		return new AcideCompilerConfigurationWindow();
 	}
 
 	/**
-	 * Builds the output visualization options window of ACIDE - A
-	 * Configurable IDE.
+	 * Builds the ACIDE - A Configurable IDE console display options window.
 	 * 
-	 * @return the output visualization options window of ACIDE - A
-	 *         Configurable IDE.
-	 * @see ShellDisplayOptionsWindow
+	 * @return the ACIDE - A Configurable IDE console display options window.
+	 * @see AcideConsoleDisplayOptionsWindow
 	 */
-	public ShellDisplayOptionsWindow buildOutputVisualizationOptionsWindow() {
-		return new ShellDisplayOptionsWindow();
+	public AcideConsoleDisplayOptionsWindow buildAcideConsoleDisplayOptionsWindow() {
+		return new AcideConsoleDisplayOptionsWindow();
 	}
 }

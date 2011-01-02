@@ -1,3 +1,32 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.configurationMenu.lexiconMenu.listeners;
 
 import java.awt.event.ActionEvent;
@@ -7,50 +36,18 @@ import java.util.ResourceBundle;
 
 import javax.swing.JFileChooser;
 
-import language.AcideLanguage;
-import es.configuration.lexicon.LexiconConfiguration;
+import language.AcideLanguageManager;
+import es.configuration.lexicon.AcideLexiconConfiguration;
+import es.configuration.project.AcideProjectConfiguration;
 import es.text.TextFileFilter;
 import gui.mainWindow.MainWindow;
 
-/************************************************************************																
- * Load lexicon menu item listener.
+/**																
+ * ACIDE - A Configurable IDE lexicon menu load lexicon menu item listener.
  *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
  * @version 0.8	
  * @see ActionListener																													
- ***********************************************************************/
+ */
 public class LoadLexiconMenuItemListener implements ActionListener {
 
 	/*
@@ -62,14 +59,14 @@ public class LoadLexiconMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		ResourceBundle labels = AcideLanguage.getInstance().getLabels();
+		ResourceBundle labels = AcideLanguageManager.getInstance().getLabels();
 		TextFileFilter filter = new TextFileFilter(labels.getString("s327"));
 		filter.addExtension(".xml");
 
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.addChoosableFileFilter(filter);
-		fileChooser.setCurrentDirectory(new File("./configuration/lexical/"));
+		fileChooser.setCurrentDirectory(new File("./configuration/lexicon/"));
 
 		int chosenOption = fileChooser.showOpenDialog(fileChooser);
 
@@ -82,35 +79,33 @@ public class LoadLexiconMenuItemListener implements ActionListener {
 		if (!filePath.equals(" ")) {
 
 			// Loads the lexicon configuration
-			LexiconConfiguration.getInstance().load(
+			AcideLexiconConfiguration.getInstance().load(
 					fileChooser.getSelectedFile().getAbsolutePath());
 
-			// RESETS ALL THE OPENED FILES IN THE EDITOR WITH THE NEW LEXICAL
-			// CONFIGURATION
+			// Resets all the opened files in the editor with the new lexicon configuration
 			int numEditors = MainWindow.getInstance().getFileEditorManager()
 					.getNumFileEditorPanels();
-			for (int i = 0; i < numEditors; i++)
-				MainWindow.getInstance().getFileEditorManager().getFileEditorPanelAt(i)
+			for (int index = 0; index < numEditors; index++)
+				MainWindow.getInstance().getFileEditorManager().getFileEditorPanelAt(index)
 						.resetDocument();
 
 			// Updates the status bar
-			MainWindow.getInstance().getStatusBar().getLexiconMessage()
-					.setText(
+			MainWindow.getInstance().getStatusBar().setLexiconMessage(
 							labels.getString("s449")
 									+ " "
-									+ LexiconConfiguration.getInstance()
+									+ AcideLexiconConfiguration.getInstance()
 											.getName());
 			
 			// Updates the project configuration
-			MainWindow.getInstance().getProjectConfiguration()
-					.setLexicalConfiguration(
-							LexiconConfiguration.getInstance().getPath());
+			AcideProjectConfiguration.getInstance()
+					.setLexiconConfiguration(
+							AcideLexiconConfiguration.getInstance().getPath());
 			
 			// Not default project
-			if (!MainWindow.getInstance().getProjectConfiguration().isDefaultProject()) {
+			if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
 				
 				// The project has been modified
-				MainWindow.getInstance().getProjectConfiguration()
+				AcideProjectConfiguration.getInstance()
 						.setIsModified(true);
 			}
 		}

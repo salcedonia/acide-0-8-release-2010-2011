@@ -1,6 +1,7 @@
 package gui.menuBar.projectMenu.listeners;
 
-import es.explorer.ExplorerFile;
+import es.configuration.project.AcideProjectConfiguration;
+import es.project.AcideProjectFile;
 import es.text.TextFile;
 import gui.mainWindow.MainWindow;
 
@@ -12,50 +13,17 @@ import java.util.ResourceBundle;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 import operations.factory.AcideIOFactory;
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
-/************************************************************************																
- * New project file menu item listener.											
+/**																
+ * ACIDE -A Configurable IDE project menu new project file menu item listener.											
  *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
  * @version 0.8	
  * @see ActionListener																													
- ***********************************************************************/
+ */
 public class NewProjectFileMenuItemListener implements ActionListener {
 
 	/*
@@ -75,10 +43,10 @@ public class NewProjectFileMenuItemListener implements ActionListener {
 		MainWindow.getInstance().getMenu().getFile().getNewFile().doClick();
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception exception) {
 			
 			// Updates the log
@@ -173,20 +141,20 @@ public class NewProjectFileMenuItemListener implements ActionListener {
 				TreePath path = MainWindow.getInstance().getExplorerPanel()
 						.getTree().getSelectionPath();
 				DefaultMutableTreeNode filePath;
-				ExplorerFile explorerFile;
+				AcideProjectFile projectFile;
 
 				// Folder selected
 				if (path != null) {
 
 					filePath = (DefaultMutableTreeNode) path
 							.getLastPathComponent();
-					explorerFile = (ExplorerFile) filePath.getUserObject();
+					projectFile = (AcideProjectFile) filePath.getUserObject();
 
 					// File selected
-					if (!explorerFile.isDirectory()) {
+					if (!projectFile.isDirectory()) {
 						filePath = MainWindow.getInstance().getExplorerPanel()
 								.getRoot().getNextNode();
-						explorerFile = (ExplorerFile) filePath.getUserObject();
+						projectFile = (AcideProjectFile) filePath.getUserObject();
 					}
 
 				} else {
@@ -194,7 +162,7 @@ public class NewProjectFileMenuItemListener implements ActionListener {
 					// Nothing selected
 					filePath = MainWindow.getInstance().getExplorerPanel()
 							.getRoot().getNextNode();
-					explorerFile = (ExplorerFile) filePath.getUserObject();
+					projectFile = (AcideProjectFile) filePath.getUserObject();
 				}
 
 				// Gets the node name
@@ -204,37 +172,55 @@ public class NewProjectFileMenuItemListener implements ActionListener {
 					index = file.lastIndexOf("/");
 				name = file.substring(index + 1, file.length());
 
-				ExplorerFile fic = new ExplorerFile();
-				fic.setPath(file);
-				fic.setName(name);
-				fic.setParent(explorerFile.getName());
-				MainWindow.getInstance().getProjectConfiguration().addFile(
-						fic);
-				MainWindow.getInstance().getProjectConfiguration()
+				// Builds the project file
+				projectFile = new AcideProjectFile();
+				projectFile.setAbsolutePath(file);
+				projectFile.setName(name);
+				projectFile.setParent(projectFile.getName());
+				
+				// Adds the file to the project file list
+				AcideProjectConfiguration.getInstance().addFile(
+						projectFile);
+				
+				// Sets the new file open state to true
+				AcideProjectConfiguration.getInstance()
 						.getFileAt(
-								MainWindow.getInstance()
-										.getProjectConfiguration()
+								AcideProjectConfiguration.getInstance()
 										.getNumFilesFromList() - 1)
 						.setIsOpened(true);
 
-				DefaultMutableTreeNode d = new DefaultMutableTreeNode(fic);
-				d.setAllowsChildren(false);
-				filePath.add(d);
+				DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(projectFile);
+				defaultMutableTreeNode.setAllowsChildren(false);
+				filePath.add(defaultMutableTreeNode);
+				
+				// Validates the MAIN WINDOW
 				MainWindow.getInstance().validate();
+				
+				// Repaints the MAIN WINDOW
 				MainWindow.getInstance().repaint();
+				
+				// Reloads the explorer panel tree
 				MainWindow.getInstance().getExplorerPanel().getTreeModel()
 						.reload();
+				
+				// Expands the explorer panel tree
 				MainWindow.getInstance().getExplorerPanel().expandTree();
+				
+				// Enables the removes file menu item in the explorer panel popup menu
 				MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 						.getRemoveFile().setEnabled(true);
+				
+				// Enables the delete file menu item in the explorer panel popup menu
 				MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 						.getDeleteFile().setEnabled(true);
-				MainWindow.getInstance().getProjectConfiguration()
+				
+				// The project configuration has been modified
+				AcideProjectConfiguration.getInstance()
 						.setIsModified(true);
 
-				// Updates the status bar
-				MainWindow.getInstance().getStatusBar().setMessage(
-						fic.getPath());
+				// Updates the status message in the status bar
+				MainWindow.getInstance().getStatusBar().setStatusMessage(
+						projectFile.getAbsolutePath());
 			}
 		} catch (Exception exception) {
 			

@@ -1,55 +1,50 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.fileEditor.fileEditorManager.utils.gui;
-
 
 import java.awt.*;
 import java.util.ResourceBundle;
 
 import javax.swing.*;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 
 import operations.log.AcideLog;
 
-/************************************************************************
+/**
  * Handles the creation and destruction of the different tabs of editors of
  * ACIDE - A Configurable IDE.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see JTabbedPane
- ***********************************************************************/
+ */
 public class LineNumberComponent extends JComponent{
 	
 	/**
@@ -59,15 +54,15 @@ public class LineNumberComponent extends JComponent{
 	/**
 	 * Default background color.
 	 */
-	private final static Color DEFAULT_BACKGROUND = new Color(204, 204, 255);
+	private final static Color DEFAULT_BACKGROUND = new Color(215, 215, 255);
 	/**
 	 * Default foreground color.
 	 */
-	private final static Color DEFAULT_FOREGROUND = Color.black;
+	private final static Color DEFAULT_FOREGROUND = new Color(125, 125, 155);
 	/**
 	 * Line number default font.
 	 */
-	private final static Font DEFAULT_FONT = new Font("monospaced", Font.PLAIN, 12);
+	private final static Font DEFAULT_FONT = new Font("monospaced", Font.BOLD, 12);
 	/**
 	 * Line number height.
 	 */
@@ -109,7 +104,7 @@ public class LineNumberComponent extends JComponent{
 	 */
 	public LineNumberComponent(JComponent component){
 		
-		ResourceBundle labels = AcideLanguage.getInstance().getLabels();
+		ResourceBundle labels = AcideLanguageManager.getInstance().getLabels();
 		try {
 			
 			if (component == null){
@@ -118,13 +113,15 @@ public class LineNumberComponent extends JComponent{
 				_component = this;
 			}
 			else{
-				setFont(component.getFont());
+				setFont( DEFAULT_FONT );
+				//setFont(component.getFont());
 				_component = component;
 			}
 
 			setBackground(DEFAULT_BACKGROUND);
 			setForeground(DEFAULT_FOREGROUND);
 			setPreferredWidth(99);
+			setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, DEFAULT_FOREGROUND));
 		} catch (RuntimeException exception) {
 			
 			// Updates the log

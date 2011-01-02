@@ -1,3 +1,32 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.fileMenu.utils;
 
 import java.awt.Color;
@@ -24,73 +53,40 @@ import javax.swing.text.Position;
 import javax.swing.text.View;
 import javax.swing.text.ViewFactory;
 
-/************************************************************************
- * Printer of ACIDE - A Configurable IDE
+/**
+ * Printer of ACIDE - A Configurable IDE.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see Printable
- ***********************************************************************/
+ */
 public class PrinterText implements Printable {
 
 	/**
-	 * The root View to be printed
+	 * The root View to be printed.
 	 */
 	private View _root;
 	/**
-	 * Paper plus page orientation
+	 * Paper plus page orientation.
 	 */
 	private PageFormat _pageFormat;
 	/**
-	 * How many pages in the document
+	 * How many pages in the document.
 	 */
 	private int _numPages;
 	/**
-	 * Coordinates of upper-left of print area
+	 * Coordinates of upper-left of print area.
 	 */
 	private double _printX, _printY;
 	/**
-	 * Width of the printable area
+	 * Width of the printable area.
 	 */
 	private double _printWidth;
 	/**
-	 * Height of the printable area
+	 * Height of the printable area.
 	 */
 	private double _printHeight;
 	/**
-	 * The rectangle in which the document is painted
+	 * The rectangle in which the document is painted.
 	 */
 	private Rectangle _drawRect;
 	/**
@@ -98,29 +94,29 @@ public class PrinterText implements Printable {
 	 */
 	static final double MARGIN_ADJUST = .97;
 	/**
-	 * The font we use for printing page numbers
+	 * The font we use for printing page numbers.
 	 */
 	static final Font _headerFont = new Font("Arial", Font.BOLD, 12);
 	/**
-	 * Maximum number of lines
+	 * Maximum number of lines.
 	 */
 	final int MAX_LINES = 1;
 	/**
-	 * Indicates if shows the page in the printed page or not
+	 * Indicates if shows the page in the printed page or not.
 	 */
 	private boolean _showPage;
 	/**
-	 * Indicates if shows the date in the printed page or not
+	 * Indicates if shows the date in the printed page or not.
 	 */
 	private boolean _showDate;
 	/**
-	 * This is the starting offset of the page we're currently working on
+	 * This is the starting offset of the page we're currently working on.
 	 */
 	private double _pageStart = 0;
 
 	/**
 	 * This constructor allows the contents of any JTextComponent to be printed,
-	 * using any specified PageFormat object
+	 * using any specified PageFormat object.
 	 */
 	public PrinterText(JTextComponent textComponent, PageFormat format,
 			boolean pag, boolean date) {
@@ -175,7 +171,7 @@ public class PrinterText implements Printable {
 	/**
 	 * This method loops through the children of the specified view, recursing
 	 * as necessary, and inserts pages breaks when needed. It makes a
-	 * rudimentary attempt to avoid "widows" and "orphans"
+	 * rudimentary attempt to avoid "widows" and "orphans".
 	 */
 	protected void paginate(View v, Rectangle2D allocation) {
 		// Figure out how tall this view is, and tell it to allocate
@@ -271,7 +267,7 @@ public class PrinterText implements Printable {
 	/**
 	 * Return the number of pages. This is a Pageable method.
 	 * 
-	 * @return The number of pages.
+	 * @return the number of pages.
 	 */
 	public int getNumberOfPages() {
 		return _numPages;
@@ -305,14 +301,14 @@ public class PrinterText implements Printable {
 	/**
 	 * This Printable method returns the Printable object for the specified
 	 * page. Since this class implements both Pageable and Printable, it just
-	 * returns this
+	 * returns this.
 	 */
 	public Printable getPrintable(int pagenum) {
 		return this;
 	}
 
 	/**
-	 * This is the basic Printable method that prints a specified page
+	 * This is the basic Printable method that prints a specified page.
 	 */
 	@SuppressWarnings("deprecation")
 	public int print(Graphics g, PageFormat format, int pageIndex) {
@@ -374,67 +370,34 @@ public class PrinterText implements Printable {
 		return PAGE_EXISTS;
 	}
 
-	/************************************************************************
+	/**
 	 * This inner class is a concrete implementation of View, with a couple of
 	 * key method implementations. An instance of this class is used as the
 	 * parent of the root View object we want to print
-	 * 
-	 * <p>
-	 * <b>ACIDE - A Configurable IDE</b>
-	 * </p>
-	 * <p>
-	 * <b>Official web site:</b> @see http://acide.sourceforge.net
-	 * </p>
-	 * 
-	 ************************************************************************ 
-	 * @author <ul>
-	 *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
-	 *         <li><b>Version 0.1-0.6:</b>
-	 *         <ul>
-	 *         Diego Cardiel Freire
-	 *         </ul>
-	 *         <ul>
-	 *         Juan José Ortiz Sánchez
-	 *         </ul>
-	 *         <ul>
-	 *         Delfín Rupérez Cañas
-	 *         </ul>
-	 *         </li>
-	 *         <li><b>Version 0.7:</b>
-	 *         <ul>
-	 *         Miguel Martín Lázaro
-	 *         </ul>
-	 *         </li>
-	 *         <li><b>Version 0.8:</b>
-	 *         <ul>
-	 *         Javier Salcedo Gómez
-	 *         </ul>
-	 *         </li>
-	 *         </ul>
-	 ************************************************************************ 
+	 *  
 	 * @version 0.8
 	 * @see View
-	 ***********************************************************************/
+	 */
 	static class ParentView extends View {
 
 		/**
-		 * The ViewFactory for the hierarchy of views
+		 * The ViewFactory for the hierarchy of views.
 		 */
 		private ViewFactory _viewFactory;
 		/**
-		 * The Container for the hierarchy of views
+		 * The Container for the hierarchy of views.
 		 */
 		private Container _container;
 
 		/**
-		 * Class constructor
+		 * Class constructor.
 		 * 
 		 * @param v
-		 *            view
+		 *            view.
 		 * @param viewFactory
-		 *            view factory of the window
+		 *            view factory of the window.
 		 * @param container
-		 *            container
+		 *            container.
 		 */
 		public ParentView(View v, ViewFactory viewFactory, Container container) {
 			super(v.getElement());
@@ -444,18 +407,18 @@ public class PrinterText implements Printable {
 
 		/**
 		 * These methods return key pieces of information required by the View
-		 * hierarchy
+		 * hierarchy.
 		 * 
-		 * @return key pieces of information required by the View hierarchy
+		 * @return key pieces of information required by the View hierarchy.
 		 */
 		public ViewFactory getViewFactory() {
 			return _viewFactory;
 		}
 
 		/**
-		 * Returns the container
+		 * Returns the container.
 		 * 
-		 * @return the container
+		 * @return the container.
 		 */
 		public Container getContainer() {
 			return _container;
@@ -463,38 +426,38 @@ public class PrinterText implements Printable {
 
 		/**
 		 * These methods are abstract in View, so we've got to provide dummy
-		 * implementations of them here, even though they're never used
+		 * implementations of them here, even though they're never used.
 		 * 
 		 * @param g
-		 *            graphics
+		 *            graphics.
 		 * @param allocation
-		 *            shape
+		 *            shape.
 		 */
 		public void paint(Graphics g, Shape allocation) {
 		}
 
 		/**
-		 * Returns the preferred span
+		 * Returns the preferred span.
 		 * 
 		 * @param axis
-		 *            axis of the span
-		 * @return the preferred span
+		 *            axis of the span.
+		 * @return the preferred span.
 		 */
 		public float getPreferredSpan(int axis) {
 			return 0.0f;
 		}
 
 		/**
-		 * Returns 0
+		 * Returns 0.
 		 * 
 		 * @param x
-		 *            X coordinate
+		 *            X coordinate.
 		 * @param y
-		 *            Y coordinate
+		 *            Y coordinate.
 		 * @param a
-		 *            Shape
+		 *            Shape.
 		 * @param bias
-		 *            position bias array
+		 *            position bias array.
 		 * 
 		 * @return 0
 		 */
@@ -503,13 +466,13 @@ public class PrinterText implements Printable {
 		}
 
 		/**
-		 * Returns the shape
+		 * Returns the shape.
 		 * 
 		 * @param a
-		 *            shape
+		 *            shape.
 		 * @param b
-		 *            bias
-		 * @return the shape
+		 *            bias.
+		 * @return the shape.
 		 */
 		public Shape modelToView(int pos, Shape a, Position.Bias b)
 				throws BadLocationException {

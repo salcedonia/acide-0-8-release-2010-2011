@@ -1,6 +1,37 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.explorerPanel.listeners;
 
-import es.explorer.ExplorerFile;
+import es.configuration.project.AcideProjectConfiguration;
+import es.project.AcideProjectFile;
+import es.project.AcideProjectFileType;
 import es.text.TextFile;
 import gui.fileEditor.fileEditorManager.AcideFileEditorManager;
 import gui.mainWindow.MainWindow;
@@ -13,45 +44,12 @@ import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-/************************************************************************
+/**
  * ACIDE - A Configurable IDE explorer panel double click listener.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see MouseAdapter
- ***********************************************************************/
+ */
 public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 
 	/*
@@ -76,106 +74,96 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 				// Updates the status bar
 				String filePath = selectedNode.getLastPathComponent()
 						.toString();
-				MainWindow.getInstance().getStatusBar().setMessage(filePath);
+				MainWindow.getInstance().getStatusBar().setStatusMessage(filePath);
 
 				DefaultMutableTreeNode defaultMutableTreeNode = (DefaultMutableTreeNode) selectedNode
 						.getLastPathComponent();
 				Object node = defaultMutableTreeNode.getUserObject();
-				ExplorerFile explorerFile = (ExplorerFile) node;
+				AcideProjectFile projectFile = (AcideProjectFile) node;
 
 				// Searches for the file into the editor files
-				int posEditor = -1;
-				for (int pos = 0; pos < MainWindow.getInstance()
-						.getFileEditorManager().getNumFileEditorPanels(); pos++) {
+				int fileEditorPanelIndex = -1;
+				for (int index = 0; index < MainWindow.getInstance()
+						.getFileEditorManager().getNumFileEditorPanels(); index++) {
 					if (MainWindow.getInstance().getFileEditorManager()
-							.getFileEditorPanelAt(pos).getAbsolutePath()
-							.equals(explorerFile.getPath())) {
-						posEditor = pos;
+							.getFileEditorPanelAt(index).getAbsolutePath()
+							.equals(projectFile.getAbsolutePath())) {
+						fileEditorPanelIndex = index;
 					}
 				}
 
 				// If it is not opened
-				if (posEditor == -1) {
+				if (fileEditorPanelIndex == -1) {
 
 					// Not a directory
-					if (!explorerFile.isDirectory()) {
+					if (!projectFile.isDirectory()) {
 
 						TextFile textFile = new TextFile();
 						AcideFileEditorManager editorBuilder = MainWindow
 								.getInstance().getFileEditorManager();
 
 						String fileContent = "";
-						fileContent = textFile.load(explorerFile.getPath());
+						fileContent = textFile.load(projectFile.getAbsolutePath());
 
 						// Searches for the file into the project opened files
 						// list
-						posEditor = -1;
-						for (int pos = 0; pos < MainWindow.getInstance()
-								.getProjectConfiguration()
-								.getNumFilesFromList(); pos++) {
-							if (MainWindow.getInstance()
-									.getProjectConfiguration().getFileAt(pos)
-									.getPath().equals(explorerFile.getPath()))
-								posEditor = pos;
+						fileEditorPanelIndex = -1;
+						for (int index = 0; index < AcideProjectConfiguration.getInstance()
+								.getNumFilesFromList(); index++) {
+							if (AcideProjectConfiguration.getInstance().getFileAt(index)
+									.getAbsolutePath().equals(projectFile.getAbsolutePath()))
+								fileEditorPanelIndex = index;
 						}
 
 						// Checks the type
-						int t = 0;
+						AcideProjectFileType fileType = AcideProjectFileType.NORMAL;
 
 						// COMPILABLE FILE?
-						if (MainWindow.getInstance().getProjectConfiguration()
-								.getFileAt(posEditor).isCompilableFile())
+						if (AcideProjectConfiguration.getInstance()
+								.getFileAt(fileEditorPanelIndex).isCompilableFile())
 
 							// MAIN FILE?
-							if (MainWindow.getInstance()
-									.getProjectConfiguration()
-									.getFileAt(posEditor).isMainFile()) {
+							if (AcideProjectConfiguration.getInstance()
+									.getFileAt(fileEditorPanelIndex).isMainFile()) {
 
-								t = 1;
+								fileType = AcideProjectFileType.MAIN;
 
-								// Updates the status bar
+								// Updates the status message in the status bar
 								MainWindow
 										.getInstance()
 										.getStatusBar()
-										.setMessage(
-												MainWindow
-														.getInstance()
-														.getProjectConfiguration()
-														.getFileAt(posEditor)
-														.getPath()
+										.setStatusMessage(
+												AcideProjectConfiguration.getInstance().getFileAt(fileEditorPanelIndex)
+														.getAbsolutePath()
 														+ " <MAIN>");
 							} else {
 
-								t = 2;
-								// Updates the status bar
+								fileType = AcideProjectFileType.COMPILABLE;
+								// Updates the status message in the status bar
 								MainWindow
 										.getInstance()
 										.getStatusBar()
-										.setMessage(
-												MainWindow
-														.getInstance()
-														.getProjectConfiguration()
-														.getFileAt(posEditor)
-														.getPath()
+										.setStatusMessage(
+												AcideProjectConfiguration.getInstance().getFileAt(fileEditorPanelIndex)
+														.getAbsolutePath()
 														+ " <COMPILABLE>");
 							}
 						else {
 
-							t = 0;
-							// Updates the status bar
+							fileType = AcideProjectFileType.NORMAL;
+							
+							// Updates the status message in the status bar
 							MainWindow
 									.getInstance()
 									.getStatusBar()
-									.setMessage(
-											MainWindow.getInstance()
-													.getProjectConfiguration()
-													.getFileAt(posEditor)
-													.getPath());
+									.setStatusMessage(
+											AcideProjectConfiguration.getInstance().getFileAt(fileEditorPanelIndex)
+													.getAbsolutePath());
 						}
 
 						// Opens a new tab in the editor
-						editorBuilder.newTab(explorerFile.getPath(),
-								explorerFile.getPath(), fileContent, true, t);
+						editorBuilder.newTab(projectFile.getAbsolutePath(),
+								projectFile.getAbsolutePath(), fileContent, true, fileType, 0);
 
 						// Enables the file menu
 						MainWindow.getInstance().getMenu().enableFileMenu();
@@ -184,7 +172,9 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 						MainWindow.getInstance().getMenu().enableEditMenu();
 						
 						// Updates the undo manager
-						AcideUndoRedoManager.getInstance().update();
+						AcideUndoRedoManager.getInstance().update(
+								MainWindow.getInstance().getFileEditorManager()
+										.getSelectedFileEditorPanel().getSyntaxDocument());
 
 						// Sets the focus on the selected file at the editor
 						for (int i = 0; i < MainWindow.getInstance()
@@ -195,7 +185,7 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 
 							if (MainWindow.getInstance().getFileEditorManager()
 									.getFileEditorPanelAt(i).getAbsolutePath()
-									.equals(explorerFile.getPath())) {
+									.equals(projectFile.getAbsolutePath())) {
 
 								SwingUtilities.invokeLater(new Runnable() {
 									/*
@@ -222,26 +212,23 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 						MainWindow.getInstance().repaint();
 
 						// Sets the file status in the project configuration
-						for (int pos = 0; pos < MainWindow.getInstance()
-								.getProjectConfiguration().getFileListSize(); pos++) {
-							if (MainWindow.getInstance()
-									.getProjectConfiguration().getFileAt(pos)
-									.getPath().equals(explorerFile.getPath())) {
-								MainWindow.getInstance()
-										.getProjectConfiguration()
-										.getFileAt(pos).setIsOpened(true);
+						for (int index = 0; index < AcideProjectConfiguration.getInstance().getFileListSize(); index++) {
+							if (AcideProjectConfiguration.getInstance().getFileAt(index)
+									.getAbsolutePath().equals(projectFile.getAbsolutePath())) {
+								AcideProjectConfiguration.getInstance()
+										.getFileAt(index).setIsOpened(true);
 							}
 						}
 
 						// The project has been modified
-						MainWindow.getInstance().getProjectConfiguration()
+						AcideProjectConfiguration.getInstance()
 								.setIsModified(true);
 					}
 				} else {
 
 					// If it is already opened
 
-					final int editorIndex = posEditor;
+					final int editorIndex = fileEditorPanelIndex;
 
 					SwingUtilities.invokeLater(new Runnable() {
 						/*

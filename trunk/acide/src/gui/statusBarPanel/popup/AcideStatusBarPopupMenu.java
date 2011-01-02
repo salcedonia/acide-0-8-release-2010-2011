@@ -1,7 +1,39 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.statusBarPanel.popup;
 
 import gui.mainWindow.MainWindow;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
@@ -10,72 +42,40 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 
-/************************************************************************																
- * Status bar popup menu of ACIDE - A Configurable IDE.
- *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
- * @version 0.8	
- * @see JPopupMenu																													
- ***********************************************************************/
+/**
+ * ACIDE - A Configurable IDE status bar popup menu.
+ * 
+ * @version 0.8
+ * @see JPopupMenu
+ */
 public class AcideStatusBarPopupMenu extends JPopupMenu {
 
 	/**
-	 * Class serial version UID.
+	 * ACIDE - A Configurable IDE status bar popup menu class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * Copy menu item.
+	 * ACIDE - A Configurable IDE status bar popup menu copy menu item.
 	 */
 	private JMenuItem _copyMenuItem;
-	
+
 	/**
-	 * Class constructor.
+	 * Creates a new ACIDE - A Configurable IDE status bar popup menu.
 	 */
-	public AcideStatusBarPopupMenu(){
-	
+	public AcideStatusBarPopupMenu() {
+
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
-		
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
+
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty(
+					"language"));
 		} catch (Exception exception) {
-			
+
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
 			exception.printStackTrace();
@@ -83,7 +83,7 @@ public class AcideStatusBarPopupMenu extends JPopupMenu {
 
 		// Gets the labels
 		ResourceBundle labels = language.getLabels();
-		
+
 		_copyMenuItem = new JMenuItem(labels.getString("s187"));
 		_copyMenuItem.addActionListener(new ActionListener() {
 			/*
@@ -95,7 +95,16 @@ public class AcideStatusBarPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				MainWindow.getInstance().getStatusBar().getMessageTextField().copy();
+
+				// Gets the text from the status message label
+				String selection = MainWindow.getInstance().getStatusBar()
+						.getStatusMessage().getText();
+				
+				// Puts it into the system clipboard
+				StringSelection data = new StringSelection(selection);
+				Clipboard clipboard = Toolkit.getDefaultToolkit()
+						.getSystemClipboard();
+				clipboard.setContents(data, data);
 			}
 		});
 		add(_copyMenuItem);

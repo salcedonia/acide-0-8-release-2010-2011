@@ -1,14 +1,43 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.mainWindow;
 
-import es.configuration.project.AcideProjectConfiguration;
-import es.configuration.toolBar.shellComandToolBar.ShellCommandList;
+import es.configuration.fileEditor.AcideFileEditorConfiguration;
+import es.configuration.project.workbench.AcideWorkbenchManager;
+import es.configuration.toolBar.consoleComandToolBar.ConsoleCommandList;
+import gui.consolePanel.AcideConsolePanel;
 import gui.explorerPanel.AcideExplorerPanel;
 import gui.fileEditor.fileEditorManager.AcideFileEditorManager;
-import gui.mainWindow.listeners.MainWindowListener;
+import gui.mainWindow.listeners.MainWindowWindowListener;
 import gui.menuBar.Menu;
-import gui.menuBar.projectMenu.gui.NewProjectConfigurationWindow;
-import gui.outputPanel.AcideOutputPanel;
-import gui.splashScreen.AcideSplashScreen;
+import gui.menuBar.projectMenu.gui.AcideNewProjectConfigurationWindow;
 import gui.statusBarPanel.AcideStatusBar;
 import gui.toolBarPanel.AcideToolBarPanel;
 
@@ -20,112 +49,75 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 import operations.factory.AcideGUIFactory;
-import operations.factory.AcideOperationsFactory;
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
-/************************************************************************
- * Main window of ACIDE - A Configurable IDE.
+/**
+ * ACIDE - A Configurable IDE main window.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see JFrame
- ***********************************************************************/
+ */
 public class MainWindow extends JFrame {
 
 	/**
-	 * Main window class serial version UID.
+	 * ACIDE - A Configurable IDE main window class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * Main window image icon.
+	 * ACIDE - A Configurable IDE main window image icon.
 	 */
 	private static final ImageIcon ICON = new ImageIcon(
 			"./resources/images/icon.png");
 	/**
-	 * Main window unique class instance.
+	 * ACIDE - A Configurable IDE main window unique class instance.
 	 */
 	private static MainWindow _instance;
 	/**
-	 * Main window editor builder.
+	 * ACIDE - A Configurable IDE main window file editor manager.
 	 */
 	private AcideFileEditorManager _fileEditorManager;
 	/**
-	 * Main window menu.
+	 * ACIDE - A Configurable IDE main window menu.
 	 */
 	private Menu _menu;
 	/**
-	 * Main window output panel.
+	 * ACIDE - A Configurable IDE main window console panel.
 	 */
-	private AcideOutputPanel _outputPanel;
+	private AcideConsolePanel _consolePanel;
 	/**
-	 * Main window status bar.
+	 * ACIDE - A Configurable IDE main window status bar.
 	 */
 	private AcideStatusBar _statusBar;
 	/**
-	 * Main window explorer panel.
+	 * ACIDE - A Configurable IDE main window explorer panel.
 	 */
 	private AcideExplorerPanel _explorerPanel;
 	/**
-	 * Main window tool bar panel.
+	 * ACIDE - A Configurable IDE main window tool bar panel.
 	 */
 	private AcideToolBarPanel _toolBarPanel;
 	/**
-	 * Project configuration of the application.
+	 * ACIDE - A Configurable IDE new project configuration window.
 	 */
-	private AcideProjectConfiguration _projectConfiguration;
+	private AcideNewProjectConfigurationWindow _newProjectConfigurationWindow;
 	/**
-	 * ProjectGUI of the application.
-	 */
-	private NewProjectConfigurationWindow _projectGUI;
-	/**
-	 * Main window vertical split panel.
+	 * ACIDE - A Configurable IDE main window vertical split panel.
 	 */
 	private JSplitPane _verticalSplitPanel;
 	/**
-	 * Main window horizontal split panel.
+	 * ACIDE - A Configurable IDE main window horizontal split panel.
 	 */
 	private JSplitPane _horizontalSplitPanel;
 
 	/**
-	 * Returns the unique main window class instance.
+	 * Returns the unique ACIDE - A Configurable IDE main window class instance.
 	 * 
-	 * @return the unique main window class instance.
+	 * @return the unique ACIDE - A Configurable IDE main window class instance.
 	 */
 	public static MainWindow getInstance() {
 		if (_instance == null)
@@ -134,16 +126,15 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
-	 * Creates a new main window.
+	 * Creates a new ACIDE - A Configurable IDE main window.
 	 */
 	public MainWindow() {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
-		AcideSplashScreen.setProgressBar(20);
-
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
+		
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty(
+			language.getLanguage(AcideResourceManager.getInstance().getProperty(
 					"language"));
 		} catch (Exception exception) {
 
@@ -151,93 +142,64 @@ public class MainWindow extends JFrame {
 			AcideLog.getLog().error(exception.getMessage());
 			exception.printStackTrace();
 		}
-		AcideSplashScreen.setProgressBar(22);
 
 		// Sets the window icon
 		setIconImage(ICON.getImage());
-		AcideSplashScreen.setProgressBar(25);
 
 		// Gets the labels
 		final ResourceBundle labels = language.getLabels();
-		AcideSplashScreen.setProgressBar(27);
+		
+		// Updates the log
 		AcideLog.getLog().info(labels.getString("s67"));
-
-		AcideSplashScreen.setProgressBar(35);
 
 		// Sets the title
 		setTitle(labels.getString("s425"));
-		AcideSplashScreen.setProgressBar(42);
 
-		// PROJECT CONFIGURATION
-		_projectConfiguration = AcideOperationsFactory.getInstance()
-				.buildProjectConfiguration();
-		AcideSplashScreen.setProgressBar(45);
-		
 		// MENU
-		_menu = AcideGUIFactory.getInstance().buildMenu();
-		AcideSplashScreen.setProgressBar(47);
+		_menu = AcideGUIFactory.getInstance().buildAcideMenu();
 
 		// MENU BAR
 		setJMenuBar(_menu.getMenuBar());
-		AcideSplashScreen.setProgressBar(50);
-		
+
 		// EXPLORER
-		_explorerPanel = AcideGUIFactory.getInstance().buildAcideExplorerPanel();
-		AcideSplashScreen.setProgressBar(53);
+		_explorerPanel = AcideGUIFactory.getInstance()
+				.buildAcideExplorerPanel();
 
 		// EDITOR
-		_fileEditorManager = AcideGUIFactory.getInstance().buildAcideFileEditorManager();
-		AcideSplashScreen.setProgressBar(57);
+		_fileEditorManager = AcideGUIFactory.getInstance()
+				.buildAcideFileEditorManager();
 
-		// OUTPUT
-		_outputPanel = AcideGUIFactory.getInstance().buildAcideOutputPanel();
-		AcideSplashScreen.setProgressBar(60);
+		// CONSOLE
+		_consolePanel = AcideGUIFactory.getInstance().buildAcideConsolePanel();
 
 		// STATUS BAR
 		_statusBar = AcideGUIFactory.getInstance().buildAcideStatusBar();
-		AcideSplashScreen.setProgressBar(63);
-
-		add(_statusBar.getStatusBar(), BorderLayout.SOUTH);
-		AcideSplashScreen.setProgressBar(65);
+		add(_statusBar, BorderLayout.SOUTH);
 
 		// TOOLBAR
 		buildToolBarPanel();
-		AcideSplashScreen.setProgressBar(67);
 
 		// VERTICAL SPLIT PANEL
 		_verticalSplitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				_explorerPanel, _fileEditorManager.getTabbedPane());
-		AcideSplashScreen.setProgressBar(72);
-
 		_verticalSplitPanel.setResizeWeight(0.05);
-		AcideSplashScreen.setProgressBar(75);
-
 		_verticalSplitPanel.setContinuousLayout(true);
-		AcideSplashScreen.setProgressBar(77);
 
 		// HORIZONTAL SPLIT PANEL
 		_horizontalSplitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-				_verticalSplitPanel, _outputPanel);
-		AcideSplashScreen.setProgressBar(80);
-
+				_verticalSplitPanel, _consolePanel);
 		_horizontalSplitPanel.setResizeWeight(0.9);
-		AcideSplashScreen.setProgressBar(82);
-
 		_horizontalSplitPanel.setContinuousLayout(true);
-		AcideSplashScreen.setProgressBar(85);
-
 		add(_horizontalSplitPanel, BorderLayout.CENTER);
-		AcideSplashScreen.setProgressBar(87);
 
 		// Do not close automatically
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		AcideSplashScreen.setProgressBar(90);
-
 		setLocationRelativeTo(null);
-		AcideSplashScreen.setProgressBar(95);
 
 		// Adds the Listeners
-		addWindowListener(new MainWindowListener());
+		addWindowListener(new MainWindowWindowListener());
+
+		// Sets the menu listeners
 		setMenuListeners();
 
 		// Updates the log
@@ -245,16 +207,16 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
-	 * Builds the main window tool bar panel with the different types of tool
-	 * bars in the application.
+	 * Builds the ACIDE - A Configurable IDE main window tool bar panel with the
+	 * different types of tool bars in the application.
 	 */
 	public void buildToolBarPanel() {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty(
+			language.getLanguage(AcideResourceManager.getInstance().getProperty(
 					"language"));
 		} catch (Exception exception) {
 
@@ -270,13 +232,13 @@ public class MainWindow extends JFrame {
 
 		try {
 
-			ShellCommandList.clear();
-			currentToolBarConfiguration = ResourceManager.getInstance()
+			ConsoleCommandList.clear();
+			currentToolBarConfiguration = AcideResourceManager.getInstance()
 					.getProperty("currentToolBarConfiguration");
-			ShellCommandList.loadFinalList(currentToolBarConfiguration);
+			ConsoleCommandList.loadFinalList(currentToolBarConfiguration);
 
 			// Updates the RESOURCE MANAGER
-			ResourceManager.getInstance().setProperty(
+			AcideResourceManager.getInstance().setProperty(
 					"currentToolBarConfiguration", currentToolBarConfiguration);
 		} catch (Exception exception) {
 
@@ -294,7 +256,7 @@ public class MainWindow extends JFrame {
 			try {
 
 				// Load the command list
-				ShellCommandList.loadFinalList(name);
+				ConsoleCommandList.loadFinalList(name);
 
 				// Information message
 				JOptionPane.showMessageDialog(null,
@@ -302,7 +264,7 @@ public class MainWindow extends JFrame {
 								+ labels.getString("s957") + name);
 
 				// Updates the RESOURCE MANAGER
-				ResourceManager.getInstance().setProperty(
+				AcideResourceManager.getInstance().setProperty(
 						"currentToolBarConfiguration", name);
 			} catch (Exception exception1) {
 
@@ -312,7 +274,7 @@ public class MainWindow extends JFrame {
 				try {
 
 					// Loads the default grammar configuration
-					ShellCommandList
+					ConsoleCommandList
 							.loadFinalList("./configuration/toolbar/default.TBcfg");
 
 					// Information message
@@ -323,7 +285,7 @@ public class MainWindow extends JFrame {
 									+ labels.getString("s959"));
 
 					// Updates the RESOURCE MANAGER
-					ResourceManager.getInstance().setProperty(
+					AcideResourceManager.getInstance().setProperty(
 							"currentToolBarConfiguration",
 							"./configuration/toolbar/default.TBcfg");
 				} catch (HeadlessException exception2) {
@@ -348,59 +310,51 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
-	 * Returns the main window output panel.
+	 * Returns the ACIDE - A Configurable IDE main window console panel.
 	 * 
-	 * @return the main window output panel.
+	 * @return the ACIDE - A Configurable IDE main window console panel.
 	 */
-	public AcideOutputPanel getOutputPanel() {
-		return _outputPanel;
+	public AcideConsolePanel getConsolePanel() {
+		return _consolePanel;
 	}
 
 	/**
-	 * Returns the main window menu.
+	 * Returns the ACIDE - A Configurable IDE main window menu.
 	 * 
-	 * @return the main window menu.
+	 * @return the ACIDE - A Configurable IDE main window menu.
 	 */
 	public Menu getMenu() {
 		return _menu;
 	}
 
 	/**
-	 * Returns the file editor manager of the main window.
+	 * Returns the ACIDE - A Configurable IDE main window file editor manager.
 	 * 
-	 * @return the file editor manager of the main window.
+	 * @return the ACIDE - A Configurable IDE main window file editor manager.
 	 */
 	public AcideFileEditorManager getFileEditorManager() {
 		return _fileEditorManager;
 	}
 
 	/**
-	 * Returns the main window project configuration.
-	 * 
-	 * @return the main window project configuration.
-	 */
-	public AcideProjectConfiguration getProjectConfiguration() {
-		return _projectConfiguration;
-	}
-
-	/**
-	 * Set the Listeners for the menu of the main window.
+	 * Set the ACIDE - A Configurable IDE main window listeners.
 	 */
 	public void setMenuListeners() {
 		_menu.setListeners();
 	}
 
 	/**
-	 * Returns the explorer panel of the main window.
+	 * Returns the ACIDE - A Configurable IDE main window explorer panel.
 	 * 
-	 * @return the explorer panel of the main window.
+	 * @return the ACIDE - A Configurable IDE main window explorer panel.
 	 */
 	public AcideExplorerPanel getExplorerPanel() {
 		return _explorerPanel;
 	}
 
 	/**
-	 * Set a new value for the main window explorer panel.
+	 * Set a new value for the ACIDE - A Configurable IDE main window explorer
+	 * panel.
 	 * 
 	 * @param explorerPanel
 	 *            new value to set.
@@ -410,12 +364,12 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
-	 * Returns the main window projectGUI.
+	 * Returns the ACIDE - A Configurable IDE new project configuration window.
 	 * 
-	 * @return the main window projectGUI.
+	 * @return the ACIDE - A Configurable IDE new project configuration window.
 	 */
-	public NewProjectConfigurationWindow getProjectWindowConfiguration() {
-		return _projectGUI;
+	public AcideNewProjectConfigurationWindow getProjectWindowConfiguration() {
+		return _newProjectConfigurationWindow;
 	}
 
 	/**
@@ -424,40 +378,42 @@ public class MainWindow extends JFrame {
 	 * @param projectGUI
 	 *            new value to set.
 	 */
-	public void setProjectGUI(NewProjectConfigurationWindow projectGUI) {
-		_projectGUI = projectGUI;
+	public void setProjectGUI(AcideNewProjectConfigurationWindow projectGUI) {
+		_newProjectConfigurationWindow = projectGUI;
 	}
 
 	/**
-	 * Returns the main window status bar.
+	 * Returns the the ACIDE - A Configurable IDE main window status bar.
 	 * 
-	 * @return the main window status bar.
+	 * @return the the ACIDE - A Configurable IDE main window status bar.
 	 */
 	public AcideStatusBar getStatusBar() {
 		return _statusBar;
 	}
 
 	/**
-	 * Returns the horizontal split pane of the main window.
+	 * Returns the ACIDE - A Configurable IDE main window horizontal split pane.
 	 * 
-	 * @return the horizontal split pane of the main window.
+	 * @return the ACIDE - A Configurable IDE main window horizontal split pane.
 	 */
 	public JSplitPane getHorizontalSplitPane() {
 		return _horizontalSplitPanel;
 	}
 
 	/**
-	 * Sets a new value for the horizontal split panel of the main window.
+	 * Sets a new value for the ACIDE - A Configurable IDE main window
+	 * horizontal split pane.
 	 * 
-	 * @param splitPaneHorizontal
+	 * @param horizontalSplitPane
 	 *            new value to set.
 	 */
-	public void setSplitPaneHorizontal(JSplitPane splitPaneHorizontal) {
-		_horizontalSplitPanel = splitPaneHorizontal;
+	public void setHorizontalSplitPane(JSplitPane horizontalSplitPane) {
+		_horizontalSplitPanel = horizontalSplitPane;
 	}
 
 	/**
-	 * Sets a new value for the main window explorer panel size.
+	 * Sets a new value for the ACIDE - A Configurable IDE main window explorer
+	 * panel size.
 	 * 
 	 * @param size
 	 *            new value to set.
@@ -467,35 +423,37 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
-	 * Returns the main window vertical split panel.
+	 * Returns the ACIDE - A Configurable IDE main window vertical split panel.
 	 * 
-	 * @return the main window vertical split panel.
+	 * @return the ACIDE - A Configurable IDE main window vertical split panel.
 	 */
 	public JSplitPane getVerticalSplitPane() {
 		return _verticalSplitPanel;
 	}
 
 	/**
-	 * Set a new value for the main window vertical split panel.
+	 * Set a new value for the ACIDE - A Configurable IDE main window vertical
+	 * split panel.
 	 * 
-	 * @param splitPaneVertical
+	 * @param verticalSplitPane
 	 *            new value to set.
 	 */
-	public void setSplitPaneVertical(JSplitPane splitPaneVertical) {
-		_verticalSplitPanel = splitPaneVertical;
+	public void setVerticalSplitPane(JSplitPane verticalSplitPane) {
+		_verticalSplitPanel = verticalSplitPane;
 	}
 
 	/**
-	 * Returns the main window tool bar panel.
+	 * Returns the ACIDE - A Configurable IDE main window tool bar panel.
 	 * 
-	 * @return the main window tool bar panel.
+	 * @return the ACIDE - A Configurable IDE main window tool bar panel.
 	 */
 	public AcideToolBarPanel getToolBarPanel() {
 		return _toolBarPanel;
 	}
 
 	/**
-	 * Sets a new value to the main window tool bar panel.
+	 * Sets a new value to the ACIDE - A Configurable IDE main window tool bar
+	 * panel.
 	 * 
 	 * @param toolBar
 	 *            new value to set.
@@ -503,23 +461,79 @@ public class MainWindow extends JFrame {
 	public void setToolBarPanel(AcideToolBarPanel toolBar) {
 		_toolBarPanel = toolBar;
 	}
-	
+
 	/**
-	 * Updates the tool bar panel. Removes the tool bar panel if exists, and
-	 * builds it, adding it to the main window afterwards.
+	 * Updates the ACIDE - A Configurable IDE main window tool bar panel.
+	 * Removes the tool bar panel if exists, and builds it, adding it to the
+	 * main window afterwards.
 	 */
-	public void updateToolBarPanel(){
-		
-		if(_toolBarPanel != null)
+	public void updateToolBarPanel() {
+
+		if (_toolBarPanel != null)
 			remove(_toolBarPanel);
-		
+
 		// Creates the tool bar
 		_toolBarPanel = new AcideToolBarPanel();
-		
+
 		// Builds the tool bar panel
 		_toolBarPanel.buildAcideToolBarPanel();
-		
+
 		// Adds the tool bar panel to the main window
 		add(_toolBarPanel, BorderLayout.NORTH);
+	}
+
+	/**
+	 * Shows the main window, once the workbech configuration has been loaded.
+	 * As the main window is already visible, it is possible to paint the 
+	 * caret in the selected editor.
+	 * It also closes the splash screen window and sets the workbench configuration
+	 * loaded attribute to true.
+	 */
+	public void showAcideMainWindow() {
+
+		// Waits until all the repaints are done to show the main window
+		// and closing the splash screen window
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+	
+				// Shows the main window
+				MainWindow.getInstance().setVisible(true);
+
+				// The workbench has been loaded
+				AcideWorkbenchManager.getInstance().setWorkbenchLoaded(true);
+				
+				// Sets the selected editor
+				if (AcideFileEditorConfiguration.getInstance().getSelectedFileEditorPanelIndex() != -1) {
+
+					// Sets the selected file editor
+					MainWindow
+							.getInstance()
+							.getFileEditorManager()
+							.setSelectedFileEditorPanelAt(
+									AcideFileEditorConfiguration.getInstance().
+											getSelectedFileEditorPanelIndex());
+
+					// Sets the focus in the edition area
+					MainWindow.getInstance().getFileEditorManager()
+							.getSelectedFileEditorPanel().getActiveTextEditionArea()
+							.requestFocusInWindow();
+
+					// Sets the caret visible
+					MainWindow.getInstance().getFileEditorManager()
+							.getSelectedFileEditorPanel().getActiveTextEditionArea()
+							.getCaret().setVisible(true);
+
+					// Selects the tree node
+					MainWindow.getInstance().getExplorerPanel()
+							.selectTreeNodeFromFileEditor();
+
+					// Updates the status bar with the selected editor
+					MainWindow.getInstance().getStatusBar()
+							.updatesStatusBarFromFileEditor();
+				}
+			}
+		});	
 	}
 }

@@ -1,3 +1,2 @@
 Manifest-Version: 1.0
-Main-Class: main.Acide
-Class-Path: lib/commons-lang-2.5.jar
+Main-Class: main.AcideMain

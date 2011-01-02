@@ -1,3 +1,32 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.explorerPanel.utils;
 
 import java.awt.Component;
@@ -8,48 +37,15 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import es.explorer.ExplorerFile;
+import es.project.AcideProjectFile;
 
-/************************************************************************																
+/**																
  * Explorer tree cell renderer. Handles the graphics and the general behavior of
  * the explorer tree.									
  *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
  * @version 0.8	
  * @see DefaultTreeCellRenderer																													
- ***********************************************************************/
+ */
 public class ExtendedTreeCellRenderer extends DefaultTreeCellRenderer {
 
 	/**
@@ -94,23 +90,23 @@ public class ExtendedTreeCellRenderer extends DefaultTreeCellRenderer {
 				row, hasFocus);
 
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-		ExplorerFile explorerFile;
+		AcideProjectFile projectFile;
 		
 		try {
 			
 			// Get the info from the node
-			explorerFile = (ExplorerFile) node.getUserObject();
+			projectFile = (AcideProjectFile) node.getUserObject();
 			
 			// Set the tree node text
-			setText(explorerFile.getName());
+			setText(projectFile.getName());
 			
 			// Set the tree node icon
 			setIcon(ICON_DEFAULT);
-			if (explorerFile.isDirectory())
+			if (projectFile.isDirectory())
 				setIcon(ICON_FOLDER);
-			if (explorerFile.isCompilableFile())
+			if (projectFile.isCompilableFile())
 				setIcon(ICON_COMPILABLE);
-			if (explorerFile.isMainFile())
+			if (projectFile.isMainFile())
 				setIcon(ICON_MAIN);
 
 		} catch (RuntimeException exception) {

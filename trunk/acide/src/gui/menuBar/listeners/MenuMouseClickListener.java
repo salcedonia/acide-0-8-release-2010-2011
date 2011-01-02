@@ -1,6 +1,36 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.listeners;
 
-import es.explorer.ExplorerFile;
+import es.configuration.project.AcideProjectConfiguration;
+import es.project.AcideProjectFile;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
 
@@ -11,45 +41,12 @@ import java.awt.event.MouseEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-/************************************************************************
+/**
  * Menu mouse click listener.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see MouseAdapter
- ***********************************************************************/
+ */
 public class MenuMouseClickListener extends MouseAdapter {
 
 	/*
@@ -96,7 +93,7 @@ public class MenuMouseClickListener extends MouseAdapter {
 					.setEnabled(false);
 
 			// If the project configuration has been modified
-			if (MainWindow.getInstance().getProjectConfiguration().isModified())
+			if (AcideProjectConfiguration.getInstance().isModified())
 
 				// Enables the save project menu item
 				MainWindow.getInstance().getMenu().getProject()
@@ -105,17 +102,17 @@ public class MenuMouseClickListener extends MouseAdapter {
 			TreePath path = MainWindow.getInstance().getExplorerPanel().getTree()
 					.getSelectionPath();
 			DefaultMutableTreeNode filePath;
-			ExplorerFile explorerFile;
+			AcideProjectFile projectFile;
 
 			if (path != null) {
 
 				filePath = (DefaultMutableTreeNode) path.getLastPathComponent();
 
 				// Gets the node info
-				explorerFile = (ExplorerFile) filePath.getUserObject();
+				projectFile = (AcideProjectFile) filePath.getUserObject();
 
 				// It is not a directory
-				if (!explorerFile.isDirectory()) {
+				if (!projectFile.isDirectory()) {
 
 					// Enables the remove file menu item
 					MainWindow.getInstance().getMenu().getProject()
@@ -126,25 +123,25 @@ public class MenuMouseClickListener extends MouseAdapter {
 							.getDeleteFile().setEnabled(true);
 
 					// Enables the set main menu item
-					if (!explorerFile.isMainFile())
+					if (!projectFile.isMainFile())
 						// Enables the set main menu item
 						MainWindow.getInstance().getMenu().getProject()
 								.getSetMain().setEnabled(true);
 
-					if (explorerFile.isMainFile())
+					if (projectFile.isMainFile())
 						// Enables the unset main menu item
 						MainWindow.getInstance().getMenu().getProject()
 								.getUnsetMain().setEnabled(true);
 
-					if (!explorerFile.isCompilableFile()
-							|| (explorerFile.isCompilableFile() && explorerFile
+					if (!projectFile.isCompilableFile()
+							|| (projectFile.isCompilableFile() && projectFile
 									.isMainFile()))
 						// Enables the set compilable menu item
 						MainWindow.getInstance().getMenu().getProject()
 								.getSetCompilable().setEnabled(true);
 
-					if (explorerFile.isCompilableFile()
-							&& !explorerFile.isMainFile())
+					if (projectFile.isCompilableFile()
+							&& !projectFile.isMainFile())
 						// Enables the unset compilable menu item
 						MainWindow.getInstance().getMenu().getProject()
 								.getUnsetCompilable().setEnabled(true);
@@ -157,7 +154,7 @@ public class MenuMouseClickListener extends MouseAdapter {
 			}
 
 			// Default project
-			if (MainWindow.getInstance().getProjectConfiguration()
+			if (AcideProjectConfiguration.getInstance()
 					.isDefaultProject()) {
 
 				// Gets the number of the editors
@@ -181,10 +178,10 @@ public class MenuMouseClickListener extends MouseAdapter {
 
 					// SET COMPILABLE FILE
 					if (!MainWindow.getInstance().getFileEditorManager()
-							.getSelectedFileEditorPanel().isCompilerFile()
+							.getSelectedFileEditorPanel().isCompilableFile()
 							|| (MainWindow.getInstance().getFileEditorManager()
 									.getSelectedFileEditorPanel()
-									.isCompilerFile() && MainWindow
+									.isCompilableFile() && MainWindow
 									.getInstance().getFileEditorManager()
 									.getSelectedFileEditorPanel().isMainFile()))
 						MainWindow.getInstance().getMenu().getProject()
@@ -192,7 +189,7 @@ public class MenuMouseClickListener extends MouseAdapter {
 
 					// UNSET COMPILABLE FILE
 					if (MainWindow.getInstance().getFileEditorManager()
-							.getSelectedFileEditorPanel().isCompilerFile()
+							.getSelectedFileEditorPanel().isCompilableFile()
 							&& !MainWindow.getInstance().getFileEditorManager()
 									.getSelectedFileEditorPanel().isMainFile())
 						MainWindow.getInstance().getMenu().getProject()
@@ -299,15 +296,15 @@ public class MenuMouseClickListener extends MouseAdapter {
 			if (Toolkit.getDefaultToolkit().getSystemClipboard()
 					.getContents(null) != null) {
 
-				if (!MainWindow.getInstance().getOutputPanel().getTextComponent()
+				if (!MainWindow.getInstance().getConsolePanel().getTextPane()
 						.hasFocus())
 
 					// Enables the paste menu item
 					MainWindow.getInstance().getMenu().getEdit().getPaste()
 							.setEnabled(true);
-				else if (MainWindow.getInstance().getOutputPanel()
-						.getTextComponent().getSelectionStart() >= MainWindow
-						.getInstance().getOutputPanel().getPromptCaretPosition())
+				else if (MainWindow.getInstance().getConsolePanel()
+						.getTextPane().getSelectionStart() >= MainWindow
+						.getInstance().getConsolePanel().getPromptCaretPosition())
 
 					// Enables the paste menu item
 					MainWindow.getInstance().getMenu().getEdit().getPaste()
@@ -321,18 +318,18 @@ public class MenuMouseClickListener extends MouseAdapter {
 			// If there are opened editors
 			if (editor > 0) {
 
-				if (MainWindow.getInstance().getOutputPanel().getTextComponent()
+				if (MainWindow.getInstance().getConsolePanel().getTextPane()
 						.hasFocus()
-						&& MainWindow.getInstance().getOutputPanel()
-								.getTextComponent().getSelectedText() != null) {
+						&& MainWindow.getInstance().getConsolePanel()
+								.getTextPane().getSelectedText() != null) {
 
 					// Enables the copy menu item
 					MainWindow.getInstance().getMenu().getEdit().getCopy()
 							.setEnabled(true);
 
-					if (MainWindow.getInstance().getOutputPanel().getTextComponent()
+					if (MainWindow.getInstance().getConsolePanel().getTextPane()
 							.getSelectionStart() >= MainWindow.getInstance()
-							.getOutputPanel().getPromptCaretPosition())
+							.getConsolePanel().getPromptCaretPosition())
 
 						// Enables the cut menu item
 						MainWindow.getInstance().getMenu().getEdit().getCut()
@@ -355,16 +352,16 @@ public class MenuMouseClickListener extends MouseAdapter {
 			} else {
 
 				// We can copy from the output
-				if (MainWindow.getInstance().getOutputPanel().getTextComponent()
+				if (MainWindow.getInstance().getConsolePanel().getTextPane()
 						.getSelectedText() != null) {
 
 					// Enables the copy menu item
 					MainWindow.getInstance().getMenu().getEdit().getCopy()
 							.setEnabled(true);
 
-					if (MainWindow.getInstance().getOutputPanel().getTextComponent()
+					if (MainWindow.getInstance().getConsolePanel().getTextPane()
 							.getSelectionStart() >= MainWindow.getInstance()
-							.getOutputPanel().getPromptCaretPosition())
+							.getConsolePanel().getPromptCaretPosition())
 
 						// Enables the cut menu item
 						MainWindow.getInstance().getMenu().getEdit().getCut()
@@ -377,8 +374,8 @@ public class MenuMouseClickListener extends MouseAdapter {
 		MainWindow
 				.getInstance()
 				.getMenu()
-				.setIsShellFocus(
-						MainWindow.getInstance().getOutputPanel().getTextComponent()
+				.setIsConsoleFocused(
+						MainWindow.getInstance().getConsolePanel().getTextPane()
 								.isFocusOwner());
 	}
 }

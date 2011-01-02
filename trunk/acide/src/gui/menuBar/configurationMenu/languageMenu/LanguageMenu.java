@@ -1,12 +1,42 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.configurationMenu.languageMenu;
 
-import es.configuration.lexicon.LexiconConfiguration;
-import es.configuration.menu.MenuConfiguration;
+import es.configuration.lexicon.AcideLexiconConfiguration;
+import es.configuration.menu.AcideMenuConfiguration;
+import es.configuration.project.AcideProjectConfiguration;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.configurationMenu.languageMenu.listeners.EnglishMenuItemListener;
 import gui.menuBar.configurationMenu.languageMenu.listeners.SpanishMenuItemListener;
-import gui.menuBar.editMenu.gui.replace.ReplaceWindow;
-import gui.menuBar.editMenu.gui.search.SearchWindow;
+import gui.menuBar.editMenu.gui.replace.AcideReplaceWindow;
+import gui.menuBar.editMenu.gui.search.AcideSearchWindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -19,84 +49,51 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 
-/************************************************************************
- * Language menu of ACIDE - A Configurable IDE.
+/**
+ * ACIDE - A Configurable IDE language menu.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see JMenu
- ***********************************************************************/
+ */
 public class LanguageMenu extends JMenu {
 
 	/**
-	 * Language menu class serial version UID.
+	 * ACIDE - A Configurable IDE language menu class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * Spanish menu item name.
+	 * ACIDE - A Configurable IDE language menu spanish menu item name.
 	 */
 	public static final String SPANISH_NAME = "Spanish";
 	/**
-	 * English menu item name.
+	 * ACIDE - A Configurable IDE language menu english menu item name.
 	 */
 	public static final String ENGLISH_NAME = "English";
 	/**
-	 * Spanish menu item image icon.
+	 * ACIDE - A Configurable IDE language menu spanish menu item image icon.
 	 */
 	private static final ImageIcon SPANISH_IMAGE = new ImageIcon(
 			"./resources/icons/menu/configuration/language/spanish.png");
 	/**
-	 * English menu item image icon.
+	 * ACIDE - A Configurable IDE language menu english menu item image icon.
 	 */
 	private static final ImageIcon ENGLISH_IMAGE = new ImageIcon(
 			"./resources/icons/menu/configuration/language/english.png");
 	/**
-	 * Spanish menu item.
+	 * ACIDE - A Configurable IDE language menu spanish menu item.
 	 */
 	private JMenuItem _spanish;
 	/**
-	 * English menu item.
+	 * ACIDE - A Configurable IDE language menu english menu item.
 	 */
 	private JMenuItem _english;
 
 	/**
-	 * Creates a new language menu.
+	 * Creates a new ACIDE - A Configurable IDE language menu.
 	 */
 	public LanguageMenu() {
 
@@ -108,15 +105,15 @@ public class LanguageMenu extends JMenu {
 	}
 
 	/**
-	 * Sets the labels to display in the menu in the selected language.
+	 * Sets the ACIDE - A Configurable IDE language menu language labels.
 	 */
 	public void setLanguageLabels() {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty(
+			language.getLanguage(AcideResourceManager.getInstance().getProperty(
 					"language"));
 		} catch (Exception exception) {
 
@@ -140,23 +137,23 @@ public class LanguageMenu extends JMenu {
 	}
 
 	/**
-	 * Builds the language menu.
+	 * Builds the ACIDE - A Configurable IDE language menu.
 	 */
 	public void buildMenu() {
 
 		removeAll();
 
 		// SPANISH MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(SPANISH_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SPANISH_NAME))
 			add(_spanish);
 
 		// ENGLISH MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(ENGLISH_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(ENGLISH_NAME))
 			add(_english);
 	}
 
 	/**
-	 * Sets the language menu item listeners.
+	 * Sets the ACIDE - A Configurable IDE language menu menu item listeners.
 	 */
 	public void setListeners() {
 
@@ -168,16 +165,16 @@ public class LanguageMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the English menu item.
+	 * Returns the ACIDE - A Configurable IDE language menu English menu item.
 	 * 
-	 * @return the English menu item.
+	 * @return the ACIDE - A Configurable IDE language menu English menu item.
 	 */
 	public JMenuItem getEnglish() {
 		return _english;
 	}
 
 	/**
-	 * Sets a new value to the English menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE language menu English menu item.
 	 * 
 	 * @param english
 	 *            new value to set.
@@ -187,16 +184,16 @@ public class LanguageMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the Spanish menu item.
+	 * Returns the ACIDE - A Configurable IDE language menu Spanish menu item.
 	 * 
-	 * @return the Spanish menu item.
+	 * @return the ACIDE - A Configurable IDE language menu Spanish menu item.
 	 */
 	public JMenuItem getSpanish() {
 		return _spanish;
 	}
 
 	/**
-	 * Sets a new value to the Spanish menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE language menu Spanish menu item.
 	 * 
 	 * @param spanish
 	 *            new value to set.
@@ -215,10 +212,10 @@ public class LanguageMenu extends JMenu {
 	public void changeLanguage(String selectedLanguage) {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty(
+			language.getLanguage(AcideResourceManager.getInstance().getProperty(
 					"language"));
 		} catch (Exception exception) {
 
@@ -228,10 +225,10 @@ public class LanguageMenu extends JMenu {
 		}
 
 		// Updates the RESOURCE MANAGER
-		ResourceManager.getInstance().setProperty("language", selectedLanguage);
+		AcideResourceManager.getInstance().setProperty("language", selectedLanguage);
 
 		// Gets the labels
-		ResourceBundle labels = AcideLanguage.getInstance().getLabels();
+		ResourceBundle labels = AcideLanguageManager.getInstance().getLabels();
 		AcideLog.getLog().info(labels.getString("s100"));
 
 		// Resets the main window
@@ -242,7 +239,7 @@ public class LanguageMenu extends JMenu {
 		MainWindow.getInstance().getExplorerPanel().buildPopupMenu();
 
 		// Updates the OUTPUT POPUP MENU
-		MainWindow.getInstance().getOutputPanel().buildPopupMenu();
+		MainWindow.getInstance().getConsolePanel().buildPopupMenu();
 
 		// Updates the STATUS BAR POPUP MENU
 		MainWindow.getInstance().getStatusBar().buildPopupMenu();
@@ -258,19 +255,19 @@ public class LanguageMenu extends JMenu {
 		MainWindow.getInstance().repaint();
 
 		// Resets the SEARCH GUI
-		SearchWindow searchGUI = SearchWindow.getInstance();
+		AcideSearchWindow searchGUI = AcideSearchWindow.getInstance();
 		searchGUI.inicialize();
 		searchGUI.validate();
 		searchGUI.repaint();
 
 		// Resets the REPLACE GUI
-		ReplaceWindow replaceGUI = ReplaceWindow.getInstance();
+		AcideReplaceWindow replaceGUI = AcideReplaceWindow.getInstance();
 		replaceGUI.inicialize();
 		replaceGUI.validate();
 		replaceGUI.repaint();
 
 		// Get the labels
-		labels = AcideLanguage.getInstance().getLabels();
+		labels = AcideLanguageManager.getInstance().getLabels();
 
 		// Updates the lexicon message in the status bar
 		MainWindow
@@ -278,12 +275,12 @@ public class LanguageMenu extends JMenu {
 				.getStatusBar()
 				.setLexiconMessage(
 						labels.getString("s449") + " "
-								+ LexiconConfiguration.getInstance().getName());
+								+ AcideLexiconConfiguration.getInstance().getName());
 
 		try {
 
 			// Gets the name
-			String currentGrammar = ResourceManager.getInstance().getProperty(
+			String currentGrammar = AcideResourceManager.getInstance().getProperty(
 					"currentGrammar");
 			int index = currentGrammar.lastIndexOf("\\");
 			if (index == -1)
@@ -310,7 +307,7 @@ public class LanguageMenu extends JMenu {
 
 		// Gets the current lines number message
 		String currentNumLinesMessage = MainWindow.getInstance().getStatusBar()
-				.getNumLinesMessage().getText();
+				.getNumberOfLinesMessage();
 
 		// Gets the number of lines
 		int lastIndexOfDouble = currentNumLinesMessage.lastIndexOf(":");
@@ -321,13 +318,12 @@ public class LanguageMenu extends JMenu {
 			// Updates the number of lines in the status bar
 			String numLinesMessage = labels.getString("s1001") + numLines;
 
-			// Updates the status bar
-			MainWindow.getInstance().getStatusBar().getNumLinesMessage()
-					.setText(numLinesMessage);
+			// Updates the number of lines message in the status bar
+			MainWindow.getInstance().getStatusBar().setNumberOfLinesMessage(numLinesMessage);
 		}
 		
 		// Not default project
-		if (!MainWindow.getInstance().getProjectConfiguration()
+		if (!AcideProjectConfiguration.getInstance()
 				.isDefaultProject()) {
 
 			// Enables the project menu
@@ -337,7 +333,7 @@ public class LanguageMenu extends JMenu {
 			MainWindow.getInstance().getMenu().getFile().getOpenAllFiles().setEnabled(true);		
 	
 			// The project configuration has been modified
-			MainWindow.getInstance().getProjectConfiguration()
+			AcideProjectConfiguration.getInstance()
 					.setIsModified(true);
 		}
 

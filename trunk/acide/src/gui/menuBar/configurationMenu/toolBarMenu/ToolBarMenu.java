@@ -1,6 +1,35 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.configurationMenu.toolBarMenu;
 
-import es.configuration.menu.MenuConfiguration;
+import es.configuration.menu.AcideMenuConfiguration;
 import gui.menuBar.configurationMenu.toolBarMenu.listeners.LoadToolBarMenuItemListener;
 import gui.menuBar.configurationMenu.toolBarMenu.listeners.ModifyToolBarMenuItemListener;
 import gui.menuBar.configurationMenu.toolBarMenu.listeners.NewToolBarMenuItemListener;
@@ -12,98 +41,65 @@ import java.util.ResourceBundle;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
-/************************************************************************																
- * Tool bar menu of ACIDE - A Configurable IDE.
+/**																
+ * ACIDE - A Configurable IDE tool bar menu.
  *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
  * @version 0.8
  * @see JMenu																														
- ***********************************************************************/
+ */
 public class ToolBarMenu extends JMenu {
 
 	/**
-	 * Tool bar menu class serial version UID.
+	 * ACIDE - A Configurable IDE tool bar menu tool bar menu class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * New tool bar menu item name.
+	 * ACIDE - A Configurable IDE tool bar menu new tool bar menu item name.
 	 */
 	public static final String NEW_TOOLBAR_NAME = "New Toolbar";
 	/**
-	 * Load tool bar menu item name.
+	 * ACIDE - A Configurable IDE tool bar menu load tool bar menu item name.
 	 */
 	public static final String LOAD_TOOLBAR_NAME = "Load Toolbar";
 	/**
-	 * Modify tool bar menu item name.
+	 * ACIDE - A Configurable IDE tool bar menu modify tool bar menu item name.
 	 */
 	public static final String MODIFY_TOOLBAR_NAME = "Modify Toolbar";
 	/**
-	 * Save tool bar menu item name.
+	 * ACIDE - A Configurable IDE tool bar menu save tool bar menu item name.
 	 */
 	public static final String SAVE_TOOLBAR_NAME = "Save Toolbar";
 	/**
-	 * Save tool bar as menu item name.
+	 * ACIDE - A Configurable IDE tool bar menu save tool bar as menu item name.
 	 */
 	public static final String SAVE_TOOLBAR_AS_NAME = "Save Toolbar As";
 	/**
-	 * New tool bar menu item.
+	 * ACIDE - A Configurable IDE tool bar menu new tool bar menu item.
 	 */
 	private JMenuItem _newToolBar;
 	/**
-	 * Load tool bar menu item.
+	 * ACIDE - A Configurable IDE tool bar menu load tool bar menu item.
 	 */
 	private JMenuItem _loadToolBar;
 	/**
-	 * Modify tool bar menu item.
+	 * ACIDE - A Configurable IDE tool bar menu modify tool bar menu item.
 	 */
 	private JMenuItem _modifyToolBar;
 	/**
-	 * Save tool bar menu item.
+	 * ACIDE - A Configurable IDE tool bar menu save tool bar menu item.
 	 */
 	private JMenuItem _saveToolBar;
 	/**
-	 * Save as tool menu item.
+	 * ACIDE - A Configurable IDE tool bar menu save as tool menu item.
 	 */
 	private JMenuItem _saveAsToolBar;
 	
 	/**
-	 * Creates a new tool bar menu.
+	 * Creates a new ACIDE - A Configurable IDE tool bar menu.
 	 */
 	public ToolBarMenu(){
 				
@@ -119,15 +115,15 @@ public class ToolBarMenu extends JMenu {
 	}
 
 	/**
-	 * Sets the language labels to display in the selected language.
+	 * Sets the ACIDE - A Configurable IDE tool bar menu language labels.
 	 */
 	public void setLanguageLabels() {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 		
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception exception) {
 			
 			// Updates the log
@@ -155,7 +151,7 @@ public class ToolBarMenu extends JMenu {
 	}
 	
 	/**
-	 * Sets the tool bar menu item listeners.
+	 * Sets the ACIDE - A Configurable IDE tool bar menu menu item listeners.
 	 */
 	public void setListeners(){
 		
@@ -176,44 +172,44 @@ public class ToolBarMenu extends JMenu {
 	}
 
 	/**
-	 * Builds the tool bar menu.
+	 * Builds the ACIDE - A Configurable IDE tool bar menu.
 	 */
 	public void buildMenu(){
 		
 		removeAll();
 		
 		// NEW TOOL BAR MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(NEW_TOOLBAR_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_TOOLBAR_NAME))
 			add(_newToolBar);
 		
 		// LOAD TOOL BAR MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(LOAD_TOOLBAR_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(LOAD_TOOLBAR_NAME))
 			add(_loadToolBar);
 		
 		// MODIFY TOOL BAR MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(MODIFY_TOOLBAR_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(MODIFY_TOOLBAR_NAME))
 			add(_modifyToolBar);
 		
 		// SAVE TOOL BAR MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(SAVE_TOOLBAR_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_TOOLBAR_NAME))
 			add(_saveToolBar);
 		
 		// SAVE AS TOOL BAR
-		if (MenuConfiguration.getInstance().getIsDisplayed(SAVE_TOOLBAR_AS_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_TOOLBAR_AS_NAME))
 			add(_saveAsToolBar);
 	}
 	
 	/**
-	 * Returns the load tool bar menu item.
+	 * Returns the ACIDE - A Configurable IDE tool bar menu load tool bar menu item.
 	 * 
-	 * @return the load tool bar menu item.
+	 * @return the ACIDE - A Configurable IDE tool bar menu load tool bar menu item.
 	 */
 	public JMenuItem getLoadToolBar() {
 		return _loadToolBar;
 	}
 
 	/**
-	 * Sets a new value to the load tool bar menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE tool bar menu load tool bar menu item.
 	 * 
 	 * @param loadToolBar new value to set.
 	 */
@@ -222,16 +218,16 @@ public class ToolBarMenu extends JMenu {
 	}
 	
 	/**
-	 * Returns the modify tool bar menu item.
+	 * Returns the ACIDE - A Configurable IDE tool bar menu modify tool bar menu item.
 	 * 
-	 * @return the modify tool bar menu item.
+	 * @return the ACIDE - A Configurable IDE tool bar menu modify tool bar menu item.
 	 */
 	public JMenuItem getModifyToolBar() {
 		return _modifyToolBar;
 	}
 
 	/**
-	 * Sets a new value to the modify tool bar menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE tool bar menu modify tool bar menu item.
 	 * 
 	 * @param modifyToolBar new value to set.
 	 */
@@ -240,16 +236,16 @@ public class ToolBarMenu extends JMenu {
 	}
 	
 	/**
-	 * Returns the new tool bar menu item.
+	 * Returns the ACIDE - A Configurable IDE tool bar menu new tool bar menu item.
 	 * 
-	 * @return the new tool bar menu item.
+	 * @return the ACIDE - A Configurable IDE tool bar menu new tool bar menu item.
 	 */
 	public JMenuItem getNewToolBar() {
 		return _newToolBar;
 	}
 
 	/**
-	 * Sets a new value to the new tool bar menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE tool bar menu new tool bar menu item.
 	 * 
 	 * @param newToolBar new value to set.
 	 */
@@ -258,16 +254,16 @@ public class ToolBarMenu extends JMenu {
 	}
 	
 	/**
-	 * Returns the save as tool bar menu item.
+	 * Returns the ACIDE - A Configurable IDE tool bar menu save as tool bar menu item.
 	 * 
-	 * @return the save as tool bar menu item.
+	 * @return the ACIDE - A Configurable IDE tool bar menu save as tool bar menu item.
 	 */
 	public JMenuItem getSaveAsToolBar() {
 		return _saveAsToolBar;
 	}
 
 	/**
-	 * Sets a new value to the save as tool bar menu item
+	 * Sets a new value to the ACIDE - A Configurable IDE tool bar menu save as tool bar menu item
 	 * 
 	 * @param saveAsToolBar new value to set
 	 */
@@ -276,16 +272,16 @@ public class ToolBarMenu extends JMenu {
 	}
 	
 	/**
-	 * Returns the save tool bar menu item
+	 * Returns the ACIDE - A Configurable IDE tool bar menu save tool bar menu item
 	 * 
-	 * @return the save tool bar menu item
+	 * @return the ACIDE - A Configurable IDE tool bar menu save tool bar menu item
 	 */
 	public JMenuItem getSaveToolBar() {
 		return _saveToolBar;
 	}
 
 	/**
-	 * Sets a new value to the save tool bar menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE tool bar menu save tool bar menu item.
 	 * 
 	 * @param saveToolBar new value to set.
 	 */

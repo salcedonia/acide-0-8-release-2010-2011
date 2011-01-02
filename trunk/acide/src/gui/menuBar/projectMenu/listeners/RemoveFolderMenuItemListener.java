@@ -1,6 +1,36 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.projectMenu.listeners;
 
-import es.explorer.ExplorerFile;
+import es.configuration.project.AcideProjectConfiguration;
+import es.project.AcideProjectFile;
 import es.text.TextFile;
 import gui.mainWindow.MainWindow;
 
@@ -15,49 +45,16 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
-/************************************************************************																
- * Remove folder menu item listener.										
+/**																
+ * ACIDE -A Configurable IDE project menu remove folder menu item listener.										
  *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
  * @version 0.8	
  * @see ActionListener																													
- ***********************************************************************/
+ */
 public class RemoveFolderMenuItemListener implements ActionListener {
 
 	/*
@@ -71,10 +68,10 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception exception) {
 			
 			// Updates the log
@@ -93,7 +90,7 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 		if (chosenOption == JOptionPane.OK_OPTION) {
 
 			// The project has been modified
-			MainWindow.getInstance().getProjectConfiguration().setIsModified(true);
+			AcideProjectConfiguration.getInstance().setIsModified(true);
 			
 			// Gets the selection in the explorer
 			TreePath currentSelection = MainWindow.getInstance().getExplorerPanel().getTree()
@@ -107,7 +104,7 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 						.getLastPathComponent());
 				
 				// Transforms the node into a explorer file
-				ExplorerFile folder = (ExplorerFile) currentNode.getUserObject();
+				AcideProjectFile folder = (AcideProjectFile) currentNode.getUserObject();
 				
 				// If it is a directory
 				if (folder.isDirectory()) {
@@ -126,8 +123,7 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 						ArrayList<String> contRemove = new ArrayList<String>();
 						
 						if ((currentNode.getDepth() <= 2)
-								&& (folder.getName().equals(MainWindow.getInstance()
-										.getProjectConfiguration()
+								&& (folder.getName().equals(AcideProjectConfiguration.getInstance()
 										.getName()))) {
 							
 							// Updates the explorer popup menu 
@@ -148,80 +144,66 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 									"<EMPTY>");
 							MainWindow.getInstance().validate();
 							MainWindow.getInstance().repaint();
-							MainWindow.getInstance().getProjectConfiguration()
+							AcideProjectConfiguration.getInstance()
 									.setName("");
 							
 							// Updates the RESOURCE MANAGER
-							ResourceManager.getInstance().setProperty(
+							AcideResourceManager.getInstance().setProperty(
 									"defaultAcideProject",
 									"./configuration/project/default.acidePrj");
 						}
 
 						// Searches for the file in the explorer
 						int posExplorer = -1;
-						for (int position = 0; position < MainWindow.getInstance()
-								.getProjectConfiguration()
+						for (int position = 0; position < AcideProjectConfiguration.getInstance()
 								.getNumFilesFromList(); position++) {
 							
 							if (!folder.getName().equals(
-									MainWindow.getInstance().getProjectConfiguration()
+									AcideProjectConfiguration.getInstance()
 											.getName())) {
-								if (MainWindow.getInstance().getProjectConfiguration()
+								if (AcideProjectConfiguration.getInstance()
 										.getFileAt(position).getName().equals(
 												folder.getName())) {
 									posExplorer = position;
 
-								} else if (MainWindow.getInstance()
-										.getProjectConfiguration()
+								} else if (AcideProjectConfiguration.getInstance()
 										.getFileAt(position).getParent().equals(
 												folder.getName())) {
-									if (!MainWindow.getInstance()
-											.getProjectConfiguration()
+									if (!AcideProjectConfiguration.getInstance()
 											.getFileAt(position).isDirectory()) {
 										
-										contRemove.add(MainWindow.getInstance()
-												.getProjectConfiguration()
-												.getFileAt(position).getPath());
+										contRemove.add(AcideProjectConfiguration.getInstance()
+												.getFileAt(position).getAbsolutePath());
 										
-										if (MainWindow.getInstance()
-												.getProjectConfiguration()
+										if (AcideProjectConfiguration.getInstance()
 												.getNumFilesFromList() != 1)
-											MainWindow.getInstance()
-													.getProjectConfiguration()
+											AcideProjectConfiguration.getInstance()
 													.removeFileAt(position);
 										else
-											MainWindow.getInstance()
-													.getProjectConfiguration()
+											AcideProjectConfiguration.getInstance()
 													.removeFileAt(0);
 									} else {
-										String dir = MainWindow.getInstance()
-												.getProjectConfiguration()
+										String dir = AcideProjectConfiguration.getInstance()
 												.getFileAt(position).getName();
 										
-										for (int k = position + 1; k < MainWindow.getInstance()
-												.getProjectConfiguration()
+										for (int k = position + 1; k < AcideProjectConfiguration.getInstance()
 												.getNumFilesFromList(); k++) {
-											if (MainWindow.getInstance()
-													.getProjectConfiguration()
+											if (AcideProjectConfiguration.getInstance()
 													.getFileAt(position)
 													.getParent()
 													.equals(dir)) {
 												contRemove
-														.add(MainWindow.getInstance()
-																.getProjectConfiguration()
+														.add(AcideProjectConfiguration.getInstance()
 																.getFileAt(
 																		k)
-																.getPath());
+																.getAbsolutePath());
 
-												if (MainWindow.getInstance()
-														.getProjectConfiguration()
+												if (AcideProjectConfiguration.getInstance()
 														.getNumFilesFromList() != 1)
-													MainWindow.getInstance()
-															.getProjectConfiguration()
+													AcideProjectConfiguration.getInstance()
 															.removeFileAt(k);
 												else
-													MainWindow.getInstance()
-															.getProjectConfiguration()
+													AcideProjectConfiguration.getInstance()
 															.removeFileAt(0);
 											}
 										}
@@ -234,14 +216,14 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 						if (posExplorer != -1)
 							
 							// If it is not the last file in the project 
-							if (MainWindow.getInstance().getProjectConfiguration()
+							if (AcideProjectConfiguration.getInstance()
 									.getNumFilesFromList() != 1)
-								MainWindow.getInstance().getProjectConfiguration()
+								AcideProjectConfiguration.getInstance()
 										.removeFileAt(posExplorer);
 							else
 								
 								// Last file in the project
-								MainWindow.getInstance().getProjectConfiguration()
+								AcideProjectConfiguration.getInstance()
 										.removeFileAt(0);
 						
 						// Are you sure?
@@ -260,7 +242,7 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 
 						} else
 							// Updates the status bar
-							MainWindow.getInstance().getStatusBar().setMessage(
+							MainWindow.getInstance().getStatusBar().setStatusMessage(
 									"Option cancel");
 						return;
 
@@ -270,7 +252,7 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 		}
 
 		// UPDATES THE EXPLORER POPUP MENU
-		if (MainWindow.getInstance().getProjectConfiguration().getNumFilesFromList() > 0) {
+		if (AcideProjectConfiguration.getInstance().getNumFilesFromList() > 0) {
 			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getRemoveFile()
 					.setEnabled(true);
 			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getDeleteFile()

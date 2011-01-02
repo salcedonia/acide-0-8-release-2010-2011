@@ -1,5 +1,35 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.projectMenu.listeners;
 
+import es.configuration.project.AcideProjectConfiguration;
 import es.text.TextFile;
 import gui.mainWindow.MainWindow;
 
@@ -8,47 +38,14 @@ import java.awt.event.ActionListener;
 
 import operations.factory.AcideIOFactory;
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
-/************************************************************************																
- * Save project menu item listener.											
+/**																
+ * ACIDE -A Configurable IDE project menu save project menu item listener.											
  *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
  * @version 0.8	
  * @see ActionListener																													
- ***********************************************************************/
+ */
 public class SaveProjectMenuItemListener implements ActionListener {
 
 	/*
@@ -66,69 +63,72 @@ public class SaveProjectMenuItemListener implements ActionListener {
 		try {
 
 			// Not default project
-			if (!MainWindow.getInstance().getProjectConfiguration()
+			if (!AcideProjectConfiguration.getInstance()
 					.isDefaultProject()) {
 
 				// IF THIS IS NOT THE FIRST TIME THAT THE PROJECT IS SAVED
 				// THEN SAVE IT AS
-				if (!MainWindow.getInstance().getProjectConfiguration()
+				if (!AcideProjectConfiguration.getInstance()
 						.isFirstSave()) {
 
+					// Enables the save as project menu item
 					MainWindow.getInstance().getMenu().getProject()
 							.getSaveAsProject().setEnabled(true);
+					
+					// Does the save as project menu item action
 					MainWindow.getInstance().getMenu().getProject()
 							.getSaveAsProject().doClick();
 				} else {
 
-					// Sets the language
-					MainWindow.getInstance().getProjectConfiguration()
+					// Sets the language configuration
+					AcideProjectConfiguration.getInstance()
 							.setLanguage(
-									ResourceManager
+									AcideResourceManager
 											.getInstance().getProperty("language"));
 
-					// Sets the menu
-					MainWindow
-							.getInstance()
-							.getProjectConfiguration()
+					// Sets the menu configuration
+					AcideProjectConfiguration.getInstance()
 							.setMenu(
-									ResourceManager
+									AcideResourceManager
 											.getInstance().getProperty("currentMenuConfiguration"));
 
-					// Sets the tool bar
-					MainWindow
-							.getInstance()
-							.getProjectConfiguration()
+					// Sets the tool bar configuration
+					AcideProjectConfiguration.getInstance()
 							.setToolBar(
-									ResourceManager
+									AcideResourceManager
 											.getInstance().getProperty("currentToolBarConfiguration"));
 
-					// Sets the grammar
-					MainWindow.getInstance().getProjectConfiguration()
-							.setSyntacticConfiguration(
-									ResourceManager
+					// Sets the grammar configuration
+					AcideProjectConfiguration.getInstance()
+							.setGrammarConfiguration(
+									AcideResourceManager
 											.getInstance().getProperty("currentGrammar"));
 
-					// Sets the lexicon
-					MainWindow.getInstance().getProjectConfiguration()
-							.setLexicalConfiguration(
-									ResourceManager
+					// Sets the lexicon configuration
+					AcideProjectConfiguration.getInstance()
+							.setLexiconConfiguration(
+									AcideResourceManager
 											.getInstance().getProperty("languagePath"));
 
-					// Sets the shell configuration
-					MainWindow.getInstance().getProjectConfiguration()
+					// Sets the console configuration
+					AcideProjectConfiguration.getInstance()
 					.setOutputConfiguration(
-							ResourceManager
-									.getInstance().getProperty("outputConfiguration"));
+							AcideResourceManager
+									.getInstance().getProperty("consoleConfiguration"));
 
+					// Sets the file editor configuration
+					AcideProjectConfiguration.getInstance()
+					.setFileEditorConfiguration(
+							AcideResourceManager
+									.getInstance().getProperty("fileEditorConfiguration"));
+					
 					// Saves the configuration into the file
-					String fileContent = MainWindow.getInstance()
-							.getProjectConfiguration().save();
-					textFile.save(MainWindow.getInstance()
-							.getProjectConfiguration().getProjectPath(),
+					String fileContent = AcideProjectConfiguration.getInstance().save();
+					textFile.save(AcideProjectConfiguration.getInstance().getProjectPath(),
 							fileContent);
 
 					// The project has not been modified
-					MainWindow.getInstance().getProjectConfiguration()
+					AcideProjectConfiguration.getInstance()
 							.setIsModified(false);
 				}
 			}

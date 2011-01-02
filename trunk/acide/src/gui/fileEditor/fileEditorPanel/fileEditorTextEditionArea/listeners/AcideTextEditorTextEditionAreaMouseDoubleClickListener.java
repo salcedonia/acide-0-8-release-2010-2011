@@ -1,6 +1,36 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners;
 
-import es.explorer.ExplorerFile;
+import es.configuration.project.AcideProjectConfiguration;
+import es.project.AcideProjectFile;
 import gui.fileEditor.fileEditorManager.utils.logic.MatchingBraces;
 import gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
 import gui.mainWindow.MainWindow;
@@ -13,45 +43,12 @@ import javax.swing.tree.TreePath;
 
 import operations.log.AcideLog;
 
-/************************************************************************																
+/**																
  * Editor panel double click listener.
  *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
  * @version 0.8	
  * @see MouseAdapter																													
- ***********************************************************************/
+ */
 public class AcideTextEditorTextEditionAreaMouseDoubleClickListener extends MouseAdapter {
 
 	/*
@@ -63,7 +60,8 @@ public class AcideTextEditorTextEditionAreaMouseDoubleClickListener extends Mous
 	@Override
 	public void mouseClicked(MouseEvent mouseEvent) {
 
-		AcideFileEditorPanel selectedEditor = MainWindow.getInstance()
+		// Gets the selected file editor panel index
+		AcideFileEditorPanel selectedFileEditorPanelIndex = MainWindow.getInstance()
 		.getFileEditorManager().getSelectedFileEditorPanel();
 		
 		// Double click
@@ -73,15 +71,15 @@ public class AcideTextEditorTextEditionAreaMouseDoubleClickListener extends Mous
 				
 				// Selects the word which is over the caret position in
 				// the active editor
-				int start = selectedEditor.getActiveTextEditionArea().getCaretPosition();
-				int end = MatchingBraces.findMatchingBracket(selectedEditor.getActiveTextEditionArea()
+				int start = selectedFileEditorPanelIndex.getActiveTextEditionArea().getCaretPosition();
+				int end = MatchingBraces.findMatchingBracket(selectedFileEditorPanelIndex.getActiveTextEditionArea()
 						.getDocument(), start - 1);
 				
 				if (end > -1) {
 					if (end > start)
-						selectedEditor.selectText(start - 1, end - start + 2);
+						selectedFileEditorPanelIndex.selectText(start - 1, end - start + 2);
 					if (end < start)
-						selectedEditor.selectText(end, start - end);
+						selectedFileEditorPanelIndex.selectText(end, start - end);
 				}
 			} catch (BadLocationException exception) {
 				
@@ -93,24 +91,24 @@ public class AcideTextEditorTextEditionAreaMouseDoubleClickListener extends Mous
 		}
 
 		// Not default project
-		if (!MainWindow.getInstance().getProjectConfiguration().isDefaultProject()) {
+		if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
 
-			ExplorerFile explorerFile = new ExplorerFile();
+			// Creates the project file
+			AcideProjectFile projectFile = new AcideProjectFile();
+			
 			int index = -1;
-			for (int position = 0; position < MainWindow.getInstance()
-					.getProjectConfiguration().getNumFilesFromList(); position++) {
+			for (int position = 0; position < AcideProjectConfiguration.getInstance().getNumFilesFromList(); position++) {
 
-				if (MainWindow.getInstance().getProjectConfiguration()
-						.getFileAt(position).getPath().equals(
+				if (AcideProjectConfiguration.getInstance()
+						.getFileAt(position).getAbsolutePath().equals(
 								MainWindow.getInstance().getFileEditorManager()
 										.getSelectedFileEditorPanel()
 										.getAbsolutePath())) {
 
-					explorerFile = MainWindow.getInstance()
-							.getProjectConfiguration().getFileAt(position);
+					// Gets the file from the project configuration
+					projectFile = AcideProjectConfiguration.getInstance().getFileAt(position);
 
-					for (int positionProject = 0; positionProject < MainWindow.getInstance()
-							.getProjectConfiguration()
+					for (int positionProject = 0; positionProject < AcideProjectConfiguration.getInstance()
 							.getNumFilesFromList() + 1; positionProject++) {
 
 						if (MainWindow
@@ -120,7 +118,7 @@ public class AcideTextEditorTextEditionAreaMouseDoubleClickListener extends Mous
 								.getPathForRow(positionProject)
 								.getLastPathComponent()
 								.toString()
-								.equals(explorerFile.getLastPathComponent())) {
+								.equals(projectFile.getLastPathComponent())) {
 
 							index = positionProject;
 						}

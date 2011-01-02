@@ -1,51 +1,47 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.listeners;
 
 import gui.mainWindow.MainWindow;
-import gui.menuBar.editMenu.gui.replace.ReplaceWindow;
-import gui.menuBar.editMenu.gui.search.SearchWindow;
+import gui.menuBar.editMenu.gui.replace.AcideReplaceWindow;
+import gui.menuBar.editMenu.gui.search.AcideSearchWindow;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-/************************************************************************																
+/**																
  * ACIDE - A Configurable IDE mouse listener.
  *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
  * @version 0.8			
  * @see MouseAdapter																											
- ***********************************************************************/
+ */
 public class AcideMouseListener extends MouseAdapter{
 
 	/*
@@ -56,25 +52,25 @@ public class AcideMouseListener extends MouseAdapter{
 	public void mouseClicked(MouseEvent mouseEvent) {
 		
 		// SEARCH
-		SearchWindow.getInstance().setCurrentPosition(-2);
-		SearchWindow.getInstance().setIsCycle(false);
-		SearchWindow.getInstance().setIsEnd(false);
-		SearchWindow.getInstance().getSearch().setTemporalPosition(-2);
-		SearchWindow.getInstance().getSearch().setIsCycle(false);
-		SearchWindow.getInstance().setIsCycle(false);
-		SearchWindow.getInstance().setSelectedText(null);
-		SearchWindow.setIsFirst(true);
+		AcideSearchWindow.getInstance().setCurrentPosition(-2);
+		AcideSearchWindow.getInstance().setIsCycle(false);
+		AcideSearchWindow.getInstance().setIsEnd(false);
+		AcideSearchWindow.getInstance().getSearch().setTemporalPosition(-2);
+		AcideSearchWindow.getInstance().getSearch().setIsCycle(false);
+		AcideSearchWindow.getInstance().setIsCycle(false);
+		AcideSearchWindow.getInstance().setSelectedText(null);
+		AcideSearchWindow.setIsFirst(true);
 		
 		// REPLACE
-		ReplaceWindow.getInstance().setCurrentPosition(-2);
-		ReplaceWindow.getInstance().setIsCycle(false);
-		ReplaceWindow.getInstance().setIsEnd(false);
-		ReplaceWindow.getInstance().getSearch().setTemporalPosition(-2);
-		ReplaceWindow.getInstance().getSearch().setIsCycle(false);
-		ReplaceWindow.getInstance().setIsCycle(false);
-		ReplaceWindow.getInstance().setSelectedText(null);
-		ReplaceWindow.setIsFirstSearch(true);
-		ReplaceWindow.setIsFirstReplacement(true);
+		AcideReplaceWindow.getInstance().setCurrentPosition(-2);
+		AcideReplaceWindow.getInstance().setIsCycle(false);
+		AcideReplaceWindow.getInstance().setIsEnd(false);
+		AcideReplaceWindow.getInstance().getSearch().setTemporalPosition(-2);
+		AcideReplaceWindow.getInstance().getSearch().setIsCycle(false);
+		AcideReplaceWindow.getInstance().setIsCycle(false);
+		AcideReplaceWindow.getInstance().setSelectedText(null);
+		AcideReplaceWindow.setIsFirstSearch(true);
+		AcideReplaceWindow.setIsFirstReplacement(true);
 	}
 
 	/*
@@ -91,39 +87,39 @@ public class AcideMouseListener extends MouseAdapter{
 				.getSelectedText();
 		
 		if (selectedText != null) {
-			SearchWindow.getInstance().getSelectedTextRadioButton().setSelected(true);
-			SearchWindow.getInstance().getAllRadioButton().setEnabled(false);
+			AcideSearchWindow.getInstance().getSelectedTextRadioButton().setSelected(true);
+			AcideSearchWindow.getInstance().getAllRadioButton().setEnabled(false);
 		} else {
-			SearchWindow.getInstance().getCurrentDocumentRadioButton().setSelected(true);
-			SearchWindow.getInstance().getAllRadioButton().setEnabled(true);
+			AcideSearchWindow.getInstance().getCurrentDocumentRadioButton().setSelected(true);
+			AcideSearchWindow.getInstance().getAllRadioButton().setEnabled(true);
 		}
 		if (selectedText != null) {
-			ReplaceWindow.getInstance().getSelectedTextRadioButton().setSelected(true);
-			ReplaceWindow.getInstance().getAllRadioButton().setEnabled(false);
+			AcideReplaceWindow.getInstance().getSelectedTextRadioButton().setSelected(true);
+			AcideReplaceWindow.getInstance().getAllRadioButton().setEnabled(false);
 		} else {
-			ReplaceWindow.getInstance().getCurrentDocumentRadioButton().setSelected(true);
-			ReplaceWindow.getInstance().getAllRadioButton().setEnabled(true);
+			AcideReplaceWindow.getInstance().getCurrentDocumentRadioButton().setSelected(true);
+			AcideReplaceWindow.getInstance().getAllRadioButton().setEnabled(true);
 		}
 		
 		// SEARCH
-		SearchWindow.getInstance().setCurrentPosition(-2);
-		SearchWindow.getInstance().setIsCycle(false);
-		SearchWindow.getInstance().setIsEnd(false);
-		SearchWindow.getInstance().getSearch().setTemporalPosition(-2);
-		SearchWindow.getInstance().getSearch().setIsCycle(false);
-		SearchWindow.getInstance().setIsCycle(false);
-		SearchWindow.setIsFirst(true);
-		SearchWindow.getInstance().setSelectedText(null);
+		AcideSearchWindow.getInstance().setCurrentPosition(-2);
+		AcideSearchWindow.getInstance().setIsCycle(false);
+		AcideSearchWindow.getInstance().setIsEnd(false);
+		AcideSearchWindow.getInstance().getSearch().setTemporalPosition(-2);
+		AcideSearchWindow.getInstance().getSearch().setIsCycle(false);
+		AcideSearchWindow.getInstance().setIsCycle(false);
+		AcideSearchWindow.setIsFirst(true);
+		AcideSearchWindow.getInstance().setSelectedText(null);
 		
 		// REPLACE
-		ReplaceWindow.getInstance().setCurrentPosition(-2);
-		ReplaceWindow.getInstance().setIsCycle(false);
-		ReplaceWindow.getInstance().setIsEnd(false);
-		ReplaceWindow.getInstance().getSearch().setTemporalPosition(-2);
-		ReplaceWindow.getInstance().getSearch().setIsCycle(false);
-		ReplaceWindow.getInstance().setIsCycle(false);
-		ReplaceWindow.getInstance().setSelectedText(null);
-		ReplaceWindow.setIsFirstSearch(true);
-		ReplaceWindow.setIsFirstReplacement(true);
+		AcideReplaceWindow.getInstance().setCurrentPosition(-2);
+		AcideReplaceWindow.getInstance().setIsCycle(false);
+		AcideReplaceWindow.getInstance().setIsEnd(false);
+		AcideReplaceWindow.getInstance().getSearch().setTemporalPosition(-2);
+		AcideReplaceWindow.getInstance().getSearch().setIsCycle(false);
+		AcideReplaceWindow.getInstance().setIsCycle(false);
+		AcideReplaceWindow.getInstance().setSelectedText(null);
+		AcideReplaceWindow.setIsFirstSearch(true);
+		AcideReplaceWindow.setIsFirstReplacement(true);
 	}
 }

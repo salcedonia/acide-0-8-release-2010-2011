@@ -1,3 +1,32 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners;
 
 import java.util.ResourceBundle;
@@ -11,51 +40,19 @@ import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
-/************************************************************************
+/**
  * Editor panel caret listener.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see CaretListener
- ***********************************************************************/
-public class AcideTextEditorTextEditionAreaCaretListener implements CaretListener {
+ */
+public class AcideTextEditorTextEditionAreaCaretListener implements
+		CaretListener {
 
 	/*
 	 * (non-Javadoc)
@@ -67,11 +64,12 @@ public class AcideTextEditorTextEditionAreaCaretListener implements CaretListene
 	@Override
 	public void caretUpdate(CaretEvent caretEvent) {
 
+		
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty(
+			language.getLanguage(AcideResourceManager.getInstance().getProperty(
 					"language"));
 		} catch (Exception exception) {
 
@@ -101,44 +99,48 @@ public class AcideTextEditorTextEditionAreaCaretListener implements CaretListene
 			// The active editor is the editor2
 			selectedEditor.setActiveEditor(1);
 
+		// Gets the root element
 		Element rootElement = selectedEditor.getSyntaxDocument()
 				.getDefaultRootElement();
+		
+		// Gets the dot
 		int dot = caretEvent.getDot();
+		
+		// Gets the line
 		int line = rootElement.getElementIndex(dot);
-		int col = dot - rootElement.getElement(line).getStartOffset();
-		int numLines = rootElement.getElementCount();
-
-		String lineColMessage = (line + 1) + ":" + (col + 1);
 		
-		// Updates the status bar
-		MainWindow.getInstance().getStatusBar().getLineColMessage()
-		.setColumns(lineColMessage.length());
+		// Gets the column
+		int column = dot - rootElement.getElement(line).getStartOffset();
 
-		MainWindow.getInstance().getStatusBar().getLineColMessage()
-				.setText(lineColMessage);
+		// Updates the line and columns message in the status bar
+		MainWindow.getInstance().getStatusBar()
+				.setLineAndColumnMessage((line + 1) + ":" + (column + 1));
 
-		String numLinesMessage = labels.getString("s1001") + numLines;
+		// Updates the number of lines message in the status bar
+		MainWindow
+				.getInstance()
+				.getStatusBar()
+				.setNumberOfLinesMessage(
+						labels.getString("s1001")
+								+ rootElement.getElementCount());
 
-		// Updates the status bar
-		MainWindow.getInstance().getStatusBar().getNumLinesMessage()
-				.setColumns(numLinesMessage.length());
-		MainWindow.getInstance().getStatusBar().getNumLinesMessage()
-				.setText(numLinesMessage);
-		
+		// Updates the braces
 		try {
 			if (selectedEditor.getTextEditionPanelList().get(0)
 					.getBraceMatcher() != -1) {
 				selectedEditor.getSyntaxDocument().removeBrace(
 						selectedEditor.getTextEditionPanelList().get(0)
 								.getBraceMatcher());
-				selectedEditor.getTextEditionPanelList().get(0).setBraceMatcher(-1);
+				selectedEditor.getTextEditionPanelList().get(0)
+						.setBraceMatcher(-1);
 			}
 			if (selectedEditor.getTextEditionPanelList().get(1)
 					.getBraceMatcher() != -1) {
 				selectedEditor.getSyntaxDocument().removeBrace(
 						selectedEditor.getTextEditionPanelList().get(1)
 								.getBraceMatcher());
-				selectedEditor.getTextEditionPanelList().get(1).setBraceMatcher(-1);
+				selectedEditor.getTextEditionPanelList().get(1)
+						.setBraceMatcher(-1);
 			}
 
 			int start = selectedEditor.getActiveTextEditionArea()
@@ -161,20 +163,28 @@ public class AcideTextEditorTextEditionAreaCaretListener implements CaretListene
 				if (end > -1) {
 
 					if (end > start) {
-						
-						selectedEditor.getTextEditionPanelList().get(0).setBraceMatcher(start - 1);
-						selectedEditor.getTextEditionPanelList().get(1).setBraceMatcher(end);
+
+						selectedEditor.getTextEditionPanelList().get(0)
+								.setBraceMatcher(start - 1);
+						selectedEditor.getTextEditionPanelList().get(1)
+								.setBraceMatcher(end);
 						selectedEditor.getSyntaxDocument().setBrace(
-								selectedEditor.getTextEditionPanelList().get(0).getBraceMatcher());
+								selectedEditor.getTextEditionPanelList().get(0)
+										.getBraceMatcher());
 						selectedEditor.getSyntaxDocument().setBrace(
-								selectedEditor.getTextEditionPanelList().get(1).getBraceMatcher());
+								selectedEditor.getTextEditionPanelList().get(1)
+										.getBraceMatcher());
 					} else if (end < start) {
-						selectedEditor.getTextEditionPanelList().get(0).setBraceMatcher(end);
-						selectedEditor.getTextEditionPanelList().get(1).setBraceMatcher(start - 1);
+						selectedEditor.getTextEditionPanelList().get(0)
+								.setBraceMatcher(end);
+						selectedEditor.getTextEditionPanelList().get(1)
+								.setBraceMatcher(start - 1);
 						selectedEditor.getSyntaxDocument().setBrace(
-								selectedEditor.getTextEditionPanelList().get(0).getBraceMatcher());
+								selectedEditor.getTextEditionPanelList().get(0)
+										.getBraceMatcher());
 						selectedEditor.getSyntaxDocument().setBrace(
-								selectedEditor.getTextEditionPanelList().get(1).getBraceMatcher());
+								selectedEditor.getTextEditionPanelList().get(1)
+										.getBraceMatcher());
 					}
 				}
 			}

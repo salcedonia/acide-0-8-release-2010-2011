@@ -1,6 +1,7 @@
 package gui.fileEditor.fileEditorPanel.popup;
 
-import es.explorer.ExplorerFile;
+import es.configuration.project.AcideProjectConfiguration;
+import es.project.AcideProjectFile;
 import gui.mainWindow.MainWindow;
 
 import java.awt.event.ActionEvent;
@@ -16,9 +17,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
 /************************************************************************																
  * Editor panel popup menu of ACIDE - A Configurable IDE.
@@ -164,10 +165,10 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 	public AcideEditorPopupMenu() {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception exception) {
 			
 			// Updates the log
@@ -333,25 +334,25 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 						TreePath path = MainWindow.getInstance().getExplorerPanel()
 								.getTree().getSelectionPath();
 						DefaultMutableTreeNode filePath;
-						ExplorerFile fc;
+						AcideProjectFile fc;
 
 						// Folder selected
 						if (path != null) {
 							filePath = (DefaultMutableTreeNode) path
 									.getLastPathComponent();
-							fc = (ExplorerFile) filePath.getUserObject();
+							fc = (AcideProjectFile) filePath.getUserObject();
 
 							// File selected
 							if (!fc.isDirectory()) {
 								filePath = MainWindow.getInstance()
 										.getExplorerPanel().getRoot().getNextNode();
-								fc = (ExplorerFile) filePath.getUserObject();
+								fc = (AcideProjectFile) filePath.getUserObject();
 							}
 
 						} else {
 							filePath = MainWindow.getInstance().getExplorerPanel()
 									.getRoot().getNextNode();
-							fc = (ExplorerFile) filePath.getUserObject();
+							fc = (AcideProjectFile) filePath.getUserObject();
 						}
 
 						// Gets the name
@@ -361,37 +362,31 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 							index = file.lastIndexOf("/");
 						name = file.substring(index + 1, file.length());
 
-						ExplorerFile fic = new ExplorerFile();
-						fic.setPath(file);
-						fic.setName(name);
+						AcideProjectFile projectFile = new AcideProjectFile();
+						projectFile.setAbsolutePath(file);
+						projectFile.setName(name);
 
 						boolean isAdded = false;
-						for (int i = 0; i < MainWindow.getInstance()
-								.getProjectConfiguration()
+						for (int i = 0; i < AcideProjectConfiguration.getInstance()
 								.getNumFilesFromList(); i++) {
-							if (MainWindow.getInstance()
-									.getProjectConfiguration().getFileAt(i)
-									.getPath().equals(fic.getPath())) {
+							if (AcideProjectConfiguration.getInstance().getFileAt(i)
+									.getAbsolutePath().equals(projectFile.getAbsolutePath())) {
 								isAdded = true;
 							}
 						}
 
 						if (!isAdded) {
 
-							fic.setParent(MainWindow.getInstance()
-									.getProjectConfiguration().getName());
-							MainWindow.getInstance().getProjectConfiguration()
-									.addFile(fic);
-							MainWindow
-									.getInstance()
-									.getProjectConfiguration()
+							projectFile.setParent(AcideProjectConfiguration.getInstance().getName());
+							AcideProjectConfiguration.getInstance()
+									.addFile(projectFile);
+							AcideProjectConfiguration.getInstance()
 									.getFileAt(
-											MainWindow.getInstance()
-													.getProjectConfiguration()
+											AcideProjectConfiguration.getInstance()
 													.getNumFilesFromList() - 1)
 									.setIsOpened(true);
 							DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(
-									fic);
+									projectFile);
 							defaultMutableTreeNode.setAllowsChildren(false);
 							filePath.add(defaultMutableTreeNode);
 							MainWindow.getInstance().validate();
@@ -405,7 +400,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 							MainWindow.getInstance().getExplorerPanel()
 									.getPopupMenu().getDeleteFile()
 									.setEnabled(true);
-							MainWindow.getInstance().getProjectConfiguration()
+							AcideProjectConfiguration.getInstance()
 									.setIsModified(true);
 						}
 					}
@@ -438,28 +433,23 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 				// If ok
 				if (chosenOption == JOptionPane.OK_OPTION) {
 
-					ExplorerFile explorerFile = new ExplorerFile();
+					AcideProjectFile explorerFile = new AcideProjectFile();
 					int posExplorer = -1;
 					int selectedEditorIndex = MainWindow.getInstance()
 							.getFileEditorManager().getSelectedFileEditorPanelIndex();
 
-					for (int position1 = 0; position1 < MainWindow.getInstance()
-							.getProjectConfiguration().getNumFilesFromList(); position1++) {
+					for (int position1 = 0; position1 < AcideProjectConfiguration.getInstance().getNumFilesFromList(); position1++) {
 
-						if (MainWindow
-								.getInstance()
-								.getProjectConfiguration()
+						if (AcideProjectConfiguration.getInstance()
 								.getFileAt(position1)
-								.getPath()
+								.getAbsolutePath()
 								.equals(MainWindow.getInstance()
 										.getFileEditorManager().getSelectedFileEditorPanel()
 										.getAbsolutePath())) {
 							
-							explorerFile = MainWindow.getInstance()
-									.getProjectConfiguration().getFileAt(position1);
+							explorerFile = AcideProjectConfiguration.getInstance().getFileAt(position1);
 							
-							for (int position2 = 0; position2 < MainWindow.getInstance()
-									.getProjectConfiguration()
+							for (int position2 = 0; position2 < AcideProjectConfiguration.getInstance()
 									.getNumFilesFromList() + 1; position2++) {
 								
 								if (MainWindow.getInstance().getExplorerPanel()
@@ -482,7 +472,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 
 						DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) (currentSelection
 								.getLastPathComponent());
-						ExplorerFile p = (ExplorerFile) currentNode
+						AcideProjectFile p = (AcideProjectFile) currentNode
 								.getUserObject();
 
 						// Is not a directory
@@ -503,30 +493,26 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 								// Searches for the file into the project configuration file list
 								int posProjectList = -1;
 
-								for (int position = 0; position < MainWindow.getInstance()
-										.getProjectConfiguration()
+								for (int position = 0; position < AcideProjectConfiguration.getInstance()
 										.getNumFilesFromList(); position++) {
 
-									if (MainWindow.getInstance()
-											.getProjectConfiguration()
-											.getFileAt(position).getPath()
-											.equals(p.getPath())) {
+									if (AcideProjectConfiguration.getInstance()
+											.getFileAt(position).getAbsolutePath()
+											.equals(p.getAbsolutePath())) {
 										posProjectList = position;
 									}
 								}
 
 								// Removes the file
-								MainWindow.getInstance()
-										.getProjectConfiguration()
+								AcideProjectConfiguration.getInstance()
 										.removeFileAt(posProjectList);
 								
 								// Updates the status bar
 								MainWindow.getInstance().getStatusBar()
-										.setMessage("");
+										.setStatusMessage(" ");
 								
 								// The project has been modified
-								MainWindow.getInstance()
-										.getProjectConfiguration()
+								AcideProjectConfiguration.getInstance()
 										.setIsModified(true);
 
 								// If the file has been modified
@@ -572,7 +558,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 					}
 
 					// IF THERE ARE MORE FILE IN THE PROJECT CONFIGURATION
-					if (MainWindow.getInstance().getProjectConfiguration()
+					if (AcideProjectConfiguration.getInstance()
 							.getNumFilesFromList() > 0) {
 						
 						// UPDATES THE EXPLORER POPUP MENU 
@@ -608,10 +594,10 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 			public void actionPerformed(ActionEvent actionEvent) {
 
 				// Gets the language
-				AcideLanguage language = AcideLanguage.getInstance();
+				AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 				try {
-					language.getLanguage(ResourceManager
+					language.getLanguage(AcideResourceManager
 							.getInstance().getProperty("language"));
 				} catch (Exception exception) {
 					
@@ -627,18 +613,18 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 						labels.getString("s951"));
 				if (chosenOption == JOptionPane.OK_OPTION) {
 
-					// DEFAULT PROJECT
-					if (MainWindow.getInstance().getProjectConfiguration()
+					// Default project
+					if (AcideProjectConfiguration.getInstance()
 							.isDefaultProject()) {
 
-						// DELETE THE FILE
+						// Deletes the file
 						String fileRemove = MainWindow.getInstance()
 								.getFileEditorManager().getSelectedFileEditorPanel()
 								.getAbsolutePath();
 						File file = new File(fileRemove);
 						file.delete();
 
-						// REMOVES THE TAB IN THE EDITOR
+						// Removes the tab in the editor
 						MainWindow
 								.getInstance()
 								.getFileEditorManager()
@@ -647,36 +633,31 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 										.getFileEditorManager()
 										.getSelectedFileEditorPanelIndex());
 
-						// SET THE STATUS BAR
-						MainWindow.getInstance().getStatusBar().setMessage("");
+						// Updates the status message in the status bar
+						MainWindow.getInstance().getStatusBar().setStatusMessage(" ");
 
 					} else {
 
-						// NOT DEFAULT PROJECT
-						ExplorerFile explorerFile = new ExplorerFile();
+						// Not default project
+						AcideProjectFile explorerFile = new AcideProjectFile();
 						
 						int posExplorer = -1;
 						int selectedEditor = MainWindow.getInstance()
 								.getFileEditorManager().getSelectedFileEditorPanelIndex();
 						
-						for (int position1 = 0; position1 < MainWindow.getInstance()
-								.getProjectConfiguration()
+						for (int position1 = 0; position1 < AcideProjectConfiguration.getInstance()
 								.getNumFilesFromList(); position1++) {
 
-							if (MainWindow
-									.getInstance()
-									.getProjectConfiguration()
+							if (AcideProjectConfiguration.getInstance()
 									.getFileAt(position1)
-									.getPath()
+									.getAbsolutePath()
 									.equals(MainWindow.getInstance()
 											.getFileEditorManager()
 											.getSelectedFileEditorPanel()
 											.getAbsolutePath())) {
 
-								explorerFile = MainWindow.getInstance()
-										.getProjectConfiguration().getFileAt(position1);
-								for (int position2 = 0; position2 < MainWindow.getInstance()
-										.getProjectConfiguration()
+								explorerFile = AcideProjectConfiguration.getInstance().getFileAt(position1);
+								for (int position2 = 0; position2 < AcideProjectConfiguration.getInstance()
 										.getNumFilesFromList() + 1; position2++) {
 
 									if (MainWindow.getInstance().getExplorerPanel()
@@ -690,53 +671,48 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 							}
 						}
 
-						// GET THE SELECTED NODE
+						// Gets the selected noede
 						TreePath currentSelection = MainWindow.getInstance()
 								.getExplorerPanel().getTree().getPathForRow(posExplorer);
 
-						// BELONGS TO THE PROJECT
+						// Belongs the the project
 						if (currentSelection != null) {
 
 							DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) (currentSelection
 									.getLastPathComponent());
-							ExplorerFile p = (ExplorerFile) currentNode
+							AcideProjectFile p = (AcideProjectFile) currentNode
 									.getUserObject();
 
-							// IS NOT A DIRECTORY
+							// Is not a directory
 							if (!p.isDirectory()) {
 
-								// GET THE PARENT
+								// Gets the parent
 								MutableTreeNode parent = (MutableTreeNode) (currentNode
 										.getParent());
 
-								// HAS PARENT
+								// Has parent
 								if (parent != null) {
 
-									// REMOVE THE PARENT
+									// Removes the parent
 									MainWindow.getInstance().getExplorerPanel()
 											.getTreeModel()
 											.removeNodeFromParent(currentNode);
 
 									int posProjectList = -1;
 									
-									for (int position = 0; position < MainWindow
-											.getInstance()
-											.getProjectConfiguration()
+									for (int position = 0; position < AcideProjectConfiguration.getInstance()
 											.getNumFilesFromList(); position++)
-										if (MainWindow.getInstance()
-												.getProjectConfiguration()
-												.getFileAt(position).getPath()
-												.equals(p.getPath()))
+										if (AcideProjectConfiguration.getInstance()
+												.getFileAt(position).getAbsolutePath()
+												.equals(p.getAbsolutePath()))
 											posProjectList = position;
 
-									ExplorerFile f = MainWindow.getInstance()
-											.getProjectConfiguration()
+									AcideProjectFile f = AcideProjectConfiguration.getInstance()
 											.getFileAt(posProjectList);
-									String fileRemove = f.getPath();
+									String fileRemove = f.getAbsolutePath();
 									
-									// REMOVE THE FILE FROM THE PROJECT CONFIGURATION
-									MainWindow.getInstance()
-											.getProjectConfiguration()
+									// Removes the file from the project configuration
+									AcideProjectConfiguration.getInstance()
 											.removeFileAt(posProjectList);
 
 									File file = new File(fileRemove);
@@ -744,11 +720,10 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 
 									// Updates the status bar
 									MainWindow.getInstance().getStatusBar()
-											.setMessage("");
+											.setStatusMessage(" ");
 									
-									// THE PROJECT HAS BEEN MODIFIED
-									MainWindow.getInstance()
-											.getProjectConfiguration()
+									// The project has been modified
+									AcideProjectConfiguration.getInstance()
 											.setIsModified(true);
 									MainWindow.getInstance().getFileEditorManager()
 											.getTabbedPane().remove(selectedEditor);
@@ -758,16 +733,16 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 							}
 						} else {
 
-							// NOT BELONGS TO THE PROJECT
+							// Not belongs to the project
 							String fileRemove = MainWindow.getInstance()
 									.getFileEditorManager().getSelectedFileEditorPanel()
 									.getAbsolutePath();
 							
-							// DELETE THE FILE
+							// Deletes the file
 							File file = new File(fileRemove);
 							file.delete();
 							
-							// CLOSES THE TAB
+							// Closes the tab
 							MainWindow
 									.getInstance()
 									.getFileEditorManager()
@@ -778,11 +753,11 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 							
 							// Updates the status bar
 							MainWindow.getInstance().getStatusBar()
-									.setMessage("");
+									.setStatusMessage(" ");
 						}
 
 						// IF THERE ARE MORE FILES IN THE PROJECT CONFIGURATION
-						if (MainWindow.getInstance().getProjectConfiguration()
+						if (AcideProjectConfiguration.getInstance()
 								.getNumFilesFromList() > 0) {
 							
 							// UPDATES THE EXPLORER POPUP MENU

@@ -1,3 +1,32 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.configurationMenu.menuMenu;
 
 import java.util.ResourceBundle;
@@ -5,104 +34,71 @@ import java.util.ResourceBundle;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 import operations.log.AcideLog;
-import resources.ResourceManager;
-import es.configuration.menu.MenuConfiguration;
+import resources.AcideResourceManager;
+import es.configuration.menu.AcideMenuConfiguration;
 import gui.menuBar.configurationMenu.menuMenu.listeners.LoadMenuMenuItemListener;
 import gui.menuBar.configurationMenu.menuMenu.listeners.ModifyMenuMenuItemListener;
 import gui.menuBar.configurationMenu.menuMenu.listeners.NewMenuMenuItemListener;
 import gui.menuBar.configurationMenu.menuMenu.listeners.SaveAsMenuMenuItemListener;
 import gui.menuBar.configurationMenu.menuMenu.listeners.SaveMenuMenuItemListener;
 
-/************************************************************************
- * Menu menu of ACIDE - A Configurable IDE.
+/**
+ * ACIDE - A Configurable IDE menu menu.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see JMenu
- ***********************************************************************/
+ */
 public class MenuMenu extends JMenu {
 
 	/**
-	 * Menu menu class serial version UID.
+	 * ACIDE - A Configurable IDE menu menu class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * New menu menu item name.
+	 * ACIDE - A Configurable IDE menu menu new menu menu item name.
 	 */
 	public static final String NEW_MENU_NAME = "New Menu";
 	/**
-	 * New menu menu item name.
+	 * ACIDE - A Configurable IDE menu menu new menu menu item name.
 	 */
 	public static final String LOAD_MENU_NAME = "Load Menu";
 	/**
-	 * Modify menu menu item name.
+	 * ACIDE - A Configurable IDE menu menu modify menu menu item name.
 	 */
 	public static final String MODIFY_MENU_NAME = "Modify Menu";
 	/**
-	 * Save menu menu item name.
+	 * ACIDE - A Configurable IDE menu menu save menu menu item name.
 	 */
 	public static final String SAVE_MENU_NAME = "Save Menu";
 	/**
-	 * Save menu as menu item name.
+	 * ACIDE - A Configurable IDE menu menu save menu as menu item name.
 	 */
-	public static final String SAVE_MENU_AS_NAME = "Save Menu As";	
+	public static final String SAVE_MENU_AS_NAME = "Save Menu As";
 	/**
-	 * New menu menu item.
+	 * ACIDE - A Configurable IDE menu menu new menu menu item.
 	 */
 	private JMenuItem _newMenu;
 	/**
-	 * Load menu menu item.
+	 * ACIDE - A Configurable IDE menu menu load menu menu item.
 	 */
 	private JMenuItem _loadMenu;
 	/**
-	 * Modify menu menu item.
+	 * ACIDE - A Configurable IDE menu menu modify menu menu item.
 	 */
 	private JMenuItem _modifyMenu;
 	/**
-	 * Save menu menu item.
+	 * ACIDE - A Configurable IDE menu menu save menu menu item.
 	 */
 	private JMenuItem _saveMenu;
 	/**
-	 * Save as menu menu item.
+	 * ACIDE - A Configurable IDE menu menu save as menu menu item.
 	 */
 	private JMenuItem _saveAsMenu;
 
 	/**
-	 * Creates a new menu menu.
+	 * Creates a new ACIDE - A Configurable IDE menu menu.
 	 */
 	public MenuMenu() {
 
@@ -118,15 +114,16 @@ public class MenuMenu extends JMenu {
 	}
 
 	/**
-	 * Sets the language labels to display in the selected language.
+	 * Sets the ACIDE - A Configurable IDE menu menu language labels.
 	 */
 	public void setLanguageLabels() {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty(
+					"language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -154,30 +151,30 @@ public class MenuMenu extends JMenu {
 	}
 
 	/**
-	 * Builds the menu menu.
+	 * Builds the ACIDE - A Configurable IDE menu menu.
 	 */
 	public void buildMenu() {
 
 		removeAll();
 
 		// NEW MENU MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(NEW_MENU_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_MENU_NAME))
 			add(_newMenu);
-		
+
 		// LOAD MENU MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(LOAD_MENU_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(LOAD_MENU_NAME))
 			add(_loadMenu);
-		
+
 		// MODIFY MENU MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(MODIFY_MENU_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(MODIFY_MENU_NAME))
 			add(_modifyMenu);
-		
+
 		// SAVE MENU MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(SAVE_MENU_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_MENU_NAME))
 			add(_saveMenu);
-		
+
 		// SAVE AS MENU MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(SAVE_MENU_AS_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_MENU_AS_NAME))
 			add(_saveAsMenu);
 	}
 
@@ -203,16 +200,17 @@ public class MenuMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the load menu menu item.
+	 * Returns the ACIDE - A Configurable IDE menu menu load menu menu item.
 	 * 
-	 * @return the load menu menu item.
+	 * @return the ACIDE - A Configurable IDE menu menu load menu menu item.
 	 */
 	public JMenuItem getLoadMenu() {
 		return _loadMenu;
 	}
 
 	/**
-	 * Sets a new value to the load menu menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE menu menu load menu
+	 * menu item.
 	 * 
 	 * @param loadMenu
 	 *            new value to set.
@@ -222,16 +220,17 @@ public class MenuMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the modify menu menu item.
+	 * Returns the ACIDE - A Configurable IDE menu menu modify menu menu item.
 	 * 
-	 * @return the modify menu menu item.
+	 * @return the ACIDE - A Configurable IDE menu menu modify menu menu item.
 	 */
 	public JMenuItem getModifyMenu() {
 		return _modifyMenu;
 	}
 
 	/**
-	 * Sets a new value to the modify menu menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE menu menu modify menu
+	 * menu item.
 	 * 
 	 * @param modifyMenu
 	 *            new value to set.
@@ -241,16 +240,17 @@ public class MenuMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the new menu menu item.
+	 * Returns the ACIDE - A Configurable IDE menu menu new menu menu item.
 	 * 
-	 * @return the new menu menu item.
+	 * @return the ACIDE - A Configurable IDE menu menu new menu menu item.
 	 */
 	public JMenuItem getNewMenu() {
 		return _newMenu;
 	}
 
 	/**
-	 * Sets a new value to the new menu menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE menu menu new menu
+	 * menu item.
 	 * 
 	 * @param newMenu
 	 *            new value to set.
@@ -260,16 +260,17 @@ public class MenuMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the save as menu menu item
+	 * Returns the ACIDE - A Configurable IDE menu menu save as menu menu item
 	 * 
-	 * @return the save as menu menu item
+	 * @return the ACIDE - A Configurable IDE menu menu save as menu menu item
 	 */
 	public JMenuItem getSaveAsMenu() {
 		return _saveAsMenu;
 	}
 
 	/**
-	 * Sets a new value to the save as menu menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE menu menu save as menu
+	 * menu item.
 	 * 
 	 * @param saveAsMenu
 	 *            new value to set.
@@ -279,16 +280,17 @@ public class MenuMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the save menu menu item.
+	 * Returns the ACIDE - A Configurable IDE menu menu save menu menu item.
 	 * 
-	 * @return the save menu menu item.
+	 * @return the ACIDE - A Configurable IDE menu menu save menu menu item.
 	 */
 	public JMenuItem getSaveMenu() {
 		return _saveMenu;
 	}
 
 	/**
-	 * Sets a new value to the save menu menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE menu menu save menu
+	 * menu item.
 	 * 
 	 * @param saveMenu
 	 *            new value to set.

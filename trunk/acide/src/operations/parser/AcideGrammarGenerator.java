@@ -1,5 +1,33 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package operations.parser;
-
 
 import java.awt.Dimension;
 import java.io.File;
@@ -8,18 +36,18 @@ import java.util.ResourceBundle;
 
 import es.bytes.ByteFile;
 import es.text.TextFile;
-import gui.outputPanel.AcideOutputPanel;
+import gui.consolePanel.AcideConsolePanel;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 
 import org.apache.log4j.Logger;
 
+import operations.console.ConsoleThread;
 import operations.log.AcideLog;
-import operations.output.OutputThread;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
 /**
  * 
@@ -52,10 +80,10 @@ public class AcideGrammarGenerator {
 	public static boolean generate(String grammarName) throws Exception {
 		
 		// Gets the language TO DISPLAY
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 		
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -64,15 +92,15 @@ public class AcideGrammarGenerator {
 		ResourceBundle labels = language.getLabels();
 		
 		boolean generated = true;
-		OutputThread p = new OutputThread();
+		ConsoleThread p = new ConsoleThread();
 		//Process p1 = Runtime.getRuntime().exec();
-		AcideOutputPanel s = new AcideOutputPanel(false);
+		AcideConsolePanel s = new AcideConsolePanel(false);
 		//String sep = System.getProperty("file.separator");
 		//System.out.println(sep);
 		//String javaPath = javacPath.substring(0,javacPath.length() - 1);
 		String javaPath = null;
 		try {
-			javaPath = ResourceManager.getInstance().getProperty("javaPath");
+			javaPath = AcideResourceManager.getInstance().getProperty("javaPath");
 			if (javaPath.equals("null")) throw new Exception(labels.getString("s927"));
 		}
 		catch (Exception e) {
@@ -119,7 +147,7 @@ public class AcideGrammarGenerator {
 		//while(!f1.exists());
 		String javacPath = null;
 		try {
-			javacPath = ResourceManager.getInstance().getProperty("javacPath");
+			javacPath = AcideResourceManager.getInstance().getProperty("javacPath");
 			if (javacPath.equals("null")) throw new Exception(labels.getString("s929"));
 		}
 		catch (Exception e) {
@@ -212,7 +240,7 @@ public class AcideGrammarGenerator {
 		//String jarPath = javacPath.substring(0, javacPath.length() - 3) + "r";
 		String jarPath = null;
 		try {
-			jarPath = ResourceManager.getInstance().getProperty("jarPath");
+			jarPath = AcideResourceManager.getInstance().getProperty("jarPath");
 			if (jarPath.equals("null")) throw new Exception(labels.getString("s930"));
 		}
 		catch (Exception e) {
@@ -345,10 +373,10 @@ public class AcideGrammarGenerator {
 	private static boolean reallocateFile(String source, String target) {
 		
 		// Gets the language TO DISPLAY
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 		
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

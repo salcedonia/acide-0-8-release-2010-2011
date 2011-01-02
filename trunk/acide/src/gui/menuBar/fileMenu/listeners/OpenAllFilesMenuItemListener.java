@@ -1,5 +1,36 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.fileMenu.listeners;
 
+import es.configuration.project.AcideProjectConfiguration;
+import es.project.AcideProjectFileType;
 import es.text.TextFile;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
@@ -12,51 +43,18 @@ import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 
 import operations.factory.AcideIOFactory;
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
-/************************************************************************
+/**
  * Open file menu item listener.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see ActionListener
- ***********************************************************************/
+ */
 public class OpenAllFilesMenuItemListener implements ActionListener {
 
 	/*
@@ -67,14 +65,15 @@ public class OpenAllFilesMenuItemListener implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
-		
+
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
-		
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
+
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty(
+					"language"));
 		} catch (Exception exception) {
-			
+
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
 			exception.printStackTrace();
@@ -82,27 +81,26 @@ public class OpenAllFilesMenuItemListener implements ActionListener {
 
 		// Gets the labels
 		final ResourceBundle labels = language.getLabels();
-		
-		for (int index = 0; index < MainWindow.getInstance()
-				.getProjectConfiguration().getNumFilesFromList(); index++) {
+
+		for (int index = 0; index < AcideProjectConfiguration.getInstance().getNumFilesFromList(); index++) {
 
 			// Checks if the file really exists
-			File file = new File(MainWindow.getInstance()
-					.getProjectConfiguration().getFileAt(index).getPath());
+			File file = new File(AcideProjectConfiguration.getInstance().getFileAt(index)
+					.getAbsolutePath());
 
 			// If the file is not a directory and exists
-			if (!MainWindow.getInstance().getProjectConfiguration()
+			if (!AcideProjectConfiguration.getInstance()
 					.getFileAt(index).isDirectory()
 					&& file.exists()) {
 
 				TextFile textFile = AcideIOFactory.getInstance().buildFile();
 				String text = null;
-				text = textFile.load(MainWindow.getInstance()
-						.getProjectConfiguration().getFileAt(index).getPath());
+				text = textFile.load(AcideProjectConfiguration.getInstance().getFileAt(index)
+						.getAbsolutePath());
 
 				String fileName = null;
-				String filePath = MainWindow.getInstance()
-						.getProjectConfiguration().getFileAt(index).getPath();
+				String filePath = AcideProjectConfiguration.getInstance().getFileAt(index)
+						.getAbsolutePath();
 
 				// Gets the file name
 				if (filePath != null) {
@@ -118,51 +116,48 @@ public class OpenAllFilesMenuItemListener implements ActionListener {
 				MainWindow
 						.getInstance()
 						.getStatusBar()
-						.setMessage(
-								MainWindow.getInstance()
-										.getProjectConfiguration()
-										.getFileAt(index).getPath());
+						.setStatusMessage(
+								AcideProjectConfiguration.getInstance()
+										.getFileAt(index).getAbsolutePath());
 
 				// Check if it is a MAIN or COMPILABLE FILE
-				int fileType = 0;
+				AcideProjectFileType fileType = AcideProjectFileType.NORMAL;
 
 				// COMPILABLE
-				if (MainWindow.getInstance().getProjectConfiguration()
+				if (AcideProjectConfiguration.getInstance()
 						.getFileAt(index).isCompilableFile()) {
 
-					fileType = 2;
+					fileType = AcideProjectFileType.COMPILABLE;
 
 					// Adds the <COMPILABLE> tag in the status bar
 					MainWindow
 							.getInstance()
 							.getStatusBar()
-							.setMessage(
-									MainWindow.getInstance()
-											.getProjectConfiguration()
-											.getFileAt(index).getPath()
+							.setStatusMessage(
+									AcideProjectConfiguration.getInstance()
+											.getFileAt(index).getAbsolutePath()
 											+ " <COMPILABLE>");
 				}
 
 				// MAIN
-				if (MainWindow.getInstance().getProjectConfiguration()
+				if (AcideProjectConfiguration.getInstance()
 						.getFileAt(index).isMainFile()) {
 
-					fileType = 1;
+					fileType = AcideProjectFileType.MAIN;
 
 					// Adds the <MAIN> tag in the status bar
 					MainWindow
 							.getInstance()
 							.getStatusBar()
-							.setMessage(
-									MainWindow.getInstance()
-											.getProjectConfiguration()
-											.getFileAt(index).getPath()
+							.setStatusMessage(
+									AcideProjectConfiguration.getInstance()
+											.getFileAt(index).getAbsolutePath()
 											+ " <MAIN>");
 				}
 
 				// Opens a new tab in the editor
 				MainWindow.getInstance().getFileEditorManager()
-						.newTab(fileName, filePath, text, true, fileType);
+						.newTab(fileName, filePath, text, true, fileType, 0);
 
 				// Checks if it is marked as a MAIN or COMPILABLE FILE
 				for (int i = 0; i < MainWindow.getInstance()
@@ -173,19 +168,18 @@ public class OpenAllFilesMenuItemListener implements ActionListener {
 							.getFileEditorManager()
 							.getFileEditorPanelAt(i)
 							.getAbsolutePath()
-							.equals(MainWindow.getInstance()
-									.getProjectConfiguration().getFileAt(index)
-									.getPath())) {
+							.equals(AcideProjectConfiguration.getInstance().getFileAt(index)
+									.getAbsolutePath())) {
 
 						// IS COMPILABLE FILE?
-						if (MainWindow.getInstance().getProjectConfiguration()
+						if (AcideProjectConfiguration.getInstance()
 								.getFileAt(index).isCompilableFile())
 							MainWindow.getInstance().getFileEditorManager()
 									.getFileEditorPanelAt(i)
-									.setCompilerFile(true);
+									.setCompilableFile(true);
 
 						// IS MAIN FILE?
-						if (MainWindow.getInstance().getProjectConfiguration()
+						if (AcideProjectConfiguration.getInstance()
 								.getFileAt(index).isMainFile())
 							MainWindow.getInstance().getFileEditorManager()
 									.getFileEditorPanelAt(i).setMainFile(true);
@@ -199,10 +193,13 @@ public class OpenAllFilesMenuItemListener implements ActionListener {
 				MainWindow.getInstance().getMenu().enableEditMenu();
 
 				// Updates the undo manager
-				AcideUndoRedoManager.getInstance().update();
+				AcideUndoRedoManager.getInstance().update(
+						MainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.getSyntaxDocument());
 
 				// The project configuration has been modified
-				MainWindow.getInstance().getProjectConfiguration()
+				AcideProjectConfiguration.getInstance()
 						.setIsModified(false);
 			} else {
 
@@ -212,18 +209,17 @@ public class OpenAllFilesMenuItemListener implements ActionListener {
 					// Error message
 					JOptionPane.showMessageDialog(null,
 							labels.getString("s970")
-									+ MainWindow.getInstance()
-											.getProjectConfiguration()
-											.getFileAt(index).getPath()
+									+ AcideProjectConfiguration.getInstance()
+											.getFileAt(index).getAbsolutePath()
 									+ labels.getString("s971"), "Error",
 							JOptionPane.ERROR_MESSAGE);
 
 					// Removes the file from the project
-					MainWindow.getInstance().getProjectConfiguration()
+					AcideProjectConfiguration.getInstance()
 							.removeFileAt(index);
 
 					// The project configuration has been modified
-					MainWindow.getInstance().getProjectConfiguration()
+					AcideProjectConfiguration.getInstance()
 							.setIsModified(true);
 				}
 			}
@@ -238,34 +234,24 @@ public class OpenAllFilesMenuItemListener implements ActionListener {
 			@Override
 			public void run() {
 
-				// Sets the selected editor
-				if (MainWindow.getInstance().getProjectConfiguration()
-						.getSelectedEditorIndex() != -1) {
+				// Sets the focus in the edition area
+				MainWindow.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanel()
+						.getActiveTextEditionArea().requestFocusInWindow();
 
-					// Sets the selected file editor
-					MainWindow
-							.getInstance()
-							.getFileEditorManager()
-							.setSelectedFileEditorPanelAt(
-									MainWindow.getInstance()
-											.getProjectConfiguration()
-											.getSelectedEditorIndex());
+				// Sets the caret visible
+				MainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanel()
+				.getActiveTextEditionArea().getCaret().setVisible(true);
+				
+				// Selects the tree node
+				MainWindow.getInstance().getExplorerPanel()
+						.selectTreeNodeFromFileEditor();
 
-					// Sets the focus in the edition area
-					MainWindow.getInstance().getFileEditorManager()
-							.getSelectedFileEditorPanel()
-							.getActiveTextEditionArea().requestFocusInWindow();
-
-					// Selects the tree node
-					MainWindow.getInstance().getExplorerPanel()
-							.selectTreeNodeFromFileEditor();
-
-					// Updates the status bar with the selected editor
-					MainWindow.getInstance().getStatusBar()
-							.updatesStatusBarFromFileEditor();
-				}
+				// Updates the status bar with the selected editor
+				MainWindow.getInstance().getStatusBar()
+						.updatesStatusBarFromFileEditor();
 			}
 		});
 	}
-
 }

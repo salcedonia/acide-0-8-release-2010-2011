@@ -1,74 +1,92 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package es.configuration.project;
 
-import es.explorer.ExplorerFile;
-import es.text.TextFile;
-import gui.mainWindow.MainWindow;
+import es.project.AcideProjectFile;
 
 import java.util.ArrayList;
 
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
-/************************************************************************
- * Project configuration of ACIDE - A Configurable IDE.
+/**
+ * ACIDE - A Configurable IDE project configuration.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
- ***********************************************************************/
+ */
 public class AcideProjectConfiguration {
 
 	/**
-	 * Project name.
+	 * ACIDE - A Configurable IDE project configuration unique class instance.
+	 */
+	private static AcideProjectConfiguration _instance;
+	/**
+	 * ACIDE - A Configurable IDE project configuration project name.
 	 */
 	private String _name;
 	/**
-	 * Project path.
+	 * ACIDE - A Configurable IDE project configuration project path.
 	 */
 	private String _path;
 	/**
-	 * Lexicon configuration.
+	 * ACIDE - A Configurable IDE project configuration lexicon configuration.
 	 */
 	private String _lexiconConfiguration;
 	/**
-	 * Syntactic configuration.
+	 * ACIDE - A Configurable IDE project configuration grammar configuration.
 	 */
-	private String _syntacticConfiguration;
+	private String _grammarConfiguration;
 	/**
-	 * Output configuration.
+	 * ACIDE - A Configurable IDE project configuration console configuration.
 	 */
-	private String _outputConfiguration;
+	private String _consoleConfiguration;
+	/**
+	 * ACIDE - A Configurable IDE project configuration file editor configuration.
+	 */
+	private String _fileEditorConfiguration;
+	/**
+	 * ACIDE - A Configurable IDE project configuration window configuration.
+	 */
+	private String _windowConfiguration;
+	/**
+	 * Language of the application.
+	 */
+	private String _language;
+	/**
+	 * Menu configuration.
+	 */
+	private String _menuConfiguration;
+	/**
+	 * Tool Bar configuration.
+	 */
+	private String _toolBarConfiguration;
 	/**
 	 * Compiler path.
 	 */
@@ -90,18 +108,6 @@ public class AcideProjectConfiguration {
 	 */
 	private String _fileExtension;
 	/**
-	 * Language of the application.
-	 */
-	private String _language;
-	/**
-	 * Menu configuration.
-	 */
-	private String _menuConfiguration;
-	/**
-	 * Tool Bar configuration.
-	 */
-	private String _toolBarConfiguration;
-	/**
 	 * Flag that indicates if it is the first time that the configuration has
 	 * been saved or not.
 	 */
@@ -111,53 +117,29 @@ public class AcideProjectConfiguration {
 	 */
 	private boolean _isModified;
 	/**
-	 * Flag that indicates if the Explorer is showed or not.
-	 */
-	private boolean _isExplorerShowed;
-	/**
-	 * Flag that indicates if the Shell Output is showed or not.
-	 */
-	private boolean _isShellShowed;
-	/**
-	 * Window width.
-	 */
-	private int _windowWidth;
-	/**
-	 * Window height.
-	 */
-	private int _windowHeight;
-	/**
-	 * X position for the window.
-	 */
-	private int _posX;
-	/**
-	 * Y position for the window.
-	 */
-	private int _posY;
-	/**
-	 * Panel Width.
-	 */
-	private int _splitPaneVerticalDividerLocation;
-	/**
-	 * Panel Height.
-	 */
-	private int _splitPaneHorizontalDividerLocation;
-	/**
 	 * File list of the files which belongs to the project.
 	 */
-	private ArrayList<ExplorerFile> _fileList;
-	/**
-	 * Selected editor index.
-	 */
-	private int _selectedEditorIndex;
+	private ArrayList<AcideProjectFile> _fileList;
 
 	/**
 	 * Creates a new project configuration.
 	 */
 	public AcideProjectConfiguration() {
-		_fileList = new ArrayList<ExplorerFile>();
+		_fileList = new ArrayList<AcideProjectFile>();
 	}
 
+	/**
+	 * Returns the ACIDE - A Configurable IDE project configuration unique class instance.
+	 * 
+	 * @return the ACIDE - A Configurable IDE project configuration unique class instance.
+	 */
+	public static AcideProjectConfiguration getInstance(){
+		
+		if(_instance == null)
+			_instance = new AcideProjectConfiguration();
+		return _instance;
+	}
+	
 	/**
 	 * Saves the project configuration in a string.
 	 * 
@@ -167,139 +149,32 @@ public class AcideProjectConfiguration {
 
 		String fileContent = "";
 		fileContent = fileContent + _name + "\n";
+		fileContent = fileContent + _path + "\n";
+		fileContent = fileContent + _windowConfiguration + "\n";
 		fileContent = fileContent + _lexiconConfiguration + "\n";
-		fileContent = fileContent + _syntacticConfiguration + "\n";
+		fileContent = fileContent + _grammarConfiguration + "\n";
 		fileContent = fileContent + _compilerPath + "\n";
 		fileContent = fileContent + _compilerArguments + "\n";
-		fileContent = fileContent + _outputConfiguration + "\n";
+		fileContent = fileContent + _consoleConfiguration + "\n";
 		fileContent = fileContent + _language + "\n";
 		fileContent = fileContent + _menuConfiguration + "\n";
 		fileContent = fileContent + _toolBarConfiguration + "\n";
-
-		// If the explorer is shown
-		if (MainWindow.getInstance().getMenu().getView().getShowExplorerPanel()
-				.isSelected())
-			_isExplorerShowed = true;
-		else
-			_isExplorerShowed = false;
-		fileContent = fileContent + isExplorerShowed() + "\n";
-
-		// If the shell is shown
-		if (MainWindow.getInstance().getMenu().getView().getShowShellWindow()
-				.isSelected())
-			_isShellShowed = true;
-		else
-			_isShellShowed = false;
-		fileContent = fileContent + isShellShowed() + "\n";
-
-		// MAIN WINDOW WIDTH
-		fileContent = fileContent + MainWindow.getInstance().getWidth() + "\n";
-
-		// MAIN WINDOW HEIGHT
-		fileContent = fileContent + MainWindow.getInstance().getHeight() + "\n";
-
-		// MAIN WINDOW X
-		fileContent = fileContent + MainWindow.getInstance().getX() + "\n";
-
-		// MAIN WINDOW Y
-		fileContent = fileContent + MainWindow.getInstance().getY() + "\n";
-
-		// MAIN WINDOW VERTICAL SPLIT PANEL
-		fileContent = fileContent
-				+ MainWindow.getInstance().getVerticalSplitPane()
-						.getDividerLocation() + "\n";
-
-		// MAIN WINDOW HORIZONTAL SPLIT PANEL
-		fileContent = fileContent
-				+ MainWindow.getInstance().getHorizontalSplitPane()
-						.getDividerLocation() + "\n";
-
-		// SELECTED EDITOR	
-		fileContent = fileContent + MainWindow.getInstance()
-		.getFileEditorManager().getSelectedFileEditorPanelIndex() + "\n";
+		fileContent = fileContent + _fileEditorConfiguration + "\n";
 
 		// FILES ASSOCIATED TO THE PROJECT
-		fileContent = fileContent + getNumFilesFromList() + "\n";
+		fileContent = fileContent + _fileList.size() + "\n";
 
-		for (int i = 0; i < _fileList.size(); i++) {
-			ExplorerFile f = (ExplorerFile) _fileList.get(i);
-			fileContent = fileContent + f.getPath() + "\n" + f.getName() + "\n"
-					+ f.getParent() + "\n" + f.isDirectory() + "\n"
-					+ f.isCompilableFile() + "\n" + f.isMainFile() + "\n"
-					+ f.isOpened() + "\n";
+		for (int index = 0; index < _fileList.size(); index++) {
+			
+			// Gets the ACIDE - A Configurable file from the list
+			AcideProjectFile file = (AcideProjectFile) _fileList.get(index);
+			fileContent = fileContent + file.getAbsolutePath() + "\n" + file.getName() + "\n"
+					+ file.getParent() + "\n" + file.isDirectory() + "\n"
+					+ file.isCompilableFile() + "\n" + file.isMainFile() + "\n"
+					+ file.isOpened() + "\n";
 		}
 
 		return fileContent;
-	}
-
-	/**
-	 * Saves the Main Window configuration parameters in the configuration file.
-	 */
-	public void saveMainWindowParameters() {
-
-		// Not default project
-		if (!isDefaultProject()) {
-
-			// Gets the project configuration to overwriting it
-			String fileContent = null;
-			String path = null;
-			TextFile textFile = new TextFile();
-
-			try {
-				path = ResourceManager.getInstance().getProperty(
-						"defaultAcideProject");
-				fileContent = textFile.load(path);
-			} catch (Exception exception) {
-
-				// Updates the Log
-				AcideLog.getLog().error(exception.getMessage());
-				exception.printStackTrace();
-			}
-
-			// Splits the text in different lines
-			String[] lines = fileContent.split("\n");
-
-			// MAIN WINDOW WIDTH
-			lines[11] = Integer.toString(MainWindow.getInstance().getWidth());
-
-			// MAIN WINDOW HEIGHT
-			lines[12] = Integer.toString(MainWindow.getInstance().getHeight());
-
-			// MAIN WINDOW X
-			lines[13] = Integer.toString(MainWindow.getInstance().getX());
-
-			// MAIN WINDOW Y
-			lines[14] = Integer.toString(MainWindow.getInstance().getY());
-
-			// MAIN WINDOW VERTICAL SPLIT PANEL
-			lines[15] = Integer.toString(MainWindow.getInstance()
-					.getVerticalSplitPane().getDividerLocation());
-
-			// MAIN WINDOW HORIZONTAL SPLIT PANEL
-			lines[16] = Integer.toString(MainWindow.getInstance()
-					.getHorizontalSplitPane().getDividerLocation());
-
-			// MAIN WINDOW SELECTED EDITOR
-			lines[17] = Integer.toString(MainWindow.getInstance()
-					.getFileEditorManager().getSelectedFileEditorPanelIndex());
-
-			// Rebuilds the file content
-			String newFileContent = "";
-			for (int i = 0; i < lines.length; i++)
-				newFileContent = newFileContent + lines[i] + "\n";
-
-			// Saves the text in the file
-			try {
-				textFile.save(
-						ResourceManager.getInstance().getProperty(
-								"defaultAcideProject"), newFileContent);
-			} catch (Exception exception) {
-
-				// Updates the Log
-				AcideLog.getLog().error(exception.getMessage());
-				exception.printStackTrace();
-			}
-		}
 	}
 
 	/**
@@ -313,7 +188,7 @@ public class AcideProjectConfiguration {
 		// Gets the project configuration
 		String project = null;
 		try {
-			project = ResourceManager.getInstance().getProperty(
+			project = AcideResourceManager.getInstance().getProperty(
 					"defaultAcideProject");
 		} catch (Exception exception) {
 
@@ -323,7 +198,7 @@ public class AcideProjectConfiguration {
 		}
 
 		return project.equals("./configuration/project/default.acidePrj")
-				&& MainWindow.getInstance().getProjectConfiguration().getName()
+				&& AcideProjectConfiguration.getInstance().getName()
 						.equals("");
 	}
 
@@ -340,11 +215,22 @@ public class AcideProjectConfiguration {
 		int initialPosition = 0;
 		int finalPosition = 0;
 
-		// PROJECT NAME PATH
+		// PROJECT NAME
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_name = fileContent.substring(initialPosition, finalPosition);
-
-		// LEXICAL CONFIGURATION PATH
+		
+		// PROJECT PATH
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_path = fileContent.substring(initialPosition, finalPosition);
+		
+		// WINDOW CONFIGURATION PATH
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_windowConfiguration = fileContent.substring(initialPosition,
+				finalPosition);
+		
+		// LEXICON CONFIGURATION PATH
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_lexiconConfiguration = fileContent.substring(initialPosition,
@@ -353,7 +239,7 @@ public class AcideProjectConfiguration {
 		// GRAMMAR CONFIGURATION PATH
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
-		_syntacticConfiguration = fileContent.substring(initialPosition,
+		_grammarConfiguration = fileContent.substring(initialPosition,
 				finalPosition);
 
 		// COMPILER PATH
@@ -367,10 +253,10 @@ public class AcideProjectConfiguration {
 		_compilerArguments = fileContent.substring(initialPosition,
 				finalPosition);
 
-		// OUTPUT CONFIGURATION PATH
+		// CONSOLE CONFIGURATION PATH
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
-		_outputConfiguration = fileContent.substring(initialPosition,
+		_consoleConfiguration = fileContent.substring(initialPosition,
 				finalPosition);
 
 		// LANGUAGE OF THE APPLICATION
@@ -390,95 +276,50 @@ public class AcideProjectConfiguration {
 		_toolBarConfiguration = fileContent.substring(initialPosition,
 				finalPosition);
 
-		// IS EXPLORER SHOWED
+		// FILE EDITOR CONFIGURATION PATH
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
-		String cond = fileContent.substring(initialPosition, finalPosition);
-		if (cond.equals("true"))
-			_isExplorerShowed = true;
-		else
-			_isExplorerShowed = false;
-
-		// IS SHELL SHOWED
-		initialPosition = finalPosition + 1;
-		finalPosition = fileContent.indexOf("\n", initialPosition);
-		cond = fileContent.substring(initialPosition, finalPosition);
-		if (cond.equals("true"))
-			_isShellShowed = true;
-		else
-			_isShellShowed = false;
-
-		// WINDOW WIDTH
-		initialPosition = finalPosition + 1;
-		finalPosition = fileContent.indexOf("\n", initialPosition);
-		cond = fileContent.substring(initialPosition, finalPosition);
-		_windowWidth = Integer.parseInt(cond);
-
-		// WINDOW HEIGHT
-		initialPosition = finalPosition + 1;
-		finalPosition = fileContent.indexOf("\n", initialPosition);
-		cond = fileContent.substring(initialPosition, finalPosition);
-		_windowHeight = Integer.parseInt(cond);
-
-		// POSITION X WINDOW
-		initialPosition = finalPosition + 1;
-		finalPosition = fileContent.indexOf("\n", initialPosition);
-		cond = fileContent.substring(initialPosition, finalPosition);
-		_posX = Integer.parseInt(cond);
-
-		// POSITION Y WINDOW
-		initialPosition = finalPosition + 1;
-		finalPosition = fileContent.indexOf("\n", initialPosition);
-		cond = fileContent.substring(initialPosition, finalPosition);
-		_posY = Integer.parseInt(cond);
-
-		// PANEL WIDTH
-		initialPosition = finalPosition + 1;
-		finalPosition = fileContent.indexOf("\n", initialPosition);
-		cond = fileContent.substring(initialPosition, finalPosition);
-		_splitPaneVerticalDividerLocation = Integer.parseInt(cond);
-
-		// PANEL HEIGHT
-		initialPosition = finalPosition + 1;
-		finalPosition = fileContent.indexOf("\n", initialPosition);
-		cond = fileContent.substring(initialPosition, finalPosition);
-		_splitPaneHorizontalDividerLocation = Integer.parseInt(cond);
-
-		// SELECTED EDITOR
-		initialPosition = finalPosition + 1;
-		finalPosition = fileContent.indexOf("\n", initialPosition);
-		cond = fileContent.substring(initialPosition, finalPosition);
-		_selectedEditorIndex = Integer.parseInt(cond);
-
-		// RELATED FILES
+		_fileEditorConfiguration = fileContent.substring(initialPosition,
+				finalPosition);
+		
+		// NUM FILES
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		String numFiles = fileContent.substring(initialPosition, finalPosition);
-
 		initialPosition = finalPosition + 1;
 
-		boolean isCompilable;
-		boolean isMain;
+		boolean isCompilableFile;
+		boolean isMainFile;
 		String name;
 		String path;
 		String parent;
 		boolean isDirectory;
 		boolean isOpened;
 
+		// Clears the file list
 		_fileList.clear();
 
-		for (int i = 0; i < Integer.parseInt(numFiles); i++) {
+		for (int index = 0; index < Integer.parseInt(numFiles); index++) {
 
-			ExplorerFile explorerFile = new ExplorerFile();
+			// Creates the ACIDE - A Configurable IDE file
+			AcideProjectFile file = new AcideProjectFile();
+			
+			// ABSOLUTE PATH
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			path = fileContent.substring(initialPosition, finalPosition);
 			initialPosition = finalPosition + 1;
+			
+			// NAME
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			name = fileContent.substring(initialPosition, finalPosition);
 			initialPosition = finalPosition + 1;
+			
+			// PARENT
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			parent = fileContent.substring(initialPosition, finalPosition);
 			initialPosition = finalPosition + 1;
+			
+			// IS DIRECTORY
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			if (Boolean.parseBoolean(fileContent.substring(initialPosition,
 					finalPosition)) == true)
@@ -486,20 +327,26 @@ public class AcideProjectConfiguration {
 			else
 				isDirectory = false;
 			initialPosition = finalPosition + 1;
+			
+			// IS COMPILABLE FILE
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			if (Boolean.parseBoolean(fileContent.substring(initialPosition,
 					finalPosition)) == true)
-				isCompilable = true;
+				isCompilableFile = true;
 			else
-				isCompilable = false;
+				isCompilableFile = false;
 			initialPosition = finalPosition + 1;
+			
+			// IS MAIN FILE
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			if (Boolean.parseBoolean(fileContent.substring(initialPosition,
 					finalPosition)) == true)
-				isMain = true;
+				isMainFile = true;
 			else
-				isMain = false;
+				isMainFile = false;
 			initialPosition = finalPosition + 1;
+			
+			// IS OPENED
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			if (Boolean.parseBoolean(fileContent.substring(initialPosition,
 					finalPosition)) == true)
@@ -507,14 +354,18 @@ public class AcideProjectConfiguration {
 			else
 				isOpened = false;
 			initialPosition = finalPosition + 1;
-			explorerFile.setIsMainFile(isMain);
-			explorerFile.setIsCompilableFile(isCompilable);
-			explorerFile.setPath(path);
-			explorerFile.setParent(parent);
-			explorerFile.setName(name);
-			explorerFile.setIsDirectory(isDirectory);
-			explorerFile.setIsOpened(isOpened);
-			_fileList.add(explorerFile);
+			
+			// Updates the ACIDE - A Configurable IDE file with the info
+			file.setIsMainFile(isMainFile);
+			file.setIsCompilableFile(isCompilableFile);
+			file.setAbsolutePath(path);
+			file.setParent(parent);
+			file.setName(name);
+			file.setIsDirectory(isDirectory);
+			file.setIsOpened(isOpened);
+			
+			// Adds the file to the list
+			_fileList.add(file);
 		}
 	}
 
@@ -569,18 +420,18 @@ public class AcideProjectConfiguration {
 	 * @param index
 	 *            position of the file.
 	 * @return the file from a list in the position given as a parameter.
-	 * @see ExplorerFile
+	 * @see AcideProjectFile
 	 */
-	public ExplorerFile getFileAt(int index) {
+	public AcideProjectFile getFileAt(int index) {
 		return _fileList.get(index);
 	}
 
 	/**
-	 * Returns the lexical configuration.
+	 * Returns the lexicon configuration.
 	 * 
-	 * @return the lexical configuration.
+	 * @return the lexicon configuration.
 	 */
-	public String getLexicalConfiguration() {
+	public String getLexiconConfiguration() {
 		return _lexiconConfiguration;
 	}
 
@@ -627,11 +478,11 @@ public class AcideProjectConfiguration {
 	/**
 	 * Adds a file to the list.
 	 * 
-	 * @param explorerFile
+	 * @param projectFile
 	 *            new file to add.
 	 */
-	public void addFile(ExplorerFile explorerFile) {
-		_fileList.add(explorerFile);
+	public void addFile(AcideProjectFile projectFile) {
+		_fileList.add(projectFile);
 	}
 
 	/**
@@ -665,8 +516,8 @@ public class AcideProjectConfiguration {
 	 * 
 	 * @return the syntactic configuration.
 	 */
-	public String getSyntacticConfiguration() {
-		return _syntacticConfiguration;
+	public String getGrammarConfiguration() {
+		return _grammarConfiguration;
 	}
 
 	/**
@@ -675,8 +526,8 @@ public class AcideProjectConfiguration {
 	 * @param syntacticConfiguration
 	 *            new value to set.
 	 */
-	public void setSyntacticConfiguration(String syntacticConfiguration) {
-		_syntacticConfiguration = syntacticConfiguration;
+	public void setGrammarConfiguration(String syntacticConfiguration) {
+		_grammarConfiguration = syntacticConfiguration;
 	}
 
 	/**
@@ -779,7 +630,7 @@ public class AcideProjectConfiguration {
 	 * 
 	 * @return the tool bar.
 	 */
-	public String getToolBar() {
+	public String getToolBarConfiguration() {
 		return _toolBarConfiguration;
 	}
 
@@ -832,194 +683,85 @@ public class AcideProjectConfiguration {
 	}
 
 	/**
-	 * Returns the window height.
+	 * Sets a new value for the lexicon configuration.
 	 * 
-	 * @return the window height.
-	 */
-	public int getWindowHeight() {
-		return _windowHeight;
-	}
-
-	/**
-	 * Sets a new value for the window height.
-	 * 
-	 * @param windowHeight
+	 * @param lexiconConfiguration
 	 *            new value to set.
 	 */
-	public void setWindowHeight(int windowHeight) {
-		_windowHeight = windowHeight;
+	public void setLexiconConfiguration(String lexiconConfiguration) {
+		_lexiconConfiguration = lexiconConfiguration;
 	}
 
 	/**
-	 * Returns the x position of the window.
+	 * Sets a new value to the console configuration.
 	 * 
-	 * @return the x position of the window.
-	 */
-	public int getPosX() {
-		return _posX;
-	}
-
-	/**
-	 * Sets a new value to the x position of the window.
-	 * 
-	 * @param posX
+	 * @param consoleConfiguration
 	 *            new value to set.
 	 */
-	public void setPosX(int posX) {
-		_posX = posX;
+	public void setOutputConfiguration(String consoleConfiguration) {
+		_consoleConfiguration = consoleConfiguration;
 	}
 
 	/**
-	 * Returns the y position of the window.
+	 * Returns the console configuration.
 	 * 
-	 * @return the y position of the window.
+	 * @return the console configuration.
 	 */
-	public int getPosY() {
-		return _posY;
+	public String getConsoleConfiguration() {
+		return _consoleConfiguration;
+	}
+	
+	/**
+	 * Returns the file editor configuration.
+	 * 
+	 * @return the file editor configuration.
+	 */
+	public String getFileEditorConfiguration() {
+		return _fileEditorConfiguration;
 	}
 
 	/**
-	 * Sets a new value to the y position of the window.
+	 * Sets a new value to the file editor configuration.
 	 * 
-	 * @param posY
-	 *            new value to set.
+	 * @param fileEditorConfiguration new value to set.
 	 */
-	public void setPosY(int posY) {
-		_posY = posY;
+	public void setFileEditorConfiguration(String fileEditorConfiguration) {
+		_fileEditorConfiguration = fileEditorConfiguration;
 	}
-
+	
 	/**
-	 * Returns the showed shell flag.
+	 * Returns the ACIDE - A Configurable IDE window configuration.
 	 * 
-	 * @return the showed shell flag.
+	 * @return the ACIDE - A Configurable IDE window configuration.
 	 */
-	public boolean isShellShowed() {
-		return _isShellShowed;
+	public String getWindowConfiguration() {
+		return _windowConfiguration;
 	}
-
+	
 	/**
-	 * Sets a new value to the showed shell flag.
+	 * Sets a new value to the ACIDE - A Configurable IDE window configuration.
 	 * 
-	 * @param isShellShowed
-	 *            new value to set.
+	 * @param windowConfiguration new value to set.
 	 */
-	public void setIsShellShowed(boolean isShellShowed) {
-		_isShellShowed = isShellShowed;
+	public void setWindowConfiguration(String windowConfiguration){
+		_windowConfiguration = windowConfiguration;
 	}
-
+	
 	/**
-	 * Returns the explorer showed flag.
+	 * Returns the file from the file list which absolute path matches with
+	 * the path given as a parameter.
 	 * 
-	 * @return the explorer showed flag.
-	 */
-	public boolean isExplorerShowed() {
-		return _isExplorerShowed;
-	}
-
-	/**
-	 * Sets a new value to the flag of the explorer showed.
+	 * @param absolutePath absolute path to compare with.
 	 * 
-	 * @param isExplorerShowed
-	 *            new value to set.
+	 * @return the file from the file list which absolute path matches with
+	 * the path given as a parameter.
 	 */
-	public void setIsExplorerShowed(boolean isExplorerShowed) {
-		_isExplorerShowed = isExplorerShowed;
-	}
-
-	/**
-	 * Returns the window width.
-	 * 
-	 * @return the window width.
-	 */
-	public int getWindowWidth() {
-		return _windowWidth;
-	}
-
-	/**
-	 * Sets a new value for the window width.
-	 * 
-	 * @param windowWidth
-	 *            new value to set.
-	 */
-	public void setWindowWidth(int windowWidth) {
-		_windowWidth = windowWidth;
-	}
-
-	/**
-	 * Returns the splitPaneHorizontal location.
-	 * 
-	 * @return the splitPaneHorizontal location.
-	 */
-	public int getSplitPanelHorizontalDividerLocation() {
-		return _splitPaneHorizontalDividerLocation;
-	}
-
-	/**
-	 * Sets a new value for the splitPaneHorizontalDividerLocation.
-	 * 
-	 * @param splitPaneHorizontalDividerLocation
-	 *            new value to set.
-	 */
-	public void setSplitPaneHorizontalDividerLocation(
-			int splitPaneHorizontalDividerLocation) {
-		_splitPaneHorizontalDividerLocation = splitPaneHorizontalDividerLocation;
-	}
-
-	/**
-	 * Returns the splitPaneVertical location.
-	 * 
-	 * @return the splitPaneVertical location.
-	 */
-	public int getSplitPaneVerticalDividerLocation() {
-		return _splitPaneVerticalDividerLocation;
-	}
-
-	/**
-	 * Sets a new value for the splitPaneVerticalDividerLocation.
-	 * 
-	 * @param splitPaneVerticalDividerLocation
-	 *            new value to set.
-	 */
-	public void setSplitPaneVerticalDividerLocation(
-			int splitPaneVerticalDividerLocation) {
-		_splitPaneVerticalDividerLocation = splitPaneVerticalDividerLocation;
-	}
-
-	/**
-	 * Sets a new value for the lexicalConfiguration.
-	 * 
-	 * @param lexicalConfiguration
-	 *            new value to set.
-	 */
-	public void setLexicalConfiguration(String lexicalConfiguration) {
-		_lexiconConfiguration = lexicalConfiguration;
-	}
-
-	/**
-	 * Sets a new value to the output configuration.
-	 * 
-	 * @param outputConfiguration
-	 *            new value to set.
-	 */
-	public void setOutputConfiguration(String outputConfiguration) {
-		_outputConfiguration = outputConfiguration;
-	}
-
-	/**
-	 * Returns the output configuration.
-	 * 
-	 * @return the output configuration.
-	 */
-	public String getOutputConfiguration() {
-		return _outputConfiguration;
-	}
-
-	/**
-	 * Returns the selected editor index.
-	 * 
-	 * @return the selected editor index.
-	 */
-	public int getSelectedEditorIndex() {
-		return _selectedEditorIndex;
+	public AcideProjectFile getFileAt(String absolutePath) {
+	
+		for(int index = 0; index < _fileList.size(); index++)
+			if(_fileList.get(index).getAbsolutePath().equals(absolutePath))
+				return _fileList.get(index);
+		
+		return null;
 	}
 }

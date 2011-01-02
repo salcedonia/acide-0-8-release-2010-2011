@@ -1,3 +1,32 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea;
 
 import java.awt.*;
@@ -5,48 +34,16 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
+
 import operations.log.AcideLog;
 
-/************************************************************************
+/**
  * Track the movement of the Caret by painting a background line at the current
  * caret position.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see JComponent
- ***********************************************************************/
+ */
 public class LinePainter extends JComponent implements
 		Highlighter.HighlightPainter, CaretListener, MouseListener,
 		MouseMotionListener {
@@ -95,7 +92,7 @@ public class LinePainter extends JComponent implements
 
 		// Add listeners so we know when to change highlighting
 
-		textComponent.addCaretListener(this);
+		//textComponent.addCaretListener(this);
 		textComponent.addMouseListener(this);
 		textComponent.addMouseMotionListener(this);
 
@@ -104,7 +101,7 @@ public class LinePainter extends JComponent implements
 		try {
 			textComponent.getHighlighter().addHighlight(0, 0, this);
 		} catch (BadLocationException badLocationException) {
-			
+
 			// Updates the log
 			AcideLog.getLog().error(badLocationException.getMessage());
 			badLocationException.printStackTrace();
@@ -141,18 +138,18 @@ public class LinePainter extends JComponent implements
 	public void paint(Graphics g, int p0, int p1, Shape bounds, JTextComponent c) {
 		try {
 
-			Rectangle r = c.modelToView(c.getCaretPosition());
+			Rectangle r = _textComponent.getUI().modelToView(c, c.getCaretPosition());
 			g.setColor(_color);
 			g.fillRect(0, r.y, c.getWidth(), r.height);
 
 			if (_lastView == null)
 				_lastView = r;
-			
+
 		} catch (BadLocationException badLocationException) {
 
 			// Updates the log
-			AcideLog.getLog().error(badLocationException.getMessage());
-			badLocationException.printStackTrace();
+			// AcideLog.getLog().error(badLocationException.getMessage());
+			// badLocationException.printStackTrace();
 		}
 	}
 
@@ -180,7 +177,6 @@ public class LinePainter extends JComponent implements
 
 					// Removes the highlighting from the previously highlighted
 					// line
-
 					if (_lastView != null)
 						if (_lastView.y != currentView.y) {
 							_textComponent
@@ -192,8 +188,8 @@ public class LinePainter extends JComponent implements
 				} catch (BadLocationException badLocationException) {
 
 					// Updates the log
-					AcideLog.getLog().error(badLocationException.getMessage());
-					badLocationException.printStackTrace();
+					// AcideLog.getLog().error(badLocationException.getMessage());
+					// badLocationException.printStackTrace();
 				}
 			}
 		});

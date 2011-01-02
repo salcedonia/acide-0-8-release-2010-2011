@@ -1,3 +1,32 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.fileEditor.fileEditorManager.utils.logic;
 
 import java.awt.Color;
@@ -5,6 +34,7 @@ import java.util.Hashtable;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import javax.swing.SwingUtilities;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
@@ -14,53 +44,20 @@ import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 
-import operations.lexicon.Comments;
+import operations.lexicon.Remark;
 import operations.lexicon.DelimiterList;
 import operations.lexicon.TokenType;
 import operations.lexicon.TokenTypeList;
 import operations.log.AcideLog;
 
-/************************************************************************																
- * Syntax document for the editors of ACIDE - A Configurable IDE.			
- *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
- * @version 0.8	
- * @see Properties																												
- ***********************************************************************/
+/**
+ * Syntax document for the editors of ACIDE - A Configurable IDE.
+ * 
+ * @version 0.8
+ * @see Properties
+ */
 public class SyntaxDocument extends DefaultStyledDocument {
 
 	/**
@@ -76,7 +73,7 @@ public class SyntaxDocument extends DefaultStyledDocument {
 	 */
 	private Element _rootElement;
 	/**
-	 * Mutable attribute set normal. 
+	 * Mutable attribute set normal.
 	 */
 	private MutableAttributeSet _normal;
 	/**
@@ -98,14 +95,15 @@ public class SyntaxDocument extends DefaultStyledDocument {
 
 	/**
 	 * Creates a new syntax document.
-	 * @param fileEditorPanel 
+	 * 
+	 * @param fileEditorPanel
 	 */
 	@SuppressWarnings("unchecked")
 	public SyntaxDocument() {
 
 		super();
-		
-		ResourceBundle labels = AcideLanguage.getInstance().getLabels();
+
+		ResourceBundle labels = AcideLanguageManager.getInstance().getLabels();
 
 		try {
 
@@ -113,18 +111,18 @@ public class SyntaxDocument extends DefaultStyledDocument {
 
 			// Updates the log
 			AcideLog.getLog().info(labels.getString("s321"));
-			
+
 			_defaultStyledDocument = this;
 			_rootElement = _defaultStyledDocument.getDefaultRootElement();
-			
+
 			putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
-			
+
 			_normal = new SimpleAttributeSet();
 			_comment = new SimpleAttributeSet();
 
 			StyleConstants.setForeground(_normal, Color.black);
-			StyleConstants.setForeground(_comment, Comments.getInstance()
-					.getLineCommentColor());
+			StyleConstants.setForeground(_comment, Remark.getInstance()
+					.getColor());
 			StyleConstants.setItalic(_comment, true);
 			StyleConstants.setBold(_comment, false);
 
@@ -157,12 +155,12 @@ public class SyntaxDocument extends DefaultStyledDocument {
 		}
 
 		catch (Exception exception) {
-			
+
 			// Updates the log
 			AcideLog.getLog().info(labels.getString("s322"));
 			exception.printStackTrace();
 		}
-		
+
 		// Updates the log
 		AcideLog.getLog().info(labels.getString("s323"));
 	}
@@ -171,22 +169,28 @@ public class SyntaxDocument extends DefaultStyledDocument {
 	 * Overrides to apply syntax highlighting after the document has been
 	 * updated.
 	 * 
-	 * @param offset string offset.
-	 * @param string string to insert.
-	 * @param attributeSet attribute set.
+	 * @param offset
+	 *            string offset.
+	 * @param string
+	 *            string to insert.
+	 * @param attributeSet
+	 *            attribute set.
 	 */
-	public void insertString(int offset, String string, AttributeSet attributeSet)
-			throws BadLocationException {
+	public void insertString(int offset, String string,
+			AttributeSet attributeSet) throws BadLocationException {
 		super.insertString(offset, string, attributeSet);
 		processChangedLines(offset, string.length());
 	}
 
 	/**
 	 * 
-	 * Overrides to apply syntax highlighting after the document has been updated
-	 *
-	 * @param offset offset to apply.
-	 * @param length highlighting length.
+	 * Overrides to apply syntax highlighting after the document has been
+	 * updated
+	 * 
+	 * @param offset
+	 *            offset to apply.
+	 * @param length
+	 *            highlighting length.
 	 * 
 	 * @exception BadLocationException
 	 */
@@ -198,9 +202,11 @@ public class SyntaxDocument extends DefaultStyledDocument {
 	/**
 	 * Determines how many lines have been changed, then apply highlighting to
 	 * each line.
-	 *
-	 * @param offset offset to apply.
-	 * @param length highlighting length.
+	 * 
+	 * @param offset
+	 *            offset to apply.
+	 * @param length
+	 *            highlighting length.
 	 * @throws BadLocationException
 	 */
 	private void processChangedLines(int offset, int length)
@@ -213,16 +219,18 @@ public class SyntaxDocument extends DefaultStyledDocument {
 		// Do the actual highlighting
 		for (int i = startLine; i <= endLine; i++) {
 			applyHighlighting(content, i);
-			if (Comments.getInstance().getLineComment() != "")
+			if (Remark.getInstance().getContent() != "")
 				applyComments(content, i);
 		}
 	}
 
 	/**
 	 * Parses the line to determine the appropriate highlighting.
-	 *
-	 * @param content file content.
-	 * @param line line to parse.
+	 * 
+	 * @param content
+	 *            file content.
+	 * @param line
+	 *            line to parse.
 	 * @throws BadLocationException
 	 */
 	private void applyHighlighting(String content, int line)
@@ -243,14 +251,17 @@ public class SyntaxDocument extends DefaultStyledDocument {
 	/**
 	 * Parses the line for tokens to highlight.
 	 * 
-	 * @param content file content.
-	 * @param offsetStart offset start.
-	 * @param offsetEnd offset end.
+	 * @param content
+	 *            file content.
+	 * @param offsetStart
+	 *            offset start.
+	 * @param offsetEnd
+	 *            offset end.
 	 */
 	private void checkForTokens(String content, int offsetStart, int offsetEnd) {
-		
+
 		while (offsetStart <= offsetEnd) {
-			
+
 			// skip the delimiters to find the start of a new token
 			while (isDelimiter(content.substring(offsetStart, offsetStart + 1),
 					offsetStart, content)) {
@@ -272,7 +283,7 @@ public class SyntaxDocument extends DefaultStyledDocument {
 	 * @return
 	 */
 	private int getOtherToken(String content, int startOffset, int endOffset) {
-		
+
 		int endOfToken = startOffset + 1;
 		while (endOfToken <= endOffset) {
 			if (isDelimiter(content.substring(endOfToken, endOfToken + 1),
@@ -374,7 +385,7 @@ public class SyntaxDocument extends DefaultStyledDocument {
 	 * @throws BadLocationException
 	 */
 	protected String addMatchingBrace(int offset) throws BadLocationException {
-		
+
 		StringBuffer whiteSpace = new StringBuffer();
 		int line = _rootElement.getElementIndex(offset);
 		int i = _rootElement.getElement(line).getStartOffset();
@@ -396,9 +407,9 @@ public class SyntaxDocument extends DefaultStyledDocument {
 	 * @param line
 	 */
 	private void applyComments(String content, int line) {
-		
-		Comments comment = Comments.getInstance();
-		String s = comment.getLineComment();
+
+		Remark comment = Remark.getInstance();
+		String s = comment.getContent();
 		String text = "";
 		int startOffset = _rootElement.getElement(line).getStartOffset();
 		int endOffset = _rootElement.getElement(line).getEndOffset() - 1;
@@ -410,7 +421,7 @@ public class SyntaxDocument extends DefaultStyledDocument {
 				_defaultStyledDocument.setCharacterAttributes(
 						startOffset + pos, lineLength - pos, _comment, true);
 		} catch (BadLocationException exception) {
-			
+
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
 			exception.printStackTrace();
@@ -421,33 +432,55 @@ public class SyntaxDocument extends DefaultStyledDocument {
 	/**
 	 * Sets a new brace in the position given as a parameter.
 	 * 
-	 * @param position brace position to be inserted.
+	 * @param position
+	 *            brace position to be inserted.
 	 */
-	public void setBrace(int position) {
-		try {
-			if ((position + 1) < _defaultStyledDocument.getLength()) {
-				_defaultStyledDocument.setCharacterAttributes(position, 1, _brace,
-						true);
+	public void setBrace(final int position) {
+
+		/*
+		 * Prevents the java.lang.IllegalStateException: Attempt to mutate in
+		 * notification cause the exception is thrown because you can't make
+		 * changes to text inside an event handler that is being notified of
+		 * changes to the text (because of the possibilities for endless
+		 * recursion). The text is locked against modifications while handling a
+		 * modification (character entry in this case).
+		 */
+		SwingUtilities.invokeLater(new Runnable() {
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see java.lang.Runnable#run()
+			 */
+			@Override
+			public void run() {
+				try {
+					if ((position + 1) < _defaultStyledDocument.getLength()) {
+						_defaultStyledDocument.setCharacterAttributes(position,
+								1, _brace, true);
+					}
+				} catch (Exception exception) {
+
+					// Updates the log
+					AcideLog.getLog().error(exception.getMessage());
+					exception.printStackTrace();
+				}
 			}
-		} catch (Exception exception) {
-			
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
+		});
 	}
 
 	/**
 	 * Removes the brace at the position given as a parameter.
 	 * 
-	 * @param position brace position to be removed.
+	 * @param position
+	 *            brace position to be removed.
 	 */
 	public void removeBrace(int position) {
 		try {
-			_defaultStyledDocument
-					.setCharacterAttributes(position, 1, _normal, true);
+			_defaultStyledDocument.setCharacterAttributes(position, 1, _normal,
+					true);
 		} catch (Exception exception) {
-			
+
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
 		}

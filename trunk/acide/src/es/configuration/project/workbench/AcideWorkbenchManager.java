@@ -1,80 +1,87 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package es.configuration.project.workbench;
 
-import java.awt.Cursor;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 import operations.factory.AcideIOFactory;
 import operations.log.AcideLog;
-import resources.ResourceManager;
-import es.configuration.lexicon.LexiconConfiguration;
-import es.configuration.output.OutputConfiguration;
-import es.explorer.ExplorerFile;
+import resources.AcideResourceManager;
+import es.configuration.console.AcideConsoleConfiguration;
+import es.configuration.fileEditor.AcideFileEditorConfiguration;
+import es.configuration.lexicon.AcideLexiconConfiguration;
+import es.configuration.project.AcideProjectConfiguration;
+import es.configuration.window.AcideWindowConfiguration;
+import es.project.AcideProjectFile;
+import es.project.AcideProjectFileType;
 import es.text.TextFile;
 import gui.mainWindow.MainWindow;
+import gui.mainWindow.utils.AcideSavingResourcesWindow;
 import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
+import gui.splashScreen.AcideSplashScreenWindow;
 
-/************************************************************************
- * Handles the workbench configuration of ACIDE - A Configurable IDE. Loads
- * the workbench configuration from the workbench configuration file at the 
- * beginning of the application, and stores the workbench configuration when
- * the user close the project or the application.
+/**
+ * Handles the workbench configuration of ACIDE - A Configurable IDE. Loads the
+ * workbench configuration from the workbench configuration file at the
+ * beginning of the application, and stores the workbench configuration when the
+ * user close the project or the application.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
- ***********************************************************************/
+ */
 public class AcideWorkbenchManager {
 
 	/**
-	 * Acide - A Configurable IDE workbench manager unique class
-	 * instance.
+	 * Acide - A Configurable IDE workbench manager unique class instance.
 	 */
 	private static AcideWorkbenchManager _instance;
+	/**
+	 * Flag which is used to determine if the workbench configuration has been
+	 * finally loaded. The method updatesEditorAndProjectState in the class
+	 * AcideFileEditorPanelDocumentListener doesn't check the TestPlaf for the
+	 * closing buttons avoiding the exceptions.
+	 */
+	private boolean _workbenchLoaded = false;
 
 	/**
-	 * Returns the Acide - A Configurable IDE workbench manager
-	 * unique class instance.
+	 * Returns the Acide - A Configurable IDE workbench manager unique class
+	 * instance.
 	 * 
-	 * @return the Acide - A Configurable IDE workbench manager
-	 *         unique class instance.
+	 * @return the Acide - A Configurable IDE workbench manager unique class
+	 *         instance.
 	 */
 	public static AcideWorkbenchManager getInstance() {
 
@@ -103,7 +110,7 @@ public class AcideWorkbenchManager {
 
 			DefaultMutableTreeNode temp = list.get(pos);
 
-			ExplorerFile file = (ExplorerFile) temp.getUserObject();
+			AcideProjectFile file = (AcideProjectFile) temp.getUserObject();
 
 			if (file.getName().equals(fileName)) {
 				found = true;
@@ -124,33 +131,32 @@ public class AcideWorkbenchManager {
 	public void loadMainWindowWorkbenchConfiguration(
 			String configurationFileContent) {
 
-		// Sets the WAIT CURSOR
-		Cursor cursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
-		MainWindow.getInstance().setCursor(cursor);
-
 		// Loads the PROJECT CONFIGURATION
-		MainWindow.getInstance().getProjectConfiguration()
-				.load(configurationFileContent);
-
-		// Loads the MAIN WINDOW CONFIGURATION
-		loadMainWindowConfiguration();
+		AcideProjectConfiguration.getInstance().load(configurationFileContent);
+		AcideSplashScreenWindow.setProgressBar(25,
+				"Loading ACIDE - A Configurable IDE Project Configuration");
 
 		// Loads the LEXICON CONFIGURATION
-		LexiconConfiguration lexiconConfiguration = loadLexiconWorkbenchConfiguration();
+		AcideLexiconConfiguration lexiconConfiguration = loadLexiconWorkbenchConfiguration();
+		AcideSplashScreenWindow.setProgressBar(36,
+				"Loading ACIDE - A Configurable IDE Lexicon Configuration");
 
 		// Loads the LANGUAGE FOR THE LABELS OF THE APPLICATION
 		ResourceBundle labels = loadLanguageWorkbenchConfiguration();
+		AcideSplashScreenWindow.setProgressBar(48,
+				"Loading ACIDE - A Configurable IDE Language Configuration");
 
-		// Loads the OUTPUT CONFIGURATION
-		loadOutputWorkbenchConfiguration();
+		// Loads the CONSOLE CONFIGURATION
+		loadConsoleWorkbenchConfiguration();
+		AcideSplashScreenWindow.setProgressBar(56,
+				"Loading ACIDE - A Configurable IDE Console Configuration");
 
 		// Loads the EXPLORER CONFIGURATION
 		loadExplorerWorkbenchConfiguration(labels);
+		AcideSplashScreenWindow.setProgressBar(90,
+				"Loading ACIDE - A Configurable IDE Explorer Configuration");
 
-		// Loads the EDITOR CONFIGURATION
-		loadFileEditorWorkbenchConfiguration(labels);
-
-		// Updates the status bar with the lexical
+		// Updates the status bar with the lexicon
 		MainWindow
 				.getInstance()
 				.getStatusBar()
@@ -160,10 +166,18 @@ public class AcideWorkbenchManager {
 
 		// Loads the GRAMMAR CONFIGURATION
 		loadGrammarWorkbenchConfiguration(labels);
+		AcideSplashScreenWindow.setProgressBar(95,
+				"Loading ACIDE - A Configurable IDE File Editor Configuration");
 
-		// Sets the DEFAULT CURSOR
-		cursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
-		MainWindow.getInstance().setCursor(cursor);
+		// Loads the EDITOR CONFIGURATION
+		loadFileEditorWorkbenchConfiguration(labels);
+		AcideSplashScreenWindow.setProgressBar(98,
+				"Loading ACIDE - A Configurable IDE Grammar Configuration");
+
+		// Loads the MAIN WINDOW CONFIGURATION
+		loadMainWindowConfiguration();
+		AcideSplashScreenWindow.setProgressBar(99,
+				"Loading ACIDE - A Configurable IDE Main Window Configuration");
 	}
 
 	/**
@@ -172,30 +186,48 @@ public class AcideWorkbenchManager {
 	 * 
 	 * @param labels
 	 *            labels to display in the selected language.
+	 * @return
 	 */
-	public static void loadFileEditorWorkbenchConfiguration(
-			ResourceBundle labels) {
+	public void loadFileEditorWorkbenchConfiguration(ResourceBundle labels) {
 
-		for (int index = 0; index < MainWindow.getInstance()
-				.getProjectConfiguration().getNumFilesFromList(); index++) {
+		// Updates the RESOURCE MANAGER
+		AcideResourceManager.getInstance().setProperty(
+				"fileEditorConfiguration",
+				AcideProjectConfiguration.getInstance()
+						.getFileEditorConfiguration());
+
+		// Gets the file editor configuration
+		AcideFileEditorConfiguration fileEditorConfiguration = AcideFileEditorConfiguration
+				.getInstance();
+		try {
+			fileEditorConfiguration.load(AcideResourceManager.getInstance()
+					.getProperty("fileEditorConfiguration"));
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+
+		for (int index = 0; index < AcideFileEditorConfiguration.getInstance()
+				.getNumFilesFromList(); index++) {
 
 			// Checks if the file really exists
-			File file = new File(MainWindow.getInstance()
-					.getProjectConfiguration().getFileAt(index).getPath());
+			File file = new File(AcideFileEditorConfiguration.getInstance()
+					.getFileAt(index).getPath());
 
 			// If the file is not a directory and exists
-			if (!MainWindow.getInstance().getProjectConfiguration()
-					.getFileAt(index).isDirectory()
-					&& file.exists()) {
+			if (!file.isDirectory() && file.exists()) {
 
+				// Loads the text file content
 				TextFile textFile = AcideIOFactory.getInstance().buildFile();
 				String text = null;
-				text = textFile.load(MainWindow.getInstance()
-						.getProjectConfiguration().getFileAt(index).getPath());
+				text = textFile.load(AcideFileEditorConfiguration.getInstance()
+						.getFileAt(index).getPath());
 
 				String fileName = null;
-				String filePath = MainWindow.getInstance()
-						.getProjectConfiguration().getFileAt(index).getPath();
+				String filePath = AcideFileEditorConfiguration.getInstance()
+						.getFileAt(index).getPath();
 
 				// Gets the file name
 				if (filePath != null) {
@@ -207,106 +239,102 @@ public class AcideWorkbenchManager {
 							filePath.length());
 				}
 
-				// If it is the default project or the file is has to be opened
-				if (MainWindow.getInstance().getProjectConfiguration()
-						.isDefaultProject()
-						|| MainWindow.getInstance().getProjectConfiguration()
-								.getFileAt(index).isOpened()) {
+				// Updates the status bar
+				MainWindow
+						.getInstance()
+						.getStatusBar()
+						.setStatusMessage(
+								AcideFileEditorConfiguration.getInstance()
+										.getFileAt(index).getPath());
 
-					// Updates the status bar
+				// Check if it is a MAIN or COMPILABLE FILE
+				AcideProjectFileType fileType = AcideProjectFileType.NORMAL;
+
+				// COMPILABLE
+				if (AcideFileEditorConfiguration.getInstance().getFileAt(index)
+						.getType() == AcideProjectFileType.COMPILABLE) {
+
+					fileType = AcideProjectFileType.COMPILABLE;
+
+					// Adds the <COMPILABLE> tag in the status bar
 					MainWindow
 							.getInstance()
 							.getStatusBar()
-							.setMessage(
-									MainWindow.getInstance()
-											.getProjectConfiguration()
-											.getFileAt(index).getPath());
-
-					// Check if it is a MAIN or COMPILABLE FILE
-					int fileType = 0;
-
-					// COMPILABLE
-					if (MainWindow.getInstance().getProjectConfiguration()
-							.getFileAt(index).isCompilableFile()) {
-
-						fileType = 2;
-
-						// Adds the <COMPILABLE> tag in the status bar
-						MainWindow
-								.getInstance()
-								.getStatusBar()
-								.setMessage(
-										MainWindow.getInstance()
-												.getProjectConfiguration()
-												.getFileAt(index).getPath()
-												+ " <COMPILABLE>");
-					}
-
-					// MAIN
-					if (MainWindow.getInstance().getProjectConfiguration()
-							.getFileAt(index).isMainFile()) {
-
-						fileType = 1;
-
-						// Adds the <MAIN> tag in the status bar
-						MainWindow
-								.getInstance()
-								.getStatusBar()
-								.setMessage(
-										MainWindow.getInstance()
-												.getProjectConfiguration()
-												.getFileAt(index).getPath()
-												+ " <MAIN>");
-					}
-
-					// Opens a new tab in the editor
-					MainWindow.getInstance().getFileEditorManager()
-							.newTab(fileName, filePath, text, true, fileType);
-
-					// Checks if it is marked as a MAIN or COMPILABLE FILE
-					for (int i = 0; i < MainWindow.getInstance()
-							.getFileEditorManager().getNumFileEditorPanels(); i++) {
-
-						if (MainWindow
-								.getInstance()
-								.getFileEditorManager()
-								.getFileEditorPanelAt(i)
-								.getAbsolutePath()
-								.equals(MainWindow.getInstance()
-										.getProjectConfiguration()
-										.getFileAt(index).getPath())) {
-
-							// IS COMPILABLE FILE?
-							if (MainWindow.getInstance()
-									.getProjectConfiguration().getFileAt(index)
-									.isCompilableFile())
-								MainWindow.getInstance().getFileEditorManager()
-										.getFileEditorPanelAt(i)
-										.setCompilerFile(true);
-
-							// IS MAIN FILE?
-							if (MainWindow.getInstance()
-									.getProjectConfiguration().getFileAt(index)
-									.isMainFile())
-								MainWindow.getInstance().getFileEditorManager()
-										.getFileEditorPanelAt(i)
-										.setMainFile(true);
-						}
-					}
-
-					// Enables the file menu
-					MainWindow.getInstance().getMenu().enableFileMenu();
-
-					// Enables the edit menu
-					MainWindow.getInstance().getMenu().enableEditMenu();
-					
-					// Updates the undo manager
-					AcideUndoRedoManager.getInstance().update();
+							.setStatusMessage(
+									AcideFileEditorConfiguration.getInstance()
+											.getFileAt(index).getPath()
+											+ " <COMPILABLE>");
 				}
 
-				// The project configuration has been modified
-				MainWindow.getInstance().getProjectConfiguration()
-						.setIsModified(false);
+				// MAIN
+				if (AcideFileEditorConfiguration.getInstance().getFileAt(index)
+						.getType() == AcideProjectFileType.MAIN) {
+
+					fileType = AcideProjectFileType.MAIN;
+
+					// Adds the <MAIN> tag in the status bar
+					MainWindow
+							.getInstance()
+							.getStatusBar()
+							.setStatusMessage(
+									AcideFileEditorConfiguration.getInstance()
+											.getFileAt(index).getPath()
+											+ " <MAIN>");
+				}
+
+				// Opens a new tab in the editor
+				MainWindow
+						.getInstance()
+						.getFileEditorManager()
+						.newTab(fileName,
+								filePath,
+								text,
+								true,
+								fileType,
+								AcideFileEditorConfiguration.getInstance()
+										.getFileAt(index).getCaretPosition());
+
+				// Checks if it is marked as a MAIN or COMPILABLE FILE
+				for (int i = 0; i < MainWindow.getInstance()
+						.getFileEditorManager().getNumFileEditorPanels(); i++) {
+
+					if (MainWindow
+							.getInstance()
+							.getFileEditorManager()
+							.getFileEditorPanelAt(i)
+							.getAbsolutePath()
+							.equals(AcideFileEditorConfiguration.getInstance()
+									.getFileAt(index).getPath())) {
+
+						// IS COMPILABLE FILE?
+						if (AcideFileEditorConfiguration.getInstance()
+								.getFileAt(index).getType() == AcideProjectFileType.COMPILABLE)
+							MainWindow.getInstance().getFileEditorManager()
+									.getFileEditorPanelAt(i)
+									.setCompilableFile(true);
+
+						// IS MAIN FILE?
+						if (AcideFileEditorConfiguration.getInstance()
+								.getFileAt(index).getType() == AcideProjectFileType.MAIN)
+							MainWindow.getInstance().getFileEditorManager()
+									.getFileEditorPanelAt(i).setMainFile(true);
+					}
+				}
+
+				// Enables the file menu
+				MainWindow.getInstance().getMenu().enableFileMenu();
+
+				// Enables the edit menu
+				MainWindow.getInstance().getMenu().enableEditMenu();
+
+				// Updates the undo manager
+				AcideUndoRedoManager.getInstance().update(
+						MainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.getSyntaxDocument());
+
+				// The project configuration has not been modified
+				AcideProjectConfiguration.getInstance().setIsModified(false);
 			} else {
 
 				// If the file does not exist
@@ -315,60 +343,19 @@ public class AcideWorkbenchManager {
 					// Error message
 					JOptionPane.showMessageDialog(null,
 							labels.getString("s970")
-									+ MainWindow.getInstance()
-											.getProjectConfiguration()
-											.getFileAt(index).getPath()
+									+ AcideProjectConfiguration.getInstance()
+											.getFileAt(index).getAbsolutePath()
 									+ labels.getString("s971"), "Error",
 							JOptionPane.ERROR_MESSAGE);
 
 					// Removes the file from the project
-					MainWindow.getInstance().getProjectConfiguration()
-							.removeFileAt(index);
+					AcideProjectConfiguration.getInstance().removeFileAt(index);
 
 					// The project configuration has been modified
-					MainWindow.getInstance().getProjectConfiguration()
-							.setIsModified(true);
+					AcideProjectConfiguration.getInstance().setIsModified(true);
 				}
 			}
 		}
-
-		SwingUtilities.invokeLater(new Runnable() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
-
-				// Sets the selected editor
-				if (MainWindow.getInstance().getProjectConfiguration()
-						.getSelectedEditorIndex() != -1) {
-
-					// Sets the selected file editor
-					MainWindow
-							.getInstance()
-							.getFileEditorManager()
-							.setSelectedFileEditorPanelAt(
-									MainWindow.getInstance()
-											.getProjectConfiguration()
-											.getSelectedEditorIndex());
-
-					// Sets the focus in the edition area
-					MainWindow.getInstance().getFileEditorManager()
-							.getSelectedFileEditorPanel()
-							.getActiveTextEditionArea().requestFocusInWindow();
-
-					// Selects the tree node
-					MainWindow.getInstance().getExplorerPanel()
-							.selectTreeNodeFromFileEditor();
-
-					// Updates the status bar with the selected editor
-					MainWindow.getInstance().getStatusBar()
-							.updatesStatusBarFromFileEditor();
-				}
-			}
-		});
 	}
 
 	/**
@@ -385,7 +372,7 @@ public class AcideWorkbenchManager {
 		try {
 
 			// Gets the grammar configuration
-			currentGrammar = ResourceManager.getInstance().getProperty(
+			currentGrammar = AcideResourceManager.getInstance().getProperty(
 					"currentGrammar");
 			int index = currentGrammar.lastIndexOf("\\");
 			if (index == -1)
@@ -417,9 +404,10 @@ public class AcideWorkbenchManager {
 	 */
 	public static ResourceBundle loadLanguageWorkbenchConfiguration() {
 
-		String configurationLanguage = MainWindow.getInstance()
-				.getProjectConfiguration().getLanguage();
-		AcideLanguage language = AcideLanguage.getInstance();
+		// Gets the language
+		String configurationLanguage = AcideProjectConfiguration.getInstance()
+				.getLanguage();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		// SPANISH
 		if (configurationLanguage.equals("spanish"))
@@ -432,8 +420,8 @@ public class AcideWorkbenchManager {
 					.getEnglish().doClick();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty(
-					"language"));
+			language.getLanguage(AcideResourceManager.getInstance()
+					.getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -451,60 +439,81 @@ public class AcideWorkbenchManager {
 	 */
 	public static void loadMainWindowConfiguration() {
 
-		// CHECK IF THE EXPLORER HAS TO BE SHOWED
-		if (!MainWindow.getInstance().getProjectConfiguration()
-				.isExplorerShowed())
+		// Updates the RESOURCE MANAGER
+		AcideResourceManager.getInstance().setProperty(
+				"windowConfiguration",
+				AcideProjectConfiguration.getInstance()
+						.getWindowConfiguration());
+
+		// Gets the window configuration
+		AcideWindowConfiguration windowConfiguration = AcideWindowConfiguration
+				.getInstance();
+		try {
+			windowConfiguration.load(AcideResourceManager.getInstance()
+					.getProperty("windowConfiguration"));
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+
+		// If the explorer panel has not to be showed
+		if (!AcideWindowConfiguration.getInstance().isExplorerPanelShowed())
+
+			// Does the show explorer panel check box menu item action
 			MainWindow.getInstance().getMenu().getView().getShowExplorerPanel()
 					.doClick();
 
-		// CHECK IF THE OUTPUT SHELL HAS TO BE SHOWED
-		if (!MainWindow.getInstance().getProjectConfiguration().isShellShowed())
-			MainWindow.getInstance().getMenu().getView().getShowShellWindow()
+		// If the console panel has not to be showed
+		if (!AcideWindowConfiguration.getInstance().isConsolePanelShowed())
+
+			// Does the show explorer panel check box menu item action
+			MainWindow.getInstance().getMenu().getView().getShowConsolePanel()
 					.doClick();
 
 		// Sets the main window size
 		MainWindow.getInstance().setSize(
-				MainWindow.getInstance().getProjectConfiguration()
-						.getWindowWidth(),
-				MainWindow.getInstance().getProjectConfiguration()
-						.getWindowHeight());
+				AcideWindowConfiguration.getInstance().getWindowWidth(),
+				AcideWindowConfiguration.getInstance().getWindowHeight());
 
 		// Sets the main window location
 		MainWindow.getInstance().setLocation(
-				MainWindow.getInstance().getProjectConfiguration().getPosX(),
-				MainWindow.getInstance().getProjectConfiguration().getPosY());
+				AcideWindowConfiguration.getInstance().getXCoordinate(),
+				AcideWindowConfiguration.getInstance().getYCoordinate());
 
 		// Sets the main window split panel vertical divider location
 		MainWindow
 				.getInstance()
 				.getVerticalSplitPane()
 				.setDividerLocation(
-						MainWindow.getInstance().getProjectConfiguration()
-								.getSplitPaneVerticalDividerLocation());
+						AcideWindowConfiguration.getInstance()
+								.getVerticalSplitPaneDividerLocation());
 
 		// Sets the main window split panel horizontal divider location
 		MainWindow
 				.getInstance()
 				.getHorizontalSplitPane()
 				.setDividerLocation(
-						MainWindow.getInstance().getProjectConfiguration()
-								.getSplitPanelHorizontalDividerLocation());
-
-		// Updates the main window
-		MainWindow.getInstance().validate();
-		MainWindow.getInstance().repaint();
-		MainWindow.getInstance().setVisible(true);
+						AcideWindowConfiguration.getInstance()
+								.getHorizontalSplitPanelDividerLocation());
 
 		// Not default project
-		if (!MainWindow.getInstance().getProjectConfiguration()
-				.isDefaultProject()){
+		if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
 
 			// Enables the project menu
 			MainWindow.getInstance().getMenu().enableProjectMenu();
-			
+
 			// Enables the open all files menu item
-			MainWindow.getInstance().getMenu().getFile().getOpenAllFiles().setEnabled(true);
+			MainWindow.getInstance().getMenu().getFile().getOpenAllFiles()
+					.setEnabled(true);
 		}
+
+		// Updates the main window
+		MainWindow.getInstance().validate();
+
+		// Repaint the main window
+		MainWindow.getInstance().repaint();
 	}
 
 	/**
@@ -512,19 +521,19 @@ public class AcideWorkbenchManager {
 	 * 
 	 * @return the lexicon workbench configuration of ACIDE - Configurable IDE.
 	 */
-	public static LexiconConfiguration loadLexiconWorkbenchConfiguration() {
+	public static AcideLexiconConfiguration loadLexiconWorkbenchConfiguration() {
 
 		// Updates the RESOURCE MANAGER
-		ResourceManager.getInstance().setProperty(
+		AcideResourceManager.getInstance().setProperty(
 				"languagePath",
-				MainWindow.getInstance().getProjectConfiguration()
-						.getLexicalConfiguration());
+				AcideProjectConfiguration.getInstance()
+						.getLexiconConfiguration());
 
 		// Gets the lexicon configuration
-		LexiconConfiguration lexiconConfiguration = LexiconConfiguration
+		AcideLexiconConfiguration lexiconConfiguration = AcideLexiconConfiguration
 				.getInstance();
 		try {
-			lexiconConfiguration.load(ResourceManager.getInstance()
+			lexiconConfiguration.load(AcideResourceManager.getInstance()
 					.getProperty("languagePath"));
 		} catch (Exception exception) {
 
@@ -546,8 +555,7 @@ public class AcideWorkbenchManager {
 		try {
 
 			// Default project
-			if (MainWindow.getInstance().getProjectConfiguration()
-					.isDefaultProject()) {
+			if (AcideProjectConfiguration.getInstance().isDefaultProject()) {
 
 				// Sets the title with the <empty> tag
 				MainWindow.getInstance().setTitle(
@@ -556,18 +564,20 @@ public class AcideWorkbenchManager {
 
 				// Sets all the features for the main window to allow the
 				// options for an open project configuration
-				String name = MainWindow.getInstance()
-						.getProjectConfiguration().getName();
+				String name = AcideProjectConfiguration.getInstance().getName();
 
-				ExplorerFile explorerFile = new ExplorerFile();
-				explorerFile.setPath(name);
-				explorerFile.setName(name);
-				explorerFile.setParent(null);
-				explorerFile.setIsDirectory(true);
+				// Creates the new project file
+				AcideProjectFile projectFile = new AcideProjectFile();
+				projectFile.setAbsolutePath(name);
+				projectFile.setName(name);
+				projectFile.setParent(null);
+				projectFile.setIsDirectory(true);
 
-				// Enables the explorer menu options
+				// Enables add file menu item in the explorer popup menu
 				MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 						.getAddFile().setEnabled(true);
+
+				// Enables the remove file menu item in the explorer popup menu
 				MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 						.getRemoveFile().setEnabled(true);
 
@@ -575,86 +585,110 @@ public class AcideWorkbenchManager {
 				MainWindow.getInstance().setTitle(
 						labels.getString("s425")
 								+ " - "
-								+ MainWindow.getInstance()
-										.getProjectConfiguration().getName());
+								+ AcideProjectConfiguration.getInstance()
+										.getName());
 
 				// Builds the EXPLORER TREE with all the associated files
 				MainWindow.getInstance().getExplorerPanel().getRoot()
 						.removeAllChildren();
+
+				// Creates the new explorer node
 				DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(
-						explorerFile);
+						projectFile);
+
+				// Adds the new node to the explorer tree root
 				MainWindow.getInstance().getExplorerPanel().getRoot()
 						.add(defaultMutableTreeNode);
+
+				// Creates the directory list
 				ArrayList<DefaultMutableTreeNode> directoryList = new ArrayList<DefaultMutableTreeNode>();
 
-				for (int i = 0; i < MainWindow.getInstance()
-						.getProjectConfiguration().getNumFilesFromList(); i++) {
+				for (int index = 0; index < AcideProjectConfiguration
+						.getInstance().getNumFilesFromList(); index++) {
 
 					// Gets the node
 					DefaultMutableTreeNode node = new DefaultMutableTreeNode(
-							MainWindow.getInstance().getProjectConfiguration()
-									.getFileAt(i));
+							AcideProjectConfiguration.getInstance().getFileAt(
+									index));
 
 					// Checks if the file really exists
-					File file = new File(MainWindow.getInstance()
-							.getProjectConfiguration().getFileAt(i).getPath());
+					File file = new File(AcideProjectConfiguration
+							.getInstance().getFileAt(index).getAbsolutePath());
 
 					// If exists
 					if (file.exists()) {
 
 						// Directory?
-						if (MainWindow.getInstance().getProjectConfiguration()
-								.getFileAt(i).isDirectory()) {
+						if (AcideProjectConfiguration.getInstance()
+								.getFileAt(index).isDirectory()) {
+
+							// Allows children in the tree
 							node.setAllowsChildren(true);
+
+							// Adds the node
 							directoryList.add(node);
 						} else
-							// No children
+							// No children are allowed
 							node.setAllowsChildren(false);
 
-						if (MainWindow
+						// If the file already exists in the level above
+						if (AcideProjectConfiguration
 								.getInstance()
-								.getProjectConfiguration()
-								.getFileAt(i)
+								.getFileAt(index)
 								.getParent()
-								.equals(MainWindow.getInstance()
-										.getProjectConfiguration().getName())) {
+								.equals(AcideProjectConfiguration.getInstance()
+										.getName())) {
+
+							// Adds the new node
 							defaultMutableTreeNode.add(node);
 						} else {
-							DefaultMutableTreeNode fh = searchDirectoryList(
-									directoryList, MainWindow.getInstance()
-											.getProjectConfiguration()
-											.getFileAt(i).getParent());
-							fh.add(node);
+
+							// Searches for the node
+							DefaultMutableTreeNode defaultMutableTreeNode1 = searchDirectoryList(
+									directoryList, AcideProjectConfiguration
+											.getInstance().getFileAt(index)
+											.getParent());
+
+							// Adds the new node
+							defaultMutableTreeNode1.add(node);
 						}
 					}
 				}
-				MainWindow.getInstance().getExplorerPanel().getTreeModel().reload();
+
+				// Updates the explorer tree
+				MainWindow.getInstance().getExplorerPanel().getTreeModel()
+						.reload();
+
+				// Repaint the explorer tree
 				MainWindow.getInstance().getExplorerPanel().expandTree();
+
+				// Enables the add file menu item in the popup menu
 				MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 						.getAddFile().setEnabled(true);
+
+				// Enables the save project menu item in the popup menu
 				MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 						.getSaveProject().setEnabled(true);
 
 				// If it has more than 0 files associated
-				if (MainWindow.getInstance().getProjectConfiguration()
+				if (AcideProjectConfiguration.getInstance()
 						.getNumFilesFromList() > 0)
 
 					// Allows to remove files in the EXPLORER menu
 					MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 							.getRemoveFile().setEnabled(true);
 				else
+					// Removing files in the EXPLORER menu is not allowed
 					MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 							.getRemoveFile().setEnabled(false);
 
 				// Saves the default configuration
-				MainWindow.getInstance().getProjectConfiguration()
-						.setFirstSave(true);
-				MainWindow
-						.getInstance()
-						.getProjectConfiguration()
-						.setPath(
-								ResourceManager.getInstance().getProperty(
-										"defaultAcideProject"));
+				AcideProjectConfiguration.getInstance().setFirstSave(true);
+
+				// Updates the project configuration
+				AcideProjectConfiguration.getInstance().setPath(
+						AcideResourceManager.getInstance().getProperty(
+								"defaultAcideProject"));
 			}
 		} catch (NumberFormatException exception) {
 
@@ -670,23 +704,23 @@ public class AcideWorkbenchManager {
 	}
 
 	/**
-	 * Loads the output configuration and applies it to the Output in the main
+	 * Loads the console configuration and applies it to the Output in the main
 	 * window.
 	 */
-	public static void loadOutputWorkbenchConfiguration() {
+	public static void loadConsoleWorkbenchConfiguration() {
 
 		// Updates the RESOURCE MANAGER
-		ResourceManager.getInstance().setProperty(
-				"outputConfiguration",
-				MainWindow.getInstance().getProjectConfiguration()
-						.getOutputConfiguration());
+		AcideResourceManager.getInstance().setProperty(
+				"consoleConfiguration",
+				AcideProjectConfiguration.getInstance()
+						.getConsoleConfiguration());
 
-		// Gets the output configuration
-		OutputConfiguration outputConfiguration = OutputConfiguration
+		// Gets the console configuration
+		AcideConsoleConfiguration consoleConfiguration = AcideConsoleConfiguration
 				.getInstance();
 		try {
-			outputConfiguration.load(ResourceManager.getInstance().getProperty(
-					"outputConfiguration"));
+			consoleConfiguration.load(AcideResourceManager.getInstance()
+					.getProperty("consoleConfiguration"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -694,11 +728,12 @@ public class AcideWorkbenchManager {
 			exception.printStackTrace();
 		}
 
-		// Sets the shell display options
-		MainWindow.getInstance().getOutputPanel().updateShellDisplayOptions();
+		// Sets the console display options
+		MainWindow.getInstance().getConsolePanel()
+				.updateConsoleDisplayOptions();
 
-		// Resets the output
-		MainWindow.getInstance().getOutputPanel().resetOutput();
+		// Resets the console
+		MainWindow.getInstance().getConsolePanel().resetConsole();
 	}
 
 	/**
@@ -711,11 +746,11 @@ public class AcideWorkbenchManager {
 	public String getConfigurationFileContent() {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty(
-					"language"));
+			language.getLanguage(AcideResourceManager.getInstance()
+					.getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -727,7 +762,7 @@ public class AcideWorkbenchManager {
 		ResourceBundle labels = language.getLabels();
 
 		// Deletes all the files associated to the project
-		MainWindow.getInstance().getProjectConfiguration().removeFiles();
+		AcideProjectConfiguration.getInstance().removeFiles();
 
 		// Gets the default configuration file content
 		TextFile textFile = new TextFile();
@@ -736,7 +771,7 @@ public class AcideWorkbenchManager {
 
 		try {
 
-			path = ResourceManager.getInstance().getProperty(
+			path = AcideResourceManager.getInstance().getProperty(
 					"defaultAcideProject");
 			fileContent = textFile.load(path);
 
@@ -748,7 +783,7 @@ public class AcideWorkbenchManager {
 						.load("./configuration/project/default.acidePrj");
 
 				// Updates the RESOURCE MANAGER
-				ResourceManager.getInstance().setProperty(
+				AcideResourceManager.getInstance().setProperty(
 						"defaultAcideProject",
 						"./configuration/project/default.acidePrj");
 
@@ -774,9 +809,10 @@ public class AcideWorkbenchManager {
 	}
 
 	/**
-	 * Saves the current file editor panel configuration. Closes the new and log tab in the
-	 * editor and saves the state of each one of the opened files in the file editor
-	 * into the project configuration, whether it is the default project or not.
+	 * Saves the current file editor panel configuration. Closes the new and log
+	 * tab in the editor and saves the state of each one of the opened files in
+	 * the file editor into the project configuration, whether it is the default
+	 * project or not.
 	 */
 	public void saveFileEditorPanelConfiguration() {
 
@@ -806,32 +842,33 @@ public class AcideWorkbenchManager {
 						.remove(logFileIndex);
 			}
 
-			String file = ResourceManager.getInstance().getProperty(
+			String file = AcideResourceManager.getInstance().getProperty(
 					"defaultAcideProject");
 
+			// Saves the editor manager configuration
+			AcideFileEditorConfiguration.getInstance().save();
+
 			// Is default project
-			if (MainWindow.getInstance().getProjectConfiguration()
-					.isDefaultProject()) {
+			if (AcideProjectConfiguration.getInstance().isDefaultProject()) {
 
 				// Files which belong to the project
 				TextFile textFile = new AcideIOFactory().buildFile();
-				MainWindow.getInstance().getProjectConfiguration()
-						.removeFiles();
+				AcideProjectConfiguration.getInstance().removeFiles();
 
 				// Sets the all opened files in the editor
 				for (int pos = 0; pos < MainWindow.getInstance()
 						.getFileEditorManager().getNumFileEditorPanels(); pos++) {
 
 					// Creates the file
-					ExplorerFile explorerFile = new ExplorerFile();
-					explorerFile.setPath(MainWindow.getInstance()
+					AcideProjectFile explorerFile = new AcideProjectFile();
+					explorerFile.setAbsolutePath(MainWindow.getInstance()
 							.getFileEditorManager().getFileEditorPanelAt(pos)
 							.getAbsolutePath());
 
 					// Sets if it is compilable file
 					explorerFile.setIsCompilableFile(MainWindow.getInstance()
 							.getFileEditorManager().getFileEditorPanelAt(pos)
-							.isCompilerFile());
+							.isCompilableFile());
 
 					// Sets if it is main file
 					explorerFile.setIsMainFile(MainWindow.getInstance()
@@ -847,36 +884,32 @@ public class AcideWorkbenchManager {
 					explorerFile.setIsDirectory(false);
 
 					// Adds the file to the configuration
-					MainWindow.getInstance().getProjectConfiguration()
-							.addFile(explorerFile);
+					AcideProjectConfiguration.getInstance().addFile(
+							explorerFile);
 				}
 
 				// Sets the language
-				MainWindow
-						.getInstance()
-						.getProjectConfiguration()
-						.setLanguage(
-								ResourceManager.getInstance().getProperty(
-										"language"));
+				AcideProjectConfiguration.getInstance().setLanguage(
+						AcideResourceManager.getInstance().getProperty(
+								"language"));
 
 				// Sets the name
-				MainWindow.getInstance().getProjectConfiguration().setName("");
+				AcideProjectConfiguration.getInstance().setName("");
 
 				// Saves the configuration in the file
 				textFile.save("./configuration/project/default.acidePrj",
-						MainWindow.getInstance().getProjectConfiguration()
-								.save());
+						AcideProjectConfiguration.getInstance().save());
 
 				// Sets the default project
-				ResourceManager.getInstance().setProperty(
+				AcideResourceManager.getInstance().setProperty(
 						"defaultAcideProject",
 						"./configuration/project/default.acidePrj");
 			} else {
 
 				// Saves the configuration of the project
 				TextFile textFile = new AcideIOFactory().buildFile();
-				textFile.save(file, MainWindow.getInstance()
-						.getProjectConfiguration().save());
+				textFile.save(file, AcideProjectConfiguration.getInstance()
+						.save());
 			}
 
 		} catch (Exception exception) {
@@ -895,11 +928,11 @@ public class AcideWorkbenchManager {
 	private int getNewFileIndex() {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty(
-					"language"));
+			language.getLanguage(AcideResourceManager.getInstance()
+					.getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -939,6 +972,7 @@ public class AcideWorkbenchManager {
 		// Set the original selected editor
 		MainWindow.getInstance().getFileEditorManager()
 				.setSelectedFileEditorPanelAt(selectedEditor);
+
 		return newFileIndex;
 	}
 
@@ -987,11 +1021,11 @@ public class AcideWorkbenchManager {
 	public void saveWorkbenchConfiguration() {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
-		
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
+
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty(
-					"language"));
+			language.getLanguage(AcideResourceManager.getInstance()
+					.getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -1001,9 +1035,9 @@ public class AcideWorkbenchManager {
 
 		// Gets the labels
 		final ResourceBundle labels = language.getLabels();
-		
+
 		// Is the project configuration modified?
-		if (MainWindow.getInstance().getProjectConfiguration().isModified()) {
+		if (AcideProjectConfiguration.getInstance().isModified()) {
 
 			// Ask the user to save the configuration
 			int chosenOption = JOptionPane.showConfirmDialog(null,
@@ -1024,124 +1058,199 @@ public class AcideWorkbenchManager {
 					MainWindow.getInstance().getMenu().getProject()
 							.getSaveProject().doClick();
 
-					// Checks the opened files in the editor
-					int selectedEditor = MainWindow.getInstance()
+					// Gets the selected file editor panel index
+					int selectedFileEditorPanelIndex = MainWindow.getInstance()
 							.getFileEditorManager()
 							.getSelectedFileEditorPanelIndex();
-					int numEditors = MainWindow.getInstance()
+
+					// Gets the number of opened file editor panels
+					int numberOfFileEditorPanels = MainWindow.getInstance()
 							.getFileEditorManager().getNumFileEditorPanels();
 
-					// Starts with the last one
-					MainWindow.getInstance().getFileEditorManager()
-							.setSelectedFileEditorPanelAt(numEditors - 1);
+					// If there are opened file editor panels
+					if (numberOfFileEditorPanels > 0) {
+						
+						// Stores the modified resources
+						Vector<String> resourceList = new Vector<String>();
+						
+						// Counts the number of modified opened files
+						int countModified = 0;
+						
+						for (int index = numberOfFileEditorPanels - 1; index >= 0; index--) {
 
-					for (int cont = numEditors - 1; cont >= 0; cont--) {
-						MainWindow.getInstance().getFileEditorManager()
-								.setSelectedFileEditorPanelAt(cont);
+							// Updates the selected file editor panel
+							MainWindow.getInstance().getFileEditorManager()
+									.setSelectedFileEditorPanelAt(index);
 
-						// Is the file in the editor modified?
-						if (MainWindow.getInstance().getFileEditorManager()
-								.isRedButton()) {
+							// Is the file in the editor modified?
+							if (MainWindow.getInstance().getFileEditorManager()
+									.isRedButton()) {
 
-							// Asks the user to save the file
-							chosenOption = JOptionPane.showConfirmDialog(null,
-									labels.getString("s643"),
-									labels.getString("s953"),
-									JOptionPane.YES_NO_OPTION);
-
-							// If yes
-							if (chosenOption == JOptionPane.OK_OPTION) {
-								MainWindow.getInstance().getMenu().getFile()
-										.saveOrSaveAS();
+								// Adds the file to the resource list
+								resourceList.add(MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel().getFileName());
+							
+								// Updates the count modified
+								countModified++;
 							}
 						}
+
+						// Sets the original selected editor
+						MainWindow
+								.getInstance()
+								.getFileEditorManager()
+								.setSelectedFileEditorPanelAt(
+										selectedFileEditorPanelIndex);
+						
+						// If there are modified files
+						if(countModified > 0)
+							// Shows the saving resources window
+							new AcideSavingResourcesWindow(resourceList);
+						else{
+							
+							// Save the rest of the workbench configuration
+							saveRestOfWorkbenchConfiguration();
+							
+							// Closes the main window
+							System.exit(0);
+						}
 					}
-
-					// Sets the original selected editor
-					MainWindow.getInstance().getFileEditorManager()
-							.setSelectedFileEditorPanelAt(selectedEditor);
-
-					// Saves the output configuration
-					OutputConfiguration.getInstance().save();
-					// Closes the output
-					MainWindow.getInstance().getOutputPanel().executeExitCommand();
-
-					// Updates the configuration
-					try {
-
-						// Menu configuration
-						String currentMenu = ResourceManager.getInstance()
-								.getProperty("currentMenuConfiguration");
-
-						if ((currentMenu.endsWith("lastModified.menuCfg"))
-								|| (currentMenu.endsWith("newMenu.menuCfg"))) {
-							String previous = ResourceManager.getInstance()
-									.getProperty("previousMenuConfiguration");
-
-							// Updates the RESOURCE MANAGER
-							ResourceManager.getInstance().setProperty(
-									"currentMenuConfiguration", previous);
-						}
-
-						// Tool bar configuration
-						String currentToolBar = ResourceManager.getInstance()
-								.getProperty("currentToolBarConfiguration");
-						if ((currentToolBar.endsWith("lastModified.TBcfg"))
-								|| currentToolBar.endsWith("newToolBar.TBcfg")) {
-							String previous = ResourceManager
-									.getInstance()
-									.getProperty("previousToolBarConfiguration");
-
-							// Updates the RESOURCE MANAGER
-							ResourceManager.getInstance().setProperty(
-									"currentToolBarConfiguration", previous);
-						}
-
-						// Grammar configuration
-						String currentGrammar = ResourceManager.getInstance()
-								.getProperty("currentGrammar");
-						if ((currentGrammar.endsWith("lastModified.jar"))
-								|| (currentGrammar.endsWith("newGrammar.jar"))) {
-							String previous = ResourceManager.getInstance()
-									.getProperty("previousGrammar");
-
-							// Updates the RESOURCE MANAGER
-							ResourceManager.getInstance().setProperty(
-									"currentGrammar", previous);
-						}
-					} catch (Exception exception) {
-
-						// Updates the log
-						AcideLog.getLog().error(exception.getMessage());
-
-						JOptionPane.showMessageDialog(null,
-								exception.getMessage(),
-								labels.getString("s294"),
-								JOptionPane.ERROR_MESSAGE);
+					else{
+						// Save the rest of the workbench configuration
+						saveRestOfWorkbenchConfiguration();
+						
+						// Closes the main window
+						System.exit(0);
 					}
-
-					// Stores the configuration of the files
-					saveFileEditorPanelConfiguration();
-
-					// Saves the configuration parameters of the main window
-					MainWindow.getInstance().getProjectConfiguration()
-							.saveMainWindowParameters();
 				}
-
-				// Closes the main window
-				System.exit(0);
+				else
+					if(chosenOption == JOptionPane.NO_OPTION)
+						// Closes the main window
+						System.exit(0);
 			}
 		} else {
 
 			// Stores the configuration of the files
 			saveFileEditorPanelConfiguration();
 
-			// Saves the configuration parameters of the main window
-			MainWindow.getInstance().getProjectConfiguration()
-					.saveMainWindowParameters();
+			// Saves the window configuration
+			AcideWindowConfiguration.getInstance().save();
 
 			// Closes the main window
 			System.exit(0);
 		}
+	}
+
+	/**
+	 * Saves the rest of the workbench configuration once the opened modified
+	 * file editor panels has been saved or not.
+	 */
+	public void saveRestOfWorkbenchConfiguration() {
+		
+		// Gets the language
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
+
+		try {
+			language.getLanguage(AcideResourceManager.getInstance()
+					.getProperty("language"));
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+
+		// Gets the labels
+		final ResourceBundle labels = language.getLabels();
+		
+		// Saves the console configuration
+		AcideConsoleConfiguration.getInstance().save();
+
+		// Closes the console panel
+		MainWindow.getInstance().getConsolePanel()
+				.executeExitCommand();
+
+		try {
+
+			// Menu configuration
+			String currentMenu = AcideResourceManager.getInstance()
+					.getProperty("currentMenuConfiguration");
+
+			if ((currentMenu.endsWith("lastModified.menuCfg"))
+					|| (currentMenu.endsWith("newMenu.menuCfg"))) {
+				String previous = AcideResourceManager
+						.getInstance().getProperty(
+								"previousMenuConfiguration");
+
+				// Updates the RESOURCE MANAGER
+				AcideResourceManager.getInstance().setProperty(
+						"currentMenuConfiguration", previous);
+			}
+
+			// Tool bar configuration
+			String currentToolBar = AcideResourceManager
+					.getInstance().getProperty(
+							"currentToolBarConfiguration");
+			if ((currentToolBar.endsWith("lastModified.TBcfg"))
+					|| currentToolBar.endsWith("newToolBar.TBcfg")) {
+				String previous = AcideResourceManager
+						.getInstance().getProperty(
+								"previousToolBarConfiguration");
+
+				// Updates the RESOURCE MANAGER
+				AcideResourceManager.getInstance().setProperty(
+						"currentToolBarConfiguration", previous);
+			}
+
+			// Grammar configuration
+			String currentGrammar = AcideResourceManager
+					.getInstance().getProperty("currentGrammar");
+			if ((currentGrammar.endsWith("lastModified.jar"))
+					|| (currentGrammar.endsWith("newGrammar.jar"))) {
+				String previous = AcideResourceManager
+						.getInstance().getProperty(
+								"previousGrammar");
+
+				// Updates the RESOURCE MANAGER
+				AcideResourceManager.getInstance().setProperty(
+						"currentGrammar", previous);
+			}
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+
+			JOptionPane.showMessageDialog(null,
+					exception.getMessage(),
+					labels.getString("s294"),
+					JOptionPane.ERROR_MESSAGE);
+		}
+
+		// Stores the configuration of the files
+		saveFileEditorPanelConfiguration();
+
+		// Saves the window configuration
+		AcideWindowConfiguration.getInstance().save();
+	}
+
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE workbench
+	 * configuration loaded flag.
+	 * 
+	 * @param loaded
+	 *            new value to set.
+	 */
+	public void setWorkbenchLoaded(boolean loaded) {
+		_workbenchLoaded = loaded;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE workbench configuration loaded
+	 * flag.
+	 * 
+	 * @return the ACIDE - A Configurable IDE workbench configuration loaded
+	 *         flag.
+	 */
+	public boolean isWorkbenchLoaded() {
+		return _workbenchLoaded;
 	}
 }

@@ -1,3 +1,32 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.fileMenu.utils;
 
 import java.awt.print.PageFormat;
@@ -9,81 +38,48 @@ import javax.swing.text.JTextComponent;
 
 import operations.log.AcideLog;
 
-/************************************************************************																
- * Printer manager of ACIDE - A Configurable IDE											
+/**																
+ * Printer manager of ACIDE - A Configurable IDE.											
  *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
  * @version 0.8																														
- ***********************************************************************/
+ */
 public class PrinterManager {
 
 	/**
-	 * Printer job
+	 * Printer job.
 	 */
 	private PrinterJob _printerJob;
 	/**
-	 * Page format
+	 * Page format.
 	 */
 	private PageFormat _pageFormat;
 	/**
-	 * Printed text component
+	 * Printed text component.
 	 */
 	private JTextComponent _printedTextComponent;
 	/**
-	 * Style of the document
+	 * Style of the document.
 	 */
 	private AttributedString _style;
 	/**
-	 * Show page flag
+	 * Show page flag.
 	 */
 	private boolean _showPage;
 	/**
-	 * Show date flag
+	 * Show date flag.
 	 */
 	private boolean _showDate;
 	/**
-	 * Printer text
+	 * Printer text.
 	 */
 	private PrinterText _printerText;
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 * 
-	 * @param component text component
-	 * @param showPage show page flag
-	 * @param showDate show date flag
+	 * @param component text component.
+	 * @param showPage show page flag.
+	 * @param showDate show date flag.
 	 */
 	public PrinterManager(JTextComponent component, boolean showPage, boolean showDate) {
 		_printedTextComponent = component;
@@ -92,25 +88,25 @@ public class PrinterManager {
 	}
 
 	/**
-	 * Returns the page style
+	 * Returns the page style.
 	 * 
-	 * @return the page style
+	 * @return the page style.
 	 */
 	public AttributedString getStyle() {
 		return _style;
 	}
 
 	/**
-	 * Sets a new value to the style
+	 * Sets a new value to the style.
 	 * 
-	 * @param style new value to set
+	 * @param style new value to set.
 	 */
 	public void setStyle(AttributedString style) {
 		_style = style;
 	}
 
 	/**
-	 * Configures the page to print it
+	 * Configures the page to print it.
 	 */
 	public void configurePage() {
 
@@ -131,7 +127,7 @@ public class PrinterManager {
 	}
 
 	/**
-	 * Prints the page
+	 * Prints the page.
 	 */
 	public void print() {
 		
@@ -146,9 +142,9 @@ public class PrinterManager {
 	}
 
 	/**
-	 * Sets a new value to the show date flag
+	 * Sets a new value to the show date flag.
 	 * 
-	 * @param showDate new value to set
+	 * @param showDate new value to set.
 	 */
 	public void setDate(boolean showDate) {
 		_showDate = showDate;
@@ -156,9 +152,9 @@ public class PrinterManager {
 	}
 	
 	/**
-	 * Sets a new value to the show page flag
+	 * Sets a new value to the show page flag.
 	 * 
-	 * @param showPage new value to set
+	 * @param showPage new value to set.
 	 */
 	public void setShowPage(boolean showPage) {
 		_showPage = showPage;
@@ -166,9 +162,9 @@ public class PrinterManager {
 	}
 
 	/**
-	 * Returns the page format
+	 * Returns the page format.
 	 * 
-	 * @return the page format
+	 * @return the page format.
 	 */
 	public Object getPageFormat() {
 		return _pageFormat;

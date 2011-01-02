@@ -1,3 +1,32 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.projectMenu.listeners;
 
 import java.awt.event.ActionEvent;
@@ -8,50 +37,19 @@ import javax.swing.tree.TreePath;
 
 import operations.factory.AcideIOFactory;
 import operations.log.AcideLog;
-import es.explorer.ExplorerFile;
+import es.configuration.project.AcideProjectConfiguration;
+import es.project.AcideProjectFile;
+import es.project.AcideProjectFileType;
 import es.text.TextFile;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
 
-/************************************************************************
- * Add file menu item listener.
+/**
+ * ACIDE - A Configurable IDE project menu add file menu item listener.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see ActionListener
- ***********************************************************************/
+ */
 public class AddFileMenuItemListener implements ActionListener {
 
 	/*
@@ -73,89 +71,108 @@ public class AddFileMenuItemListener implements ActionListener {
 			String fileContent = "";
 			fileContent = textFile.read();
 
+			// If the file content is not empty
 			if (fileContent != null) {
 
+				// Gets the selection path from the explorer panel tree
 				TreePath path = MainWindow.getInstance().getExplorerPanel()
 						.getTree().getSelectionPath();
 				DefaultMutableTreeNode filePath;
-				ExplorerFile fc;
+				AcideProjectFile projectFile;
 
 				if (path != null) {
 					filePath = (DefaultMutableTreeNode) path
 							.getLastPathComponent();
-					fc = (ExplorerFile) filePath.getUserObject();
+					projectFile = (AcideProjectFile) filePath.getUserObject();
 
-					if (!fc.isDirectory()) {
+					if (!projectFile.isDirectory()) {
 						filePath = MainWindow.getInstance().getExplorerPanel()
 								.getRoot().getNextNode();
-						fc = (ExplorerFile) filePath.getUserObject();
+						projectFile = (AcideProjectFile) filePath.getUserObject();
 					}
 
 				} else {
 					filePath = MainWindow.getInstance().getExplorerPanel()
 							.getRoot().getNextNode();
-					fc = (ExplorerFile) filePath.getUserObject();
+					projectFile = (AcideProjectFile) filePath.getUserObject();
 				}
 
 				// Gets the file name
 				String name = "";
-				int index = fileContent.lastIndexOf("\\");
-				if (index == -1)
-					index = fileContent.lastIndexOf("/");
-				name = fileContent.substring(index + 1, fileContent.length());
+				int lastIndexOfSlash = fileContent.lastIndexOf("\\");
+				if (lastIndexOfSlash == -1)
+					lastIndexOfSlash = fileContent.lastIndexOf("/");
+				name = fileContent.substring(lastIndexOfSlash + 1, fileContent.length());
 
-				ExplorerFile explorerFile = new ExplorerFile();
-				explorerFile.setPath(fileContent);
-				explorerFile.setName(name);
-				explorerFile.setParent(fc.getName());
+				// Builds the project file
+				projectFile = new AcideProjectFile();
+				projectFile.setAbsolutePath(fileContent);
+				projectFile.setName(name);
+				projectFile.setParent(projectFile.getName());
 
+				// Checks if it is added already to the project
 				boolean isAdded = false;
-				for (int i = 0; i < MainWindow.getInstance()
-						.getProjectConfiguration().getNumFilesFromList(); i++) {
-					if (MainWindow.getInstance().getProjectConfiguration()
-							.getFileAt(i).getPath()
-							.equals(explorerFile.getPath())) {
+				for (int index = 0; index < AcideProjectConfiguration.getInstance().getNumFilesFromList(); index++) {
+					if (AcideProjectConfiguration.getInstance()
+							.getFileAt(index).getAbsolutePath()
+							.equals(projectFile.getAbsolutePath())) {
 						isAdded = true;
 					}
 				}
 
+				// If it is not added
 				if (!isAdded) {
 
-					MainWindow.getInstance().getProjectConfiguration()
-							.addFile(explorerFile);
-					MainWindow
-							.getInstance()
-							.getProjectConfiguration()
+					// Adds the file to the project file list
+					AcideProjectConfiguration.getInstance()
+							.addFile(projectFile);
+					
+					// Sets the file as opened
+					AcideProjectConfiguration.getInstance()
 							.getFileAt(
-									MainWindow.getInstance()
-											.getProjectConfiguration()
+									AcideProjectConfiguration.getInstance()
 											.getNumFilesFromList() - 1)
 							.setIsOpened(true);
 
+					// Creates the node in the explorer panel tree
 					DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(
-							explorerFile);
+							projectFile);
 					defaultMutableTreeNode.setAllowsChildren(false);
 					filePath.add(defaultMutableTreeNode);
+					
+					// Validates the MAIN WINDOW
 					MainWindow.getInstance().validate();
+					
+					// Repaints the MAIN WINDOW
 					MainWindow.getInstance().repaint();
+					
+					// Updates the tree model
 					MainWindow.getInstance().getExplorerPanel().getTreeModel()
 							.reload();
+					
+					// Expands the explorer panel tree
 					MainWindow.getInstance().getExplorerPanel().expandTree();
+					
+					// Enables the remove file menu item in the explorer panel popup menu
 					MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 							.getRemoveFile().setEnabled(true);
+					
+					// Enables the delete file menu item in the explorer panel popup menu
 					MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 							.getDeleteFile().setEnabled(true);
-					MainWindow.getInstance().getProjectConfiguration()
+					
+					// The project has been modified
+					AcideProjectConfiguration.getInstance()
 							.setIsModified(true);
 				}
 
 				// Checks if the file is opened in the editor
 				boolean isOpened = false;
-				for (int i = 0; i < MainWindow.getInstance()
-						.getFileEditorManager().getNumFileEditorPanels(); i++) {
+				for (int index = 0; index < MainWindow.getInstance()
+						.getFileEditorManager().getNumFileEditorPanels(); index++) {
 					if (MainWindow.getInstance().getFileEditorManager()
-							.getFileEditorPanelAt(i).getAbsolutePath()
-							.equals(explorerFile.getPath())) {
+							.getFileEditorPanelAt(index).getAbsolutePath()
+							.equals(projectFile.getAbsolutePath())) {
 						isOpened = true;
 					}
 				}
@@ -163,20 +180,21 @@ public class AddFileMenuItemListener implements ActionListener {
 				// If it is not opened in the editor
 				if (!isOpened) {
 
-					TextFile fd = new TextFile();
-					int type = 0;
+					// Creates a new NORMAL file
+					TextFile textFile1 = new TextFile();
+					AcideProjectFileType type = AcideProjectFileType.NORMAL;
 
 					// Updates the status bar
 					MainWindow.getInstance().getStatusBar()
-							.setMessage(explorerFile.getPath());
+							.setStatusMessage(projectFile.getAbsolutePath());
 
 					// Opens a new tab in the editor
 					MainWindow
 							.getInstance()
 							.getFileEditorManager()
-							.newTab(explorerFile.getPath(),
-									explorerFile.getPath(),
-									fd.load(explorerFile.getPath()), true, type);
+							.newTab(projectFile.getAbsolutePath(),
+									projectFile.getAbsolutePath(),
+									textFile1.load(projectFile.getAbsolutePath()), true, type, 0);
 
 					// Enables the file menu
 					MainWindow.getInstance().getMenu().enableFileMenu();
@@ -185,8 +203,10 @@ public class AddFileMenuItemListener implements ActionListener {
 					MainWindow.getInstance().getMenu().enableEditMenu();
 					
 					// Updates the undo manager
-					AcideUndoRedoManager.getInstance().update();
-
+					AcideUndoRedoManager.getInstance().update(
+							MainWindow.getInstance().getFileEditorManager()
+									.getSelectedFileEditorPanel().getSyntaxDocument());
+					
 					// Sets the caret in the first position of the selected file
 					// editor panel
 					MainWindow.getInstance().getFileEditorManager()

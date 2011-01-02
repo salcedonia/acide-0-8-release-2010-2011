@@ -1,6 +1,36 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.projectMenu.listeners;
 
-import es.explorer.ExplorerFile;
+import es.configuration.project.AcideProjectConfiguration;
+import es.project.AcideProjectFile;
 import es.text.TextFile;
 import gui.mainWindow.MainWindow;
 
@@ -13,50 +43,17 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 import operations.factory.AcideIOFactory;
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
-/************************************************************************																
- * Remove file menu item listener.											
+/**																
+ * ACIDE -A Configurable IDE project menu remove file menu item listener.											
  *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
  * @version 0.8	
  * @see ActionListener																													
- ***********************************************************************/
+ */
 public class RemoveFileMenuItemListener implements ActionListener {
 
 	/*
@@ -70,10 +67,10 @@ public class RemoveFileMenuItemListener implements ActionListener {
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception exception) {
 			
 			// Updates the log
@@ -102,11 +99,11 @@ public class RemoveFileMenuItemListener implements ActionListener {
 				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) (currentSelection
 						.getLastPathComponent());
 
-				// Transform the node into a explorer file
-				ExplorerFile explorerFile = (ExplorerFile) currentNode.getUserObject();
+				// Transform the node into a project file
+				AcideProjectFile projectFile = (AcideProjectFile) currentNode.getUserObject();
 				
 				// If it is a file and not a directory
-				if (!explorerFile.isDirectory()) {
+				if (!projectFile.isDirectory()) {
 					
 					// Gets the node parent
 					MutableTreeNode parent = (MutableTreeNode) (currentNode
@@ -121,24 +118,23 @@ public class RemoveFileMenuItemListener implements ActionListener {
 						
 						// Searches for the file in the explorer
 						int posFile = -1;
-						for (int position = 0; position < MainWindow.getInstance()
-								.getProjectConfiguration()
+						for (int position = 0; position < AcideProjectConfiguration.getInstance()
 								.getNumFilesFromList(); position++) {
 							
-							if (MainWindow.getInstance().getProjectConfiguration()
-									.getFileAt(position).getPath().equals(
-											explorerFile.getPath())) {
+							if (AcideProjectConfiguration.getInstance()
+									.getFileAt(position).getAbsolutePath().equals(
+											projectFile.getAbsolutePath())) {
 								
 								posFile = position;
 							}
 						}
 
 						// Removes the file from the project configuration
-						MainWindow.getInstance().getProjectConfiguration().removeFileAt(
+						AcideProjectConfiguration.getInstance().removeFileAt(
 								posFile);
 						
 						// Updates the status bar
-						MainWindow.getInstance().getStatusBar().setMessage("");
+						MainWindow.getInstance().getStatusBar().setStatusMessage(" ");
 						
 						// Searches for the file in the editor
 						int posEditor = -1;
@@ -146,7 +142,7 @@ public class RemoveFileMenuItemListener implements ActionListener {
 								.getNumFileEditorPanels(); position++) {
 							if (MainWindow.getInstance().getFileEditorManager()
 									.getFileEditorPanelAt(position).getAbsolutePath()
-									.equals(explorerFile.getPath()))
+									.equals(projectFile.getAbsolutePath()))
 								posEditor = position;
 						}
 						
@@ -205,7 +201,7 @@ public class RemoveFileMenuItemListener implements ActionListener {
 					}
 
 					// The project has been modified
-					MainWindow.getInstance().getProjectConfiguration()
+					AcideProjectConfiguration.getInstance()
 							.setIsModified(true);
 					return;
 				}
@@ -213,7 +209,7 @@ public class RemoveFileMenuItemListener implements ActionListener {
 		}
 
 		// If there are more opened files 
-		if (MainWindow.getInstance().getProjectConfiguration().getNumFilesFromList() > 0) {
+		if (AcideProjectConfiguration.getInstance().getNumFilesFromList() > 0) {
 			
 			// Updates the explorer popup menu
 			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getRemoveFile()

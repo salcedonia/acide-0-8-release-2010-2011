@@ -21,90 +21,58 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.plaf.basic.BasicArrowButton;
 
-/************************************************************************
- * Text edition area of ACIDE - A Configurable IDE. Creates the panel which
- * contains the line number panel and the editable text area for modifying the
- * file contents.
+/**
+ * ACIDE - A Configurable IDE text edition area.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
+ * Creates the panel which contains the line number panel and the text
+ * area for modifying the file contents.
  * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
- ***********************************************************************/
+ */
 public class AcideFileEditorTextEditionArea {
 
 	/**
-	 * Text edition area class serial version UID.
+	 * ACIDE - A Configurable IDE text edition area class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * Text edition area scroll pane.
+	 * ACIDE - A Configurable IDE text edition area scroll pane.
 	 */
 	private JScrollPane _scrollPane;
 	/**
-	 * Text edition area text pane.
+	 * ACIDE - A Configurable IDE text edition area text pane.
 	 */
 	private JTextPane _textPane;
 	/**
-	 * Text edition area vertical value.
+	 * ACIDE - A Configurable IDE text edition area vertical value.
 	 */
 	private int _verticalValue;
 	/**
-	 * Text edition area horizontal value.
+	 * ACIDE - A Configurable IDE text edition area horizontal value.
 	 */
 	private int _horizontalValue;
 	/**
-	 * Text edition area line number panel.
+	 * ACIDE - A Configurable IDE text edition area line number panel.
 	 */
 	private LineNumberComponent _lineNumberPanel;
 	/**
-	 * Text edition area brace matcher.
+	 * ACIDE - A Configurable IDE text edition area brace matcher.
 	 */
 	private int _braceMatcher;
 	/**
-	 * Text edition area mouse click listener.
+	 * ACIDE - A Configurable IDE text edition area mouse click listener.
 	 */
 	private AcideTextEditorTextEditionAreaMouseClickListener _mouseClickListener;
 	/**
-	 * Text edition area document document listener.
+	 * ACIDE - A Configurable IDE text edition area document listener.
 	 */
 	private AcideFileEditorPanelDocumentListener _documentListener;
 	/**
-	 * Text edition area caret listener.
+	 * ACIDE - A Configurable IDE text edition area caret listener.
 	 */
 	private AcideTextEditorTextEditionAreaCaretListener _caretListener;
 	/**
-	 * Text edition area adjustment listener.
+	 * ACIDE - A Configurable IDE text edition area adjustment listener.
 	 */
 	private AcideTextEditorTextEditionAreaAdjustmentListener _adjustmentListener;
 
@@ -122,15 +90,22 @@ public class AcideFileEditorTextEditionArea {
 
 		// Builds the text area for edition
 		buildEditor(syntaxDocument);
-		
+
+		// Sets the ACIDE - A Configurable IDE caret
+		AcideCaret caret = new AcideCaret();
+		caret.setBlinkRate(500);
+		_textPane.setCaret(caret);
+
+		// Sets the listeners
 		_textPane
 				.addKeyListener(new AcideTextEditorTextEditionAreaKeyboardListener());
 		_textPane.addMouseListener(new AcideEditorPanelPopupMenuListener());
 		_textPane
 				.addMouseListener(new AcideTextEditorTextEditionAreaMouseDoubleClickListener());
+
+		// Paint the lines which contains the caret
+		new LinePainter(_textPane);
 		
-		// Adds the line painter
-		//LinePainter linePainter = new LinePainter(_textPane);
 		_scrollPane = new JScrollPane(_textPane);
 
 		// Creates the line number
@@ -178,11 +153,11 @@ public class AcideFileEditorTextEditionArea {
 	}
 
 	/**
-	 * Builds the text edition area text pane.
+	 * Builds the ACIDE - A Configurable IDE text edition area text pane.
 	 * 
 	 * @param syntaxDocument
 	 *            file editor manager syntax document.
-	 * @return the text edition area text pane.
+	 * @return the ACIDE - A Configurable IDE text edition area text pane.
 	 */
 	protected void buildEditor(SyntaxDocument syntaxDocument) {
 
@@ -220,18 +195,18 @@ public class AcideFileEditorTextEditionArea {
 	}
 
 	/**
-	 * Returns the text edition area text pane.
+	 * Returns the ACIDE - A Configurable IDE text edition area text pane.
 	 * 
-	 * @return the text edition area text pane.
+	 * @return the ACIDE - A Configurable IDE text edition area text pane.
 	 */
 	public JTextPane getTextPane() {
 		return _textPane;
 	}
 
 	/**
-	 * Returns the text edition area brace matcher.
+	 * Returns the ACIDE - A Configurable IDE text edition area brace matcher.
 	 * 
-	 * @return the text edition area brace matcher.
+	 * @return the ACIDE - A Configurable IDE text edition area brace matcher.
 	 */
 	public int getBraceMatcher() {
 		return _braceMatcher;
@@ -248,16 +223,19 @@ public class AcideFileEditorTextEditionArea {
 	}
 
 	/**
-	 * Returns the text edition area horizontal value.
+	 * Returns the ACIDE - A Configurable IDE text edition area horizontal
+	 * value.
 	 * 
-	 * @return the text edition area horizontal value.
+	 * @return the ACIDE - A Configurable IDE text edition area horizontal
+	 *         value.
 	 */
 	public int getHorizontalValue() {
 		return _horizontalValue;
 	}
 
 	/**
-	 * Sets a new value to the horizontal value.
+	 * Sets a new value to the ACIDE - A Configurable IDE text edition area
+	 * horizontal value.
 	 * 
 	 * @param horizontalValue
 	 *            new value to set.
@@ -267,16 +245,17 @@ public class AcideFileEditorTextEditionArea {
 	}
 
 	/**
-	 * Returns the vertical value.
+	 * Returns the ACIDE - A Configurable IDE text edition area vertical value.
 	 * 
-	 * @return the vertical value.
+	 * @return the ACIDE - A Configurable IDE text edition area vertical value.
 	 */
 	public int getVerticalValue() {
 		return _verticalValue;
 	}
 
 	/**
-	 * Sets a new value to the text edition area vertical value.
+	 * Sets a new value to the ACIDE - A Configurable IDE text edition area
+	 * vertical value.
 	 * 
 	 * @param verticalValue
 	 *            new value to set.
@@ -286,9 +265,9 @@ public class AcideFileEditorTextEditionArea {
 	}
 
 	/**
-	 * Returns the text edition area scroll pane.
+	 * Returns the ACIDE - A Configurable IDE text edition area scroll pane.
 	 * 
-	 * @return the text edition area scroll pane.
+	 * @return the ACIDE - A Configurable IDE text edition area scroll pane.
 	 */
 	public JScrollPane getScrollPane() {
 		return _scrollPane;

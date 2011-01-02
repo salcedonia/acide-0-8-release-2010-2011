@@ -1,6 +1,36 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.projectMenu.listeners;
 
-import es.explorer.ExplorerFile;
+import es.configuration.project.AcideProjectConfiguration;
+import es.project.AcideProjectFile;
 import gui.mainWindow.MainWindow;
 
 import java.awt.event.ActionEvent;
@@ -10,45 +40,12 @@ import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-/************************************************************************																
- * Set main file menu item listener.											
+/**																
+ * ACIDE -A Configurable IDE project menu set main file menu item listener.											
  *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
  * @version 0.8	
  * @see ActionListener																													
- ***********************************************************************/
+ */
 public class SetMainFileMenuItemListener implements ActionListener {
 
 	/*
@@ -65,79 +62,76 @@ public class SetMainFileMenuItemListener implements ActionListener {
 		TreePath explorerSelection = MainWindow.getInstance().getExplorerPanel().getTree()
 				.getSelectionPath();
 		DefaultMutableTreeNode filePath;
-		ExplorerFile explorerFile;
+		AcideProjectFile projectFile;
 
 		// If something is selected
 		if (explorerSelection != null) {
 
 			filePath = (DefaultMutableTreeNode) explorerSelection.getLastPathComponent();
-			explorerFile = (ExplorerFile) filePath.getUserObject();
+			projectFile = (AcideProjectFile) filePath.getUserObject();
 
 			// Is not MAIN FILE
-			if (!explorerFile.isMainFile()) {
+			if (!projectFile.isMainFile()) {
 
 				// Is file and not a directory
-				if (!explorerFile.isDirectory()) {
+				if (!projectFile.isDirectory()) {
 
-					for (int i = 0; i < MainWindow.getInstance()
-							.getProjectConfiguration().getFileListSize(); i++) {
+					for (int index1 = 0; index1 < AcideProjectConfiguration.getInstance().getFileListSize(); index1++) {
 
 						// Quits previous MAIN
-						if (MainWindow.getInstance()
-								.getProjectConfiguration().getFileAt(i)
+						if (AcideProjectConfiguration.getInstance().getFileAt(index1)
 								.isMainFile()) {
-							MainWindow.getInstance()
-									.getProjectConfiguration().getFileAt(i)
+							AcideProjectConfiguration.getInstance().getFileAt(index1)
 									.setIsMainFile(false);
-							MainWindow.getInstance()
-									.getProjectConfiguration().getFileAt(i)
+							AcideProjectConfiguration.getInstance().getFileAt(index1)
 									.setIsCompilableFile(false);
 
 							// Quits the icon tab
-							for (int j = 0; j < MainWindow.getInstance()
-									.getFileEditorManager().getNumFileEditorPanels(); j++) {
+							for (int index2 = 0; index2 < MainWindow.getInstance()
+									.getFileEditorManager().getNumFileEditorPanels(); index2++) {
 
 								if (MainWindow
 										.getInstance()
 										.getFileEditorManager()
-										.getFileEditorPanelAt(j)
+										.getFileEditorPanelAt(index2)
 										.getAbsolutePath()
 										.equals(
-												MainWindow
-														.getInstance()
-														.getProjectConfiguration()
-														.getFileAt(i)
-														.getPath()))
+												AcideProjectConfiguration.getInstance()
+														.getFileAt(index1)
+														.getAbsolutePath()))
 									MainWindow.getInstance()
 											.getFileEditorManager().getTabbedPane()
-											.setIconAt(j, null);
+											.setIconAt(index2, null);
 							}
 						}
 					}
 
-					explorerFile.setIsMainFile(true);
-					explorerFile.setIsCompilableFile(true);
+					// Is a MAIN FILE
+					projectFile.setIsMainFile(true);
+					
+					// Is a COMPILABLE FILE
+					projectFile.setIsCompilableFile(true);
 
 					// The project has been modified
-					MainWindow.getInstance().getProjectConfiguration()
+					AcideProjectConfiguration.getInstance()
 							.setIsModified(true);
 
-					// Updates the status bar
-					MainWindow.getInstance().getStatusBar().setMessage(
-							explorerFile.getPath() + " <MAIN>");
+					// Updates the status message in the status bar
+					MainWindow.getInstance().getStatusBar().setStatusMessage(
+							projectFile.getAbsolutePath() + " <MAIN>");
 
 					// Puts the icon 
-					for (int j = 0; j < MainWindow.getInstance()
-							.getFileEditorManager().getNumFileEditorPanels(); j++) {
+					for (int index = 0; index < MainWindow.getInstance()
+							.getFileEditorManager().getNumFileEditorPanels(); index++) {
 						if (MainWindow.getInstance().getFileEditorManager()
-								.getFileEditorPanelAt(j).getAbsolutePath().equals(
-										explorerFile.getPath())) {
+								.getFileEditorPanelAt(index).getAbsolutePath().equals(
+										projectFile.getAbsolutePath())) {
 							MainWindow
 									.getInstance()
 									.getFileEditorManager()
 									.getTabbedPane()
 									.setIconAt(
-											j,
+											index,
 											new ImageIcon(
 													"./resources/icons/editor/main.PNG"));
 						}
@@ -147,7 +141,7 @@ public class SetMainFileMenuItemListener implements ActionListener {
 		} else {
 
 			// Default configuration
-			if (MainWindow.getInstance().getProjectConfiguration()
+			if (AcideProjectConfiguration.getInstance()
 					.isDefaultProject()) {
 
 				// If there are more opened editor

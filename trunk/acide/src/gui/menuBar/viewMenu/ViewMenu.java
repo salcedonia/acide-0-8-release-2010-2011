@@ -1,9 +1,38 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.viewMenu;
 
-import es.configuration.menu.MenuConfiguration;
+import es.configuration.menu.AcideMenuConfiguration;
 import gui.menuBar.viewMenu.listeners.ShowAcideExplorerPanelMenuItemListener;
 import gui.menuBar.viewMenu.listeners.ShowAcideLogTabMenuItemListener;
-import gui.menuBar.viewMenu.listeners.ShowAcideOutputPanelMenuItemListener;
+import gui.menuBar.viewMenu.listeners.ShowAcideConsolePanelMenuItemListener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -17,97 +46,64 @@ import javax.swing.KeyStroke;
 
 import operations.log.AcideLog;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
-/************************************************************************																
- * View menu of ACIDE - A Configurable IDE.
+/**																
+ * ACIDE - A Configurable IDE view menu.
  *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
  * @version 0.8																														
- ***********************************************************************/
+ */
 public class ViewMenu extends JMenu {
 
 	/**
-	 * View menu class serial version UID.
+	 * ACIDE - A Configurable IDE view menu class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * Show log tab menu item name.
+	 * ACIDE - A Configurable IDE view menu show log tab menu item name.
 	 */
 	public static final String SHOW_LOG_TAB_NAME = "Show Log Tab";
 	/**
-	 * Show explorer panel menu item name.
+	 * ACIDE - A Configurable IDE view menu show explorer panel menu item name.
 	 */
 	public static final String SHOW_EXPLORER_PANEL_NAME = "Show Explorer Panel";
 	/**
-	 * Show output panel menu item name.
+	 * ACIDE - A Configurable IDE view menu show console panel menu item name.
 	 */
-	public static final String SHOW_OUTPUT_PANEL_NAME = "Show Output Panel";
+	public static final String SHOW_CONSOLE_PANEL_NAME = "Show Console Panel";
 	/**
-	 * Show log tab menu item icon.
+	 * ACIDE - A Configurable IDE view menu show log tab menu item icon.
 	 */
-	private final static ImageIcon SHOW_LOG_TAB_IMAGE = new ImageIcon("./resources/icons/menu/view/showLog.png");
+	private final static ImageIcon SHOW_LOG_TAB_IMAGE = new ImageIcon("./resources/icons/menu/view/showLogTab.png");
 	/**
-	 * Show explorer panel check box menu item image icon.
+	 * ACIDE - A Configurable IDE view menu show explorer panel check box menu item image icon.
 	 */
-	private final static ImageIcon SHOW_EXPLORER_PANEL_IMAGE = new ImageIcon("./resources/icons/menu/view/showExplorer.png");
+	private final static ImageIcon SHOW_EXPLORER_PANEL_IMAGE = new ImageIcon("./resources/icons/menu/view/showExplorerPanel.png");
 	/**
-	 * Show output panel check box menu item image icon.
+	 * ACIDE - A Configurable IDE view menu show console panel check box menu item image icon.
 	 */
-	private final static ImageIcon SHOW_OUTPUT_PANEL_IMAGE = new ImageIcon("./resources/icons/menu/view/showShellWindows.png");
+	private final static ImageIcon SHOW_CONSOLE_PANEL_IMAGE = new ImageIcon("./resources/icons/menu/view/showConsolePanel.png");
 	/**
-	 * Show log tab menu item.
+	 * ACIDE - A Configurable IDE view menu show log tab menu item.
 	 */
 	private JMenuItem _showLogTab;
 	/**
-	 * Show explorer panel check box menu item.
+	 * ACIDE - A Configurable IDE view menu show explorer panel check box menu item.
 	 */
 	private JCheckBoxMenuItem _showExplorerPanel;
 	/**
-	 * Show output panel check box menu item.
+	 * ACIDE - A Configurable IDE view menu show console panel check box menu item.
 	 */
-	private JCheckBoxMenuItem _showOutputPanel;
+	private JCheckBoxMenuItem _showConsolePanel;
 	/**
-	 * Shell size.
+	 * ACIDE - A Configurable IDE view menu console size.
 	 */
-	private int _shellSize;
+	private int _consoleSize;
 
 	/**
-	 * Creates a new view menu.
+	 * Creates a new ACIDE - A Configurable IDE view menu.
 	 */
 	public ViewMenu(){
 		
@@ -115,8 +111,8 @@ public class ViewMenu extends JMenu {
 		_showLogTab = new JMenuItem(SHOW_LOG_TAB_IMAGE);
 		_showExplorerPanel = new JCheckBoxMenuItem(SHOW_EXPLORER_PANEL_IMAGE);
 		_showExplorerPanel.setSelected(true);		
-		_showOutputPanel = new JCheckBoxMenuItem(SHOW_OUTPUT_PANEL_IMAGE);
-		_showOutputPanel.setSelected(true);
+		_showConsolePanel = new JCheckBoxMenuItem(SHOW_CONSOLE_PANEL_IMAGE);
+		_showConsolePanel.setSelected(true);
 
 		setLanguageLabels();
 	}
@@ -127,10 +123,10 @@ public class ViewMenu extends JMenu {
 	public void setLanguageLabels() {
 		
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 		
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception exception) {
 			
 			// Updates the log
@@ -150,26 +146,26 @@ public class ViewMenu extends JMenu {
 		_showExplorerPanel.setText(labels.getString("s221"));
 		
 		// SHOW OUTPUT PANEL
-		_showOutputPanel.setText(labels.getString("s223"));
+		_showConsolePanel.setText(labels.getString("s223"));
 	}
 	
 	/**
-	 * Builds the view menu.
+	 * Builds the ACIDE - A Configurable IDE view menu.
 	 */
 	public void buildMenu(){
 		
 		removeAll();
 		
-		if (MenuConfiguration.getInstance().getIsDisplayed(SHOW_LOG_TAB_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SHOW_LOG_TAB_NAME))
 			add(_showLogTab);
-		if (MenuConfiguration.getInstance().getIsDisplayed(SHOW_EXPLORER_PANEL_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SHOW_EXPLORER_PANEL_NAME))
 			add(_showExplorerPanel);
-		if (MenuConfiguration.getInstance().getIsDisplayed(SHOW_OUTPUT_PANEL_NAME))
-			add(_showOutputPanel);
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SHOW_CONSOLE_PANEL_NAME))
+			add(_showConsolePanel);
 	}
 	
 	/**
-	 * Sets the view menu item listeners.
+	 * Sets the ACIDE - A Configurable IDE view menu menu item listeners.
 	 */
 	public void setListeners(){
 		
@@ -180,20 +176,20 @@ public class ViewMenu extends JMenu {
 		_showExplorerPanel.addActionListener(new ShowAcideExplorerPanelMenuItemListener());
 		
 		// SHOW SHELL WINDOWS
-		_showOutputPanel.addActionListener(new ShowAcideOutputPanelMenuItemListener());
+		_showConsolePanel.addActionListener(new ShowAcideConsolePanelMenuItemListener());
 	}
 	
 	/**
-	 * Returns the show log tab menu item.
+	 * Returns the ACIDE - A Configurable IDE view menu show log tab menu item.
 	 * 
-	 * @return the show log tab menu item.
+	 * @return the ACIDE - A Configurable IDE view menu show log tab menu item.
 	 */
 	public JMenuItem getShowLogTab() {
 		return _showLogTab;
 	}
 
 	/**
-	 * Sets a new value to the show log tab menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE view menu show log tab menu item.
 	 * 
 	 * @param showLogTab new value to set.
 	 */
@@ -202,16 +198,16 @@ public class ViewMenu extends JMenu {
 	}
 	
 	/**
-	 * Returns the show explorer panel check box menu item.
+	 * Returns the ACIDE - A Configurable IDE view menu show explorer panel check box menu item.
 	 * 
-	 * @return the show explorer panel check box menu item.
+	 * @return the ACIDE - A Configurable IDE view menu show explorer panel check box menu item.
 	 */
 	public JCheckBoxMenuItem getShowExplorerPanel() {
 		return _showExplorerPanel;
 	}
 
 	/**
-	 * Sets a new value to the show explorer panel check box menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE view menu show explorer panel check box menu item.
 	 * 
 	 * @param showExplorerPanel new value to set.
 	 */
@@ -220,47 +216,38 @@ public class ViewMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the show output panel check box menu item.
+	 * Returns the ACIDE - A Configurable IDE view menu show output panel check box menu item.
 	 * 
-	 * @return the show output panel check box menu item.
+	 * @return the ACIDE - A Configurable IDE view menu show output panel check box menu item.
 	 */
-	public JCheckBoxMenuItem getShowShellWindow() {
-		return _showOutputPanel;
+	public JCheckBoxMenuItem getShowConsolePanel() {
+		return _showConsolePanel;
 	}
 
 	/**
-	 * Sets the show output panel check box menu item.
+	 * Sets the ACIDE - A Configurable IDE view menu show console panel check box menu item.
 	 * 
-	 * @param showOutputPanel new value to set.
+	 * @param showConsolePanel new value to set.
 	 */
-	public void setShowShellWindowCBox(JCheckBoxMenuItem showOutputPanel) {
-		_showOutputPanel = showOutputPanel;
+	public void setShowConsolePanel(JCheckBoxMenuItem showConsolePanel) {
+		_showConsolePanel = showConsolePanel;
 	}
 	
 	/**
-	 * Returns the show output panel menu item.
+	 * Returns the ACIDE - A Configurable IDE view menu console size.
 	 * 
-	 * @return the show output panel menu item.
+	 * @return the ACIDE - A Configurable IDE view menu console size.
 	 */
-	public JMenuItem getShowOutputPanel() {
-		return _showOutputPanel;
+	public int getConsoleSize(){
+		return _consoleSize;
 	}
 	
 	/**
-	 * Returns the shell size.
+	 * Sets a new value to the ACIDE - A Configurable IDE view menu console size.
 	 * 
-	 * @return the shell size.
+	 * @param consoleSize new value to set.
 	 */
-	public int getShellSize(){
-		return _shellSize;
-	}
-	
-	/**
-	 * Sets a new value to the shell size.
-	 * 
-	 * @param shellSize new value to set.
-	 */
-	public void setShellSize(int shellSize){
-		_shellSize = shellSize;
+	public void setConsoleSize(int consoleSize){
+		_consoleSize = consoleSize;
 	}
 }

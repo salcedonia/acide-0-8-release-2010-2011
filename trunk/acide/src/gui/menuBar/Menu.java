@@ -1,13 +1,42 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar;
 
 import javax.swing.*;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 
-import es.configuration.menu.MenuConfiguration;
+import es.configuration.menu.AcideMenuConfiguration;
 
 import operations.log.AcideLog;
-import resources.ResourceManager;
+import resources.AcideResourceManager;
 
 import java.awt.HeadlessException;
 import java.util.ResourceBundle;
@@ -20,93 +49,60 @@ import gui.menuBar.listeners.MenuMouseClickListener;
 import gui.menuBar.projectMenu.ProjectMenu;
 import gui.menuBar.viewMenu.ViewMenu;
 
-/************************************************************************																
- * Menu of ACIDE - A Configurable IDE.
+/**																
+ * ACIDE - A Configurable IDE menu.
  *					
- * 		   <p>															
- *         <b>ACIDE - A Configurable IDE</b>							
- *         </p>															
- *         <p>															
- *         <b>Official web site:</b> @see http://acide.sourceforge.net	
- *         </p>   
- *           									
- ************************************************************************
- * @author <ul>															
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
- *         <li><b>Version 0.1-0.6:</b>									
- *         <ul>															
- *         Diego Cardiel Freire											
- *         </ul>														
- *         <ul>															
- *         Juan José Ortiz Sánchez										
- *         </ul>														
- *         <ul>															
- *         Delfín Rupérez Cañas											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.7:</b>										
- *         <ul>															
- *         Miguel Martín Lázaro											
- *         </ul>														
- *         </li>														
- *         <li><b>Version 0.8:</b>										
- *         <ul>															
- *         Javier Salcedo Gómez											
- *         </ul>														
- *         </li>														
- *         </ul>														
- ************************************************************************																	
  * @version 0.8																														
- ***********************************************************************/
+ */
 public class Menu {
 
 	/**
-	 * Menu bar.
+	 * ACIDE - A Configurable IDE menu bar.
 	 */
 	private JMenuBar _menuBar;
 	/**
-	 * File menu.
+	 * ACIDE - A Configurable IDE menu file menu.
 	 */
 	private FileMenu _file;
 	/**
-	 * Edit menu.
+	 * ACIDE - A Configurable IDE menu edit menu.
 	 */
 	private EditMenu _edit;
 	/**
-	 * Project menu.
+	 * ACIDE - A Configurable IDE menu project menu.
 	 */
 	private ProjectMenu _project;
 	/**
-	 * View menu.
+	 * ACIDE - A Configurable IDE menu view menu.
 	 */
 	private ViewMenu _view;
 	/**
-	 * Configuration menu.
+	 * ACIDE - A Configurable IDE menu configuration menu.
 	 */
 	private ConfigurationMenu _configuration;
 	/**
-	 * Help menu.
+	 * ACIDE - A Configurable IDE menu help menu.
 	 */
 	private HelpMenu _help;
 	/**
-	 * Indicates if the shell is focused.
+	 * Indicates if the console is focused.
 	 */
-	private boolean _isShellFocused;
+	private boolean _isConsoleFocused;
 	/**
-	 * Indicates if 
+	 * Indicates if ?
 	 */
 	private boolean _isNPF;
 
 	/**
-	 * Creates a new menu.
+	 * Creates a new ACIDE - A Configurable IDE menu.
 	 */
 	public Menu() {
 		
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 		
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception exception) {
 			
 			// Updates the log
@@ -139,15 +135,15 @@ public class Menu {
 	}
 
 	/**
-	 * Sets the labels to display in the selected language.
+	 * Sets the ACIDE - A Configurable IDE menu labels to display.
 	 */
 	public void setLanguageLabels() {
 		
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 		
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception exception) {
 			
 			// Updates the log
@@ -184,15 +180,15 @@ public class Menu {
 	}
 
 	/**
-	 * Builds the menu.
+	 * Builds the ACIDE - A Configurable IDE menu.
 	 */
 	public void buildMenu() {
 			
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 		
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception exception) {
 			
 			// Updates the log
@@ -208,15 +204,15 @@ public class Menu {
 		try {
 			
 			// Gets the menu configuration
-			currentMenu = ResourceManager
+			currentMenu = AcideResourceManager
 					.getInstance().getProperty("currentMenuConfiguration");
 			
 			// Sets the new menu item list
-			MenuConfiguration.getInstance().setMenuElementList(MenuConfiguration
+			AcideMenuConfiguration.getInstance().setMenuElementList(AcideMenuConfiguration
 					.getInstance().loadMenuConfigurationFile(currentMenu));
 			
 			// Updates the RESOURCE MANAGER
-			ResourceManager.getInstance().setProperty("currentMenuConfiguration",
+			AcideResourceManager.getInstance().setProperty("currentMenuConfiguration",
 					currentMenu);
 			
 			// Updates the log
@@ -237,10 +233,10 @@ public class Menu {
 			try {
 				
 				// Sets the new menu item list
-				MenuConfiguration.getInstance().setMenuElementList(MenuConfiguration.getInstance().loadMenuConfigurationFile(currentMenu2));
+				AcideMenuConfiguration.getInstance().setMenuElementList(AcideMenuConfiguration.getInstance().loadMenuConfigurationFile(currentMenu2));
 				
 				// Updates the RESOURCES MANAGER
-				ResourceManager.getInstance().setProperty("currentMenuConfiguration",
+				AcideResourceManager.getInstance().setProperty("currentMenuConfiguration",
 						currentMenu2);
 				
 				// Updates the log
@@ -259,11 +255,11 @@ public class Menu {
 					exception1.printStackTrace();
 					
 					// Loads the new menu item list
-					MenuConfiguration.getInstance().setMenuElementList(MenuConfiguration
+					AcideMenuConfiguration.getInstance().setMenuElementList(AcideMenuConfiguration
 							.getInstance().loadMenuConfigurationFile("./configuration/menu/defaultAllOn.menuCfg"));
 					
 					// Updates the RESOURCE MANAGER
-					ResourceManager.getInstance().setProperty("currentMenuConfiguration",
+					AcideResourceManager.getInstance().setProperty("currentMenuConfiguration",
 							"./configuration/menu/defaultAllOn.menuCfg");
 					
 					// Error message
@@ -295,55 +291,55 @@ public class Menu {
 		_help.buildMenu();
 		
 		// FILE MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(FileMenu.NEW_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(FileMenu.OPEN_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(FileMenu.OPEN_ALL_FILES_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(FileMenu.SAVE_FILE_AS_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(FileMenu.SAVE_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(FileMenu.SAVE_ALL_FILES_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(FileMenu.PRINT_FILE_NAME) 
-				|| MenuConfiguration.getInstance().getIsDisplayed(FileMenu.EXIT_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(FileMenu.NEW_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(FileMenu.OPEN_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(FileMenu.OPEN_ALL_FILES_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(FileMenu.SAVE_FILE_AS_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(FileMenu.SAVE_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(FileMenu.SAVE_ALL_FILES_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(FileMenu.PRINT_FILE_NAME) 
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(FileMenu.EXIT_NAME))
 			_menuBar.add(_file);
 		
 		// EDIT MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(EditMenu.UNDO_NAME) 
-				|| MenuConfiguration.getInstance().getIsDisplayed(EditMenu.REDO_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(EditMenu.COPY_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(EditMenu.PASTE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(EditMenu.CUT_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(EditMenu.SELECT_ALL_FILES_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(EditMenu.GO_TO_LINE_NAME) 
-				|| MenuConfiguration.getInstance().getIsDisplayed(EditMenu.SEARCH_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(EditMenu.REPLACE_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(EditMenu.UNDO_NAME) 
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(EditMenu.REDO_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(EditMenu.COPY_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(EditMenu.PASTE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(EditMenu.CUT_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(EditMenu.SELECT_ALL_FILES_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(EditMenu.GO_TO_LINE_NAME) 
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(EditMenu.SEARCH_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(EditMenu.REPLACE_NAME))
 			_menuBar.add(_edit);
 		
 		// PROJECT MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.NEW_PROJECT_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.OPEN_PROJECT_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.SAVE_PROJECT_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.CLOSE_PROJECT_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.ADD_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.REMOVE_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.DELETE_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.NEW_PROJECT_FILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.ADD_FOLDER_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.REMOVE_FOLDER_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.COMPILE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.EXECUTE_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.NEW_PROJECT_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.OPEN_PROJECT_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.SAVE_PROJECT_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.CLOSE_PROJECT_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.ADD_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.REMOVE_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.DELETE_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.NEW_PROJECT_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.ADD_FOLDER_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.REMOVE_FOLDER_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.COMPILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(ProjectMenu.EXECUTE_NAME))
 			_menuBar.add(_project);
 		
 		// VIEW MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(ViewMenu.SHOW_LOG_TAB_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(ViewMenu.SHOW_EXPLORER_PANEL_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(ViewMenu.SHOW_OUTPUT_PANEL_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(ViewMenu.SHOW_LOG_TAB_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(ViewMenu.SHOW_EXPLORER_PANEL_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(ViewMenu.SHOW_CONSOLE_PANEL_NAME))
 			_menuBar.add(_view);
 		
 		// CONFIGURATION
 		_menuBar.add(_configuration);
 		
 		// HELP MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(HelpMenu.SHOW_HELP_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(HelpMenu.SHOW_ABOUT_US_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(HelpMenu.SHOW_HELP_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(HelpMenu.SHOW_ABOUT_US_NAME))
 			_menuBar.add(_help);
 		
 		// Shows the menu bar
@@ -351,15 +347,15 @@ public class Menu {
 	}
 
 	/**
-	 * Sets the menu listeners.
+	 * Sets the ACIDE - A Configurable IDE menu listeners.
 	 */
 	public void setListeners() {
 		
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 		
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception exception) {
 			
 			// Updates the log
@@ -399,44 +395,44 @@ public class Menu {
 	}
 
 	/**
-	 * Returns the menu bar.
+	 * Returns the ACIDE - A Configurable IDE menu bar.
 	 * 
-	 * @return the menu bar.
+	 * @return the ACIDE - A Configurable IDE menu bar.
 	 */
 	public JMenuBar getMenuBar() {
 		return _menuBar;
 	}
 	
 	/**
-	 * Enables the file menu.
+	 * Enables the ACIDE - A Configurable IDE menu file menu.
 	 */
 	public void enableFileMenu() {
 		_file.enableMenu();
 	}
 
 	/**
-	 * Disables the file menu.
+	 * Disables the ACIDE - A Configurable IDE menu file menu.
 	 */
 	public void disableFileMenu() {
 		_file.disableMenu();	
 	}
 	
 	/**
-	 * Enables the project menu.
+	 * Enables the ACIDE - A Configurable IDE menu project menu.
 	 */
 	public void enableProjectMenu() {
 		_project.enableMenu();
 	}
 
 	/**
-	 * Disables the project menu.
+	 * Disables the ACIDE - A Configurable IDE menu project menu.
 	 */
 	public void disableProjectMenu() {
 		_project.disableMenu();		
 	}
 
 	/**
-	 * Sets a new value to the file menu.
+	 * Sets a new value to the ACIDE - A Configurable IDE menu file menu.
 	 * 
 	 * @param file new value to set.
 	 */
@@ -445,16 +441,16 @@ public class Menu {
 	}
 	
 	/**
-	 * Returns the help menu.
+	 * Returns the ACIDE - A Configurable IDE menu help menu.
 	 * 
-	 * @return the help menu.
+	 * @return the ACIDE - A Configurable IDE menu help menu.
 	 */
 	public HelpMenu getHelp() {
 		return _help;
 	}
 
 	/**
-	 * Sets a new value to the help menu.
+	 * Sets a new value to the ACIDE - A Configurable IDE menu help menu.
 	 * 
 	 * @param help new value to set.
 	 */
@@ -463,16 +459,16 @@ public class Menu {
 	}
 	
 	/**
-	 * Returns the edit menu.
+	 * Returns the ACIDE - A Configurable IDE menu edit menu.
 	 * 
-	 * @return the edit menu.
+	 * @return the ACIDE - A Configurable IDE menu edit menu.
 	 */
 	public EditMenu getEdit() {
 		return _edit;
 	}
 
 	/**
-	 * Sets a new value to the edit menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE menu edit menu item.
 	 * 
 	 * @param edit new value to set.
 	 */
@@ -481,16 +477,16 @@ public class Menu {
 	}
 
 	/**
-	 * Returns the configuration menu.
+	 * Returns the ACIDE - A Configurable IDE menu configuration menu.
 	 * 
-	 * @return the configuration menu.
+	 * @return the ACIDE - A Configurable IDE menu configuration menu.
 	 */
 	public ConfigurationMenu getConfiguration() {
 		return _configuration;
 	}
 
 	/**
-	 * Sets a new value to the configuration menu.
+	 * Sets a new value to the ACIDE - A Configurable IDE menu configuration menu.
 	 * 
 	 * @param configuration new value to set.
 	 */
@@ -499,16 +495,16 @@ public class Menu {
 	}
 
 	/**
-	 * Returns the project menu.
+	 * Returns the ACIDE - A Configurable IDE menu project menu.
 	 * 
-	 * @return the project menu.
+	 * @return the ACIDE - A Configurable IDE menu project menu.
 	 */
 	public ProjectMenu getProject() {
 		return _project;
 	}
 
 	/**
-	 * Sets a new value to the project menu.
+	 * Sets a new value to the ACIDE - A Configurable IDE menu project menu.
 	 * 
 	 * @param project new value to set.
 	 */
@@ -517,16 +513,16 @@ public class Menu {
 	}
 
 	/**
-	 * Returns the view menu.
+	 * Returns the ACIDE - A Configurable IDE menu view menu.
 	 * 
-	 * @return the view menu.
+	 * @return the ACIDE - A Configurable IDE menu view menu.
 	 */
 	public ViewMenu getView() {
 		return _view;
 	}
 
 	/**
-	 * Sets a new value to the view menu.
+	 * Sets a new value to the ACIDE - A Configurable IDE menu view menu.
 	 * 
 	 * @param view new value to set.
 	 */
@@ -535,7 +531,7 @@ public class Menu {
 	}
 
 	/**
-	 * Sets a new value to the menu bar.
+	 * Sets a new value to the ACIDE - A Configurable IDE menu bar.
 	 * 
 	 * @param menuBar new value to set.
 	 */
@@ -544,21 +540,21 @@ public class Menu {
 	}
 
 	/**
-	 * Returns the is shell focused flag.
+	 * Returns the ACIDE - A Configurable IDE menu is shell focused flag.
 	 * 
-	 * @return the is shell focused flag.
+	 * @return the ACIDE - A Configurable IDE menu is shell focused flag.
 	 */
-	public boolean isShellFocused() {
-		return _isShellFocused;
+	public boolean getIsConsoleFocused() {
+		return _isConsoleFocused;
 	}
 
 	/**
-	 * Sets a new value to the is shell focused flag.
+	 * Sets a new value to the ACIDE - A Configurable IDE menu is console focused flag.
 	 * 
-	 * @param shellIsFocused new value to set.
+	 * @param consoleIsFocused new value to set.
 	 */
-	public void setIsShellFocus(boolean shellIsFocused) {
-		_isShellFocused = shellIsFocused;
+	public void setIsConsoleFocused(boolean consoleIsFocused) {
+		_isConsoleFocused = consoleIsFocused;
 	}
 
 	/**
@@ -571,7 +567,7 @@ public class Menu {
 	}
 
 	/**
-	 * Sets a new value to the is NPF flag.
+	 * Sets a new value to the ACIDE - A Configurable IDE menu is NPF flag.
 	 * 
 	 * @param isNPF new value to set.
 	 */
@@ -580,23 +576,23 @@ public class Menu {
 	}
 
 	/**
-	 * Returns the file menu.
+	 * Returns the ACIDE - A Configurable IDE menu file menu.
 	 * 
-	 * @return the file menu.
+	 * @return the ACIDE - A Configurable IDE menu file menu.
 	 */
 	public FileMenu getFile() {	
 		return _file;
 	}
 	
 	/**
-	 * Enables the edit menu.
+	 * Enables the ACIDE - A Configurable IDE menu edit menu.
 	 */
 	public void enableEditMenu() {
 		_edit.enableMenu();
 	}
 	
 	/**
-	 * Disables the edit menu.
+	 * Disables the ACIDE - A Configurable IDE menu edit menu.
 	 */
 	public void disableEditMenu() {
 		_edit.disableMenu();

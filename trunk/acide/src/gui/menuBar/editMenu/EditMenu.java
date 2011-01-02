@@ -1,3 +1,32 @@
+/*
+ * ACIDE - A Configurable IDE
+ * Official web site: http://acide.sourceforge.net
+ * 
+ * Copyright (C) 2007-2011  
+ * Authors:
+ * 		- Fernando Sáenz Pérez (Team Director).
+ *      - Version from 0.1 to 0.6:
+ *      	- Diego Cardiel Freire.
+ *			- Juan José Ortiz Sánchez.
+ *          - Delfín Rupérez Cañas.
+ *      - Version 0.7:
+ *          - Miguel Martín Lázaro.
+ *      - Version 0.8:
+ *      	- Javier Salcedo Gómez.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package gui.menuBar.editMenu;
 
 import java.awt.event.ActionEvent;
@@ -10,10 +39,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import language.AcideLanguage;
+import language.AcideLanguageManager;
 import operations.log.AcideLog;
-import resources.ResourceManager;
-import es.configuration.menu.MenuConfiguration;
+import resources.AcideResourceManager;
+import es.configuration.menu.AcideMenuConfiguration;
 import gui.menuBar.editMenu.listeners.CopyMenuItemListener;
 import gui.menuBar.editMenu.listeners.CutMenuItemListener;
 import gui.menuBar.editMenu.listeners.GoToLineMenuItemListener;
@@ -24,162 +53,129 @@ import gui.menuBar.editMenu.listeners.SearchMenuItemListener;
 import gui.menuBar.editMenu.listeners.SelectAllMenuItemListener;
 import gui.menuBar.editMenu.listeners.UndoMenuItemListener;
 
-/************************************************************************
- * Edit menu of ACIDE - A Configurable IDE.
+/**
+ * ACIDE - A Configurable IDE edit menu.
  * 
- * <p>
- * <b>ACIDE - A Configurable IDE</b>
- * </p>
- * <p>
- * <b>Official web site:</b> @see http://acide.sourceforge.net
- * </p>
- * 
- ************************************************************************ 
- * @author <ul>
- *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>
- *         <li><b>Version 0.1-0.6:</b>
- *         <ul>
- *         Diego Cardiel Freire
- *         </ul>
- *         <ul>
- *         Juan José Ortiz Sánchez
- *         </ul>
- *         <ul>
- *         Delfín Rupérez Cañas
- *         </ul>
- *         </li>
- *         <li><b>Version 0.7:</b>
- *         <ul>
- *         Miguel Martín Lázaro
- *         </ul>
- *         </li>
- *         <li><b>Version 0.8:</b>
- *         <ul>
- *         Javier Salcedo Gómez
- *         </ul>
- *         </li>
- *         </ul>
- ************************************************************************ 
  * @version 0.8
  * @see JMenu
- ***********************************************************************/
+ */
 public class EditMenu extends JMenu {
 
 	/**
-	 * Edit menu class serial version UID.
+	 * ACIDE - A Configurable IDE edit menu class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * Undo menu item name.
+	 * ACIDE - A Configurable IDE edit menu undo menu item name.
 	 */
 	public static final String UNDO_NAME = "Undo";
 	/**
-	 * Redo menu item name.
+	 * ACIDE - A Configurable IDE edit menu redo menu item name.
 	 */
 	public static final String REDO_NAME = "Redo";
 	/**
-	 * Copy menu item name.
+	 * ACIDE - A Configurable IDE edit menu copy menu item name.
 	 */
 	public static final String COPY_NAME = "Copy";
 	/**
-	 * Paste menu item name.
+	 * ACIDE - A Configurable IDE edit menu paste menu item name.
 	 */
 	public static final String PASTE_NAME = "Paste";
 	/**
-	 * Cut menu item name.
+	 * ACIDE - A Configurable IDE edit menu cut menu item name.
 	 */
 	public static final String CUT_NAME = "Cut";
 	/**
-	 * Select all files menu item name.
+	 * ACIDE - A Configurable IDE edit menu select all files menu item name.
 	 */
 	public static final String SELECT_ALL_FILES_NAME = "Select All Files";
 	/**
-	 * Go to line menu item name.
+	 * ACIDE - A Configurable IDE edit menu go to line menu item name.
 	 */
 	public static final String GO_TO_LINE_NAME = "Go To Line";
 	/**
-	 * Search menu item name.
+	 * ACIDE - A Configurable IDE edit menu search menu item name.
 	 */
 	public static final String SEARCH_NAME = "Search";
 	/**
-	 * Replace menu item name.
+	 * ACIDE - A Configurable IDE edit menu replace menu item name.
 	 */
 	public static final String REPLACE_NAME = "Replace";
 	/**
-	 * Undo menu item image icon.
+	 * ACIDE - A Configurable IDE edit menu undo menu item image icon.
 	 */
 	private final static ImageIcon UNDO_IMAGE = new ImageIcon("./resources/icons/menu/edit/undo.png");
 	/**
-	 * Redo menu item image icon.
+	 * ACIDE - A Configurable IDE edit menu redo menu item image icon.
 	 */
 	private final static ImageIcon REDO_IMAGE = new ImageIcon("./resources/icons/menu/edit/redo.png");
 	/**
-	 * Copy menu item image icon.
+	 * ACIDE - A Configurable IDE edit menu copy menu item image icon.
 	 */
 	private final static ImageIcon COPY_IMAGE = new ImageIcon("./resources/icons/menu/edit/copy.png");
 	/**
-	 * Paste menu item image icon.
+	 * ACIDE - A Configurable IDE edit menu paste menu item image icon.
 	 */
 	private final static ImageIcon PASTE_IMAGE = new ImageIcon("./resources/icons/menu/edit/paste.png");
 	/**
-	 * Cut menu item image icon.
+	 * ACIDE - A Configurable IDE edit menu cut menu item image icon.
 	 */
 	private final static ImageIcon CUT_IMAGE = new ImageIcon("./resources/icons/menu/edit/cut.png");
 	/**
-	 * Select all files menu item image icon.
+	 * ACIDE - A Configurable IDE edit menu select all files menu item image icon.
 	 */
 	private final static ImageIcon SELECT_ALL_FILES_IMAGE = new ImageIcon("./resources/icons/menu/edit/selectAll.png");
 	/**
-	 * Go to line menu item image icon.
+	 * ACIDE - A Configurable IDE edit menu go to line menu item image icon.
 	 */
 	private final static ImageIcon GO_TO_LINE_IMAGE = new ImageIcon("./resources/icons/menu/edit/goToLine.png");
 	/**
-	 * Search menu item image icon.
+	 * ACIDE - A Configurable IDE edit menu search menu item image icon.
 	 */
 	private final static ImageIcon SEARCH_IMAGE = new ImageIcon("./resources/icons/menu/edit/search.png");
 	/**
-	 * Replace menu item image icon.
+	 * ACIDE - A Configurable IDE edit menu replace menu item image icon.
 	 */
 	private final static ImageIcon REPLACE_IMAGE = new ImageIcon("./resources/icons/menu/edit/replace.png");
 	/**
-	 * Undo menu item.
+	 * ACIDE - A Configurable IDE edit menu undo menu item.
 	 */
 	private JMenuItem _undo;
 	/**
-	 * Redo menu item.
+	 * ACIDE - A Configurable IDE edit menu redo menu item.
 	 */
 	private JMenuItem _redo;
 	/**
-	 * Search menu item.
+	 * ACIDE - A Configurable IDE edit menu search menu item.
 	 */
 	private JMenuItem _search;
 	/**
-	 * Paste menu item.
+	 * ACIDE - A Configurable IDE edit menu paste menu item.
 	 */
 	private JMenuItem _paste;
 	/**
-	 * Copy menu item.
+	 * ACIDE - A Configurable IDE edit menu copy menu item.
 	 */
 	private JMenuItem _copy;
 	/**
-	 * Cut menu item.
+	 * ACIDE - A Configurable IDE edit menu cut menu item.
 	 */
 	private JMenuItem _cut;
 	/**
-	 * Select all menu item.
+	 * ACIDE - A Configurable IDE edit menu select all menu item.
 	 */
 	private JMenuItem _selectAllFiles;
 	/**
-	 * Go to line menu item.
+	 * ACIDE - A Configurable IDE edit menu go to line menu item.
 	 */
 	private JMenuItem _goToLine;
 	/**
-	 * Replace menu item.
+	 * ACIDE - A Configurable IDE edit menu replace menu item.
 	 */
 	private JMenuItem _replace;
 	
 	/**
-	 * Creates a new edit menu.
+	 * Creates a new ACIDE - A Configurable IDE edit menu.
 	 */
 	public EditMenu() {
 
@@ -198,15 +194,15 @@ public class EditMenu extends JMenu {
 	}
 
 	/**
-	 * Sets the language labels to display in the selected language.
+	 * Sets the ACIDE - A Configurable IDE edit menu language labels.
 	 */
 	public void setLanguageLabels() {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -272,82 +268,82 @@ public class EditMenu extends JMenu {
 	}
 
 	/**
-	 * Builds the edit menu.
+	 * Builds the ACIDE - A Configurable IDE edit menu.
 	 */
 	public void buildMenu() {
 
 		removeAll();
 
 		// UNDO MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME))
 			add(_undo);
 		
 		// REDO MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(REDO_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(REDO_NAME))
 			add(_redo);
 		
 		// SEPARATOR
-		if ((MenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME) 
-				|| MenuConfiguration.getInstance().getIsDisplayed(REDO_NAME))
-				&& (MenuConfiguration.getInstance().getIsDisplayed(COPY_NAME) 
-						|| MenuConfiguration.getInstance().getIsDisplayed(PASTE_NAME)
-						|| MenuConfiguration.getInstance().getIsDisplayed(CUT_NAME) 
-						|| MenuConfiguration.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME)))
+		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME) 
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(REDO_NAME))
+				&& (AcideMenuConfiguration.getInstance().getIsDisplayed(COPY_NAME) 
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(PASTE_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(CUT_NAME) 
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME)))
 			addSeparator();
 		
 		// COPY MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(COPY_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(COPY_NAME))
 			add(_copy);
 		
 		// PASTE MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(PASTE_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(PASTE_NAME))
 			add(_paste);
 		
 		// CUT MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(CUT_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(CUT_NAME))
 			add(_cut);
 		
 		// SELECT ALL FILES MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME))
 			add(_selectAllFiles);
 		
 		// SEPARATOR
-		if ((MenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME) 
-				|| MenuConfiguration.getInstance().getIsDisplayed(REDO_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(COPY_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(PASTE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(CUT_NAME) 
-				|| MenuConfiguration.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME)) 
-				&& MenuConfiguration.getInstance().getIsDisplayed(GO_TO_LINE_NAME))
+		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME) 
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(REDO_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(COPY_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(PASTE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(CUT_NAME) 
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME)) 
+				&& AcideMenuConfiguration.getInstance().getIsDisplayed(GO_TO_LINE_NAME))
 			addSeparator();
 		
 		// GO TO LINE MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(GO_TO_LINE_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(GO_TO_LINE_NAME))
 			add(_goToLine);
 		
 		// SEPARATOR
-		if ((MenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME) 
-				|| MenuConfiguration.getInstance().getIsDisplayed(REDO_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(COPY_NAME) 
-				|| MenuConfiguration.getInstance().getIsDisplayed(PASTE_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(CUT_NAME)
-				|| MenuConfiguration.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME) 
-				|| MenuConfiguration.getInstance().getIsDisplayed(GO_TO_LINE_NAME))
-				&& (MenuConfiguration.getInstance().getIsDisplayed(SEARCH_NAME) 
-						|| MenuConfiguration.getInstance().getIsDisplayed(REPLACE_NAME)))
+		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME) 
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(REDO_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(COPY_NAME) 
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(PASTE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(CUT_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME) 
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(GO_TO_LINE_NAME))
+				&& (AcideMenuConfiguration.getInstance().getIsDisplayed(SEARCH_NAME) 
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(REPLACE_NAME)))
 			addSeparator();
 		
 		// SEARCH MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(SEARCH_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SEARCH_NAME))
 			add(_search);
 		
 		// REPLACE MENU
-		if (MenuConfiguration.getInstance().getIsDisplayed(REPLACE_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(REPLACE_NAME))
 			add(_replace);
 	}
 
 	/**
-	 * Sets the edit menu item listeners.
+	 * Sets the ACIDE - A Configurable IDE edit menu menu item listeners.
 	 */
 	public void setListeners() {
 
@@ -380,15 +376,15 @@ public class EditMenu extends JMenu {
 	}
 
 	/**
-	 * Disables the paste menu item.
+	 * Disables the ACIDE - A Configurable IDE edit menu paste menu item.
 	 */
 	public void disablePaste() {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -406,15 +402,15 @@ public class EditMenu extends JMenu {
 	}
 
 	/**
-	 * Enables the paste menu item.
+	 * Enables the ACIDE - A Configurable IDE edit menu paste menu item.
 	 */
 	public void enablePaste() {
 
 		// Gets the language
-		AcideLanguage language = AcideLanguage.getInstance();
+		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(ResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -432,25 +428,25 @@ public class EditMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the search menu item.
+	 * Returns the ACIDE - A Configurable IDE edit menu search menu item.
 	 * 
-	 * @return the search menu item.
+	 * @return the ACIDE - A Configurable IDE edit menu search menu item.
 	 */
 	public JMenuItem getSearch() {
 		return _search;
 	}
 
 	/**
-	 * Returns the go to line menu item.
+	 * Returns the ACIDE - A Configurable IDE edit menu go to line menu item.
 	 * 
-	 * @return the go to line menu item.
+	 * @return the ACIDE - A Configurable IDE edit menu go to line menu item.
 	 */
 	public JMenuItem getGoToLine() {
 		return _goToLine;
 	}
 
 	/**
-	 * Sets a new value to the go to line menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE edit menu go to line menu item.
 	 * 
 	 * @param goToLine new value to set.
 	 */
@@ -459,16 +455,16 @@ public class EditMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the undo menu item.
+	 * Returns the ACIDE - A Configurable IDE edit menu undo menu item.
 	 * 
-	 * @return the undo menu item.
+	 * @return the ACIDE - A Configurable IDE edit menu undo menu item.
 	 */
 	public JMenuItem getUndo() {
 		return _undo;
 	}
 
 	/**
-	 * Sets a new value to the undo menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE edit menu undo menu item.
 	 * 
 	 * @param undo new value to set.
 	 */
@@ -477,16 +473,16 @@ public class EditMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the copy menu item.
+	 * Returns the ACIDE - A Configurable IDE edit menu copy menu item.
 	 * 
-	 * @return the copy menu item.
+	 * @return the ACIDE - A Configurable IDE edit menu copy menu item.
 	 */
 	public JMenuItem getCopy() {
 		return _copy;
 	}
 
 	/**
-	 * Sets a new value to the copy menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE edit menu copy menu item.
 	 * 
 	 * @param copy new value to set.
 	 */
@@ -495,16 +491,16 @@ public class EditMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the cut menu item.
+	 * Returns the ACIDE - A Configurable IDE edit menu cut menu item.
 	 * 
-	 * @return the cut menu item.
+	 * @return the ACIDE - A Configurable IDE edit menu cut menu item.
 	 */
 	public JMenuItem getCut() {
 		return _cut;
 	}
 
 	/**
-	 * Sets a new value to the cut menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE edit menu cut menu item.
 	 * 
 	 * @param cut new value to set.
 	 */ 
@@ -513,16 +509,16 @@ public class EditMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the paste menu item.
+	 * Returns the ACIDE - A Configurable IDE edit menu paste menu item.
 	 * 
-	 * @return the paste menu item.
+	 * @return the ACIDE - A Configurable IDE edit menu paste menu item.
 	 */
 	public JMenuItem getPaste() {
 		return _paste;
 	}
 
 	/**
-	 * Sets a new value to the paste menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE edit menu paste menu item.
 	 * 
 	 * @param paste new value to set.
 	 */
@@ -531,16 +527,16 @@ public class EditMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the replace menu item.
+	 * Returns the ACIDE - A Configurable IDE edit menu replace menu item.
 	 * 
-	 * @return the replace menu item.
+	 * @return the ACIDE - A Configurable IDE edit menu replace menu item.
 	 */
 	public JMenuItem getReplace() {
 		return _replace;
 	}
 
 	/**
-	 * Sets a new value to the replace menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE edit menu replace menu item.
 	 * 
 	 * @param replace new value to set.
 	 */
@@ -549,16 +545,16 @@ public class EditMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the redo menu item.
+	 * Returns the ACIDE - A Configurable IDE edit menu redo menu item.
 	 * 
-	 * @return the redo menu item.
+	 * @return the ACIDE - A Configurable IDE edit menu redo menu item.
 	 */
 	public JMenuItem getRedo() {
 		return _redo;
 	}
 
 	/**
-	 * Sets a new value to the redo menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE edit menu redo menu item.
 	 * 
 	 * @param redo new value to set.
 	 */
@@ -567,16 +563,16 @@ public class EditMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the select all menu item.
+	 * Returns the ACIDE - A Configurable IDE edit menu select all menu item.
 	 * 
-	 * @return the select all menu item.
+	 * @return the ACIDE - A Configurable IDE edit menu select all menu item.
 	 */
 	public JMenuItem getSelectAll() {
 		return _selectAllFiles;
 	}
 
 	/**
-	 * Sets a new value to the select all menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE edit menu select all menu item.
 	 * 
 	 * @param selectAll new value to set.
 	 */
@@ -585,7 +581,7 @@ public class EditMenu extends JMenu {
 	}
 
 	/**
-	 * Sets a new value to the search menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE edit menu search menu item.
 	 * 
 	 * @param search new value to set.
 	 */
@@ -594,7 +590,7 @@ public class EditMenu extends JMenu {
 	}
 
 	/**
-	 * Enables the edit menu.
+	 * Enables the ACIDE - A Configurable IDE edit menu.
 	 */
 	public void enableMenu() {
 
@@ -610,7 +606,7 @@ public class EditMenu extends JMenu {
 	}
 
 	/**
-	 * Disables the edit menu.
+	 * Disables the ACIDE - A Configurable IDE edit menu.
 	 */
 	public void disableMenu() {
 
