@@ -35,7 +35,7 @@ import java.awt.event.ActionListener;
 import operations.factory.AcideGUIFactory;
 
 /**																
- * Show about us menu item listener.											
+ * ACIDE - A Configurable IDE help menu show about us menu item listener.											
  *					
  * @version 0.8	
  * @see ActionListener																													

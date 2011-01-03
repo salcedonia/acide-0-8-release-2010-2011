@@ -29,16 +29,13 @@
  */
 package gui.fileEditor.fileEditorManager.utils.logic;
 
-import java.util.Properties;
-
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
 /**																
- * Handles the matching braces of the editor of ACIDE - A Configurable IDE.
+ * ACIDE - A Configurable IDE matching braces.
  *					
- * @version 0.8	
- * @see Properties																												
+ * @version 0.8																												
  */
 public class MatchingBraces {
 

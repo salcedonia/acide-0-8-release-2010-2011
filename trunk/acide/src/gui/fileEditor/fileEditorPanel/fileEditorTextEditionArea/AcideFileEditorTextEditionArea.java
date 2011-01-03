@@ -1,12 +1,14 @@
 package gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea;
 
 import gui.fileEditor.fileEditorManager.utils.gui.LineNumberComponent;
-import gui.fileEditor.fileEditorManager.utils.logic.SyntaxDocument;
-import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideTextEditorTextEditionAreaAdjustmentListener;
-import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideTextEditorTextEditionAreaCaretListener;
-import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideTextEditorTextEditionAreaKeyboardListener;
-import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideTextEditorTextEditionAreaMouseClickListener;
-import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideTextEditorTextEditionAreaMouseDoubleClickListener;
+import gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
+import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorTextEditionAreaAdjustmentListener;
+import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorTextEditionAreaCaretListener;
+import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorTextEditionAreaKeyboardListener;
+import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorTextEditionAreaMouseClickListener;
+import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorTextEditionAreaMouseDoubleClickListener;
+import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.AcideCaret;
+import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.LinePainter;
 import gui.fileEditor.fileEditorPanel.listeners.AcideFileEditorPanelDocumentListener;
 import gui.fileEditor.fileEditorPanel.popup.AcideEditorPanelPopupMenuListener;
 import gui.listeners.AcideKeyboardListener;
@@ -62,7 +64,7 @@ public class AcideFileEditorTextEditionArea {
 	/**
 	 * ACIDE - A Configurable IDE text edition area mouse click listener.
 	 */
-	private AcideTextEditorTextEditionAreaMouseClickListener _mouseClickListener;
+	private AcideFileEditorTextEditionAreaMouseClickListener _mouseClickListener;
 	/**
 	 * ACIDE - A Configurable IDE text edition area document listener.
 	 */
@@ -70,11 +72,11 @@ public class AcideFileEditorTextEditionArea {
 	/**
 	 * ACIDE - A Configurable IDE text edition area caret listener.
 	 */
-	private AcideTextEditorTextEditionAreaCaretListener _caretListener;
+	private AcideFileEditorTextEditionAreaCaretListener _caretListener;
 	/**
 	 * ACIDE - A Configurable IDE text edition area adjustment listener.
 	 */
-	private AcideTextEditorTextEditionAreaAdjustmentListener _adjustmentListener;
+	private AcideFileEditorTextEditionAreaAdjustmentListener _adjustmentListener;
 
 	/**
 	 * Creates a new text edition area.
@@ -82,7 +84,7 @@ public class AcideFileEditorTextEditionArea {
 	 * @param syntaxDocument
 	 *            text syntax document.
 	 */
-	public AcideFileEditorTextEditionArea(SyntaxDocument syntaxDocument) {
+	public AcideFileEditorTextEditionArea(AcideStyledDocument syntaxDocument) {
 
 		_braceMatcher = -1;
 		_verticalValue = 0;
@@ -98,10 +100,10 @@ public class AcideFileEditorTextEditionArea {
 
 		// Sets the listeners
 		_textPane
-				.addKeyListener(new AcideTextEditorTextEditionAreaKeyboardListener());
+				.addKeyListener(new AcideFileEditorTextEditionAreaKeyboardListener());
 		_textPane.addMouseListener(new AcideEditorPanelPopupMenuListener());
 		_textPane
-				.addMouseListener(new AcideTextEditorTextEditionAreaMouseDoubleClickListener());
+				.addMouseListener(new AcideFileEditorTextEditionAreaMouseDoubleClickListener());
 
 		// Paint the lines which contains the caret
 		new LinePainter(_textPane);
@@ -117,7 +119,7 @@ public class AcideFileEditorTextEditionArea {
 		// Puts the mask over the scroll bars at the right and down part of the
 		// panel
 		// so they are used as part of the text pane
-		_mouseClickListener = new AcideTextEditorTextEditionAreaMouseClickListener();
+		_mouseClickListener = new AcideFileEditorTextEditionAreaMouseClickListener();
 
 		_scrollPane.getVerticalScrollBar()
 				.addMouseListener(_mouseClickListener);
@@ -139,11 +141,11 @@ public class AcideFileEditorTextEditionArea {
 
 		_documentListener = new AcideFileEditorPanelDocumentListener();
 		_textPane.getDocument().addDocumentListener(_documentListener);
-		_caretListener = new AcideTextEditorTextEditionAreaCaretListener();
+		_caretListener = new AcideFileEditorTextEditionAreaCaretListener();
 		_textPane.addCaretListener(_caretListener);
 		_scrollPane.setMinimumSize(new Dimension(0, 0));
 
-		_adjustmentListener = new AcideTextEditorTextEditionAreaAdjustmentListener();
+		_adjustmentListener = new AcideFileEditorTextEditionAreaAdjustmentListener();
 		_scrollPane.getVerticalScrollBar().addAdjustmentListener(
 				_adjustmentListener);
 
@@ -159,7 +161,7 @@ public class AcideFileEditorTextEditionArea {
 	 *            file editor manager syntax document.
 	 * @return the ACIDE - A Configurable IDE text edition area text pane.
 	 */
-	protected void buildEditor(SyntaxDocument syntaxDocument) {
+	protected void buildEditor(AcideStyledDocument syntaxDocument) {
 
 		_textPane = new JTextPane(syntaxDocument) {
 

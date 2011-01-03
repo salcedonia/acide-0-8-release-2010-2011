@@ -33,6 +33,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 
+import javax.swing.SwingUtilities;
+
 import language.AcideLanguageManager;
 import operations.factory.AcideIOFactory;
 import operations.log.AcideLog;
@@ -107,11 +109,11 @@ public class OpenFileMenuItemListener implements ActionListener {
 
 					// Searches for the file into the project configuration file list
 					int fileProjectIndex = -1;
-					for (int pos = 0; pos < AcideProjectConfiguration.getInstance()
-							.getNumFilesFromList(); pos++) {
-						if (AcideProjectConfiguration.getInstance().getFileAt(pos)
+					for (int index = 0; index < AcideProjectConfiguration.getInstance()
+							.getNumFilesFromList(); index++) {
+						if (AcideProjectConfiguration.getInstance().getFileAt(index)
 								.getAbsolutePath().equals(filePath))
-							fileProjectIndex = pos;
+							fileProjectIndex = index;
 					}
 
 					AcideProjectFileType fileType = AcideProjectFileType.NORMAL;
@@ -119,7 +121,7 @@ public class OpenFileMenuItemListener implements ActionListener {
 					// If belongs to the project
 					if (fileProjectIndex > -1) {
 
-						// Updates the status bar
+						// Updates the status message in the status bar
 						MainWindow.getInstance().getStatusBar().setStatusMessage(
 								AcideProjectConfiguration.getInstance()
 										.getFileAt(fileProjectIndex)
@@ -131,7 +133,7 @@ public class OpenFileMenuItemListener implements ActionListener {
 								.isCompilableFile()) {
 							fileType = AcideProjectFileType.COMPILABLE;
 
-							// Updates the status bar
+							// Updates the status message in the status bar
 							MainWindow
 									.getInstance()
 									.getStatusBar()
@@ -148,7 +150,7 @@ public class OpenFileMenuItemListener implements ActionListener {
 										fileProjectIndex).isMainFile()) {
 							fileType = AcideProjectFileType.MAIN;
 
-							// Updates the status bar
+							// Updates the status message in the status bar
 							MainWindow
 									.getInstance()
 									.getStatusBar()
@@ -164,7 +166,7 @@ public class OpenFileMenuItemListener implements ActionListener {
 
 						// If it does not belong to the project
 
-						// Updates the status bar
+						// Updates the status message in the status bar
 						MainWindow.getInstance().getStatusBar().setStatusMessage(
 								filePath);
 
@@ -186,9 +188,7 @@ public class OpenFileMenuItemListener implements ActionListener {
 					MainWindow.getInstance().getMenu().enableEditMenu();
 					
 					// Updates the undo manager
-					AcideUndoRedoManager.getInstance().update(
-							MainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel().getSyntaxDocument());
+					AcideUndoRedoManager.getInstance().update();
 
 					// Sets the caret in the first position of the editor
 					MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel().getActiveTextEditionArea().setCaretPosition(0);
@@ -204,6 +204,36 @@ public class OpenFileMenuItemListener implements ActionListener {
 						}
 					}
 
+					// Sets the focus on the selected file at the editor
+					for (int index = 0; index < MainWindow.getInstance()
+							.getFileEditorManager()
+							.getNumFileEditorPanels(); index++) {
+
+						final int editorIndex = index;
+
+						if (MainWindow.getInstance().getFileEditorManager()
+								.getFileEditorPanelAt(index).getAbsolutePath()
+								.equals(filePath)) {
+
+							SwingUtilities.invokeLater(new Runnable() {
+								/*
+								 * (non-Javadoc)
+								 * 
+								 * @see java.lang.Runnable#run()
+								 */
+								@Override
+								public void run() {
+
+									// Sets the focus on the text area
+									MainWindow.getInstance()
+											.getFileEditorManager()
+											.getFileEditorPanelAt(editorIndex)
+											.getActiveTextEditionArea()
+											.requestFocusInWindow();
+								}
+							});
+						}
+					}
 					// Not default project
 					if (!AcideProjectConfiguration.getInstance().isDefaultProject())
 						
@@ -221,9 +251,30 @@ public class OpenFileMenuItemListener implements ActionListener {
 
 			} else {
 
-				// Puts the focus in the opened editor
-				MainWindow.getInstance().getFileEditorManager()
-						.setSelectedFileEditorPanelAt(fileIndex);
+				// If it is already opened
+
+				final int editorIndex = fileIndex;
+
+				SwingUtilities.invokeLater(new Runnable() {
+					/*
+					 * (non-Javadoc)
+					 * 
+					 * @see java.lang.Runnable#run()
+					 */
+					@Override
+					public void run() {
+
+						// Sets the selected editor
+						MainWindow.getInstance().getFileEditorManager()
+								.setSelectedFileEditorPanelAt(editorIndex);
+
+						// Sets the focus on the text component
+						MainWindow.getInstance().getFileEditorManager()
+								.getFileEditorPanelAt(editorIndex)
+								.getActiveTextEditionArea()
+								.requestFocusInWindow();
+					}
+				});
 			}
 		} else
 

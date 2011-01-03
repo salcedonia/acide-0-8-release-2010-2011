@@ -58,7 +58,7 @@ import operations.log.AcideLog;
 import resources.AcideResourceManager;
 
 /**																
- * About us window of ACIDE - A Configurable IDE.											
+ * ACIDE - A Configurable IDE about us window.											
  *					
  * @version 0.8	
  * @see JFrame																													
@@ -66,44 +66,44 @@ import resources.AcideResourceManager;
 public class AcideAboutUsWindow extends JFrame{
 
 	/**
-	 * About us window class serial version UID.
+	 * ACIDE - A Configurable IDE about us window class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * About us window image icon.
+	 * ACIDE - A Configurable IDE about us window image icon.
 	 */
 	private static final ImageIcon ICON = new ImageIcon("./resources/images/icon.png");
 	/**
-	 * About us window image file.
+	 * ACIDE - A Configurable IDE about us window image file.
 	 */
 	private static final ImageIcon IMAGE = new ImageIcon("./resources/images/aboutUs.png");
 	/**
-	 * Panel which contains the info about the developers of the application.
+	 * ACIDE - A Configurable IDE about us window panel which contains the info about the developers of the application.
 	 */
 	private JPanel _developersPanel;
 	/**
-	 * About us window info panel.
+	 * ACIDE - A Configurable IDE about us window info panel.
 	 */
 	private JPanel _infoPanel;
 	/**
-	 * About us window main panel.
+	 * ACIDE - A Configurable IDE about us window main panel.
 	 */
 	private JPanel _mainPanel;
 	/**
-	 * About us window button panel.
+	 * ACIDE - A Configurable IDE about us window button panel.
 	 */
 	private JPanel _buttonPanel;
 	/**
-	 * About us window image label.
+	 * ACIDE - A Configurable IDE about us window image label.
 	 */
 	private JLabel _image;
 	/**
-	 * Accept button.
+	 * ACIDE - A Configurable IDE about us window accept button.
 	 */
 	private JButton _acceptButton;
 	
 	/**
-	 * Creates a new about us window.
+	 * Creates a new ACIDE - A Configurable IDE about us window.
 	 */
 	public AcideAboutUsWindow() {
 
@@ -259,45 +259,12 @@ public class AcideAboutUsWindow extends JFrame{
 		setVisible(true);
 	}
 
-	/************************************************************************																
-	 * About us window keyboard listener											
+	/**																
+	 * ACIDE - A Configurable IDE about us window keyboard listener.											
 	 *					
-	 * 		   <p>															
-	 *         <b>ACIDE - A Configurable IDE</b>							
-	 *         </p>															
-	 *         <p>															
-	 *         <b>Official web site:</b> @see http://acide.sourceforge.net	
-	 *         </p>   
-	 *           									
-	 ************************************************************************
-	 * @author <ul>															
-	 *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
-	 *         <li><b>Version 0.1-0.6:</b>									
-	 *         <ul>															
-	 *         Diego Cardiel Freire											
-	 *         </ul>														
-	 *         <ul>															
-	 *         Juan José Ortiz Sánchez										
-	 *         </ul>														
-	 *         <ul>															
-	 *         Delfín Rupérez Cañas											
-	 *         </ul>														
-	 *         </li>														
-	 *         <li><b>Version 0.7:</b>										
-	 *         <ul>															
-	 *         Miguel Martín Lázaro											
-	 *         </ul>														
-	 *         </li>														
-	 *         <li><b>Version 0.8:</b>										
-	 *         <ul>															
-	 *         Javier Salcedo Gómez											
-	 *         </ul>														
-	 *         </li>														
-	 *         </ul>														
-	 ************************************************************************																	
 	 * @version 0.8	
 	 * @see KeyAdapter																													
-	 ***********************************************************************/
+	 */
 	class AboutUsWindowKeyboardListener extends KeyAdapter {
 		/*
 		 * (non-Javadoc)

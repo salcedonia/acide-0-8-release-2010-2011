@@ -100,9 +100,7 @@ public class NewFileMenuItemListener implements ActionListener {
 		MainWindow.getInstance().getMenu().enableEditMenu();
 
 		// Updates the undo manager
-		AcideUndoRedoManager.getInstance().update(
-				MainWindow.getInstance().getFileEditorManager()
-						.getSelectedFileEditorPanel().getSyntaxDocument());
+		AcideUndoRedoManager.getInstance().update();
 
 		// Updates the status bar
 		MainWindow.getInstance().getStatusBar()

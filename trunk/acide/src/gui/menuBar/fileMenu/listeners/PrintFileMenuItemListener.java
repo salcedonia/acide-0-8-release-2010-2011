@@ -35,7 +35,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**																
- * Print menu item listener.											
+ * ACIDE - A Configurable IDE file menu print menu item listener.											
  *					
  * @version 0.8	
  * @see ActionListener																													

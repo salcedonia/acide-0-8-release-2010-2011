@@ -60,7 +60,7 @@ public class AcideFileEditorManagerMouseClickListener extends MouseAdapter {
 	 */
 	@Override
 	public void mouseClicked(MouseEvent mouseEvent) {
-		mouseEventListener(mouseEvent);
+		dispatchEvent(mouseEvent);
 	}
 
 	/*
@@ -70,16 +70,16 @@ public class AcideFileEditorManagerMouseClickListener extends MouseAdapter {
 	 */
 	@Override
 	public void mousePressed(MouseEvent mouseEvent) {
-		mouseEventListener(mouseEvent);
+		dispatchEvent(mouseEvent);
 	}
 
 	/**
-	 * Mouse event listener method to handle the mouse events.
+	 * Dispatches the mouse event.
 	 * 
 	 * @param mouseEvent
 	 *            mouse event.
 	 */
-	private void mouseEventListener(MouseEvent mouseEvent) {
+	private void dispatchEvent(MouseEvent mouseEvent) {
 
 		// If there are opened editors
 		if (MainWindow.getInstance().getFileEditorManager().getTabbedPane()

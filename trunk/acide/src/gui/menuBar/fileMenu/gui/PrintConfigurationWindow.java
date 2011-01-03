@@ -57,60 +57,64 @@ import language.AcideLanguageManager;
 import operations.log.AcideLog;
 import resources.AcideResourceManager;
 
-/**																
- * Print configuration window of ACIDE - A Configurable IDE.											
- *					
- * @version 0.8	
- * @see JFrame																													
+/**
+ * ACIDE - A Configurable IDE print configuration window.
+ * 
+ * @version 0.8
+ * @see JFrame
  */
-public class PrintConfigurationWindow extends JFrame{
+public class PrintConfigurationWindow extends JFrame {
 
 	/**
-	 * Print configuration window class serial version UID.
+	 * ACIDE - A Configurable IDE print configuration window class serial
+	 * version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * Print configuration window image icon.
+	 * ACIDE - A Configurable IDE print configuration window image icon.
 	 */
-	private static final ImageIcon ICON = new ImageIcon("./resources/images/icon.png");
+	private static final ImageIcon ICON = new ImageIcon(
+			"./resources/images/icon.png");
 	/**
-	 * Print configuration window print button.
+	 * ACIDE - A Configurable IDE print configuration window print button.
 	 */
 	private JButton _printButton;
 	/**
-	 * Print configuration window cancel button.
+	 * ACIDE - A Configurable IDE print configuration window cancel button.
 	 */
 	private JButton _cancelButton;
 	/**
-	 * Print configuration window configure page button.
+	 * ACIDE - A Configurable IDE print configuration window configure page
+	 * button.
 	 */
 	private JButton _configurePageButton;
 	/**
-	 * Print configuration window button panel.
+	 * ACIDE - A Configurable IDE print configuration window button panel.
 	 */
 	private JPanel _buttonPanel;
 	/**
-	 * Print configuration window main panel.
+	 * ACIDE - A Configurable IDE print configuration window main panel.
 	 */
 	private JPanel _mainPanel;
 	/**
-	 * Print configuration window page number label.
+	 * ACIDE - A Configurable IDE print configuration window page number label.
 	 */
 	private JLabel _pageNumberLabel;
 	/**
-	 * Print configuration window page number check box.
+	 * ACIDE - A Configurable IDE print configuration window page number check
+	 * box.
 	 */
 	private JCheckBox _pageNumberCheckBox;
 	/**
-	 * Print configuration window date label.
+	 * ACIDE - A Configurable IDE print configuration window date label.
 	 */
 	private JLabel _dateLabel;
 	/**
-	 * Print configuration window date check box.
+	 * ACIDE - A Configurable IDE print configuration window date check box.
 	 */
 	private JCheckBox _dateCheckBox;
 	/**
-	 * Print configuration window printer manager.
+	 * ACIDE - A Configurable IDE print configuration window printer manager.
 	 */
 	private PrinterManager _printerManager;
 	/**
@@ -118,14 +122,17 @@ public class PrintConfigurationWindow extends JFrame{
 	 */
 	private ResourceBundle _labels;
 	/**
-	 * Print configuration window unique class instance.
+	 * ACIDE - A Configurable IDE print configuration window unique class
+	 * instance.
 	 */
 	private static PrintConfigurationWindow _instance;
-	
+
 	/**
-	 * Returns the print configuration window unique class instance.
+	 * Returns the ACIDE - A Configurable IDE print configuration window unique
+	 * class instance.
 	 * 
-	 * @return the print configuration window unique class instance.
+	 * @return the ACIDE - A Configurable IDE print configuration window unique
+	 *         class instance.
 	 */
 	public static PrintConfigurationWindow getInstance() {
 		if (_instance == null)
@@ -134,33 +141,38 @@ public class PrintConfigurationWindow extends JFrame{
 	}
 
 	/**
-	 * Creates a new print configuration window.
+	 * Creates a new ACIDE - A Configurable IDE print configuration window.
 	 */
 	public PrintConfigurationWindow() {
-		
+
 		// Gets the language
 		AcideLanguageManager language = AcideLanguageManager.getInstance();
 		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
+			language.getLanguage(AcideResourceManager.getInstance()
+					.getProperty("language"));
 		} catch (Exception exception) {
-			
+
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
 			exception.printStackTrace();
 		}
-		
+
 		// PRINTER MANAGER
-		_printerManager = new PrinterManager(MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel()
+		_printerManager = new PrinterManager(MainWindow.getInstance()
+				.getFileEditorManager().getSelectedFileEditorPanel()
 				.getActiveTextEditionArea(), false, false);
-		
+
 		_pageNumberCheckBox = new JCheckBox();
-		_pageNumberCheckBox.addActionListener(new ActionListener(){
+		_pageNumberCheckBox.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
-			 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+			 * 
+			 * @see
+			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
+			 * ActionEvent)
 			 */
 			@Override
-			public void actionPerformed(ActionEvent actionEvent){			
+			public void actionPerformed(ActionEvent actionEvent) {
 				if (_pageNumberCheckBox.isSelected())
 					_printerManager.setShowPage(true);
 				else
@@ -170,21 +182,21 @@ public class PrintConfigurationWindow extends JFrame{
 
 		// Gets the labels
 		_labels = language.getLabels();
-		
+
 		// Sets the layout
 		setLayout(new GridBagLayout());
-		
+
 		// MAIN PANEL
 		_mainPanel = new JPanel();
-		_mainPanel.setBorder(BorderFactory.createTitledBorder(null, _labels
-				.getString("s965"),TitledBorder.LEADING,
+		_mainPanel.setBorder(BorderFactory.createTitledBorder(null,
+				_labels.getString("s965"), TitledBorder.LEADING,
 				TitledBorder.DEFAULT_POSITION));
 		_mainPanel.setLayout(new GridBagLayout());
-		
+
 		// PAGE NUMBER
 		_pageNumberLabel = new JLabel(_labels.getString("s962"));
-		
-		// DATE 
+
+		// DATE
 		_dateLabel = new JLabel(_labels.getString("s963"));
 		_dateCheckBox = new JCheckBox();
 		_dateCheckBox.setEnabled(false);
@@ -192,7 +204,10 @@ public class PrintConfigurationWindow extends JFrame{
 		_dateCheckBox.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
-			 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+			 * 
+			 * @see
+			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
+			 * ActionEvent)
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
@@ -211,7 +226,10 @@ public class PrintConfigurationWindow extends JFrame{
 		_printButton.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
-			 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+			 * 
+			 * @see
+			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
+			 * ActionEvent)
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
@@ -220,7 +238,7 @@ public class PrintConfigurationWindow extends JFrame{
 				MainWindow.getInstance().setEnabled(true);
 			}
 		});
-		
+
 		// CANCEL BUTTON
 		_cancelButton = new JButton(_labels.getString("s919"));
 		_cancelButton.setHorizontalAlignment(JButton.CENTER);
@@ -228,7 +246,10 @@ public class PrintConfigurationWindow extends JFrame{
 		_cancelButton.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
-			 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+			 * 
+			 * @see
+			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
+			 * ActionEvent)
 			 */
 			public void actionPerformed(ActionEvent actionEvent) {
 				MainWindow.getInstance().setEnabled(true);
@@ -243,12 +264,15 @@ public class PrintConfigurationWindow extends JFrame{
 		_configurePageButton.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
-			 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+			 * 
+			 * @see
+			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
+			 * ActionEvent)
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				_printerManager.configurePage();	
-				
+				_printerManager.configurePage();
+
 				if (_printerManager.getPageFormat() != null) {
 					_printButton.setEnabled(true);
 					_dateCheckBox.setEnabled(true);
@@ -256,15 +280,15 @@ public class PrintConfigurationWindow extends JFrame{
 				}
 			}
 		});
-		
+
 		// ADD THE COMPONENTS TO THE WINDOW WITH THE LAYOUT
 		GridBagConstraints constraints = new GridBagConstraints();
-		
+
 		constraints.fill = GridBagConstraints.BOTH;
 		constraints.insets = new Insets(10, 10, 5, 5);
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		
+
 		// GENERAL PANEL
 		_mainPanel.add(_configurePageButton, constraints);
 		constraints.gridy = 1;
@@ -287,7 +311,7 @@ public class PrintConfigurationWindow extends JFrame{
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		add(_buttonPanel, constraints);
-		
+
 		// FRAME
 		setTitle(_labels.getString("s964"));
 		setIconImage(ICON.getImage());
@@ -295,114 +319,87 @@ public class PrintConfigurationWindow extends JFrame{
 		pack();
 		setVisible(true);
 		setResizable(false);
-		
+
 		// Centers the window
-		
+
 		// Get the size of the screen
-	    Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-	    
-	    // Determine the new location of the window
-	    int w = getSize().width;
-	    int h = getSize().height;
-	    int x = (dimension.width-w)/2;
-	    int y = (dimension.height-h)/2;
-	    
-	    // Move the window
-	    setLocation(x, y);
-	    
+		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+
+		// Determine the new location of the window
+		int w = getSize().width;
+		int h = getSize().height;
+		int x = (dimension.width - w) / 2;
+		int y = (dimension.height - h) / 2;
+
+		// Move the window
+		setLocation(x, y);
+
 		// Listeners
-		_configurePageButton.addKeyListener(new PrintConfigurationWindowKeyboardListener());
-		_printButton.addKeyListener(new PrintConfigurationWindowKeyboardListener());
-		_cancelButton.addKeyListener(new PrintConfigurationWindowKeyboardListener());
+		_configurePageButton
+				.addKeyListener(new PrintConfigurationWindowKeyboardListener());
+		_printButton
+				.addKeyListener(new PrintConfigurationWindowKeyboardListener());
+		_cancelButton
+				.addKeyListener(new PrintConfigurationWindowKeyboardListener());
 		addWindowListener(new AcideWindowListener());
-		
+
 		// Disables the main window
-		MainWindow.getInstance().setEnabled(false);	
+		MainWindow.getInstance().setEnabled(false);
 	}
 
 	/**
-	 * Return the configure page button.
+	 * Return the ACIDE - A Configurable IDE print configuration window configure page button.
 	 * 
-	 * @return the configure page button.
+	 * @return the ACIDE - A Configurable IDE print configuration window configure page button.
 	 */
 	public JButton getConfigurePageButton() {
 		return _configurePageButton;
 	}
 
 	/**
-	 * Sets a new value to the configure page button.
+	 * Sets a new value to the ACIDE - A Configurable IDE print configuration window configure page button.
 	 * 
-	 * @param configurePageButton new value to set.
+	 * @param configurePageButton
+	 *            new value to set.
 	 */
 	public void setConfigurePageButton(JButton configurePageButton) {
 		_configurePageButton = configurePageButton;
 	}
 
 	/**
-	 * Returns the print button.
+	 * Returns the ACIDE - A Configurable IDE print configuration window print button.
 	 * 
-	 * @return the print button.
+	 * @return the ACIDE - A Configurable IDE print configuration window print button.
 	 */
 	public JButton getPrintButton() {
 		return _printButton;
 	}
 
 	/**
-	 * Sets a new value to the print button.
+	 * Sets a new value to the ACIDE - A Configurable IDE print configuration window print button.
 	 * 
-	 * @param printButton new value to set.
+	 * @param printButton
+	 *            new value to set.
 	 */
 	public void setPrintButton(JButton printButton) {
 		_printButton = printButton;
 	}
-	
-	/************************************************************************																
-	 * Print configuration window keyboard listener.										
-	 *					
-	 * 		   <p>															
-	 *         <b>ACIDE - A Configurable IDE</b>							
-	 *         </p>															
-	 *         <p>															
-	 *         <b>Official web site:</b> @see http://acide.sourceforge.net	
-	 *         </p>   
-	 *           									
-	 ************************************************************************
-	 * @author <ul>															
-	 *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
-	 *         <li><b>Version 0.1-0.6:</b>									
-	 *         <ul>															
-	 *         Diego Cardiel Freire											
-	 *         </ul>														
-	 *         <ul>															
-	 *         Juan José Ortiz Sánchez										
-	 *         </ul>														
-	 *         <ul>															
-	 *         Delfín Rupérez Cañas											
-	 *         </ul>														
-	 *         </li>														
-	 *         <li><b>Version 0.7:</b>										
-	 *         <ul>															
-	 *         Miguel Martín Lázaro											
-	 *         </ul>														
-	 *         </li>														
-	 *         <li><b>Version 0.8:</b>										
-	 *         <ul>															
-	 *         Javier Salcedo Gómez											
-	 *         </ul>														
-	 *         </li>														
-	 *         </ul>														
-	 ************************************************************************																	
-	 * @version 0.8	
-	 * @see KeyAdapter																													
-	 ***********************************************************************/
+
+	/**
+	 * Print configuration window keyboard listener.
+	 * 
+	 * @version 0.8
+	 * @see KeyAdapter
+	 */
 	class PrintConfigurationWindowKeyboardListener extends KeyAdapter {
 		/*
 		 * (non-Javadoc)
+		 * 
 		 * @see java.awt.event.KeyAdapter#keyPressed(java.awt.event.KeyEvent)
 		 */
 		@Override
 		public void keyPressed(KeyEvent keyEvent) {
-			
+
 			if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				MainWindow.getInstance().setEnabled(true);
 				dispose();

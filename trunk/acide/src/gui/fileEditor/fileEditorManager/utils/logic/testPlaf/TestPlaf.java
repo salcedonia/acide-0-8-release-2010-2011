@@ -111,45 +111,12 @@ public class TestPlaf extends BasicTabbedPaneUI {
 		return defaultInsets;
 	}
 
-	/************************************************************************																
+	/**																
 	 * Handles the tab layout.
 	 *					
-	 * 		   <p>															
-	 *         <b>ACIDE - A Configurable IDE</b>							
-	 *         </p>															
-	 *         <p>															
-	 *         <b>Official web site:</b> @see http://acide.sourceforge.net	
-	 *         </p>   
-	 *           									
-	 ************************************************************************
-	 * @author <ul>															
-	 *         <li><b>Fernando Sáenz Pérez (Team Director)</b></li>			
-	 *         <li><b>Version 0.1-0.6:</b>									
-	 *         <ul>															
-	 *         Diego Cardiel Freire											
-	 *         </ul>														
-	 *         <ul>															
-	 *         Juan José Ortiz Sánchez										
-	 *         </ul>														
-	 *         <ul>															
-	 *         Delfín Rupérez Cañas											
-	 *         </ul>														
-	 *         </li>														
-	 *         <li><b>Version 0.7:</b>										
-	 *         <ul>															
-	 *         Miguel Martín Lázaro											
-	 *         </ul>														
-	 *         </li>														
-	 *         <li><b>Version 0.8:</b>										
-	 *         <ul>															
-	 *         Javier Salcedo Gómez											
-	 *         </ul>														
-	 *         </li>														
-	 *         </ul>														
-	 ************************************************************************																	
 	 * @version 0.8	
 	 * @see TabbedPaneLayout																													
-	 ***********************************************************************/
+	 */
 	class TestPlafLayout extends TabbedPaneLayout {
 
 		/**
@@ -180,21 +147,21 @@ public class TestPlaf extends BasicTabbedPaneUI {
 				_closeButtons.add(new CloseButton(_closeButtons.size()));
 
 			Rectangle rectangle = new Rectangle();
-			int i;
+			int index;
 
-			for (i = 0; i < tabPane.getTabCount(); i++) {
+			for (index = 0; index < tabPane.getTabCount(); index++) {
 
-				rectangle = getTabBounds(i, rectangle);
-				JButton closeButton = (JButton) _closeButtons.get(i);
+				rectangle = getTabBounds(index, rectangle);
+				JButton closeButton = (JButton) _closeButtons.get(index);
 				closeButton.setLocation(rectangle.x + rectangle.width - 20,
 						rectangle.y + 5);
 				closeButton.setSize(15, 15);
 				tabPane.add(closeButton);
 			}
 
-			for (; i < _closeButtons.size(); i++) {
-				tabPane.remove((JButton) _closeButtons.get(i));
-				_closeButtons.remove(i);
+			for (; index < _closeButtons.size(); index++) {
+				tabPane.remove((JButton) _closeButtons.get(index));
+				_closeButtons.remove(index);
 			}
 		}
 
@@ -205,7 +172,6 @@ public class TestPlaf extends BasicTabbedPaneUI {
 		 */
 		public ArrayList<CloseButton> getCloseButtons() {
 			return _closeButtons;
-		}
-		
+		}	
 	}
 }

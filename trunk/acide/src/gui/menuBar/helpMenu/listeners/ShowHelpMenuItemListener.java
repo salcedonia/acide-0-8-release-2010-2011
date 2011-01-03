@@ -44,7 +44,7 @@ import operations.log.AcideLog;
 import resources.AcideResourceManager;
 
 /**																
- * Show help menu item listener.											
+ * ACIDE - A Configurable IDE help menu show help menu item listener.											
  *					
  * @version 0.8	
  * @see ActionListener																													

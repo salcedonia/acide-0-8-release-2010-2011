@@ -29,7 +29,7 @@
  */
 package gui.fileEditor.fileEditorPanel;
 
-import gui.fileEditor.fileEditorManager.utils.logic.SyntaxDocument;
+import gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
 import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.AcideFileEditorTextEditionArea;
 import gui.fileEditor.fileEditorPanel.listeners.AcideFileEditorPanelDocumentListener;
 import gui.fileEditor.fileEditorPanel.popup.AcideEditorPopupMenu;
@@ -50,7 +50,7 @@ import operations.log.AcideLog;
 import resources.AcideResourceManager;
 
 /**
- * File editor panel of ACIDE - A Configurable IDE.
+ * ACIDE - A Configurable IDE file editor panel.
  * 
  * @version 0.8
  * @see JPanel
@@ -58,69 +58,75 @@ import resources.AcideResourceManager;
 public class AcideFileEditorPanel extends JPanel {
 
 	/**
-	 * File editor panel class serial version UID.
+	 * ACIDE - A Configurable IDE file editor panel class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * Constant that indicates the number of text editors for the file editor
-	 * panel.
+	 * ACIDE - A Configurable IDE file editor panel constant that indicates the
+	 * number of text editors for the file editor panel.
 	 */
 	private static final int NUM_TEXT_EDITORS = 2;
 	/**
-	 * File editor panel text edition area.
+	 * ACIDE - A Configurable IDE file editor panel text edition area.
 	 */
 	private ArrayList<AcideFileEditorTextEditionArea> _textEditionAreaList;
 	/**
-	 * File editor panel file path.
+	 * ACIDE - A Configurable IDE file editor panel file path.
 	 */
 	private String _path;
 	/**
-	 * File editor panel last change in the editor.
+	 * ACIDE - A Configurable IDE file editor panel last change in the editor.
 	 */
 	private long _lastChange;
 	/**
-	 * File editor panel last size of the editor.
+	 * ACIDE - A Configurable IDE file editor panel last size of the editor.
 	 */
 	private long _lastSize;
 	/**
-	 * File editor panel editor panel popup menu.
+	 * ACIDE - A Configurable IDE file editor panel popup menu.
 	 */
 	private AcideEditorPopupMenu _popup;
 	/**
-	 * File editor panel syntax document for the files.
+	 * ACIDE - A Configurable IDE file editor panel styled document for the
+	 * files.
 	 */
-	private SyntaxDocument _syntaxDocument;
+	private AcideStyledDocument _styledDocument;
 	/**
-	 * File editor panel editor document listener.
+	 * ACIDE - A Configurable IDE file editor panel document listener.
 	 */
 	private AcideFileEditorPanelDocumentListener _documentListener;
 	/**
-	 * Flag that indicates the active text edition area.
+	 * ACIDE - A Configurable IDE file editor panel flag that indicates the
+	 * active text edition area.
 	 */
 	private int _activeTextEditionArea;
 	/**
-	 * File editor panel horizontal split panel.
+	 * ACIDE - A Configurable IDE file editor panel horizontal split panel.
 	 */
 	private JSplitPane _horizontalSplitPane;
 	/**
-	 * Flag that indicates if the file is main.
+	 * ACIDE - A Configurable IDE file editor panel flag that indicates if the
+	 * file is main.
 	 */
 	private boolean _isMainFile;
 	/**
-	 * Flag that indicates if the file is compilable.
+	 * ACIDE - A Configurable IDE file editor panel flag that indicates if the
+	 * file is compilable.
 	 */
 	private boolean _isCompilableFile;
 	/**
-	 * File editor panel icon.
+	 * ACIDE - A Configurable IDE file editor panel icon.
 	 */
 	private Icon _icon;
 	/**
-	 * File disk copy. Used to determine the color of the close button.
+	 * ACIDE - A Configurable IDE file editor panel file disk copy.
+	 * 
+	 * Used to determine the color of the close button.
 	 */
 	private String _fileDiskCopy;
 
 	/**
-	 * Creates a new file editor panel.
+	 * Creates a new ACIDE - A Configurable IDE file editor panel.
 	 */
 	public AcideFileEditorPanel() {
 
@@ -130,8 +136,8 @@ public class AcideFileEditorPanel extends JPanel {
 		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
+			language.getLanguage(AcideResourceManager.getInstance()
+					.getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -154,7 +160,7 @@ public class AcideFileEditorPanel extends JPanel {
 			_textEditionAreaList = new ArrayList<AcideFileEditorTextEditionArea>();
 
 			// Creates the syntax document
-			_syntaxDocument = new SyntaxDocument();
+			_styledDocument = new AcideStyledDocument();
 
 			// Builds the popup menu
 			buildPopupMenu();
@@ -166,7 +172,7 @@ public class AcideFileEditorPanel extends JPanel {
 			for (int index = 0; index < NUM_TEXT_EDITORS; index++) {
 
 				AcideFileEditorTextEditionArea textEditionPanel = new AcideFileEditorTextEditionArea(
-						_syntaxDocument);
+						_styledDocument);
 				_textEditionAreaList.add(textEditionPanel);
 			}
 
@@ -195,16 +201,18 @@ public class AcideFileEditorPanel extends JPanel {
 	}
 
 	/**
-	 * Builds the file editor panel popup menu.
+	 * Builds the file ACIDE - A Configurable IDE file editor panel popup menu.
 	 */
 	public void buildPopupMenu() {
 		_popup = new AcideEditorPopupMenu();
 	}
 
 	/**
-	 * Returns the active text edition panel.
+	 * Returns the ACIDE - A Configurable IDE file editor panel active text
+	 * edition panel.
 	 * 
-	 * @return the active text edition panel.
+	 * @return the ACIDE - A Configurable IDE file editor panel active text
+	 *         edition panel.
 	 */
 	public JTextPane getActiveTextEditionArea() {
 		return _textEditionAreaList.get(_activeTextEditionArea).getTextPane();
@@ -224,7 +232,7 @@ public class AcideFileEditorPanel extends JPanel {
 				.setText(text);
 
 		_textEditionAreaList.get(_activeTextEditionArea).getTextPane()
-				.setCaretPosition(_syntaxDocument.getLength());
+				.setCaretPosition(_styledDocument.getLength());
 		_textEditionAreaList.get(_activeTextEditionArea).getTextPane()
 				.getDocument().addDocumentListener(_documentListener);
 
@@ -264,8 +272,8 @@ public class AcideFileEditorPanel extends JPanel {
 
 		String textContent = "";
 		try {
-			textContent = _syntaxDocument.getText(0,
-					_syntaxDocument.getLength());
+			textContent = _styledDocument.getText(0,
+					_styledDocument.getLength());
 		} catch (BadLocationException exception) {
 
 			// Updates the log
@@ -273,13 +281,13 @@ public class AcideFileEditorPanel extends JPanel {
 			exception.printStackTrace();
 		}
 
-		SyntaxDocument syntaxDocument = new SyntaxDocument();
+		AcideStyledDocument syntaxDocument = new AcideStyledDocument();
 		_textEditionAreaList.get(_activeTextEditionArea).getTextPane()
 				.setStyledDocument(syntaxDocument);
 		_textEditionAreaList.get(_activeTextEditionArea).getTextPane()
 				.setText(textContent);
 		_textEditionAreaList.get(_activeTextEditionArea).getTextPane()
-				.setCaretPosition(_syntaxDocument.getLength());
+				.setCaretPosition(_styledDocument.getLength());
 		_textEditionAreaList.get(_activeTextEditionArea).getTextPane()
 				.getDocument().addDocumentListener(_documentListener);
 
@@ -307,9 +315,11 @@ public class AcideFileEditorPanel extends JPanel {
 	}
 
 	/**
-	 * Returns the text edition area content.
+	 * Returns the ACIDE - A Configurable IDE file editor panel text edition
+	 * area content.
 	 * 
-	 * @return the text edition area content.
+	 * @return the ACIDE - A Configurable IDE file editor panel text edition
+	 *         area content.
 	 */
 	public String getTextEditionAreaContent() {
 		return _textEditionAreaList.get(_activeTextEditionArea).getTextPane()
@@ -317,28 +327,40 @@ public class AcideFileEditorPanel extends JPanel {
 	}
 
 	/**
-	 * Sets a new value to the file path.
+	 * Sets a new value to the ACIDE - A Configurable IDE file editor panel file
+	 * path.
 	 * 
 	 * @param path
 	 *            new value to set.
 	 */
 	public void setAbsolutePath(String path) {
+
+		// Updates the path
 		_path = path;
+
+		// Once we know the path we can inform to the syntax document
+		// in order to get the file editor panel which provokes the
+		// change in the document listener
+		_styledDocument.setFileEditorPanelName(getFileName());
 	}
 
 	/**
-	 * Returns the absolute file path.
+	 * Returns the ACIDE - A Configurable IDE file editor panel absolute file
+	 * path.
 	 * 
-	 * @return the absolute file path.
+	 * @return the ACIDE - A Configurable IDE file editor panel absolute file
+	 *         path.
 	 */
 	public String getAbsolutePath() {
 		return _path;
 	}
 
 	/**
-	 * Returns the relative file path.
+	 * Returns the ACIDE - A Configurable IDE file editor panel relative file
+	 * path.
 	 * 
-	 * @return the relative file path.
+	 * @return the ACIDE - A Configurable IDE file editor panel relative file
+	 *         path.
 	 */
 	public String getFilePath() {
 
@@ -354,18 +376,18 @@ public class AcideFileEditorPanel extends JPanel {
 	}
 
 	/**
-	 * Returns the file extension.
+	 * Returns the ACIDE - A Configurable IDE file editor panel file extension.
 	 * 
-	 * @return the file extension.
+	 * @return the ACIDE - A Configurable IDE file editor panel file extension.
 	 */
 	public String getFileExtension() {
 		return _path.substring(_path.lastIndexOf(".") + 1);
 	}
 
 	/**
-	 * Returns the file name.
+	 * Returns the ACIDE - A Configurable IDE file editor panel file name.
 	 * 
-	 * @return the file name.
+	 * @return the ACIDE - A Configurable IDE file editor panel file name.
 	 */
 	public String getFileName() {
 
@@ -383,16 +405,17 @@ public class AcideFileEditorPanel extends JPanel {
 	}
 
 	/**
-	 * Returns the last change.
+	 * Returns the ACIDE - A Configurable IDE file editor panel last change.
 	 * 
-	 * @return the last change.
+	 * @return the ACIDE - A Configurable IDE file editor panel last change.
 	 */
 	public long getLastChange() {
 		return _lastChange;
 	}
 
 	/**
-	 * Sets a new value to the last change.
+	 * Sets a new value to the ACIDE - A Configurable IDE file editor panel last
+	 * change.
 	 * 
 	 * @param lastChange
 	 *            New value to set.
@@ -402,9 +425,9 @@ public class AcideFileEditorPanel extends JPanel {
 	}
 
 	/**
-	 * Returns the last size.
+	 * Returns the ACIDE - A Configurable IDE file editor panel last size.
 	 * 
-	 * @return the last size.
+	 * @return the ACIDE - A Configurable IDE file editor panel last size.
 	 */
 	public long getLastSize() {
 		return _lastSize;
@@ -432,16 +455,19 @@ public class AcideFileEditorPanel extends JPanel {
 	}
 
 	/**
-	 * Returns the is compilable file flag.
+	 * Returns the ACIDE - A Configurable IDE file editor panel is compilable
+	 * file flag.
 	 * 
-	 * @return the is compilable file flag.
+	 * @return the ACIDE - A Configurable IDE file editor panel is compilable
+	 *         file flag.
 	 */
 	public boolean isCompilableFile() {
 		return _isCompilableFile;
 	}
 
 	/**
-	 * Sets a new value to the is compilable flag.
+	 * Sets a new value to the ACIDE - A Configurable IDE file editor panel is
+	 * compilable flag.
 	 * 
 	 * @param compilableFile
 	 *            new value to set.
@@ -451,16 +477,19 @@ public class AcideFileEditorPanel extends JPanel {
 	}
 
 	/**
-	 * Returns the is main file flag.
+	 * Returns the ACIDE - A Configurable IDE file editor panel is main file
+	 * flag.
 	 * 
-	 * @return the is main file flag.
+	 * @return the ACIDE - A Configurable IDE file editor panel is main file
+	 *         flag.
 	 */
 	public boolean isMainFile() {
 		return _isMainFile;
 	}
 
 	/**
-	 * Sets a new value to the is main file flag.
+	 * Sets a new value to the ACIDE - A Configurable IDE file editor panel is
+	 * main file flag.
 	 * 
 	 * @param mainFile
 	 *            new value to set.
@@ -470,16 +499,17 @@ public class AcideFileEditorPanel extends JPanel {
 	}
 
 	/**
-	 * Returns the icon.
+	 * Returns the ACIDE - A Configurable IDE file editor panel icon.
 	 * 
-	 * @return the icon.
+	 * @return the ACIDE - A Configurable IDE file editor panel icon.
 	 */
 	public Icon getIcon() {
 		return _icon;
 	}
 
 	/**
-	 * Sets a new value to the icon.
+	 * Sets a new value to the ACIDE - A Configurable IDE file editor panel
+	 * icon.
 	 * 
 	 * @param icon
 	 *            new value to set.
@@ -489,27 +519,29 @@ public class AcideFileEditorPanel extends JPanel {
 	}
 
 	/**
-	 * Returns the syntax document.
+	 * Returns the ACIDE - A Configurable IDE file editor panel styled document.
 	 * 
-	 * @return the syntax document.
+	 * @return the ACIDE - A Configurable IDE file editor panel styled document.
 	 */
-	public SyntaxDocument getSyntaxDocument() {
-		return _syntaxDocument;
+	public AcideStyledDocument getStyledDocument() {
+		return _styledDocument;
 	}
 
 	/**
-	 * Returns the active editor index.
+	 * Returns the ACIDE - A Configurable IDE file editor panel active editor
+	 * index.
 	 * 
-	 * @return the active editor index.
+	 * @return the ACIDE - A Configurable IDE file editor panel active editor
+	 *         index.
 	 */
 	public int getActiveEditorIndex() {
 		return _activeTextEditionArea;
 	}
 
 	/**
-	 * Returns the popup menu.
+	 * Returns the ACIDE - A Configurable IDE file editor panel popup menu.
 	 * 
-	 * @return the popup menu.
+	 * @return the ACIDE - A Configurable IDE file editor panel popup menu.
 	 */
 	public AcideEditorPopupMenu getPopupMenu() {
 		return _popup;
@@ -528,8 +560,8 @@ public class AcideFileEditorPanel extends JPanel {
 		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
+			language.getLanguage(AcideResourceManager.getInstance()
+					.getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -565,25 +597,28 @@ public class AcideFileEditorPanel extends JPanel {
 	}
 
 	/**
-	 * Returns the text edition panel list.
+	 * Returns the ACIDE - A Configurable IDE file editor panel text edition
+	 * panel list.
 	 * 
-	 * @return the text edition panel list.
+	 * @return the ACIDE - A Configurable IDE file editor panel text edition
+	 *         panel list.
 	 */
 	public ArrayList<AcideFileEditorTextEditionArea> getTextEditionPanelList() {
 		return _textEditionAreaList;
 	}
 
 	/**
-	 * Returns the file disk copy.
+	 * Returns the ACIDE - A Configurable IDE file editor panel file disk copy.
 	 * 
-	 * @return the file disk copy.
+	 * @return the ACIDE - A Configurable IDE file editor panel file disk copy.
 	 */
 	public String getFileDiskCopy() {
 		return _fileDiskCopy;
 	}
 
 	/**
-	 * Sets a new value for the file disk copy.
+	 * Sets a new value for the ACIDE - A Configurable IDE file editor panel
+	 * file disk copy.
 	 * 
 	 * @param fileDiskCopy
 	 *            new value to set.

@@ -328,10 +328,7 @@ public class AcideWorkbenchManager {
 				MainWindow.getInstance().getMenu().enableEditMenu();
 
 				// Updates the undo manager
-				AcideUndoRedoManager.getInstance().update(
-						MainWindow.getInstance().getFileEditorManager()
-								.getSelectedFileEditorPanel()
-								.getSyntaxDocument());
+				AcideUndoRedoManager.getInstance().update();
 
 				// The project configuration has not been modified
 				AcideProjectConfiguration.getInstance().setIsModified(false);

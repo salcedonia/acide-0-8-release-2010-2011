@@ -883,9 +883,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 							MainWindow.getInstance().getMenu().enableEditMenu();
 
 							// Updates the undo manager
-							AcideUndoRedoManager.getInstance().update(MainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel()
-									.getSyntaxDocument());
+							AcideUndoRedoManager.getInstance().update();
 						}
 
 						// The project configuration has been modified

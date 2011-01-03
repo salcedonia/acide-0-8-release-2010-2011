@@ -31,6 +31,7 @@ package gui.fileEditor.fileEditorPanel.listeners;
 
 import es.configuration.project.AcideProjectConfiguration;
 import es.configuration.project.workbench.AcideWorkbenchManager;
+import gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
 import gui.mainWindow.MainWindow;
 
 import javax.swing.SwingUtilities;
@@ -86,32 +87,38 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 		// If the workbench configuration has been loaded
 		if (AcideWorkbenchManager.getInstance().isWorkbenchLoaded()) {
 
-			// Gets the selected file editor panel index
-			final int selectedFileEditorPanelIndex = MainWindow.getInstance()
-					.getFileEditorManager().getSelectedFileEditorPanelIndex();
+			// Gets the syntax document which contains
+			AcideStyledDocument document = (AcideStyledDocument) documentEvent.getDocument();
+
+			// Gets the file editor panel index which has to be on focus
+			final int fileEditorPanelIndexOnFocus = MainWindow.getInstance()
+					.getFileEditorManager().getIndexOfFileEditorPanel(document.getFileEditorPanelName());
 
 			SwingUtilities.invokeLater(new Runnable() {
 				
 				@Override
 				public void run() {
 
-					if (selectedFileEditorPanelIndex != -1) {
+					if (fileEditorPanelIndexOnFocus != -1) {
 
+						// Puts the focus on the tab which provokes the change
+						MainWindow.getInstance().getFileEditorManager().setSelectedFileEditorPanelAt(fileEditorPanelIndexOnFocus);
+						
 						// Gets the current content
 						String fileContent = MainWindow.getInstance()
 								.getFileEditorManager()
-								.getFileEditorPanelAt(selectedFileEditorPanelIndex)
+								.getFileEditorPanelAt(fileEditorPanelIndexOnFocus)
 								.getTextEditionAreaContent();
 
 						// If has been changes in the file
 						if (!MainWindow.getInstance().getFileEditorManager()
-								.getFileEditorPanelAt(selectedFileEditorPanelIndex)
+								.getFileEditorPanelAt(fileEditorPanelIndexOnFocus)
 								.isEqualToFileDiskCopy(fileContent)) {
 
 							// Sets the red icon to the close button
 							MainWindow.getInstance().getFileEditorManager()
 									.getTestPlaf()
-									.getCloseButtonAt(selectedFileEditorPanelIndex)
+									.getCloseButtonAt(fileEditorPanelIndexOnFocus)
 									.setRedCloseButton();
 
 							// Enables the save as menu item
@@ -126,7 +133,7 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 							// Sets the red icon to the close button
 							MainWindow.getInstance().getFileEditorManager()
 									.getTestPlaf()
-									.getCloseButtonAt(selectedFileEditorPanelIndex)
+									.getCloseButtonAt(fileEditorPanelIndexOnFocus)
 									.setGreenCloseButton();
 
 							// Enables the save as menu item

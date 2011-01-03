@@ -29,6 +29,8 @@
  */
 package gui.menuBar.editMenu.utils;
 
+import gui.mainWindow.MainWindow;
+
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.text.DefaultStyledDocument;
@@ -52,39 +54,43 @@ public class AcideUndoRedoManager extends UndoManager {
 	 * Acide undo redo manager unique class instance.
 	 */
 	private static AcideUndoRedoManager _instance;
-	
+
 	/**
 	 * Returns the Acide undo redo manager unique class instance.
 	 * 
 	 * @return the Acide undo redo manager unique class instance.
 	 */
-	public static AcideUndoRedoManager getInstance(){
-		
-		if(_instance == null)
+	public static AcideUndoRedoManager getInstance() {
+
+		if (_instance == null)
 			_instance = new AcideUndoRedoManager();
 		return _instance;
 	}
-	
-	/** 
+
+	/**
 	 * Creates a new Acide undo redo manager.
 	 */
 	public AcideUndoRedoManager() {
 		super();
 	}
-	
+
 	/**
-	 * Adds a new undoable event to the undo redo manager of the new file
-	 * which has been opened in the file editor panel.
+	 * Adds a new undoable event to the undo redo manager of the new file which
+	 * has been opened in the file editor panel.
 	 */
-	public void update(DefaultStyledDocument document){
-			
+	public void update() {
+
+		// Gets the default styled document
+		DefaultStyledDocument document = MainWindow.getInstance()
+				.getFileEditorManager().getSelectedFileEditorPanel()
+				.getStyledDocument();
+
 		// Adds the undoable edit listener to support undoable events on it
 		document.addUndoableEditListener(new UndoableEditListener() {
 			/*
 			 * (non-Javadoc)
 			 * 
-			 * @see
-			 * javax.swing.event.UndoableEditListener#undoableEditHappened
+			 * @see javax.swing.event.UndoableEditListener#undoableEditHappened
 			 * (javax.swing.event.UndoableEditEvent)
 			 */
 			@Override
@@ -94,9 +100,10 @@ public class AcideUndoRedoManager extends UndoManager {
 
 				if (!((edit instanceof DefaultDocumentEvent) && (((DefaultDocumentEvent) edit)
 						.getType() == DefaultDocumentEvent.EventType.CHANGE))) {
-					
+
 					// Sets the edit property over the general undo manager
-					AcideUndoRedoManager.getInstance().addEdit(undoableEditEvent.getEdit());
+					AcideUndoRedoManager.getInstance().addEdit(
+							undoableEditEvent.getEdit());
 				}
 			}
 		});

@@ -46,7 +46,7 @@ import operations.log.AcideLog;
 import resources.AcideResourceManager;
 
 /**																
- * Close all files item listener.											
+ * ACIDE - A Configurable IDE file menu close all files item listener.											
  *					
  * @version 0.8	
  * @see ActionListener																													

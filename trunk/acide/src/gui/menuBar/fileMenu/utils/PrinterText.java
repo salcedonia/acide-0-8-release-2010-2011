@@ -54,7 +54,7 @@ import javax.swing.text.View;
 import javax.swing.text.ViewFactory;
 
 /**
- * Printer of ACIDE - A Configurable IDE.
+ * ACIDE - A Configurable IDE printer text.
  * 
  * @version 0.8
  * @see Printable
@@ -62,31 +62,31 @@ import javax.swing.text.ViewFactory;
 public class PrinterText implements Printable {
 
 	/**
-	 * The root View to be printed.
+	 * ACIDE - A Configurable IDE printer text root view to be printed.
 	 */
 	private View _root;
 	/**
-	 * Paper plus page orientation.
+	 * ACIDE - A Configurable IDE printer text paper plus page orientation.
 	 */
 	private PageFormat _pageFormat;
 	/**
-	 * How many pages in the document.
+	 * ACIDE - A Configurable IDE printer text number of pages in the document.
 	 */
-	private int _numPages;
+	private int _numberOfPages;
 	/**
-	 * Coordinates of upper-left of print area.
+	 * ACIDE - A Configurable IDE printer text coordinates of upper-left of print area.
 	 */
 	private double _printX, _printY;
 	/**
-	 * Width of the printable area.
+	 * ACIDE - A Configurable IDE printer text width of the printable area.
 	 */
 	private double _printWidth;
 	/**
-	 * Height of the printable area.
+	 * ACIDE - A Configurable IDE printer text height of the printable area.
 	 */
 	private double _printHeight;
 	/**
-	 * The rectangle in which the document is painted.
+	 * ACIDE - A Configurable IDE printer text rectangle in which the document is painted.
 	 */
 	private Rectangle _drawRect;
 	/**
@@ -94,11 +94,11 @@ public class PrinterText implements Printable {
 	 */
 	static final double MARGIN_ADJUST = .97;
 	/**
-	 * The font we use for printing page numbers.
+	 * ACIDE - A Configurable IDE printer text font we use for printing page numbers.
 	 */
 	static final Font _headerFont = new Font("Arial", Font.BOLD, 12);
 	/**
-	 * Maximum number of lines.
+	 * ACIDE - A Configurable IDE printer text maximum number of lines.
 	 */
 	final int MAX_LINES = 1;
 	/**
@@ -165,7 +165,7 @@ public class PrinterText implements Printable {
 			paginate(_root, _drawRect);
 
 		// Once we've broken it into pages, figure out how man pages.
-		_numPages = pageLengths.size() + 1;
+		_numberOfPages = pageLengths.size() + 1;
 	}
 
 	/**
@@ -270,7 +270,7 @@ public class PrinterText implements Printable {
 	 * @return the number of pages.
 	 */
 	public int getNumberOfPages() {
-		return _numPages;
+		return _numberOfPages;
 	}
 
 	/**
@@ -282,7 +282,7 @@ public class PrinterText implements Printable {
 	 */
 	public PageFormat getPageFormat(int pagenum) {
 		// On the last page, just return the user-specified page format
-		if (pagenum == _numPages - 1)
+		if (pagenum == _numberOfPages - 1)
 			return _pageFormat;
 
 		// Otherwise, look up the height of this page and return an
@@ -313,7 +313,7 @@ public class PrinterText implements Printable {
 	@SuppressWarnings("deprecation")
 	public int print(Graphics g, PageFormat format, int pageIndex) {
 		// Return an error code on attempts to print past the end of the doc
-		if (pageIndex >= _numPages)
+		if (pageIndex >= _numberOfPages)
 			return NO_SUCH_PAGE;
 
 		// Cast the Graphics object so we can use Java2D operations

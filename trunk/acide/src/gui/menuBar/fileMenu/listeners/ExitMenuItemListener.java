@@ -35,7 +35,7 @@ import java.awt.event.ActionListener;
 import es.configuration.project.workbench.AcideWorkbenchManager;
 
 /**																
- * Exit menu item listener.											
+ * ACIDE - A Configurable IDE file menu exit menu item listener.											
  *					
  * @version 0.8	
  * @see ActionListener																													

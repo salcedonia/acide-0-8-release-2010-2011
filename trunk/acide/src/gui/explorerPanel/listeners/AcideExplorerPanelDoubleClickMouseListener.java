@@ -172,19 +172,17 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 						MainWindow.getInstance().getMenu().enableEditMenu();
 						
 						// Updates the undo manager
-						AcideUndoRedoManager.getInstance().update(
-								MainWindow.getInstance().getFileEditorManager()
-										.getSelectedFileEditorPanel().getSyntaxDocument());
+						AcideUndoRedoManager.getInstance().update();
 
 						// Sets the focus on the selected file at the editor
-						for (int i = 0; i < MainWindow.getInstance()
+						for (int index = 0; index < MainWindow.getInstance()
 								.getFileEditorManager()
-								.getNumFileEditorPanels(); i++) {
+								.getNumFileEditorPanels(); index++) {
 
-							final int index = i;
+							final int editorIndex = index;
 
 							if (MainWindow.getInstance().getFileEditorManager()
-									.getFileEditorPanelAt(i).getAbsolutePath()
+									.getFileEditorPanelAt(index).getAbsolutePath()
 									.equals(projectFile.getAbsolutePath())) {
 
 								SwingUtilities.invokeLater(new Runnable() {
@@ -199,7 +197,7 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 										// Sets the focus on the text area
 										MainWindow.getInstance()
 												.getFileEditorManager()
-												.getFileEditorPanelAt(index)
+												.getFileEditorPanelAt(editorIndex)
 												.getActiveTextEditionArea()
 												.requestFocusInWindow();
 									}
@@ -207,8 +205,10 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 							}
 						}
 
-						// Updates the main window
+						// Validates the main window
 						MainWindow.getInstance().validate();
+						
+						// Repaints the main window
 						MainWindow.getInstance().repaint();
 
 						// Sets the file status in the project configuration
@@ -248,10 +248,8 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 									.getFileEditorPanelAt(editorIndex)
 									.getActiveTextEditionArea()
 									.requestFocusInWindow();
-
 						}
 					});
-
 				}
 			}
 		}

@@ -61,7 +61,7 @@ import operations.log.AcideLog;
 import resources.AcideResourceManager;
 
 /**
- * File menu of ACIDE - A Configurable IDE.
+ * ACIDE - A Configurable IDE file menu.
  * 
  * @version 0.8
  * @see JMenu
@@ -69,137 +69,138 @@ import resources.AcideResourceManager;
 public class FileMenu extends JMenu {
 
 	/**
-	 * File menu class serial version UID.
+	 * ACIDE - A Configurable IDE file menu class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * New file menu item name.
+	 * ACIDE - A Configurable IDE file menu new file menu item name.
 	 */
 	public final static String NEW_FILE_NAME = "New File";
 	/**
-	 * Open file menu item name.
+	 * ACIDE - A Configurable IDE file menu open file menu item name.
 	 */
 	public final static String OPEN_FILE_NAME = "Open File";
 	/**
-	 * Open all files menu item name.
+	 * ACIDE - A Configurable IDE file menu open all files menu item name.
 	 */
 	public final static String OPEN_ALL_FILES_NAME = "Open All Files";
 	/**
-	 * Close file menu item name.
+	 * ACIDE - A Configurable IDE file menu close file menu item name.
 	 */
 	public final static String CLOSE_FILE_NAME = "Close File";
 	/**
-	 * Close all files menu item name.
+	 * ACIDE - A Configurable IDE file menu close all files menu item name.
 	 */
 	public final static String CLOSE_ALL_FILES_NAME = "Close All Files";
 	/**
-	 * Save file menu item name.
+	 * ACIDE - A Configurable IDE file menu save file menu item name.
 	 */
 	public final static String SAVE_FILE_NAME = "Save File";
 	/**
-	 * Save all files menu item name.
+	 * ACIDE - A Configurable IDE file menu save all files menu item name.
 	 */
 	public final static String SAVE_ALL_FILES_NAME = "Save All Files";
 	/**
-	 * Save file menu item name.
+	 * ACIDE - A Configurable IDE file menu save file menu item name.
 	 */
 	public final static String SAVE_FILE_AS_NAME = "Save File As";
 	/**
-	 * Print file menu item name.
+	 * ACIDE - A Configurable IDE file menu print file menu item name.
 	 */
 	public final static String PRINT_FILE_NAME = "Print File";
 	/**
-	 * Exit menu item name.
+	 * ACIDE - A Configurable IDE file menu exit menu item name.
 	 */
 	public final static String EXIT_NAME = "Exit File";
 	/**
-	 * New file menu item image icon.
+	 * ACIDE - A Configurable IDE file menu new file menu item image icon.
 	 */
 	private final static ImageIcon NEW_FILE_IMAGE = new ImageIcon(
 			"./resources/icons/menu/file/newFile.png");
 	/**
-	 * Open file menu item image icon.
+	 * ACIDE - A Configurable IDE file menu open file menu item image icon.
 	 */
 	private final static ImageIcon OPEN_FILE_IMAGE = new ImageIcon(
 			"./resources/icons/menu/file/openFile.png");
 	/**
-	 * Close file menu item image icon.
+	 * ACIDE - A Configurable IDE file menu close file menu item image icon.
 	 */
 	private final static ImageIcon CLOSE_FILE_IMAGE = new ImageIcon(
 			"./resources/icons/menu/file/closeFile.png");
 	/**
-	 * Close all files menu item image icon.
+	 * ACIDE - A Configurable IDE file menu close all files menu item image
+	 * icon.
 	 */
 	private final static ImageIcon CLOSE_ALL_FILES_IMAGE = new ImageIcon(
 			"./resources/icons/menu/file/closeAllFiles.png");
 	/**
-	 * Save file menu item image icon.
+	 * ACIDE - A Configurable IDE file menu save file menu item image icon.
 	 */
 	private final static ImageIcon SAVE_FILE_IMAGE = new ImageIcon(
 			"./resources/icons/menu/file/saveFile.png");
 	/**
-	 * Save all files menu item image icon.
+	 * ACIDE - A Configurable IDE file menu save all files menu item image icon.
 	 */
 	private final static ImageIcon SAVE_ALL_FILES_IMAGE = new ImageIcon(
 			"./resources/icons/menu/file/saveAllFiles.png");
 	/**
-	 * Save file as menu item image icon.
+	 * ACIDE - A Configurable IDE file menu save file as menu item image icon.
 	 */
 	private final static ImageIcon SAVE_FILE_AS_IMAGE = new ImageIcon(
 			"./resources/icons/menu/file/saveFileAs.png");
 	/**
-	 * Print file menu item image icon.
+	 * ACIDE - A Configurable IDE file menu print file menu item image icon.
 	 */
 	private final static ImageIcon PRINT_FILE_IMAGE = new ImageIcon(
 			"./resources/icons/menu/file/printFile.png");
 	/**
-	 * Exit menu item image icon.
+	 * ACIDE - A Configurable IDE file menu exit menu item image icon.
 	 */
 	private final static ImageIcon EXIT_IMAGE = new ImageIcon(
 			"./resources/icons/menu/file/exit.png");
 	/**
-	 * New file menu item.
+	 * ACIDE - A Configurable IDE file menu new file menu item.
 	 */
 	private JMenuItem _newFile;
 	/**
-	 * Open file menu item.
+	 * ACIDE - A Configurable IDE file menu open file menu item.
 	 */
 	private JMenuItem _openFile;
 	/**
-	 * Open all files menu item.
+	 * ACIDE - A Configurable IDE file menu open all files menu item.
 	 */
 	private JMenuItem _openAllFiles;
 	/**
-	 * Close file menu item.
+	 * ACIDE - A Configurable IDE file menu close file menu item.
 	 */
 	private JMenuItem _closeFile;
 	/**
-	 * Close all files menu item.
+	 * ACIDE - A Configurable IDE file menu close all files menu item.
 	 */
 	private JMenuItem _closeAllFiles;
 	/**
-	 * Save file as menu item.
+	 * ACIDE - A Configurable IDE file menu save file as menu item.
 	 */
 	private JMenuItem _saveFileAs;
 	/**
-	 * Save file menu item.
+	 * ACIDE - A Configurable IDE file menu save file menu item.
 	 */
 	private JMenuItem _saveFile;
 	/**
-	 * Save all file menu item.
+	 * ACIDE - A Configurable IDE file menu save all file menu item.
 	 */
 	private JMenuItem _saveAllFiles;
 	/**
-	 * Print file menu item.
+	 * ACIDE - A Configurable IDE file menu print file menu item.
 	 */
 	private JMenuItem _printFile;
 	/**
-	 * Exit menu item.
+	 * ACIDE - A Configurable IDE file menu exit menu item.
 	 */
 	private JMenuItem _exit;
 
 	/**
-	 * Creates a new file menu.
+	 * Creates a new ACIDE - A Configurable IDE file menu.
 	 */
 	public FileMenu() {
 
@@ -219,7 +220,7 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Sets the labels to display in the selected language.
+	 * Sets the ACIDE - A Configurable IDE file menu language labels.
 	 */
 	public void setLanguageLabels() {
 
@@ -227,8 +228,8 @@ public class FileMenu extends JMenu {
 		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
+			language.getLanguage(AcideResourceManager.getInstance()
+					.getProperty("language"));
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
@@ -252,7 +253,7 @@ public class FileMenu extends JMenu {
 
 		// OPEN ALL FILES
 		_openAllFiles.setText(labels.getString("s1004"));
-		
+
 		// CLOSE FILE
 		_closeFile.setText(labels.getString("s238"));
 
@@ -300,7 +301,7 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Builds the file menu.
+	 * Builds the ACIDE - A Configurable IDE file menu.
 	 * 
 	 * @param labels
 	 *            labels to display in the selected language.
@@ -315,19 +316,21 @@ public class FileMenu extends JMenu {
 			add(_newFile);
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(OPEN_FILE_NAME))
 			add(_openFile);
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(OPEN_ALL_FILES_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
+				OPEN_ALL_FILES_NAME))
 			add(_openAllFiles);
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(CLOSE_FILE_NAME))
-			add(_closeFile);
 		if (AcideMenuConfiguration.getInstance()
-				.getIsDisplayed(CLOSE_ALL_FILES_NAME))
+				.getIsDisplayed(CLOSE_FILE_NAME))
+			add(_closeFile);
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
+				CLOSE_ALL_FILES_NAME))
 			add(_closeAllFiles);
 		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						OPEN_FILE_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						CLOSE_FILE_NAME) || AcideMenuConfiguration.getInstance()
-				.getIsDisplayed(CLOSE_ALL_FILES_NAME))
+						CLOSE_FILE_NAME) || AcideMenuConfiguration
+				.getInstance().getIsDisplayed(CLOSE_ALL_FILES_NAME))
 				&& (AcideMenuConfiguration.getInstance().getIsDisplayed(
 						SAVE_FILE_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -336,9 +339,11 @@ public class FileMenu extends JMenu {
 			addSeparator();
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_FILE_NAME))
 			add(_saveFile);
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_FILE_AS_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
+				SAVE_FILE_AS_NAME))
 			add(_saveFileAs);
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_ALL_FILES_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
+				SAVE_ALL_FILES_NAME))
 			add(_saveAllFiles);
 		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -350,13 +355,14 @@ public class FileMenu extends JMenu {
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						SAVE_FILE_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						SAVE_FILE_AS_NAME) || AcideMenuConfiguration.getInstance()
-				.getIsDisplayed(SAVE_ALL_FILES_NAME))
+						SAVE_FILE_AS_NAME) || AcideMenuConfiguration
+				.getInstance().getIsDisplayed(SAVE_ALL_FILES_NAME))
 				&& (AcideMenuConfiguration.getInstance()
 						.getIsDisplayed(PRINT_FILE_NAME)))
 			addSeparator();
 
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(PRINT_FILE_NAME))
+		if (AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(PRINT_FILE_NAME))
 			add(_printFile);
 
 		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME)
@@ -369,9 +375,10 @@ public class FileMenu extends JMenu {
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						PRINT_FILE_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						CLOSE_FILE_NAME) || AcideMenuConfiguration.getInstance()
-				.getIsDisplayed(CLOSE_ALL_FILES_NAME))
-				&& AcideMenuConfiguration.getInstance().getIsDisplayed(EXIT_NAME))
+						CLOSE_FILE_NAME) || AcideMenuConfiguration
+				.getInstance().getIsDisplayed(CLOSE_ALL_FILES_NAME))
+				&& AcideMenuConfiguration.getInstance().getIsDisplayed(
+						EXIT_NAME))
 			addSeparator();
 
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(EXIT_NAME))
@@ -379,7 +386,7 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Sets the file menu item listeners.
+	 * Sets the ACIDE - A Configurable IDE file menu item listeners.
 	 */
 	public void setListeners() {
 
@@ -391,7 +398,7 @@ public class FileMenu extends JMenu {
 
 		// OPEN ALL FILES
 		_openAllFiles.addActionListener(new OpenAllFilesMenuItemListener());
-		
+
 		// SAVE FILE AS
 		_saveFileAs.addActionListener(new SaveFileAsMenuItemListener());
 
@@ -426,8 +433,8 @@ public class FileMenu extends JMenu {
 		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
+			language.getLanguage(AcideResourceManager.getInstance()
+					.getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -556,7 +563,7 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Enables the file menu.
+	 * Enables the ACIDE - A Configurable IDE file menu.
 	 */
 	public void enableMenu() {
 
@@ -569,10 +576,10 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Disables the file menu.
+	 * Disables the ACIDE - A Configurable IDE file menu.
 	 */
 	public void disableMenu() {
-		
+
 		_closeFile.setEnabled(false);
 		_closeAllFiles.setEnabled(false);
 		_saveFileAs.setEnabled(false);
@@ -582,7 +589,7 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Enables the save file as menu item.
+	 * Enables the ACIDE - A Configurable IDE file menu save file as menu item.
 	 */
 	public void enableSaveFileAs() {
 
@@ -590,8 +597,8 @@ public class FileMenu extends JMenu {
 		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
+			language.getLanguage(AcideResourceManager.getInstance()
+					.getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -609,16 +616,17 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the new file menu item.
+	 * Returns the ACIDE - A Configurable IDE file menu new file menu item.
 	 * 
-	 * @return the new file menu item.
+	 * @return the ACIDE - A Configurable IDE file menu new file menu item.
 	 */
 	public JMenuItem getNewFile() {
 		return _newFile;
 	}
 
 	/**
-	 * Sets a new value to the new file menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE file menu new file
+	 * menu item.
 	 * 
 	 * @param newFile
 	 *            new value to set.
@@ -628,16 +636,17 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the exit menu item.
+	 * Returns the ACIDE - A Configurable IDE file menu exit menu item.
 	 * 
-	 * @return the exit menu item.
+	 * @return the ACIDE - A Configurable IDE file menu exit menu item.
 	 */
 	public JMenuItem getExit() {
 		return _exit;
 	}
 
 	/**
-	 * Sets a new value to the exit menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE file menu exit menu
+	 * item.
 	 * 
 	 * @param exit
 	 *            new value to set.
@@ -647,16 +656,17 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the save file as menu item.
+	 * Returns the ACIDE - A Configurable IDE file menu save file as menu item.
 	 * 
-	 * @return the save file as menu item.
+	 * @return the ACIDE - A Configurable IDE file menu save file as menu item.
 	 */
 	public JMenuItem getSaveFileAs() {
 		return _saveFileAs;
 	}
 
 	/**
-	 * Sets a new value to the save file as menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE file menu save file as
+	 * menu item.
 	 * 
 	 * @param saveFileAs
 	 *            new value to set.
@@ -666,16 +676,17 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the save file menu item.
+	 * Returns the ACIDE - A Configurable IDE file menu save file menu item.
 	 * 
-	 * @return the save file menu item.
+	 * @return the ACIDE - A Configurable IDE file menu save file menu item.
 	 */
 	public JMenuItem getSaveFile() {
 		return _saveFile;
 	}
 
 	/**
-	 * Sets a new value to the save file menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE file menu save file
+	 * menu item.
 	 * 
 	 * @param saveFile
 	 *            new value to set.
@@ -685,16 +696,19 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the save all files menu item.
+	 * Returns the ACIDE - A Configurable IDE file menu save all files menu
+	 * item.
 	 * 
-	 * @return the save all files menu item.
+	 * @return the ACIDE - A Configurable IDE file menu save all files menu
+	 *         item.
 	 */
 	public JMenuItem getSaveAllFiles() {
 		return _saveAllFiles;
 	}
 
 	/**
-	 * Sets a new value to the save all files menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE file menu save all
+	 * files menu item.
 	 * 
 	 * @param saveAllFiles
 	 *            new value to set.
@@ -704,16 +718,17 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the print file menu item.
+	 * Returns the ACIDE - A Configurable IDE file menu print file menu item.
 	 * 
-	 * @return the print file menu item.
+	 * @return the ACIDE - A Configurable IDE file menu print file menu item.
 	 */
 	public JMenuItem getPrintFile() {
 		return _printFile;
 	}
 
 	/**
-	 * Sets a new value to the print file menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE file menu print file
+	 * menu item.
 	 * 
 	 * @param printFile
 	 *            new value to set.
@@ -723,16 +738,19 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the close all files menu item.
+	 * Returns the ACIDE - A Configurable IDE file menu close all files menu
+	 * item.
 	 * 
-	 * @return the close all files menu item.
+	 * @return the ACIDE - A Configurable IDE file menu close all files menu
+	 *         item.
 	 */
 	public JMenuItem getCloseAllFiles() {
 		return _closeAllFiles;
 	}
 
 	/**
-	 * Sets a new value to the close all files menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE file menu close all
+	 * files menu item.
 	 * 
 	 * @param closeAllFiles
 	 *            new value to set.
@@ -742,16 +760,17 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the close file menu item.
+	 * Returns the ACIDE - A Configurable IDE file menu close file menu item.
 	 * 
-	 * @return the close file menu item.
+	 * @return the ACIDE - A Configurable IDE file menu close file menu item.
 	 */
 	public JMenuItem getCloseFile() {
 		return _closeFile;
 	}
 
 	/**
-	 * Sets a new value to the close file menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE file menu close file
+	 * menu item.
 	 * 
 	 * @param closeFile
 	 *            new value to set.
@@ -761,16 +780,17 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the open file menu item.
+	 * Returns the ACIDE - A Configurable IDE file menu open file menu item.
 	 * 
-	 * @return the open file menu item.
+	 * @return the ACIDE - A Configurable IDE file menu open file menu item.
 	 */
 	public JMenuItem getOpenFile() {
 		return _openFile;
 	}
 
 	/**
-	 * Sets a new value to the open file menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE file menu open file
+	 * menu item.
 	 * 
 	 * @param openFile
 	 *            new value to set.
@@ -780,16 +800,19 @@ public class FileMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the open all files menu item.
+	 * Returns the ACIDE - A Configurable IDE file menu open all files menu
+	 * item.
 	 * 
-	 * @return the open all files menu item.
+	 * @return the ACIDE - A Configurable IDE file menu open all files menu
+	 *         item.
 	 */
 	public JMenuItem getOpenAllFiles() {
 		return _openAllFiles;
 	}
-	
+
 	/**
-	 * Sets a new value to the open all files menu item.
+	 * Sets a new value to the ACIDE - A Configurable IDE file menu open all
+	 * files menu item.
 	 * 
 	 * @param openAllFiles
 	 *            new value to set.

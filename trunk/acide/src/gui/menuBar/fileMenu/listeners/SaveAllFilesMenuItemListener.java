@@ -35,7 +35,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Save all files item listener.
+ * ACIDE - A Configurable IDE file menu save all files item listener.
  * 
  * @version 0.8
  * @see ActionListener

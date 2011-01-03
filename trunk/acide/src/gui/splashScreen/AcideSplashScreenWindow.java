@@ -80,35 +80,28 @@ public class AcideSplashScreenWindow extends JWindow {
 		_mainPanel.setBorder(BorderFactory.createEmptyBorder());
 		
 		// MESSAGE PANEL
-		_messagePanel = new JPanel(new BorderLayout());
-		_messagePanel.setBackground(new Color(115, 115, 225));
-		_messagePanel.setBorder(BorderFactory.createLineBorder(new Color(65, 65, 205)));
+		_messagePanel = new JPanel(new GridBagLayout());
+		_messagePanel.setBackground(new Color(70, 110, 175));
+		
+		// MESSAGE LABEL
+		_messageLabel = new JLabel(" ");
+		_messageLabel.setFont(new Font("Arial", Font.BOLD, 12));
+		_messageLabel.setForeground(Color.WHITE);
 		
 		// CONTENT PANEL
 		JPanel content = (JPanel) getContentPane();
 		content.setLayout(new BorderLayout());
 			
-		// Centers the window
-		int width = 515;
-		int height = 323;
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		int x = (screen.width - width) / 2;
-		int y = (screen.height - height) / 2;
-		setBounds(x, y, width, height);
-
-		// PROGRESS BAR
-		_progressBar = new JProgressBar();
-		_progressBar.setPreferredSize(new Dimension(511, 10));
-		_progressBar.setForeground(new Color(200, 0, 0));
-		_progressBar.setBorder(BorderFactory.createLineBorder(new Color(75, 75, 75)));
-		
 		// IMAGE
 		_image = new JLabel(new ImageIcon(IMAGE));
-
-		// MESSAGE LABEL
-		_messageLabel = new JLabel(" ");
-		_messageLabel.setFont(new Font("Arial", Font.BOLD, 11));
-		_messageLabel.setForeground(Color.WHITE);
+		
+		// PROGRESS BAR
+		UIManager.put("ProgressBar.selectionBackground", Color.black);
+	    UIManager.put("ProgressBar.selectionForeground", Color.white);
+	    UIManager.put("ProgressBar.foreground", new Color(200, 0, 0));
+		_progressBar = new JProgressBar();
+		_progressBar.setStringPainted(true);
+		_progressBar.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.BLACK));
 		
 		// Adds the components to the window with the layout
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -119,12 +112,23 @@ public class AcideSplashScreenWindow extends JWindow {
 		constraints.gridy = 0;
 		_mainPanel.add(_image, constraints);	
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.insets = new Insets(235, 0, 0, 0);
+		constraints.insets = new Insets(236, 0, 0, 0);
 		_mainPanel.add(_progressBar, constraints);
 		content.add(_mainPanel, BorderLayout.CENTER);
-		_messagePanel.add(_messageLabel, BorderLayout.LINE_END);
+		constraints.insets = new Insets(5, 5, 5, 5);
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.anchor = GridBagConstraints.EAST;
+		_messagePanel.add(_messageLabel, constraints);
 		content.add(_messagePanel, BorderLayout.SOUTH);
-		content.setBorder(BorderFactory.createRaisedBevelBorder());
+		content.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		
+		// Centers the window
+		int width = getPreferredSize().width;
+		int height = getPreferredSize().height;
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (screen.width - width) / 2;
+		int y = (screen.height - height) / 2;
+		setBounds(x, y, width, height);
 		
 		// Displays it
 		setVisible(true);	
@@ -135,12 +139,11 @@ public class AcideSplashScreenWindow extends JWindow {
 	 */
 	public void closeSplashScreenWindow() {
 		setVisible(false);
-		this.repaint();
 	}
 
 	/**
 	 * Sets a new value to the ACIDE - A Configurable IDE splash screen window
-	 * progress bar given as a parameter.
+	 * progress bar and the message label given as parameters.
 	 * 
 	 * @param percent
 	 *            new value for the progress bar.

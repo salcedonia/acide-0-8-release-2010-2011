@@ -128,7 +128,7 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 						Element rootElement = MainWindow.getInstance()
 								.getFileEditorManager()
 								.getSelectedFileEditorPanel()
-								.getSyntaxDocument().getDefaultRootElement();
+								.getStyledDocument().getDefaultRootElement();
 						int numLines = rootElement.getElementCount();
 
 						// Updates the the line and column message in the status

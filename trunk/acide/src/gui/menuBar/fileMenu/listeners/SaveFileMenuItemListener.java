@@ -43,7 +43,7 @@ import operations.log.AcideLog;
 import resources.AcideResourceManager;
 
 /**
- * Save file menu item listener.
+ * ACIDE - A Configurable IDE file menu save file menu item listener.
  * 
  * @version 0.8
  * @see ActionListener

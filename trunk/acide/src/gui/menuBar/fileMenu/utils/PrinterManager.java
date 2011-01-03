@@ -39,43 +39,43 @@ import javax.swing.text.JTextComponent;
 import operations.log.AcideLog;
 
 /**																
- * Printer manager of ACIDE - A Configurable IDE.											
+ * ACIDE - A Configurable IDE printer manager.											
  *					
  * @version 0.8																														
  */
 public class PrinterManager {
 
 	/**
-	 * Printer job.
+	 * ACIDE - A Configurable IDE printer manager printer job.
 	 */
 	private PrinterJob _printerJob;
 	/**
-	 * Page format.
+	 * ACIDE - A Configurable IDE printer manager page format.
 	 */
 	private PageFormat _pageFormat;
 	/**
-	 * Printed text component.
+	 * ACIDE - A Configurable IDE printer manager printed text component.
 	 */
 	private JTextComponent _printedTextComponent;
 	/**
-	 * Style of the document.
+	 * ACIDE - A Configurable IDE printer manager style of the document.
 	 */
 	private AttributedString _style;
 	/**
-	 * Show page flag.
+	 * ACIDE - A Configurable IDE printer manager show page flag.
 	 */
 	private boolean _showPage;
 	/**
-	 * Show date flag.
+	 * ACIDE - A Configurable IDE printer manager show date flag.
 	 */
 	private boolean _showDate;
 	/**
-	 * Printer text.
+	 * ACIDE - A Configurable IDE printer manager printer text.
 	 */
 	private PrinterText _printerText;
 
 	/**
-	 * Class constructor.
+	 * Creates a new ACIDE - A Configurable IDE printer manager.
 	 * 
 	 * @param component text component.
 	 * @param showPage show page flag.
@@ -88,16 +88,16 @@ public class PrinterManager {
 	}
 
 	/**
-	 * Returns the page style.
+	 * Returns the ACIDE - A Configurable IDE printer manager page style.
 	 * 
-	 * @return the page style.
+	 * @return the ACIDE - A Configurable IDE printer manager page style.
 	 */
 	public AttributedString getStyle() {
 		return _style;
 	}
 
 	/**
-	 * Sets a new value to the style.
+	 * Sets a new value to the ACIDE - A Configurable IDE printer manager style.
 	 * 
 	 * @param style new value to set.
 	 */
@@ -142,7 +142,7 @@ public class PrinterManager {
 	}
 
 	/**
-	 * Sets a new value to the show date flag.
+	 * Sets a new value to the ACIDE - A Configurable IDE printer manager show date flag.
 	 * 
 	 * @param showDate new value to set.
 	 */
@@ -152,7 +152,7 @@ public class PrinterManager {
 	}
 	
 	/**
-	 * Sets a new value to the show page flag.
+	 * Sets a new value to the ACIDE - A Configurable IDE printer manager show page flag.
 	 * 
 	 * @param showPage new value to set.
 	 */
@@ -162,9 +162,9 @@ public class PrinterManager {
 	}
 
 	/**
-	 * Returns the page format.
+	 * Returns the ACIDE - A Configurable IDE printer manager page format.
 	 * 
-	 * @return the page format.
+	 * @return the ACIDE - A Configurable IDE printer manager page format.
 	 */
 	public Object getPageFormat() {
 		return _pageFormat;
