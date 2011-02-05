@@ -405,6 +405,23 @@ public class AcideFileEditorPanel extends JPanel {
 	}
 
 	/**
+	 * Returns the ACIDE - A Configurable IDE file editor panel file name, extension included.
+	 * 
+	 * @return the ACIDE - A Configurable IDE file editor panel file name, extension included.
+	 */
+	public String getFileNameWithExtension() {
+
+		if (_path != null) {
+			int index = _path.lastIndexOf("\\");
+			if (index == -1)
+				index = _path.lastIndexOf("/");
+
+			return _path.substring(index + 1, _path.length());
+		}
+		return "";
+	}
+	
+	/**
 	 * Returns the ACIDE - A Configurable IDE file editor panel last change.
 	 * 
 	 * @return the ACIDE - A Configurable IDE file editor panel last change.

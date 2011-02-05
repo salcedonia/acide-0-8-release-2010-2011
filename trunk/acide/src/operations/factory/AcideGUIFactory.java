@@ -41,7 +41,6 @@ import gui.menuBar.configurationMenu.consoleMenu.gui.AcideConsoleConfigurationWi
 import gui.menuBar.configurationMenu.grammarMenu.gui.AcideGrammarConfigurationWindow;
 import gui.menuBar.configurationMenu.lexiconMenu.gui.AcideLexiconConfigurationWindow;
 import gui.menuBar.configurationMenu.menuMenu.gui.AcideMenuConfigurationWindow;
-import gui.menuBar.configurationMenu.toolBarMenu.gui.AcideToolBarConfigurationWindow;
 import gui.menuBar.editMenu.gui.replace.AcideReplaceWindow;
 import gui.menuBar.editMenu.gui.search.AcideSearchWindow;
 import gui.menuBar.fileMenu.gui.PrintConfigurationWindow;
@@ -262,20 +261,6 @@ public class AcideGUIFactory {
 	 */
 	public AcideExternalCommandConfigurationWindow buildAcideExternalCommandConfigurationWindow() {
 		return new AcideExternalCommandConfigurationWindow();
-	}
-
-	/**
-	 * Builds the ACIDE - A Configurable IDE tool bar configuration window.
-	 * 
-	 * @param forModify
-	 *            indicates if the tool bar configuration window has to be used
-	 *            to modify the tool bar configuration or not.
-	 * @return the ACIDE - A Configurable IDE tool bar command configuration window.
-	 * @see AcideToolBarConfigurationWindow
-	 */
-	public AcideToolBarConfigurationWindow buildAcideToolBarConfigurationWindow(
-			boolean forModify) {
-		return new AcideToolBarConfigurationWindow(forModify);
 	}
 
 	/**

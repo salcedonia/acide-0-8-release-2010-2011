@@ -50,6 +50,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import language.AcideLanguageManager;
 import operations.log.AcideLog;
@@ -177,6 +179,21 @@ public class AcideSavingResourcesWindow extends JFrame {
 		_listComponent
 				.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
+		// List selection listener
+		_listComponent.addListSelectionListener(new ListSelectionListener(){
+
+			/*
+			 * (non-Javadoc)
+			 * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
+			 */
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				
+				// If there is a selected value in the list at least, the accept button is enabled
+				_acceptButton.setEnabled(_listComponent.getSelectedIndex() != -1);
+			}	
+		});
+		
 		// SCROLL PANE
 		_scrollPanel = new JScrollPane(_listComponent);
 
@@ -227,6 +244,7 @@ public class AcideSavingResourcesWindow extends JFrame {
 
 		// ACCEPT BUTTON
 		_acceptButton = new JButton(labels.getString("s918"));
+		_acceptButton.setEnabled(false);
 		_acceptButton.addActionListener(new ActionListener() {
 
 			/*

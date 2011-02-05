@@ -2,7 +2,6 @@
 name = consult
 action = consult($activeFile$).
 hintText = Consults the selected file
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -10,7 +9,6 @@ parameterType = NONE
 name = listing
 action = listing.
 hintText = Lists the contents of the database
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -18,7 +16,6 @@ parameterType = NONE
 name = shell
 action = shell.
 hintText = Opens an OS shell
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -26,7 +23,6 @@ parameterType = NONE
 name = pwd
 action = working_directory(X,X).
 hintText = Displays the current folder
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -34,7 +30,6 @@ parameterType = NONE
 name = clpfd
 action = use_module(library(clpfd)).
 hintText = Loads finite domain constraint library
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -42,7 +37,6 @@ parameterType = NONE
 name = clpr
 action = use_module(library(clpr)).
 hintText = Loads arithmetical constraint library
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -50,7 +44,6 @@ parameterType = NONE
 name = lists
 action = use_module(library(lists)).
 hintText = Loads list library
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -58,7 +51,6 @@ parameterType = NONE
 name = help
 action = help.
 hintText = Shows the help
-hasIcon = false
 icon = 
 parameterType = NONE
 

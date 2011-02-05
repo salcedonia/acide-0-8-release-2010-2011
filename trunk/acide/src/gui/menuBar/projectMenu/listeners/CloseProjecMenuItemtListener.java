@@ -32,6 +32,7 @@ package gui.menuBar.projectMenu.listeners;
 import es.configuration.project.AcideProjectConfiguration;
 import es.configuration.window.AcideWindowConfiguration;
 import gui.mainWindow.MainWindow;
+import gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -168,6 +169,9 @@ public class CloseProjecMenuItemtListener implements ActionListener {
 			
 			// Updates the status bar
 			MainWindow.getInstance().getStatusBar().setStatusMessage(" ");
+			
+			// Disables the save project button in the static tool bar
+			AcideStaticToolBar.getInstance().getSaveProjectButton().setEnabled(false);
 		}
 	}
 }

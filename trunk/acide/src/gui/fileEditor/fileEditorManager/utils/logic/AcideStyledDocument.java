@@ -147,15 +147,15 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 
 				// Creates the keyword list
 				_keyword[index] = new SimpleAttributeSet();
-				
+
 				// Gets the token type from the list
-				TokenType tokenType = tokenTypeList.getTokenType(index);			
-				
+				TokenType tokenType = tokenTypeList.getTokenType(index);
+
 				// Foreground color as defines the token type of the list
 				StyleConstants.setForeground(_keyword[index],
-						tokenType.getColor());	
+						tokenType.getColor());
 				// Italic as defines the token type of the list
-				StyleConstants.setItalic(_keyword[index], tokenType.isItalic());		
+				StyleConstants.setItalic(_keyword[index], tokenType.isItalic());
 				// Bold as defines the token type of the list
 				StyleConstants.setBold(_keyword[index], tokenType.isBold());
 			}
@@ -163,24 +163,24 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 			// KEYWORDS
 			_keywords = new Hashtable[tokenTypeList.getSize()];
 			Object dummyObject = new Object();
-			
+
 			for (int index1 = 0; index1 < tokenTypeList.getSize(); index1++) {
-				
+
 				_keywords[index1] = new Hashtable<String, Object>();
-				
+
 				// Gets the token type from the list
 				TokenType tokenType = tokenTypeList.getTokenType(index1);
-				
+
 				for (int index2 = 0; index2 < tokenType.getTokenListSize(); index2++) {
-					
+
 					// Gets the token
 					String token = tokenType.getToken(index2);
-					
+
 					// If the token is case sensitive
 					if (!tokenType.isCaseSensitive())
 						// Parse to lower case
 						token = token.toLowerCase();
-					
+
 					_keywords[index1].put(token, dummyObject);
 				}
 			}
@@ -250,13 +250,13 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 		// The lines affected by the latest document update
 		int startLine = _rootElement.getElementIndex(offset);
 		int endLine = _rootElement.getElementIndex(offset + length);
-		
+
 		// Does the actual highlighting
 		for (int index = startLine; index <= endLine; index++) {
-			
+
 			// Applies the highlighting
 			applyHighlighting(content, index);
-			
+
 			// If there is a defined remark
 			if (Remark.getInstance().getContent() != "")
 				// Applies the remark highlighting
@@ -319,17 +319,21 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	/**
 	 * Applies the token style for the next token in the file content.
 	 * 
-	 * @param content file content.
-	 * @param startOffset start offset.
-	 * @param endOffset end offset.
+	 * @param content
+	 *            file content.
+	 * @param startOffset
+	 *            start offset.
+	 * @param endOffset
+	 *            end offset.
 	 * 
 	 * @return the position to continue to explore from.
 	 */
-	private int applyNextTokenStyle(String content, int startOffset, int endOffset) {
+	private int applyNextTokenStyle(String content, int startOffset,
+			int endOffset) {
 
 		// Gets the end of the token
 		int endOfToken = startOffset + 1;
-		
+
 		// Looks for the next delimiter
 		while (endOfToken <= endOffset) {
 			if (isDelimiter(content.substring(endOfToken, endOfToken + 1),
@@ -337,16 +341,16 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 				break;
 			endOfToken++;
 		}
-		
+
 		// Gets the token
 		String token = content.substring(startOffset, endOfToken);
-		
+
 		// Checks if the token is a keyword
 		int index = isKeyword(token);
-		
+
 		// If it is a keyword
 		if (index != -1)
-			
+
 			// Applies the keyword style
 			setCharacterAttributes(startOffset, endOfToken - startOffset,
 					_keyword[index - 1], false);
@@ -357,54 +361,65 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	/**
 	 * Checks if a character given as a parameter is a delimiter or not.
 	 * 
-	 * @param character character to check.
-	 * @param characterPostion character position.
-	 * @param content text content.
+	 * @param character
+	 *            character to check.
+	 * @param characterPostion
+	 *            character position.
+	 * @param content
+	 *            text content.
 	 * 
 	 * @return true if it is a delimiter and false in other case.
 	 */
-	protected boolean isDelimiter(String character, int characterPostion, String content) {
+	protected boolean isDelimiter(String character, int characterPostion,
+			String content) {
 
 		// Creates the delimiter list
 		DelimiterList.getInstance();
 
 		for (int index = 0; index < DelimiterList.getInstance().getSize(); index++) {
-			
+
 			// Gets the delimiter
-			String delimiter = DelimiterList.getInstance().getDelimiterAt(index);
+			String delimiter = DelimiterList.getInstance()
+					.getDelimiterAt(index);
 
 			// If it is the white space
 			if (Character.isWhitespace(character.charAt(0)))
-				
+
 				// Returns true
 				return true;
-			
+
 			int position = 0;
 
 			while (delimiter.indexOf(character, position) != -1) {
-				
+
 				if (((characterPostion - delimiter.indexOf(character, position) + delimiter
 						.length()) <= content.length())
-						&& (characterPostion - delimiter.indexOf(character, position) >= 0)) {
-					
+						&& (characterPostion
+								- delimiter.indexOf(character, position) >= 0)) {
+
 					// Gets the delimiter
 					String delimiterAux = content.substring(
-							characterPostion - delimiter.indexOf(character, position), characterPostion
+							characterPostion
+									- delimiter.indexOf(character, position),
+							characterPostion
 									- delimiter.indexOf(character, position)
 									+ delimiter.length());
-					
+
 					if (delimiterAux.equals(delimiter)) {
-						
+
 						// Gets the index in the keyword list
 						int delimiterPosition = isKeyword(delimiterAux);
-						
+
 						// If the token is a keyword
 						if (delimiterPosition != -1) {
 
 							// Applies the keyword style
 							setCharacterAttributes(
-									characterPostion - delimiter.indexOf(character, position),
-									delimiterAux.length(), _keyword[delimiterPosition - 1], false);
+									characterPostion
+											- delimiter.indexOf(character,
+													position),
+									delimiterAux.length(),
+									_keyword[delimiterPosition - 1], false);
 						}
 						return true;
 					}
@@ -416,12 +431,13 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	}
 
 	/**
-	 * Checks if a token given as a parameter is a keyword. 
+	 * Checks if a token given as a parameter is a keyword.
 	 * 
-	 * If it is a keyword returns the index in the keyword list and -1 
-	 * in other case.
+	 * If it is a keyword returns the index in the keyword list and -1 in other
+	 * case.
 	 * 
-	 * @param token token to check.
+	 * @param token
+	 *            token to check.
 	 * 
 	 * @return the index + 1 in the keyword list.
 	 */
@@ -442,7 +458,7 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 			} else {
 				token = tokenAux;
 			}
-			
+
 			object = _keywords[index].get(token);
 
 			if (object != null) {
@@ -472,24 +488,24 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	public String addMatchingBrace(int offset) throws BadLocationException {
 
 		// TODO: UNUSED
-		
+
 		StringBuffer whiteSpace = new StringBuffer();
-		
+
 		int line = _rootElement.getElementIndex(offset);
 		int index = _rootElement.getElement(line).getStartOffset();
-		
+
 		while (true) {
-			
+
 			// Gets the text
 			String text = getText(index, 1);
-			
+
 			if (text.equals(" ") || text.equals("\t")) {
 				whiteSpace.append(text);
 				index++;
 			} else
 				break;
 		}
-		
+
 		return "{\n" + whiteSpace.toString() + whiteSpace.toString() + "\n"
 				+ whiteSpace.toString() + "}";
 	}
@@ -497,35 +513,37 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	/**
 	 * Applies the remark style to the file content given as a parameter.
 	 * 
-	 * @param content file content.
-	 * @param line current line.
+	 * @param content
+	 *            file content.
+	 * @param line
+	 *            current line.
 	 */
 	private void applyRemarkStyle(String content, int line) {
 
 		// Gets the remark configuration
 		Remark remark = Remark.getInstance();
-		
+
 		// Gets the remark content
 		String remarkContent = remark.getContent();
 		String text = "";
 		int startOffset = _rootElement.getElement(line).getStartOffset();
 		int endOffset = _rootElement.getElement(line).getEndOffset() - 1;
 		int lineLength = endOffset - startOffset;
-		
+
 		try {
-			
+
 			// Gets the current text to analyze
 			text = getText(startOffset, lineLength);
-			
+
 			// Gets the remark content position
 			int position = text.indexOf(remarkContent);
-			
+
 			// If it is a valid position
 			if (position >= 0)
-				
+
 				// Applies the remark style
-				setCharacterAttributes(startOffset + position, lineLength - position,
-						_remark, true);
+				setCharacterAttributes(startOffset + position, lineLength
+						- position, _remark, true);
 		} catch (BadLocationException exception) {
 
 			// Updates the log
@@ -581,29 +599,38 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	 * @param position
 	 *            brace position to be removed.
 	 */
-	public void removeHighlightBrace(int position) {
-				
-		try {
-			
-			// Gets the keyword index
-			int index = isKeyword(getText(position, 1));
-			
-			// If it is a keyword
-			if (index != -1)
-				
-				// Applies the keyword style
-				setCharacterAttributes(position, 1,
-						_keyword[index - 1], true);		
-			else
-				
-				// Applies the normal style
-				setCharacterAttributes(position, 1, _normal, true);
-			
-		} catch (Exception exception) {
+	public void removeHighlightBrace(final int position) {
 
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-		}
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			/*
+			 * (non-Javadoc)
+			 * @see java.lang.Runnable#run()
+			 */
+			@Override
+			public void run() {
+				try {
+
+					// Gets the keyword index
+					int index = isKeyword(getText(position, 1));
+
+					// If it is a keyword
+					if (index != -1)
+
+						// Applies the keyword style
+						setCharacterAttributes(position, 1, _keyword[index - 1], true);
+					else
+
+						// Applies the normal style
+						setCharacterAttributes(position, 1, _normal, true);
+
+				} catch (Exception exception) {
+
+					// Updates the log
+					AcideLog.getLog().error(exception.getMessage());
+				}
+			}
+		});
 	}
 
 	/**

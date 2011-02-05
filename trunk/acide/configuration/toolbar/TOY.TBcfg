@@ -2,7 +2,6 @@
 name = run
 action = /run($activeFile$)
 hintText = Compile and execute the selected file
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -10,7 +9,6 @@ parameterType = NONE
 name = cflpr
 action = /cflpr
 hintText = Enables arithmetical constraint solving
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -18,7 +16,6 @@ parameterType = NONE
 name = nocflpr
 action = /nocflpr
 hintText = Disables arithmetical constraint solving
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -26,7 +23,6 @@ parameterType = NONE
 name = cflpfd
 action = /cflpfd
 hintText = Enables finite domain constraint solving
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -34,7 +30,6 @@ parameterType = NONE
 name = nocflpfd
 action = /nocflpfd
 hintText = Disables finite domain constraint solving
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -42,7 +37,6 @@ parameterType = NONE
 name = prop
 action = /prop
 hintText = Enables constraint propagation
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -50,7 +44,6 @@ parameterType = NONE
 name = noprop
 action = /noprop
 hintText = Disables constraint propagation
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -58,7 +51,6 @@ parameterType = NONE
 name = cd
 action = /cd
 hintText = Sets the working directory to the installation directory
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -66,7 +58,6 @@ parameterType = NONE
 name = ls
 action = /ls
 hintText = Lists the contents of the current folder
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -74,7 +65,6 @@ parameterType = NONE
 name = pwd
 action = /pwd
 hintText = Displays the current folder
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -82,7 +72,6 @@ parameterType = NONE
 name = tot
 action = /tot
 hintText = Enables displaying totality constraints
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -90,7 +79,6 @@ parameterType = NONE
 name = notot
 action = /notot
 hintText = Disables displaying totality constraints
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -98,7 +86,6 @@ parameterType = NONE
 name = cut
 action = /cut
 hintText = Enables compilation with dynamic cut optimization
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -106,7 +93,6 @@ parameterType = NONE
 name = nocut
 action = /nocut
 hintText = Disables compilation with dynamic cut optimization
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -114,7 +100,6 @@ parameterType = NONE
 name = status
 action = /status
 hintText = Lists the loaded libraries
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -122,7 +107,6 @@ parameterType = NONE
 name = version
 action = /version
 hintText = Displays software version
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -130,7 +114,6 @@ parameterType = NONE
 name = help
 action = /help
 hintText = Shows the help
-hasIcon = false
 icon = 
 parameterType = NONE
 

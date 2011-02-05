@@ -2,7 +2,6 @@
 name = load
 action = :l "$activeFile$"
 hintText = 
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -10,7 +9,6 @@ parameterType = NONE
 name = programa
 action = ejecuta "programa { si (x<5) entonces {x=x+2;};y=x;}"
 hintText = 
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -18,7 +16,6 @@ parameterType = NONE
 name = incrementa
 action = mainComienza(ejecuta "programa { si (x<5) entonces {x=x+2;};y=x;}")
 hintText = 
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -26,7 +23,6 @@ parameterType = NONE
 name = programa gordisimo
 action = ejecuta "programa { 	 si (x < 5) entonces{ 		x = x + 2; };  mientras (x > 10) hacer { 	y = y * (x +7); 	x = x -1; } ;  repetir { 	y = y * 2; 	z = 5; 	si (y == 7) entonces{ 		b = cierto; 	} 	sino { 		b = ((z == 5) and (y < 100)); y = y - 3; 	}; } hasta ( z == 5);  }"
 hintText = 
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -34,7 +30,6 @@ parameterType = NONE
 name = incrementa gordisimo
 action = mainComienza(ejecuta "programa { 	 si (x < 5) entonces{ 		x = x + 2; };  mientras (x > 10) hacer { 	y = y * (x +7); 	x = x -1; } ;  repetir { 	y = y * 2; 	z = 5; 	si (y == 7) entonces{ 		b = cierto; 	} 	sino { 		b = ((z == 5) and (y < 100)); y = y - 3; 	}; } hasta ( z == 5);  }" )
 hintText = 
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -42,7 +37,6 @@ parameterType = NONE
 name = mainCajas
 action = mainCajas "&"
 hintText = 
-hasIcon = false
 icon = 
 parameterType = NONE
 

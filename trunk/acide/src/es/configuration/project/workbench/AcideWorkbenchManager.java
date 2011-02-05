@@ -156,7 +156,7 @@ public class AcideWorkbenchManager {
 		AcideSplashScreenWindow.setProgressBar(90,
 				"Loading ACIDE - A Configurable IDE Explorer Configuration");
 
-		// Updates the status bar with the lexicon
+		// Updates the lexicon message in the status bar
 		MainWindow
 				.getInstance()
 				.getStatusBar()
@@ -340,13 +340,9 @@ public class AcideWorkbenchManager {
 					// Error message
 					JOptionPane.showMessageDialog(null,
 							labels.getString("s970")
-									+ AcideProjectConfiguration.getInstance()
-											.getFileAt(index).getAbsolutePath()
+									+ file.getAbsolutePath()
 									+ labels.getString("s971"), "Error",
 							JOptionPane.ERROR_MESSAGE);
-
-					// Removes the file from the project
-					AcideProjectConfiguration.getInstance().removeFileAt(index);
 
 					// The project configuration has been modified
 					AcideProjectConfiguration.getInstance().setIsModified(true);

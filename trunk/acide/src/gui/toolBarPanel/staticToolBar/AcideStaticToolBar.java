@@ -29,12 +29,13 @@
  */
 package gui.toolBarPanel.staticToolBar;
 
+import es.configuration.project.AcideProjectConfiguration;
 import gui.mainWindow.MainWindow;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -45,10 +46,9 @@ import javax.swing.SwingUtilities;
 
 import language.AcideLanguageManager;
 import operations.log.AcideLog;
-import resources.AcideResourceManager;
 
 /**
- * ACIDE - A Configurable IDE static tool bar. 
+ * ACIDE - A Configurable IDE static tool bar.
  * 
  * Its buttons execute internal commands to ACIDE - A Configurable IDE.
  * 
@@ -78,7 +78,8 @@ public class AcideStaticToolBar extends ArrayList<Component> {
 	 */
 	private static final String SAVE_FILE = "./resources/icons/toolBar/saveFile.png";
 	/**
-	 * ACIDE - A Configurable IDE static tool bar save all files button image icon.
+	 * ACIDE - A Configurable IDE static tool bar save all files button image
+	 * icon.
 	 */
 	private static final String SAVE_ALL_FILES = "./resources/icons/toolBar/saveAllFiles.png";
 	/**
@@ -86,41 +87,43 @@ public class AcideStaticToolBar extends ArrayList<Component> {
 	 */
 	private static final String NEW_PROJECT = "./resources/icons/toolBar/newProject.png";
 	/**
-	 * ACIDE - A Configurable IDE static tool bar open project button image icon.
+	 * ACIDE - A Configurable IDE static tool bar open project button image
+	 * icon.
 	 */
 	private static final String OPEN_PROJECT = "./resources/icons/toolBar/openProject.png";
 	/**
-	 * ACIDE - A Configurable IDE static tool bar save project button image icon.
+	 * ACIDE - A Configurable IDE static tool bar save project button image
+	 * icon.
 	 */
 	private static final String SAVE_PROJECT = "./resources/icons/toolBar/saveProject.png";
 	/**
 	 * ACIDE - A Configurable IDE static tool bar new file button.
 	 */
-	private static JButton _btnNewFile;
+	private static JButton _newFileButton;
 	/**
 	 * ACIDE - A Configurable IDE static tool bar open file button.
 	 */
-	private static JButton _btnOpenFile;
+	private static JButton _openFileButton;
 	/**
 	 * ACIDE - A Configurable IDE static tool bar save file button.
 	 */
-	private static JButton _btnSaveFile;
+	private static JButton _saveFileButton;
 	/**
 	 * ACIDE - A Configurable IDE static tool bar save all files button.
 	 */
-	private static JButton _btnSaveAllFiles;
+	private static JButton _saveAllFilesButton;
 	/**
 	 * ACIDE - A Configurable IDE static tool bar new project button.
 	 */
-	private static JButton _btnNewProject;
+	private static JButton _newProjectButton;
 	/**
 	 * ACIDE - A Configurable IDE static tool bar open project button.
 	 */
-	private static JButton _btnOpenProject;
+	private static JButton _openProjectButton;
 	/**
 	 * ACIDE - A Configurable IDE static tool bar save project button.
 	 */
-	private static JButton _btnSaveProject;
+	private static JButton _saveProjectButton;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE static tool bar.
@@ -130,9 +133,11 @@ public class AcideStaticToolBar extends ArrayList<Component> {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE static tool bar unique class instance.
+	 * Returns the ACIDE - A Configurable IDE static tool bar unique class
+	 * instance.
 	 * 
-	 * @return the ACIDE - A Configurable IDE static tool bar unique class instance.
+	 * @return the ACIDE - A Configurable IDE static tool bar unique class
+	 *         instance.
 	 */
 	public static AcideStaticToolBar getInstance() {
 
@@ -148,38 +153,85 @@ public class AcideStaticToolBar extends ArrayList<Component> {
 	 */
 	public AcideStaticToolBar build() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
 		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
+		final ResourceBundle labels = AcideLanguageManager.getInstance()
+				.getLabels();
 
 		// Updates the log
 		AcideLog.getLog().info(labels.getString("s102"));
 
 		// NEW FILE BUTTON
-		_btnNewFile = new JButton(new ImageIcon(NEW_FILE));
-		_btnNewFile.setToolTipText(labels.getString("s103"));
-		_btnNewFile.addActionListener(new ActionListener() {
+		_newFileButton = new JButton(new ImageIcon(NEW_FILE));
+		_newFileButton.setToolTipText(labels.getString("s103"));
+		_newFileButton.setBorderPainted(false);
+		_newFileButton.addMouseListener(new MouseListener() {
 			/*
 			 * (non-Javadoc)
 			 * 
 			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
+			 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent
+			 * )
 			 */
 			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
+			public void mouseReleased(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseExited(MouseEvent mouseEvent) {
+				_newFileButton.setBorderPainted(false);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseEntered(MouseEvent mouseEvent) {
+				_newFileButton.setBorderPainted(true);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseClicked(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/**
+			 * Dispatches the mouse event.
+			 * 
+			 * @param mouseEvent
+			 *            mouse event.
+			 */
+			public void dispatchEvent(MouseEvent mouseEvent) {
 
 				// Does the new file menu item action
 				MainWindow.getInstance().getMenu().getFile().getNewFile()
@@ -191,18 +243,77 @@ public class AcideStaticToolBar extends ArrayList<Component> {
 		});
 
 		// OPEN FILE BUTTON
-		_btnOpenFile = new JButton(new ImageIcon(OPEN_FILE));
-		_btnOpenFile.setToolTipText(labels.getString("s106"));
-		_btnOpenFile.addActionListener(new ActionListener() {
+		_openFileButton = new JButton(new ImageIcon(OPEN_FILE));
+		_openFileButton.setToolTipText(labels.getString("s106"));
+		_openFileButton.setBorderPainted(false);
+		_openFileButton.addMouseListener(new MouseListener() {
 			/*
 			 * (non-Javadoc)
 			 * 
 			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
+			 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent
+			 * )
 			 */
 			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
+			public void mouseReleased(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseExited(MouseEvent mouseEvent) {
+				_openFileButton.setBorderPainted(false);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseEntered(MouseEvent mouseEvent) {
+				_openFileButton.setBorderPainted(true);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseClicked(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/**
+			 * Dispatches the mouse event.
+			 * 
+			 * @param mouseEvent
+			 *            mouse event.
+			 */
+			public void dispatchEvent(MouseEvent mouseEvent) {
 
 				// Does the open file menu item action
 				MainWindow.getInstance().getMenu().getFile().getOpenFile()
@@ -214,23 +325,82 @@ public class AcideStaticToolBar extends ArrayList<Component> {
 		});
 
 		// SAVE FILE BUTTON
-		_btnSaveFile = new JButton(new ImageIcon(SAVE_FILE));
-		_btnSaveFile.setToolTipText(labels.getString("s114"));
-		_btnSaveFile.addActionListener(new ActionListener() {
+		_saveFileButton = new JButton(new ImageIcon(SAVE_FILE));
+		_saveFileButton.setToolTipText(labels.getString("s114"));
+		_saveFileButton.setBorderPainted(false);
+		_saveFileButton.addMouseListener(new MouseListener() {
 			/*
 			 * (non-Javadoc)
 			 * 
 			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
+			 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent
+			 * )
 			 */
 			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
+			public void mouseReleased(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseExited(MouseEvent mouseEvent) {
+				_saveFileButton.setBorderPainted(false);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseEntered(MouseEvent mouseEvent) {
+				_saveFileButton.setBorderPainted(true);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseClicked(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/**
+			 * Dispatches the mouse event.
+			 * 
+			 * @param mouseEvent
+			 *            mouse event.
+			 */
+			public void dispatchEvent(MouseEvent mouseEvent) {
 
 				// Enables the save file menu item
 				MainWindow.getInstance().getMenu().getFile().getSaveFile()
 						.setEnabled(true);
-				
+
 				// Does the save menu item action
 				MainWindow.getInstance().getMenu().getFile().getSaveFile()
 						.doClick();
@@ -241,23 +411,82 @@ public class AcideStaticToolBar extends ArrayList<Component> {
 		});
 
 		// SAVE ALL FILES BUTTON
-		_btnSaveAllFiles = new JButton(new ImageIcon(SAVE_ALL_FILES));
-		_btnSaveAllFiles.setToolTipText(labels.getString("s229"));
-		_btnSaveAllFiles.addActionListener(new ActionListener() {
+		_saveAllFilesButton = new JButton(new ImageIcon(SAVE_ALL_FILES));
+		_saveAllFilesButton.setToolTipText(labels.getString("s229"));
+		_saveAllFilesButton.setBorderPainted(false);
+		_saveAllFilesButton.addMouseListener(new MouseListener() {
 			/*
 			 * (non-Javadoc)
 			 * 
 			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
+			 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent
+			 * )
 			 */
 			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
+			public void mouseReleased(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseExited(MouseEvent mouseEvent) {
+				_saveAllFilesButton.setBorderPainted(false);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseEntered(MouseEvent mouseEvent) {
+				_saveAllFilesButton.setBorderPainted(true);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseClicked(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/**
+			 * Dispatches the mouse event.
+			 * 
+			 * @param mouseEvent
+			 *            mouse event.
+			 */
+			public void dispatchEvent(MouseEvent mouseEvent) {
 
 				// Enables the save all files menu item
 				MainWindow.getInstance().getMenu().getFile().getSaveAllFiles()
 						.setEnabled(true);
-				
+
 				// Does the save all files menu item action
 				MainWindow.getInstance().getMenu().getFile().getSaveAllFiles()
 						.doClick();
@@ -268,18 +497,77 @@ public class AcideStaticToolBar extends ArrayList<Component> {
 		});
 
 		// NEW PROJECT BUTTON
-		_btnNewProject = new JButton(new ImageIcon(NEW_PROJECT));
-		_btnNewProject.setToolTipText(labels.getString("s122"));
-		_btnNewProject.addActionListener(new ActionListener() {
+		_newProjectButton = new JButton(new ImageIcon(NEW_PROJECT));
+		_newProjectButton.setToolTipText(labels.getString("s122"));
+		_newProjectButton.setBorderPainted(false);
+		_newProjectButton.addMouseListener(new MouseListener() {
 			/*
 			 * (non-Javadoc)
 			 * 
 			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
+			 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent
+			 * )
 			 */
 			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
+			public void mouseReleased(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseExited(MouseEvent mouseEvent) {
+				_newProjectButton.setBorderPainted(false);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseEntered(MouseEvent mouseEvent) {
+				_newProjectButton.setBorderPainted(true);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseClicked(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/**
+			 * Dispatches the mouse event.
+			 * 
+			 * @param mouseEvent
+			 *            mouse event.
+			 */
+			public void dispatchEvent(MouseEvent mouseEvent) {
 
 				// Does the new project menu item action
 				MainWindow.getInstance().getMenu().getProject().getNewProject()
@@ -291,18 +579,77 @@ public class AcideStaticToolBar extends ArrayList<Component> {
 		});
 
 		// OPEN PROJECT BUTTON
-		_btnOpenProject = new JButton(new ImageIcon(OPEN_PROJECT));
-		_btnOpenProject.setToolTipText(labels.getString("s123"));
-		_btnOpenProject.addActionListener(new ActionListener() {
+		_openProjectButton = new JButton(new ImageIcon(OPEN_PROJECT));
+		_openProjectButton.setToolTipText(labels.getString("s123"));
+		_openProjectButton.setBorderPainted(false);
+		_openProjectButton.addMouseListener(new MouseListener() {
 			/*
 			 * (non-Javadoc)
 			 * 
 			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
+			 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent
+			 * )
 			 */
 			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
+			public void mouseReleased(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseExited(MouseEvent mouseEvent) {
+				_openProjectButton.setBorderPainted(false);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseEntered(MouseEvent mouseEvent) {
+				_openProjectButton.setBorderPainted(true);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseClicked(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/**
+			 * Dispatches the mouse event.
+			 * 
+			 * @param mouseEvent
+			 *            mouse event.
+			 */
+			public void dispatchEvent(MouseEvent mouseEvent) {
 
 				// Does the open project menu item action
 				MainWindow.getInstance().getMenu().getProject()
@@ -314,23 +661,87 @@ public class AcideStaticToolBar extends ArrayList<Component> {
 		});
 
 		// SAVE PROJECT BUTTON
-		_btnSaveProject = new JButton(new ImageIcon(SAVE_PROJECT));
-		_btnSaveProject.setToolTipText(labels.getString("s124"));
-		_btnSaveProject.addActionListener(new ActionListener() {
+		_saveProjectButton = new JButton(new ImageIcon(SAVE_PROJECT));
+		_saveProjectButton.setToolTipText(labels.getString("s124"));
+		_saveProjectButton.setBorderPainted(false);
+		_saveProjectButton.setEnabled(!AcideProjectConfiguration.getInstance()
+				.isDefaultProject());
+
+		_saveProjectButton.addMouseListener(new MouseListener() {
 			/*
 			 * (non-Javadoc)
 			 * 
 			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
+			 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent
+			 * )
 			 */
 			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
+			public void mouseReleased(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseExited(MouseEvent mouseEvent) {
+				if (_saveProjectButton.isEnabled())
+					_saveProjectButton.setBorderPainted(false);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseEntered(MouseEvent mouseEvent) {
+				if (_saveProjectButton.isEnabled())
+					_saveProjectButton.setBorderPainted(true);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent
+			 * )
+			 */
+			@Override
+			public void mouseClicked(MouseEvent mouseEvent) {
+				dispatchEvent(mouseEvent);
+			}
+
+			/**
+			 * Dispatches the mouse event.
+			 * 
+			 * @param mouseEvent
+			 *            mouse event.
+			 */
+			public void dispatchEvent(MouseEvent mouseEvent) {
 
 				// Enables the save project menu item
 				MainWindow.getInstance().getMenu().getProject()
 						.getSaveProject().setEnabled(true);
-				
+
 				// Does the save project menu item action
 				MainWindow.getInstance().getMenu().getProject()
 						.getSaveProject().doClick();
@@ -373,21 +784,21 @@ public class AcideStaticToolBar extends ArrayList<Component> {
 		// Removes all the components
 		clear();
 
-		// Adds the static buttons
+		// Adds the static buttons with some space between them
 		add(Box.createRigidArea(new Dimension(5, 5)));
-		add(_btnNewFile);
+		add(_newFileButton);
 		add(Box.createRigidArea(new Dimension(5, 5)));
-		add(_btnOpenFile);
+		add(_openFileButton);
 		add(Box.createRigidArea(new Dimension(5, 5)));
-		add(_btnSaveFile);
+		add(_saveFileButton);
 		add(Box.createRigidArea(new Dimension(5, 5)));
-		add(_btnSaveAllFiles);
+		add(_saveAllFilesButton);
 		add(Box.createRigidArea(new Dimension(5, 5)));
-		add(_btnNewProject);
+		add(_newProjectButton);
 		add(Box.createRigidArea(new Dimension(5, 5)));
-		add(_btnOpenProject);
+		add(_openProjectButton);
 		add(Box.createRigidArea(new Dimension(5, 5)));
-		add(_btnSaveProject);
+		add(_saveProjectButton);
 		add(Box.createRigidArea(new Dimension(5, 5)));
 
 		// Updates the log
@@ -395,32 +806,27 @@ public class AcideStaticToolBar extends ArrayList<Component> {
 
 		return this;
 	}
-	
+
 	/**
 	 * Puts the focus on the selected file editor panel in the main window.
 	 */
-	private void putFocusOnSelectedFileEditorPanel(){
-		
+	private void putFocusOnSelectedFileEditorPanel() {
+
 		// Gets the selected editor index
 		final int selectedFileEditorPanelIndex = MainWindow.getInstance()
-				.getFileEditorManager()
-				.getSelectedFileEditorPanelIndex();
+				.getFileEditorManager().getSelectedFileEditorPanelIndex();
 
 		// If there are opened tabs
 		if (selectedFileEditorPanelIndex != -1) {
-			
+
 			// Updates the selected file editor panel
-			MainWindow
-					.getInstance()
-					.getFileEditorManager()
-					.getTabbedPane()
+			MainWindow.getInstance().getFileEditorManager().getTabbedPane()
 					.setSelectedIndex(selectedFileEditorPanelIndex);
 
-			// Puts the focus on the active text edition area 
-			MainWindow
-					.getInstance()
-					.getFileEditorManager()
-					.getFileEditorPanelAt(selectedFileEditorPanelIndex).getActiveTextEditionArea().requestFocusInWindow();
+			// Puts the focus on the active text edition area
+			MainWindow.getInstance().getFileEditorManager()
+					.getFileEditorPanelAt(selectedFileEditorPanelIndex)
+					.getActiveTextEditionArea().requestFocusInWindow();
 
 			SwingUtilities.invokeLater(new Runnable() {
 				/*
@@ -432,15 +838,21 @@ public class AcideStaticToolBar extends ArrayList<Component> {
 				public void run() {
 
 					// Sets the focus in the active editor
-					MainWindow
-							.getInstance()
-							.getFileEditorManager()
-							.getFileEditorPanelAt(
-									selectedFileEditorPanelIndex)
+					MainWindow.getInstance().getFileEditorManager()
+							.getFileEditorPanelAt(selectedFileEditorPanelIndex)
 							.getActiveTextEditionArea().getCaret()
 							.setVisible(true);
 				}
 			});
 		}
+	}
+
+	/**
+	 * Returns the save project button.
+	 * 
+	 * @return the save project button.
+	 */
+	public JButton getSaveProjectButton() {
+		return _saveProjectButton;
 	}
 }

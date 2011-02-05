@@ -40,11 +40,11 @@ import operations.factory.AcideIOFactory;
 import operations.log.AcideLog;
 import resources.AcideResourceManager;
 
-/**																
- * ACIDE -A Configurable IDE project menu save project menu item listener.											
- *					
- * @version 0.8	
- * @see ActionListener																													
+/**
+ * ACIDE -A Configurable IDE project menu save project menu item listener.
+ * 
+ * @version 0.8
+ * @see ActionListener
  */
 public class SaveProjectMenuItemListener implements ActionListener {
 
@@ -58,82 +58,73 @@ public class SaveProjectMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
+		// Creates the text file which it is going to be the project file
 		TextFile textFile = AcideIOFactory.getInstance().buildFile();
 
 		try {
 
-			// Not default project
-			if (!AcideProjectConfiguration.getInstance()
-					.isDefaultProject()) {
+			// If it is not the first time the project is saved
+			if (!AcideProjectConfiguration.getInstance().isFirstSave()) {
 
-				// IF THIS IS NOT THE FIRST TIME THAT THE PROJECT IS SAVED
-				// THEN SAVE IT AS
-				if (!AcideProjectConfiguration.getInstance()
-						.isFirstSave()) {
+				// Enables the save as project menu item
+				MainWindow.getInstance().getMenu().getProject()
+						.getSaveAsProject().setEnabled(true);
 
-					// Enables the save as project menu item
-					MainWindow.getInstance().getMenu().getProject()
-							.getSaveAsProject().setEnabled(true);
-					
-					// Does the save as project menu item action
-					MainWindow.getInstance().getMenu().getProject()
-							.getSaveAsProject().doClick();
-				} else {
+				// Does the save as project menu item action
+				MainWindow.getInstance().getMenu().getProject()
+						.getSaveAsProject().doClick();
+			} else {
 
-					// Sets the language configuration
-					AcideProjectConfiguration.getInstance()
-							.setLanguage(
-									AcideResourceManager
-											.getInstance().getProperty("language"));
+				// Sets the language configuration
+				AcideProjectConfiguration.getInstance().setLanguage(
+						AcideResourceManager.getInstance().getProperty(
+								"language"));
 
-					// Sets the menu configuration
-					AcideProjectConfiguration.getInstance()
-							.setMenu(
-									AcideResourceManager
-											.getInstance().getProperty("currentMenuConfiguration"));
+				// Sets the menu configuration
+				AcideProjectConfiguration.getInstance().setMenu(
+						AcideResourceManager.getInstance().getProperty(
+								"currentMenuConfiguration"));
 
-					// Sets the tool bar configuration
-					AcideProjectConfiguration.getInstance()
-							.setToolBar(
-									AcideResourceManager
-											.getInstance().getProperty("currentToolBarConfiguration"));
+				// Sets the tool bar configuration
+				AcideProjectConfiguration.getInstance().setToolBar(
+						AcideResourceManager.getInstance().getProperty(
+								"currentToolBarConfiguration"));
 
-					// Sets the grammar configuration
-					AcideProjectConfiguration.getInstance()
-							.setGrammarConfiguration(
-									AcideResourceManager
-											.getInstance().getProperty("currentGrammar"));
+				// Sets the grammar configuration
+				AcideProjectConfiguration.getInstance()
+						.setGrammarConfiguration(
+								AcideResourceManager.getInstance().getProperty(
+										"currentGrammar"));
 
-					// Sets the lexicon configuration
-					AcideProjectConfiguration.getInstance()
-							.setLexiconConfiguration(
-									AcideResourceManager
-											.getInstance().getProperty("languagePath"));
+				// Sets the lexicon configuration
+				AcideProjectConfiguration.getInstance()
+						.setLexiconConfiguration(
+								AcideResourceManager.getInstance().getProperty(
+										"languagePath"));
 
-					// Sets the console configuration
-					AcideProjectConfiguration.getInstance()
-					.setOutputConfiguration(
-							AcideResourceManager
-									.getInstance().getProperty("consoleConfiguration"));
+				// Sets the console configuration
+				AcideProjectConfiguration.getInstance().setOutputConfiguration(
+						AcideResourceManager.getInstance().getProperty(
+								"consoleConfiguration"));
 
-					// Sets the file editor configuration
-					AcideProjectConfiguration.getInstance()
-					.setFileEditorConfiguration(
-							AcideResourceManager
-									.getInstance().getProperty("fileEditorConfiguration"));
-					
-					// Saves the configuration into the file
-					String fileContent = AcideProjectConfiguration.getInstance().save();
-					textFile.save(AcideProjectConfiguration.getInstance().getProjectPath(),
-							fileContent);
+				// Sets the file editor configuration
+				AcideProjectConfiguration.getInstance()
+						.setFileEditorConfiguration(
+								AcideResourceManager.getInstance().getProperty(
+										"fileEditorConfiguration"));
 
-					// The project has not been modified
-					AcideProjectConfiguration.getInstance()
-							.setIsModified(false);
-				}
+				// Saves the configuration into the file
+				String fileContent = AcideProjectConfiguration.getInstance()
+						.save();
+				textFile.save(AcideProjectConfiguration.getInstance()
+						.getProjectPath(), fileContent);
+
+				// The project has not been modified
+				AcideProjectConfiguration.getInstance().setIsModified(false);
 			}
+
 		} catch (Exception exception) {
-			
+
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
 			exception.printStackTrace();

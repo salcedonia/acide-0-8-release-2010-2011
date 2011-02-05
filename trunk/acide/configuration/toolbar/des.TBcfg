@@ -2,7 +2,6 @@
 name = consult
 action = /consult $activeFile$
 hintText = Consults the selected file
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -10,7 +9,6 @@ parameterType = NONE
 name = listing
 action = /listing
 hintText = Lists the contents of the database
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -18,7 +16,6 @@ parameterType = NONE
 name = pdg
 action = /pdg
 hintText = Lists the predicate dependency graph
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -26,7 +23,6 @@ parameterType = NONE
 name = strata
 action = /strata
 hintText = Lists the strata
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -34,7 +30,6 @@ parameterType = NONE
 name = strata
 action = /strata
 hintText = Lists the strata
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -42,7 +37,6 @@ parameterType = NONE
 name = abolish
 action = /abolish
 hintText = Abolish all the database rules
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -50,7 +44,6 @@ parameterType = NONE
 name = list_et
 action = /list_et
 hintText = List the extension table contents
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -58,7 +51,6 @@ parameterType = NONE
 name = clear_et
 action = /clear_et
 hintText = Clear the extension table
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -66,7 +58,6 @@ parameterType = NONE
 name = cd
 action = /cd
 hintText = Sets the current folder to the installation folder
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -74,7 +65,6 @@ parameterType = NONE
 name = ls
 action = /ls
 hintText = Lists the contents of the current folder
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -82,7 +72,6 @@ parameterType = NONE
 name = pwd
 action = /pwd
 hintText = Displays the current folder
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -90,7 +79,6 @@ parameterType = NONE
 name = log
 action = /log
 hintText = Displays the current log, if any
-hasIcon = false
 icon = 
 hasExtraParameter = false
 
@@ -98,7 +86,6 @@ hasExtraParameter = false
 name = nolog
 action = /nolog
 hintText = Disables logging
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -106,7 +93,6 @@ parameterType = NONE
 name = verbose
 action = /verbose
 hintText = Enables verbose output
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -114,7 +100,6 @@ parameterType = NONE
 name = noverbose
 action = /noverbose
 hintText = Disables verbose output
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -122,7 +107,6 @@ parameterType = NONE
 name = version
 action = /version
 hintText = Displays the current system version
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -130,7 +114,6 @@ parameterType = NONE
 name = builtins
 action = /builtins
 hintText = Lists predefined operators
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -138,7 +121,6 @@ parameterType = NONE
 name = help
 action = /help
 hintText = Shows the help
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -146,7 +128,6 @@ parameterType = NONE
 name = exit
 action = /exit
 hintText = Exit the output
-hasIcon = false
 icon = 
 parameterType = NONE
 

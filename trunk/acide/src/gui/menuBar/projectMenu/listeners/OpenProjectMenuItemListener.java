@@ -59,6 +59,7 @@ import gui.mainWindow.MainWindow;
 import gui.menuBar.configurationMenu.menuMenu.gui.AcideMenuConfigurationWindow;
 import gui.menuBar.configurationMenu.toolBarMenu.gui.AcideToolBarConfigurationWindow;
 import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
+import gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
 
 /**
  * ACIDE -A Configurable IDE project menu open project menu item listener.
@@ -222,6 +223,9 @@ public class OpenProjectMenuItemListener implements ActionListener {
 				MainWindow.getInstance().getMenu().getFile().getOpenAllFiles()
 						.setEnabled(true);
 
+				// Enables the save project button in the static tool bar
+				AcideStaticToolBar.getInstance().getSaveProjectButton().setEnabled(true);
+				
 				// Updates the MAIN WINDOW
 				MainWindow.getInstance().validate();
 				MainWindow.getInstance().repaint();

@@ -2,7 +2,6 @@
 name = consult
 action = consult($activeFile$).
 hintText = Consults the selected file
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -10,7 +9,6 @@ parameterType = NONE
 name = listing
 action = listing.
 hintText = Lists the contents of the database
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -18,7 +16,6 @@ parameterType = NONE
 name = shell
 action = shell.
 hintText = Opens an OS shell
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -26,7 +23,6 @@ parameterType = NONE
 name = pwd
 action = working_directory(X,X).
 hintText = Displays the current folder
-hasIcon = false
 icon = 
 parameterType = NONE
 

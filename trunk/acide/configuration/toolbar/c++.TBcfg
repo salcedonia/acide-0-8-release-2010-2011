@@ -2,7 +2,6 @@
 name = show options
 action = bcc32
 hintText = show options
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -10,7 +9,6 @@ parameterType = NONE
 name = compile
 action = bcc32 -tW $activeFile$
 hintText = compile a file
-hasIcon = false
 icon = 
 parameterType = NONE
 

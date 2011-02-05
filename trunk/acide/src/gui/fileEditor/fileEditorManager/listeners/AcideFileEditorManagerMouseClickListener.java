@@ -85,6 +85,7 @@ public class AcideFileEditorManagerMouseClickListener extends MouseAdapter {
 		if (MainWindow.getInstance().getFileEditorManager().getTabbedPane()
 				.getComponentCount() != 0) {
 
+			// Gets the selected editor path
 			String selectedEditorPath = MainWindow.getInstance()
 					.getFileEditorManager().getSelectedFileEditorPanel()
 					.getAbsolutePath();
@@ -129,12 +130,12 @@ public class AcideFileEditorManagerMouseClickListener extends MouseAdapter {
 			// If has path
 			if (selectedEditorPath != null) {
 
-				File f = new File(selectedEditorPath);
+				File file = new File(selectedEditorPath);
 
-				if ((f.lastModified() != MainWindow.getInstance()
+				if ((file.lastModified() != MainWindow.getInstance()
 						.getFileEditorManager().getSelectedFileEditorPanel()
 						.getLastChange())
-						|| (f.length() != MainWindow.getInstance()
+						|| (file.length() != MainWindow.getInstance()
 								.getFileEditorManager()
 								.getSelectedFileEditorPanel().getLastSize())) {
 
@@ -167,19 +168,19 @@ public class AcideFileEditorManagerMouseClickListener extends MouseAdapter {
 								.loadText(newTextFile.load(selectedEditorPath));
 						MainWindow.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel()
-								.setLastChange(f.lastModified());
+								.setLastChange(file.lastModified());
 						MainWindow.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel()
-								.setLastSize(f.length());
+								.setLastSize(file.length());
 					} else {
 						
 						// NO OPTION
 						MainWindow.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel()
-								.setLastChange(f.lastModified());
+								.setLastChange(file.lastModified());
 						MainWindow.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel()
-								.setLastSize(f.length());
+								.setLastSize(file.length());
 					}
 				}
 			}

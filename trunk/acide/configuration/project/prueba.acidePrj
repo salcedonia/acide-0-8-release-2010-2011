@@ -6,48 +6,13 @@ C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\lexicon\des.
 null
 null
 ./configuration/console/configuration.xml
-english
+spanish
 ./configuration/menu/defaultAllOn.menuCfg
-C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\toolbar\des.TBcfg
+C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\toolbar\default.TBcfg
 C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\fileEditor\configuration.xml
-6
-C:\Documents and Settings\Salcedonia\Escritorio\ups.txt
-ups.txt
-prueba
-false
-true
-true
-false
-C:\Documents and Settings\Salcedonia\Escritorio\ds
-ds
-prueba
-false
-true
-false
-false
-C:\Documents and Settings\Salcedonia\Escritorio\sdad
-sdad
-prueba
-false
-false
-false
-false
-C:\Documents and Settings\Salcedonia\Escritorio\aj.txt
-aj.txt
-prueba
-false
-false
-false
-false
-C:\Documents and Settings\Salcedonia\Escritorio\Nuevo Documento de textoasdasdasdasdasdasdasdasdas.txt
-Nuevo Documento de textoasdasdasdasdasdasdasdasdas.txt
-prueba
-false
-false
-false
-false
-C:\Documents and Settings\Salcedonia\Escritorio\p1asdasdasdasdasdasdsdasdasdasdasdasdasdasdasdasdasdasdasd.txt
-p1asdasdasdasdasdasdsdasdasdasdasdasdasdasdasdasdasdasdasd.txt
+1
+C:\Documents and Settings\Salcedonia\Escritorio\as.txt
+as.txt
 prueba
 false
 false

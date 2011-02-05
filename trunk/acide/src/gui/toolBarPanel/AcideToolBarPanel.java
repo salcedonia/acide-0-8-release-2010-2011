@@ -42,6 +42,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ResourceBundle;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -221,11 +222,22 @@ public class AcideToolBarPanel extends JPanel {
 
 		// TOOL BAR SCROLL PANE
 		_toolBarScrollPane = new JScrollPane();
+		
+		// Hides the vertical scroll bar
 		_toolBarScrollPane
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		
+		// Hides the horizontal scroll bar
 		_toolBarScrollPane
 				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		// Sets the tool bar panel as its viewport view 
 		_toolBarScrollPane.setViewportView(_toolBar);
+		
+		// No border
+		_toolBarScrollPane.setBorder(BorderFactory.createEmptyBorder());
+		
+		// Adds the tool bar to the window
 		add(_toolBarScrollPane, BorderLayout.CENTER);
 	}
 

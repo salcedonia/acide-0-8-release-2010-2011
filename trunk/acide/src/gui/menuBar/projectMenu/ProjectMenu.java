@@ -53,7 +53,7 @@ import gui.menuBar.projectMenu.listeners.NewProjectMenuItemListener;
 import gui.menuBar.projectMenu.listeners.OpenProjectMenuItemListener;
 import gui.menuBar.projectMenu.listeners.RemoveFileMenuItemListener;
 import gui.menuBar.projectMenu.listeners.RemoveFolderMenuItemListener;
-import gui.menuBar.projectMenu.listeners.SaveAsProjectMenuItemListener;
+import gui.menuBar.projectMenu.listeners.SaveProjectAsMenuItemListener;
 import gui.menuBar.projectMenu.listeners.SaveProjectMenuItemListener;
 import gui.menuBar.projectMenu.listeners.SetCompilableFileMenuItemListener;
 import gui.menuBar.projectMenu.listeners.SetMainFileMenuItemListener;
@@ -522,7 +522,7 @@ public class ProjectMenu extends JMenu {
 		_saveProject.addActionListener(new SaveProjectMenuItemListener());
 
 		// SAVE AS PROJECT
-		_saveProjectAs.addActionListener(new SaveAsProjectMenuItemListener());
+		_saveProjectAs.addActionListener(new SaveProjectAsMenuItemListener());
 
 		// OPEN PROJECT
 		_openProject.addActionListener(new OpenProjectMenuItemListener());

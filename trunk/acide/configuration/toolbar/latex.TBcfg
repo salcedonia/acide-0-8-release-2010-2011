@@ -2,7 +2,6 @@
 name = LaTeX
 action = latex $mainFileName$\$mainFilePaht$
 hintText = LaTeX Compiler
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -10,7 +9,6 @@ parameterType = NONE
 name = BibTeX
 action = bibtex $mainFileName$
 hintText = BibTeX Bibliography
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -18,7 +16,6 @@ parameterType = NONE
 name = dvi2pdf
 action = dvipdfm $mainFileName$
 hintText = dvi2pdf
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -26,7 +23,6 @@ parameterType = NONE
 name = Yap
 action = yap $mainFilePath$\$mainFileName$
 hintText = Yet Another Previewer
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -34,7 +30,6 @@ parameterType = NONE
 name = TeXify
 action = elatex.bat $mainFileName$
 hintText = LaTex+BibTeX+LaTeX+LaTeX
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -42,7 +37,6 @@ parameterType = NONE
 name = Acrobat
 action = "C:\Archivos de programa\Adobe\Acrobat 7.0\Acrobat\acrobat" $mainFilePath$\$mainFileName$.pdf
 hintText = Acrobat Reader
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -50,7 +44,6 @@ parameterType = NONE
 name = PDFLaTeX
 action = pdflatex $mainFile$
 hintText = dvi2pdf
-hasIcon = false
 icon = 
 parameterType = NONE
 

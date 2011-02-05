@@ -63,13 +63,13 @@ public class AcideFileEditorTextEditionAreaCaretListener implements
 	 */
 	@Override
 	public void caretUpdate(CaretEvent caretEvent) {
-	
+
 		// Gets the language
 		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
+			language.getLanguage(AcideResourceManager.getInstance()
+					.getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -81,33 +81,32 @@ public class AcideFileEditorTextEditionAreaCaretListener implements
 		ResourceBundle labels = language.getLabels();
 
 		// Get selected editor
-		AcideFileEditorPanel selectedEditor = MainWindow.getInstance()
+		final AcideFileEditorPanel selectedEditor = MainWindow.getInstance()
 				.getFileEditorManager().getSelectedFileEditorPanel();
 
-		// If the editor1 is focused
+		// If the first text editor is focused
 		if (selectedEditor.getTextEditionPanelList().get(0).getTextPane()
 				.isFocusOwner())
-
-			// The active editor is the editor1
+			// The active editor is the first text editor
 			selectedEditor.setActiveEditor(0);
-
-		// If the editor2 is focused
+			
+		
+		// If the second editor is focused
 		if (selectedEditor.getTextEditionPanelList().get(1).getTextPane()
 				.isFocusOwner())
-
-			// The active editor is the editor2
+			// The active editor is the second text editor
 			selectedEditor.setActiveEditor(1);
-
+			
 		// Gets the root element
 		Element rootElement = selectedEditor.getStyledDocument()
 				.getDefaultRootElement();
-		
+
 		// Gets the dot
 		int dot = caretEvent.getDot();
-		
+
 		// Gets the line
 		int line = rootElement.getElementIndex(dot);
-		
+
 		// Gets the column
 		int column = dot - rootElement.getElement(line).getStartOffset();
 
@@ -122,31 +121,57 @@ public class AcideFileEditorTextEditionAreaCaretListener implements
 				.setNumberOfLinesMessage(
 						labels.getString("s1001")
 								+ rootElement.getElementCount());
+		
+		// Updates the matching braces
+		updatesMatchingBraces(selectedEditor);
+	}
 
-		// Updates the braces
+	/**
+	 * Updates the matching braces in the text edition area. All the matching
+	 * braces are removed and added afterwards.
+	 * 
+	 * @param selectedEditor
+	 *            current selected text edition area.
+	 */
+	public void updatesMatchingBraces(final AcideFileEditorPanel selectedEditor) {
+
+		// If the first edition text area has a matching brace
+		if (selectedEditor.getTextEditionPanelList().get(0)
+				.getMatchingBracePosition() != -1) {
+
+			// Removes the highlighting of the matching brace
+			selectedEditor.getStyledDocument().removeHighlightBrace(
+					selectedEditor.getTextEditionPanelList().get(0)
+							.getMatchingBracePosition());
+
+			// Sets the matching brace position as -1
+			selectedEditor.getTextEditionPanelList().get(0)
+					.setMatchingBracePosition(-1);
+		}
+
+		// If the second edition text area has a matching brace
+		if (selectedEditor.getTextEditionPanelList().get(1)
+				.getMatchingBracePosition() != -1) {
+
+			// Removes the highlighting of the matching brace
+			selectedEditor.getStyledDocument().removeHighlightBrace(
+					selectedEditor.getTextEditionPanelList().get(1)
+							.getMatchingBracePosition());
+
+			// Sets the matching brace position as -1
+			selectedEditor.getTextEditionPanelList().get(1)
+					.setMatchingBracePosition(-1);
+		}
+
 		try {
-			if (selectedEditor.getTextEditionPanelList().get(0)
-					.getBraceMatcher() != -1) {
-				selectedEditor.getStyledDocument().removeHighlightBrace(
-						selectedEditor.getTextEditionPanelList().get(0)
-								.getBraceMatcher());
-				selectedEditor.getTextEditionPanelList().get(0)
-						.setBraceMatcher(-1);
-			}
-			if (selectedEditor.getTextEditionPanelList().get(1)
-					.getBraceMatcher() != -1) {
-				selectedEditor.getStyledDocument().removeHighlightBrace(
-						selectedEditor.getTextEditionPanelList().get(1)
-								.getBraceMatcher());
-				selectedEditor.getTextEditionPanelList().get(1)
-						.setBraceMatcher(-1);
-			}
 
+			// Gets the selected brace position in the text
 			int start = selectedEditor.getActiveTextEditionArea()
 					.getCaretPosition();
 			int end;
 
-			// Selects the end
+			// Selects the matching end position avoiding to reach out of the
+			// bounds
 			if (start == 0)
 				end = MatchingBraces.findMatchingBracket(selectedEditor
 						.getActiveTextEditionArea().getDocument(), start);
@@ -154,37 +179,52 @@ public class AcideFileEditorTextEditionAreaCaretListener implements
 				end = MatchingBraces.findMatchingBracket(selectedEditor
 						.getActiveTextEditionArea().getDocument(), start - 1);
 
+			// If are inside the bounds
 			if (((start > 0) && (start <= selectedEditor.getStyledDocument()
 					.getLength()))
 					&& ((end >= 0) && (end <= selectedEditor
 							.getStyledDocument().getLength()))) {
 
-				if (end > -1) {
+				if (end != start) {
 
+					// If the matching brace is below the selected brace in
+					// the text
 					if (end > start) {
 
+						// Set the matching brace position in the text
+						// edition area
 						selectedEditor.getTextEditionPanelList().get(0)
-								.setBraceMatcher(start - 1);
+								.setMatchingBracePosition(start - 1);
+						// Set the matching brace position in the text
+						// edition area
 						selectedEditor.getTextEditionPanelList().get(1)
-								.setBraceMatcher(end);
-						selectedEditor.getStyledDocument().addHighlightBrace(
-								selectedEditor.getTextEditionPanelList().get(0)
-										.getBraceMatcher());
-						selectedEditor.getStyledDocument().addHighlightBrace(
-								selectedEditor.getTextEditionPanelList().get(1)
-										.getBraceMatcher());
-					} else if (end < start) {
-						selectedEditor.getTextEditionPanelList().get(0)
-								.setBraceMatcher(end);
-						selectedEditor.getTextEditionPanelList().get(1)
-								.setBraceMatcher(start - 1);
-						selectedEditor.getStyledDocument().addHighlightBrace(
-								selectedEditor.getTextEditionPanelList().get(0)
-										.getBraceMatcher());
-						selectedEditor.getStyledDocument().addHighlightBrace(
-								selectedEditor.getTextEditionPanelList().get(1)
-										.getBraceMatcher());
+								.setMatchingBracePosition(end);
 					}
+					// If the matching brace is above the selected brace in
+					// the text
+					else if (end < start) {
+
+						// Set the matching brace position in the text
+						// edition area
+						selectedEditor.getTextEditionPanelList().get(0)
+								.setMatchingBracePosition(end);
+						// Set the matching brace position in the text
+						// edition area
+						selectedEditor.getTextEditionPanelList().get(1)
+								.setMatchingBracePosition(start - 1);
+					}
+
+					// Highlights the matching brace in the first text
+					// edition panel
+					selectedEditor.getStyledDocument().addHighlightBrace(
+							selectedEditor.getTextEditionPanelList().get(0)
+									.getMatchingBracePosition());
+
+					// Highlights the matching brace in the second text
+					// edition panel
+					selectedEditor.getStyledDocument().addHighlightBrace(
+							selectedEditor.getTextEditionPanelList().get(1)
+									.getMatchingBracePosition());
 				}
 			}
 		} catch (BadLocationException exception) {

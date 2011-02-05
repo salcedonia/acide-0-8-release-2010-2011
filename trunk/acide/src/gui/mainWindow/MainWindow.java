@@ -375,11 +375,11 @@ public class MainWindow extends JFrame {
 	/**
 	 * Sets a new value for the main window projectGUI.
 	 * 
-	 * @param projectGUI
+	 * @param newProjectConfigurationWindow
 	 *            new value to set.
 	 */
-	public void setProjectGUI(AcideNewProjectConfigurationWindow projectGUI) {
-		_newProjectConfigurationWindow = projectGUI;
+	public void setNewProjectConfigurationWindow(AcideNewProjectConfigurationWindow newProjectConfigurationWindow) {
+		_newProjectConfigurationWindow = newProjectConfigurationWindow;
 	}
 
 	/**

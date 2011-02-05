@@ -29,10 +29,10 @@
  */
 package gui.menuBar.configurationMenu.toolBarMenu.listeners;
 
+import gui.menuBar.configurationMenu.toolBarMenu.gui.AcideToolBarConfigurationWindow;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import operations.factory.AcideGUIFactory;
 
 /**																
  * ACIDE - A Configurable IDE tool bar menu modify tool bar listener.										
@@ -48,7 +48,9 @@ public class ModifyToolBarMenuItemListener implements ActionListener{
 	 */
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
-		AcideGUIFactory.getInstance().buildAcideToolBarConfigurationWindow(true);
+		
+		// Creates and displays the window for modifying
+		new AcideToolBarConfigurationWindow(true);
 	}
 }
 

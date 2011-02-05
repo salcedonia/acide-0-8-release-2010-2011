@@ -138,7 +138,7 @@ public class NewProjectMenuItemListener implements ActionListener {
 		if (!cancelOptionSelected)
 			
 			// Shows the project configuration window
-			MainWindow.getInstance().setProjectGUI(
+			MainWindow.getInstance().setNewProjectConfigurationWindow(
 					AcideGUIFactory.getInstance()
 							.buildNewProjectConfigurationWindow());
 	}

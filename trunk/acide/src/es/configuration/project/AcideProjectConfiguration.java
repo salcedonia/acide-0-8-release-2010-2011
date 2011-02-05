@@ -31,7 +31,12 @@ package es.configuration.project;
 
 import es.project.AcideProjectFile;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
+import language.AcideLanguageManager;
 
 import operations.log.AcideLog;
 import resources.AcideResourceManager;
@@ -197,7 +202,7 @@ public class AcideProjectConfiguration {
 			exception.printStackTrace();
 		}
 
-		return project.equals("./configuration/project/default.acidePrj")
+		return project.matches("./configuration/project/default.acidePrj")
 				&& AcideProjectConfiguration.getInstance().getName()
 						.equals("");
 	}
@@ -364,8 +369,26 @@ public class AcideProjectConfiguration {
 			file.setIsDirectory(isDirectory);
 			file.setIsOpened(isOpened);
 			
-			// Adds the file to the list
-			_fileList.add(file);
+			// Checks if exists
+			File externalFile = new File(path);
+			if(externalFile.exists()){
+				
+				// Adds the file to the list
+				_fileList.add(file);
+			}
+			else{
+				
+				// Error message
+				JOptionPane.showMessageDialog(null,
+						AcideLanguageManager.getInstance().getLabels().getString("s970")
+								+ AcideProjectConfiguration.getInstance()
+										.getFileAt(index).getAbsolutePath()
+								+ AcideLanguageManager.getInstance().getLabels().getString("s971"), "Error",
+						JOptionPane.ERROR_MESSAGE);
+				
+				// The configuration has been modified
+				_isModified = true;
+			}
 		}
 	}
 
@@ -511,6 +534,16 @@ public class AcideProjectConfiguration {
 		_fileList.remove(position);
 	}
 
+	/**
+	 * Removes a file from the list which matches with the one given as a parameter.
+	 * 
+	 * @param name
+	 *            file name to be removed.
+	 */
+	public void removeFileAt(String name) {
+		_fileList.remove(name);
+	}
+	
 	/**
 	 * Returns the syntactic configuration.
 	 * 

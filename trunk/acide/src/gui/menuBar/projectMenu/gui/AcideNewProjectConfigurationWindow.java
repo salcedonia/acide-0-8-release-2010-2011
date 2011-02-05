@@ -38,6 +38,7 @@ import es.text.ExtensionFilter;
 import es.text.TextFile;
 import gui.listeners.AcideWindowListener;
 import gui.mainWindow.MainWindow;
+import gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
 
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -80,7 +81,8 @@ import resources.AcideResourceManager;
 public class AcideNewProjectConfigurationWindow extends JFrame {
 
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window class serial version UID.
+	 * ACIDE - A Configurable IDE new project configuration window class serial
+	 * version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
@@ -93,11 +95,13 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 	 */
 	private JPanel _mainPanel;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window language configuration panel.
+	 * ACIDE - A Configurable IDE new project configuration window language
+	 * configuration panel.
 	 */
 	private JPanel _languageConfigurationPanel;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window compiler panel.
+	 * ACIDE - A Configurable IDE new project configuration window compiler
+	 * panel.
 	 */
 	private JPanel _compilerPanel;
 	/**
@@ -105,11 +109,13 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 	 */
 	private JPanel _buttonPanel;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window name text field.
+	 * ACIDE - A Configurable IDE new project configuration window name text
+	 * field.
 	 */
 	private JTextField _nameTextField;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window workspace text field.
+	 * ACIDE - A Configurable IDE new project configuration window workspace
+	 * text field.
 	 */
 	private JTextField _workspaceTextField;
 	/**
@@ -117,84 +123,102 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 	 */
 	private JLabel _nameLabel;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window lexicon configuration label.
+	 * ACIDE - A Configurable IDE new project configuration window lexicon
+	 * configuration label.
 	 */
 	private JLabel _lexiconConfigurationNameLabel;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window grammar configuration label.
+	 * ACIDE - A Configurable IDE new project configuration window grammar
+	 * configuration label.
 	 */
 	private JLabel _grammarConfigurationNameLabel;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window workspace label.
+	 * ACIDE - A Configurable IDE new project configuration window workspace
+	 * label.
 	 */
 	private JLabel _workspaceLabel;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window accept button.
+	 * ACIDE - A Configurable IDE new project configuration window accept
+	 * button.
 	 */
 	private JButton _acceptButton;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window cancel button.
+	 * ACIDE - A Configurable IDE new project configuration window cancel
+	 * button.
 	 */
 	private JButton _cancelButton;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window workspace button.
+	 * ACIDE - A Configurable IDE new project configuration window workspace
+	 * button.
 	 */
 	private JButton _workspaceButton;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window compiler button.
+	 * ACIDE - A Configurable IDE new project configuration window compiler
+	 * button.
 	 */
 	private JButton _compilerButton;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window output button.
+	 * ACIDE - A Configurable IDE new project configuration window output
+	 * button.
 	 */
 	private JButton _outputButton;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window create grammar button.
+	 * ACIDE - A Configurable IDE new project configuration window create
+	 * grammar button.
 	 */
 	private JButton _createGrammarButton;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window load grammar button.
+	 * ACIDE - A Configurable IDE new project configuration window load grammar
+	 * button.
 	 */
 	private JButton _loadGrammarButton;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window create lexicon button.
+	 * ACIDE - A Configurable IDE new project configuration window create
+	 * lexicon button.
 	 */
 	private JButton _createLexiconButton;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window load lexicon button.
+	 * ACIDE - A Configurable IDE new project configuration window load lexicon
+	 * button.
 	 */
 	private JButton _loadLexiconButton;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window lexicon configuration name string.
+	 * ACIDE - A Configurable IDE new project configuration window lexicon
+	 * configuration name string.
 	 */
 	private String _lexiconConfigurationName;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window grammar configuration name string
+	 * ACIDE - A Configurable IDE new project configuration window grammar
+	 * configuration name string
 	 */
 	private String _grammarConfigurationName;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window workspace path string
+	 * ACIDE - A Configurable IDE new project configuration window workspace
+	 * path string
 	 */
 	private String _workspacePath;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window flag that indicates if the compiler paths are defined or not.
+	 * ACIDE - A Configurable IDE new project configuration window flag that
+	 * indicates if the compiler paths are defined or not.
 	 */
 	private boolean _areCompilerPathsDefined;
 	/**
-	 * ACIDE - A Configurable IDE new project configuration window flag that indicates if the shell paths are defined or not.
+	 * ACIDE - A Configurable IDE new project configuration window flag that
+	 * indicates if the shell paths are defined or not.
 	 */
 	private boolean _areShellPathsDefined;
 
 	/**
-	 * Creates a new ACIDE - A Configurable IDE new project configuration window.
+	 * Creates a new ACIDE - A Configurable IDE new project configuration
+	 * window.
 	 */
 	public AcideNewProjectConfigurationWindow() {
 
 		// Gets the language
 		AcideLanguageManager language = AcideLanguageManager.getInstance();
 		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
+			language.getLanguage(AcideResourceManager.getInstance()
+					.getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -338,7 +362,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 			public void actionPerformed(ActionEvent actionEvent) {
 
 				// Gets the language
-				AcideLanguageManager language = AcideLanguageManager.getInstance();
+				AcideLanguageManager language = AcideLanguageManager
+						.getInstance();
 				try {
 					language.getLanguage(AcideResourceManager.getInstance()
 							.getProperty("language"));
@@ -357,7 +382,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 						.getLexicon().getLoadParameters().doClick();
 
 				// Gets the current project lexicon configuration
-				_lexiconConfigurationName = AcideProjectConfiguration.getInstance().getLexiconConfiguration();
+				_lexiconConfigurationName = AcideProjectConfiguration
+						.getInstance().getLexiconConfiguration();
 
 				// Gets the current lexicon configuration name
 				String lexiconConfigurationName = AcideLexiconConfiguration
@@ -382,7 +408,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 			public void actionPerformed(ActionEvent actionEvent) {
 
 				// Gets the language
-				AcideLanguageManager language = AcideLanguageManager.getInstance();
+				AcideLanguageManager language = AcideLanguageManager
+						.getInstance();
 				try {
 					language.getLanguage(AcideResourceManager.getInstance()
 							.getProperty("language"));
@@ -405,7 +432,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 					index = AcideProjectConfiguration.getInstance()
 							.getGrammarConfiguration().lastIndexOf("/");
 
-				String grammarName = AcideProjectConfiguration.getInstance()
+				String grammarName = AcideProjectConfiguration
+						.getInstance()
 						.getGrammarConfiguration()
 						.substring(
 								index + 1,
@@ -431,7 +459,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 			public void actionPerformed(ActionEvent actionEvent) {
 
 				// Gets the language
-				AcideLanguageManager language = AcideLanguageManager.getInstance();
+				AcideLanguageManager language = AcideLanguageManager
+						.getInstance();
 				try {
 					language.getLanguage(AcideResourceManager.getInstance()
 							.getProperty("language"));
@@ -452,7 +481,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 				if (index == -1)
 					index = AcideProjectConfiguration.getInstance()
 							.getGrammarConfiguration().lastIndexOf("/");
-				String grammarName = AcideProjectConfiguration.getInstance()
+				String grammarName = AcideProjectConfiguration
+						.getInstance()
 						.getGrammarConfiguration()
 						.substring(
 								index + 1,
@@ -503,20 +533,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 
-				// Gets the language
-				AcideLanguageManager language = AcideLanguageManager.getInstance();
-				try {
-					language.getLanguage(AcideResourceManager.getInstance()
-							.getProperty("language"));
-				} catch (Exception exception) {
-
-					// Updates the log
-					AcideLog.getLog().error(exception.getMessage());
-					exception.printStackTrace();
-				}
-
 				// Gets the labels
-				ResourceBundle labels = language.getLabels();
+				ResourceBundle labels = AcideLanguageManager.getInstance().getLabels();
 
 				// If the required parameters are set
 				if (!_nameTextField.getText().equals("")
@@ -593,12 +611,12 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 
 						// If the shell paths are not defined
 						if (!_areShellPathsDefined) {
-							
+
 							// Sets the shell path in the configuration
 							// as null
 							AcideConsoleConfiguration.getInstance()
 									.setShellPath(null);
-							
+
 							// Sets the shell directory in the configuration
 							// as null
 							AcideConsoleConfiguration.getInstance()
@@ -609,8 +627,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 									.getShellPath().equals(""))
 								// Sets the shell path in the configuration
 								// as null
-								AcideConsoleConfiguration.getInstance().setShellPath(
-										null);
+								AcideConsoleConfiguration.getInstance()
+										.setShellPath(null);
 
 							if (AcideConsoleConfiguration.getInstance()
 									.getShellDirectory().equals(""))
@@ -621,26 +639,31 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 						}
 
 						// CONSOLE EXIT COMMAND
-						AcideConsoleConfiguration.getInstance().setExitCommand("null");
+						AcideConsoleConfiguration.getInstance().setExitCommand(
+								"null");
 
 						// CONSOLE ECHO COMMAND
-						AcideConsoleConfiguration.getInstance().setEchoCommand(false);
+						AcideConsoleConfiguration.getInstance().setEchoCommand(
+								false);
 
 						// CONSOLE PANEL BACKGROUND COLOR
-						AcideConsoleConfiguration.getInstance().setBackgroundColor(
-								MainWindow.getInstance().getConsolePanel()
-										.getTextPane().getBackground());
+						AcideConsoleConfiguration.getInstance()
+								.setBackgroundColor(
+										MainWindow.getInstance()
+												.getConsolePanel()
+												.getTextPane().getBackground());
 
 						// CONSOLE PANEL FOREGROUND COLOR
-						AcideConsoleConfiguration.getInstance().setForegroundColor(
-								MainWindow.getInstance().getConsolePanel()
-										.getTextPane().getForeground());
+						AcideConsoleConfiguration.getInstance()
+								.setForegroundColor(
+										MainWindow.getInstance()
+												.getConsolePanel()
+												.getTextPane().getForeground());
 
 						// CONSOLE PANEL FONT NAME
 						AcideConsoleConfiguration.getInstance().setFontName(
 								MainWindow.getInstance().getConsolePanel()
-										.getTextPane().getFont()
-										.getFontName());
+										.getTextPane().getFont().getFontName());
 
 						// Parse the font style from int to string
 						String fontStyleString = "";
@@ -665,20 +688,17 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 								fontStyleString);
 
 						// CONSOLE PANEL FONT SIZE
-						AcideConsoleConfiguration.getInstance()
-								.setFontSize(
-										MainWindow.getInstance().getConsolePanel()
-												.getTextPane().getFont()
-												.getSize());
+						AcideConsoleConfiguration.getInstance().setFontSize(
+								MainWindow.getInstance().getConsolePanel()
+										.getTextPane().getFont().getSize());
 
 						// Removes the previous files
-						AcideProjectConfiguration.getInstance()
-								.removeFiles();
-						
+						AcideProjectConfiguration.getInstance().removeFiles();
+
 						// Sets the project name
-						AcideProjectConfiguration.getInstance()
-								.setName(_nameTextField.getText());
-						
+						AcideProjectConfiguration.getInstance().setName(
+								_nameTextField.getText());
+
 						if (_lexiconConfigurationName.equals(labels
 								.getString("s598"))) {
 							try {
@@ -699,8 +719,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 										_lexiconConfigurationName);
 
 						// Is not the first save
-						AcideProjectConfiguration.getInstance()
-								.setFirstSave(false);
+						AcideProjectConfiguration.getInstance().setFirstSave(
+								false);
 
 						// Updates the log
 						AcideLog.getLog().info(
@@ -767,9 +787,10 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 
 								AcideProjectConfiguration.getInstance()
 										.setPath(file);
-								String cad = AcideProjectConfiguration.getInstance().save();
-								projectTextFile.save(AcideProjectConfiguration.getInstance()
-										.getProjectPath(), cad);
+								String cad = AcideProjectConfiguration
+										.getInstance().save();
+								projectTextFile.save(AcideProjectConfiguration
+										.getInstance().getProjectPath(), cad);
 								AcideProjectConfiguration.getInstance()
 										.setFirstSave(true);
 
@@ -781,7 +802,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 								AcideResourceManager.getInstance().setProperty(
 										"defaultPath", file);
 
-								// The project configuration has not been modified yet
+								// The project configuration has not been
+								// modified yet
 								AcideProjectConfiguration.getInstance()
 										.setIsModified(false);
 							}
@@ -821,8 +843,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 										.getInstance().getFileEditorManager()
 										.getFileEditorPanelAt(i)
 										.isCompilableFile());
-								projectFile.setAbsolutePath(MainWindow.getInstance()
-										.getFileEditorManager()
+								projectFile.setAbsolutePath(MainWindow
+										.getInstance().getFileEditorManager()
 										.getFileEditorPanelAt(i)
 										.getAbsolutePath());
 								projectFile.setParent(defaultMutableTreeNode
@@ -858,56 +880,63 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 								.setIsConsolePanelShowed(true);
 
 						// Sets WINDOW WIDTH
-						AcideWindowConfiguration.getInstance()
-								.setWindowWidth(
-										MainWindow.getInstance().getWidth());
-						
+						AcideWindowConfiguration.getInstance().setWindowWidth(
+								MainWindow.getInstance().getWidth());
+
 						// Sets WINDOW HEIGHT
-						AcideWindowConfiguration.getInstance()
-								.setWindowHeight(
-										MainWindow.getInstance().getHeight());
-						
+						AcideWindowConfiguration.getInstance().setWindowHeight(
+								MainWindow.getInstance().getHeight());
+
 						// Sets WINDOW X COORDINATE
-						AcideWindowConfiguration.getInstance()
-								.setXCoordinate(MainWindow.getInstance().getX());
-						
+						AcideWindowConfiguration.getInstance().setXCoordinate(
+								MainWindow.getInstance().getX());
+
 						// Sets WINDOW Y COORDINATE
-						AcideWindowConfiguration.getInstance()
-								.setYCoordinate(MainWindow.getInstance().getY());
-						
+						AcideWindowConfiguration.getInstance().setYCoordinate(
+								MainWindow.getInstance().getY());
+
 						// Sets VERTICAL SPLIT PANE DIVIDER LOCATION
 						AcideWindowConfiguration.getInstance()
 								.setVerticalSplitPaneDividerLocation(
-										MainWindow.getInstance().getExplorerPanel()
-												.getWidth());
-						
+										MainWindow.getInstance()
+												.getExplorerPanel().getWidth());
+
 						// Sets HORIZONTAL SPLIT PANE DIVIDER LOCATION
 						AcideWindowConfiguration.getInstance()
 								.setHorizontalSplitPaneDividerLocation(
-										MainWindow.getInstance().getConsolePanel()
-												.getHeight());
+										MainWindow.getInstance()
+												.getConsolePanel().getHeight());
 
 						// Updates the changes in the MAIN WINDOW
 						MainWindow.getInstance().validate();
-						
+
 						// Repaints the MAIN WINDOW
 						MainWindow.getInstance().repaint();
-						
-						// Enables the add file menu item in the explorer panel popup menu
-						MainWindow.getInstance().getExplorerPanel().getPopupMenu()
-								.getAddFile().setEnabled(true);
-						
-						// Enables the save project menu item in the explorer panel popup menu
-						MainWindow.getInstance().getExplorerPanel().getPopupMenu()
-								.getSaveProject().setEnabled(true);
-						
+
+						// Enables the add file menu item in the explorer panel
+						// popup menu
+						MainWindow.getInstance().getExplorerPanel()
+								.getPopupMenu().getAddFile().setEnabled(true);
+
+						// Enables the save project menu item in the explorer
+						// panel popup menu
+						MainWindow.getInstance().getExplorerPanel()
+								.getPopupMenu().getSaveProject()
+								.setEnabled(true);
+
+						// Enables the save project button in the static tool
+						// bar
+						AcideStaticToolBar.getInstance().getSaveProjectButton()
+								.setEnabled(true);
+
 						// Notifies to the model about the changes
-						MainWindow.getInstance().getExplorerPanel().getTreeModel()
-								.reload();
-						
+						MainWindow.getInstance().getExplorerPanel()
+								.getTreeModel().reload();
+
 						// Expands the explorer tree
-						MainWindow.getInstance().getExplorerPanel().expandTree();
-						
+						MainWindow.getInstance().getExplorerPanel()
+								.expandTree();
+
 						// Enables the MAIN WINDOW
 						MainWindow.getInstance().setEnabled(true);
 
@@ -917,24 +946,27 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 						// If the show explorer panel menu item is not selected
 						if (!MainWindow.getInstance().getMenu().getView()
 								.getShowExplorerPanel().isSelected())
-							
+
 							// Shows the explorer panel
 							MainWindow.getInstance().getExplorerPanel()
 									.showExplorerPanel();
 
-						// Sets the show explorer panel check box menu item as selected
+						// Sets the show explorer panel check box menu item as
+						// selected
 						MainWindow.getInstance().getMenu().getView()
 								.getShowExplorerPanel().setSelected(true);
-						
-						// Sets the show console panel check box menu item as selected
+
+						// Sets the show console panel check box menu item as
+						// selected
 						MainWindow.getInstance().getMenu().getView()
 								.getShowConsolePanel().setSelected(true);
 
 						// Enables the project menu
 						MainWindow.getInstance().getMenu().enableProjectMenu();
-						
+
 						// Enables the open all files menu item
-						MainWindow.getInstance().getMenu().getFile().getOpenAllFiles().setEnabled(true);		
+						MainWindow.getInstance().getMenu().getFile()
+								.getOpenAllFiles().setEnabled(true);
 					}
 				} else {
 
@@ -976,23 +1008,10 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 
-				// Gets the language
-				AcideLanguageManager language = AcideLanguageManager.getInstance();
-				try {
-					language.getLanguage(AcideResourceManager.getInstance()
-							.getProperty("language"));
-				} catch (Exception exception) {
-
-					// Updates the log
-					AcideLog.getLog().error(exception.getMessage());
-					exception.printStackTrace();
-				}
-
-				// Gets the labels
-				ResourceBundle labels = language.getLabels();
-
 				// Updates the log
-				AcideLog.getLog().info(labels.getString("s614"));
+				AcideLog.getLog().info(
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s614"));
 
 				// Enables the main window again
 				MainWindow.getInstance().setEnabled(true);
@@ -1013,7 +1032,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				AcideGUIFactory.getInstance().buildAcideConsoleConfigurationWindow();
+				AcideGUIFactory.getInstance()
+						.buildAcideConsoleConfigurationWindow();
 			}
 		});
 
@@ -1160,8 +1180,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 		String grammarFile = "./configuration/grammars/bytes.jar";
 
 		// Updates the RESOURCE MANAGER
-		AcideResourceManager.getInstance()
-				.setProperty("currentGrammar", grammarFile);
+		AcideResourceManager.getInstance().setProperty("currentGrammar",
+				grammarFile);
 
 		// Updates the log
 		AcideLog.getLog().info(labels.getString("s243") + " " + grammarFile);
@@ -1190,16 +1210,19 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE new project configuration window lexicon configuration name label.
+	 * Returns the ACIDE - A Configurable IDE new project configuration window
+	 * lexicon configuration name label.
 	 * 
-	 * @return the ACIDE - A Configurable IDE new project configuration window lexicon configuration name label.
+	 * @return the ACIDE - A Configurable IDE new project configuration window
+	 *         lexicon configuration name label.
 	 */
 	public JLabel getLexiconConfigurationNameLabel() {
 		return _lexiconConfigurationNameLabel;
 	}
 
 	/**
-	 * Sets a new value to the ACIDE - A Configurable IDE new project configuration window lexicon configuration name label.
+	 * Sets a new value to the ACIDE - A Configurable IDE new project
+	 * configuration window lexicon configuration name label.
 	 * 
 	 * @param lexiconConfigurationLabel
 	 *            new value to set.
@@ -1210,16 +1233,19 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE new project configuration window lexicon configuration name.
+	 * Returns the ACIDE - A Configurable IDE new project configuration window
+	 * lexicon configuration name.
 	 * 
-	 * @return the ACIDE - A Configurable IDE new project configuration window lexicon configuration name.
+	 * @return the ACIDE - A Configurable IDE new project configuration window
+	 *         lexicon configuration name.
 	 */
 	public String getLexiconConfigurationName() {
 		return _lexiconConfigurationName;
 	}
 
 	/**
-	 * Sets a new value to the ACIDE - A Configurable IDE new project configuration window lexicon configuration name.
+	 * Sets a new value to the ACIDE - A Configurable IDE new project
+	 * configuration window lexicon configuration name.
 	 * 
 	 * @param lexiconConfigurationName
 	 *            new value to set.
@@ -1229,25 +1255,30 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE new project configuration window accept button.
+	 * Returns the ACIDE - A Configurable IDE new project configuration window
+	 * accept button.
 	 * 
-	 * @return the ACIDE - A Configurable IDE new project configuration window accept button.
+	 * @return the ACIDE - A Configurable IDE new project configuration window
+	 *         accept button.
 	 */
 	public JButton getAcceptButton() {
 		return _acceptButton;
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE new project configuration window grammar configuration name.
+	 * Returns the ACIDE - A Configurable IDE new project configuration window
+	 * grammar configuration name.
 	 * 
-	 * @return the ACIDE - A Configurable IDE new project configuration window grammar configuration name.
+	 * @return the ACIDE - A Configurable IDE new project configuration window
+	 *         grammar configuration name.
 	 */
 	public String getGrammarConfigurationName() {
 		return _grammarConfigurationName;
 	}
 
 	/**
-	 * Sets a new value to the ACIDE - A Configurable IDE new project configuration window grammar configuration name.
+	 * Sets a new value to the ACIDE - A Configurable IDE new project
+	 * configuration window grammar configuration name.
 	 * 
 	 * @param grammarConfigurationName
 	 *            new value to set.
@@ -1257,7 +1288,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE new project configuration window grammar configuration name label.
+	 * Returns the ACIDE - A Configurable IDE new project configuration window
+	 * grammar configuration name label.
 	 * 
 	 * @return the grammar configuration name label.
 	 */
@@ -1266,7 +1298,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 	}
 
 	/**
-	 * Sets a new value to the ACIDE - A Configurable IDE new project configuration window grammar configuration name label.
+	 * Sets a new value to the ACIDE - A Configurable IDE new project
+	 * configuration window grammar configuration name label.
 	 * 
 	 * @param grammarConfigurationNameLabel
 	 *            new value to set.
@@ -1276,16 +1309,19 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE new project configuration window workspace path.
+	 * Returns the ACIDE - A Configurable IDE new project configuration window
+	 * workspace path.
 	 * 
-	 * @return the ACIDE - A Configurable IDE new project configuration window workspace path.
+	 * @return the ACIDE - A Configurable IDE new project configuration window
+	 *         workspace path.
 	 */
 	public String getWorkspacePath() {
 		return _workspacePath;
 	}
 
 	/**
-	 * Sets a new value to the ACIDE - A Configurable IDE new project configuration window workspace path.
+	 * Sets a new value to the ACIDE - A Configurable IDE new project
+	 * configuration window workspace path.
 	 * 
 	 * @param workspacePath
 	 *            new value to set.
@@ -1295,7 +1331,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 	}
 
 	/**
-	 * Sets a new value to the ACIDE - A Configurable IDE new project configuration window are shell paths defined flag.
+	 * Sets a new value to the ACIDE - A Configurable IDE new project
+	 * configuration window are shell paths defined flag.
 	 * 
 	 * @param areShellPathsDefined
 	 *            new value to set.
@@ -1305,7 +1342,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 	}
 
 	/**
-	 * Sets a new value to the ACIDE - A Configurable IDE new project configuration window are compiler paths defined flag.
+	 * Sets a new value to the ACIDE - A Configurable IDE new project
+	 * configuration window are compiler paths defined flag.
 	 * 
 	 * @param areCompilerPathsDefined
 	 *            new value to set.

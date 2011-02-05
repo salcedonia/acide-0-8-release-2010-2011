@@ -34,7 +34,7 @@ import es.project.AcideProjectFileType;
 import gui.fileEditor.fileEditorManager.listeners.AcideFileEditorManagerChangeListener;
 import gui.fileEditor.fileEditorManager.listeners.AcideFileEditorManagerMouseClickListener;
 import gui.fileEditor.fileEditorManager.utils.gui.DragAndDropTabbedPane;
-import gui.fileEditor.fileEditorManager.utils.logic.testPlaf.TestPlaf;
+import gui.fileEditor.fileEditorManager.utils.logic.UI.AcideFileEditorTabbedPaneUI;
 import gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
 import gui.fileEditor.fileEditorPanel.popup.AcideEditorPopupMenu;
 import gui.mainWindow.MainWindow;
@@ -72,7 +72,7 @@ public class AcideFileEditorManager {
 	 * 
 	 * Handles the painting for the tabbed pane and the closing buttons.
 	 */
-	private TestPlaf _testPlaf;
+	private AcideFileEditorTabbedPaneUI _testPlaf;
 	/**
 	 * ACIDE - A Configurable IDE file editor manager popup menu.
 	 */
@@ -102,7 +102,7 @@ public class AcideFileEditorManager {
 		try {
 
 			_tabbedPane = new DragAndDropTabbedPane();
-			_testPlaf = new TestPlaf();
+			_testPlaf = new AcideFileEditorTabbedPaneUI();
 			_tabbedPane.setUI(_testPlaf);
 			_tabbedPane
 					.addMouseListener(new AcideFileEditorManagerMouseClickListener());
@@ -343,9 +343,9 @@ public class AcideFileEditorManager {
 	 * Returns the ACIDE - A Configurable IDE file editor manager test plaf.
 	 * 
 	 * @return the ACIDE - A Configurable IDE file editor manager test plaf.
-	 * @see TestPlaf
+	 * @see AcideFileEditorTabbedPaneUI
 	 */
-	public TestPlaf getTestPlaf() {
+	public AcideFileEditorTabbedPaneUI getTestPlaf() {
 		return _testPlaf;
 	}
 

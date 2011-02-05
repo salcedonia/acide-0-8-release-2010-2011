@@ -2,15 +2,13 @@
 name = dir
 action = dir
 hintText = Directory Listing
-hasIcon = false
 icon = 
-parameterType = NONE
+parameterType = TEXT
 
 // Command pwd
 name = pwd
 action = cd
 hintText = Current Directory
-hasIcon = false
 icon = 
 parameterType = NONE
 
@@ -18,7 +16,6 @@ parameterType = NONE
 name = type
 action = type $activeFile$
 hintText = Type Current File
-hasIcon = false
 icon = 
 parameterType = NONE
 

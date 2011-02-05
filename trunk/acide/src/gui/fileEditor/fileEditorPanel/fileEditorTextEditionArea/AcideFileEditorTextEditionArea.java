@@ -4,11 +4,9 @@ import gui.fileEditor.fileEditorManager.utils.gui.LineNumberComponent;
 import gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
 import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorTextEditionAreaAdjustmentListener;
 import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorTextEditionAreaCaretListener;
-import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorTextEditionAreaKeyboardListener;
 import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorTextEditionAreaMouseClickListener;
 import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorTextEditionAreaMouseDoubleClickListener;
 import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.AcideCaret;
-import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.LinePainter;
 import gui.fileEditor.fileEditorPanel.listeners.AcideFileEditorPanelDocumentListener;
 import gui.fileEditor.fileEditorPanel.popup.AcideEditorPanelPopupMenuListener;
 import gui.listeners.AcideKeyboardListener;
@@ -58,9 +56,9 @@ public class AcideFileEditorTextEditionArea {
 	 */
 	private LineNumberComponent _lineNumberPanel;
 	/**
-	 * ACIDE - A Configurable IDE text edition area brace matcher.
+	 * ACIDE - A Configurable IDE text edition area matching brace position.
 	 */
-	private int _braceMatcher;
+	private int _matchingBracePosition;
 	/**
 	 * ACIDE - A Configurable IDE text edition area mouse click listener.
 	 */
@@ -77,7 +75,7 @@ public class AcideFileEditorTextEditionArea {
 	 * ACIDE - A Configurable IDE text edition area adjustment listener.
 	 */
 	private AcideFileEditorTextEditionAreaAdjustmentListener _adjustmentListener;
-
+	
 	/**
 	 * Creates a new text edition area.
 	 * 
@@ -86,7 +84,7 @@ public class AcideFileEditorTextEditionArea {
 	 */
 	public AcideFileEditorTextEditionArea(AcideStyledDocument syntaxDocument) {
 
-		_braceMatcher = -1;
+		_matchingBracePosition = -1;
 		_verticalValue = 0;
 		_horizontalValue = 0;
 
@@ -99,14 +97,9 @@ public class AcideFileEditorTextEditionArea {
 		_textPane.setCaret(caret);
 
 		// Sets the listeners
-		_textPane
-				.addKeyListener(new AcideFileEditorTextEditionAreaKeyboardListener());
 		_textPane.addMouseListener(new AcideEditorPanelPopupMenuListener());
 		_textPane
 				.addMouseListener(new AcideFileEditorTextEditionAreaMouseDoubleClickListener());
-
-		// Paint the lines which contains the caret
-		new LinePainter(_textPane);
 		
 		_scrollPane = new JScrollPane(_textPane);
 
@@ -206,22 +199,22 @@ public class AcideFileEditorTextEditionArea {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE text edition area brace matcher.
+	 * Returns the ACIDE - A Configurable IDE text edition area matching brace position.
 	 * 
-	 * @return the ACIDE - A Configurable IDE text edition area brace matcher.
+	 * @return the ACIDE - A Configurable IDE text edition area matching brace position.
 	 */
-	public int getBraceMatcher() {
-		return _braceMatcher;
+	public int getMatchingBracePosition() {
+		return _matchingBracePosition;
 	}
 
 	/**
-	 * Sets a new value to the text edition area brace matcher.
+	 * Sets a new value to the text edition area matching brace position.
 	 * 
-	 * @param braceMatcher
+	 * @param matchingBracePosition
 	 *            new value to set.
 	 */
-	public void setBraceMatcher(int braceMatcher) {
-		_braceMatcher = braceMatcher;
+	public void setMatchingBracePosition(int matchingBracePosition) {
+		_matchingBracePosition = matchingBracePosition;
 	}
 
 	/**
