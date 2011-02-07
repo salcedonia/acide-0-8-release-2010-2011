@@ -36,12 +36,10 @@ import gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
 import language.AcideLanguageManager;
-import operations.log.AcideLog;
 import resources.AcideResourceManager;
 
 /**
@@ -62,22 +60,6 @@ public class CloseProjecMenuItemtListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		boolean isCancelOptionSelected = false;
 
 		// If the project has been modified
@@ -85,7 +67,7 @@ public class CloseProjecMenuItemtListener implements ActionListener {
 
 			// Do you want to save it?
 			int chosenOption = JOptionPane.showConfirmDialog(null,
-					labels.getString("s657"), labels.getString("s953"),
+					AcideLanguageManager.getInstance().getLabels().getString("s657"), AcideLanguageManager.getInstance().getLabels().getString("s953"),
 					JOptionPane.YES_NO_CANCEL_OPTION);
 
 			// If OK
@@ -133,7 +115,7 @@ public class CloseProjecMenuItemtListener implements ActionListener {
 
 			// Sets the default title to the project
 			MainWindow.getInstance().setTitle(
-					labels.getString("s425") + " - <empty>");
+					AcideLanguageManager.getInstance().getLabels().getString("s425") + " - <empty>");
 
 			// Removes all the files related to the project
 			AcideProjectConfiguration.getInstance().removeFiles();

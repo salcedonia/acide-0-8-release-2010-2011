@@ -69,17 +69,17 @@ public class CompileMenuItemListener implements ActionListener {
 
 				String fileToCompile = "";
 
-				for (int i = 0; i < AcideProjectConfiguration.getInstance()
-						.getNumberOfFilesFromList(); i++) {
+				for (int index = 0; index < AcideProjectConfiguration.getInstance()
+						.getNumberOfFilesFromList(); index++) {
 					
 					// IS COMPILABLE?
-					if (AcideProjectConfiguration.getInstance().getFileAt(i)
+					if (AcideProjectConfiguration.getInstance().getFileAt(index)
 							.isCompilableFile()){
 					
 						fileToCompile = fileToCompile
 								+ "\""
 								+ AcideProjectConfiguration.getInstance()
-										.getFileAt(i).getAbsolutePath()
+										.getFileAt(index).getAbsolutePath()
 								+ "\""
 								+ AcideProjectConfiguration.getInstance()
 										.getSeparatorFile();
@@ -108,10 +108,10 @@ public class CompileMenuItemListener implements ActionListener {
 				String extension = AcideProjectConfiguration.getInstance()
 						.getFileExtension();
 				
-				for (int i = 0; i < AcideProjectConfiguration.getInstance()
-						.getNumberOfFilesFromList(); i++) {
+				for (int index = 0; index < AcideProjectConfiguration.getInstance()
+						.getNumberOfFilesFromList(); index++) {
 					
-					AcideProjectFile file = AcideProjectConfiguration.getInstance().getFileAt(i);
+					AcideProjectFile file = AcideProjectConfiguration.getInstance().getFileAt(index);
 					
 					// Is not a directory
 					if (!file.isDirectory()) {

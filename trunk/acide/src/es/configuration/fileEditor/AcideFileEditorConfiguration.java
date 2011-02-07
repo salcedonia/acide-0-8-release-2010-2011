@@ -34,8 +34,6 @@ import gui.mainWindow.MainWindow;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.ResourceBundle;
-
 import language.AcideLanguageManager;
 
 import com.thoughtworks.xstream.XStream;
@@ -180,25 +178,8 @@ public class AcideFileEditorConfiguration {
 
 			} catch (Exception exception) {
 
-				// Gets the language
-				AcideLanguageManager language = AcideLanguageManager
-						.getInstance();
-
-				try {
-					language.getLanguage(AcideResourceManager.getInstance()
-							.getProperty("language"));
-				} catch (Exception exception2) {
-
-					// Updates the log
-					AcideLog.getLog().error(exception2.getMessage());
-					exception2.printStackTrace();
-				}
-
-				// Gets the labels
-				ResourceBundle labels = language.getLabels();
-
 				// Updates the log
-				AcideLog.getLog().info(labels.getString("s990"));
+				AcideLog.getLog().info(AcideLanguageManager.getInstance().getLabels().getString("s990"));
 				exception.printStackTrace();
 
 				// Updates the RESOURCE MANAGER

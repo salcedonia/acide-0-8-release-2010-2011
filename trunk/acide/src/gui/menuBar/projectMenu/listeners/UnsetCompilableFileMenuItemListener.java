@@ -39,11 +39,11 @@ import java.awt.event.ActionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-/**																
- * ACIDE -A Configurable IDE project menu unset compilable menu item listener.											
- *					
- * @version 0.8	
- * @see ActionListener																													
+/**
+ * ACIDE -A Configurable IDE project menu unset compilable menu item listener.
+ * 
+ * @version 0.8
+ * @see ActionListener
  */
 public class UnsetCompilableFileMenuItemListener implements ActionListener {
 
@@ -58,47 +58,72 @@ public class UnsetCompilableFileMenuItemListener implements ActionListener {
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		// Gets the selection in the explorer tree
-		TreePath explorerSelection = MainWindow.getInstance().getExplorerPanel().getTree()
-				.getSelectionPath();
+		TreePath currentSelection = MainWindow.getInstance().getExplorerPanel()
+				.getTree().getSelectionPath();
 
-		DefaultMutableTreeNode selectedNode;
-		AcideProjectFile projectFile;
+		// Current node
+		DefaultMutableTreeNode currentNode;
+
+		// Current project file
+		AcideProjectFile currentProjectFile;
 
 		// If something is selected
-		if (explorerSelection != null) {
+		if (currentSelection != null) {
 
 			// Gets the selected node in the explorer
-			selectedNode = (DefaultMutableTreeNode) explorerSelection.getLastPathComponent();
-			
-			// Transforms it into a project file
-			projectFile = (AcideProjectFile) selectedNode.getUserObject();
+			currentNode = (DefaultMutableTreeNode) currentSelection
+					.getLastPathComponent();
+
+			// Gets the current project file from the current node info
+			currentProjectFile = (AcideProjectFile) currentNode.getUserObject();
 
 			// If is COMPILABLE and not MAIN FILE
-			if (projectFile.isCompilableFile()
-					&& !projectFile.isMainFile()) {
+			if (currentProjectFile.isCompilableFile()
+					&& !currentProjectFile.isMainFile()) {
 
 				// If it is a file and not a directory
-				if (!projectFile.isDirectory()) {
+				if (!currentProjectFile.isDirectory()) {
 
 					// The file is not COMPILABLE FILE
-					projectFile.setIsCompilableFile(false);
+					currentProjectFile.setIsCompilableFile(false);
 
 					// The project has been modified
-					AcideProjectConfiguration.getInstance()
-							.setIsModified(true);
+					AcideProjectConfiguration.getInstance().setIsModified(true);
 
-					// Updates the status message in the status bar
-					MainWindow.getInstance().getStatusBar().setStatusMessage(
-							projectFile.getAbsolutePath());
-
-					// Quits the icon in the editor
+					// Updates the file editor
 					for (int index = 0; index < MainWindow.getInstance()
-							.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
+							.getFileEditorManager()
+							.getNumberOfFileEditorPanels(); index++) {
 						if (MainWindow.getInstance().getFileEditorManager()
-								.getFileEditorPanelAt(index).getAbsolutePath().equals(
-										projectFile.getAbsolutePath())) {
+								.getFileEditorPanelAt(index).getAbsolutePath()
+								.equals(currentProjectFile.getAbsolutePath())) {
+
+							// Updates the file editor configuration
+							MainWindow.getInstance().getFileEditorManager()
+									.getFileEditorPanelAt(index)
+									.setCompilableFile(false);
+							MainWindow.getInstance().getFileEditorManager()
+									.getFileEditorPanelAt(index)
+									.setMainFile(false);
+
+							// Updates the file editor panel image icon
+							MainWindow.getInstance().getFileEditorManager()
+									.getFileEditorPanelAt(index).setIcon(null);
+
+							// Sets the icon in the file editor tab
 							MainWindow.getInstance().getFileEditorManager()
 									.getTabbedPane().setIconAt(index, null);
+
+							// Updates the status message in the status bar
+							MainWindow
+									.getInstance()
+									.getStatusBar()
+									.setStatusMessage(
+											MainWindow
+													.getInstance()
+													.getFileEditorManager()
+													.getFileEditorPanelAt(index)
+													.getAbsolutePath());
 						}
 					}
 				}
@@ -106,8 +131,7 @@ public class UnsetCompilableFileMenuItemListener implements ActionListener {
 		} else {
 
 			// Default project
-			if (AcideProjectConfiguration.getInstance()
-					.isDefaultProject())
+			if (AcideProjectConfiguration.getInstance().isDefaultProject())
 
 				// If there are opened editors
 				if (MainWindow.getInstance().getFileEditorManager()

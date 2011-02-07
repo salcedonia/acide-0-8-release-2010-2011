@@ -309,8 +309,8 @@ public class AcideWorkbenchManager {
 
 					// Error message
 					JOptionPane.showMessageDialog(null,
-							labels.getString("s970") + file.getAbsolutePath()
-									+ labels.getString("s971"), "Warning",
+							labels.getString("s1020") + file.getAbsolutePath()
+									+ labels.getString("s1021"), "Warning",
 							JOptionPane.WARNING_MESSAGE);
 
 					// The project configuration has been modified
@@ -803,28 +803,28 @@ public class AcideWorkbenchManager {
 				AcideProjectConfiguration.getInstance().removeFiles();
 
 				// Sets the all opened files in the editor
-				for (int pos = 0; pos < MainWindow.getInstance()
-						.getFileEditorManager().getNumberOfFileEditorPanels(); pos++) {
+				for (int index = 0; index < MainWindow.getInstance()
+						.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
 
 					// Creates the file
 					AcideProjectFile explorerFile = new AcideProjectFile();
 					explorerFile.setAbsolutePath(MainWindow.getInstance()
-							.getFileEditorManager().getFileEditorPanelAt(pos)
+							.getFileEditorManager().getFileEditorPanelAt(index)
 							.getAbsolutePath());
 
 					// Sets if it is compilable file
 					explorerFile.setIsCompilableFile(MainWindow.getInstance()
-							.getFileEditorManager().getFileEditorPanelAt(pos)
+							.getFileEditorManager().getFileEditorPanelAt(index)
 							.isCompilableFile());
 
 					// Sets if it is main file
 					explorerFile.setIsMainFile(MainWindow.getInstance()
-							.getFileEditorManager().getFileEditorPanelAt(pos)
+							.getFileEditorManager().getFileEditorPanelAt(index)
 							.isMainFile());
 
 					// Sets the name
 					explorerFile.setName(MainWindow.getInstance()
-							.getFileEditorManager().getFileEditorPanelAt(pos)
+							.getFileEditorManager().getFileEditorPanelAt(index)
 							.getName());
 
 					// Is a not a directory

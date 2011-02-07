@@ -5,10 +5,15 @@
         <operations.fileEditor.FileEditorPanelConfiguration>
           <__path>C:\Documents and Settings\Salcedonia\Escritorio\as.txt</__path>
           <__type>Normal</__type>
-          <__caretPosition>77</__caretPosition>
+          <__caretPosition>0</__caretPosition>
+        </operations.fileEditor.FileEditorPanelConfiguration>
+        <operations.fileEditor.FileEditorPanelConfiguration>
+          <__path>C:\Documents and Settings\Salcedonia\Escritorio\file1.txt</__path>
+          <__type>Main</__type>
+          <__caretPosition>0</__caretPosition>
         </operations.fileEditor.FileEditorPanelConfiguration>
       </__list>
     </__list>
   </__fileEditorPanelConfigurationList>
-  <__selectedFileEditorPanelIndex>0</__selectedFileEditorPanelIndex>
+  <__selectedFileEditorPanelIndex>1</__selectedFileEditorPanelIndex>
 </es.configuration.fileEditor.AcideFileEditorConfiguration>

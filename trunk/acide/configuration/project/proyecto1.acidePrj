@@ -10,7 +10,7 @@ english
 ./configuration/menu/defaultAllOn.menuCfg
 C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\toolbar\default.TBcfg
 C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\fileEditor\configuration.xml
-4
+3
 C:\Documents and Settings\Salcedonia\Escritorio\as.txt
 as.txt
 proyecto1
@@ -25,17 +25,10 @@ true
 false
 false
 false
-folder2
-folder2
+C:\Documents and Settings\Salcedonia\Escritorio\file1.txt
+file1.txt
 folder1
+false
 true
-false
-false
-false
-folder3
-folder3
-folder2
 true
-false
-false
-false
+true

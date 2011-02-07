@@ -34,7 +34,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -69,36 +68,6 @@ import gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
  */
 public class OpenProjectMenuItemListener implements ActionListener {
 
-	/**
-	 * Search a file into a list of files.
-	 * 
-	 * @param list
-	 *            list of files.
-	 * @param fileName
-	 *            file name to search for.
-	 * 
-	 * @return the node of the tree if exists.
-	 */
-	private DefaultMutableTreeNode searchDirectoryList(
-			ArrayList<DefaultMutableTreeNode> list, String fileName) {
-
-		int pos = 0;
-		boolean found = false;
-
-		while (pos < list.size() && !found) {
-
-			DefaultMutableTreeNode temp = list.get(pos);
-			AcideProjectFile projectFile = (AcideProjectFile) temp.getUserObject();
-
-			if (projectFile.getName().equals(fileName)) {
-				found = true;
-				return (DefaultMutableTreeNode) list.get(pos);
-			} else
-				pos++;
-		}
-		return null;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -109,22 +78,6 @@ public class OpenProjectMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		AcideTextFile textFile = AcideIOFactory.getInstance().buildFile();
 
 		boolean cancelOptionSelected = false;
@@ -132,7 +85,8 @@ public class OpenProjectMenuItemListener implements ActionListener {
 		// Selects the extension for the project
 		String[] ExtPide = new String[] { "acidePrj" };
 		textFile.getFileChooser().addChoosableFileFilter(
-				new ExtensionFilter(ExtPide, labels.getString("s328")));
+				new ExtensionFilter(ExtPide, AcideLanguageManager.getInstance()
+						.getLabels().getString("s328")));
 		final String file;
 		file = textFile.askAbsolutePath();
 
@@ -144,7 +98,9 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 				// Do you want to save it?
 				int chosenOption = JOptionPane.showConfirmDialog(null,
-						labels.getString("s657"), labels.getString("s953"),
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s657"), AcideLanguageManager
+								.getInstance().getLabels().getString("s953"),
 						JOptionPane.YES_NO_CANCEL_OPTION);
 
 				// If OK
@@ -168,53 +124,51 @@ public class OpenProjectMenuItemListener implements ActionListener {
 				MainWindow.getInstance().setCursor(
 						Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-				// Updates the status bar
+				// Updates the status message in the status bar
 				MainWindow.getInstance().getStatusBar().setStatusMessage(" ");
 
 				// Closes the previous project configuration
-				closePreviousProjectConfiguration(labels);
+				closePreviousProjectConfiguration();
 
 				// Loads the file editor configuration
 				loadNewProjectConfiguration(file);
 
 				// Loads the language
-				loadLanguage(labels);
+				loadLanguage();
 
 				// Loads the main window configuration
 				loadMainWindowConfiguration();
 
 				// Loads the menu configuration
-				loadMenuConfiguration(labels);
+				loadMenuConfiguration();
 
 				// Loads the grammar configuration
-				loadGrammarConfiguration(labels);
+				loadGrammarConfiguration();
 
-				// Loads the shell configuration
-				loadShellConfiguration();
+				// Loads the console configuration
+				loadConsoleConfiguration();
 
 				// Loads the tool bar configuration
-				loadToolBarConfiguration(labels);
+				loadToolBarConfiguration();
 
 				// Loads the explorer configuration
-				loadExplorerConfiguration(labels);
+				loadExplorerConfiguration();
 
 				// Enables the show explorer panel menu item
 				MainWindow.getInstance().getMenu().getView()
 						.getShowExplorerPanel().setSelected(true);
 
 				// Loads the file editor configuration
-				loadFileEditorConfiguration(labels);
+				loadFileEditorConfiguration();
 
 				// Loads the lexicon configuration
-				loadLexiconConfiguration(labels);
+				loadLexiconConfiguration();
 
 				// The project has not been modified
-				AcideProjectConfiguration.getInstance()
-						.setIsModified(false);
+				AcideProjectConfiguration.getInstance().setIsModified(false);
 
 				// This is the first time that it is saved
-				AcideProjectConfiguration.getInstance()
-						.setFirstSave(true);
+				AcideProjectConfiguration.getInstance().setFirstSave(true);
 
 				// Enables the project menu
 				MainWindow.getInstance().getMenu().enableProjectMenu();
@@ -224,10 +178,13 @@ public class OpenProjectMenuItemListener implements ActionListener {
 						.setEnabled(true);
 
 				// Enables the save project button in the static tool bar
-				AcideStaticToolBar.getInstance().getSaveProjectButton().setEnabled(true);
-				
-				// Updates the MAIN WINDOW
+				AcideStaticToolBar.getInstance().getSaveProjectButton()
+						.setEnabled(true);
+
+				// Validates the changes in the main window
 				MainWindow.getInstance().validate();
+
+				// Repaints the main window
 				MainWindow.getInstance().repaint();
 
 				// Sets the default cursor
@@ -239,11 +196,8 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 	/**
 	 * Loads the project explorer configuration.
-	 * 
-	 * @param labels
-	 *            labels to display in the selected language.
 	 */
-	public void loadExplorerConfiguration(ResourceBundle labels) {
+	public void loadExplorerConfiguration() {
 
 		// Removes all the nodes in the tree
 		MainWindow.getInstance().getExplorerPanel().getRoot()
@@ -251,54 +205,55 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 		// Creates the folder with the name of the project
 		AcideProjectFile projectFile = new AcideProjectFile();
-		
+
 		// Sets the absolute path
 		projectFile.setAbsolutePath(AcideProjectConfiguration.getInstance()
 				.getName());
-		
+
 		// Sets the name
-		projectFile.setName(AcideProjectConfiguration.getInstance()
-				.getName());
-		
+		projectFile.setName(AcideProjectConfiguration.getInstance().getName());
+
 		// It is directory
 		projectFile.setIsDirectory(true);
-		
+
 		// It has no parent
 		projectFile.setParent(null);
-		
-		// Sets the Main Window title
+
+		// Sets the main window title
 		MainWindow.getInstance().setTitle(
-				labels.getString("s425")
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s425")
 						+ " - "
-						+ AcideProjectConfiguration.getInstance()
-								.getName());
+						+ AcideProjectConfiguration.getInstance().getName());
 
 		// Creates the explorer tree with the project as the root of it
 		DefaultMutableTreeNode explorerTree = new DefaultMutableTreeNode(
 				projectFile);
-		
+
 		// Allows children
 		explorerTree.setAllowsChildren(true);
-		
+
 		// Adds the root node to the tree
 		MainWindow.getInstance().getExplorerPanel().getRoot().add(explorerTree);
-		
+
 		// Creates the directory list
 		ArrayList<DefaultMutableTreeNode> directoryList = new ArrayList<DefaultMutableTreeNode>();
 
 		// Adds the associated project files to the explorer
-		for (int index = 0; index < AcideProjectConfiguration.getInstance().getNumberOfFilesFromList(); index++) {
+		for (int index = 0; index < AcideProjectConfiguration.getInstance()
+				.getNumberOfFilesFromList(); index++) {
 
 			// Gets the file from the project configuration
-			DefaultMutableTreeNode file = new DefaultMutableTreeNode(AcideProjectConfiguration.getInstance().getFileAt(index));
+			DefaultMutableTreeNode file = new DefaultMutableTreeNode(
+					AcideProjectConfiguration.getInstance().getFileAt(index));
 
 			// If it is directory
-			if (AcideProjectConfiguration.getInstance()
-					.getFileAt(index).isDirectory()) {
+			if (AcideProjectConfiguration.getInstance().getFileAt(index)
+					.isDirectory()) {
 
 				// It can have files inside
 				file.setAllowsChildren(true);
-				
+
 				// Adds the file
 				directoryList.add(file);
 			} else
@@ -306,19 +261,21 @@ public class OpenProjectMenuItemListener implements ActionListener {
 				file.setAllowsChildren(false);
 
 			// If the file is in the same folder than the project folder
-			if (AcideProjectConfiguration.getInstance()
-					.getFileAt(index)
+			if (AcideProjectConfiguration.getInstance().getFileAt(index)
 					.getParent()
-					.equals(AcideProjectConfiguration.getInstance()
-							.getName())) {
+					.equals(AcideProjectConfiguration.getInstance().getName())) {
 				// Adds the file
 				explorerTree.add(file);
 			} else {
 
 				// Searches for it in the tree structure
-				DefaultMutableTreeNode fileAux = searchDirectoryList(directoryList,
-						AcideProjectConfiguration.getInstance()
-								.getFileAt(index).getParent());
+				DefaultMutableTreeNode fileAux = MainWindow
+						.getInstance()
+						.getExplorerPanel()
+						.searchDirectoryList(
+								directoryList,
+								AcideProjectConfiguration.getInstance()
+										.getFileAt(index).getParent());
 
 				// Adds the file
 				fileAux.add(file);
@@ -327,13 +284,12 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 		// Updates the explorer tree
 		MainWindow.getInstance().getExplorerPanel().getTreeModel().reload();
-		
+
 		// Repaints the explorer tree
 		MainWindow.getInstance().getExplorerPanel().expandTree();
 
 		// If there are files associated to the project
-		if (AcideProjectConfiguration.getInstance()
-				.getNumberOfFilesFromList() > 0) {
+		if (AcideProjectConfiguration.getInstance().getNumberOfFilesFromList() > 0) {
 
 			// Enables the remove file menu item
 			MainWindow.getInstance().getExplorerPanel().getPopupMenu()
@@ -355,7 +311,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 		// Updates the main window
 		MainWindow.getInstance().validate();
-		
+
 		// Repaints the main window
 		MainWindow.getInstance().repaint();
 
@@ -368,14 +324,12 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 	/**
 	 * Loads the project language.
-	 * 
-	 * @param labels
-	 *            labels to display in the selected language.
 	 */
-	public void loadLanguage(ResourceBundle labels) {
+	public void loadLanguage() {
 
 		// Gets the language configuration
-		String configurationLanguage = AcideProjectConfiguration.getInstance().getLanguage();
+		String configurationLanguage = AcideProjectConfiguration.getInstance()
+				.getLanguage();
 
 		// SPANISH
 		if (configurationLanguage.equals("spanish"))
@@ -388,30 +342,31 @@ public class OpenProjectMenuItemListener implements ActionListener {
 					.getEnglish().doClick();
 
 		// Updates the status bar
-		MainWindow.getInstance().getStatusBar()
-				.setLexiconMessage(labels.getString("s449") + " ");
+		MainWindow
+				.getInstance()
+				.getStatusBar()
+				.setLexiconMessage(
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s449")
+								+ " ");
 	}
 
 	/**
 	 * Loads the project menu configuration.
-	 * 
-	 * @param labels
-	 *            labels to display in the selected language.
 	 */
-	public void loadMenuConfiguration(ResourceBundle labels) {
+	public void loadMenuConfiguration() {
 
 		String currentMenu = null;
 
 		try {
 
 			// Gets the menu configuration file path
-			currentMenu = AcideProjectConfiguration.getInstance()
-					.getMenu();
+			currentMenu = AcideProjectConfiguration.getInstance().getMenu();
 
 			// Loads the new menu item list
 			AcideMenuConfiguration.getInstance().setMenuElementList(
-					AcideMenuConfiguration.getInstance().loadMenuConfigurationFile(
-							currentMenu));
+					AcideMenuConfiguration.getInstance()
+							.loadMenuConfigurationFile(currentMenu));
 
 			// Updates the RESOURCE MANAGER
 			AcideResourceManager.getInstance().setProperty(
@@ -442,10 +397,11 @@ public class OpenProjectMenuItemListener implements ActionListener {
 						"currentMenuConfiguration", currentMenu2);
 
 				// Error message
-				JOptionPane
-						.showMessageDialog(null, labels.getString("s956")
-								+ currentMenu + labels.getString("s957")
-								+ currentMenu2);
+				JOptionPane.showMessageDialog(null, AcideLanguageManager
+						.getInstance().getLabels().getString("s956")
+						+ currentMenu
+						+ AcideLanguageManager.getInstance().getLabels()
+								.getString("s957") + currentMenu2);
 
 			} catch (Exception exception1) {
 
@@ -468,8 +424,11 @@ public class OpenProjectMenuItemListener implements ActionListener {
 						"./configuration/menu/defaultAllOn.menuCfg");
 
 				// Error message
-				JOptionPane.showMessageDialog(null, labels.getString("s956")
-						+ currentMenu + labels.getString("s959"));
+				JOptionPane.showMessageDialog(null, AcideLanguageManager
+						.getInstance().getLabels().getString("s956")
+						+ currentMenu
+						+ AcideLanguageManager.getInstance().getLabels()
+								.getString("s959"));
 
 				// Updates the log
 				AcideLog.getLog().error(exception1.getMessage());
@@ -494,16 +453,14 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 	/**
 	 * Loads the project grammar configuration.
-	 * 
-	 * @param labels
-	 *            labels to display in the selected language.
 	 */
-	public void loadGrammarConfiguration(ResourceBundle labels) {
+	public void loadGrammarConfiguration() {
 
 		try {
 
 			// Gets the grammar configuration
-			String currentGrammar = AcideProjectConfiguration.getInstance().getGrammarConfiguration();
+			String currentGrammar = AcideProjectConfiguration.getInstance()
+					.getGrammarConfiguration();
 
 			// Gets the grammar name
 			int index = currentGrammar.lastIndexOf("\\");
@@ -517,7 +474,9 @@ public class OpenProjectMenuItemListener implements ActionListener {
 					.getInstance()
 					.getStatusBar()
 					.setGrammarMessage(
-							labels.getString("s248") + " " + grammarName);
+							AcideLanguageManager.getInstance().getLabels()
+									.getString("s248")
+									+ " " + grammarName);
 
 			// Updates the RESOURCE MANAGER
 			AcideResourceManager.getInstance().setProperty("currentGrammar",
@@ -525,8 +484,11 @@ public class OpenProjectMenuItemListener implements ActionListener {
 		} catch (Exception exception) {
 
 			// Error message
-			JOptionPane.showMessageDialog(null, exception.getMessage(),
-					labels.getString("s944"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(
+					null,
+					exception.getMessage(),
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s944"), JOptionPane.ERROR_MESSAGE);
 
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
@@ -537,7 +499,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 	/**
 	 * Loads the project shell configuration.
 	 */
-	public void loadShellConfiguration() {
+	public void loadConsoleConfiguration() {
 
 		// Gets the output configuration
 		AcideConsoleConfiguration.getInstance().load(
@@ -555,11 +517,8 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 	/**
 	 * Loads the project tool bar configuration.
-	 * 
-	 * @param labels
-	 *            labels to display in the selected language.
 	 */
-	public void loadToolBarConfiguration(ResourceBundle labels) {
+	public void loadToolBarConfiguration() {
 
 		String currentToolBarConfiguration = null;
 
@@ -569,7 +528,8 @@ public class OpenProjectMenuItemListener implements ActionListener {
 			ConsoleCommandList.clear();
 
 			// Gets the tool bar configuration
-			currentToolBarConfiguration = AcideProjectConfiguration.getInstance().getToolBarConfiguration();
+			currentToolBarConfiguration = AcideProjectConfiguration
+					.getInstance().getToolBarConfiguration();
 
 			// Loads the command list from the configuration file
 			ConsoleCommandList.loadFinalList(currentToolBarConfiguration);
@@ -599,10 +559,12 @@ public class OpenProjectMenuItemListener implements ActionListener {
 				ConsoleCommandList.loadFinalList(currentToolBarConfiguration2);
 
 				// Error message
-				JOptionPane.showMessageDialog(null,
-						labels.getString("s958") + currentToolBarConfiguration
-								+ labels.getString("s957")
-								+ currentToolBarConfiguration2);
+				JOptionPane.showMessageDialog(null, AcideLanguageManager
+						.getInstance().getLabels().getString("s958")
+						+ currentToolBarConfiguration
+						+ AcideLanguageManager.getInstance().getLabels()
+								.getString("s957")
+						+ currentToolBarConfiguration2);
 
 				// Updates the RESOURCE MANAGER
 				AcideResourceManager.getInstance().setProperty(
@@ -627,9 +589,11 @@ public class OpenProjectMenuItemListener implements ActionListener {
 				}
 
 				// Error message
-				JOptionPane.showMessageDialog(null,
-						labels.getString("s958") + currentToolBarConfiguration
-								+ labels.getString("s959"));
+				JOptionPane.showMessageDialog(null, AcideLanguageManager
+						.getInstance().getLabels().getString("s958")
+						+ currentToolBarConfiguration
+						+ AcideLanguageManager.getInstance().getLabels()
+								.getString("s959"));
 
 				// Updates the RESOURCE MANAGER
 				AcideResourceManager.getInstance().setProperty(
@@ -670,15 +634,13 @@ public class OpenProjectMenuItemListener implements ActionListener {
 				configurationFilePath);
 
 		// Sets the project path
-		AcideProjectConfiguration.getInstance()
-				.setPath(configurationFilePath);
+		AcideProjectConfiguration.getInstance().setPath(configurationFilePath);
 
 		// Removes the previous associated files to the project
 		AcideProjectConfiguration.getInstance().removeFiles();
 
 		// Loads the project configuration
-		AcideProjectConfiguration.getInstance()
-				.load(configurationFileContent);
+		AcideProjectConfiguration.getInstance().load(configurationFileContent);
 	}
 
 	/**
@@ -687,8 +649,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 	public void loadMainWindowConfiguration() {
 
 		// Is explorer panel showed?
-		if (!AcideWindowConfiguration.getInstance()
-				.isExplorerPanelShowed())
+		if (!AcideWindowConfiguration.getInstance().isExplorerPanelShowed())
 
 			// Shows the explorer panel
 			MainWindow.getInstance().getMenu().getView().getShowExplorerPanel()
@@ -703,10 +664,8 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 		// MAIN WINDOW SIZE
 		MainWindow.getInstance().setSize(
-				AcideWindowConfiguration.getInstance()
-						.getWindowWidth(),
-						AcideWindowConfiguration.getInstance()
-						.getWindowHeight());
+				AcideWindowConfiguration.getInstance().getWindowWidth(),
+				AcideWindowConfiguration.getInstance().getWindowHeight());
 
 		// MAIN WINDOW LOCATION
 		MainWindow.getInstance().setLocation(
@@ -731,7 +690,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 		// Updates the MAIN WINDOW
 		MainWindow.getInstance().validate();
-		
+
 		// Repaints the MAIN WINDOW
 		MainWindow.getInstance().repaint();
 	}
@@ -740,11 +699,8 @@ public class OpenProjectMenuItemListener implements ActionListener {
 	 * Loads the project file editor configuration. SwingUtilities is used to
 	 * wait until the end of the execution of all the previous events so it can
 	 * add all the editors properly and safety.
-	 * 
-	 * @param labels
-	 *            labels to display in the selected language.
 	 */
-	public void loadFileEditorConfiguration(final ResourceBundle labels) {
+	public void loadFileEditorConfiguration() {
 
 		// Updates the RESOURCE MANAGER
 		AcideResourceManager.getInstance().setProperty(
@@ -774,11 +730,12 @@ public class OpenProjectMenuItemListener implements ActionListener {
 			@Override
 			public void run() {
 
-				for (int index = 0; index < AcideProjectConfiguration.getInstance().getNumberOfFilesFromList(); index++) {
+				for (int index = 0; index < AcideProjectConfiguration
+						.getInstance().getNumberOfFilesFromList(); index++) {
 
 					// Checks if the file really exists
-					File file = new File(AcideProjectConfiguration.getInstance().getFileAt(index)
-							.getAbsolutePath());
+					File file = new File(AcideProjectConfiguration
+							.getInstance().getFileAt(index).getAbsolutePath());
 
 					// If the file is not a directory and exists
 					if (!AcideProjectConfiguration.getInstance()
@@ -788,11 +745,13 @@ public class OpenProjectMenuItemListener implements ActionListener {
 						AcideTextFile textFile = AcideIOFactory.getInstance()
 								.buildFile();
 						String text = null;
-						text = textFile.load(AcideProjectConfiguration.getInstance().getFileAt(index)
+						text = textFile.load(AcideProjectConfiguration
+								.getInstance().getFileAt(index)
 								.getAbsolutePath());
 
 						String fileName = null;
-						String filePath = AcideProjectConfiguration.getInstance().getFileAt(index)
+						String filePath = AcideProjectConfiguration
+								.getInstance().getFileAt(index)
 								.getAbsolutePath();
 
 						// Gets the file name
@@ -822,15 +781,17 @@ public class OpenProjectMenuItemListener implements ActionListener {
 									.getInstance()
 									.getStatusBar()
 									.setStatusMessage(
-											AcideProjectConfiguration.getInstance()
-													.getFileAt(index).getAbsolutePath());
+											AcideProjectConfiguration
+													.getInstance()
+													.getFileAt(index)
+													.getAbsolutePath());
 
 							// Check if it is a MAIN or COMPILABLE FILE
 							AcideProjectFileType fileType = AcideProjectFileType.NORMAL;
 
 							// COMPILABLE
-							if (AcideProjectConfiguration.getInstance().getFileAt(index)
-									.isCompilableFile()) {
+							if (AcideProjectConfiguration.getInstance()
+									.getFileAt(index).isCompilableFile()) {
 
 								fileType = AcideProjectFileType.COMPILABLE;
 
@@ -839,15 +800,16 @@ public class OpenProjectMenuItemListener implements ActionListener {
 										.getInstance()
 										.getStatusBar()
 										.setStatusMessage(
-												AcideProjectConfiguration.getInstance()
+												AcideProjectConfiguration
+														.getInstance()
 														.getFileAt(index)
 														.getAbsolutePath()
 														+ " <COMPILABLE>");
 							}
 
 							// MAIN
-							if (AcideProjectConfiguration.getInstance().getFileAt(index)
-									.isMainFile()) {
+							if (AcideProjectConfiguration.getInstance()
+									.getFileAt(index).isMainFile()) {
 
 								fileType = AcideProjectFileType.MAIN;
 
@@ -856,7 +818,8 @@ public class OpenProjectMenuItemListener implements ActionListener {
 										.getInstance()
 										.getStatusBar()
 										.setStatusMessage(
-												AcideProjectConfiguration.getInstance()
+												AcideProjectConfiguration
+														.getInstance()
 														.getFileAt(index)
 														.getAbsolutePath()
 														+ " <MAIN>");
@@ -880,8 +843,9 @@ public class OpenProjectMenuItemListener implements ActionListener {
 										.getFileEditorManager()
 										.getFileEditorPanelAt(i)
 										.getAbsolutePath()
-										.equals(AcideProjectConfiguration.getInstance()
-												.getFileAt(index).getAbsolutePath())) {
+										.equals(AcideProjectConfiguration
+												.getInstance().getFileAt(index)
+												.getAbsolutePath())) {
 
 									// IS COMPILABLE FILE?
 									if (AcideProjectConfiguration.getInstance()
@@ -913,28 +877,31 @@ public class OpenProjectMenuItemListener implements ActionListener {
 						}
 
 						// The project configuration has been modified
-						AcideProjectConfiguration.getInstance()
-								.setIsModified(false);
+						AcideProjectConfiguration.getInstance().setIsModified(
+								false);
 					} else {
 
 						// If the file does not exist
 						if (!file.exists()) {
 
-							// Error message
-							JOptionPane.showMessageDialog(null,
-									labels.getString("s970")
-											+ AcideProjectConfiguration.getInstance()
-													.getFileAt(index).getAbsolutePath()
-											+ labels.getString("s971"),
-									"Error", JOptionPane.ERROR_MESSAGE);
+							if (!AcideProjectConfiguration.getInstance()
+									.getFileAt(index).isDirectory()) {
+								// Error message
+								JOptionPane.showMessageDialog(
+										null,
+										AcideLanguageManager.getInstance()
+												.getLabels().getString("s1020")
+												+ file.getAbsolutePath()
+												+ " " +AcideLanguageManager
+														.getInstance()
+														.getLabels()
+														.getString("s1021"),
+										"Warning", JOptionPane.WARNING_MESSAGE);
 
-							// Removes the file from the project
-							AcideProjectConfiguration.getInstance()
-									.removeFileAt(index);
-
-							// The project configuration has been modified
-							AcideProjectConfiguration.getInstance()
-									.setIsModified(true);
+								// The project configuration has been modified
+								AcideProjectConfiguration.getInstance()
+										.setIsModified(true);
+							}
 						}
 					}
 				}
@@ -959,10 +926,10 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 					// Sets the caret visible
 					MainWindow.getInstance().getFileEditorManager()
-					.getSelectedFileEditorPanel()
-					.getActiveTextEditionArea().getCaret().setVisible(true);
+							.getSelectedFileEditorPanel()
+							.getActiveTextEditionArea().getCaret()
+							.setVisible(true);
 
-					
 					// Selects the tree node
 					MainWindow.getInstance().getExplorerPanel()
 							.selectTreeNodeFromFileEditor();
@@ -977,15 +944,11 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 	/**
 	 * Closes the opened file editors and store the window parameters.
-	 * 
-	 * @param labels
-	 *            labels to display in the selected language.
 	 */
-	public void closePreviousProjectConfiguration(ResourceBundle labels) {
+	public void closePreviousProjectConfiguration() {
 
 		// Saves the window configuration
-		AcideWindowConfiguration.getInstance()
-				.save();
+		AcideWindowConfiguration.getInstance().save();
 
 		// Gets the selected file editor index
 		int selectedFileEditorIndex = MainWindow.getInstance()
@@ -1007,7 +970,9 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 				// Do you want to save it?
 				int choosenOption = JOptionPane.showConfirmDialog(null,
-						labels.getString("s643"), labels.getString("s953"),
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s643"), AcideLanguageManager
+								.getInstance().getLabels().getString("s953"),
 						JOptionPane.YES_NO_OPTION);
 
 				// If OK
@@ -1036,11 +1001,8 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 	/**
 	 * Loads the lexicon configuration and apply it to the opened file editors.
-	 * 
-	 * @param labels
-	 *            labels to display in the selected language.
 	 */
-	public void loadLexiconConfiguration(ResourceBundle labels) {
+	public void loadLexiconConfiguration() {
 
 		// Gets the lexicon configuration from the project configuration
 		AcideResourceManager.getInstance().setProperty(
@@ -1051,7 +1013,8 @@ public class OpenProjectMenuItemListener implements ActionListener {
 		// Loads the lexicon configuration
 		AcideLexiconConfiguration lexiconConfiguration = AcideLexiconConfiguration
 				.getInstance();
-		lexiconConfiguration.load(AcideProjectConfiguration.getInstance().getLexiconConfiguration());
+		lexiconConfiguration.load(AcideProjectConfiguration.getInstance()
+				.getLexiconConfiguration());
 
 		// Gets the opened file editor panel number
 		int numFileEditorPanels = MainWindow.getInstance()
@@ -1063,30 +1026,15 @@ public class OpenProjectMenuItemListener implements ActionListener {
 					.getFileEditorPanelAt(index).resetDocument();
 
 		// Loads the language
-		loadLanguage(labels);
-
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		labels = language.getLabels();
+		loadLanguage();
 
 		// Updates the status bar
 		MainWindow
 				.getInstance()
 				.getStatusBar()
 				.setLexiconMessage(
-						labels.getString("s449") + " "
-								+ lexiconConfiguration.getName());
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s449")
+								+ " " + lexiconConfiguration.getName());
 	}
 }

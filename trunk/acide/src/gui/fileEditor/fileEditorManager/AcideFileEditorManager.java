@@ -36,17 +36,14 @@ import gui.fileEditor.fileEditorManager.listeners.AcideFileEditorManagerMouseCli
 import gui.fileEditor.fileEditorManager.utils.gui.DragAndDropTabbedPane;
 import gui.fileEditor.fileEditorManager.utils.logic.UI.AcideFileEditorTabbedPaneUI;
 import gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
-import gui.fileEditor.fileEditorPanel.popup.AcideEditorPopupMenu;
 import gui.mainWindow.MainWindow;
 
 import java.io.File;
-import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
 
 import language.AcideLanguageManager;
 import operations.log.AcideLog;
-import resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE file editor manager.
@@ -68,63 +65,40 @@ public class AcideFileEditorManager {
 	 */
 	private DragAndDropTabbedPane _tabbedPane;
 	/**
-	 * ACIDE - A Configurable IDE file editor manager test plaf.
+	 * ACIDE - A Configurable IDE file editor manager tabbed pane UI.
 	 * 
 	 * Handles the painting for the tabbed pane and the closing buttons.
 	 */
-	private AcideFileEditorTabbedPaneUI _testPlaf;
-	/**
-	 * ACIDE - A Configurable IDE file editor manager popup menu.
-	 */
-	private AcideEditorPopupMenu _popupMenu;
+	private AcideFileEditorTabbedPaneUI _tabbedPanelUI;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE file editor manager.
 	 */
 	public AcideFileEditorManager() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
 		try {
 
+			// Creates the drag and drop tabbed pane
 			_tabbedPane = new DragAndDropTabbedPane();
-			_testPlaf = new AcideFileEditorTabbedPaneUI();
-			_tabbedPane.setUI(_testPlaf);
+			
+			// Sets the tabbed pane UI
+			_tabbedPanelUI = new AcideFileEditorTabbedPaneUI();
+			_tabbedPane.setUI(_tabbedPanelUI);
+			
+			// Listeners
 			_tabbedPane
 					.addMouseListener(new AcideFileEditorManagerMouseClickListener());
 			_tabbedPane
 					.addChangeListener(new AcideFileEditorManagerChangeListener());
 
-			// POPUP
-			buildPopupMenu();
-
 		} catch (RuntimeException exception) {
 
 			// Updates the log
-			AcideLog.getLog().info(labels.getString("s315"));
+			AcideLog.getLog().info(
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s315"));
 			exception.printStackTrace();
 		}
-	}
-
-	/**
-	 * Builds the ACIDE - A Configurable IDE file editor manager popup menu.
-	 */
-	public void buildPopupMenu() {
-		_popupMenu = new AcideEditorPopupMenu();
 	}
 
 	/**
@@ -145,20 +119,53 @@ public class AcideFileEditorManager {
 
 		switch (fileType) {
 		case NORMAL:
+			
+			// Adds the tab
 			_tabbedPane.addTab(name, null, editorPanel, toolTip);
+			
+			// It has no icon
 			editorPanel.setIcon(null);
+			
+			// It is not a compilable file
+			editorPanel.setCompilableFile(false);
+			
+			// It is not a main file
+			editorPanel.setMainFile(false);
+			
 			break;
 
 		case MAIN:
-			_tabbedPane.addTab(name, new ImageIcon(RESOURCE_PATH + "main.PNG"),
+			
+			// Adds the tab
+			_tabbedPane.addTab(name, new ImageIcon(RESOURCE_PATH + "main.png"),
 					editorPanel, toolTip);
-			editorPanel.setIcon(new ImageIcon(RESOURCE_PATH + "main.PNG"));
+			
+			// Sets the icon for the main files
+			editorPanel.setIcon(new ImageIcon(RESOURCE_PATH + "main.png"));
+			
+			// It is compilable file
+			editorPanel.setCompilableFile(true);
+			
+			// It is main file
+			editorPanel.setMainFile(true);
 			break;
 
 		case COMPILABLE:
+			
+			// Adds the tab
 			_tabbedPane.addTab(name, new ImageIcon(RESOURCE_PATH
-					+ "compilable.PNG"), editorPanel, toolTip);
-			new ImageIcon(RESOURCE_PATH + "compilable.PNG");
+					+ "compilable.png"), editorPanel, toolTip);
+			
+			// Sets the icon for the compilable files
+			editorPanel
+					.setIcon(new ImageIcon(RESOURCE_PATH + "compilable.png"));
+			
+			// It is compilable file
+			editorPanel.setCompilableFile(true);
+			
+			// It is main file
+			editorPanel.setMainFile(false);
+			
 			break;
 		}
 
@@ -178,21 +185,21 @@ public class AcideFileEditorManager {
 	 *            tab position to be closed.
 	 */
 	public void removeTab(int pos) {
-		_testPlaf.getCloseButtonAt(pos).doClick();
+		_tabbedPanelUI.getCloseButtonAt(pos).doClick();
 	}
 
 	/**
 	 * Returns the file editor panel at the position of the list given as a
 	 * parameter.
 	 * 
-	 * @param pos
+	 * @param index
 	 *            position of the editor to return.
 	 * 
 	 * @return the editor at the position of the list given as a parameter.
 	 */
-	public AcideFileEditorPanel getFileEditorPanelAt(int pos) {
-		if ((pos < _tabbedPane.getComponentCount()) && (pos >= 0)) {
-			return (AcideFileEditorPanel) _tabbedPane.getComponentAt(pos);
+	public AcideFileEditorPanel getFileEditorPanelAt(int index) {
+		if ((index < _tabbedPane.getComponentCount()) && (index >= 0)) {
+			return (AcideFileEditorPanel) _tabbedPane.getComponentAt(index);
 		} else {
 			return null;
 		}
@@ -288,18 +295,22 @@ public class AcideFileEditorManager {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE file editor manager selected file editor panel index.
+	 * Returns the ACIDE - A Configurable IDE file editor manager selected file
+	 * editor panel index.
 	 * 
-	 * @return the ACIDE - A Configurable IDE file editor manager selected file editor panel index.
+	 * @return the ACIDE - A Configurable IDE file editor manager selected file
+	 *         editor panel index.
 	 */
 	public int getSelectedFileEditorPanelIndex() {
 		return getTabbedPane().getSelectedIndex();
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE file editor manager selected file editor panel.
+	 * Returns the ACIDE - A Configurable IDE file editor manager selected file
+	 * editor panel.
 	 * 
-	 * @return the ACIDE - A Configurable IDE file editor manager selected file editor panel.
+	 * @return the ACIDE - A Configurable IDE file editor manager selected file
+	 *         editor panel.
 	 */
 	public AcideFileEditorPanel getSelectedFileEditorPanel() {
 		return getFileEditorPanelAt(getTabbedPane().getSelectedIndex());
@@ -315,38 +326,31 @@ public class AcideFileEditorManager {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE file editor manager popup menu.
-	 * 
-	 * @return the ACIDE - A Configurable IDE file editor manager popup menu.
-	 */
-	public AcideEditorPopupMenu getPopupMenu() {
-		return _popupMenu;
-	}
-
-	/**
 	 * Returns the editor marked as Main File.
 	 * 
 	 * @return the main editor marked as Main File.
 	 */
 	public AcideFileEditorPanel getMainEditor() {
 
-		for (int i = 0; i < getNumberOfFileEditorPanels(); i++) {
+		for (int index = 0; index < getNumberOfFileEditorPanels(); index++) {
 
-			if (getFileEditorPanelAt(i).isMainFile())
-				return getFileEditorPanelAt(i);
+			if (getFileEditorPanelAt(index).isMainFile())
+				return getFileEditorPanelAt(index);
 		}
 
 		return null;
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE file editor manager test plaf.
+	 * Returns the ACIDE - A Configurable IDE file editor manager tabbed pane
+	 * UI.
 	 * 
-	 * @return the ACIDE - A Configurable IDE file editor manager test plaf.
+	 * @return the ACIDE - A Configurable IDE file editor manager tabbed pane
+	 *         UI.
 	 * @see AcideFileEditorTabbedPaneUI
 	 */
-	public AcideFileEditorTabbedPaneUI getTestPlaf() {
-		return _testPlaf;
+	public AcideFileEditorTabbedPaneUI getTabbedPaneUI() {
+		return _tabbedPanelUI;
 	}
 
 	/**
@@ -356,7 +360,7 @@ public class AcideFileEditorManager {
 		MainWindow
 				.getInstance()
 				.getFileEditorManager()
-				.getTestPlaf()
+				.getTabbedPaneUI()
 				.getCloseButtonAt(
 						MainWindow.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanelIndex())
@@ -372,7 +376,7 @@ public class AcideFileEditorManager {
 		return MainWindow
 				.getInstance()
 				.getFileEditorManager()
-				.getTestPlaf()
+				.getTabbedPaneUI()
 				.getCloseButtonAt(
 						MainWindow.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanelIndex())
@@ -387,7 +391,7 @@ public class AcideFileEditorManager {
 	 *            list position of the button.
 	 */
 	public void setGreenButtonAt(int position) {
-		MainWindow.getInstance().getFileEditorManager().getTestPlaf()
+		MainWindow.getInstance().getFileEditorManager().getTabbedPaneUI()
 				.getCloseButtonAt(position).setGreenCloseButton();
 	}
 
@@ -400,8 +404,8 @@ public class AcideFileEditorManager {
 	 * @return True if the button is red and false in the other case.
 	 */
 	public boolean isRedButton(int position) {
-		return MainWindow.getInstance().getFileEditorManager().getTestPlaf()
-				.getCloseButtonAt(position).isRedButton();
+		return MainWindow.getInstance().getFileEditorManager()
+				.getTabbedPaneUI().getCloseButtonAt(position).isRedButton();
 	}
 
 	/**
@@ -432,8 +436,8 @@ public class AcideFileEditorManager {
 
 				// Searches for the file into the project configuration file
 				// list
-				for (int index = 0; index < AcideProjectConfiguration.getInstance()
-						.getNumberOfFilesFromList(); index++) {
+				for (int index = 0; index < AcideProjectConfiguration
+						.getInstance().getNumberOfFilesFromList(); index++) {
 
 					// If Exists
 					if (AcideProjectConfiguration
@@ -445,15 +449,15 @@ public class AcideFileEditorManager {
 									.getSelectedFileEditorPanel()
 									.getAbsolutePath()))
 						// Marks it as COMPILABLE FILE
-						AcideProjectConfiguration.getInstance().getFileAt(index)
-								.setIsCompilableFile(true);
+						AcideProjectConfiguration.getInstance()
+								.getFileAt(index).setIsCompilableFile(true);
 
 					// Is it already a MAIN FILE?
-					if (AcideProjectConfiguration.getInstance().getFileAt(index)
-							.isMainFile())
+					if (AcideProjectConfiguration.getInstance()
+							.getFileAt(index).isMainFile())
 						// Removes the main property
-						AcideProjectConfiguration.getInstance().getFileAt(index)
-								.setIsMainFile(false);
+						AcideProjectConfiguration.getInstance()
+								.getFileAt(index).setIsMainFile(false);
 				}
 
 				// Puts the COMPILABLE icon in the tab
@@ -505,8 +509,8 @@ public class AcideFileEditorManager {
 										+ " <COMPILABLE>");
 
 				// Search for the file into the project configuration file list
-				for (int index = 0; index < AcideProjectConfiguration.getInstance()
-						.getNumberOfFilesFromList(); index++) {
+				for (int index = 0; index < AcideProjectConfiguration
+						.getInstance().getNumberOfFilesFromList(); index++) {
 
 					// If exists
 					if (AcideProjectConfiguration
@@ -519,8 +523,8 @@ public class AcideFileEditorManager {
 									.getAbsolutePath())) {
 
 						// Marks it as COMPILABLE FILE
-						AcideProjectConfiguration.getInstance().getFileAt(index)
-								.setIsCompilableFile(true);
+						AcideProjectConfiguration.getInstance()
+								.getFileAt(index).setIsCompilableFile(true);
 
 						// It is MAIN FILE
 						if (AcideProjectConfiguration.getInstance()
@@ -589,8 +593,8 @@ public class AcideFileEditorManager {
 
 				// Searches for the file into the project configuration file
 				// list
-				for (int index = 0; index < AcideProjectConfiguration.getInstance()
-						.getNumberOfFilesFromList(); index++) {
+				for (int index = 0; index < AcideProjectConfiguration
+						.getInstance().getNumberOfFilesFromList(); index++) {
 
 					if (AcideProjectConfiguration
 							.getInstance()
@@ -601,8 +605,8 @@ public class AcideFileEditorManager {
 									.getSelectedFileEditorPanel()
 									.getAbsolutePath()))
 						// Sets the COMPILABLE FILE as false
-						AcideProjectConfiguration.getInstance().getFileAt(index)
-								.setIsCompilableFile(false);
+						AcideProjectConfiguration.getInstance()
+								.getFileAt(index).setIsCompilableFile(false);
 				}
 			}
 		}
@@ -618,8 +622,8 @@ public class AcideFileEditorManager {
 				.getSelectedFileEditorPanel().isMainFile()) {
 
 			// Removes the previous MAIN FILE
-			for (int index = 0; index < MainWindow.getInstance().getFileEditorManager()
-					.getNumberOfFileEditorPanels(); index++) {
+			for (int index = 0; index < MainWindow.getInstance()
+					.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
 
 				// Finds the previous MAIN FILE
 				if (MainWindow.getInstance().getFileEditorManager()
@@ -631,7 +635,8 @@ public class AcideFileEditorManager {
 
 					// Sets COMPILER FILE as false
 					MainWindow.getInstance().getFileEditorManager()
-							.getFileEditorPanelAt(index).setCompilableFile(false);
+							.getFileEditorPanelAt(index)
+							.setCompilableFile(false);
 
 					// Updates the status bar
 					MainWindow
@@ -671,8 +676,8 @@ public class AcideFileEditorManager {
 			if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
 
 				// Updates the file into the project configuration
-				for (int index1 = 0; index1 < AcideProjectConfiguration.getInstance()
-						.getNumberOfFilesFromList(); index1++) {
+				for (int index1 = 0; index1 < AcideProjectConfiguration
+						.getInstance().getNumberOfFilesFromList(); index1++) {
 
 					// If exists
 					if (AcideProjectConfiguration
@@ -710,7 +715,8 @@ public class AcideFileEditorManager {
 											.getFileEditorPanelAt(position)
 											.getAbsolutePath()
 											.equals(AcideProjectConfiguration
-													.getInstance().getFileAt(index2)
+													.getInstance()
+													.getFileAt(index2)
 													.getAbsolutePath()))
 
 										// Removes the icon from the tab
@@ -723,13 +729,13 @@ public class AcideFileEditorManager {
 						}
 
 						// Sets it as MAIN FILE
-						AcideProjectConfiguration.getInstance().getFileAt(index1)
-								.setIsMainFile(true);
-						
+						AcideProjectConfiguration.getInstance()
+								.getFileAt(index1).setIsMainFile(true);
+
 						// Sets it as COMPILABLE FILE
-						AcideProjectConfiguration.getInstance().getFileAt(index1)
-								.setIsCompilableFile(true);
-						
+						AcideProjectConfiguration.getInstance()
+								.getFileAt(index1).setIsCompilableFile(true);
+
 						// The project has been modified
 						AcideProjectConfiguration.getInstance().setIsModified(
 								true);
@@ -791,8 +797,8 @@ public class AcideFileEditorManager {
 
 				// Searches for the file into the project configuration file
 				// list
-				for (int index = 0; index < AcideProjectConfiguration.getInstance()
-						.getNumberOfFilesFromList(); index++) {
+				for (int index = 0; index < AcideProjectConfiguration
+						.getInstance().getNumberOfFilesFromList(); index++) {
 
 					// If exists
 					if (AcideProjectConfiguration
@@ -804,8 +810,8 @@ public class AcideFileEditorManager {
 									.getSelectedFileEditorPanel()
 									.getAbsolutePath()))
 						// Sets MAIN FILE as false
-						AcideProjectConfiguration.getInstance().getFileAt(index)
-								.setIsMainFile(false);
+						AcideProjectConfiguration.getInstance()
+								.getFileAt(index).setIsMainFile(false);
 				}
 			}
 		}

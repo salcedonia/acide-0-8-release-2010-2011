@@ -43,7 +43,6 @@ import gui.toolBarPanel.AcideToolBarPanel;
 
 import java.awt.BorderLayout;
 import java.awt.HeadlessException;
-import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -130,30 +129,14 @@ public class MainWindow extends JFrame {
 	 */
 	public MainWindow() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
 		// Sets the window icon
 		setIconImage(ICON.getImage());
 
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s67"));
+		AcideLog.getLog().info(AcideLanguageManager.getInstance().getLabels().getString("s67"));
 
 		// Sets the title
-		setTitle(labels.getString("s425"));
+		setTitle(AcideLanguageManager.getInstance().getLabels().getString("s425"));
 
 		// MENU
 		_menu = AcideGUIFactory.getInstance().buildAcideMenu();
@@ -203,7 +186,7 @@ public class MainWindow extends JFrame {
 		setMenuListeners();
 
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s66"));
+		AcideLog.getLog().info(AcideLanguageManager.getInstance().getLabels().getString("s66"));
 	}
 
 	/**
@@ -211,22 +194,6 @@ public class MainWindow extends JFrame {
 	 * different types of tool bars in the application.
 	 */
 	public void buildToolBarPanel() {
-
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
 
 		String currentToolBarConfiguration = null;
 
@@ -260,8 +227,8 @@ public class MainWindow extends JFrame {
 
 				// Information message
 				JOptionPane.showMessageDialog(null,
-						labels.getString("s958") + currentToolBarConfiguration
-								+ labels.getString("s957") + name);
+						AcideLanguageManager.getInstance().getLabels().getString("s958") + currentToolBarConfiguration
+								+ AcideLanguageManager.getInstance().getLabels().getString("s957") + name);
 
 				// Updates the RESOURCE MANAGER
 				AcideResourceManager.getInstance().setProperty(
@@ -269,7 +236,7 @@ public class MainWindow extends JFrame {
 			} catch (Exception exception1) {
 
 				// Updates the log
-				AcideLog.getLog().error(labels.getString("s127"));
+				AcideLog.getLog().error(AcideLanguageManager.getInstance().getLabels().getString("s127"));
 
 				try {
 
@@ -280,9 +247,9 @@ public class MainWindow extends JFrame {
 					// Information message
 					JOptionPane.showMessageDialog(
 							null,
-							labels.getString("s958")
+							AcideLanguageManager.getInstance().getLabels().getString("s958")
 									+ currentToolBarConfiguration
-									+ labels.getString("s959"));
+									+ AcideLanguageManager.getInstance().getLabels().getString("s959"));
 
 					// Updates the RESOURCE MANAGER
 					AcideResourceManager.getInstance().setProperty(
@@ -302,7 +269,7 @@ public class MainWindow extends JFrame {
 			}
 
 			// Updates the log
-			AcideLog.getLog().error(labels.getString("s127"));
+			AcideLog.getLog().error(AcideLanguageManager.getInstance().getLabels().getString("s127"));
 		}
 
 		// Updates the tool bar panel

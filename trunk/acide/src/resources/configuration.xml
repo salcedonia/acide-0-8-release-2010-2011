@@ -13,7 +13,7 @@
 <entry key="windowConfiguration">./configuration/window/configuration.xml</entry>
 <entry key="javaPath"/>
 <entry key="jarPath"/>
-<entry key="defaultPath">C:\Documents and Settings\Salcedonia\Escritorio\as.txt</entry>
+<entry key="defaultPath">C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\project\proyecto1.acidePrj</entry>
 <entry key="languagePath">C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\lexicon\default.xml</entry>
 <entry key="javacPath"/>
 <entry key="consoleConfiguration">./configuration/console/configuration.xml</entry>

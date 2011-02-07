@@ -328,38 +328,26 @@ public class AcideProjectConfiguration {
 
 			// IS DIRECTORY
 			finalPosition = fileContent.indexOf("\n", initialPosition);
-			if (Boolean.parseBoolean(fileContent.substring(initialPosition,
-					finalPosition)) == true)
-				isDirectory = true;
-			else
-				isDirectory = false;
+			isDirectory = Boolean.parseBoolean(fileContent.substring(initialPosition,
+						finalPosition));
 			initialPosition = finalPosition + 1;
 
 			// IS COMPILABLE FILE
 			finalPosition = fileContent.indexOf("\n", initialPosition);
-			if (Boolean.parseBoolean(fileContent.substring(initialPosition,
-					finalPosition)) == true)
-				isCompilableFile = true;
-			else
-				isCompilableFile = false;
+			isCompilableFile = Boolean.parseBoolean(fileContent.substring(initialPosition,
+						finalPosition));
 			initialPosition = finalPosition + 1;
 
 			// IS MAIN FILE
 			finalPosition = fileContent.indexOf("\n", initialPosition);
-			if (Boolean.parseBoolean(fileContent.substring(initialPosition,
-					finalPosition)) == true)
-				isMainFile = true;
-			else
-				isMainFile = false;
+			isMainFile = Boolean.parseBoolean(fileContent.substring(initialPosition,
+						finalPosition));
 			initialPosition = finalPosition + 1;
 
 			// IS OPENED
 			finalPosition = fileContent.indexOf("\n", initialPosition);
-			if (Boolean.parseBoolean(fileContent.substring(initialPosition,
-					finalPosition)) == true)
-				isOpened = true;
-			else
-				isOpened = false;
+			isOpened = Boolean.parseBoolean(fileContent.substring(initialPosition,
+						finalPosition));
 			initialPosition = finalPosition + 1;
 
 			// Updates the ACIDE - A Configurable IDE file with the info
@@ -401,45 +389,45 @@ public class AcideProjectConfiguration {
 	}
 
 	/**
-	 * Returns the project name.
+	 * Returns the ACIDE - A Configurable IDE project configuration project name.
 	 * 
-	 * @return the project name.
+	 * @return the ACIDE - A Configurable IDE project configuration project name.
 	 */
 	public String getName() {
 		return _name;
 	}
 
 	/**
-	 * Returns the project path.
+	 * Returns the ACIDE - A Configurable IDE project configuration project path.
 	 * 
-	 * @return the project path.
+	 * @return the ACIDE - A Configurable IDE project configuration project path.
 	 */
 	public String getProjectPath() {
 		return _path;
 	}
 
 	/**
-	 * Returns the file list size.
+	 * Returns the ACIDE - A Configurable IDE project configuration file list size.
 	 * 
-	 * @return the file list size.
+	 * @return the ACIDE - A Configurable IDE project configuration file list size.
 	 */
 	public int getFileListSize() {
 		return _fileList.size();
 	}
 
 	/**
-	 * Returns the compiler path.
+	 * Returns the ACIDE - A Configurable IDE project configuration compiler path.
 	 * 
-	 * @return the compiler path.
+	 * @return the ACIDE - A Configurable IDE project configuration compiler path.
 	 */
 	public String getCompilerPath() {
 		return _compilerPath;
 	}
 
 	/**
-	 * Returns the compiler arguments.
+	 * Returns the ACIDE - A Configurable IDE project configuration compiler arguments.
 	 * 
-	 * @return the compiler arguments.
+	 * @return the ACIDE - A Configurable IDE project configuration compiler arguments.
 	 */
 	public String getCompilerArguments() {
 		return _compilerArguments;

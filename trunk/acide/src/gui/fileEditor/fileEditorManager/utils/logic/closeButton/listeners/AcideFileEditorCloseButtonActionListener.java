@@ -271,14 +271,14 @@ public class AcideFileEditorCloseButtonActionListener extends AbstractAction {
 			
 			// Exchanges the closing buttons
 			for (int index = _index; index < MainWindow.getInstance()
-					.getFileEditorManager().getTestPlaf().getCloseButtons()
+					.getFileEditorManager().getTabbedPaneUI().getCloseButtons()
 					.size() - 1; index++) {
 
 				AcideFileEditorCloseButton closeButton = (AcideFileEditorCloseButton) MainWindow
-						.getInstance().getFileEditorManager().getTestPlaf()
+						.getInstance().getFileEditorManager().getTabbedPaneUI()
 						.getCloseButtons().get(index);
 				AcideFileEditorCloseButton nextCloseButton = (AcideFileEditorCloseButton) MainWindow
-						.getInstance().getFileEditorManager().getTestPlaf()
+						.getInstance().getFileEditorManager().getTabbedPaneUI()
 						.getCloseButtons().get(index + 1);
 
 				// Sets the button color
@@ -288,7 +288,7 @@ public class AcideFileEditorCloseButtonActionListener extends AbstractAction {
 					closeButton.setGreenCloseButton();
 
 				// Sets the position
-				MainWindow.getInstance().getFileEditorManager().getTestPlaf()
+				MainWindow.getInstance().getFileEditorManager().getTabbedPaneUI()
 						.getCloseButtons().set(index, closeButton);
 			}
 		}

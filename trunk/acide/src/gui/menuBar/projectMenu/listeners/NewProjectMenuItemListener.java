@@ -29,19 +29,15 @@
  */
 package gui.menuBar.projectMenu.listeners;
 
-import es.configuration.project.AcideProjectConfiguration;
-import gui.mainWindow.MainWindow;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
 import language.AcideLanguageManager;
 import operations.factory.AcideGUIFactory;
-import operations.log.AcideLog;
-import resources.AcideResourceManager;
+import es.configuration.project.AcideProjectConfiguration;
+import gui.mainWindow.MainWindow;
 
 /**
  * ACIDE -A Configurable IDE project menu new project menu item listener.
@@ -61,34 +57,21 @@ public class NewProjectMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		boolean cancelOptionSelected = false;
 
 		// If the project has been modified
 		if (AcideProjectConfiguration.getInstance().isModified()) {
 
 			// Do you want to save it?
-			int chosenOption = JOptionPane.showConfirmDialog(null,
-					labels.getString("s657"), labels.getString("s953"),
+			int returnValue = JOptionPane.showConfirmDialog(
+					null,
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s657"), AcideLanguageManager
+							.getInstance().getLabels().getString("s953"),
 					JOptionPane.YES_NO_CANCEL_OPTION);
 
 			// If OK
-			if (chosenOption == JOptionPane.OK_OPTION) {
+			if (returnValue == JOptionPane.OK_OPTION) {
 
 				// Enables the save project menu item
 				MainWindow.getInstance().getMenu().getProject()
@@ -97,21 +80,21 @@ public class NewProjectMenuItemListener implements ActionListener {
 				// Does the save project menu item action
 				MainWindow.getInstance().getMenu().getProject()
 						.getSaveProject().doClick();
-			} else if (chosenOption != JOptionPane.NO_OPTION)
+			} else if (returnValue != JOptionPane.NO_OPTION)
 				cancelOptionSelected = true;
 		}
 
 		// Gets the selected file editor panel index
-		int selectedFileEditorPanelIndex = MainWindow.getInstance().getFileEditorManager()
-				.getSelectedFileEditorPanelIndex();
-		
-		// Gets the number of editors
-		int numEditors = MainWindow.getInstance().getFileEditorManager()
+		int selectedFileEditorPanelIndex = MainWindow.getInstance()
+				.getFileEditorManager().getSelectedFileEditorPanelIndex();
+
+		// Gets the number of file editor panels
+		int numberOfFileEditorPanels = MainWindow.getInstance().getFileEditorManager()
 				.getNumberOfFileEditorPanels();
-		
+
 		// Closes the opened files in the editor
-		for (int index = numEditors - 1; index >= 0; index--) {
-			
+		for (int index = numberOfFileEditorPanels - 1; index >= 0; index--) {
+
 			// Sets the selected file editor at the last editor
 			MainWindow.getInstance().getFileEditorManager()
 					.setSelectedFileEditorPanelAt(index);
@@ -120,23 +103,25 @@ public class NewProjectMenuItemListener implements ActionListener {
 			if (MainWindow.getInstance().getFileEditorManager().isRedButton()) {
 
 				// Do you want to save it?
-				int option = JOptionPane.showConfirmDialog(null,
-						labels.getString("s643"), labels.getString("s953"),
+				int returnValue = JOptionPane.showConfirmDialog(null,
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s643"), AcideLanguageManager
+								.getInstance().getLabels().getString("s953"),
 						JOptionPane.YES_NO_OPTION);
 
 				// If OK
-				if (option == JOptionPane.OK_OPTION)
+				if (returnValue == JOptionPane.OK_OPTION)
 					MainWindow.getInstance().getMenu().getFile().saveOrSaveAS();
 			}
 		}
-		
+
 		// Restores the original file editor panel
 		MainWindow.getInstance().getFileEditorManager()
 				.setSelectedFileEditorPanelAt(selectedFileEditorPanelIndex);
 
 		// Displays the new project configuration window
 		if (!cancelOptionSelected)
-			
+
 			// Shows the project configuration window
 			MainWindow.getInstance().setNewProjectConfigurationWindow(
 					AcideGUIFactory.getInstance()

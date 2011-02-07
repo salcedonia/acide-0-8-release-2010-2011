@@ -36,7 +36,6 @@ import gui.mainWindow.MainWindow;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -44,8 +43,6 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import language.AcideLanguageManager;
-import operations.log.AcideLog;
-import resources.AcideResourceManager;
 
 /**																
  * ACIDE -A Configurable IDE project menu delete file menu item listener.											
@@ -64,24 +61,9 @@ public class DeleteFileMenuItemListener implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
-
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-			
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
 		
 		// Are you sure?
-		int chosenOption = JOptionPane.showConfirmDialog(null, labels
+		int chosenOption = JOptionPane.showConfirmDialog(null, AcideLanguageManager.getInstance().getLabels()
 				.getString("s951"));
 		
 		// If yes
@@ -116,25 +98,25 @@ public class DeleteFileMenuItemListener implements ActionListener {
 								.removeNodeFromParent(currentNode);
 						
 						// Searches for the file into the project configuration
-						int posExplorer = -1;
-						for (int position = 0; position < AcideProjectConfiguration.getInstance()
-								.getNumberOfFilesFromList(); position++) {
+						int fileIndex = -1;
+						for (int index = 0; index < AcideProjectConfiguration.getInstance()
+								.getNumberOfFilesFromList(); index++) {
 							
 							if (AcideProjectConfiguration.getInstance()
-									.getFileAt(position).getAbsolutePath().equals(
+									.getFileAt(index).getAbsolutePath().equals(
 											projectFile.getAbsolutePath())) {
-								posExplorer = position;
+								fileIndex = index;
 							}
 						}
 
 						// Gets the file from the project configuration file list
-						AcideProjectFile configurationFile = AcideProjectConfiguration.getInstance().getFileAt(posExplorer);
+						AcideProjectFile configurationFile = AcideProjectConfiguration.getInstance().getFileAt(fileIndex);
 						
 						String fileRemove = configurationFile.getAbsolutePath();
 						
 						// Removes the file from the project configuration
 						AcideProjectConfiguration.getInstance().removeFileAt(
-								posExplorer);
+								fileIndex);
 
 						// Deletes this file
 						File physicalFile = new File(fileRemove);

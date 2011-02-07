@@ -59,28 +59,36 @@ public class SetMainFileMenuItemListener implements ActionListener {
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		// Gets the selection in the explorer tree
-		TreePath explorerSelection = MainWindow.getInstance().getExplorerPanel().getTree()
+		TreePath currentSelection = MainWindow.getInstance().getExplorerPanel().getTree()
 				.getSelectionPath();
-		DefaultMutableTreeNode filePath;
-		AcideProjectFile projectFile;
+		
+		// Current node
+		DefaultMutableTreeNode currentNode;
+		
+		// Current project file
+		AcideProjectFile currentProjectFile;
 
 		// If something is selected
-		if (explorerSelection != null) {
+		if (currentSelection != null) {
 
-			filePath = (DefaultMutableTreeNode) explorerSelection.getLastPathComponent();
-			projectFile = (AcideProjectFile) filePath.getUserObject();
+			// Gets the current node
+			currentNode = (DefaultMutableTreeNode) currentSelection.getLastPathComponent();
+			
+			// Gets the current project file
+			currentProjectFile = (AcideProjectFile) currentNode.getUserObject();
 
 			// Is not MAIN FILE
-			if (!projectFile.isMainFile()) {
+			if (!currentProjectFile.isMainFile()) {
 
 				// Is file and not a directory
-				if (!projectFile.isDirectory()) {
+				if (!currentProjectFile.isDirectory()) {
 
 					for (int index1 = 0; index1 < AcideProjectConfiguration.getInstance().getFileListSize(); index1++) {
 
 						// Quits previous MAIN
 						if (AcideProjectConfiguration.getInstance().getFileAt(index1)
 								.isMainFile()) {
+							
 							AcideProjectConfiguration.getInstance().getFileAt(index1)
 									.setIsMainFile(false);
 							AcideProjectConfiguration.getInstance().getFileAt(index1)
@@ -107,33 +115,55 @@ public class SetMainFileMenuItemListener implements ActionListener {
 					}
 
 					// Is a MAIN FILE
-					projectFile.setIsMainFile(true);
+					currentProjectFile.setIsMainFile(true);
 					
 					// Is a COMPILABLE FILE
-					projectFile.setIsCompilableFile(true);
+					currentProjectFile.setIsCompilableFile(true);
 
 					// The project has been modified
 					AcideProjectConfiguration.getInstance()
 							.setIsModified(true);
 
-					// Updates the status message in the status bar
-					MainWindow.getInstance().getStatusBar().setStatusMessage(
-							projectFile.getAbsolutePath() + " <MAIN>");
-
-					// Puts the icon 
+					// Updates the File Editor
 					for (int index = 0; index < MainWindow.getInstance()
 							.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
+						
 						if (MainWindow.getInstance().getFileEditorManager()
 								.getFileEditorPanelAt(index).getAbsolutePath().equals(
-										projectFile.getAbsolutePath())) {
+										currentProjectFile.getAbsolutePath())) {
+							
+							// Creates the image icon
+							ImageIcon imageIcon = new ImageIcon(
+							"./resources/icons/editor/main.PNG");
+							
+							// Updates the file editor configuration
+							MainWindow
+							.getInstance()
+							.getFileEditorManager().getFileEditorPanelAt(index).setCompilableFile(true);
+							MainWindow
+							.getInstance()
+							.getFileEditorManager().getFileEditorPanelAt(index).setMainFile(true);
+							
+							// Updates the file editor panel image icon
+							MainWindow
+							.getInstance()
+							.getFileEditorManager().getFileEditorPanelAt(index).setIcon(imageIcon);
+							
+							// Sets the icon in the file editor tab
 							MainWindow
 									.getInstance()
 									.getFileEditorManager()
 									.getTabbedPane()
 									.setIconAt(
 											index,
-											new ImageIcon(
-													"./resources/icons/editor/main.PNG"));
+											imageIcon);
+							
+							// Updates the status message in the status bar
+							MainWindow.getInstance().getStatusBar().setStatusMessage(
+									MainWindow.getInstance()
+									.getFileEditorManager()
+									.getFileEditorPanelAt(index)
+									.getAbsolutePath() + " <MAIN>");
 						}
 					}
 				}

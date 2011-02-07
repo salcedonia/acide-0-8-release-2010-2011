@@ -294,7 +294,7 @@ public class AcideTextFile {
 
 					isApproved = false;
 
-					if (MainWindow.getInstance().getMenu().isNPF()) {
+					if (MainWindow.getInstance().getMenu().isNewProjectFile()) {
 
 						// Removes the tab from the file editor
 						MainWindow
@@ -325,7 +325,7 @@ public class AcideTextFile {
 
 			isApproved = false;
 
-			if (MainWindow.getInstance().getMenu().isNPF()) {
+			if (MainWindow.getInstance().getMenu().isNewProjectFile()) {
 
 				// Removes the tab in the file editor
 				MainWindow

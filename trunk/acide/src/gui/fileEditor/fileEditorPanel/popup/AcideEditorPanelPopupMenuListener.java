@@ -38,7 +38,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * Editor panel popup menu listener.
+ * ACIDE - A Configurable IDE editor panel popup menu listener.
  * 
  * @version 0.8
  * @see MouseAdapter
@@ -73,53 +73,80 @@ public class AcideEditorPanelPopupMenuListener extends MouseAdapter {
 	 */
 	private void maybeShowPopup(MouseEvent mouseEvent) {
 
+		// If it has to display the popup menu
 		if (mouseEvent.isPopupTrigger()) {
 
-			AcideFileEditorPanel selectedEditor = MainWindow.getInstance().getFileEditorManager()
+			// Gets the selected file editor panel
+			AcideFileEditorPanel selectedFileEditorPanel = MainWindow.getInstance().getFileEditorManager()
 					.getSelectedFileEditorPanel();
 			
-			selectedEditor.getPopupMenu().getCopy().setEnabled(false);
-			selectedEditor.getPopupMenu().getCut().setEnabled(false);
-			selectedEditor.getPopupMenu().getPaste().setEnabled(false);
-			selectedEditor.getPopupMenu().getAddFile().setEnabled(false);
-			selectedEditor.getPopupMenu().getRemoveFile().setEnabled(false);
-			selectedEditor.getPopupMenu().getSetCompilable().setEnabled(false);
-			selectedEditor.getPopupMenu().getUnsetCompilable().setEnabled(false);
-			selectedEditor.getPopupMenu().getSetMain().setEnabled(false);
-			selectedEditor.getPopupMenu().getUnsetMain().setEnabled(false);
+			// Disables the copy menu item
+			selectedFileEditorPanel.getPopupMenu().getCopy().setEnabled(false);
+			
+			// Disables the cut menu item
+			selectedFileEditorPanel.getPopupMenu().getCut().setEnabled(false);
+			
+			// Disables the paste menu item
+			selectedFileEditorPanel.getPopupMenu().getPaste().setEnabled(false);
+			
+			// Disables the add file menu item
+			selectedFileEditorPanel.getPopupMenu().getAddFile().setEnabled(false);
+			
+			// Disables the remove file menu item
+			selectedFileEditorPanel.getPopupMenu().getRemoveFile().setEnabled(false);
+			
+			// Disables the set compilable menu item
+			selectedFileEditorPanel.getPopupMenu().getSetCompilable().setEnabled(false);
+			
+			// Disables the unset compilable menu item
+			selectedFileEditorPanel.getPopupMenu().getUnsetCompilable().setEnabled(false);
+			
+			// Disables the set main menu item
+			selectedFileEditorPanel.getPopupMenu().getSetMain().setEnabled(false);
+			
+			// Disables the unset main menu item
+			selectedFileEditorPanel.getPopupMenu().getUnsetMain().setEnabled(false);
 
-			// Check the systeme clipboard
+			// Check the system clipboard
 			if (Toolkit.getDefaultToolkit().getSystemClipboard()
 					.getContents(null) != null)
 				// Enables the paste menu item in the popup menu
-				selectedEditor.getPopupMenu().getPaste().setEnabled(true);
+				selectedFileEditorPanel.getPopupMenu().getPaste().setEnabled(true);
 
 			// Checks the selected editor
-			if (selectedEditor.getActiveTextEditionArea().getSelectedText() != null) {
+			if (selectedFileEditorPanel.getActiveTextEditionArea().getSelectedText() != null) {
 
-				// Enable the options
-				selectedEditor.getPopupMenu().getCopy().setEnabled(true);
-				selectedEditor.getPopupMenu().getCut().setEnabled(true);
+				// Enables the copy menu item
+				selectedFileEditorPanel.getPopupMenu().getCopy().setEnabled(true);
+				
+				// Enables the cut menu item
+				selectedFileEditorPanel.getPopupMenu().getCut().setEnabled(true);
 			}
 
 			// Is it default project?
 			if (AcideProjectConfiguration.getInstance()
 					.isDefaultProject()) {
 
-				// Disables the add and remove file menu item in the popup menu
-				selectedEditor.getPopupMenu().getAddFile().setEnabled(false);
-				selectedEditor.getPopupMenu().getRemoveFile().setEnabled(false);
+				// Disables the add file menu item
+				selectedFileEditorPanel.getPopupMenu().getAddFile().setEnabled(false);
+				
+				// Disables the remove file menu item
+				selectedFileEditorPanel.getPopupMenu().getRemoveFile().setEnabled(false);
 
 				// Checks the types
-				if (!selectedEditor.isMainFile())
-					selectedEditor.getPopupMenu().getSetMain().setEnabled(true);
-				if (selectedEditor.isMainFile())
-					selectedEditor.getPopupMenu().getUnsetMain().setEnabled(true);
-				if (!selectedEditor.isCompilableFile()
-						|| (selectedEditor.isCompilableFile() && selectedEditor.isMainFile()))
-					selectedEditor.getPopupMenu().getSetCompilable().setEnabled(true);
-				if (selectedEditor.isCompilableFile() && !selectedEditor.isMainFile())
-					selectedEditor.getPopupMenu().getUnsetCompilable().setEnabled(true);
+				if (!selectedFileEditorPanel.isMainFile())
+					// Enables the set main menu item
+					selectedFileEditorPanel.getPopupMenu().getSetMain().setEnabled(true);
+				if (selectedFileEditorPanel.isMainFile())
+					// Enables the unset main menu item
+					selectedFileEditorPanel.getPopupMenu().getUnsetMain().setEnabled(true);
+				if (!selectedFileEditorPanel.isCompilableFile()
+						|| (selectedFileEditorPanel.isCompilableFile() && selectedFileEditorPanel.isMainFile()))
+					// Enables the set compilable menu item
+					selectedFileEditorPanel.getPopupMenu().getSetCompilable().setEnabled(true);
+				if (selectedFileEditorPanel.isCompilableFile() && !selectedFileEditorPanel.isMainFile())
+					// Enables the unset compilable menu item
+					selectedFileEditorPanel.getPopupMenu().getUnsetCompilable().setEnabled(true);
 			} else {
 
 				// Searches for the file in the project list
@@ -132,31 +159,44 @@ public class AcideEditorPanelPopupMenuListener extends MouseAdapter {
 
 				boolean exists = false;
 
-				for (int i = 0; i < AcideProjectConfiguration.getInstance()
-						.getNumberOfFilesFromList(); i++) {
-					if (AcideProjectConfiguration.getInstance().getFileAt(i)
+				for (int index = 0; index < AcideProjectConfiguration.getInstance()
+						.getNumberOfFilesFromList(); index++) {
+					if (AcideProjectConfiguration.getInstance().getFileAt(index)
 							.getAbsolutePath().equals(file)) {
 						exists = true;
 					}
 				}
+				
 				if (exists) {
-					selectedEditor.getPopupMenu().getRemoveFile().setEnabled(true);
-					selectedEditor.getPopupMenu().getAddFile().setEnabled(false);
+					
+					// Enables the remove file menu item
+					selectedFileEditorPanel.getPopupMenu().getRemoveFile().setEnabled(true);
+					
+					// Enables the add file menu item
+					selectedFileEditorPanel.getPopupMenu().getAddFile().setEnabled(false);
 
-					if (!selectedEditor.isMainFile())
-						selectedEditor.getPopupMenu().getSetMain().setEnabled(true);
-					if (selectedEditor.isMainFile())
-						selectedEditor.getPopupMenu().getUnsetMain().setEnabled(true);
-					if (!selectedEditor.isCompilableFile()
-							|| (selectedEditor.isCompilableFile() && selectedEditor.isMainFile()))
-						selectedEditor.getPopupMenu().getSetCompilable().setEnabled(true);
-					if (selectedEditor.isCompilableFile() && !selectedEditor.isMainFile())
-						selectedEditor.getPopupMenu().getUnsetCompilable()
+					if (!selectedFileEditorPanel.isMainFile())
+						// Enables the set main menu item
+						selectedFileEditorPanel.getPopupMenu().getSetMain().setEnabled(true);
+					if (selectedFileEditorPanel.isMainFile())
+						// Enables the unset main menu item
+						selectedFileEditorPanel.getPopupMenu().getUnsetMain().setEnabled(true);
+					if (!selectedFileEditorPanel.isCompilableFile()
+							|| (selectedFileEditorPanel.isCompilableFile() && selectedFileEditorPanel.isMainFile()))
+						// Enables the set compilable menu item
+						selectedFileEditorPanel.getPopupMenu().getSetCompilable().setEnabled(true);
+					if (selectedFileEditorPanel.isCompilableFile() && !selectedFileEditorPanel.isMainFile())
+						// Enables the unset compilable menu item
+						selectedFileEditorPanel.getPopupMenu().getUnsetCompilable()
 								.setEnabled(true);
 
 				} else {
-					selectedEditor.getPopupMenu().getRemoveFile().setEnabled(false);
-					selectedEditor.getPopupMenu().getAddFile().setEnabled(true);
+					
+					// Disables the remove file menu item
+					selectedFileEditorPanel.getPopupMenu().getRemoveFile().setEnabled(false);
+					
+					// Disables the add file menu item
+					selectedFileEditorPanel.getPopupMenu().getAddFile().setEnabled(true);
 				}
 			}
 

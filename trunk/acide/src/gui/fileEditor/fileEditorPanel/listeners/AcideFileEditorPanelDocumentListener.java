@@ -117,7 +117,7 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 
 							// Sets the red icon to the close button
 							MainWindow.getInstance().getFileEditorManager()
-									.getTestPlaf()
+									.getTabbedPaneUI()
 									.getCloseButtonAt(fileEditorPanelIndexOnFocus)
 									.setRedCloseButton();
 
@@ -132,7 +132,7 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 
 							// Sets the red icon to the close button
 							MainWindow.getInstance().getFileEditorManager()
-									.getTestPlaf()
+									.getTabbedPaneUI()
 									.getCloseButtonAt(fileEditorPanelIndexOnFocus)
 									.setGreenCloseButton();
 

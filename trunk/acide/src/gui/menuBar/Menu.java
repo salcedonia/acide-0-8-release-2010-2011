@@ -89,9 +89,9 @@ public class Menu {
 	 */
 	private boolean _isConsoleFocused;
 	/**
-	 * Indicates if ?
+	 * Is new project file flag.
 	 */
-	private boolean _isNPF;
+	private boolean _isNewProjectFile;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE menu.
@@ -558,21 +558,21 @@ public class Menu {
 	}
 
 	/**
-	 * Returns the is NPF flag.
+	 * Returns the is new project file flag.
 	 * 
-	 * @return the is NPF flag.
+	 * @return the is new project file flag.
 	 */
-	public boolean isNPF() {
-		return _isNPF;
+	public boolean isNewProjectFile() {
+		return _isNewProjectFile;
 	}
 
 	/**
-	 * Sets a new value to the ACIDE - A Configurable IDE menu is NPF flag.
+	 * Sets a new value to the ACIDE - A Configurable IDE menu is new project file flag.
 	 * 
-	 * @param isNPF new value to set.
+	 * @param isNewProjectFile new value to set.
 	 */
-	public void setIsNPF(boolean isNPF) {
-		_isNPF = isNPF;
+	public void setIsNewProjectFile(boolean isNewProjectFile) {
+		_isNewProjectFile = isNewProjectFile;
 	}
 
 	/**

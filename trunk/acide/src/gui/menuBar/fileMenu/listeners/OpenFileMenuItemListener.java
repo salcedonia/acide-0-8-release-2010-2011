@@ -31,25 +31,23 @@ package gui.menuBar.fileMenu.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
 import javax.swing.SwingUtilities;
 
 import language.AcideLanguageManager;
 import operations.factory.AcideIOFactory;
 import operations.log.AcideLog;
-import resources.AcideResourceManager;
 import es.configuration.project.AcideProjectConfiguration;
 import es.project.AcideProjectFileType;
 import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
 
-/**																
- * ACIDE - A Configurable IDE file menu open file menu item listener.											
- *					
- * @version 0.8	
- * @see ActionListener																													
+/**
+ * ACIDE - A Configurable IDE file menu open file menu item listener.
+ * 
+ * @version 0.8
+ * @see ActionListener
  */
 public class OpenFileMenuItemListener implements ActionListener {
 
@@ -63,21 +61,6 @@ public class OpenFileMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-			
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		AcideTextFile textFile = AcideIOFactory.getInstance().buildFile();
 		String filePath = " ";
 		filePath = textFile.askAbsolutePath();
@@ -89,10 +72,11 @@ public class OpenFileMenuItemListener implements ActionListener {
 
 			// Checks if the file is already opened
 			int fileIndex = -1;
-			for (int position = 0; position < MainWindow.getInstance().getFileEditorManager()
-					.getNumberOfFileEditorPanels(); position++) {
+			for (int position = 0; position < MainWindow.getInstance()
+					.getFileEditorManager().getNumberOfFileEditorPanels(); position++) {
 				if (MainWindow.getInstance().getFileEditorManager()
-						.getFileEditorPanelAt(position).getAbsolutePath().equals(filePath)) {
+						.getFileEditorPanelAt(position).getAbsolutePath()
+						.equals(filePath)) {
 					isOpened = true;
 					fileIndex = position;
 				}
@@ -107,30 +91,34 @@ public class OpenFileMenuItemListener implements ActionListener {
 				// If the text is not empty
 				if (text != null) {
 
-					// Searches for the file into the project configuration file list
+					// Searches for the file into the project configuration file
+					// list
 					int fileProjectIndex = -1;
-					for (int index = 0; index < AcideProjectConfiguration.getInstance()
-							.getNumberOfFilesFromList(); index++) {
-						if (AcideProjectConfiguration.getInstance().getFileAt(index)
-								.getAbsolutePath().equals(filePath))
+					for (int index = 0; index < AcideProjectConfiguration
+							.getInstance().getNumberOfFilesFromList(); index++) {
+						if (AcideProjectConfiguration.getInstance()
+								.getFileAt(index).getAbsolutePath()
+								.equals(filePath))
 							fileProjectIndex = index;
 					}
 
 					AcideProjectFileType fileType = AcideProjectFileType.NORMAL;
-					
+
 					// If belongs to the project
 					if (fileProjectIndex > -1) {
 
 						// Updates the status message in the status bar
-						MainWindow.getInstance().getStatusBar().setStatusMessage(
-								AcideProjectConfiguration.getInstance()
-										.getFileAt(fileProjectIndex)
-										.getAbsolutePath());
+						MainWindow
+								.getInstance()
+								.getStatusBar()
+								.setStatusMessage(
+										AcideProjectConfiguration.getInstance()
+												.getFileAt(fileProjectIndex)
+												.getAbsolutePath());
 
 						// Is COMPILABLE FILE?
-						if (AcideProjectConfiguration.getInstance().getFileAt(
-										fileProjectIndex)
-								.isCompilableFile()) {
+						if (AcideProjectConfiguration.getInstance()
+								.getFileAt(fileProjectIndex).isCompilableFile()) {
 							fileType = AcideProjectFileType.COMPILABLE;
 
 							// Updates the status message in the status bar
@@ -138,16 +126,16 @@ public class OpenFileMenuItemListener implements ActionListener {
 									.getInstance()
 									.getStatusBar()
 									.setStatusMessage(
-											AcideProjectConfiguration.getInstance()
-													.getFileAt(
-															fileProjectIndex)
+											AcideProjectConfiguration
+													.getInstance()
+													.getFileAt(fileProjectIndex)
 													.getAbsolutePath()
 													+ " <COMPILABLE>");
 						}
 
 						// Is MAIN FILE?
-						if (AcideProjectConfiguration.getInstance().getFileAt(
-										fileProjectIndex).isMainFile()) {
+						if (AcideProjectConfiguration.getInstance()
+								.getFileAt(fileProjectIndex).isMainFile()) {
 							fileType = AcideProjectFileType.MAIN;
 
 							// Updates the status message in the status bar
@@ -155,9 +143,9 @@ public class OpenFileMenuItemListener implements ActionListener {
 									.getInstance()
 									.getStatusBar()
 									.setStatusMessage(
-											AcideProjectConfiguration.getInstance()
-													.getFileAt(
-															fileProjectIndex)
+											AcideProjectConfiguration
+													.getInstance()
+													.getFileAt(fileProjectIndex)
 													.getAbsolutePath()
 													+ " <MAIN>");
 						}
@@ -167,40 +155,51 @@ public class OpenFileMenuItemListener implements ActionListener {
 						// If it does not belong to the project
 
 						// Updates the status message in the status bar
-						MainWindow.getInstance().getStatusBar().setStatusMessage(
-								filePath);
+						MainWindow.getInstance().getStatusBar()
+								.setStatusMessage(filePath);
 
 					}
 
 					// Opens a new tab with the content
-					MainWindow.getInstance().getFileEditorManager().newTab(
-							filePath, filePath, text, true, fileType, 0);
-					
+					MainWindow
+							.getInstance()
+							.getFileEditorManager()
+							.newTab(filePath, filePath, text, true, fileType, 0);
+
 					// Updates the log
-					AcideLog.getLog().info(labels.getString("s84") + filePath);
-					AcideLog.getLog().info(labels.getString("s85") + filePath
-							+ labels.getString("s86"));
+					AcideLog.getLog().info(
+							AcideLanguageManager.getInstance().getLabels()
+									.getString("s84")
+									+ filePath);
+					AcideLog.getLog().info(
+							AcideLanguageManager.getInstance().getLabels()
+									.getString("s85")
+									+ filePath
+									+ AcideLanguageManager.getInstance()
+											.getLabels().getString("s86"));
 
 					// Enables the file menu
 					MainWindow.getInstance().getMenu().enableFileMenu();
 
 					// Enables the edit menu
 					MainWindow.getInstance().getMenu().enableEditMenu();
-					
+
 					// Updates the undo manager
 					AcideUndoRedoManager.getInstance().update();
 
 					// Sets the caret in the first position of the editor
-					MainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel().getActiveTextEditionArea().setCaretPosition(0);
+					MainWindow.getInstance().getFileEditorManager()
+							.getSelectedFileEditorPanel()
+							.getActiveTextEditionArea().setCaretPosition(0);
 
 					// Sets the new file state to opened
-					for (int filePosition = 0; filePosition < AcideProjectConfiguration.getInstance()
-							.getFileListSize(); filePosition++) {
-						if (AcideProjectConfiguration.getInstance().getFileAt(
-										filePosition).getAbsolutePath().equals(
-										filePath)) {
-							AcideProjectConfiguration.getInstance().getFileAt(
-											filePosition).setIsOpened(true);
+					for (int filePosition = 0; filePosition < AcideProjectConfiguration
+							.getInstance().getFileListSize(); filePosition++) {
+						if (AcideProjectConfiguration.getInstance()
+								.getFileAt(filePosition).getAbsolutePath()
+								.equals(filePath)) {
+							AcideProjectConfiguration.getInstance()
+									.getFileAt(filePosition).setIsOpened(true);
 						}
 					}
 
@@ -235,18 +234,21 @@ public class OpenFileMenuItemListener implements ActionListener {
 						}
 					}
 					// Not default project
-					if (!AcideProjectConfiguration.getInstance().isDefaultProject())
-						
+					if (!AcideProjectConfiguration.getInstance()
+							.isDefaultProject())
+
 						// The project has been modified
-						AcideProjectConfiguration.getInstance()
-								.setIsModified(true);
+						AcideProjectConfiguration.getInstance().setIsModified(
+								true);
 
 				} else {
 
 					// EMPTY FILE
-					
+
 					// Updates the log
-					AcideLog.getLog().info(labels.getString("s88"));
+					AcideLog.getLog().info(
+							AcideLanguageManager.getInstance().getLabels()
+									.getString("s88"));
 				}
 
 			} else {
@@ -279,8 +281,10 @@ public class OpenFileMenuItemListener implements ActionListener {
 		} else
 
 			// FILE DOESN'T EXISTS
-			
+
 			// Updates the log
-			AcideLog.getLog().info(labels.getString("s83"));
+			AcideLog.getLog().info(
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s83"));
 	}
 }

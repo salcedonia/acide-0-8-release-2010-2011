@@ -58,46 +58,70 @@ public class UnsetMainFileMenuItemListener implements ActionListener {
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		// Gets the selection in the explorer tree
-		TreePath explorerSelection = MainWindow.getInstance().getExplorerPanel().getTree()
+		TreePath currentSelection = MainWindow.getInstance().getExplorerPanel().getTree()
 				.getSelectionPath();
-		DefaultMutableTreeNode selectedNode;
-		AcideProjectFile projectFile;
+		
+		// Current node
+		DefaultMutableTreeNode currentNode;
+		
+		// Current project file
+		AcideProjectFile currentProjectFile;
 
 		// If something is selected
-		if (explorerSelection != null) {
+		if (currentSelection != null) {
 
 			// Gets the selected node in the explorer tree
-			selectedNode = (DefaultMutableTreeNode) explorerSelection.getLastPathComponent();
+			currentNode = (DefaultMutableTreeNode) currentSelection.getLastPathComponent();
 			
-			// Transforms it into a explorer file
-			projectFile = (AcideProjectFile) selectedNode.getUserObject();
+			// Gets the current project file from the current node info
+			currentProjectFile = (AcideProjectFile) currentNode.getUserObject();
 
 			// Is MAIN FILE
-			if (projectFile.isMainFile()) {
+			if (currentProjectFile.isMainFile()) {
 
 				// Is a file and not a directory
-				if (!projectFile.isDirectory()) {
+				if (!currentProjectFile.isDirectory()) {
 
-					projectFile.setIsMainFile(false);
-					projectFile.setIsCompilableFile(false);
+					// It is not a MAIN FILE
+					currentProjectFile.setIsMainFile(false);
+					
+					// It is not a COMPILABLE FILE
+					currentProjectFile.setIsCompilableFile(false);
 
 					// The project has been modified
 					AcideProjectConfiguration.getInstance()
 							.setIsModified(true);
 
-					// Updates the status message in the status bar
-					MainWindow.getInstance().getStatusBar().setStatusMessage(
-							projectFile.getAbsolutePath());
-
-					// Quits the icon tab
+					// Updates the file editor
 					for (int index = 0; index < MainWindow.getInstance()
 							.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
 
 						if (MainWindow.getInstance().getFileEditorManager()
 								.getFileEditorPanelAt(index).getAbsolutePath().equals(
-										projectFile.getAbsolutePath())) {
+										currentProjectFile.getAbsolutePath())) {
+							
+							// Updates the file editor configuration
+							MainWindow
+							.getInstance()
+							.getFileEditorManager().getFileEditorPanelAt(index).setCompilableFile(false);
+							MainWindow
+							.getInstance()
+							.getFileEditorManager().getFileEditorPanelAt(index).setMainFile(false);
+							
+							// Updates the file editor panel image icon
+							MainWindow
+							.getInstance()
+							.getFileEditorManager().getFileEditorPanelAt(index).setIcon(null);
+							
+							// Sets the icon in the file editor tab
 							MainWindow.getInstance().getFileEditorManager()
 									.getTabbedPane().setIconAt(index, null);
+							
+							// Updates the status message in the status bar
+							MainWindow.getInstance().getStatusBar().setStatusMessage(
+									MainWindow
+									.getInstance()
+									.getFileEditorManager().getFileEditorPanelAt(index).getAbsolutePath());
 						}
 					}
 				}

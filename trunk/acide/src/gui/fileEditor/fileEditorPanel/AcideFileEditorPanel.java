@@ -32,14 +32,14 @@ package gui.fileEditor.fileEditorPanel;
 import gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
 import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.AcideFileEditorTextEditionArea;
 import gui.fileEditor.fileEditorPanel.listeners.AcideFileEditorPanelDocumentListener;
-import gui.fileEditor.fileEditorPanel.popup.AcideEditorPopupMenu;
+import gui.fileEditor.fileEditorPanel.popup.AcideFileEditorPopupMenu;
 import gui.mainWindow.MainWindow;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextPane;
@@ -85,7 +85,7 @@ public class AcideFileEditorPanel extends JPanel {
 	/**
 	 * ACIDE - A Configurable IDE file editor panel popup menu.
 	 */
-	private AcideEditorPopupMenu _popup;
+	private AcideFileEditorPopupMenu _popup;
 	/**
 	 * ACIDE - A Configurable IDE file editor panel styled document for the
 	 * files.
@@ -117,7 +117,7 @@ public class AcideFileEditorPanel extends JPanel {
 	/**
 	 * ACIDE - A Configurable IDE file editor panel icon.
 	 */
-	private Icon _icon;
+	private ImageIcon _icon;
 	/**
 	 * ACIDE - A Configurable IDE file editor panel file disk copy.
 	 * 
@@ -132,36 +132,21 @@ public class AcideFileEditorPanel extends JPanel {
 
 		super();
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		try {
 
 			// Initializes the variables
 			_activeTextEditionArea = 1;
 
 			// Updates the log
-			AcideLog.getLog().info(labels.getString("s317"));
+			AcideLog.getLog().info(AcideLanguageManager.getInstance().getLabels().getString("s317"));
 
 			// Creates the text edition panel list
 			_textEditionAreaList = new ArrayList<AcideFileEditorTextEditionArea>();
 
 			// Creates the syntax document
 			_styledDocument = new AcideStyledDocument();
-
+			_styledDocument.addDocumentListener(_documentListener);
+			
 			// Builds the popup menu
 			buildPopupMenu();
 
@@ -190,12 +175,12 @@ public class AcideFileEditorPanel extends JPanel {
 			_lastSize = 0;
 
 			// Updates the log
-			AcideLog.getLog().info(labels.getString("s318"));
+			AcideLog.getLog().info(AcideLanguageManager.getInstance().getLabels().getString("s318"));
 
 		} catch (Exception exception) {
 
 			// Updates the log
-			AcideLog.getLog().info(labels.getString("s319"));
+			AcideLog.getLog().info(AcideLanguageManager.getInstance().getLabels().getString("s319"));
 			exception.printStackTrace();
 		}
 	}
@@ -204,7 +189,7 @@ public class AcideFileEditorPanel extends JPanel {
 	 * Builds the file ACIDE - A Configurable IDE file editor panel popup menu.
 	 */
 	public void buildPopupMenu() {
-		_popup = new AcideEditorPopupMenu();
+		_popup = new AcideFileEditorPopupMenu();
 	}
 
 	/**
@@ -520,7 +505,7 @@ public class AcideFileEditorPanel extends JPanel {
 	 * 
 	 * @return the ACIDE - A Configurable IDE file editor panel icon.
 	 */
-	public Icon getIcon() {
+	public ImageIcon getIcon() {
 		return _icon;
 	}
 
@@ -531,7 +516,7 @@ public class AcideFileEditorPanel extends JPanel {
 	 * @param icon
 	 *            new value to set.
 	 */
-	public void setIcon(Icon icon) {
+	public void setIcon(ImageIcon icon) {
 		_icon = icon;
 	}
 
@@ -560,7 +545,7 @@ public class AcideFileEditorPanel extends JPanel {
 	 * 
 	 * @return the ACIDE - A Configurable IDE file editor panel popup menu.
 	 */
-	public AcideEditorPopupMenu getPopupMenu() {
+	public AcideFileEditorPopupMenu getPopupMenu() {
 		return _popup;
 	}
 

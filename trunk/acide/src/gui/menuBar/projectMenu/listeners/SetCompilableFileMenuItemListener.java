@@ -59,53 +59,73 @@ public class SetCompilableFileMenuItemListener implements ActionListener {
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		// Gets the selection in the explorer tree
-		TreePath explorerSelection = MainWindow.getInstance().getExplorerPanel().getTree()
+		TreePath currentSelection = MainWindow.getInstance().getExplorerPanel().getTree()
 				.getSelectionPath();
-		DefaultMutableTreeNode selectedNode;
-		AcideProjectFile projectFile;
+		
+		// Current node
+		DefaultMutableTreeNode currentNode;
+		
+		// Current project file
+		AcideProjectFile currentProjectFile;
 
 		// If something is selected
-		if (explorerSelection != null) {
+		if (currentSelection != null) {
 
 			// Gets the selected node in the explorer tree
-			selectedNode = (DefaultMutableTreeNode) explorerSelection.getLastPathComponent();
+			currentNode = (DefaultMutableTreeNode) currentSelection.getLastPathComponent();
 			
 			// Transforms it into a explorer file
-			projectFile = (AcideProjectFile) selectedNode.getUserObject();
+			currentProjectFile = (AcideProjectFile) currentNode.getUserObject();
 
 			// If is not COMPILABLE FILE or COMPILABLE and MAIN FILE
-			if (!projectFile.isCompilableFile()
-					|| (projectFile.isCompilableFile() && projectFile
+			if (!currentProjectFile.isCompilableFile()
+					|| (currentProjectFile.isCompilableFile() && currentProjectFile
 							.isMainFile())) {
 
 				// Is a file and not a directory
-				if (!projectFile.isDirectory()) {
+				if (!currentProjectFile.isDirectory()) {
 
-					if (projectFile.isMainFile())
-						projectFile.setIsMainFile(false);
-
-					projectFile.setIsCompilableFile(true);
+					if (currentProjectFile.isMainFile())
+						currentProjectFile.setIsMainFile(false);
+					currentProjectFile.setIsCompilableFile(true);
 
 					// The project has been modified
 					AcideProjectConfiguration.getInstance()
 							.setIsModified(true);
 
-					// Puts the icon in the editor
+					// Updates the file editor
 					for (int index = 0; index < MainWindow.getInstance()
 							.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
 
 						if (MainWindow.getInstance().getFileEditorManager()
 								.getFileEditorPanelAt(index).getAbsolutePath().equals(
-										projectFile.getAbsolutePath())) {
+										currentProjectFile.getAbsolutePath())) {
 
+							// Creates the image icon
+							ImageIcon imageIcon = new ImageIcon(
+							"./resources/icons/editor/compilable.png");
+							
+							// Updates the file editor configuration
+							MainWindow
+							.getInstance()
+							.getFileEditorManager().getFileEditorPanelAt(index).setCompilableFile(true);
+							MainWindow
+							.getInstance()
+							.getFileEditorManager().getFileEditorPanelAt(index).setMainFile(false);
+							
+							// Updates the file editor panel image icon
+							MainWindow
+							.getInstance()
+							.getFileEditorManager().getFileEditorPanelAt(index).setIcon(imageIcon);
+							
+							// Sets the icon in the file editor tab
 							MainWindow
 									.getInstance()
 									.getFileEditorManager()
 									.getTabbedPane()
 									.setIconAt(
 											index,
-											new ImageIcon(
-													"./resources/icons/editor/compilable.PNG"));
+											imageIcon);
 
 							// Updates the status message in the status bar
 							MainWindow.getInstance().getStatusBar()

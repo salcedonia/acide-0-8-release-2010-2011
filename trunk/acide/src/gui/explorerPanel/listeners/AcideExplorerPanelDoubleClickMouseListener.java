@@ -63,31 +63,35 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 		// Double click
 		if (mouseEvent.getClickCount() == 2) {
 
-			// Gets the selected node
-			TreePath selectedNode = MainWindow.getInstance().getExplorerPanel()
+			// Gets the current explorer tree selection
+			TreePath currentSelection = MainWindow.getInstance().getExplorerPanel()
 					.getTree()
 					.getPathForLocation(mouseEvent.getX(), mouseEvent.getY());
 
 			// If something is selected
-			if (selectedNode != null) {
+			if (currentSelection != null) {
 
-				// Updates the status bar
-				String filePath = selectedNode.getLastPathComponent()
-						.toString();
-				MainWindow.getInstance().getStatusBar().setStatusMessage(filePath);
+				// Updates status message in the status bar
+				MainWindow.getInstance().getStatusBar().setStatusMessage(currentSelection.getLastPathComponent()
+						.toString());
 
-				DefaultMutableTreeNode defaultMutableTreeNode = (DefaultMutableTreeNode) selectedNode
+				// Gets the current node
+				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection
 						.getLastPathComponent();
-				Object node = defaultMutableTreeNode.getUserObject();
-				AcideProjectFile projectFile = (AcideProjectFile) node;
+
+				// Gets the current project file
+				AcideProjectFile currentProjectFile = (AcideProjectFile) currentNode.getUserObject();
 
 				// Searches for the file into the editor files
 				int fileEditorPanelIndex = -1;
 				for (int index = 0; index < MainWindow.getInstance()
 						.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
+					
 					if (MainWindow.getInstance().getFileEditorManager()
 							.getFileEditorPanelAt(index).getAbsolutePath()
-							.equals(projectFile.getAbsolutePath())) {
+							.equals(currentProjectFile.getAbsolutePath())) {
+						
+						// Found it
 						fileEditorPanelIndex = index;
 					}
 				}
@@ -96,14 +100,15 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 				if (fileEditorPanelIndex == -1) {
 
 					// Not a directory
-					if (!projectFile.isDirectory()) {
+					if (!currentProjectFile.isDirectory()) {
 
+						// Creates the file
 						AcideTextFile textFile = new AcideTextFile();
 						AcideFileEditorManager editorBuilder = MainWindow
 								.getInstance().getFileEditorManager();
 
 						String fileContent = "";
-						fileContent = textFile.load(projectFile.getAbsolutePath());
+						fileContent = textFile.load(currentProjectFile.getAbsolutePath());
 
 						// Searches for the file into the project opened files
 						// list
@@ -111,7 +116,9 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 						for (int index = 0; index < AcideProjectConfiguration.getInstance()
 								.getNumberOfFilesFromList(); index++) {
 							if (AcideProjectConfiguration.getInstance().getFileAt(index)
-									.getAbsolutePath().equals(projectFile.getAbsolutePath()))
+									.getAbsolutePath().equals(currentProjectFile.getAbsolutePath()))
+								
+								// Found it
 								fileEditorPanelIndex = index;
 						}
 
@@ -162,8 +169,8 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 						}
 
 						// Opens a new tab in the editor
-						editorBuilder.newTab(projectFile.getAbsolutePath(),
-								projectFile.getAbsolutePath(), fileContent, true, fileType, 0);
+						editorBuilder.newTab(currentProjectFile.getAbsolutePath(),
+								currentProjectFile.getAbsolutePath(), fileContent, true, fileType, 0);
 
 						// Enables the file menu
 						MainWindow.getInstance().getMenu().enableFileMenu();
@@ -183,7 +190,7 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 
 							if (MainWindow.getInstance().getFileEditorManager()
 									.getFileEditorPanelAt(index).getAbsolutePath()
-									.equals(projectFile.getAbsolutePath())) {
+									.equals(currentProjectFile.getAbsolutePath())) {
 
 								SwingUtilities.invokeLater(new Runnable() {
 									/*
@@ -214,7 +221,7 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 						// Sets the file status in the project configuration
 						for (int index = 0; index < AcideProjectConfiguration.getInstance().getFileListSize(); index++) {
 							if (AcideProjectConfiguration.getInstance().getFileAt(index)
-									.getAbsolutePath().equals(projectFile.getAbsolutePath())) {
+									.getAbsolutePath().equals(currentProjectFile.getAbsolutePath())) {
 								AcideProjectConfiguration.getInstance()
 										.getFileAt(index).setIsOpened(true);
 							}
