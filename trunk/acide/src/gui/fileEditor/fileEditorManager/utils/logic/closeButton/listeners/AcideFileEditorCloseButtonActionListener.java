@@ -30,7 +30,7 @@
 package gui.fileEditor.fileEditorManager.utils.logic.closeButton.listeners;
 
 import es.configuration.project.AcideProjectConfiguration;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.fileEditor.fileEditorManager.utils.logic.closeButton.AcideFileEditorCloseButton;
 import gui.mainWindow.MainWindow;
 
@@ -118,15 +118,15 @@ public class AcideFileEditorCloseButtonActionListener extends AbstractAction {
 						.getFileEditorPanelAt(_index).getAbsolutePath()
 						.equals(labels.getString("s79"))) {
 
-					TextFile textFile = AcideIOFactory.getInstance()
+					AcideTextFile textFile = AcideIOFactory.getInstance()
 							.buildFile();
 					String filePath = " ";
-					filePath = textFile.write();
+					filePath = textFile.askSavingFileEditorFile();
 
 					if (!filePath.equals(" ")) {
 
 						// Saves the file
-						boolean savingResult = textFile.save(filePath,
+						boolean savingResult = textFile.write(filePath,
 								MainWindow.getInstance().getFileEditorManager()
 										.getFileEditorPanelAt(_index)
 										.getTextEditionAreaContent());
@@ -166,11 +166,11 @@ public class AcideFileEditorCloseButtonActionListener extends AbstractAction {
 
 					// Is not the new file
 
-					TextFile textFile = AcideIOFactory.getInstance()
+					AcideTextFile textFile = AcideIOFactory.getInstance()
 							.buildFile();
 
 					// Saves the file
-					boolean savingResult = textFile.save(MainWindow
+					boolean savingResult = textFile.write(MainWindow
 							.getInstance().getFileEditorManager()
 							.getFileEditorPanelAt(_index).getAbsolutePath(),
 							MainWindow.getInstance().getFileEditorManager()

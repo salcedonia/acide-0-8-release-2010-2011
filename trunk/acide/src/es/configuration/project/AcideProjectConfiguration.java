@@ -73,7 +73,8 @@ public class AcideProjectConfiguration {
 	 */
 	private String _consoleConfiguration;
 	/**
-	 * ACIDE - A Configurable IDE project configuration file editor configuration.
+	 * ACIDE - A Configurable IDE project configuration file editor
+	 * configuration.
 	 */
 	private String _fileEditorConfiguration;
 	/**
@@ -134,17 +135,19 @@ public class AcideProjectConfiguration {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE project configuration unique class instance.
+	 * Returns the ACIDE - A Configurable IDE project configuration unique class
+	 * instance.
 	 * 
-	 * @return the ACIDE - A Configurable IDE project configuration unique class instance.
+	 * @return the ACIDE - A Configurable IDE project configuration unique class
+	 *         instance.
 	 */
-	public static AcideProjectConfiguration getInstance(){
-		
-		if(_instance == null)
+	public static AcideProjectConfiguration getInstance() {
+
+		if (_instance == null)
 			_instance = new AcideProjectConfiguration();
 		return _instance;
 	}
-	
+
 	/**
 	 * Saves the project configuration in a string.
 	 * 
@@ -170,13 +173,13 @@ public class AcideProjectConfiguration {
 		fileContent = fileContent + _fileList.size() + "\n";
 
 		for (int index = 0; index < _fileList.size(); index++) {
-			
+
 			// Gets the ACIDE - A Configurable file from the list
 			AcideProjectFile file = (AcideProjectFile) _fileList.get(index);
-			fileContent = fileContent + file.getAbsolutePath() + "\n" + file.getName() + "\n"
-					+ file.getParent() + "\n" + file.isDirectory() + "\n"
-					+ file.isCompilableFile() + "\n" + file.isMainFile() + "\n"
-					+ file.isOpened() + "\n";
+			fileContent = fileContent + file.getAbsolutePath() + "\n"
+					+ file.getName() + "\n" + file.getParent() + "\n"
+					+ file.isDirectory() + "\n" + file.isCompilableFile()
+					+ "\n" + file.isMainFile() + "\n" + file.isOpened() + "\n";
 		}
 
 		return fileContent;
@@ -203,8 +206,7 @@ public class AcideProjectConfiguration {
 		}
 
 		return project.matches("./configuration/project/default.acidePrj")
-				&& AcideProjectConfiguration.getInstance().getName()
-						.equals("");
+				&& AcideProjectConfiguration.getInstance().getName().equals("");
 	}
 
 	/**
@@ -223,18 +225,18 @@ public class AcideProjectConfiguration {
 		// PROJECT NAME
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_name = fileContent.substring(initialPosition, finalPosition);
-		
+
 		// PROJECT PATH
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_path = fileContent.substring(initialPosition, finalPosition);
-		
+
 		// WINDOW CONFIGURATION PATH
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_windowConfiguration = fileContent.substring(initialPosition,
 				finalPosition);
-		
+
 		// LEXICON CONFIGURATION PATH
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
@@ -286,7 +288,7 @@ public class AcideProjectConfiguration {
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_fileEditorConfiguration = fileContent.substring(initialPosition,
 				finalPosition);
-		
+
 		// NUM FILES
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
@@ -308,22 +310,22 @@ public class AcideProjectConfiguration {
 
 			// Creates the ACIDE - A Configurable IDE file
 			AcideProjectFile file = new AcideProjectFile();
-			
+
 			// ABSOLUTE PATH
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			path = fileContent.substring(initialPosition, finalPosition);
 			initialPosition = finalPosition + 1;
-			
+
 			// NAME
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			name = fileContent.substring(initialPosition, finalPosition);
 			initialPosition = finalPosition + 1;
-			
+
 			// PARENT
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			parent = fileContent.substring(initialPosition, finalPosition);
 			initialPosition = finalPosition + 1;
-			
+
 			// IS DIRECTORY
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			if (Boolean.parseBoolean(fileContent.substring(initialPosition,
@@ -332,7 +334,7 @@ public class AcideProjectConfiguration {
 			else
 				isDirectory = false;
 			initialPosition = finalPosition + 1;
-			
+
 			// IS COMPILABLE FILE
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			if (Boolean.parseBoolean(fileContent.substring(initialPosition,
@@ -341,7 +343,7 @@ public class AcideProjectConfiguration {
 			else
 				isCompilableFile = false;
 			initialPosition = finalPosition + 1;
-			
+
 			// IS MAIN FILE
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			if (Boolean.parseBoolean(fileContent.substring(initialPosition,
@@ -350,7 +352,7 @@ public class AcideProjectConfiguration {
 			else
 				isMainFile = false;
 			initialPosition = finalPosition + 1;
-			
+
 			// IS OPENED
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			if (Boolean.parseBoolean(fileContent.substring(initialPosition,
@@ -359,7 +361,7 @@ public class AcideProjectConfiguration {
 			else
 				isOpened = false;
 			initialPosition = finalPosition + 1;
-			
+
 			// Updates the ACIDE - A Configurable IDE file with the info
 			file.setIsMainFile(isMainFile);
 			file.setIsCompilableFile(isCompilableFile);
@@ -368,26 +370,32 @@ public class AcideProjectConfiguration {
 			file.setName(name);
 			file.setIsDirectory(isDirectory);
 			file.setIsOpened(isOpened);
-			
-			// Checks if exists
-			File externalFile = new File(path);
-			if(externalFile.exists()){
-				
+
+			// Always add the folders as they do not exist
+			if (file.isDirectory())
 				// Adds the file to the list
 				_fileList.add(file);
-			}
 			else{
 				
-				// Error message
-				JOptionPane.showMessageDialog(null,
-						AcideLanguageManager.getInstance().getLabels().getString("s970")
-								+ AcideProjectConfiguration.getInstance()
-										.getFileAt(index).getAbsolutePath()
-								+ AcideLanguageManager.getInstance().getLabels().getString("s971"), "Error",
-						JOptionPane.ERROR_MESSAGE);
-				
-				// The configuration has been modified
-				_isModified = true;
+				// Checks if exists
+				File externalFile = new File(path);
+				if (externalFile.exists()) {
+
+					// Adds the file to the list
+					_fileList.add(file);
+				} else {
+
+					// Error message
+					JOptionPane.showMessageDialog(null, AcideLanguageManager
+							.getInstance().getLabels().getString("s970")
+							+ path
+							+ AcideLanguageManager.getInstance().getLabels()
+									.getString("s971"), "Error",
+							JOptionPane.ERROR_MESSAGE);
+
+					// The configuration has been modified
+					_isModified = true;
+				}
 			}
 		}
 	}
@@ -513,7 +521,7 @@ public class AcideProjectConfiguration {
 	 * 
 	 * @return the number of files from the list of files.
 	 */
-	public int getNumFilesFromList() {
+	public int getNumberOfFilesFromList() {
 		return _fileList.size();
 	}
 
@@ -535,7 +543,8 @@ public class AcideProjectConfiguration {
 	}
 
 	/**
-	 * Removes a file from the list which matches with the one given as a parameter.
+	 * Removes a file from the list which matches with the one given as a
+	 * parameter.
 	 * 
 	 * @param name
 	 *            file name to be removed.
@@ -543,7 +552,7 @@ public class AcideProjectConfiguration {
 	public void removeFileAt(String name) {
 		_fileList.remove(name);
 	}
-	
+
 	/**
 	 * Returns the syntactic configuration.
 	 * 
@@ -654,7 +663,7 @@ public class AcideProjectConfiguration {
 	 * @param menu
 	 *            new value to set.
 	 */
-	public void setMenu(String menu) {
+	public void setMenuConfiguration(String menu) {
 		_menuConfiguration = menu;
 	}
 
@@ -673,7 +682,7 @@ public class AcideProjectConfiguration {
 	 * @param toolBar
 	 *            new value to set.
 	 */
-	public void setToolBar(String toolBar) {
+	public void setToolBarConfiguration(String toolBar) {
 		_toolBarConfiguration = toolBar;
 	}
 
@@ -692,7 +701,7 @@ public class AcideProjectConfiguration {
 	 * @param language
 	 *            new value to set.
 	 */
-	public void setLanguage(String language) {
+	public void setLanguageConfiguration(String language) {
 		_language = language;
 	}
 
@@ -743,7 +752,7 @@ public class AcideProjectConfiguration {
 	public String getConsoleConfiguration() {
 		return _consoleConfiguration;
 	}
-	
+
 	/**
 	 * Returns the file editor configuration.
 	 * 
@@ -756,12 +765,13 @@ public class AcideProjectConfiguration {
 	/**
 	 * Sets a new value to the file editor configuration.
 	 * 
-	 * @param fileEditorConfiguration new value to set.
+	 * @param fileEditorConfiguration
+	 *            new value to set.
 	 */
 	public void setFileEditorConfiguration(String fileEditorConfiguration) {
 		_fileEditorConfiguration = fileEditorConfiguration;
 	}
-	
+
 	/**
 	 * Returns the ACIDE - A Configurable IDE window configuration.
 	 * 
@@ -770,31 +780,33 @@ public class AcideProjectConfiguration {
 	public String getWindowConfiguration() {
 		return _windowConfiguration;
 	}
-	
+
 	/**
 	 * Sets a new value to the ACIDE - A Configurable IDE window configuration.
 	 * 
-	 * @param windowConfiguration new value to set.
+	 * @param windowConfiguration
+	 *            new value to set.
 	 */
-	public void setWindowConfiguration(String windowConfiguration){
+	public void setWindowConfiguration(String windowConfiguration) {
 		_windowConfiguration = windowConfiguration;
 	}
-	
+
 	/**
-	 * Returns the file from the file list which absolute path matches with
-	 * the path given as a parameter.
+	 * Returns the file from the file list which absolute path matches with the
+	 * path given as a parameter.
 	 * 
-	 * @param absolutePath absolute path to compare with.
+	 * @param absolutePath
+	 *            absolute path to compare with.
 	 * 
-	 * @return the file from the file list which absolute path matches with
-	 * the path given as a parameter.
+	 * @return the file from the file list which absolute path matches with the
+	 *         path given as a parameter.
 	 */
 	public AcideProjectFile getFileAt(String absolutePath) {
-	
-		for(int index = 0; index < _fileList.size(); index++)
-			if(_fileList.get(index).getAbsolutePath().equals(absolutePath))
+
+		for (int index = 0; index < _fileList.size(); index++)
+			if (_fileList.get(index).getAbsolutePath().equals(absolutePath))
 				return _fileList.get(index);
-		
+
 		return null;
 	}
 }

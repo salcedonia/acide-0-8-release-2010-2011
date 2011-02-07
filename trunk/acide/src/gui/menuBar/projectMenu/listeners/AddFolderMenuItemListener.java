@@ -35,21 +35,19 @@ import gui.mainWindow.MainWindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
+import java.util.Enumeration;
 
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import language.AcideLanguageManager;
-import operations.log.AcideLog;
-import resources.AcideResourceManager;
 
-/**																
+/**
  * ACIDE -A Configurable IDE project menu add folder menu item listener.
- *					
- * @version 0.8	
- * @see ActionListener																													
+ * 
+ * @version 0.8
+ * @see ActionListener
  */
 public class AddFolderMenuItemListener implements ActionListener {
 
@@ -63,83 +61,125 @@ public class AddFolderMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-		
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-			
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
 		// Asks for the folder name to the user
-		String newFolder = JOptionPane.showInputDialog(null, labels
-				.getString("s656"));
+		String newFolderPath = JOptionPane.showInputDialog(null,
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s656"));
 
 		// If it is a valid folder
-		if (newFolder != null && !newFolder.matches("")) {
-			
-			// Gets the selected node in the explorer tree
-			TreePath path = MainWindow.getInstance().getExplorerPanel().getTree()
-					.getSelectionPath();
+		if (newFolderPath != null && !newFolderPath.matches("")) {
+
+			// Gets the selected explorer node tree path
+			TreePath currentSelection = MainWindow.getInstance()
+					.getExplorerPanel().getTree().getSelectionPath();
 
 			// Creates the explorer folder
-			DefaultMutableTreeNode folderPath;
-			AcideProjectFile folder;
+			DefaultMutableTreeNode currentNode;
+			AcideProjectFile currentFolder;
 
-			// If folder selected
-			if (path != null) {
-				
-				// Gets the selected node in the explorer tree
-				folderPath = (DefaultMutableTreeNode) path
+			// If a node is selected
+			if (currentSelection != null) {
+
+				// Gets the selected node last path component in the explorer
+				// tree
+				currentNode = (DefaultMutableTreeNode) currentSelection
 						.getLastPathComponent();
-				
+
 				// Transforms the node into a project file
-				folder = (AcideProjectFile) folderPath.getUserObject();
+				currentFolder = (AcideProjectFile) currentNode
+						.getUserObject();
 
 				// If it is a file and not a directory
-				if (!folder.isDirectory()) {
-					folderPath = MainWindow.getInstance().getExplorerPanel().getRoot()
-							.getNextNode();
-					folder = (AcideProjectFile) folderPath.getUserObject();
+				if (!currentFolder.isDirectory()) {
+
+					// Gets the root node
+					currentNode = MainWindow.getInstance()
+							.getExplorerPanel().getRoot().getNextNode();
+
+					// Transforms the node into a project file
+					currentFolder = (AcideProjectFile) currentNode
+							.getUserObject();
 				}
 
 			} else {
-				
-				// File selected 
-				
-				folderPath = MainWindow.getInstance().getExplorerPanel().getRoot().getNextNode();
-				folder = (AcideProjectFile) folderPath.getUserObject();
+
+				// Gets the root node
+				currentNode = MainWindow.getInstance()
+						.getExplorerPanel().getRoot().getNextNode();
+
+				// Transforms the node into a project file
+				currentFolder = (AcideProjectFile) currentNode
+						.getUserObject();
 			}
 
-			// Builds the project file
-			AcideProjectFile projectFile = new AcideProjectFile();
-			projectFile.setAbsolutePath(newFolder);
-			projectFile.setName(newFolder);
-			projectFile.setParent(folder.getName());
-			projectFile.setIsDirectory(true);
-			
-			// Adds the folder to the configuration
-			AcideProjectConfiguration.getInstance().addFile(projectFile);
-			
-			// Updates the explorer tree with the new folder
-			DefaultMutableTreeNode node = new DefaultMutableTreeNode(
-					projectFile);
-			node.setAllowsChildren(true);
-			folderPath.add(node);
-			folderPath.setAllowsChildren(true);
-			MainWindow.getInstance().getExplorerPanel().getTreeModel().reload();
-			MainWindow.getInstance().getExplorerPanel().expandTree();
-			
-			// The project configuration has been modified
-			AcideProjectConfiguration.getInstance().setIsModified(true);
+			// Checks if the folder already exists in the same level at the
+			// explorer tree
+			boolean exists = false;
+
+			for (@SuppressWarnings("unchecked")
+			Enumeration<DefaultMutableTreeNode> children = currentNode
+					.children(); children.hasMoreElements();) {
+
+				// Gets the next child
+				DefaultMutableTreeNode node = children.nextElement();
+				
+				// Transforms into a project file
+				AcideProjectFile file = (AcideProjectFile) node.getUserObject();
+
+				// Found it
+				if (file.getAbsolutePath().matches(newFolderPath))
+					exists = true;
+			}
+
+			if (!exists) {
+				// Builds the new folder to be added
+				AcideProjectFile newFolder = new AcideProjectFile();
+
+				// Sets the absolute path
+				newFolder.setAbsolutePath(newFolderPath);
+
+				// Sets the name
+				newFolder.setName(newFolderPath);
+
+				// Sets the parent
+				newFolder.setParent(currentFolder.getName());
+
+				// Sets is directory
+				newFolder.setIsDirectory(true);
+
+				// Adds the folder to the configuration
+				AcideProjectConfiguration.getInstance().addFile(newFolder);
+
+				// Updates the explorer tree with the new folder
+				DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(
+						newFolder);
+
+				// Children are allowed
+				newNode.setAllowsChildren(true);
+
+				// Adds the node
+				currentNode.add(newNode);
+
+				// Children are allowed
+				currentNode.setAllowsChildren(true);
+
+				// Updates the explorer tree model
+				MainWindow.getInstance().getExplorerPanel().getTreeModel()
+						.reload();
+
+				// Validates the changes in the explorer tree
+				MainWindow.getInstance().getExplorerPanel().expandTree();
+
+				// The project configuration has been modified
+				AcideProjectConfiguration.getInstance().setIsModified(true);
+				
+			} else {
+
+				// Warning message
+				JOptionPane.showMessageDialog(null, AcideLanguageManager
+						.getInstance().getLabels().getString("s1019"),
+						"Warning", JOptionPane.WARNING_MESSAGE);
+			}
 		}
 	}
 }
-

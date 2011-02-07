@@ -84,7 +84,7 @@ public class LoadLexiconMenuItemListener implements ActionListener {
 
 			// Resets all the opened files in the editor with the new lexicon configuration
 			int numEditors = MainWindow.getInstance().getFileEditorManager()
-					.getNumFileEditorPanels();
+					.getNumberOfFileEditorPanels();
 			for (int index = 0; index < numEditors; index++)
 				MainWindow.getInstance().getFileEditorManager().getFileEditorPanelAt(index)
 						.resetDocument();

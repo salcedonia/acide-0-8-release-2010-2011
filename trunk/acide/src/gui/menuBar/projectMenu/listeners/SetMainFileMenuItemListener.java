@@ -88,7 +88,7 @@ public class SetMainFileMenuItemListener implements ActionListener {
 
 							// Quits the icon tab
 							for (int index2 = 0; index2 < MainWindow.getInstance()
-									.getFileEditorManager().getNumFileEditorPanels(); index2++) {
+									.getFileEditorManager().getNumberOfFileEditorPanels(); index2++) {
 
 								if (MainWindow
 										.getInstance()
@@ -122,7 +122,7 @@ public class SetMainFileMenuItemListener implements ActionListener {
 
 					// Puts the icon 
 					for (int index = 0; index < MainWindow.getInstance()
-							.getFileEditorManager().getNumFileEditorPanels(); index++) {
+							.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
 						if (MainWindow.getInstance().getFileEditorManager()
 								.getFileEditorPanelAt(index).getAbsolutePath().equals(
 										projectFile.getAbsolutePath())) {
@@ -146,7 +146,7 @@ public class SetMainFileMenuItemListener implements ActionListener {
 
 				// If there are more opened editor
 				if (MainWindow.getInstance().getFileEditorManager()
-						.getNumFileEditorPanels() > 0)
+						.getNumberOfFileEditorPanels() > 0)
 
 					// Sets the MAIN FILE
 					MainWindow.getInstance().getFileEditorManager()

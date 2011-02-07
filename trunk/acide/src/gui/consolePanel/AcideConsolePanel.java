@@ -49,6 +49,7 @@ import java.util.ResourceBundle;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.DefaultStyledDocument;
@@ -57,7 +58,6 @@ import javax.swing.text.JTextComponent;
 import language.AcideLanguageManager;
 import operations.console.ConsoleThread;
 import operations.log.AcideLog;
-import resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE console panel.
@@ -123,21 +123,8 @@ public class AcideConsolePanel extends JPanel {
 
 		super();
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
 		// Gets the labels
-		ResourceBundle labels = language.getLabels();
+		ResourceBundle labels = AcideLanguageManager.getInstance().getLabels();
 
 		try {
 
@@ -166,13 +153,22 @@ public class AcideConsolePanel extends JPanel {
 				 */
 				public void caretUpdate(CaretEvent caretEvent) {
 
-					if (_textPane.getSelectedText() == null) {
-						if (_textPane.getCaretPosition() < _textPane.getText()
-								.length() - _selectionSize) {
-							_textPane.setCaretPosition(_textPane.getText()
-									.length());
+					SwingUtilities.invokeLater(new Runnable() {
+						/*
+						 * (non-Javadoc)
+						 * @see java.lang.Runnable#run()
+						 */
+						@Override
+						public void run() {
+							if (_textPane.getSelectedText() == null) {
+								if (_textPane.getCaretPosition() < _textPane.getText()
+										.length() - _selectionSize) {
+									_textPane.setCaretPosition(_textPane.getText()
+											.length());
+								}
+							}
 						}
-					}
+					});			
 				}
 			});
 
@@ -336,18 +332,21 @@ public class AcideConsolePanel extends JPanel {
 
 		try {
 
-			String exitCommand = AcideConsoleConfiguration.getInstance()
-					.getExitCommand();
-			_command = exitCommand;
+			// Gets the exit command
+			_command = AcideConsoleConfiguration.getInstance()
+			.getExitCommand();
 
 			if (_processThread.getWriter() != null) {
-				_processThread.getWriter().write(exitCommand + '\n');
+				_processThread.getWriter().write(_command + '\n');
 				_processThread.getWriter().flush();
 			}
 
 			// Kill the process anyway
 			killShellProcess();
 
+			// Clear the console buffer
+			clearConsoleBuffer();
+			
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -432,7 +431,7 @@ public class AcideConsolePanel extends JPanel {
 			try {
 
 				if (MainWindow.getInstance().getFileEditorManager()
-						.getNumFileEditorPanels() > 0) {
+						.getNumberOfFileEditorPanels() > 0) {
 
 					command = command.replace("$activeFile$", MainWindow
 							.getInstance().getFileEditorManager()
@@ -475,7 +474,7 @@ public class AcideConsolePanel extends JPanel {
 
 					// Searches for the MAIN FILE
 					int mainFileEditorPanelIndex = -1;
-					for (int index = 0; index < AcideProjectConfiguration.getInstance().getNumFilesFromList(); index++) {
+					for (int index = 0; index < AcideProjectConfiguration.getInstance().getNumberOfFilesFromList(); index++) {
 						if (AcideProjectConfiguration.getInstance()
 								.getFileAt(index).isMainFile())
 							mainFileEditorPanelIndex = index;
@@ -586,6 +585,7 @@ public class AcideConsolePanel extends JPanel {
 	 * Executes the ACIDE - A Configurable IDE console panel process thread.
 	 */
 	public void execute() {
+		
 		_processThread = new ConsoleThread();
 		_processThread.start();
 	}
@@ -750,6 +750,6 @@ public class AcideConsolePanel extends JPanel {
 	 * OS.
 	 */
 	public void clearConsoleBuffer() {
-		// TODO: Pending implementation
+		_textPane.setText("");
 	}
 }

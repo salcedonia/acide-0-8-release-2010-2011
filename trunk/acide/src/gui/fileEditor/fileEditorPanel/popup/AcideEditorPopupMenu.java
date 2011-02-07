@@ -368,7 +368,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 
 						boolean isAdded = false;
 						for (int i = 0; i < AcideProjectConfiguration.getInstance()
-								.getNumFilesFromList(); i++) {
+								.getNumberOfFilesFromList(); i++) {
 							if (AcideProjectConfiguration.getInstance().getFileAt(i)
 									.getAbsolutePath().equals(projectFile.getAbsolutePath())) {
 								isAdded = true;
@@ -383,7 +383,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 							AcideProjectConfiguration.getInstance()
 									.getFileAt(
 											AcideProjectConfiguration.getInstance()
-													.getNumFilesFromList() - 1)
+													.getNumberOfFilesFromList() - 1)
 									.setIsOpened(true);
 							DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(
 									projectFile);
@@ -438,7 +438,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 					int selectedEditorIndex = MainWindow.getInstance()
 							.getFileEditorManager().getSelectedFileEditorPanelIndex();
 
-					for (int position1 = 0; position1 < AcideProjectConfiguration.getInstance().getNumFilesFromList(); position1++) {
+					for (int position1 = 0; position1 < AcideProjectConfiguration.getInstance().getNumberOfFilesFromList(); position1++) {
 
 						if (AcideProjectConfiguration.getInstance()
 								.getFileAt(position1)
@@ -450,7 +450,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 							explorerFile = AcideProjectConfiguration.getInstance().getFileAt(position1);
 							
 							for (int position2 = 0; position2 < AcideProjectConfiguration.getInstance()
-									.getNumFilesFromList() + 1; position2++) {
+									.getNumberOfFilesFromList() + 1; position2++) {
 								
 								if (MainWindow.getInstance().getExplorerPanel()
 										.getTree().getPathForRow(position2)
@@ -494,7 +494,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 								int posProjectList = -1;
 
 								for (int position = 0; position < AcideProjectConfiguration.getInstance()
-										.getNumFilesFromList(); position++) {
+										.getNumberOfFilesFromList(); position++) {
 
 									if (AcideProjectConfiguration.getInstance()
 											.getFileAt(position).getAbsolutePath()
@@ -559,7 +559,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 
 					// IF THERE ARE MORE FILE IN THE PROJECT CONFIGURATION
 					if (AcideProjectConfiguration.getInstance()
-							.getNumFilesFromList() > 0) {
+							.getNumberOfFilesFromList() > 0) {
 						
 						// UPDATES THE EXPLORER POPUP MENU 
 						MainWindow.getInstance().getExplorerPanel().getPopupMenu()
@@ -646,7 +646,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 								.getFileEditorManager().getSelectedFileEditorPanelIndex();
 						
 						for (int position1 = 0; position1 < AcideProjectConfiguration.getInstance()
-								.getNumFilesFromList(); position1++) {
+								.getNumberOfFilesFromList(); position1++) {
 
 							if (AcideProjectConfiguration.getInstance()
 									.getFileAt(position1)
@@ -658,7 +658,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 
 								explorerFile = AcideProjectConfiguration.getInstance().getFileAt(position1);
 								for (int position2 = 0; position2 < AcideProjectConfiguration.getInstance()
-										.getNumFilesFromList() + 1; position2++) {
+										.getNumberOfFilesFromList() + 1; position2++) {
 
 									if (MainWindow.getInstance().getExplorerPanel()
 											.getTree().getPathForRow(position2)
@@ -701,7 +701,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 									int posProjectList = -1;
 									
 									for (int position = 0; position < AcideProjectConfiguration.getInstance()
-											.getNumFilesFromList(); position++)
+											.getNumberOfFilesFromList(); position++)
 										if (AcideProjectConfiguration.getInstance()
 												.getFileAt(position).getAbsolutePath()
 												.equals(p.getAbsolutePath()))
@@ -758,7 +758,7 @@ public class AcideEditorPopupMenu extends JPopupMenu {
 
 						// IF THERE ARE MORE FILES IN THE PROJECT CONFIGURATION
 						if (AcideProjectConfiguration.getInstance()
-								.getNumFilesFromList() > 0) {
+								.getNumberOfFilesFromList() > 0) {
 							
 							// UPDATES THE EXPLORER POPUP MENU
 							MainWindow.getInstance().getExplorerPanel()

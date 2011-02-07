@@ -133,7 +133,7 @@ public class AcideEditorPanelPopupMenuListener extends MouseAdapter {
 				boolean exists = false;
 
 				for (int i = 0; i < AcideProjectConfiguration.getInstance()
-						.getNumFilesFromList(); i++) {
+						.getNumberOfFilesFromList(); i++) {
 					if (AcideProjectConfiguration.getInstance().getFileAt(i)
 							.getAbsolutePath().equals(file)) {
 						exists = true;

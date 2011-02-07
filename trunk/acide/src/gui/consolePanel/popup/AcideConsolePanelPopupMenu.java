@@ -33,15 +33,12 @@ import gui.mainWindow.MainWindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import operations.factory.AcideGUIFactory;
-import operations.log.AcideLog;
-import resources.AcideResourceManager;
 
 import language.AcideLanguageManager;
 
@@ -55,76 +52,61 @@ import language.AcideLanguageManager;
 public class AcideConsolePanelPopupMenu extends JPopupMenu {
 
 	/**
-	 * Acide console panel popup menu class serial version UID.
+	 * ACIDE - A Configurable IDE console panel popup menu class serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * Image file for the copy menu item.
+	 * ACIDE - A Configurable IDE console panel popup menu copy menu item image icon.
 	 */
 	private final static ImageIcon COPY_IMAGE = new ImageIcon("./resources/icons/menu/edit/copy.png");
 	/**
-	 * Image file for the paste menu item.
+	 * ACIDE - A Configurable IDE console panel popup menu paste menu item image icon.
 	 */
 	private final static ImageIcon PASTE_IMAGE = new ImageIcon("./resources/icons/menu/edit/paste.png");
 	/**
-	 * image file for the cut menu item.
+	 * ACIDE - A Configurable IDE console panel popup menu cut menu item image icon.
 	 */
 	private final static ImageIcon CUT_IMAGE = new ImageIcon("./resources/icons/menu/edit/cut.png");
 	/**
-	 * Shell display options menu item image icon.
+	 * ACIDE - A Configurable IDE console panel popup menu shell display options menu item image icon.
 	 */
 	private final static ImageIcon CONSOLE_DISPLAY_OPTIONS_IMAGE = new ImageIcon("./resources/icons/menu/configuration/console/consoleDisplayOptions.png");
 	/**
-	 * Copy menu item.
+	 * ACIDE - A Configurable IDE console panel popup menu copy menu item.
 	 */
 	private JMenuItem _copy;
 	/**
-	 * Cut menu item.
+	 * ACIDE - A Configurable IDE console panel popup menu cut menu item.
 	 */
 	private JMenuItem _cut;
 	/**
-	 * Paste menu item.
+	 * ACIDE - A Configurable IDE console panel popup menu paste menu item.
 	 */
 	private JMenuItem _paste;
 	/**
-	 * Shell display options menu item.
+	 * ACIDE - A Configurable IDE console panel popup menu shell display options menu item.
 	 */
 	private JMenuItem _consoleDisplayOptions;
 	/**
-	 * Reset menu item.
+	 * ACIDE - A Configurable IDE console panel popup menu reset menu item.
 	 */
 	private JMenuItem _reset;
 	/**
-	 * Control+C menu item.
+	 * ACIDE - A Configurable IDE console panel popup menu control+C menu item.
 	 */
 	private JMenuItem _controlC;
 	/**
-	 * Clear console buffer menu item.
+	 * ACIDE - A Configurable IDE console panel popup menu clear console buffer menu item.
 	 */
 	private JMenuItem _clearConsoleBuffer;
 
 	/**
-	 * Creates a new Acide console panel popup menu.
+	 * Creates a new ACIDE - A Configurable IDE console panel popup menu.
 	 */
 	public AcideConsolePanelPopupMenu() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-			
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
 		// CONSOLE DISPLAY OPTIONS
-		_consoleDisplayOptions = new JMenuItem(labels.getString("s986"), CONSOLE_DISPLAY_OPTIONS_IMAGE);
+		_consoleDisplayOptions = new JMenuItem(AcideLanguageManager.getInstance().getLabels().getString("s986"), CONSOLE_DISPLAY_OPTIONS_IMAGE);
 		_consoleDisplayOptions.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -142,7 +124,7 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 		addSeparator();
 
 		// COPY
-		_copy = new JMenuItem(labels.getString("s187"), COPY_IMAGE);
+		_copy = new JMenuItem(AcideLanguageManager.getInstance().getLabels().getString("s187"), COPY_IMAGE);
 		_copy.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -159,7 +141,7 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 		add(_copy);
 
 		// CUT
-		_cut = new JMenuItem(labels.getString("s188"), CUT_IMAGE);
+		_cut = new JMenuItem(AcideLanguageManager.getInstance().getLabels().getString("s188"), CUT_IMAGE);
 		_cut.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -181,7 +163,7 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 		add(_cut);
 
 		// PASTE
-		_paste = new JMenuItem(labels.getString("s189"), PASTE_IMAGE);
+		_paste = new JMenuItem(AcideLanguageManager.getInstance().getLabels().getString("s189"), PASTE_IMAGE);
 		_paste.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -224,7 +206,7 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 		add(_controlC);
 
 		// RESET
-		_reset = new JMenuItem(labels.getString("s987"));
+		_reset = new JMenuItem(AcideLanguageManager.getInstance().getLabels().getString("s987"));
 		_reset.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -241,7 +223,7 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 		add(_reset);
 		
 		// CLEAR CONSOLE BUFFER
-		_clearConsoleBuffer = new JMenuItem(labels.getString("s999"));
+		_clearConsoleBuffer = new JMenuItem(AcideLanguageManager.getInstance().getLabels().getString("s999"));
 		_clearConsoleBuffer.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -259,27 +241,27 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 	}
 
 	/**
-	 * Returns the copy menu item
+	 * Returns the ACIDE - A Configurable IDE console panel popup menu copy menu item.
 	 * 
-	 * @return the copy menu item
+	 * @return the ACIDE - A Configurable IDE console panel popup menu copy menu item.
 	 */
 	public JMenuItem getCopy() {
 		return _copy;
 	}
 
 	/**
-	 * Returns the copy menu item
+	 * Returns the ACIDE - A Configurable IDE console panel popup menu copy menu item.
 	 * 
-	 * @return the copy menu item
+	 * @return the ACIDE - A Configurable IDE console panel popup menu copy menu item.
 	 */
 	public JMenuItem getCut() {
 		return _cut;
 	}
 
 	/**
-	 * Returns the paste menu item
+	 * Returns the ACIDE - A Configurable IDE console panel popup menu paste menu item.
 	 * 
-	 * @return the paste menu item
+	 * @return the ACIDE - A Configurable IDE console panel popup menu paste menu item.
 	 */
 	public JMenuItem getPaste() {
 		return _paste;

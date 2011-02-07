@@ -92,7 +92,7 @@ public class SetCompilableFileMenuItemListener implements ActionListener {
 
 					// Puts the icon in the editor
 					for (int index = 0; index < MainWindow.getInstance()
-							.getFileEditorManager().getNumFileEditorPanels(); index++) {
+							.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
 
 						if (MainWindow.getInstance().getFileEditorManager()
 								.getFileEditorPanelAt(index).getAbsolutePath().equals(
@@ -127,7 +127,7 @@ public class SetCompilableFileMenuItemListener implements ActionListener {
 
 				// If there are opened editors
 				if (MainWindow.getInstance().getFileEditorManager()
-						.getNumFileEditorPanels() > 0)
+						.getNumberOfFileEditorPanels() > 0)
 
 					// Sets the COMPILABLE FILE
 					MainWindow.getInstance().getFileEditorManager()

@@ -75,7 +75,7 @@ public class CopyMenuItemListener implements ActionListener {
 		AcideLog.getLog().info(labels.getString("s99"));
 
 		// COPY
-		if (MainWindow.getInstance().getFileEditorManager().getNumFileEditorPanels() > 0)
+		if (MainWindow.getInstance().getFileEditorManager().getNumberOfFileEditorPanels() > 0)
 			MainWindow
 					.getInstance()
 					.getFileEditorManager()

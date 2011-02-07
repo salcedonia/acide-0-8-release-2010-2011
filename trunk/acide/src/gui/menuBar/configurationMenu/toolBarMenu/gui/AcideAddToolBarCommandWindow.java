@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import es.configuration.toolBar.consoleComandToolBar.ConsoleCommand;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.toolBarPanel.consoleCommandToolBar.utils.AcideParameterType;
 
 import language.AcideLanguageManager;
@@ -179,8 +179,8 @@ public class AcideAddToolBarCommandWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 
-				TextFile file = new TextFile();
-				String path = file.read();
+				AcideTextFile file = new AcideTextFile();
+				String path = file.askAbsolutePath();
 				_iconTextField.setText(path);
 			}
 		});

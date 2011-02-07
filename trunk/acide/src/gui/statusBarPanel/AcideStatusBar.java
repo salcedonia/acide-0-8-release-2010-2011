@@ -535,7 +535,7 @@ public class AcideStatusBar extends JPanel{
 							MainWindow.getInstance().getFileEditorManager()
 									.getSelectedFileEditorPanel().getAbsolutePath());
 
-			for (int i = 0; i < AcideProjectConfiguration.getInstance().getNumFilesFromList(); i++) {
+			for (int i = 0; i < AcideProjectConfiguration.getInstance().getNumberOfFilesFromList(); i++) {
 
 				if (AcideProjectConfiguration.getInstance()
 						.getFileAt(i)

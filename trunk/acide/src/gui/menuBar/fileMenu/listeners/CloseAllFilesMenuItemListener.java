@@ -30,7 +30,7 @@
 package gui.menuBar.fileMenu.listeners;
 
 import es.configuration.project.AcideProjectConfiguration;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
 
 import java.awt.event.ActionEvent;
@@ -78,7 +78,7 @@ public class CloseAllFilesMenuItemListener implements ActionListener {
 		// Gets the labels
 		final ResourceBundle labels = language.getLabels();
 
-		int numEditors = MainWindow.getInstance().getFileEditorManager().getNumFileEditorPanels();
+		int numEditors = MainWindow.getInstance().getFileEditorManager().getNumberOfFileEditorPanels();
 		MainWindow.getInstance().getFileEditorManager().setSelectedFileEditorPanelAt(numEditors - 1);
 
 		// Checks the opened editors
@@ -101,16 +101,16 @@ public class CloseAllFilesMenuItemListener implements ActionListener {
 							.getAbsolutePath().equals(labels.getString("s79"))) {
 
 						AcideIOFactory ioFactory = AcideIOFactory.getInstance();
-						TextFile textFile = ioFactory.buildFile();
+						AcideTextFile textFile = ioFactory.buildFile();
 						String f = " ";
-						f = textFile.write();
+						f = textFile.askSavingFileEditorFile();
 						if (f.equals(" ")) {
 							
 							// Updates the log
 							AcideLog.getLog().info(labels.getString("s92"));
 						} else {
 
-							boolean result = textFile.save(f, MainWindow.getInstance()
+							boolean result = textFile.write(f, MainWindow.getInstance()
 									.getFileEditorManager().getSelectedFileEditorPanel()
 									.getTextEditionAreaContent());
 

@@ -32,7 +32,7 @@ package gui.explorerPanel.listeners;
 import es.configuration.project.AcideProjectConfiguration;
 import es.project.AcideProjectFile;
 import es.project.AcideProjectFileType;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.fileEditor.fileEditorManager.AcideFileEditorManager;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
@@ -84,7 +84,7 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 				// Searches for the file into the editor files
 				int fileEditorPanelIndex = -1;
 				for (int index = 0; index < MainWindow.getInstance()
-						.getFileEditorManager().getNumFileEditorPanels(); index++) {
+						.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
 					if (MainWindow.getInstance().getFileEditorManager()
 							.getFileEditorPanelAt(index).getAbsolutePath()
 							.equals(projectFile.getAbsolutePath())) {
@@ -98,7 +98,7 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 					// Not a directory
 					if (!projectFile.isDirectory()) {
 
-						TextFile textFile = new TextFile();
+						AcideTextFile textFile = new AcideTextFile();
 						AcideFileEditorManager editorBuilder = MainWindow
 								.getInstance().getFileEditorManager();
 
@@ -109,7 +109,7 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 						// list
 						fileEditorPanelIndex = -1;
 						for (int index = 0; index < AcideProjectConfiguration.getInstance()
-								.getNumFilesFromList(); index++) {
+								.getNumberOfFilesFromList(); index++) {
 							if (AcideProjectConfiguration.getInstance().getFileAt(index)
 									.getAbsolutePath().equals(projectFile.getAbsolutePath()))
 								fileEditorPanelIndex = index;
@@ -177,7 +177,7 @@ public class AcideExplorerPanelDoubleClickMouseListener extends MouseAdapter {
 						// Sets the focus on the selected file at the editor
 						for (int index = 0; index < MainWindow.getInstance()
 								.getFileEditorManager()
-								.getNumFileEditorPanels(); index++) {
+								.getNumberOfFileEditorPanels(); index++) {
 
 							final int editorIndex = index;
 

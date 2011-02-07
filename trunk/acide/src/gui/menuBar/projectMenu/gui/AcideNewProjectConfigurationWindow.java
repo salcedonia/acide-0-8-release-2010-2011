@@ -35,7 +35,7 @@ import es.configuration.project.AcideProjectConfiguration;
 import es.configuration.window.AcideWindowConfiguration;
 import es.project.AcideProjectFile;
 import es.text.ExtensionFilter;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.listeners.AcideWindowListener;
 import gui.mainWindow.MainWindow;
 import gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
@@ -743,7 +743,7 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 
 						try {
 
-							TextFile projectTextFile = AcideIOFactory
+							AcideTextFile projectTextFile = AcideIOFactory
 									.getInstance().buildFile();
 
 							// Not default project
@@ -773,14 +773,14 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 										.getInstance().getProperty(
 												"currentMenuConfiguration");
 								AcideProjectConfiguration.getInstance()
-										.setMenu(currentMenu);
+										.setMenuConfiguration(currentMenu);
 
 								// TOOLBAR CONFIGURATION
 								String currentToolBar = AcideResourceManager
 										.getInstance().getProperty(
 												"currentToolBarConfiguration");
 								AcideProjectConfiguration.getInstance()
-										.setToolBar(currentToolBar);
+										.setToolBarConfiguration(currentToolBar);
 
 								if (!file.contains(".acidePrj"))
 									file = file + ".acidePrj";
@@ -789,7 +789,7 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 										.setPath(file);
 								String cad = AcideProjectConfiguration
 										.getInstance().save();
-								projectTextFile.save(AcideProjectConfiguration
+								projectTextFile.write(AcideProjectConfiguration
 										.getInstance().getProjectPath(), cad);
 								AcideProjectConfiguration.getInstance()
 										.setFirstSave(true);
@@ -824,7 +824,7 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 						// Adds all the editors currently opened
 						for (int i = 0; i < MainWindow.getInstance()
 								.getFileEditorManager()
-								.getNumFileEditorPanels(); i++) {
+								.getNumberOfFileEditorPanels(); i++) {
 
 							// Except the NEW FILE and the LOG tab
 							if (!MainWindow.getInstance()

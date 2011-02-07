@@ -31,12 +31,11 @@ package gui.menuBar.projectMenu.listeners;
 
 import es.configuration.project.AcideProjectConfiguration;
 import es.project.AcideProjectFile;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -45,8 +44,6 @@ import javax.swing.tree.TreePath;
 
 import language.AcideLanguageManager;
 import operations.factory.AcideIOFactory;
-import operations.log.AcideLog;
-import resources.AcideResourceManager;
 
 /**																
  * ACIDE -A Configurable IDE project menu remove file menu item listener.											
@@ -66,23 +63,8 @@ public class RemoveFileMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-			
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-		
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		// Are you sure?
-		int chosenOption = JOptionPane.showConfirmDialog(null, labels
+		int chosenOption = JOptionPane.showConfirmDialog(null, AcideLanguageManager.getInstance().getLabels()
 				.getString("s623"));
 
 		// If yes
@@ -96,14 +78,14 @@ public class RemoveFileMenuItemListener implements ActionListener {
 			if (currentSelection != null) {
 				
 				// Gets the select node in the explorer tree
-				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) (currentSelection
-						.getLastPathComponent());
+				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection
+						.getLastPathComponent();
 
 				// Transform the node into a project file
-				AcideProjectFile projectFile = (AcideProjectFile) currentNode.getUserObject();
+				AcideProjectFile currentFile = (AcideProjectFile) currentNode.getUserObject();
 				
 				// If it is a file and not a directory
-				if (!projectFile.isDirectory()) {
+				if (!currentFile.isDirectory()) {
 					
 					// Gets the node parent
 					MutableTreeNode parent = (MutableTreeNode) (currentNode
@@ -116,71 +98,74 @@ public class RemoveFileMenuItemListener implements ActionListener {
 						MainWindow.getInstance().getExplorerPanel().getTreeModel()
 								.removeNodeFromParent(currentNode);
 						
-						// Searches for the file in the explorer
-						int posFile = -1;
-						for (int position = 0; position < AcideProjectConfiguration.getInstance()
-								.getNumFilesFromList(); position++) {
+						// Searches for the file in the project configuration
+						int fileIndex = -1;
+						for (int index = 0; index < AcideProjectConfiguration.getInstance()
+								.getNumberOfFilesFromList(); index++) {
 							
 							if (AcideProjectConfiguration.getInstance()
-									.getFileAt(position).getAbsolutePath().equals(
-											projectFile.getAbsolutePath())) {
+									.getFileAt(index).getAbsolutePath().equals(
+											currentFile.getAbsolutePath())) {
 								
-								posFile = position;
+								// Found it
+								fileIndex = index;
 							}
 						}
 
 						// Removes the file from the project configuration
 						AcideProjectConfiguration.getInstance().removeFileAt(
-								posFile);
+								fileIndex);
 						
 						// Updates the status bar
 						MainWindow.getInstance().getStatusBar().setStatusMessage(" ");
 						
 						// Searches for the file in the editor
-						int posEditor = -1;
-						for (int position = 0; position < MainWindow.getInstance().getFileEditorManager()
-								.getNumFileEditorPanels(); position++) {
+						int fileEditorPanelIndex = -1;
+						for (int index = 0; index < MainWindow.getInstance().getFileEditorManager()
+								.getNumberOfFileEditorPanels(); index++) {
 							if (MainWindow.getInstance().getFileEditorManager()
-									.getFileEditorPanelAt(position).getAbsolutePath()
-									.equals(projectFile.getAbsolutePath()))
-								posEditor = position;
+									.getFileEditorPanelAt(index).getAbsolutePath()
+									.equals(currentFile.getAbsolutePath()))
+								
+								// Found it
+								fileEditorPanelIndex = index;
 						}
 						
 						// If it exists
-						if (posEditor != -1) {
+						if (fileEditorPanelIndex != -1) {
 
 							// Is the file modified?
 							if (MainWindow.getInstance().getFileEditorManager().isRedButton(
-									posEditor)) {
+									fileEditorPanelIndex)) {
 
 								// Do you want to save it?
 								chosenOption = JOptionPane.showConfirmDialog(
-										null, labels.getString("s643"),
-										labels.getString("s953"),
+										null, AcideLanguageManager.getInstance().getLabels().getString("s643"),
+										AcideLanguageManager.getInstance().getLabels().getString("s953"),
 										JOptionPane.YES_NO_OPTION);
 
 								// If yes
 								if (chosenOption == JOptionPane.OK_OPTION) {
 	
 									// Creates the external file
-									TextFile textFile = AcideIOFactory
+									AcideTextFile textFile = AcideIOFactory
 									.getInstance().buildFile();
 
 									// Saves the file
-									boolean result = textFile.save(MainWindow.getInstance()
+									boolean returnValue = textFile.write(MainWindow.getInstance()
 											.getFileEditorManager()
-											.getFileEditorPanelAt(posEditor)
+											.getFileEditorPanelAt(fileEditorPanelIndex)
 											.getAbsolutePath(), MainWindow.getInstance()
 											.getFileEditorManager()
-											.getFileEditorPanelAt(posEditor).getTextEditionAreaContent());
+											.getFileEditorPanelAt(fileEditorPanelIndex).getTextEditionAreaContent());
 									
 									// If it could save it
-									if (result) {
+									if (returnValue) {
 										
 										// Sets the green button
 										MainWindow.getInstance()
 												.getFileEditorManager()
-												.setGreenButtonAt(posEditor);
+												.setGreenButtonAt(fileEditorPanelIndex);
 									}
 								}
 							}
@@ -188,14 +173,16 @@ public class RemoveFileMenuItemListener implements ActionListener {
 
 						// Closes the editor tab
 						MainWindow.getInstance().getFileEditorManager().getTabbedPane().remove(
-								posEditor);
+								fileEditorPanelIndex);
 
 						// If there are no more opened tabs
 						if (MainWindow.getInstance().getFileEditorManager().getTabbedPane()
 								.getTabCount() == 0) {
 							
-							// Disables the FILE and EDIT menu
+							// Disables the file menu
 							MainWindow.getInstance().getMenu().disableFileMenu();
+							
+							// Disables the edit menu
 							MainWindow.getInstance().getMenu().disableEditMenu();
 						}
 					}
@@ -209,18 +196,22 @@ public class RemoveFileMenuItemListener implements ActionListener {
 		}
 
 		// If there are more opened files 
-		if (AcideProjectConfiguration.getInstance().getNumFilesFromList() > 0) {
+		if (AcideProjectConfiguration.getInstance().getNumberOfFilesFromList() > 0) {
 			
-			// Updates the explorer popup menu
+			// Enables the remove file menu item in the explorer popup menu
 			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getRemoveFile()
 					.setEnabled(true);
+			
+			// Enables the delete file menu item in the explorer popup menu
 			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getDeleteFile()
 					.setEnabled(true);
 		} else {
 			
-			// Updates the explorer popup menu
+			// Disables the remove file menu item in the explorer popup menu
 			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getRemoveFile()
 					.setEnabled(false);
+			
+			// Disables the delete file menu item in the explorer popup menu
 			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getDeleteFile()
 					.setEnabled(false);
 		}

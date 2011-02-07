@@ -132,10 +132,10 @@ public class MainWindow extends JFrame {
 
 		// Gets the language
 		AcideLanguageManager language = AcideLanguageManager.getInstance();
-		
+
 		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
+			language.getLanguage(AcideResourceManager.getInstance()
+					.getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -148,7 +148,7 @@ public class MainWindow extends JFrame {
 
 		// Gets the labels
 		final ResourceBundle labels = language.getLabels();
-		
+
 		// Updates the log
 		AcideLog.getLog().info(labels.getString("s67"));
 
@@ -216,8 +216,8 @@ public class MainWindow extends JFrame {
 		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
 		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
+			language.getLanguage(AcideResourceManager.getInstance()
+					.getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -378,7 +378,8 @@ public class MainWindow extends JFrame {
 	 * @param newProjectConfigurationWindow
 	 *            new value to set.
 	 */
-	public void setNewProjectConfigurationWindow(AcideNewProjectConfigurationWindow newProjectConfigurationWindow) {
+	public void setNewProjectConfigurationWindow(
+			AcideNewProjectConfigurationWindow newProjectConfigurationWindow) {
 		_newProjectConfigurationWindow = newProjectConfigurationWindow;
 	}
 
@@ -484,10 +485,9 @@ public class MainWindow extends JFrame {
 
 	/**
 	 * Shows the main window, once the workbech configuration has been loaded.
-	 * As the main window is already visible, it is possible to paint the 
-	 * caret in the selected editor.
-	 * It also closes the splash screen window and sets the workbench configuration
-	 * loaded attribute to true.
+	 * As the main window is already visible, it is possible to paint the caret
+	 * in the selected editor. It also closes the splash screen window and sets
+	 * the workbench configuration loaded attribute to true.
 	 */
 	public void showAcideMainWindow() {
 
@@ -497,43 +497,59 @@ public class MainWindow extends JFrame {
 
 			@Override
 			public void run() {
-	
+
 				// Shows the main window
 				MainWindow.getInstance().setVisible(true);
 
 				// The workbench has been loaded
 				AcideWorkbenchManager.getInstance().setWorkbenchLoaded(true);
-				
-				// Sets the selected editor
-				if (AcideFileEditorConfiguration.getInstance().getSelectedFileEditorPanelIndex() != -1) {
 
-					// Sets the selected file editor
-					MainWindow
-							.getInstance()
-							.getFileEditorManager()
-							.setSelectedFileEditorPanelAt(
-									AcideFileEditorConfiguration.getInstance().
-											getSelectedFileEditorPanelIndex());
+				// If there are files opened
+				if (MainWindow.getInstance().getFileEditorManager()
+						.getNumberOfFileEditorPanels() > 0) {
 
-					// Sets the focus in the edition area
-					MainWindow.getInstance().getFileEditorManager()
-							.getSelectedFileEditorPanel().getActiveTextEditionArea()
-							.requestFocusInWindow();
+					// Sets the selected editor
+					if (AcideFileEditorConfiguration.getInstance()
+							.getSelectedFileEditorPanelIndex() != -1) {
 
-					// Sets the caret visible
-					MainWindow.getInstance().getFileEditorManager()
-							.getSelectedFileEditorPanel().getActiveTextEditionArea()
-							.getCaret().setVisible(true);
+						// Sets the selected file editor
+						MainWindow
+								.getInstance()
+								.getFileEditorManager()
+								.setSelectedFileEditorPanelAt(
+										AcideFileEditorConfiguration
+												.getInstance()
+												.getSelectedFileEditorPanelIndex());
 
-					// Selects the tree node
-					MainWindow.getInstance().getExplorerPanel()
-							.selectTreeNodeFromFileEditor();
+						// Sets the focus in the edition area
+						MainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.getActiveTextEditionArea()
+								.requestFocusInWindow();
 
-					// Updates the status bar with the selected editor
-					MainWindow.getInstance().getStatusBar()
-							.updatesStatusBarFromFileEditor();
+						// Sets the caret visible
+						MainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.getActiveTextEditionArea().getCaret()
+								.setVisible(true);
+
+						// Selects the tree node
+						MainWindow.getInstance().getExplorerPanel()
+								.selectTreeNodeFromFileEditor();
+
+						// Updates the status bar with the selected editor
+						MainWindow.getInstance().getStatusBar()
+								.updatesStatusBarFromFileEditor();
+					}
+				}else{
+					
+					// Selects the explorer tree root node
+					MainWindow.getInstance().getExplorerPanel().getTree().setSelectionInterval(0, 0);
+					
+					// Sets the focus in the explorer panel
+					MainWindow.getInstance().getExplorerPanel().requestFocusInWindow();
 				}
 			}
-		});	
+		});
 	}
 }

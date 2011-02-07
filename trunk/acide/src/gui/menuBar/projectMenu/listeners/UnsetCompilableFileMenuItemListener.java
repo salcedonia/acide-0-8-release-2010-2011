@@ -93,7 +93,7 @@ public class UnsetCompilableFileMenuItemListener implements ActionListener {
 
 					// Quits the icon in the editor
 					for (int index = 0; index < MainWindow.getInstance()
-							.getFileEditorManager().getNumFileEditorPanels(); index++) {
+							.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
 						if (MainWindow.getInstance().getFileEditorManager()
 								.getFileEditorPanelAt(index).getAbsolutePath().equals(
 										projectFile.getAbsolutePath())) {
@@ -111,7 +111,7 @@ public class UnsetCompilableFileMenuItemListener implements ActionListener {
 
 				// If there are opened editors
 				if (MainWindow.getInstance().getFileEditorManager()
-						.getNumFileEditorPanels() > 0)
+						.getNumberOfFileEditorPanels() > 0)
 
 					// Unsets the COMPILABLE FILE
 					MainWindow.getInstance().getFileEditorManager()

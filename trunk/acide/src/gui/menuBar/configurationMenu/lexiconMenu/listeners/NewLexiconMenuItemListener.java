@@ -94,7 +94,7 @@ public class NewLexiconMenuItemListener implements ActionListener {
 			
 			// Gets the number of opened editors
 			int numEditors = MainWindow.getInstance().getFileEditorManager()
-					.getNumFileEditorPanels();
+					.getNumberOfFileEditorPanels();
 			for (int index = 0; index < numEditors; index++)
 				MainWindow.getInstance().getFileEditorManager().getFileEditorPanelAt(index)
 						.resetDocument();

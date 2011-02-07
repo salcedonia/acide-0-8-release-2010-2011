@@ -41,7 +41,7 @@ import operations.log.AcideLog;
 import resources.AcideResourceManager;
 import es.configuration.project.AcideProjectConfiguration;
 import es.project.AcideProjectFileType;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
 
@@ -78,9 +78,9 @@ public class OpenFileMenuItemListener implements ActionListener {
 		// Gets the labels
 		ResourceBundle labels = language.getLabels();
 
-		TextFile textFile = AcideIOFactory.getInstance().buildFile();
+		AcideTextFile textFile = AcideIOFactory.getInstance().buildFile();
 		String filePath = " ";
-		filePath = textFile.read();
+		filePath = textFile.askAbsolutePath();
 
 		// If the file exists
 		if (filePath != null) {
@@ -90,7 +90,7 @@ public class OpenFileMenuItemListener implements ActionListener {
 			// Checks if the file is already opened
 			int fileIndex = -1;
 			for (int position = 0; position < MainWindow.getInstance().getFileEditorManager()
-					.getNumFileEditorPanels(); position++) {
+					.getNumberOfFileEditorPanels(); position++) {
 				if (MainWindow.getInstance().getFileEditorManager()
 						.getFileEditorPanelAt(position).getAbsolutePath().equals(filePath)) {
 					isOpened = true;
@@ -110,7 +110,7 @@ public class OpenFileMenuItemListener implements ActionListener {
 					// Searches for the file into the project configuration file list
 					int fileProjectIndex = -1;
 					for (int index = 0; index < AcideProjectConfiguration.getInstance()
-							.getNumFilesFromList(); index++) {
+							.getNumberOfFilesFromList(); index++) {
 						if (AcideProjectConfiguration.getInstance().getFileAt(index)
 								.getAbsolutePath().equals(filePath))
 							fileProjectIndex = index;
@@ -207,7 +207,7 @@ public class OpenFileMenuItemListener implements ActionListener {
 					// Sets the focus on the selected file at the editor
 					for (int index = 0; index < MainWindow.getInstance()
 							.getFileEditorManager()
-							.getNumFileEditorPanels(); index++) {
+							.getNumberOfFileEditorPanels(); index++) {
 
 						final int editorIndex = index;
 

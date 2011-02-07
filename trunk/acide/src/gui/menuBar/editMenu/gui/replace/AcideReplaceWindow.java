@@ -1203,7 +1203,7 @@ public class AcideReplaceWindow extends JFrame {
 
 					_selectedText = null;
 					selectedFileEditorPanelIndex = mainWindow
-							.getFileEditorManager().getNumFileEditorPanels();
+							.getFileEditorManager().getNumberOfFileEditorPanels();
 
 					if (!_isCycle && _currentPosition == -2) {
 						_selectedEditorIndex = mainWindow
@@ -1880,7 +1880,7 @@ public class AcideReplaceWindow extends JFrame {
 
 				// Gets the number of editors
 				int numEditors = MainWindow.getInstance()
-						.getFileEditorManager().getNumFileEditorPanels();
+						.getFileEditorManager().getNumberOfFileEditorPanels();
 
 				// Initializes the number of replacements
 				_globalNumberOfReplacements = 0;

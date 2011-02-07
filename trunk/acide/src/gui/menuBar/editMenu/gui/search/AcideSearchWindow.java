@@ -1047,7 +1047,7 @@ public class AcideSearchWindow extends JFrame {
 
 					_selectedText = null;
 					selectedEditor = _mainWindow.getFileEditorManager()
-							.getNumFileEditorPanels();
+							.getNumberOfFileEditorPanels();
 
 					if ((_isCycle == false) && (_currentPosition == -2)) {
 						_selectedEditorIndex = _mainWindow.getFileEditorManager()

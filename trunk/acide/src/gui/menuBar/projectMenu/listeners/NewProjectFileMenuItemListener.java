@@ -2,7 +2,7 @@ package gui.menuBar.projectMenu.listeners;
 
 import es.configuration.project.AcideProjectConfiguration;
 import es.project.AcideProjectFile;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
 
 import java.awt.event.ActionEvent;
@@ -57,10 +57,10 @@ public class NewProjectFileMenuItemListener implements ActionListener {
 		// Gets the labels
 		ResourceBundle labels = language.getLabels();
 
-		TextFile textFile = AcideIOFactory.getInstance().buildFile();
+		AcideTextFile textFile = AcideIOFactory.getInstance().buildFile();
 		String textContent = " ";
 
-		if (MainWindow.getInstance().getFileEditorManager().getNumFileEditorPanels() == 0) {
+		if (MainWindow.getInstance().getFileEditorManager().getNumberOfFileEditorPanels() == 0) {
 			
 			// Updates the log
 			AcideLog.getLog().info(labels.getString("s89"));
@@ -68,7 +68,7 @@ public class NewProjectFileMenuItemListener implements ActionListener {
 		} else {
 
 			MainWindow.getInstance().getMenu().setIsNPF(true);
-			textContent = textFile.write();
+			textContent = textFile.askSavingFileEditorFile();
 			MainWindow.getInstance().getMenu().setIsNPF(false);
 
 			if (textContent.equals(" ")) {
@@ -79,7 +79,7 @@ public class NewProjectFileMenuItemListener implements ActionListener {
 				AcideLog.getLog().info(labels.getString("s92"));
 			} else {
 
-				boolean savingResult = textFile.save(textContent,
+				boolean savingResult = textFile.write(textContent,
 						MainWindow.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel().getTextEditionAreaContent());
 
@@ -186,7 +186,7 @@ public class NewProjectFileMenuItemListener implements ActionListener {
 				AcideProjectConfiguration.getInstance()
 						.getFileAt(
 								AcideProjectConfiguration.getInstance()
-										.getNumFilesFromList() - 1)
+										.getNumberOfFilesFromList() - 1)
 						.setIsOpened(true);
 
 				DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(projectFile);

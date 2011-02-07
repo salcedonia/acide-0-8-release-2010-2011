@@ -35,13 +35,11 @@ import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
 import javax.swing.SwingUtilities;
 
 import language.AcideLanguageManager;
 import operations.log.AcideLog;
-import resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE file menu new file menu item listener.
@@ -61,22 +59,6 @@ public class NewFileMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		// Enables the file menu
 		MainWindow.getInstance().getMenu().enableFileMenu();
 
@@ -87,11 +69,11 @@ public class NewFileMenuItemListener implements ActionListener {
 		MainWindow
 				.getInstance()
 				.getFileEditorManager()
-				.newTab(labels.getString("s79"), labels.getString("s79"), "",
+				.newTab(AcideLanguageManager.getInstance().getLabels().getString("s79"), AcideLanguageManager.getInstance().getLabels().getString("s79"), "",
 						true, AcideProjectFileType.NORMAL, 0);
 
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s80"));
+		AcideLog.getLog().info(AcideLanguageManager.getInstance().getLabels().getString("s80"));
 
 		// Enables the file menu
 		MainWindow.getInstance().getMenu().enableFileMenu();
@@ -102,9 +84,9 @@ public class NewFileMenuItemListener implements ActionListener {
 		// Updates the undo manager
 		AcideUndoRedoManager.getInstance().update();
 
-		// Updates the status bar
+		// Updates the status message in the status bar
 		MainWindow.getInstance().getStatusBar()
-				.setStatusMessage(labels.getString("s79"));
+				.setStatusMessage(AcideLanguageManager.getInstance().getLabels().getString("s79"));
 
 		SwingUtilities.invokeLater(new Runnable() {
 			/*

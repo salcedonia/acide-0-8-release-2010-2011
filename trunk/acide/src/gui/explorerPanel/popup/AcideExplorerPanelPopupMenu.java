@@ -33,7 +33,6 @@ import gui.mainWindow.MainWindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
@@ -41,125 +40,145 @@ import javax.swing.JPopupMenu;
 
 import language.AcideLanguageManager;
 
-/**																
- * Explorer panel popup menu of ACIDE - A Configurable IDE.
- *					
- * @version 0.8	
- * @see JPopupMenu																													
+/**
+ * ACIDE - A Configurable IDE explorer panel popup menu.
+ * 
+ * @version 0.8
+ * @see JPopupMenu
  */
 public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 
 	/**
-	 * Class serial version UID.
+	 * ACIDE - A Configurable IDE explorer panel popup menu class serial version
+	 * UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * Image file for the icon of the new project menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu new project menu
+	 * item image icon.
 	 */
-	private static final String NEW_PROJECT = "./resources/icons/menu/project/newProject.png";
+	private static final ImageIcon NEW_PROJECT_IMAGE = new ImageIcon("./resources/icons/menu/project/newProject.png");
 	/**
-	 * Image file for the icon of the open project menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu open project menu
+	 * item image icon.
 	 */
-	private static final String OPEN_PROJECT = "./resources/icons/menu/project/openProject.png";
+	private static final ImageIcon OPEN_PROJECT_IMAGE = new ImageIcon("./resources/icons/menu/project/openProject.png");
 	/**
-	 * Image file for the icon of the save project menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu save project menu
+	 * item image icon.
 	 */
-	private static final String SAVE_PROJECT = "./resources/icons/menu/project/saveProject.png";
+	private static final ImageIcon SAVE_PROJECT_IMAGE = new ImageIcon("./resources/icons/menu/project/saveProject.png");
 	/**
-	 * Image file for the icon of the new file menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu new file menu item
+	 * image icon.
 	 */
-	private static final String NEW_FILE = "./resources/icons/menu/project/newFile.png";
+	private static final ImageIcon NEW_FILE_IMAGE = new ImageIcon("./resources/icons/menu/project/newFile.png");
 	/**
-	 * Image file for the icon of the add file menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu add file menu item
+	 * image icon.
 	 */
-	private static final String ADD_FILE = "./resources/icons/menu/project/addFile.png";
+	private static final ImageIcon ADD_FILE_IMAGE = new ImageIcon("./resources/icons/menu/project/addFile.png");
 	/**
-	 * Image file for the icon of the add folder menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu add folder menu item
+	 * image icon.
 	 */
-	private static final String ADD_FOLDER = "./resources/icons/menu/project/addFolder.png";
+	private static final ImageIcon ADD_FOLDER_IMAGE = new ImageIcon("./resources/icons/menu/project/addFolder.png");
 	/**
-	 * Image file for the icon of the delete file menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu delete file menu
+	 * item image icon.
 	 */
-	private static final String DELETE_FILE = "./resources/icons/menu/project/deleteFile.png";
+	private static final ImageIcon DELETE_FILE_IMAGE = new ImageIcon("./resources/icons/menu/project/deleteFile.png");
 	/**
-	 * Image file for the icon of the set main menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu set main menu item
+	 * image icon.
 	 */
-	private static final String SET_MAIN = "./resources/icons/menu/project/setMain.png";
+	private static final ImageIcon SET_MAIN_IMAGE = new ImageIcon("./resources/icons/menu/project/setMain.png");
 	/**
-	 * Image file for the icon of the unset main menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu unset main menu item
+	 * image icon.
 	 */
-	private static final String UNSET_MAIN = "./resources/icons/menu/project/unsetMain.png";
+	private static final ImageIcon UNSET_MAIN_IMAGE = new ImageIcon("./resources/icons/menu/project/unsetMain.png");
 	/**
-	 * Image file for the icon of the set compilable menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu set compilable menu
+	 * item image icon.
 	 */
-	private static final String SET_COMPILABLE = "./resources/icons/menu/project/setCompilable.png";
+	private static final ImageIcon SET_COMPILABLE_IMAGE = new ImageIcon("./resources/icons/menu/project/setCompilable.png");
 	/**
-	 * Image file for the icon of the unset compilable menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu unset compilable
+	 * menu item image icon.
 	 */
-	private static final String UNSET_COMPILABLE = "./resources/icons/menu/project/unsetCompilable.png";
+	private static final ImageIcon UNSET_COMPILABLE_IMAGE = new ImageIcon("./resources/icons/menu/project/unsetCompilable.png");
 	/**
-	 * New project menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu new project menu
+	 * item.
 	 */
 	private JMenuItem _newProject;
 	/**
-	 * Open project menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu open project menu
+	 * item.
 	 */
 	private JMenuItem _openProject;
 	/**
-	 * Save project menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu save project menu
+	 * item.
 	 */
 	private JMenuItem _saveProject;
 	/**
-	 * Add file menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu add file menu item.
 	 */
 	private JMenuItem _addFile;
 	/**
-	 * Remove file menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu remove file menu
+	 * item.
 	 */
 	private JMenuItem _removeFile;
 	/**
-	 * New file menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu new file menu item.
 	 */
 	private JMenuItem _newFile;
 	/**
-	 * Add folder menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu add folder menu
+	 * item.
 	 */
 	private JMenuItem _addFolder;
 	/**
-	 * Remove folder menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu remove folder menu
+	 * item.
 	 */
 	private JMenuItem _removeFolder;
 	/**
-	 * Delete file menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu delete file menu
+	 * item.
 	 */
 	private JMenuItem _deleteFile;
 	/**
-	 * Set main menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu set main menu item.
 	 */
 	private JMenuItem _setMain;
 	/**
-	 * Set compilable menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu set compilable menu
+	 * item.
 	 */
 	private JMenuItem _setCompilable;
 	/**
-	 * Unset main menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu unset main menu
+	 * item.
 	 */
 	private JMenuItem _unsetMain;
 	/**
-	 * Unset compilable menu item.
+	 * ACIDE - A Configurable IDE explorer panel popup menu unset compilable
+	 * menu item.
 	 */
 	private JMenuItem _unsetCompilable;
 
 	/**
-	 * Class constructor.
+	 * Creates a new ACIDE - A Configurable IDE explorer panel popup menu.
 	 */
 	public AcideExplorerPanelPopupMenu() {
 
-		final ResourceBundle labels = AcideLanguageManager.getInstance().getLabels();
-
 		// NEW PROJECT
-		_newProject = new JMenuItem(labels.getString("s14"), new ImageIcon(
-				NEW_PROJECT));
+		_newProject = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s14"), NEW_PROJECT_IMAGE);
 		_newProject.addActionListener(new ActionListener() {
 
 			/*
@@ -171,6 +190,8 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
+				
+				// Calls to new project action performed
 				MainWindow.getInstance().getMenu().getProject().getNewProject()
 						.doClick();
 			}
@@ -178,8 +199,8 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 		add(_newProject);
 
 		// OPEN PROJECT
-		_openProject = new JMenuItem(labels.getString("s15"), new ImageIcon(
-				OPEN_PROJECT));
+		_openProject = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s15"), OPEN_PROJECT_IMAGE);
 		_openProject.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -190,6 +211,8 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
+				
+				// Calls to open project action performed
 				MainWindow.getInstance().getMenu().getProject()
 						.getOpenProject().doClick();
 			}
@@ -197,8 +220,8 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 		add(_openProject);
 
 		// SAVE PROJECT
-		_saveProject = new JMenuItem(labels.getString("s16"), new ImageIcon(
-				SAVE_PROJECT));
+		_saveProject = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s16"), SAVE_PROJECT_IMAGE);
 		_saveProject.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -209,8 +232,12 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
+				
+				// Enables the project menu save project menu item
 				MainWindow.getInstance().getMenu().getProject()
 						.getSaveProject().setEnabled(true);
+				
+				// Calls to save project action performed
 				MainWindow.getInstance().getMenu().getProject()
 						.getSaveProject().doClick();
 			}
@@ -219,8 +246,8 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 		addSeparator();
 
 		// NEW FILE
-		_newFile = new JMenuItem(labels.getString("s947"), new ImageIcon(
-				NEW_FILE));
+		_newFile = new JMenuItem(AcideLanguageManager.getInstance().getLabels()
+				.getString("s947"), NEW_FILE_IMAGE);
 		_newFile.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -231,8 +258,12 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
+				
+				// Enables the project menu new project file menu item
 				MainWindow.getInstance().getMenu().getProject()
 						.getNewProjectFile().setEnabled(true);
+				
+				// Calls to new project file action performed
 				MainWindow.getInstance().getMenu().getProject()
 						.getNewProjectFile().doClick();
 			}
@@ -240,8 +271,8 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 		add(_newFile);
 
 		// ADD FILE
-		_addFile = new JMenuItem(labels.getString("s17"), new ImageIcon(
-				ADD_FILE));
+		_addFile = new JMenuItem(AcideLanguageManager.getInstance().getLabels()
+				.getString("s17"), ADD_FILE_IMAGE);
 		_addFile.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -252,8 +283,12 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
+				
+				// Enables the project menu add file menu item
 				MainWindow.getInstance().getMenu().getProject().getAddFile()
 						.setEnabled(true);
+				
+				// Calls to add file action performed
 				MainWindow.getInstance().getMenu().getProject().getAddFile()
 						.doClick();
 			}
@@ -261,7 +296,8 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 		add(_addFile);
 
 		// REMOVE FILE
-		_removeFile = new JMenuItem(labels.getString("s618"));
+		_removeFile = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s618"));
 		_removeFile.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -272,8 +308,12 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
+				
+				// Enables the project menu remove file menu item
 				MainWindow.getInstance().getMenu().getProject().getRemoveFile()
 						.setEnabled(true);
+				
+				// Calls to remove file action performed
 				MainWindow.getInstance().getMenu().getProject().getRemoveFile()
 						.doClick();
 			}
@@ -281,8 +321,8 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 		add(_removeFile);
 
 		// DELETE FILE
-		_deleteFile = new JMenuItem(labels.getString("s950"), new ImageIcon(
-				DELETE_FILE));
+		_deleteFile = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s950"), DELETE_FILE_IMAGE);
 		_deleteFile.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -293,8 +333,12 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
+				
+				// Enables the project menu delete file menu item
 				MainWindow.getInstance().getMenu().getProject().getDeleteFile()
 						.setEnabled(true);
+				
+				// Calls to delete file action performed
 				MainWindow.getInstance().getMenu().getProject().getDeleteFile()
 						.doClick();
 			}
@@ -303,8 +347,8 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 		addSeparator();
 
 		// SET COMPILABLE
-		_setCompilable = new JMenuItem(labels.getString("s254"), new ImageIcon(
-				SET_COMPILABLE));
+		_setCompilable = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s254"), SET_COMPILABLE_IMAGE);
 		_setCompilable.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -315,8 +359,12 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
+				
+				// Enables the project menu set compilable menu item
 				MainWindow.getInstance().getMenu().getProject()
 						.getSetCompilable().setEnabled(true);
+				
+				// Calls to set compilable action performed
 				MainWindow.getInstance().getMenu().getProject()
 						.getSetCompilable().doClick();
 			}
@@ -324,8 +372,8 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 		add(_setCompilable);
 
 		// UNSET COMPILABLE
-		_unsetCompilable = new JMenuItem(labels.getString("s255"),
-				new ImageIcon(UNSET_COMPILABLE));
+		_unsetCompilable = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s255"), UNSET_COMPILABLE_IMAGE);
 		_unsetCompilable.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -335,8 +383,12 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 			 * ActionEvent)
 			 */
 			public void actionPerformed(ActionEvent actionEvent) {
+				
+				// Enables the project menu unset compilable menu item
 				MainWindow.getInstance().getMenu().getProject()
 						.getUnsetCompilable().setEnabled(true);
+				
+				// Calls to unset compilable action performed
 				MainWindow.getInstance().getMenu().getProject()
 						.getUnsetCompilable().doClick();
 			}
@@ -344,8 +396,8 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 		add(_unsetCompilable);
 
 		// SET MAIN
-		_setMain = new JMenuItem(labels.getString("s256"), new ImageIcon(
-				SET_MAIN));
+		_setMain = new JMenuItem(AcideLanguageManager.getInstance().getLabels()
+				.getString("s256"), SET_MAIN_IMAGE);
 		_setMain.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -356,8 +408,12 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
+				
+				// Enables the project menu set main menu item
 				MainWindow.getInstance().getMenu().getProject().getSetMain()
 						.setEnabled(true);
+				
+				// Calls to set main action performed
 				MainWindow.getInstance().getMenu().getProject().getSetMain()
 						.doClick();
 			}
@@ -365,8 +421,8 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 		add(_setMain);
 
 		// UNSET MAIN
-		_unsetMain = new JMenuItem(labels.getString("s952"), new ImageIcon(
-				UNSET_MAIN));
+		_unsetMain = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s952"), UNSET_MAIN_IMAGE);
 		_unsetMain.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -376,8 +432,12 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 			 * ActionEvent)
 			 */
 			public void actionPerformed(ActionEvent actionEvent) {
+				
+				// Enables the project menu unset main menu item
 				MainWindow.getInstance().getMenu().getProject().getUnsetMain()
 						.setEnabled(true);
+				
+				// Calls to unset main action performed
 				MainWindow.getInstance().getMenu().getProject().getUnsetMain()
 						.doClick();
 			}
@@ -386,7 +446,8 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 		addSeparator();
 
 		// REMOVE FOLDER
-		_removeFolder = new JMenuItem(labels.getString("s220"));
+		_removeFolder = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s220"));
 		_removeFolder.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -397,16 +458,20 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
+
+				// Enables the project menu remove folder menu item
 				MainWindow.getInstance().getMenu().getProject()
 						.getRemoveFolder().setEnabled(true);
+
+				// Calls to remove folder action performed
 				MainWindow.getInstance().getMenu().getProject()
 						.getRemoveFolder().doClick();
 			}
 		});
 
 		// ADD FOLDER
-		_addFolder = new JMenuItem(labels.getString("s219"), new ImageIcon(
-				ADD_FOLDER));
+		_addFolder = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s219"), ADD_FOLDER_IMAGE);
 		_addFolder.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -417,8 +482,12 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
+
+				// Enables the project menu add folder menu item
 				MainWindow.getInstance().getMenu().getProject().getAddFolder()
 						.setEnabled(true);
+
+				// Calls to add folder action performed
 				MainWindow.getInstance().getMenu().getProject().getAddFolder()
 						.doClick();
 			}

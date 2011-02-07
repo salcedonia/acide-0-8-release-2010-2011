@@ -188,7 +188,7 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 
 				// Gets the number of opened file editor panels
 				int numFileEditorPanels = MainWindow.getInstance().getFileEditorManager()
-						.getNumFileEditorPanels();
+						.getNumberOfFileEditorPanels();
 
 				// Resets all the opened file editor panels with the new lexical configuration
 				for (int index = 0; index < numFileEditorPanels; index++)

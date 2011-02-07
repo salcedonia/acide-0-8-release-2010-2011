@@ -54,7 +54,7 @@ import es.configuration.window.AcideWindowConfiguration;
 import es.project.AcideProjectFile;
 import es.project.AcideProjectFileType;
 import es.text.ExtensionFilter;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.configurationMenu.menuMenu.gui.AcideMenuConfigurationWindow;
 import gui.menuBar.configurationMenu.toolBarMenu.gui.AcideToolBarConfigurationWindow;
@@ -125,7 +125,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 		// Gets the labels
 		ResourceBundle labels = language.getLabels();
 
-		TextFile textFile = AcideIOFactory.getInstance().buildFile();
+		AcideTextFile textFile = AcideIOFactory.getInstance().buildFile();
 
 		boolean cancelOptionSelected = false;
 
@@ -134,7 +134,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 		textFile.getFileChooser().addChoosableFileFilter(
 				new ExtensionFilter(ExtPide, labels.getString("s328")));
 		final String file;
-		file = textFile.read();
+		file = textFile.askAbsolutePath();
 
 		// If the file content is not empty
 		if (file != null) {
@@ -251,12 +251,22 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 		// Creates the folder with the name of the project
 		AcideProjectFile projectFile = new AcideProjectFile();
+		
+		// Sets the absolute path
 		projectFile.setAbsolutePath(AcideProjectConfiguration.getInstance()
 				.getName());
+		
+		// Sets the name
 		projectFile.setName(AcideProjectConfiguration.getInstance()
 				.getName());
+		
+		// It is directory
 		projectFile.setIsDirectory(true);
+		
+		// It has no parent
 		projectFile.setParent(null);
+		
+		// Sets the Main Window title
 		MainWindow.getInstance().setTitle(
 				labels.getString("s425")
 						+ " - "
@@ -266,12 +276,18 @@ public class OpenProjectMenuItemListener implements ActionListener {
 		// Creates the explorer tree with the project as the root of it
 		DefaultMutableTreeNode explorerTree = new DefaultMutableTreeNode(
 				projectFile);
+		
+		// Allows children
 		explorerTree.setAllowsChildren(true);
+		
+		// Adds the root node to the tree
 		MainWindow.getInstance().getExplorerPanel().getRoot().add(explorerTree);
-		ArrayList<DefaultMutableTreeNode> listdir = new ArrayList<DefaultMutableTreeNode>();
+		
+		// Creates the directory list
+		ArrayList<DefaultMutableTreeNode> directoryList = new ArrayList<DefaultMutableTreeNode>();
 
 		// Adds the associated project files to the explorer
-		for (int index = 0; index < AcideProjectConfiguration.getInstance().getNumFilesFromList(); index++) {
+		for (int index = 0; index < AcideProjectConfiguration.getInstance().getNumberOfFilesFromList(); index++) {
 
 			// Gets the file from the project configuration
 			DefaultMutableTreeNode file = new DefaultMutableTreeNode(AcideProjectConfiguration.getInstance().getFileAt(index));
@@ -280,9 +296,11 @@ public class OpenProjectMenuItemListener implements ActionListener {
 			if (AcideProjectConfiguration.getInstance()
 					.getFileAt(index).isDirectory()) {
 
-				// Can have files inside
+				// It can have files inside
 				file.setAllowsChildren(true);
-				listdir.add(file);
+				
+				// Adds the file
+				directoryList.add(file);
 			} else
 				// Can't have files inside
 				file.setAllowsChildren(false);
@@ -298,7 +316,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 			} else {
 
 				// Searches for it in the tree structure
-				DefaultMutableTreeNode fileAux = searchDirectoryList(listdir,
+				DefaultMutableTreeNode fileAux = searchDirectoryList(directoryList,
 						AcideProjectConfiguration.getInstance()
 								.getFileAt(index).getParent());
 
@@ -307,13 +325,15 @@ public class OpenProjectMenuItemListener implements ActionListener {
 			}
 		}
 
-		// Updates the tree structure
+		// Updates the explorer tree
 		MainWindow.getInstance().getExplorerPanel().getTreeModel().reload();
+		
+		// Repaints the explorer tree
 		MainWindow.getInstance().getExplorerPanel().expandTree();
 
 		// If there are files associated to the project
 		if (AcideProjectConfiguration.getInstance()
-				.getNumFilesFromList() > 0) {
+				.getNumberOfFilesFromList() > 0) {
 
 			// Enables the remove file menu item
 			MainWindow.getInstance().getExplorerPanel().getPopupMenu()
@@ -333,8 +353,10 @@ public class OpenProjectMenuItemListener implements ActionListener {
 					.getDeleteFile().setEnabled(false);
 		}
 
-		// Updates the MAIN WINDOW
+		// Updates the main window
 		MainWindow.getInstance().validate();
+		
+		// Repaints the main window
 		MainWindow.getInstance().repaint();
 
 		// If the show explorer panel is selected
@@ -636,7 +658,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 	public void loadNewProjectConfiguration(String configurationFilePath) {
 
 		// Builds the text configuration file
-		TextFile textConfigurationFile = AcideIOFactory.getInstance()
+		AcideTextFile textConfigurationFile = AcideIOFactory.getInstance()
 				.buildFile();
 
 		// Loads the configuration file content
@@ -752,7 +774,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 			@Override
 			public void run() {
 
-				for (int index = 0; index < AcideProjectConfiguration.getInstance().getNumFilesFromList(); index++) {
+				for (int index = 0; index < AcideProjectConfiguration.getInstance().getNumberOfFilesFromList(); index++) {
 
 					// Checks if the file really exists
 					File file = new File(AcideProjectConfiguration.getInstance().getFileAt(index)
@@ -763,7 +785,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 							.getFileAt(index).isDirectory()
 							&& file.exists()) {
 
-						TextFile textFile = AcideIOFactory.getInstance()
+						AcideTextFile textFile = AcideIOFactory.getInstance()
 								.buildFile();
 						String text = null;
 						text = textFile.load(AcideProjectConfiguration.getInstance().getFileAt(index)
@@ -851,7 +873,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 							// FILE
 							for (int i = 0; i < MainWindow.getInstance()
 									.getFileEditorManager()
-									.getNumFileEditorPanels(); i++) {
+									.getNumberOfFileEditorPanels(); i++) {
 
 								if (MainWindow
 										.getInstance()
@@ -971,7 +993,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 		// Gets the opened file editors number
 		int numFileEditors = MainWindow.getInstance().getFileEditorManager()
-				.getNumFileEditorPanels();
+				.getNumberOfFileEditorPanels();
 
 		// Search for modified opened file editors
 		for (int index = numFileEditors - 1; index >= 0; index--) {
@@ -1033,7 +1055,7 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 		// Gets the opened file editor panel number
 		int numFileEditorPanels = MainWindow.getInstance()
-				.getFileEditorManager().getNumFileEditorPanels();
+				.getFileEditorManager().getNumberOfFileEditorPanels();
 
 		// Resets all the opened files with the new lexicon configuration
 		for (int index = 0; index < numFileEditorPanels; index++)

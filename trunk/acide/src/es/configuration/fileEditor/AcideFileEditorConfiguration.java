@@ -229,7 +229,7 @@ public class AcideFileEditorConfiguration {
 
 			// Analyzes all the opened file editor panels
 			for (int index = 0; index < MainWindow.getInstance()
-					.getFileEditorManager().getNumFileEditorPanels(); index++) {
+					.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
 
 				// Gets the selected file editor panel
 				AcideFileEditorPanel fileEditorPanel = MainWindow.getInstance()

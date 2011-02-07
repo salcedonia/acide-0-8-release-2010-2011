@@ -37,7 +37,7 @@ import operations.log.AcideLog;
 import resources.AcideResourceManager;
 
 import es.configuration.menu.exception.IncorrectMenuConfigurationFileFormatException;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 
 /**
  * ACIDE - A Configurable IDE menu configuration.
@@ -108,8 +108,8 @@ public class AcideMenuConfiguration {
 			fileContent += menuElement.getName() + " = "
 					+ menuElement.getIsDisplayed() + "\n";
 
-		TextFile f = new TextFile();
-		f.save(fileName, fileContent);
+		AcideTextFile f = new AcideTextFile();
+		f.write(fileName, fileContent);
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class AcideMenuConfiguration {
 		_menuItemList.clear();
 
 		// Loads the menu configuration file
-		TextFile f = new TextFile();
+		AcideTextFile f = new AcideTextFile();
 		String fileContent = f.load(filePath);
 
 		// Split the file content by lines

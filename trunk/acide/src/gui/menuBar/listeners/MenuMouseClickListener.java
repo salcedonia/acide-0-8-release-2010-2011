@@ -159,7 +159,7 @@ public class MenuMouseClickListener extends MouseAdapter {
 
 				// Gets the number of the editors
 				int numberEditors = MainWindow.getInstance()
-						.getFileEditorManager().getNumFileEditorPanels();
+						.getFileEditorManager().getNumberOfFileEditorPanels();
 
 				// If there are opened editor
 				if (numberEditors > 0) {
@@ -211,7 +211,7 @@ public class MenuMouseClickListener extends MouseAdapter {
 
 			// Gets the number of editors
 			int numberEditors = MainWindow.getInstance().getFileEditorManager()
-					.getNumFileEditorPanels();
+					.getNumberOfFileEditorPanels();
 
 			// If there are opened editors
 			if (numberEditors > 0) {
@@ -313,7 +313,7 @@ public class MenuMouseClickListener extends MouseAdapter {
 
 			// Gets the number of opened editors
 			int editor = MainWindow.getInstance().getFileEditorManager()
-					.getNumFileEditorPanels();
+					.getNumberOfFileEditorPanels();
 
 			// If there are opened editors
 			if (editor > 0) {

@@ -29,21 +29,18 @@
  */
 package gui.fileEditor.fileEditorManager.listeners;
 
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 
 import language.AcideLanguageManager;
-import operations.log.AcideLog;
-import resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE file editor manager mouse click listener.
@@ -139,45 +136,39 @@ public class AcideFileEditorManagerMouseClickListener extends MouseAdapter {
 								.getFileEditorManager()
 								.getSelectedFileEditorPanel().getLastSize())) {
 
-					// Gets the language
-					AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-					try {
-						language.getLanguage(AcideResourceManager.getInstance()
-								.getProperty("language"));
-					} catch (Exception exception) {
-
-						// Updates the log
-						AcideLog.getLog().error(exception.getMessage());
-						exception.printStackTrace();
-					}
-
-					// Gets the labels
-					ResourceBundle labels = language.getLabels();
-
 					// Ask to the user for saving 
 					int chosenOption = JOptionPane.showConfirmDialog(null,
-							labels.getString("s65"));
+							AcideLanguageManager.getInstance().getLabels().getString("s65"));
 
 					// OK OPTION
 					if (chosenOption == JOptionPane.OK_OPTION) {
 
-						TextFile newTextFile = new TextFile();
+						AcideTextFile newTextFile = new AcideTextFile();
+						
+						// Load the file content
 						MainWindow.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel()
 								.loadText(newTextFile.load(selectedEditorPath));
+						
+						// Sets last change
 						MainWindow.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel()
 								.setLastChange(file.lastModified());
+						
+						// Sets last size
 						MainWindow.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel()
 								.setLastSize(file.length());
 					} else {
 						
 						// NO OPTION
+						
+						// Sets last change
 						MainWindow.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel()
 								.setLastChange(file.lastModified());
+						
+						// Sets last size
 						MainWindow.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel()
 								.setLastSize(file.length());

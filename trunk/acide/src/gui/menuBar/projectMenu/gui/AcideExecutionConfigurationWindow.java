@@ -42,7 +42,7 @@ import java.util.ResourceBundle;
 
 import es.configuration.project.AcideProjectConfiguration;
 import es.text.ExtensionFilter;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.listeners.AcideWindowListener;
 import gui.mainWindow.MainWindow;
 
@@ -165,12 +165,12 @@ public class AcideExecutionConfigurationWindow extends JFrame {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				TextFile f = new TextFile();
+				AcideTextFile f = new AcideTextFile();
 				String[] ExtAcide = new String[] { "exe" };
 				f.getFileChooser().addChoosableFileFilter(
 						new ExtensionFilter(ExtAcide,
 								"Executable source (*.exe)"));
-				String path = f.read();
+				String path = f.askAbsolutePath();
 				_executionTextField.setText(path);
 			}
 		});
@@ -193,7 +193,7 @@ public class AcideExecutionConfigurationWindow extends JFrame {
 					String arguments = _argumentsTextField.getText();
 
 					if (MainWindow.getInstance().getFileEditorManager()
-							.getNumFileEditorPanels() > 0) {
+							.getNumberOfFileEditorPanels() > 0) {
 						
 						execution = execution.replace("$activeFile$", MainWindow
 								.getInstance().getFileEditorManager()
@@ -258,7 +258,7 @@ public class AcideExecutionConfigurationWindow extends JFrame {
 						// SEARCH THE MAIN FILE OPENED IN THE EDITOR
 						int mainFileIndex = -1;
 						for (int i = 0; i < AcideProjectConfiguration.getInstance()
-								.getNumFilesFromList(); i++) {
+								.getNumberOfFilesFromList(); i++) {
 							if (AcideProjectConfiguration.getInstance().getFileAt(i)
 									.isMainFile())
 								mainFileIndex = i;

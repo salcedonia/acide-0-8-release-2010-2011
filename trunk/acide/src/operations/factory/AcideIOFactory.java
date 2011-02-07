@@ -29,7 +29,7 @@
  */
 package operations.factory;
 
-import es.text.TextFile;
+import es.text.AcideTextFile;
  
 /**																
  * ACIDE - A Configurable IDE IOFactory.
@@ -61,7 +61,7 @@ public class AcideIOFactory {
 	 * 
 	 * @return the new text file.
 	 */
-	public TextFile buildFile() {
-		return new TextFile();
+	public AcideTextFile buildFile() {
+		return new AcideTextFile();
 	}
 }

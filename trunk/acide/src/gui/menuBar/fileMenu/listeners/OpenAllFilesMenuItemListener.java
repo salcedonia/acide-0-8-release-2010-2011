@@ -31,7 +31,7 @@ package gui.menuBar.fileMenu.listeners;
 
 import es.configuration.project.AcideProjectConfiguration;
 import es.project.AcideProjectFileType;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
 
@@ -83,7 +83,7 @@ public class OpenAllFilesMenuItemListener implements ActionListener {
 		final ResourceBundle labels = language.getLabels();
 
 		for (int index = 0; index < AcideProjectConfiguration.getInstance()
-				.getNumFilesFromList(); index++) {
+				.getNumberOfFilesFromList(); index++) {
 
 			// Checks if the file really exists
 			File file = new File(AcideProjectConfiguration.getInstance()
@@ -94,7 +94,7 @@ public class OpenAllFilesMenuItemListener implements ActionListener {
 					.isDirectory()
 					&& file.exists()) {
 
-				TextFile textFile = AcideIOFactory.getInstance().buildFile();
+				AcideTextFile textFile = AcideIOFactory.getInstance().buildFile();
 				String text = null;
 				text = textFile.load(AcideProjectConfiguration.getInstance()
 						.getFileAt(index).getAbsolutePath());
@@ -105,7 +105,7 @@ public class OpenAllFilesMenuItemListener implements ActionListener {
 				boolean isOpened = false;
 
 				for (int position = 0; position < MainWindow.getInstance()
-						.getFileEditorManager().getNumFileEditorPanels(); position++) {
+						.getFileEditorManager().getNumberOfFileEditorPanels(); position++) {
 					if (MainWindow.getInstance().getFileEditorManager()
 							.getFileEditorPanelAt(position).getAbsolutePath()
 							.equals(filePath)) {
@@ -181,7 +181,7 @@ public class OpenAllFilesMenuItemListener implements ActionListener {
 
 					// Checks if it is marked as a MAIN or COMPILABLE FILE
 					for (int i = 0; i < MainWindow.getInstance()
-							.getFileEditorManager().getNumFileEditorPanels(); i++) {
+							.getFileEditorManager().getNumberOfFileEditorPanels(); i++) {
 
 						if (MainWindow
 								.getInstance()

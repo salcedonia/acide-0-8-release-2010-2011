@@ -74,7 +74,7 @@ public class AcideExplorerPanelKeyboardListener extends KeyAdapter {
 			file.getAbsolutePath();
 
 			// Searches for the explorer file into the editor files
-			for (int fileIndex = 0; fileIndex < AcideProjectConfiguration.getInstance().getNumFilesFromList(); fileIndex++) {
+			for (int fileIndex = 0; fileIndex < AcideProjectConfiguration.getInstance().getNumberOfFilesFromList(); fileIndex++) {
 
 				// If exists
 				if (AcideProjectConfiguration.getInstance()
@@ -123,7 +123,7 @@ public class AcideExplorerPanelKeyboardListener extends KeyAdapter {
 
 			// Sets the focus on the selected file at the editor
 			for (int index = 0; index < MainWindow.getInstance().getFileEditorManager()
-					.getNumFileEditorPanels(); index++) {
+					.getNumberOfFileEditorPanels(); index++) {
 				
 				// If it is the file editor panel
 				if (MainWindow.getInstance().getFileEditorManager()

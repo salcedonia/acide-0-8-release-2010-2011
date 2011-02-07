@@ -43,6 +43,7 @@ import es.project.AcideProjectFile;
 import es.text.ValidExtensions;
 import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import gui.explorerPanel.listeners.AcideExplorerPanelClickMouseListener;
@@ -345,7 +346,7 @@ public class AcideExplorerPanel extends JPanel {
 				int fileIndex = -1;
 
 				// Searches for the file in the explorer tree
-				for (int index1 = 0; index1 < AcideProjectConfiguration.getInstance().getNumFilesFromList(); index1++) {
+				for (int index1 = 0; index1 < AcideProjectConfiguration.getInstance().getNumberOfFilesFromList(); index1++) {
 
 					// Does the file belong to the project?
 					if (AcideProjectConfiguration.getInstance()
@@ -360,7 +361,7 @@ public class AcideExplorerPanel extends JPanel {
 								.getFileAt(index1);
 
 						for (int index2 = 0; index2 < AcideProjectConfiguration.getInstance()
-								.getNumFilesFromList() + 1; index2++) {
+								.getNumberOfFilesFromList() + 1; index2++) {
 
 							if (MainWindow.getInstance().getExplorerPanel()
 									.getTree().getPathForRow(index2)
@@ -383,5 +384,36 @@ public class AcideExplorerPanel extends JPanel {
 						.setSelectionPath(currentSelection);
 			}
 		}
+	}
+	
+	/**
+	 * Searches for a file into the list of files. If finds it then it returns the node
+	 * itself and null in other case.
+	 * 
+	 * @param directoryList
+	 *            list of files.
+	 * @param fileName
+	 *            file name to search for.
+	 * @return the file itself if it exists, and null in the opposite case.
+	 */
+	public DefaultMutableTreeNode searchDirectoryList(
+			final ArrayList<DefaultMutableTreeNode> directoryList, final String fileName) {
+
+		int index = 0;
+
+		boolean found = false;
+
+		while (index < directoryList.size() && !found) {
+
+			DefaultMutableTreeNode node = directoryList.get(index);
+			AcideProjectFile file = (AcideProjectFile) node.getUserObject();
+
+			if (file.getName().equals(fileName)) {
+				found = true;
+				return directoryList.get(index);
+			} else
+				index++;
+		}
+		return null;
 	}
 }

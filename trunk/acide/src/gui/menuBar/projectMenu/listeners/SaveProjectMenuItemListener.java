@@ -30,7 +30,7 @@
 package gui.menuBar.projectMenu.listeners;
 
 import es.configuration.project.AcideProjectConfiguration;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
 
 import java.awt.event.ActionEvent;
@@ -59,7 +59,7 @@ public class SaveProjectMenuItemListener implements ActionListener {
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		// Creates the text file which it is going to be the project file
-		TextFile textFile = AcideIOFactory.getInstance().buildFile();
+		AcideTextFile textFile = AcideIOFactory.getInstance().buildFile();
 
 		try {
 
@@ -76,17 +76,17 @@ public class SaveProjectMenuItemListener implements ActionListener {
 			} else {
 
 				// Sets the language configuration
-				AcideProjectConfiguration.getInstance().setLanguage(
+				AcideProjectConfiguration.getInstance().setLanguageConfiguration(
 						AcideResourceManager.getInstance().getProperty(
 								"language"));
 
 				// Sets the menu configuration
-				AcideProjectConfiguration.getInstance().setMenu(
+				AcideProjectConfiguration.getInstance().setMenuConfiguration(
 						AcideResourceManager.getInstance().getProperty(
 								"currentMenuConfiguration"));
 
 				// Sets the tool bar configuration
-				AcideProjectConfiguration.getInstance().setToolBar(
+				AcideProjectConfiguration.getInstance().setToolBarConfiguration(
 						AcideResourceManager.getInstance().getProperty(
 								"currentToolBarConfiguration"));
 
@@ -116,7 +116,7 @@ public class SaveProjectMenuItemListener implements ActionListener {
 				// Saves the configuration into the file
 				String fileContent = AcideProjectConfiguration.getInstance()
 						.save();
-				textFile.save(AcideProjectConfiguration.getInstance()
+				textFile.write(AcideProjectConfiguration.getInstance()
 						.getProjectPath(), fileContent);
 
 				// The project has not been modified

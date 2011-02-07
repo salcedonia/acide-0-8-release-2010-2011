@@ -107,7 +107,7 @@ public class NewProjectMenuItemListener implements ActionListener {
 		
 		// Gets the number of editors
 		int numEditors = MainWindow.getInstance().getFileEditorManager()
-				.getNumFileEditorPanels();
+				.getNumberOfFileEditorPanels();
 		
 		// Closes the opened files in the editor
 		for (int index = numEditors - 1; index >= 0; index--) {

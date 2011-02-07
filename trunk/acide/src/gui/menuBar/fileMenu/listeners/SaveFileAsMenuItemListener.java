@@ -29,7 +29,7 @@
  */
 package gui.menuBar.fileMenu.listeners;
 
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
 
 import java.awt.event.ActionEvent;
@@ -76,19 +76,19 @@ public class SaveFileAsMenuItemListener implements ActionListener {
 		ResourceBundle labels = language.getLabels();
 
 		// Creates the file to be saved
-		TextFile textFile = AcideIOFactory.getInstance().buildFile();
+		AcideTextFile textFile = AcideIOFactory.getInstance().buildFile();
 		String f = " ";
 
 		// If there are opened files
-		if (MainWindow.getInstance().getFileEditorManager().getNumFileEditorPanels() != 0) {
+		if (MainWindow.getInstance().getFileEditorManager().getNumberOfFileEditorPanels() != 0) {
 
-			f = textFile.write();
+			f = textFile.askSavingFileEditorFile();
 
 			// If the file is not empty
 			if (!f.equals(" ")) {
 
 				// Try to save the file content
-				boolean result = textFile.save(f, MainWindow.getInstance()
+				boolean result = textFile.write(f, MainWindow.getInstance()
 						.getFileEditorManager().getSelectedFileEditorPanel().getTextEditionAreaContent());
 
 				// If it could save it

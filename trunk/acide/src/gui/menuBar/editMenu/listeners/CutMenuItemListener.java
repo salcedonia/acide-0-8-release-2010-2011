@@ -75,7 +75,7 @@ public class CutMenuItemListener implements ActionListener {
 		AcideLog.getLog().info(labels.getString("s97"));
 
 		// CUT
-		if (MainWindow.getInstance().getFileEditorManager().getNumFileEditorPanels() > 0)
+		if (MainWindow.getInstance().getFileEditorManager().getNumberOfFileEditorPanels() > 0)
 			MainWindow
 					.getInstance()
 					.getFileEditorManager()

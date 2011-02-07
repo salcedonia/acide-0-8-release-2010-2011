@@ -31,14 +31,13 @@ package gui.menuBar.projectMenu.listeners;
 
 import es.configuration.project.AcideProjectConfiguration;
 import es.project.AcideProjectFile;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -46,7 +45,6 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import language.AcideLanguageManager;
-import operations.log.AcideLog;
 import resources.AcideResourceManager;
 
 /**																
@@ -67,23 +65,8 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-			
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		// Are you sure?
-		int chosenOption = JOptionPane.showConfirmDialog(null, labels
+		int chosenOption = JOptionPane.showConfirmDialog(null, AcideLanguageManager.getInstance().getLabels()
 				.getString("s654"));
 		
 		// If yes
@@ -103,47 +86,62 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) (currentSelection
 						.getLastPathComponent());
 				
-				// Transforms the node into a explorer file
-				AcideProjectFile folder = (AcideProjectFile) currentNode.getUserObject();
+				// Transforms the node into a project file
+				AcideProjectFile currentFolder = (AcideProjectFile) currentNode.getUserObject();
 				
 				// If it is a directory
-				if (folder.isDirectory()) {
+				if (currentFolder.isDirectory()) {
 					
-					// Gets the node parent
+					// Gets the parent node
 					MutableTreeNode parent = (MutableTreeNode) (currentNode
 							.getParent());
 					
 					// If it has parent
 					if (parent != null) {
 						
-						// Removes the node
+						// Removes the node from the parent
 						MainWindow.getInstance().getExplorerPanel().getTreeModel()
 								.removeNodeFromParent(currentNode);
 						
-						ArrayList<String> contRemove = new ArrayList<String>();
+						// Creates the removed file list
+						ArrayList<String> removedFileList = new ArrayList<String>();
 						
 						if ((currentNode.getDepth() <= 2)
-								&& (folder.getName().equals(AcideProjectConfiguration.getInstance()
+								&& (currentFolder.getName().equals(AcideProjectConfiguration.getInstance()
 										.getName()))) {
 							
-							// Updates the explorer popup menu 
+							// Disables the add file menu item in the explorer panel popup menu 
 							MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 									.getAddFile().setEnabled(false);
+							
+							// Disables the save project menu item in the explorer panel popup menu 
 							MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 									.getSaveProject().setEnabled(false);
+							
+							// Disables the remove file menu item in the explorer panel popup menu 
 							MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 									.getRemoveFile().setEnabled(false);
+							
+							// Disables the delete file menu item in the explorer panel popup menu 
 							MainWindow.getInstance().getExplorerPanel().getPopupMenu()
 									.getDeleteFile().setEnabled(false);
 							
-							MainWindow.getInstance().setTitle(labels.getString("s425")
+							// Sets the title to the default project
+							MainWindow.getInstance().setTitle(AcideLanguageManager.getInstance().getLabels().getString("s425")
 									+ " - <empty>");
-							TextFile f = new TextFile();
-
-							f.save("./configuration/file_acidePrj",
+							
+							// Creates a new project file by default
+							AcideTextFile f = new AcideTextFile();
+							f.write("./configuration/file_acidePrj",
 									"<EMPTY>");
+							
+							// Validates the changes in the main window
 							MainWindow.getInstance().validate();
+							
+							// Repaints the main window
 							MainWindow.getInstance().repaint();
+							
+							// Sets the name in the project configuration
 							AcideProjectConfiguration.getInstance()
 									.setName("");
 							
@@ -153,56 +151,73 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 									"./configuration/project/default.acidePrj");
 						}
 
-						// Searches for the file in the explorer
-						int posExplorer = -1;
-						for (int position = 0; position < AcideProjectConfiguration.getInstance()
-								.getNumFilesFromList(); position++) {
+						// Searches for the file in the project configuration
+						int fileIndex = -1;
+						for (int index = 0; index < AcideProjectConfiguration.getInstance()
+								.getNumberOfFilesFromList(); index++) {
 							
-							if (!folder.getName().equals(
+							if (!currentFolder.getName().equals(
 									AcideProjectConfiguration.getInstance()
 											.getName())) {
 								if (AcideProjectConfiguration.getInstance()
-										.getFileAt(position).getName().equals(
-												folder.getName())) {
-									posExplorer = position;
+										.getFileAt(index).getName().equals(
+												currentFolder.getName())) {
+									
+									// Found it
+									fileIndex = index;
 
 								} else if (AcideProjectConfiguration.getInstance()
-										.getFileAt(position).getParent().equals(
-												folder.getName())) {
+										.getFileAt(index).getParent().equals(
+												currentFolder.getName())) {
+									
+									// If it is not a directory
 									if (!AcideProjectConfiguration.getInstance()
-											.getFileAt(position).isDirectory()) {
+											.getFileAt(index).isDirectory()) {
 										
-										contRemove.add(AcideProjectConfiguration.getInstance()
-												.getFileAt(position).getAbsolutePath());
+										// Adds the file to the removed file list
+										removedFileList.add(AcideProjectConfiguration.getInstance()
+												.getFileAt(index).getAbsolutePath());
 										
+										// If it is not the last file in the project configuration
 										if (AcideProjectConfiguration.getInstance()
-												.getNumFilesFromList() != 1)
+												.getNumberOfFilesFromList() != 1)
+											
+											// Removes it
 											AcideProjectConfiguration.getInstance()
-													.removeFileAt(position);
+													.removeFileAt(index);
 										else
+											// Removes it
 											AcideProjectConfiguration.getInstance()
 													.removeFileAt(0);
 									} else {
-										String dir = AcideProjectConfiguration.getInstance()
-												.getFileAt(position).getName();
 										
-										for (int k = position + 1; k < AcideProjectConfiguration.getInstance()
-												.getNumFilesFromList(); k++) {
+										// Gets the folder name
+										String folderName = AcideProjectConfiguration.getInstance()
+												.getFileAt(index).getName();
+										
+										for (int index2 = index + 1; index2 < AcideProjectConfiguration.getInstance()
+												.getNumberOfFilesFromList(); index2++) {
 											if (AcideProjectConfiguration.getInstance()
-													.getFileAt(position)
+													.getFileAt(index)
 													.getParent()
-													.equals(dir)) {
-												contRemove
+													.equals(folderName)) {
+												
+												// Adds the file to the removed file list
+												removedFileList
 														.add(AcideProjectConfiguration.getInstance()
 																.getFileAt(
-																		k)
+																		index2)
 																.getAbsolutePath());
 
+												// If it is not the last file in the project configuration
 												if (AcideProjectConfiguration.getInstance()
-														.getNumFilesFromList() != 1)
+														.getNumberOfFilesFromList() != 1)
+													
+													// Removes it
 													AcideProjectConfiguration.getInstance()
-															.removeFileAt(k);
+															.removeFileAt(index2);
 												else
+													// Removes it
 													AcideProjectConfiguration.getInstance()
 															.removeFileAt(0);
 											}
@@ -213,37 +228,43 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 						}
 						
 						// If it exists
-						if (posExplorer != -1)
+						if (fileIndex != -1)
 							
 							// If it is not the last file in the project 
 							if (AcideProjectConfiguration.getInstance()
-									.getNumFilesFromList() != 1)
+									.getNumberOfFilesFromList() != 1)
+								
+								// Removes it from the project configuration
 								AcideProjectConfiguration.getInstance()
-										.removeFileAt(posExplorer);
+										.removeFileAt(fileIndex);
 							else
 								
-								// Last file in the project
+								// Removes it from the project configuration
 								AcideProjectConfiguration.getInstance()
 										.removeFileAt(0);
 						
 						// Are you sure?
-						chosenOption = JOptionPane.showConfirmDialog(null, labels
+						chosenOption = JOptionPane.showConfirmDialog(null, AcideLanguageManager.getInstance().getLabels()
 								.getString("s655"));
 						
 						// If so
 						if (chosenOption == JOptionPane.OK_OPTION) {
 
 							// Deletes the file
-							for (int j = 0; j < contRemove.size(); j++) {
-								File fi = new File(contRemove.get(j));
-								if (fi.isFile())
-									fi.delete();
+							for (int index = 0; index < removedFileList.size(); index++) {
+								File file = new File(removedFileList.get(index));
+								
+								// If it is a file
+								if (file.isFile())
+									
+									// Deletes it
+									file.delete();
 							}
 
 						} else
-							// Updates the status bar
+							// Updates the status message in the status bar
 							MainWindow.getInstance().getStatusBar().setStatusMessage(
-									"Option cancel");
+									AcideLanguageManager.getInstance().getLabels().getString("s107"));
 						return;
 
 					}
@@ -251,15 +272,23 @@ public class RemoveFolderMenuItemListener implements ActionListener {
 			}
 		}
 
-		// UPDATES THE EXPLORER POPUP MENU
-		if (AcideProjectConfiguration.getInstance().getNumFilesFromList() > 0) {
+		// If there are more files in the project
+		if (AcideProjectConfiguration.getInstance().getNumberOfFilesFromList() > 0) {
+			
+			// Enables the remove file menu item in the explorer panel popup menu
 			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getRemoveFile()
 					.setEnabled(true);
+			
+			// Enables the delete file menu item in the explorer panel popup menu
 			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getDeleteFile()
 					.setEnabled(true);
 		} else {
+			
+			// Disables the remove file menu item in the explorer panel popup menu
 			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getRemoveFile()
 					.setEnabled(false);
+			
+			// Disables the delete file menu item in the explorer panel popup menu
 			MainWindow.getInstance().getExplorerPanel().getPopupMenu().getDeleteFile()
 					.setEnabled(false);
 		}

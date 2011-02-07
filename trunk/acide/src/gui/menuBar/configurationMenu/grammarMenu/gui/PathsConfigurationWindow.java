@@ -56,7 +56,7 @@ import operations.log.AcideLog;
 import resources.AcideResourceManager;
 
 
-import es.text.TextFile;
+import es.text.AcideTextFile;
 
 /**																
  * Paths configuration window of ACIDE - A Configurable IDE.
@@ -587,8 +587,8 @@ public class PathsConfigurationWindow extends JFrame{
 		 */
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
-			TextFile f = new TextFile();
-			String path = f.read();
+			AcideTextFile f = new AcideTextFile();
+			String path = f.askAbsolutePath();
 			_jarTextField.setText(path);
 		}
 	}
@@ -640,8 +640,8 @@ public class PathsConfigurationWindow extends JFrame{
 		 */
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
-			TextFile f = new TextFile();
-			String path = f.read();
+			AcideTextFile f = new AcideTextFile();
+			String path = f.askAbsolutePath();
 			_javacTextField.setText(path);
 		}
 	}
@@ -693,8 +693,8 @@ public class PathsConfigurationWindow extends JFrame{
 		 */
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
-			TextFile f = new TextFile();
-			String path = f.read();
+			AcideTextFile f = new AcideTextFile();
+			String path = f.askAbsolutePath();
 			_javaTextField.setText(path);
 		}
 	}

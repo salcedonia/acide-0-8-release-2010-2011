@@ -29,7 +29,7 @@
  */
 package gui.menuBar.fileMenu.listeners;
 
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
 
 import java.awt.event.ActionEvent;
@@ -76,12 +76,12 @@ public class SaveFileMenuItemListener implements ActionListener {
 		// Gets the labels
 		ResourceBundle labels = language.getLabels();
 
-		TextFile textFile = AcideIOFactory.getInstance().buildFile();
+		AcideTextFile textFile = AcideIOFactory.getInstance().buildFile();
 		String filePath = " ";
 
 		// If there are opened files
 		if (MainWindow.getInstance().getFileEditorManager()
-				.getNumFileEditorPanels() != 0) {
+				.getNumberOfFileEditorPanels() != 0) {
 
 			// If it is not the NEW FILE
 			if (!MainWindow.getInstance().getFileEditorManager()
@@ -89,7 +89,7 @@ public class SaveFileMenuItemListener implements ActionListener {
 					.equals(labels.getString("s79"))) {
 
 				// Save the file
-				boolean result = textFile.save(MainWindow.getInstance()
+				boolean result = textFile.write(MainWindow.getInstance()
 						.getFileEditorManager().getSelectedFileEditorPanel()
 						.getAbsolutePath(), MainWindow.getInstance()
 						.getFileEditorManager().getSelectedFileEditorPanel()

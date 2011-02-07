@@ -61,7 +61,7 @@ import language.AcideLanguageManager;
 
 import es.bytes.ByteFile;
 import es.configuration.project.AcideProjectConfiguration;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import es.text.TextFileFilter;
 
 import operations.console.ConsoleThread;
@@ -293,15 +293,15 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 				textContent += "\nclass GrammarParser extends Parser;\n";
 				textContent += "options{k=2;}\n";
 				textContent += _rulesTextArea.getText();
-				TextFile textFile = new TextFile();
+				AcideTextFile textFile = new AcideTextFile();
 				
-				boolean isSaved = textFile.save("grammar.g", textContent);
+				boolean isSaved = textFile.write("grammar.g", textContent);
 				
 				isSaved = isSaved
-						&& textFile.save("lexicalCats.txt",
+						&& textFile.write("lexicalCats.txt",
 								_categoriesTextArea.getText());
 				isSaved = isSaved
-						&& textFile.save("syntaxRules.txt", _rulesTextArea.getText());
+						&& textFile.write("syntaxRules.txt", _rulesTextArea.getText());
 				
 				if (isSaved)
 					
@@ -397,8 +397,8 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 				
-				TextFile file = new TextFile();
-				String path = file.read();
+				AcideTextFile file = new AcideTextFile();
+				String path = file.askAbsolutePath();
 				String text = null;
 				text = file.load(path);
 				_rulesTextArea.setText(text);
@@ -417,9 +417,9 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 			public void actionPerformed(ActionEvent actionEvent) {
 				
 				String text = _rulesTextArea.getText();
-				TextFile textFile = new TextFile();
-				String path = textFile.write();
-				boolean saved = textFile.save(path, text);
+				AcideTextFile textFile = new AcideTextFile();
+				String path = textFile.askSavingFileEditorFile();
+				boolean saved = textFile.write(path, text);
 				
 				if (saved)
 					// Updates the log
@@ -438,8 +438,8 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 				
-				TextFile file = new TextFile();
-				String path = file.read();
+				AcideTextFile file = new AcideTextFile();
+				String path = file.askAbsolutePath();
 				
 				String textContent = null;
 				textContent = file.load(path);
@@ -459,9 +459,9 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 			public void actionPerformed(ActionEvent actionEvent) {
 				
 				String text = _categoriesTextArea.getText();
-				TextFile textFile = new TextFile();
-				String path = textFile.write();
-				boolean saved = textFile.save(path, text);
+				AcideTextFile textFile = new AcideTextFile();
+				String path = textFile.askSavingFileEditorFile();
+				boolean saved = textFile.write(path, text);
 				
 				if (saved)
 					// Updates the log
@@ -597,7 +597,7 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 				// grammarName + ".jar syntaxRules.txt lexicalCats.txt");
 				
 				Thread.sleep(200);
-				TextFile file = new TextFile();
+				AcideTextFile file = new AcideTextFile();
 				String txt = file.load(currentPath + "lexicalCats.txt");
 				_categoriesTextArea.setText(txt);
 				txt = file.load(currentPath + "syntaxRules.txt");

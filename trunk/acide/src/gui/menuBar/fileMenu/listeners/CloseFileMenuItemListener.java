@@ -30,7 +30,7 @@
 package gui.menuBar.fileMenu.listeners;
 
 import es.configuration.project.AcideProjectConfiguration;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
 
 import java.awt.event.ActionEvent;
@@ -96,14 +96,14 @@ public class CloseFileMenuItemListener implements ActionListener {
 						.getSelectedFileEditorPanel().getAbsolutePath().equals(
 								labels.getString("s79"))) {
 
-					TextFile textFile = AcideIOFactory.getInstance().buildFile();
+					AcideTextFile textFile = AcideIOFactory.getInstance().buildFile();
 					String filePath = " ";
-					filePath = textFile.write();
+					filePath = textFile.askSavingFileEditorFile();
 					
 					if (!filePath.equals(" ")) {
 						
 						// Saves it
-						boolean result = textFile.save(filePath, MainWindow
+						boolean result = textFile.write(filePath, MainWindow
 								.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel().getTextEditionAreaContent());
 

@@ -91,7 +91,7 @@ public class UnsetMainFileMenuItemListener implements ActionListener {
 
 					// Quits the icon tab
 					for (int index = 0; index < MainWindow.getInstance()
-							.getFileEditorManager().getNumFileEditorPanels(); index++) {
+							.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
 
 						if (MainWindow.getInstance().getFileEditorManager()
 								.getFileEditorPanelAt(index).getAbsolutePath().equals(
@@ -110,7 +110,7 @@ public class UnsetMainFileMenuItemListener implements ActionListener {
 
 				// If there are opened editors
 				if (MainWindow.getInstance().getFileEditorManager()
-						.getNumFileEditorPanels() > 0)
+						.getNumberOfFileEditorPanels() > 0)
 
 					// Unset the MAIN FILE
 					MainWindow.getInstance().getFileEditorManager()

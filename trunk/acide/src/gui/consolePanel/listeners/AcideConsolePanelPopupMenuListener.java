@@ -103,8 +103,11 @@ public class AcideConsolePanelPopupMenuListener extends MouseAdapter {
 			else
 				consolePanel.getPopupMenu().getPaste().setEnabled(true);
 
-			// Shows the popup menu
-			consolePanel.getPopupMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+			// If the console text pane is editable
+			if(consolePanel.getTextPane().isEditable())
+			
+				// Shows the popup menu
+				consolePanel.getPopupMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
 		}
 	}
 }

@@ -35,7 +35,7 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 
 import es.bytes.ByteFile;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.consolePanel.AcideConsolePanel;
 
 import javax.swing.JFrame;
@@ -328,7 +328,7 @@ public class AcideGrammarGenerator {
 	 * 
 	 */
 	private static void ModifyParser() {
-		TextFile f = new TextFile();
+		AcideTextFile f = new AcideTextFile();
 		String txt = null;
 		txt = f.load("GrammarParser.java");
 		//String message = "message";
@@ -361,7 +361,7 @@ public class AcideGrammarGenerator {
 			}
 		}
 		//System.out.println(txt);
-		f.save("GrammarParser.java",txt);
+		f.write("GrammarParser.java",txt);
 	}
 	
 	/**

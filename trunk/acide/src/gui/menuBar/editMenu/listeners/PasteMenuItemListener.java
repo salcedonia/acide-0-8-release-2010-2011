@@ -76,7 +76,7 @@ public class PasteMenuItemListener implements ActionListener {
 
 		// PASTE
 		int numEditors = MainWindow.getInstance().getFileEditorManager()
-				.getNumFileEditorPanels();
+				.getNumberOfFileEditorPanels();
 
 		if (numEditors > 0) {
 

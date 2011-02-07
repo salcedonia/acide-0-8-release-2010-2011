@@ -70,7 +70,7 @@ public class CompileMenuItemListener implements ActionListener {
 				String fileToCompile = "";
 
 				for (int i = 0; i < AcideProjectConfiguration.getInstance()
-						.getNumFilesFromList(); i++) {
+						.getNumberOfFilesFromList(); i++) {
 					
 					// IS COMPILABLE?
 					if (AcideProjectConfiguration.getInstance().getFileAt(i)
@@ -109,7 +109,7 @@ public class CompileMenuItemListener implements ActionListener {
 						.getFileExtension();
 				
 				for (int i = 0; i < AcideProjectConfiguration.getInstance()
-						.getNumFilesFromList(); i++) {
+						.getNumberOfFilesFromList(); i++) {
 					
 					AcideProjectFile file = AcideProjectConfiguration.getInstance().getFileAt(i);
 					

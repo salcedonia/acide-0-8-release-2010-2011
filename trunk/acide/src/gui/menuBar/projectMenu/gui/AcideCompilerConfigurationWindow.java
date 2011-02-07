@@ -32,7 +32,7 @@ package gui.menuBar.projectMenu.gui;
 import es.configuration.project.AcideProjectConfiguration;
 import es.configuration.project.workbench.AcideWorkbenchManager;
 import es.text.ExtensionFilter;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.listeners.AcideWindowListener;
 import gui.mainWindow.MainWindow;
 
@@ -295,13 +295,13 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				TextFile f = new TextFile();
+				AcideTextFile f = new AcideTextFile();
 				String[] ExtAcide = new String[] { "exe" };
 				f.getFileChooser()
 						.addChoosableFileFilter(
 								new ExtensionFilter(ExtAcide,
 										"Compiler source (*.exe)"));
-				String path = f.read();
+				String path = f.askAbsolutePath();
 				_shellNameTextField.setText(path);
 			}
 		});

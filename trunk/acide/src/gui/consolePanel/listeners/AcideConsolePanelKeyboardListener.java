@@ -91,6 +91,7 @@ public class AcideConsolePanelKeyboardListener implements KeyListener {
 		if (consolePanel.getTextPane() != null) {
 
 			if (!consolePanel.getTextPaneContent().matches("")) {
+				
 				// If the caret is in the limit with the prompt
 				// and the key is left, up or down
 				if ((consolePanel.getTextPane().getCaretPosition() == consolePanel

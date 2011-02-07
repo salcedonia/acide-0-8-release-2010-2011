@@ -3,7 +3,7 @@ name = dir
 action = dir
 hintText = Directory Listing
 icon = 
-parameterType = TEXT
+parameterType = NONE
 
 // Command pwd
 name = pwd

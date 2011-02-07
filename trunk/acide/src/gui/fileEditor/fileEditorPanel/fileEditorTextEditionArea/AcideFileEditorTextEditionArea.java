@@ -6,7 +6,6 @@ import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideF
 import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorTextEditionAreaCaretListener;
 import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorTextEditionAreaMouseClickListener;
 import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorTextEditionAreaMouseDoubleClickListener;
-import gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.AcideCaret;
 import gui.fileEditor.fileEditorPanel.listeners.AcideFileEditorPanelDocumentListener;
 import gui.fileEditor.fileEditorPanel.popup.AcideEditorPanelPopupMenuListener;
 import gui.listeners.AcideKeyboardListener;
@@ -20,6 +19,8 @@ import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.plaf.basic.BasicArrowButton;
+
+import utils.AcideCaret;
 
 /**
  * ACIDE - A Configurable IDE text edition area.

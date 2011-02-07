@@ -246,7 +246,7 @@ public class LanguageMenu extends JMenu {
 
 		// Updates the EDITORS POPUP MENU
 		int numEditors = MainWindow.getInstance().getFileEditorManager()
-				.getNumFileEditorPanels();
+				.getNumberOfFileEditorPanels();
 		for (int pos = 0; pos < numEditors; pos++)
 			MainWindow.getInstance().getFileEditorManager()
 					.getFileEditorPanelAt(pos).buildPopupMenu();
@@ -339,7 +339,7 @@ public class LanguageMenu extends JMenu {
 
 		// If there are opened editors
 		if (MainWindow.getInstance().getFileEditorManager()
-				.getNumFileEditorPanels() > 0) {
+				.getNumberOfFileEditorPanels() > 0) {
 
 			// Enables the file menu
 			MainWindow.getInstance().getMenu().enableFileMenu();

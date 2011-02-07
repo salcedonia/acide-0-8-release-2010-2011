@@ -203,7 +203,7 @@ public class AcideFileEditorManager {
 	 * 
 	 * @return the number of the tabbed pane file editor panels.
 	 */
-	public int getNumFileEditorPanels() {
+	public int getNumberOfFileEditorPanels() {
 		return _tabbedPane.getTabCount();
 	}
 
@@ -230,7 +230,7 @@ public class AcideFileEditorManager {
 		// Checks if the file is already opened
 		int position = -1;
 
-		for (int index = 0; index < getNumFileEditorPanels(); index++)
+		for (int index = 0; index < getNumberOfFileEditorPanels(); index++)
 			if (getFileEditorPanelAt(index).getAbsolutePath() == textContent)
 				position = index;
 
@@ -249,7 +249,7 @@ public class AcideFileEditorManager {
 			newAcideFileEditorPanel(fileName, textContent, fileType);
 
 			// Starts from the last opened editor
-			int posEditor = getNumFileEditorPanels() - 1;
+			int posEditor = getNumberOfFileEditorPanels() - 1;
 			getFileEditorPanelAt(posEditor).loadText(text);
 			getFileEditorPanelAt(posEditor).setEditable(modifiable);
 			getTabbedPane().setSelectedIndex(posEditor);
@@ -330,7 +330,7 @@ public class AcideFileEditorManager {
 	 */
 	public AcideFileEditorPanel getMainEditor() {
 
-		for (int i = 0; i < getNumFileEditorPanels(); i++) {
+		for (int i = 0; i < getNumberOfFileEditorPanels(); i++) {
 
 			if (getFileEditorPanelAt(i).isMainFile())
 				return getFileEditorPanelAt(i);
@@ -433,7 +433,7 @@ public class AcideFileEditorManager {
 				// Searches for the file into the project configuration file
 				// list
 				for (int index = 0; index < AcideProjectConfiguration.getInstance()
-						.getNumFilesFromList(); index++) {
+						.getNumberOfFilesFromList(); index++) {
 
 					// If Exists
 					if (AcideProjectConfiguration
@@ -506,7 +506,7 @@ public class AcideFileEditorManager {
 
 				// Search for the file into the project configuration file list
 				for (int index = 0; index < AcideProjectConfiguration.getInstance()
-						.getNumFilesFromList(); index++) {
+						.getNumberOfFilesFromList(); index++) {
 
 					// If exists
 					if (AcideProjectConfiguration
@@ -590,7 +590,7 @@ public class AcideFileEditorManager {
 				// Searches for the file into the project configuration file
 				// list
 				for (int index = 0; index < AcideProjectConfiguration.getInstance()
-						.getNumFilesFromList(); index++) {
+						.getNumberOfFilesFromList(); index++) {
 
 					if (AcideProjectConfiguration
 							.getInstance()
@@ -619,7 +619,7 @@ public class AcideFileEditorManager {
 
 			// Removes the previous MAIN FILE
 			for (int index = 0; index < MainWindow.getInstance().getFileEditorManager()
-					.getNumFileEditorPanels(); index++) {
+					.getNumberOfFileEditorPanels(); index++) {
 
 				// Finds the previous MAIN FILE
 				if (MainWindow.getInstance().getFileEditorManager()
@@ -672,7 +672,7 @@ public class AcideFileEditorManager {
 
 				// Updates the file into the project configuration
 				for (int index1 = 0; index1 < AcideProjectConfiguration.getInstance()
-						.getNumFilesFromList(); index1++) {
+						.getNumberOfFilesFromList(); index1++) {
 
 					// If exists
 					if (AcideProjectConfiguration
@@ -702,7 +702,7 @@ public class AcideFileEditorManager {
 
 								for (int position = 0; position < MainWindow
 										.getInstance().getFileEditorManager()
-										.getNumFileEditorPanels(); position++) {
+										.getNumberOfFileEditorPanels(); position++) {
 
 									if (MainWindow
 											.getInstance()
@@ -792,7 +792,7 @@ public class AcideFileEditorManager {
 				// Searches for the file into the project configuration file
 				// list
 				for (int index = 0; index < AcideProjectConfiguration.getInstance()
-						.getNumFilesFromList(); index++) {
+						.getNumberOfFilesFromList(); index++) {
 
 					// If exists
 					if (AcideProjectConfiguration
@@ -817,7 +817,7 @@ public class AcideFileEditorManager {
 	public void updatesButtonIcons() {
 
 		if (MainWindow.getInstance().getFileEditorManager()
-				.getNumFileEditorPanels() > 0) {
+				.getNumberOfFileEditorPanels() > 0) {
 
 			// Gets the selected editor index
 			int selectedEditorIndex = MainWindow.getInstance()

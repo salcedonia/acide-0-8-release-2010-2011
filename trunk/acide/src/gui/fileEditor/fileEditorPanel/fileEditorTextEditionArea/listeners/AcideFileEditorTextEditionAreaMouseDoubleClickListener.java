@@ -97,7 +97,7 @@ public class AcideFileEditorTextEditionAreaMouseDoubleClickListener extends Mous
 			AcideProjectFile projectFile = new AcideProjectFile();
 			
 			int index = -1;
-			for (int position = 0; position < AcideProjectConfiguration.getInstance().getNumFilesFromList(); position++) {
+			for (int position = 0; position < AcideProjectConfiguration.getInstance().getNumberOfFilesFromList(); position++) {
 
 				if (AcideProjectConfiguration.getInstance()
 						.getFileAt(position).getAbsolutePath().equals(
@@ -109,7 +109,7 @@ public class AcideFileEditorTextEditionAreaMouseDoubleClickListener extends Mous
 					projectFile = AcideProjectConfiguration.getInstance().getFileAt(position);
 
 					for (int positionProject = 0; positionProject < AcideProjectConfiguration.getInstance()
-							.getNumFilesFromList() + 1; positionProject++) {
+							.getNumberOfFilesFromList() + 1; positionProject++) {
 
 						if (MainWindow
 								.getInstance()

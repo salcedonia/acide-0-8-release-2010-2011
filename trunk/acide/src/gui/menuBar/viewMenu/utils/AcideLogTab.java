@@ -30,7 +30,7 @@
 package gui.menuBar.viewMenu.utils;
 
 import es.project.AcideProjectFileType;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
 
 /**																
@@ -55,7 +55,7 @@ public class AcideLogTab{
 	public AcideLogTab() {
 		
 		// Retrieves the log file content
-		TextFile textFile = new TextFile();
+		AcideTextFile textFile = new AcideTextFile();
 		_logFileContent = textFile.load(LOG_FILE_PATH);
 		
 		if(_logFileContent != null)

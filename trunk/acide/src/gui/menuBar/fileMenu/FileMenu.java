@@ -30,7 +30,7 @@
 package gui.menuBar.fileMenu;
 
 import es.configuration.menu.AcideMenuConfiguration;
-import es.text.TextFile;
+import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.fileMenu.listeners.CloseAllFilesMenuItemListener;
 import gui.menuBar.fileMenu.listeners.CloseFileMenuItemListener;
@@ -458,15 +458,15 @@ public class FileMenu extends JMenu {
 					.equals(labels.getString("s79"))) {
 
 				// Creates the file in the disk
-				TextFile textFile = AcideIOFactory.getInstance().buildFile();
+				AcideTextFile textFile = AcideIOFactory.getInstance().buildFile();
 				String filePath = " ";
-				filePath = textFile.write();
+				filePath = textFile.askSavingFileEditorFile();
 
 				// If it is not empty
 				if (!filePath.equals(" ")) {
 
 					// Saves the file
-					boolean saveResult = textFile.save(filePath, MainWindow
+					boolean saveResult = textFile.write(filePath, MainWindow
 							.getInstance().getFileEditorManager()
 							.getSelectedFileEditorPanel()
 							.getTextEditionAreaContent());

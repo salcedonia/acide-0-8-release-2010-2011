@@ -118,7 +118,7 @@ public class DeleteFileMenuItemListener implements ActionListener {
 						// Searches for the file into the project configuration
 						int posExplorer = -1;
 						for (int position = 0; position < AcideProjectConfiguration.getInstance()
-								.getNumFilesFromList(); position++) {
+								.getNumberOfFilesFromList(); position++) {
 							
 							if (AcideProjectConfiguration.getInstance()
 									.getFileAt(position).getAbsolutePath().equals(
@@ -153,7 +153,7 @@ public class DeleteFileMenuItemListener implements ActionListener {
 			}
 
 			// If there are more files in the project
-			if (AcideProjectConfiguration.getInstance().getNumFilesFromList() > 0) {
+			if (AcideProjectConfiguration.getInstance().getNumberOfFilesFromList() > 0) {
 				
 				// Enables the remove file menu item in the explorer panel popup menu
 				MainWindow.getInstance().getExplorerPanel().getPopupMenu().getRemoveFile()

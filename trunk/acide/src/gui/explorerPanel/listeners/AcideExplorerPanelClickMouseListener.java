@@ -77,7 +77,7 @@ public class AcideExplorerPanelClickMouseListener extends MouseAdapter {
 			file.getAbsolutePath();
 
 			// Searches the explorer file into the editor files
-			for (int fileIndex = 0; fileIndex < AcideProjectConfiguration.getInstance().getNumFilesFromList(); fileIndex++) {
+			for (int fileIndex = 0; fileIndex < AcideProjectConfiguration.getInstance().getNumberOfFilesFromList(); fileIndex++) {
 
 				// If it is the searched file
 				if (AcideProjectConfiguration.getInstance()
@@ -126,7 +126,7 @@ public class AcideExplorerPanelClickMouseListener extends MouseAdapter {
 
 			// Sets the focus on the selected file at the file editor text edition area
 			for (int index = 0; index < MainWindow.getInstance().getFileEditorManager()
-					.getNumFileEditorPanels(); index++) {
+					.getNumberOfFileEditorPanels(); index++) {
 				
 				// If this is the file editor panel
 				if (MainWindow.getInstance().getFileEditorManager()

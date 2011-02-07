@@ -58,7 +58,7 @@ public class SaveAllFilesMenuItemListener implements ActionListener {
 
 		// Gets the number of editors
 		int numEditors = MainWindow.getInstance().getFileEditorManager()
-				.getNumFileEditorPanels();
+				.getNumberOfFileEditorPanels();
 
 		// From the first to the last file editor
 		for (int i = 0; i < numEditors; i++) {
