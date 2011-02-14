@@ -53,8 +53,8 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 	 * .DocumentEvent)
 	 */
 	@Override
-	public void insertUpdate(DocumentEvent documentEvent) {
-		updatesEditorAndProjectState(documentEvent);
+	public void insertUpdate(DocumentEvent documentEvent) {			
+		dispatchEvent(documentEvent);
 	}
 
 	/*
@@ -64,8 +64,8 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 	 * .DocumentEvent)
 	 */
 	@Override
-	public void removeUpdate(DocumentEvent documentEvent) {
-		updatesEditorAndProjectState(documentEvent);
+	public void removeUpdate(DocumentEvent documentEvent) {				
+		dispatchEvent(documentEvent);
 	}
 
 	/*
@@ -76,13 +76,13 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 	 */
 	@Override
 	public void changedUpdate(DocumentEvent documentEvent) {
-		updatesEditorAndProjectState(documentEvent);
+		dispatchEvent(documentEvent);
 	}
 
 	/**
 	 * Updates the close button and the modification project state.
 	 */
-	public void updatesEditorAndProjectState(final DocumentEvent documentEvent) {
+	public void dispatchEvent(final DocumentEvent documentEvent) {
 
 		// If the workbench configuration has been loaded
 		if (AcideWorkbenchManager.getInstance().isWorkbenchLoaded()) {

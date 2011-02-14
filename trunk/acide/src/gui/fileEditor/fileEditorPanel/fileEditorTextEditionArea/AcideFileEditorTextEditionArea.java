@@ -10,7 +10,7 @@ import gui.fileEditor.fileEditorPanel.listeners.AcideFileEditorPanelDocumentList
 import gui.fileEditor.fileEditorPanel.popup.AcideEditorPanelPopupMenuListener;
 import gui.listeners.AcideKeyboardListener;
 import gui.listeners.AcideKeyboardListenerForMenus;
-import gui.listeners.AcideMouseListener;
+import gui.listeners.AcideSearchAndReplaceWindowMouseListener;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -19,6 +19,7 @@ import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.plaf.basic.BasicArrowButton;
+import javax.swing.text.StyleConstants;
 
 import utils.AcideCaret;
 
@@ -64,18 +65,6 @@ public class AcideFileEditorTextEditionArea {
 	 * ACIDE - A Configurable IDE text edition area mouse click listener.
 	 */
 	private AcideFileEditorTextEditionAreaMouseClickListener _mouseClickListener;
-	/**
-	 * ACIDE - A Configurable IDE text edition area document listener.
-	 */
-	private AcideFileEditorPanelDocumentListener _documentListener;
-	/**
-	 * ACIDE - A Configurable IDE text edition area caret listener.
-	 */
-	private AcideFileEditorTextEditionAreaCaretListener _caretListener;
-	/**
-	 * ACIDE - A Configurable IDE text edition area adjustment listener.
-	 */
-	private AcideFileEditorTextEditionAreaAdjustmentListener _adjustmentListener;
 	
 	/**
 	 * Creates a new text edition area.
@@ -85,23 +74,28 @@ public class AcideFileEditorTextEditionArea {
 	 */
 	public AcideFileEditorTextEditionArea(AcideStyledDocument syntaxDocument) {
 
+		// No matching braces yet
 		_matchingBracePosition = -1;
+		
+		// Sets the vertical value to 0
 		_verticalValue = 0;
+		
+		// Sets the horizontal value to 0
 		_horizontalValue = 0;
 
 		// Builds the text area for edition
-		buildEditor(syntaxDocument);
-
-		// Sets the ACIDE - A Configurable IDE caret
-		AcideCaret caret = new AcideCaret();
-		caret.setBlinkRate(500);
-		_textPane.setCaret(caret);
-
-		// Sets the listeners
-		_textPane.addMouseListener(new AcideEditorPanelPopupMenuListener());
-		_textPane
-				.addMouseListener(new AcideFileEditorTextEditionAreaMouseDoubleClickListener());
+		buildTextPane(syntaxDocument);
 		
+		// Builds the scroll pane
+		buildScrollPane();
+	}
+
+	/**
+	 * Builds the scroll pane and configures it with the text pane inside of it.
+	 */
+	public void buildScrollPane() {
+		
+		// Creates the scroll pane
 		_scrollPane = new JScrollPane(_textPane);
 
 		// Creates the line number
@@ -115,37 +109,37 @@ public class AcideFileEditorTextEditionArea {
 		// so they are used as part of the text pane
 		_mouseClickListener = new AcideFileEditorTextEditionAreaMouseClickListener();
 
+		// Adds the mouse listener to the vertical scroll bar
 		_scrollPane.getVerticalScrollBar()
 				.addMouseListener(_mouseClickListener);
+		
+		// Adds the mouse listener to the horizontal scroll bar
 		_scrollPane.getHorizontalScrollBar().addMouseListener(
 				_mouseClickListener);
+		
+		// Adds the mouse click listener to the scroll pane
 		_scrollPane.addMouseListener(_mouseClickListener);
 
+		// Adds the mouse click listener to all the components in the vertical bar
 		Component verticalComponents[] = _scrollPane.getVerticalScrollBar()
 				.getComponents();
-		for (int i = 0; i < verticalComponents.length; i++)
-			if (verticalComponents[i] instanceof BasicArrowButton)
-				verticalComponents[i].addMouseListener(_mouseClickListener);
+		for (int index = 0; index < verticalComponents.length; index++)
+			if (verticalComponents[index] instanceof BasicArrowButton)
+				verticalComponents[index].addMouseListener(_mouseClickListener);
 
+		// Adds the mouse click listener to all the components in the horizontal bar
 		Component horizontalComponent[] = _scrollPane.getHorizontalScrollBar()
 				.getComponents();
-		for (int i = 0; i < horizontalComponent.length; i++)
-			if (horizontalComponent[i] instanceof BasicArrowButton)
-				horizontalComponent[i].addMouseListener(_mouseClickListener);
-
-		_documentListener = new AcideFileEditorPanelDocumentListener();
-		_textPane.getDocument().addDocumentListener(_documentListener);
-		_caretListener = new AcideFileEditorTextEditionAreaCaretListener();
-		_textPane.addCaretListener(_caretListener);
+		for (int index = 0; index < horizontalComponent.length; index++)
+			if (horizontalComponent[index] instanceof BasicArrowButton)
+				horizontalComponent[index].addMouseListener(_mouseClickListener);
+		
+		// Sets the minimum size
 		_scrollPane.setMinimumSize(new Dimension(0, 0));
 
-		_adjustmentListener = new AcideFileEditorTextEditionAreaAdjustmentListener();
+		// Adds the adjustment listener
 		_scrollPane.getVerticalScrollBar().addAdjustmentListener(
-				_adjustmentListener);
-
-		_textPane.addKeyListener(new AcideKeyboardListener());
-		_textPane.addMouseListener(new AcideMouseListener());
-		_textPane.addKeyListener(new AcideKeyboardListenerForMenus());
+				new AcideFileEditorTextEditionAreaAdjustmentListener());
 	}
 
 	/**
@@ -155,7 +149,7 @@ public class AcideFileEditorTextEditionArea {
 	 *            file editor manager syntax document.
 	 * @return the ACIDE - A Configurable IDE text edition area text pane.
 	 */
-	protected void buildEditor(AcideStyledDocument syntaxDocument) {
+	protected void buildTextPane(AcideStyledDocument syntaxDocument) {
 
 		_textPane = new JTextPane(syntaxDocument) {
 
@@ -185,9 +179,45 @@ public class AcideFileEditorTextEditionArea {
 			public boolean getScrollableTracksViewportWidth() {
 				return false;
 			}
+			
+			/*
+			 * Unset the foreground color (if any) whenever the user enters text
+			 * (if not for this, text entered after a paren would catch the paren's color)
+			 */
+			@Override
+			public void replaceSelection(String content) {
+				getInputAttributes().removeAttribute(StyleConstants.Foreground);
+				super.replaceSelection(content);
+			}
 		};
 
+		// Sets the font
 		_textPane.setFont(new Font("monospaced", Font.PLAIN, 12));
+		
+		// Sets the ACIDE - A Configurable IDE caret
+		_textPane.setCaret(new AcideCaret());
+
+		// Sets the popup menu listener
+		_textPane.addMouseListener(new AcideEditorPanelPopupMenuListener());
+		
+		// Sets the double click listener
+		_textPane
+				.addMouseListener(new AcideFileEditorTextEditionAreaMouseDoubleClickListener());
+		
+		// Adds the document listener
+		_textPane.getDocument().addDocumentListener(new AcideFileEditorPanelDocumentListener());
+		
+		// Adds the caret listener
+		_textPane.addCaretListener(new AcideFileEditorTextEditionAreaCaretListener());
+		
+		// Adds the general key listener
+		_textPane.addKeyListener(new AcideKeyboardListener());
+		
+		// Adds the general key listener
+		_textPane.addMouseListener(new AcideSearchAndReplaceWindowMouseListener());
+		
+		// Adds the key listener for menus
+		_textPane.addKeyListener(new AcideKeyboardListenerForMenus());
 	}
 
 	/**

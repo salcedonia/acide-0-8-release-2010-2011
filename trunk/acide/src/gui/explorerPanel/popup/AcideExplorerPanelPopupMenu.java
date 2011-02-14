@@ -84,11 +84,23 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 	private static final ImageIcon ADD_FILE_IMAGE = new ImageIcon(
 			"./resources/icons/menu/project/addFile.png");
 	/**
+	 * ACIDE - A Configurable IDE explorer panel popup menu remove file menu item
+	 * image icon.
+	 */
+	private static final ImageIcon REMOVE_FILE_IMAGE = new ImageIcon(
+			"./resources/icons/menu/project/removeFile.png");
+	/**
 	 * ACIDE - A Configurable IDE explorer panel popup menu add folder menu item
 	 * image icon.
 	 */
 	private static final ImageIcon ADD_FOLDER_IMAGE = new ImageIcon(
 			"./resources/icons/menu/project/addFolder.png");
+	/**
+	 * ACIDE - A Configurable IDE explorer panel popup menu remove folder menu item
+	 * image icon.
+	 */
+	private static final ImageIcon REMOVE_FOLDER_IMAGE = new ImageIcon(
+			"./resources/icons/menu/project/removeFolder.png");
 	/**
 	 * ACIDE - A Configurable IDE explorer panel popup menu delete file menu
 	 * item image icon.
@@ -308,7 +320,7 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 
 		// REMOVE FILE
 		_removeFile = new JMenuItem(AcideLanguageManager.getInstance()
-				.getLabels().getString("s618"));
+				.getLabels().getString("s618"), REMOVE_FILE_IMAGE);
 		_removeFile.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)
@@ -458,7 +470,7 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 
 		// REMOVE FOLDER
 		_removeFolder = new JMenuItem(AcideLanguageManager.getInstance()
-				.getLabels().getString("s220"));
+				.getLabels().getString("s220"), REMOVE_FOLDER_IMAGE);
 		_removeFolder.addActionListener(new ActionListener() {
 			/*
 			 * (non-Javadoc)

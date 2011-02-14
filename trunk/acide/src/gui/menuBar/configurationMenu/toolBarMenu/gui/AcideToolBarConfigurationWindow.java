@@ -37,7 +37,6 @@ import gui.menuBar.configurationMenu.toolBarMenu.utils.AcideComboBoxTableCellRen
 import gui.menuBar.configurationMenu.toolBarMenu.utils.AcideToolBarConfigurationWindowTableModel;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -585,9 +584,6 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 		
 		// Gets the scroll pane viewport
 		JViewport scroll = (JViewport) _table.getParent();
-		
-		// Sets the scroll pane background color
-		scroll.setBackground(Color.WHITE);
 		
 		// Gets the scroll pane viewport width
 		int width = scroll.getPreferredSize().width;

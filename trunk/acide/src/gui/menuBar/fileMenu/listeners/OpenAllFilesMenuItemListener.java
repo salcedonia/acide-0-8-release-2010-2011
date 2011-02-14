@@ -29,25 +29,20 @@
  */
 package gui.menuBar.fileMenu.listeners;
 
-import es.configuration.project.AcideProjectConfiguration;
-import es.project.AcideProjectFileType;
-import es.text.AcideTextFile;
-import gui.mainWindow.MainWindow;
-import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import language.AcideLanguageManager;
-
 import operations.factory.AcideIOFactory;
-import operations.log.AcideLog;
-import resources.AcideResourceManager;
+import es.configuration.project.AcideProjectConfiguration;
+import es.project.AcideProjectFileType;
+import es.text.AcideTextFile;
+import gui.mainWindow.MainWindow;
+import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
 
 /**
  * ACIDE - A Configurable IDE file menu open all files menu item listener.
@@ -66,22 +61,6 @@ public class OpenAllFilesMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
 		for (int index = 0; index < AcideProjectConfiguration.getInstance()
 				.getNumberOfFilesFromList(); index++) {
 
@@ -94,7 +73,8 @@ public class OpenAllFilesMenuItemListener implements ActionListener {
 					.isDirectory()
 					&& file.exists()) {
 
-				AcideTextFile textFile = AcideIOFactory.getInstance().buildFile();
+				AcideTextFile textFile = AcideIOFactory.getInstance()
+						.buildFile();
 				String text = null;
 				text = textFile.load(AcideProjectConfiguration.getInstance()
 						.getFileAt(index).getAbsolutePath());
@@ -181,7 +161,8 @@ public class OpenAllFilesMenuItemListener implements ActionListener {
 
 					// Checks if it is marked as a MAIN or COMPILABLE FILE
 					for (int i = 0; i < MainWindow.getInstance()
-							.getFileEditorManager().getNumberOfFileEditorPanels(); i++) {
+							.getFileEditorManager()
+							.getNumberOfFileEditorPanels(); i++) {
 
 						if (MainWindow
 								.getInstance()
@@ -219,29 +200,38 @@ public class OpenAllFilesMenuItemListener implements ActionListener {
 					// The project configuration has been modified
 					AcideProjectConfiguration.getInstance()
 							.setIsModified(false);
-				}
-				else{
-					
+				} else {
+
 					// Is already opened
 				}
 			} else {
 
-				// If the file does not exist
-				if (!file.exists()) {
+				// If the file is not a directory
+				if (!AcideProjectConfiguration.getInstance().getFileAt(index)
+						.isDirectory()) {
+					
+					// If the file does not exist
+					if (!file.exists()) {
 
-					// Error message
-					JOptionPane.showMessageDialog(null,
-							labels.getString("s970")
-									+ AcideProjectConfiguration.getInstance()
-											.getFileAt(index).getAbsolutePath()
-									+ labels.getString("s971"), "Error",
-							JOptionPane.ERROR_MESSAGE);
+						// Error message
+						JOptionPane.showMessageDialog(null,
+								AcideLanguageManager.getInstance().getLabels()
+										.getString("s970")
+										+ AcideProjectConfiguration
+												.getInstance().getFileAt(index)
+												.getAbsolutePath()
+										+ AcideLanguageManager.getInstance()
+												.getLabels().getString("s971"),
+								"Error", JOptionPane.ERROR_MESSAGE);
 
-					// Removes the file from the project
-					AcideProjectConfiguration.getInstance().removeFileAt(index);
+						// Removes the file from the project
+						AcideProjectConfiguration.getInstance().removeFileAt(
+								index);
 
-					// The project configuration has been modified
-					AcideProjectConfiguration.getInstance().setIsModified(true);
+						// The project configuration has been modified
+						AcideProjectConfiguration.getInstance().setIsModified(
+								true);
+					}
 				}
 			}
 		}

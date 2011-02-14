@@ -29,21 +29,19 @@
  */
 package gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners;
 
-import java.util.ResourceBundle;
-
-import gui.fileEditor.fileEditorManager.utils.logic.MatchingBraces;
+import gui.fileEditor.fileEditorManager.utils.logic.ElementMatcher;
 import gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
 import gui.mainWindow.MainWindow;
 
+import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 
-import language.AcideLanguageManager;
-
 import operations.log.AcideLog;
-import resources.AcideResourceManager;
+
+import language.AcideLanguageManager;
 
 /**
  * ACIDE - A Configurable IDE file editor text edition area caret listener.
@@ -64,41 +62,24 @@ public class AcideFileEditorTextEditionAreaCaretListener implements
 	@Override
 	public void caretUpdate(CaretEvent caretEvent) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
-		// Get selected editor
-		final AcideFileEditorPanel selectedEditor = MainWindow.getInstance()
+		// Get selected file editor panel
+		final AcideFileEditorPanel selectedFileEditorPanel = MainWindow.getInstance()
 				.getFileEditorManager().getSelectedFileEditorPanel();
 
 		// If the first text editor is focused
-		if (selectedEditor.getTextEditionPanelList().get(0).getTextPane()
+		if (selectedFileEditorPanel.getTextEditionPanelList().get(0).getTextPane()
 				.isFocusOwner())
 			// The active editor is the first text editor
-			selectedEditor.setActiveEditor(0);
-			
-		
+			selectedFileEditorPanel.setActiveEditor(0);
+
 		// If the second editor is focused
-		if (selectedEditor.getTextEditionPanelList().get(1).getTextPane()
+		if (selectedFileEditorPanel.getTextEditionPanelList().get(1).getTextPane()
 				.isFocusOwner())
 			// The active editor is the second text editor
-			selectedEditor.setActiveEditor(1);
-			
+			selectedFileEditorPanel.setActiveEditor(1);
+
 		// Gets the root element
-		Element rootElement = selectedEditor.getStyledDocument()
+		Element rootElement = selectedFileEditorPanel.getStyledDocument()
 				.getDefaultRootElement();
 
 		// Gets the dot
@@ -119,70 +100,83 @@ public class AcideFileEditorTextEditionAreaCaretListener implements
 				.getInstance()
 				.getStatusBar()
 				.setNumberOfLinesMessage(
-						labels.getString("s1001")
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s1001")
 								+ rootElement.getElementCount());
-		
-		// Updates the matching braces
-		updatesMatchingBraces(selectedEditor);
+
+		SwingUtilities.invokeLater(new Runnable() {
+			/*
+			 * (non-Javadoc)
+			 * @see java.lang.Runnable#run()
+			 */
+			@Override
+			public void run() {
+				// Updates the matching braces
+				updatesMatchingBraces(selectedFileEditorPanel);
+			}
+		});
 	}
 
 	/**
 	 * Updates the matching braces in the text edition area. All the matching
 	 * braces are removed and added afterwards.
 	 * 
-	 * @param selectedEditor
-	 *            current selected text edition area.
+	 * @param selectedFileEditorPanel
+	 *            current selected file editor panel.
 	 */
-	public void updatesMatchingBraces(final AcideFileEditorPanel selectedEditor) {
+	public void updatesMatchingBraces(
+			final AcideFileEditorPanel selectedFileEditorPanel) {
 
 		// If the first edition text area has a matching brace
-		if (selectedEditor.getTextEditionPanelList().get(0)
+		if (selectedFileEditorPanel.getTextEditionPanelList().get(0)
 				.getMatchingBracePosition() != -1) {
-
+			
 			// Removes the highlighting of the matching brace
-			selectedEditor.getStyledDocument().removeHighlightBrace(
-					selectedEditor.getTextEditionPanelList().get(0)
+			selectedFileEditorPanel.getStyledDocument().removeHighlightBrace(
+					selectedFileEditorPanel.getTextEditionPanelList().get(0)
 							.getMatchingBracePosition());
 
 			// Sets the matching brace position as -1
-			selectedEditor.getTextEditionPanelList().get(0)
+			selectedFileEditorPanel.getTextEditionPanelList().get(0)
 					.setMatchingBracePosition(-1);
 		}
 
 		// If the second edition text area has a matching brace
-		if (selectedEditor.getTextEditionPanelList().get(1)
+		if (selectedFileEditorPanel.getTextEditionPanelList().get(1)
 				.getMatchingBracePosition() != -1) {
 
 			// Removes the highlighting of the matching brace
-			selectedEditor.getStyledDocument().removeHighlightBrace(
-					selectedEditor.getTextEditionPanelList().get(1)
+			selectedFileEditorPanel.getStyledDocument().removeHighlightBrace(
+					selectedFileEditorPanel.getTextEditionPanelList().get(1)
 							.getMatchingBracePosition());
 
 			// Sets the matching brace position as -1
-			selectedEditor.getTextEditionPanelList().get(1)
+			selectedFileEditorPanel.getTextEditionPanelList().get(1)
 					.setMatchingBracePosition(-1);
 		}
 
 		try {
 
 			// Gets the selected brace position in the text
-			int start = selectedEditor.getActiveTextEditionArea()
+			int start = selectedFileEditorPanel.getActiveTextEditionArea()
 					.getCaretPosition();
 			int end;
 
 			// Selects the matching end position avoiding to reach out of the
 			// bounds
 			if (start == 0)
-				end = MatchingBraces.findMatchingBracket(selectedEditor
-						.getActiveTextEditionArea().getDocument(), start);
+				end = ElementMatcher.findMatchingBracket(
+						selectedFileEditorPanel.getActiveTextEditionArea()
+								.getDocument(), start);
 			else
-				end = MatchingBraces.findMatchingBracket(selectedEditor
-						.getActiveTextEditionArea().getDocument(), start - 1);
+				end = ElementMatcher.findMatchingBracket(
+						selectedFileEditorPanel.getActiveTextEditionArea()
+								.getDocument(), start - 1);
 
 			// If are inside the bounds
-			if (((start > 0) && (start <= selectedEditor.getStyledDocument()
-					.getLength()))
-					&& ((end >= 0) && (end <= selectedEditor
+			if (((start > 0) && (start <= selectedFileEditorPanel
+					.getStyledDocument().getLength()))
+					&& ((end >= 0) && (end <= selectedFileEditorPanel
 							.getStyledDocument().getLength()))) {
 
 				if (end != start) {
@@ -193,12 +187,12 @@ public class AcideFileEditorTextEditionAreaCaretListener implements
 
 						// Set the matching brace position in the text
 						// edition area
-						selectedEditor.getTextEditionPanelList().get(0)
-								.setMatchingBracePosition(start - 1);
+						selectedFileEditorPanel.getTextEditionPanelList()
+								.get(0).setMatchingBracePosition(start - 1);
 						// Set the matching brace position in the text
 						// edition area
-						selectedEditor.getTextEditionPanelList().get(1)
-								.setMatchingBracePosition(end);
+						selectedFileEditorPanel.getTextEditionPanelList()
+								.get(1).setMatchingBracePosition(end);
 					}
 					// If the matching brace is above the selected brace in
 					// the text
@@ -206,25 +200,31 @@ public class AcideFileEditorTextEditionAreaCaretListener implements
 
 						// Set the matching brace position in the text
 						// edition area
-						selectedEditor.getTextEditionPanelList().get(0)
-								.setMatchingBracePosition(end);
+						selectedFileEditorPanel.getTextEditionPanelList()
+								.get(0).setMatchingBracePosition(end);
 						// Set the matching brace position in the text
 						// edition area
-						selectedEditor.getTextEditionPanelList().get(1)
-								.setMatchingBracePosition(start - 1);
+						selectedFileEditorPanel.getTextEditionPanelList()
+								.get(1).setMatchingBracePosition(start - 1);					
 					}
-
+					
 					// Highlights the matching brace in the first text
 					// edition panel
-					selectedEditor.getStyledDocument().addHighlightBrace(
-							selectedEditor.getTextEditionPanelList().get(0)
-									.getMatchingBracePosition());
+					selectedFileEditorPanel.getStyledDocument()
+							.addHighlightBrace(
+									selectedFileEditorPanel
+											.getTextEditionPanelList()
+											.get(0)
+											.getMatchingBracePosition());
 
 					// Highlights the matching brace in the second text
 					// edition panel
-					selectedEditor.getStyledDocument().addHighlightBrace(
-							selectedEditor.getTextEditionPanelList().get(1)
-									.getMatchingBracePosition());
+					selectedFileEditorPanel.getStyledDocument()
+							.addHighlightBrace(
+									selectedFileEditorPanel
+											.getTextEditionPanelList()
+											.get(1)
+											.getMatchingBracePosition());
 				}
 			}
 		} catch (BadLocationException exception) {

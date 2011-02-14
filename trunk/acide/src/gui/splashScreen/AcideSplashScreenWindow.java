@@ -46,6 +46,10 @@ public class AcideSplashScreenWindow extends JWindow {
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
+	 * ACIDE - A Configurable IDE splash screen window unique class instance.
+	 */
+	private static AcideSplashScreenWindow _instance;
+	/**
 	 * ACIDE - A Configurable IDE splash screen window image file.
 	 */
 	private static final String IMAGE = "./resources/images/splashScreen.png";
@@ -71,10 +75,21 @@ public class AcideSplashScreenWindow extends JWindow {
 	private static JLabel _messageLabel;
 	
 	/**
-	 * Shows the ACIDE - A Configurable IDE splash screen window.
+	 * Returns the ACIDE - A Configurable IDE splash screen window unique class instance.
+	 * 
+	 * @return the ACIDE - A Configurable IDE splash screen window unique class instance.
 	 */
-	public void showSplashScreenWindow() {
-
+	public static AcideSplashScreenWindow getInstance(){
+		if(_instance == null)
+			_instance = new AcideSplashScreenWindow();
+		return _instance;
+	}
+	
+	/**
+	 * Creates a new ACIDE - A Configurable IDE splash screen window unique class instance.
+	 */
+	public AcideSplashScreenWindow(){
+		
 		// MAIN PANEL
 		_mainPanel = new JPanel(new GridBagLayout());
 		_mainPanel.setBorder(BorderFactory.createEmptyBorder());
@@ -96,11 +111,11 @@ public class AcideSplashScreenWindow extends JWindow {
 		_image = new JLabel(new ImageIcon(IMAGE));
 		
 		// PROGRESS BAR
-		UIManager.put("ProgressBar.selectionBackground", Color.black);
-	    UIManager.put("ProgressBar.selectionForeground", Color.white);
-	    UIManager.put("ProgressBar.foreground", new Color(200, 0, 0));
 		_progressBar = new JProgressBar();
 		_progressBar.setStringPainted(true);
+		_progressBar.setForeground(new Color(200, 0, 0));
+		_progressBar.setBackground(Color.WHITE);
+		_progressBar.setFont(new Font("Arial", Font.BOLD, 12));
 		_progressBar.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.BLACK));
 		
 		// Adds the components to the window with the layout
@@ -112,15 +127,17 @@ public class AcideSplashScreenWindow extends JWindow {
 		constraints.gridy = 0;
 		_mainPanel.add(_image, constraints);	
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.insets = new Insets(236, 0, 0, 0);
+		constraints.insets = new Insets(230, 0, 0, 0);
 		_mainPanel.add(_progressBar, constraints);
 		content.add(_mainPanel, BorderLayout.CENTER);
+		
 		constraints.insets = new Insets(5, 5, 5, 5);
 		constraints.fill = GridBagConstraints.NONE;
-		constraints.anchor = GridBagConstraints.EAST;
+		constraints.anchor = GridBagConstraints.WEST;
 		_messagePanel.add(_messageLabel, constraints);
+		_messagePanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
 		content.add(_messagePanel, BorderLayout.SOUTH);
-		content.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		content.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		
 		// Centers the window
 		int width = getPreferredSize().width;
@@ -129,7 +146,12 @@ public class AcideSplashScreenWindow extends JWindow {
 		int x = (screen.width - width) / 2;
 		int y = (screen.height - height) / 2;
 		setBounds(x, y, width, height);
-		
+	}
+	
+	/**
+	 * Shows the ACIDE - A Configurable IDE splash screen window.
+	 */
+	public void showSplashScreenWindow() {
 		// Displays it
 		setVisible(true);	
 	}
@@ -138,7 +160,8 @@ public class AcideSplashScreenWindow extends JWindow {
 	 * Closes the ACIDE - A Configurable IDE splash screen window.
 	 */
 	public void closeSplashScreenWindow() {
-		setVisible(false);
+		// Closes it
+		dispose();
 	}
 
 	/**
@@ -150,8 +173,19 @@ public class AcideSplashScreenWindow extends JWindow {
 	 * @param message
 	 *            new message to display.           
 	 */
-	public static void setProgressBar(int percent, String message) {
-		_progressBar.setValue(percent);
-		_messageLabel.setText(message);
+	public void setProgressBar(final int percent, final String message) {
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			/*
+			 * (non-Javadoc)
+			 * @see java.lang.Runnable#run()
+			 */
+			@Override
+			public void run() {
+				_progressBar.setValue(percent);
+				_messageLabel.setText(message);
+			}
+		});	
 	}
 }

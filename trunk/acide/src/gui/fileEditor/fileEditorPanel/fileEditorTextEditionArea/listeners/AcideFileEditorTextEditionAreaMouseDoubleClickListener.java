@@ -31,7 +31,7 @@ package gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners;
 
 import es.configuration.project.AcideProjectConfiguration;
 import es.project.AcideProjectFile;
-import gui.fileEditor.fileEditorManager.utils.logic.MatchingBraces;
+import gui.fileEditor.fileEditorManager.utils.logic.ElementMatcher;
 import gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
 import gui.mainWindow.MainWindow;
 
@@ -67,12 +67,13 @@ public class AcideFileEditorTextEditionAreaMouseDoubleClickListener extends Mous
 		// Double click
 		if (mouseEvent.getClickCount() > 1) {
 			
+			// Selects the matching braces
 			try {
 				
 				// Selects the word which is over the caret position in
 				// the active editor
 				int start = selectedFileEditorPanelIndex.getActiveTextEditionArea().getCaretPosition();
-				int end = MatchingBraces.findMatchingBracket(selectedFileEditorPanelIndex.getActiveTextEditionArea()
+				int end = ElementMatcher.findMatchingBracket(selectedFileEditorPanelIndex.getActiveTextEditionArea()
 						.getDocument(), start - 1);
 				
 				if (end > -1) {
@@ -96,31 +97,31 @@ public class AcideFileEditorTextEditionAreaMouseDoubleClickListener extends Mous
 			// Creates the project file
 			AcideProjectFile projectFile = new AcideProjectFile();
 			
-			int index = -1;
-			for (int position = 0; position < AcideProjectConfiguration.getInstance().getNumberOfFilesFromList(); position++) {
+			int fileIndex = -1;
+			for (int index = 0; index < AcideProjectConfiguration.getInstance().getNumberOfFilesFromList(); index++) {
 
 				if (AcideProjectConfiguration.getInstance()
-						.getFileAt(position).getAbsolutePath().equals(
+						.getFileAt(index).getAbsolutePath().equals(
 								MainWindow.getInstance().getFileEditorManager()
 										.getSelectedFileEditorPanel()
 										.getAbsolutePath())) {
 
 					// Gets the file from the project configuration
-					projectFile = AcideProjectConfiguration.getInstance().getFileAt(position);
+					projectFile = AcideProjectConfiguration.getInstance().getFileAt(index);
 
-					for (int positionProject = 0; positionProject < AcideProjectConfiguration.getInstance()
-							.getNumberOfFilesFromList() + 1; positionProject++) {
+					for (int projectIndex = 0; projectIndex < AcideProjectConfiguration.getInstance()
+							.getNumberOfFilesFromList() + 1; projectIndex++) {
 
 						if (MainWindow
 								.getInstance()
 								.getExplorerPanel()
 								.getTree()
-								.getPathForRow(positionProject)
+								.getPathForRow(projectIndex)
 								.getLastPathComponent()
 								.toString()
 								.equals(projectFile.getLastPathComponent())) {
 
-							index = positionProject;
+							fileIndex = projectIndex;
 						}
 					}
 				}
@@ -128,7 +129,7 @@ public class AcideFileEditorTextEditionAreaMouseDoubleClickListener extends Mous
 
 			// Selects the file in the explorer tree
 			TreePath currentSelection = MainWindow.getInstance()
-					.getExplorerPanel().getTree().getPathForRow(index);
+					.getExplorerPanel().getTree().getPathForRow(fileIndex);
 			MainWindow.getInstance().getExplorerPanel().getTree()
 					.setSelectionPath(currentSelection);
 		}

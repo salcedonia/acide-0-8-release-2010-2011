@@ -29,8 +29,6 @@
  */
 package gui.fileEditor.fileEditorManager.listeners;
 
-import java.util.ResourceBundle;
-
 import gui.mainWindow.MainWindow;
 
 import javax.swing.JTabbedPane;
@@ -45,7 +43,6 @@ import javax.swing.text.Utilities;
 
 import language.AcideLanguageManager;
 import operations.log.AcideLog;
-import resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE file editor manager change listener.
@@ -73,45 +70,35 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 		if (tabbedPane == null)
 			return;
 
-		final int index = tabbedPane.getSelectedIndex();
+		// Gets the selected tab index
+		final int selectedTabIndex = tabbedPane.getSelectedIndex();
 
 		// i returns -1 if nothing selected
-		if (index < 0)
+		if (selectedTabIndex < 0)
 			return;
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
+		// Gets the selected file editor panel index
 		final int selectedFileEditorPanelIndex = MainWindow.getInstance()
 				.getFileEditorManager().getSelectedFileEditorPanelIndex();
 
 		SwingUtilities.invokeLater(new Runnable() {
 
+			/*
+			 * (non-Javadoc)
+			 * @see java.lang.Runnable#run()
+			 */
 			@Override
 			public void run() {
 
 				if (selectedFileEditorPanelIndex != -1) {
 
 					if (MainWindow.getInstance().getFileEditorManager()
-							.getFileEditorPanelAt(index) != null) {
+							.getFileEditorPanelAt(selectedTabIndex) != null) {
 						
 						// Gets the active text edition area
 						final JTextPane activeTextPane = MainWindow
 								.getInstance().getFileEditorManager()
-								.getFileEditorPanelAt(index)
+								.getFileEditorPanelAt(selectedTabIndex)
 								.getActiveTextEditionArea();
 
 						// Gets the line of the caret position
@@ -144,7 +131,7 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 								.getInstance()
 								.getStatusBar()
 								.setNumberOfLinesMessage(
-										labels.getString("s1001") + numLines);
+										AcideLanguageManager.getInstance().getLabels().getString("s1001") + numLines);
 					}
 				}
 			}
@@ -174,7 +161,6 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
 		}
 		return line - 1;
 	}
@@ -190,6 +176,7 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 	 * @return the caret column in the selected file editor text area.
 	 */
 	public static int getCaretColumn(int caretPosition, JTextComponent textPane) {
+		
 		try {
 			return caretPosition
 					- Utilities.getRowStart(textPane, caretPosition);
@@ -197,7 +184,6 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
 		}
 		return -1;
 	}

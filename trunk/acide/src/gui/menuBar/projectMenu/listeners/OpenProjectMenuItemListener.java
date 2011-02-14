@@ -29,7 +29,6 @@
  */
 package gui.menuBar.projectMenu.listeners;
 
-import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -52,8 +51,8 @@ import es.configuration.toolBar.consoleComandToolBar.ConsoleCommandList;
 import es.configuration.window.AcideWindowConfiguration;
 import es.project.AcideProjectFile;
 import es.project.AcideProjectFileType;
-import es.text.ExtensionFilter;
 import es.text.AcideTextFile;
+import es.text.ExtensionFilter;
 import gui.mainWindow.MainWindow;
 import gui.menuBar.configurationMenu.menuMenu.gui.AcideMenuConfigurationWindow;
 import gui.menuBar.configurationMenu.toolBarMenu.gui.AcideToolBarConfigurationWindow;
@@ -80,117 +79,122 @@ public class OpenProjectMenuItemListener implements ActionListener {
 
 		AcideTextFile textFile = AcideIOFactory.getInstance().buildFile();
 
-		boolean cancelOptionSelected = false;
-
 		// Selects the extension for the project
 		String[] ExtPide = new String[] { "acidePrj" };
 		textFile.getFileChooser().addChoosableFileFilter(
 				new ExtensionFilter(ExtPide, AcideLanguageManager.getInstance()
 						.getLabels().getString("s328")));
-		final String file;
-		file = textFile.askAbsolutePath();
+		final String filePath;
+		filePath = textFile.askAbsolutePath();
 
 		// If the file content is not empty
-		if (file != null) {
+		if (filePath != null) {
 
-			// If the project has been modified
-			if (AcideProjectConfiguration.getInstance().isModified()) {
+			// Open the project
+			openProject(filePath);
+		}
+	}
 
-				// Do you want to save it?
-				int chosenOption = JOptionPane.showConfirmDialog(null,
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s657"), AcideLanguageManager
-								.getInstance().getLabels().getString("s953"),
-						JOptionPane.YES_NO_CANCEL_OPTION);
+	/**
+	 * Opens an ACIDE - A Configurable IDE project from a file given as a parameter. 
+	 * 
+	 * @param filePath file path which contains the project configuration file.
+	 */
+	public void openProject(String filePath) {
 
-				// If OK
-				if (chosenOption == JOptionPane.OK_OPTION) {
+		boolean cancelOptionSelected = false;
 
-					// Enables the save project menu item
-					MainWindow.getInstance().getMenu().getProject()
-							.getSaveProject().setEnabled(true);
+		// Open the project
+		// If the project has been modified
+		if (AcideProjectConfiguration.getInstance().isModified()) {
 
-					// Does the save project menu item action
-					MainWindow.getInstance().getMenu().getProject()
-							.getSaveProject().doClick();
-				} else if (chosenOption != JOptionPane.NO_OPTION)
-					cancelOptionSelected = true;
-			}
+			// Do you want to save it?
+			int resultValueSave = JOptionPane.showConfirmDialog(
+					null,
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s657"), AcideLanguageManager
+							.getInstance().getLabels().getString("s953"),
+					JOptionPane.YES_NO_CANCEL_OPTION);
 
-			// If the user does not select the cancel option
-			if (!cancelOptionSelected) {
+			// If OK
+			if (resultValueSave == JOptionPane.OK_OPTION) {
 
-				// Puts the wait cursor
-				MainWindow.getInstance().setCursor(
-						Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				// Enables the save project menu item
+				MainWindow.getInstance().getMenu().getProject()
+						.getSaveProject().setEnabled(true);
 
-				// Updates the status message in the status bar
-				MainWindow.getInstance().getStatusBar().setStatusMessage(" ");
+				// Does the save project menu item action
+				MainWindow.getInstance().getMenu().getProject()
+						.getSaveProject().doClick();
+			} else if (resultValueSave != JOptionPane.NO_OPTION)
+				cancelOptionSelected = true;
+		}
 
-				// Closes the previous project configuration
-				closePreviousProjectConfiguration();
+		// If the user does not select the cancel option
+		if (!cancelOptionSelected) {
 
-				// Loads the file editor configuration
-				loadNewProjectConfiguration(file);
+			// Updates the status message in the status bar
+			MainWindow.getInstance().getStatusBar().setStatusMessage(" ");
 
-				// Loads the language
-				loadLanguage();
+			// Closes the previous project configuration
+			closePreviousProjectConfiguration();
 
-				// Loads the main window configuration
-				loadMainWindowConfiguration();
+			// Loads the file editor configuration
+			loadNewProjectConfiguration(filePath);
 
-				// Loads the menu configuration
-				loadMenuConfiguration();
+			// Loads the language
+			loadLanguage();
 
-				// Loads the grammar configuration
-				loadGrammarConfiguration();
+			// Loads the main window configuration
+			loadMainWindowConfiguration();
 
-				// Loads the console configuration
-				loadConsoleConfiguration();
+			// Loads the menu configuration
+			loadMenuConfiguration();
 
-				// Loads the tool bar configuration
-				loadToolBarConfiguration();
+			// Loads the grammar configuration
+			loadGrammarConfiguration();
 
-				// Loads the explorer configuration
-				loadExplorerConfiguration();
+			// Loads the console configuration
+			loadConsoleConfiguration();
 
-				// Enables the show explorer panel menu item
-				MainWindow.getInstance().getMenu().getView()
-						.getShowExplorerPanel().setSelected(true);
+			// Loads the tool bar configuration
+			loadToolBarConfiguration();
 
-				// Loads the file editor configuration
-				loadFileEditorConfiguration();
+			// Loads the explorer configuration
+			loadExplorerConfiguration();
 
-				// Loads the lexicon configuration
-				loadLexiconConfiguration();
+			// Enables the show explorer panel menu item
+			MainWindow.getInstance().getMenu().getView().getShowExplorerPanel()
+					.setSelected(true);
 
-				// The project has not been modified
-				AcideProjectConfiguration.getInstance().setIsModified(false);
+			// Loads the file editor configuration
+			loadFileEditorConfiguration();
 
-				// This is the first time that it is saved
-				AcideProjectConfiguration.getInstance().setFirstSave(true);
+			// Loads the lexicon configuration
+			loadLexiconConfiguration();
 
-				// Enables the project menu
-				MainWindow.getInstance().getMenu().enableProjectMenu();
+			// The project has not been modified
+			AcideProjectConfiguration.getInstance().setIsModified(false);
 
-				// Enables the open all files menu item
-				MainWindow.getInstance().getMenu().getFile().getOpenAllFiles()
-						.setEnabled(true);
+			// This is the first time that it is saved
+			AcideProjectConfiguration.getInstance().setFirstSave(true);
 
-				// Enables the save project button in the static tool bar
-				AcideStaticToolBar.getInstance().getSaveProjectButton()
-						.setEnabled(true);
+			// Enables the project menu
+			MainWindow.getInstance().getMenu().enableProjectMenu();
 
-				// Validates the changes in the main window
-				MainWindow.getInstance().validate();
+			// Enables the open all files menu item
+			MainWindow.getInstance().getMenu().getFile().getOpenAllFiles()
+					.setEnabled(true);
 
-				// Repaints the main window
-				MainWindow.getInstance().repaint();
+			// Enables the save project button in the static tool bar
+			AcideStaticToolBar.getInstance().getSaveProjectButton()
+					.setEnabled(true);
 
-				// Sets the default cursor
-				MainWindow.getInstance().setCursor(
-						Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-			}
+			// Validates the changes in the main window
+			MainWindow.getInstance().validate();
+
+			// Repaints the main window
+			MainWindow.getInstance().repaint();
 		}
 	}
 
@@ -892,7 +896,8 @@ public class OpenProjectMenuItemListener implements ActionListener {
 										AcideLanguageManager.getInstance()
 												.getLabels().getString("s1020")
 												+ file.getAbsolutePath()
-												+ " " +AcideLanguageManager
+												+ " "
+												+ AcideLanguageManager
 														.getInstance()
 														.getLabels()
 														.getString("s1021"),

@@ -117,6 +117,8 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
+				
+				// Shows the console display options window
 				AcideGUIFactory.getInstance().buildAcideConsoleDisplayOptionsWindow();
 			}
 		});
@@ -135,6 +137,8 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
+				
+				// Copy
 				MainWindow.getInstance().getConsolePanel().getTextPane().copy();
 			}
 		});
@@ -153,9 +157,12 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 
+				// If the selection start position is after the prompt position
 				if (MainWindow.getInstance().getConsolePanel().getTextPane()
 						.getSelectionStart() >= MainWindow.getInstance()
 						.getConsolePanel().getPromptCaretPosition())
+					
+					// Cuts
 					MainWindow.getInstance().getConsolePanel().getTextPane()
 							.cut();
 			}
@@ -175,9 +182,12 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 
+				// If the selection start position is after the prompt position
 				if (MainWindow.getInstance().getConsolePanel().getTextPane()
 						.getSelectionStart() >= MainWindow.getInstance()
 						.getConsolePanel().getPromptCaretPosition())
+					
+					// Pastes
 					MainWindow.getInstance().getConsolePanel().getTextPane()
 							.paste();
 			}
@@ -198,9 +208,11 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 
-				// SEND THE CTRL-C TO THE OUTPUT WRITER
-				//MainWindow.getInstance().getOutput()
-					//	.sendCommandToOutput(Character.toString((char) 3));
+				// Kill the process
+				MainWindow.getInstance().getConsolePanel().killShellProcess();
+				
+				// Resets the console again
+				MainWindow.getInstance().getConsolePanel().resetConsole();
 			}
 		});
 		add(_controlC);

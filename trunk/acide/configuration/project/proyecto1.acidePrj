@@ -1,14 +1,14 @@
 proyecto1
 C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\project\proyecto1.acidePrj
 ./configuration/window/configuration.xml
-C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\lexicon\default.xml
+C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\lexicon\des.xml
 ./configuration/grammars/bytes.jar
 null
 null
 ./configuration/console/configuration.xml
-english
+spanish
 ./configuration/menu/defaultAllOn.menuCfg
-C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\toolbar\default.TBcfg
+C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\toolbar\des.TBcfg
 C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\fileEditor\configuration.xml
 3
 C:\Documents and Settings\Salcedonia\Escritorio\as.txt
@@ -17,7 +17,7 @@ proyecto1
 false
 false
 false
-true
+false
 folder1
 folder1
 proyecto1
@@ -31,4 +31,4 @@ folder1
 false
 true
 true
-true
+false

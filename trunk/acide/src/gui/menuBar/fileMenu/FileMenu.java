@@ -159,6 +159,11 @@ public class FileMenu extends JMenu {
 	private final static ImageIcon EXIT_IMAGE = new ImageIcon(
 			"./resources/icons/menu/file/exit.png");
 	/**
+	 * ACIDE - A Configurable IDE file menu open all files menu item image icon.
+	 */
+	private final static ImageIcon OPEN_ALL_FILES_IMAGE = new ImageIcon(
+			"./resources/icons/menu/file/openAllFiles.png");
+	/**
 	 * ACIDE - A Configurable IDE file menu new file menu item.
 	 */
 	private JMenuItem _newFile;
@@ -207,7 +212,7 @@ public class FileMenu extends JMenu {
 		// MENU ITEM
 		_newFile = new JMenuItem(NEW_FILE_IMAGE);
 		_openFile = new JMenuItem(OPEN_FILE_IMAGE);
-		_openAllFiles = new JMenuItem();
+		_openAllFiles = new JMenuItem(OPEN_ALL_FILES_IMAGE);
 		_closeFile = new JMenuItem(CLOSE_FILE_IMAGE);
 		_closeAllFiles = new JMenuItem(CLOSE_ALL_FILES_IMAGE);
 		_saveFileAs = new JMenuItem(SAVE_FILE_AS_IMAGE);

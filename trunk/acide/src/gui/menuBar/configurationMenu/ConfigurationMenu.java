@@ -41,6 +41,7 @@ import gui.menuBar.configurationMenu.toolBarMenu.ToolBarMenu;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
@@ -89,6 +90,10 @@ public class ConfigurationMenu extends JMenu {
 	 */
 	public static final String COMPILER_NAME = "Compiler";
 	/**
+	 * ACIDE - A Configurable IDE configuration menu compiler menu item image icon.
+	 */
+	public static final ImageIcon COMPILER_IMAGE = new ImageIcon("./resources/icons/menu/configuration/compiler.png");
+	/**
 	 * ACIDE - A Configurable IDE configuration menu menu menu item.
 	 */
 	private MenuMenu _menu;
@@ -129,7 +134,7 @@ public class ConfigurationMenu extends JMenu {
 		_toolBar = new ToolBarMenu();
 		_lexicon = new LexiconMenu();
 		_grammar = new GrammarMenu();
-		_compiler = new JMenuItem();
+		_compiler = new JMenuItem(COMPILER_IMAGE);
 		
 		setLanguageLabels();
 	}

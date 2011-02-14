@@ -359,7 +359,7 @@ public class AcideConsolePanel extends JPanel {
 	 * Forces to the operative system to kill the shell process when the
 	 * specified exit command is incorrect.
 	 */
-	private void killShellProcess() {
+	public void killShellProcess() {
 
 		// Gets the name of the current process
 		String shellPath = AcideConsoleConfiguration.getInstance().getShellPath();
@@ -544,23 +544,34 @@ public class AcideConsolePanel extends JPanel {
 	 * @param command
 	 *            executed command.
 	 */
-	public void updateCommandRecord(String command) {
+	public void updateCommandRecord(final String command) {
 
-		// Sets the care at the end of the command
-		_textPane.setCaretPosition(_promptCaretPosition);
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			/*
+			 * (non-Javadoc)
+			 * @see java.lang.Runnable#run()
+			 */
+			@Override
+			public void run() {
+				
+				// Sets the care at the end of the command
+				_textPane.setCaretPosition(_promptCaretPosition);
 
-		// The blank command does not count
-		if (!command.matches("")) {
+				// The blank command does not count
+				if (!command.matches("")) {
 
-			// Updates the command record
-			if (_commandRecord.contains(command)) {
-				_commandRecordMaximumIndex--;
-				_commandRecord.remove(command);
+					// Updates the command record
+					if (_commandRecord.contains(command)) {
+						_commandRecordMaximumIndex--;
+						_commandRecord.remove(command);
+					}
+					_commandRecord.add(command);
+					_commandRecordMaximumIndex++;
+					_commandRecordCurrentIndex = _commandRecordMaximumIndex;
+				}
 			}
-			_commandRecord.add(command);
-			_commandRecordMaximumIndex++;
-			_commandRecordCurrentIndex = _commandRecordMaximumIndex;
-		}
+		});
 	}
 
 	/**
@@ -584,7 +595,7 @@ public class AcideConsolePanel extends JPanel {
 	/**
 	 * Executes the ACIDE - A Configurable IDE console panel process thread.
 	 */
-	public void execute() {
+	public void executeProcessThread() {
 		
 		_processThread = new ConsoleThread();
 		_processThread.start();
@@ -595,7 +606,7 @@ public class AcideConsolePanel extends JPanel {
 	 */
 	public void resetConsole() {
 		_textPane.setText("");
-		execute();
+		executeProcessThread();
 	}
 
 	/**

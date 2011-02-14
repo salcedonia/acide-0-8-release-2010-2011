@@ -32,9 +32,9 @@ package gui.fileEditor.fileEditorManager.utils.logic;
 import java.awt.Color;
 import java.util.Hashtable;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
@@ -71,15 +71,15 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	/**
 	 * ACIDE - A Configurable IDE styled document mutable attribute set normal.
 	 */
-	private MutableAttributeSet _normal;
+	private MutableAttributeSet _normalAttributeSet;
 	/**
 	 * ACIDE - A Configurable IDE styled document mutable attribute set remark.
 	 */
-	private MutableAttributeSet _remark;
+	private MutableAttributeSet _remarkAttributeSet;
 	/**
 	 * ACIDE - A Configurable IDE styled document mutable attribute set brace.
 	 */
-	private MutableAttributeSet _brace;
+	private MutableAttributeSet _matchingElementsAttributeSet;
 	/**
 	 * ACIDE - A Configurable IDE styled document mutable attribute set keyword.
 	 */
@@ -93,144 +93,122 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	 * set when a CTRL+Z or CTRL+Y is pressed.
 	 */
 	private String _fileEditorPanelName;
-
+	
 	/**
 	 * Creates a new ACIDE - A Configurable IDE styled document.
 	 */
-	@SuppressWarnings("unchecked")
 	public AcideStyledDocument() {
 
 		super();
 
-		// Gets the labels
-		ResourceBundle labels = AcideLanguageManager.getInstance().getLabels();
-
 		try {
 
-			TokenTypeList tokenTypeList = TokenTypeList.getInstance();
-
 			// Updates the log
-			AcideLog.getLog().info(labels.getString("s321"));
+			AcideLog.getLog().info(
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s321"));
 
 			// Gets the default root element
 			_rootElement = getDefaultRootElement();
 
 			// The string "\n" is the end of the line
 			putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
+			
+			// The string "\t" inserts 8 blank spaces
+			putProperty(DefaultEditorKit.insertTabAction, "\t");
 
 			// NORMAL
-			_normal = new SimpleAttributeSet();
-
-			// Foreground in black
-			StyleConstants.setForeground(_normal, Color.black);
+			buildNormaAttributeSet();
 
 			// REMARK
-			_remark = new SimpleAttributeSet();
-			// Foreground as defines the Remark class
-			StyleConstants.setForeground(_remark, Remark.getInstance()
-					.getColor());
-			// Italic
-			StyleConstants.setItalic(_remark, true);
-			// Not bold
-			StyleConstants.setBold(_remark, false);
+			buildRemarkAttributeSet();
 
-			// BRACE
-			_brace = new SimpleAttributeSet();
-			// Foreground in blue
-			StyleConstants.setBackground(_brace, new Color(100, 50, 255));
-			// Foreground in white
-			StyleConstants.setForeground(_brace, Color.white);
+			// MATCH
+			buildMatchAttributeSet();
 
-			// KEYWORD
-			_keyword = new MutableAttributeSet[tokenTypeList.getSize()];
-			for (int index = 0; index < tokenTypeList.getSize(); index++) {
-
-				// Creates the keyword list
-				_keyword[index] = new SimpleAttributeSet();
-
-				// Gets the token type from the list
-				TokenType tokenType = tokenTypeList.getTokenType(index);
-
-				// Foreground color as defines the token type of the list
-				StyleConstants.setForeground(_keyword[index],
-						tokenType.getColor());
-				// Italic as defines the token type of the list
-				StyleConstants.setItalic(_keyword[index], tokenType.isItalic());
-				// Bold as defines the token type of the list
-				StyleConstants.setBold(_keyword[index], tokenType.isBold());
-			}
-
-			// KEYWORDS
-			_keywords = new Hashtable[tokenTypeList.getSize()];
-			Object dummyObject = new Object();
-
-			for (int index1 = 0; index1 < tokenTypeList.getSize(); index1++) {
-
-				_keywords[index1] = new Hashtable<String, Object>();
-
-				// Gets the token type from the list
-				TokenType tokenType = tokenTypeList.getTokenType(index1);
-
-				for (int index2 = 0; index2 < tokenType.getTokenListSize(); index2++) {
-
-					// Gets the token
-					String token = tokenType.getToken(index2);
-
-					// If the token is case sensitive
-					if (!tokenType.isCaseSensitive())
-						// Parse to lower case
-						token = token.toLowerCase();
-
-					_keywords[index1].put(token, dummyObject);
-				}
-			}
+			// KEYWORD	
+			buildKeywordAttributeSet();
 		}
 
 		catch (Exception exception) {
 
 			// Updates the log
-			AcideLog.getLog().info(labels.getString("s322"));
+			AcideLog.getLog().info(AcideLanguageManager.getInstance().getLabels().getString("s322"));
 			exception.printStackTrace();
 		}
 
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s323"));
+		AcideLog.getLog().info(AcideLanguageManager.getInstance().getLabels().getString("s323"));
 	}
 
-	/**
-	 * Overrides to apply syntax highlighting after the document has been
-	 * updated.
-	 * 
-	 * @param offset
-	 *            string offset.
-	 * @param string
-	 *            string to insert.
-	 * @param attributeSet
-	 *            attribute set.
+	/*
+	 * (non-Javadoc)
+	 * @see javax.swing.text.AbstractDocument#insertString(int, java.lang.String, javax.swing.text.AttributeSet)
 	 */
+	@Override
 	public void insertString(int offset, String string,
 			AttributeSet attributeSet) throws BadLocationException {
+		
+		/*if(string.equals("{"))
+			string = addMatchingBrace(offset);
+		if(string.equals("("))
+			string = addMatchingParenthesis(offset);
+		if(string.equals("["))
+			string = addMatchingBracket(offset);
+		*/
 		super.insertString(offset, string, attributeSet);
 		processChangedLines(offset, string.length());
 	}
 
-	/**
-	 * 
-	 * Overrides to apply syntax highlighting after the document has been
-	 * updated.
-	 * 
-	 * @param offset
-	 *            offset to apply.
-	 * @param length
-	 *            highlighting length.
-	 * 
-	 * @exception BadLocationException
+	/*
+	 * (non-Javadoc)
+	 * @see javax.swing.text.AbstractDocument#remove(int, int)
 	 */
+	@Override
 	public void remove(int offset, int length) throws BadLocationException {
 		super.remove(offset, length);
 		processChangedLines(offset, 0);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see javax.swing.text.AbstractDocument#fireInsertUpdate(javax.swing.event.DocumentEvent)
+	 */
+	@Override
+	protected void fireInsertUpdate(DocumentEvent documentEvent) {
+ 
+		super.fireInsertUpdate(documentEvent);
+ 
+		try {
+			processChangedLines(documentEvent.getOffset(), documentEvent.getLength());
+		} catch (BadLocationException exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+	}
+ 
+	/*
+	 * (non-Javadoc)
+	 * @see javax.swing.text.AbstractDocument#fireRemoveUpdate(javax.swing.event.DocumentEvent)
+	 */
+	@Override
+	protected void fireRemoveUpdate(DocumentEvent documentEvent) {
+ 
+		super.fireRemoveUpdate(documentEvent);
+ 
+		try {
+			processChangedLines(documentEvent.getOffset(), documentEvent.getLength());
+		} catch (BadLocationException exception) {
+			
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+	}
+	
+	
 	/**
 	 * Determines how many lines have been changed, then apply highlighting to
 	 * each line.
@@ -241,7 +219,7 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	 *            highlighting length.
 	 * @throws BadLocationException
 	 */
-	private void processChangedLines(int offset, int length)
+	public void processChangedLines(int offset, int length)
 			throws BadLocationException {
 
 		// Gets the text content
@@ -260,10 +238,10 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 			// If there is a defined remark
 			if (Remark.getInstance().getContent() != "")
 				// Applies the remark highlighting
-				applyRemarkStyle(content, index);
+				applyRemarkStyle(index);
 		}
 	}
-
+	
 	/**
 	 * Parses the line to determine the appropriate highlighting.
 	 * 
@@ -283,7 +261,7 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 			endOffset = contentLength - 1;
 
 		// set normal attributes for the line
-		setCharacterAttributes(startOffset, lineLength, _normal, true);
+		setCharacterAttributes(startOffset, lineLength, _normalAttributeSet, true);
 
 		// check for tokens for the highlighting
 		applyStyles(content, startOffset, endOffset);
@@ -487,8 +465,6 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	 */
 	public String addMatchingBrace(int offset) throws BadLocationException {
 
-		// TODO: UNUSED
-
 		StringBuffer whiteSpace = new StringBuffer();
 
 		int line = _rootElement.getElementIndex(offset);
@@ -511,15 +487,33 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	}
 
 	/**
+	 * Adds the matching bracket automatically.
+	 * 
+	 * @return the "[]" string.
+	 */
+	@SuppressWarnings("unused")
+	private String addMatchingBracket() {
+		return "[]";
+	}
+
+	/**
+	 * Adds the matching parenthesis automatically.
+	 * 
+	 * @return the "()" string.
+	 */
+	@SuppressWarnings("unused")
+	private String addMatchingParenthesis() {
+		return "()";
+	}
+	
+	/**
 	 * Applies the remark style to the file content given as a parameter.
 	 * 
-	 * @param content
-	 *            file content.
 	 * @param line
 	 *            current line.
 	 */
-	private void applyRemarkStyle(String content, int line) {
-
+	private void applyRemarkStyle(int line) {
+		
 		// Gets the remark configuration
 		Remark remark = Remark.getInstance();
 
@@ -543,7 +537,7 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 
 				// Applies the remark style
 				setCharacterAttributes(startOffset + position, lineLength
-						- position, _remark, true);
+						- position, _remarkAttributeSet, true);
 		} catch (BadLocationException exception) {
 
 			// Updates the log
@@ -579,7 +573,7 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 			public void run() {
 				try {
 					if ((position + 1) < getLength()) {
-						setCharacterAttributes(position, 1, _brace, true);
+						setCharacterAttributes(position, 1, _matchingElementsAttributeSet, true);
 					}
 				} catch (Exception exception) {
 
@@ -596,34 +590,44 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	 * 
 	 * It consist of set that position in the style that it had before.
 	 * 
-	 * @param position
+	 * @param offset
 	 *            brace position to be removed.
 	 */
-	public void removeHighlightBrace(final int position) {
+	public void removeHighlightBrace(final int offset) {
 
 		SwingUtilities.invokeLater(new Runnable() {
-			
+
 			/*
 			 * (non-Javadoc)
+			 * 
 			 * @see java.lang.Runnable#run()
 			 */
 			@Override
 			public void run() {
+				
 				try {
 
 					// Gets the keyword index
-					int index = isKeyword(getText(position, 1));
+					int index = isKeyword(getText(offset, 1));
 
 					// If it is a keyword
 					if (index != -1)
 
 						// Applies the keyword style
-						setCharacterAttributes(position, 1, _keyword[index - 1], true);
+						setCharacterAttributes(offset, 1,
+								_keyword[index - 1], true);
 					else
 
 						// Applies the normal style
-						setCharacterAttributes(position, 1, _normal, true);
+						setCharacterAttributes(offset, 1, _normalAttributeSet, true);
 
+					/* 
+					 * IMPORTANT: With this call to the method we guarantee:
+					 *    - If it is at a line which contains remarks, apply the remarks
+					 *    - Deletes the highlighting related to the matching brace perfectly
+					 */
+					processChangedLines(offset, _rootElement.getDocument().getLength());
+					
 				} catch (Exception exception) {
 
 					// Updates the log
@@ -631,6 +635,110 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 				}
 			}
 		});
+	}
+
+	/**
+	 * Builds and configure the keyword attribute set.
+	 */
+	@SuppressWarnings("unchecked")
+	public void buildKeywordAttributeSet() {
+		
+		// Gets the token type list from the lexicon configuration
+		TokenTypeList tokenTypeList = TokenTypeList.getInstance();
+
+		// Creates the keyword attribute set
+		_keyword = new MutableAttributeSet[tokenTypeList.getSize()];
+		
+		// Adds the keywords to the attribute set list
+		for (int index = 0; index < tokenTypeList.getSize(); index++) {
+
+			_keyword[index] = new SimpleAttributeSet();
+
+			// Gets the token type from the list
+			TokenType tokenType = tokenTypeList.getTokenType(index);
+
+			// Foreground color as defines the token type of the list
+			StyleConstants.setForeground(_keyword[index],
+					tokenType.getColor());
+			// Italic as defines the token type of the list
+			StyleConstants.setItalic(_keyword[index], tokenType.isItalic());
+			// Bold as defines the token type of the list
+			StyleConstants.setBold(_keyword[index], tokenType.isBold());
+		}
+
+		// KEYWORDS
+		_keywords = new Hashtable[tokenTypeList.getSize()];
+		Object dummyObject = new Object();
+
+		for (int index1 = 0; index1 < tokenTypeList.getSize(); index1++) {
+
+			_keywords[index1] = new Hashtable<String, Object>();
+
+			// Gets the token type from the list
+			TokenType tokenType = tokenTypeList.getTokenType(index1);
+
+			for (int index2 = 0; index2 < tokenType.getTokenListSize(); index2++) {
+
+				// Gets the token
+				String token = tokenType.getToken(index2);
+
+				// If the token is case sensitive
+				if (!tokenType.isCaseSensitive())
+					// Parse to lower case
+					token = token.toLowerCase();
+
+				_keywords[index1].put(token, dummyObject);
+			}
+		}
+	}
+
+	/**
+	 * Builds and configure the matching elements attribute set.
+	 */
+	public void buildMatchAttributeSet() {
+		
+		// Creates the matching elements attribute set
+		_matchingElementsAttributeSet = new SimpleAttributeSet();
+		
+		// Sets its foreground color in black
+		StyleConstants.setForeground(_matchingElementsAttributeSet, Color.BLACK);
+
+		// Sets its background color in yellow
+		StyleConstants.setBackground(_matchingElementsAttributeSet, Color.YELLOW);
+		
+		// Sets its style to bold
+		StyleConstants.setBold(_matchingElementsAttributeSet, true);
+	}
+
+	/**
+	 * Builds and configure the normal attribute set.
+	 */
+	public void buildNormaAttributeSet() {
+		
+		// Creates the normal attribute set
+		_normalAttributeSet = new SimpleAttributeSet();
+
+		// Sets its foreground color to black
+		StyleConstants.setForeground(_normalAttributeSet, Color.BLACK);
+	}
+
+	/**
+	 * Builds and configure the remark attribute set.
+	 */
+	public void buildRemarkAttributeSet() {
+		
+		// Creates the remark attribute set
+		_remarkAttributeSet = new SimpleAttributeSet();
+		
+		// Set its foreground color as defines the Remark class
+		StyleConstants.setForeground(_remarkAttributeSet, Remark.getInstance()
+				.getColor());
+		
+		// Sets its italic style as true
+		StyleConstants.setItalic(_remarkAttributeSet, true);
+		
+		// Sets its bold style as false
+		StyleConstants.setBold(_remarkAttributeSet, false);
 	}
 
 	/**

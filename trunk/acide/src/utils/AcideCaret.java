@@ -58,7 +58,11 @@ public class AcideCaret extends DefaultCaret {
 	 * Creates a new instance of ACIDE - A Configurable IDE caret.
 	 */
 	public AcideCaret() {
+		
 		super();
+		
+		// Sets the blink rate to 500 miliseconds
+		setBlinkRate(500);
 	}
 
 	/*

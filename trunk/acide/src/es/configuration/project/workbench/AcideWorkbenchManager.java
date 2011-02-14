@@ -50,8 +50,8 @@ import es.project.AcideProjectFile;
 import es.project.AcideProjectFileType;
 import es.text.AcideTextFile;
 import gui.mainWindow.MainWindow;
-import gui.mainWindow.utils.AcideSavingResourcesWindow;
 import gui.menuBar.editMenu.utils.AcideUndoRedoManager;
+import gui.savingResourcesWindow.AcideSavingResourcesWindow;
 import gui.splashScreen.AcideSplashScreenWindow;
 
 /**
@@ -65,7 +65,7 @@ import gui.splashScreen.AcideSplashScreenWindow;
 public class AcideWorkbenchManager {
 
 	/**
-	 * Acide - A Configurable IDE workbench manager unique class instance.
+	 * ACIDE - A Configurable IDE workbench manager unique class instance.
 	 */
 	private static AcideWorkbenchManager _instance;
 	/**
@@ -100,30 +100,36 @@ public class AcideWorkbenchManager {
 	public void loadMainWindowWorkbenchConfiguration(
 			String configurationFileContent) {
 
+		// Updates the splash screen window
+		AcideSplashScreenWindow
+				.getInstance()
+				.setProgressBar(12,
+						AcideLanguageManager.getInstance().getLabels().getString("s1027"));
+		
 		// Loads the PROJECT CONFIGURATION
 		AcideProjectConfiguration.getInstance().load(configurationFileContent);
-		AcideSplashScreenWindow.setProgressBar(25,
-				"Loading ACIDE - A Configurable IDE Project Configuration");
+		AcideSplashScreenWindow.getInstance().setProgressBar(25,
+				AcideLanguageManager.getInstance().getLabels().getString("s1028"));
 
 		// Loads the LEXICON CONFIGURATION
 		AcideLexiconConfiguration lexiconConfiguration = loadLexiconWorkbenchConfiguration();
-		AcideSplashScreenWindow.setProgressBar(36,
-				"Loading ACIDE - A Configurable IDE Lexicon Configuration");
+		AcideSplashScreenWindow.getInstance().setProgressBar(36,
+				AcideLanguageManager.getInstance().getLabels().getString("s1029"));
 
 		// Loads the LANGUAGE FOR THE LABELS OF THE APPLICATION
 		ResourceBundle labels = loadLanguageWorkbenchConfiguration();
-		AcideSplashScreenWindow.setProgressBar(48,
-				"Loading ACIDE - A Configurable IDE Language Configuration");
+		AcideSplashScreenWindow.getInstance().setProgressBar(48,
+				AcideLanguageManager.getInstance().getLabels().getString("s1030"));
 
 		// Loads the CONSOLE CONFIGURATION
 		loadConsoleWorkbenchConfiguration();
-		AcideSplashScreenWindow.setProgressBar(56,
-				"Loading ACIDE - A Configurable IDE Console Configuration");
+		AcideSplashScreenWindow.getInstance().setProgressBar(56,
+				AcideLanguageManager.getInstance().getLabels().getString("s1031"));
 
 		// Loads the EXPLORER CONFIGURATION
 		loadExplorerWorkbenchConfiguration();
-		AcideSplashScreenWindow.setProgressBar(90,
-				"Loading ACIDE - A Configurable IDE Explorer Configuration");
+		AcideSplashScreenWindow.getInstance().setProgressBar(90,
+				AcideLanguageManager.getInstance().getLabels().getString("s1032"));
 
 		// Updates the lexicon message in the status bar
 		MainWindow
@@ -135,18 +141,18 @@ public class AcideWorkbenchManager {
 
 		// Loads the GRAMMAR CONFIGURATION
 		loadGrammarWorkbenchConfiguration(labels);
-		AcideSplashScreenWindow.setProgressBar(95,
-				"Loading ACIDE - A Configurable IDE File Editor Configuration");
+		AcideSplashScreenWindow.getInstance().setProgressBar(95,
+				AcideLanguageManager.getInstance().getLabels().getString("s1033"));
 
 		// Loads the EDITOR CONFIGURATION
 		loadFileEditorWorkbenchConfiguration(labels);
-		AcideSplashScreenWindow.setProgressBar(98,
-				"Loading ACIDE - A Configurable IDE Grammar Configuration");
+		AcideSplashScreenWindow.getInstance().setProgressBar(98,
+				AcideLanguageManager.getInstance().getLabels().getString("s1034"));
 
 		// Loads the MAIN WINDOW CONFIGURATION
 		loadMainWindowConfiguration();
-		AcideSplashScreenWindow.setProgressBar(99,
-				"Loading ACIDE - A Configurable IDE Main Window Configuration");
+		AcideSplashScreenWindow.getInstance().setProgressBar(99,
+				AcideLanguageManager.getInstance().getLabels().getString("s1035"));
 	}
 
 	/**

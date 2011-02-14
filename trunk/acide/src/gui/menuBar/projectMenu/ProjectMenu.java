@@ -189,9 +189,25 @@ public class ProjectMenu extends JMenu {
 	 */
 	private static final ImageIcon SET_COMPILABLE_FILE_IMAGE = new ImageIcon("./resources/icons/menu/project/setCompilable.png");
 	/**
-	 * ACIDE - A Configurable IDE project menu unset compilable project menu item image icon.
+	 * ACIDE - A Configurable IDE project menu unset compilable menu item image icon.
 	 */
 	private static final ImageIcon UNSET_COMPILABLE_FILE_IMAGE = new ImageIcon("./resources/icons/menu/project/unsetCompilable.png");
+	/**
+	 * ACIDE - A Configurable IDE project menu close project menu item image icon.
+	 */
+	private static final ImageIcon CLOSE_PROJECT_IMAGE = new ImageIcon("./resources/icons/menu/project/closeProject.png");
+	/**
+	 * ACIDE - A Configurable IDE project menu remove file menu item image icon.
+	 */
+	private static final ImageIcon REMOVE_FILE_IMAGE = new ImageIcon("./resources/icons/menu/project/removeFile.png");
+	/**
+	 * ACIDE - A Configurable IDE project menu remove folder menu item image icon.
+	 */
+	private static final ImageIcon REMOVE_FOLDER_IMAGE = new ImageIcon("./resources/icons/menu/project/removeFolder.png");
+	/**
+	 * ACIDE - A Configurable IDE project menu save project as menu item image icon.
+	 */
+	private static final ImageIcon SAVE_PROJECT_AS_IMAGE = new ImageIcon("./resources/icons/menu/project/saveProjectAs.png");
 	/**
 	 * ACIDE - A Configurable IDE project menu new project menu item.
 	 */
@@ -270,16 +286,16 @@ public class ProjectMenu extends JMenu {
 		_newProject = new JMenuItem(NEW_PROJECT_IMAGE);
 		_openProject = new JMenuItem(OPEN_PROJECT_IMAGE);
 		_saveProject = new JMenuItem(SAVE_PROJECT_IMAGE);
-		_saveProjectAs = new JMenuItem();
+		_saveProjectAs = new JMenuItem(SAVE_PROJECT_AS_IMAGE);
 		_newProjectFile = new JMenuItem(NEW_PROJECT_FILE_IMAGE);
 		_addFile = new JMenuItem(ADD_FILE_IMAGE);
-		_removeFile = new JMenuItem();
+		_removeFile = new JMenuItem(REMOVE_FILE_IMAGE);
 		_deleteFile = new JMenuItem(DELETE_FILE_IMAGE);
-		_closeProject = new JMenuItem();
+		_closeProject = new JMenuItem(CLOSE_PROJECT_IMAGE);
 		_compile = new JMenuItem(COMPILE_IMAGE);
 		_execute = new JMenuItem(EXECUTE_IMAGE);
 		_addFolder = new JMenuItem(ADD_FOLDER_IMAGE);
-		_removeFolder = new JMenuItem();
+		_removeFolder = new JMenuItem(REMOVE_FOLDER_IMAGE);
 		_setMainFile = new JMenuItem(SET_MAIN_FILE_IMAGE);
 		_unsetMainFile = new JMenuItem(UNSET_MAIN_FILE_IMAGE);
 		_setCompilableFile = new JMenuItem(SET_COMPILABLE_FILE_IMAGE);
