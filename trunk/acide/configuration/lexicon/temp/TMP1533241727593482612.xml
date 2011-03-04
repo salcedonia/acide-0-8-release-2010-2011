@@ -1,0 +1,32 @@
+<es.configuration.lexicon.AcideLexiconConfiguration>
+  <__languageName>Default</__languageName>
+  <__languagePath>C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\lexicon\default.xml</__languagePath>
+  <__isCompiledOrInterpreted>false</__isCompiledOrInterpreted>
+  <__tokenList>
+    <__list>
+      <__list/>
+    </__list>
+  </__tokenList>
+  <__validExtensions>
+    <__list>
+      <__list>
+        <string>cpp</string>
+        <string>h</string>
+      </__list>
+    </__list>
+  </__validExtensions>
+  <__delimiterList>
+    <__list>
+      <__list/>
+    </__list>
+  </__delimiterList>
+  <__remarks>
+    <__content></__content>
+    <__color>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+      <alpha>255</alpha>
+    </__color>
+  </__remarks>
+</es.configuration.lexicon.AcideLexiconConfiguration>

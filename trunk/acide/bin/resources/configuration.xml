@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>ACIDE Configuration</comment>
+<entry key="fileEditorConfiguration">./configuration/fileEditor/configuration.xml</entry>
+<entry key="defaultAcideProject">C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\project\proyecto1.acidePrj</entry>
+<entry key="previousMenuConfiguration">C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\menu\defaultAllOn.menuCfg</entry>
+<entry key="currentGrammar">./configuration/grammars/bytes.jar</entry>
+<entry key="currentToolBarConfiguration">C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\toolbar\des.TBcfg</entry>
+<entry key="previousToolBarConfiguration">C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\toolbar\default.TBcfg</entry>
+<entry key="currentMenuConfiguration">./configuration/menu/defaultAllOn.menuCfg</entry>
+<entry key="language">spanish</entry>
+<entry key="windowConfiguration">./configuration/window/configuration.xml</entry>
+<entry key="javaPath"/>
+<entry key="jarPath"/>
+<entry key="defaultPath">C:\Documents and Settings\Salcedonia\Escritorio\file1.txt</entry>
+<entry key="languagePath">C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\lexicon\des.xml</entry>
+<entry key="javacPath"/>
+<entry key="consoleConfiguration">./configuration/console/configuration.xml</entry>
+<entry key="previousGrammar">./configuration/grammars/bytes.jar</entry>
+</properties>
