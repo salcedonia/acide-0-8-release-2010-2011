@@ -1,0 +1,29 @@
+// Command consult
+name = consult
+action = consult($activeFile$).
+hintText = Consults the selected file
+icon = 
+parameterType = NONE
+
+// Command listing
+name = listing
+action = listing.
+hintText = Lists the contents of the database
+icon = 
+parameterType = NONE
+
+// Command shell
+name = shell
+action = shell.
+hintText = Opens an OS shell
+icon = 
+parameterType = NONE
+
+// Command pwd
+name = pwd
+action = working_directory(X,X).
+hintText = Displays the current folder
+icon = 
+parameterType = NONE
+
+// End
