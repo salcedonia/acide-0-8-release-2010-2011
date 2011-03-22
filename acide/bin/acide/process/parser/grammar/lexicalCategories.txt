@@ -1,0 +1,13 @@
+LPAREN: 'a' ;
+RPAREN: 's' ;
+PLUS  : 'd' ;
+MINUS : 'f' ;
+STAR  : 'g' ;
+INT   : ('0'..'9')+ ;
+WS    : ( ' '
+        | '\r' '\n'
+        | '\n'
+        | '\t'
+        )
+        {$setType(Token.SKIP);}
+      ;    
