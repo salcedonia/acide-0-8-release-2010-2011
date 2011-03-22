@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-
-Sealed: true
-
-Main-Class: acide.process.parser.AcideGrammarAnalyzer
