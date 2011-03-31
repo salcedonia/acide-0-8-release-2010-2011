@@ -1,0 +1,120 @@
+// Command run
+name = run
+action = /run($activeFile$)
+hintText = Compile and execute the selected file
+icon = 
+parameterType = NONE
+
+// Command cflpr
+name = cflpr
+action = /cflpr
+hintText = Enables arithmetical constraint solving
+icon = 
+parameterType = NONE
+
+// Command nocflpr
+name = nocflpr
+action = /nocflpr
+hintText = Disables arithmetical constraint solving
+icon = 
+parameterType = NONE
+
+// Command cflpfd
+name = cflpfd
+action = /cflpfd
+hintText = Enables finite domain constraint solving
+icon = 
+parameterType = NONE
+
+// Command nocflpfd
+name = nocflpfd
+action = /nocflpfd
+hintText = Disables finite domain constraint solving
+icon = 
+parameterType = NONE
+
+// Command prop
+name = prop
+action = /prop
+hintText = Enables constraint propagation
+icon = 
+parameterType = NONE
+
+// Command noprop
+name = noprop
+action = /noprop
+hintText = Disables constraint propagation
+icon = 
+parameterType = NONE
+
+// Command cd
+name = cd
+action = /cd
+hintText = Sets the working directory to the installation directory
+icon = 
+parameterType = NONE
+
+// Command ls
+name = ls
+action = /ls
+hintText = Lists the contents of the current folder
+icon = 
+parameterType = NONE
+
+// Command pwd
+name = pwd
+action = /pwd
+hintText = Displays the current folder
+icon = 
+parameterType = NONE
+
+// Command tot
+name = tot
+action = /tot
+hintText = Enables displaying totality constraints
+icon = 
+parameterType = NONE
+
+// Command notot
+name = notot
+action = /notot
+hintText = Disables displaying totality constraints
+icon = 
+parameterType = NONE
+
+// Command cut
+name = cut
+action = /cut
+hintText = Enables compilation with dynamic cut optimization
+icon = 
+parameterType = NONE
+
+// Command nocut
+name = nocut
+action = /nocut
+hintText = Disables compilation with dynamic cut optimization
+icon = 
+parameterType = NONE
+
+// Command status
+name = status
+action = /status
+hintText = Lists the loaded libraries
+icon = 
+parameterType = NONE
+
+// Command version
+name = version
+action = /version
+hintText = Displays software version
+icon = 
+parameterType = NONE
+
+// Command help
+name = help
+action = /help
+hintText = Shows the help
+icon = 
+parameterType = NONE
+
+// End

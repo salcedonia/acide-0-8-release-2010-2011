@@ -1,0 +1,21 @@
+<acide.configuration.console.AcideConsoleConfiguration>
+  <__shellPath>C:\Documents and Settings\Salcedonia\Escritorio\des\des.exe</__shellPath>
+  <__shellDirectory>C:\Documents and Settings\Salcedonia\Escritorio\des</__shellDirectory>
+  <__isEchoCommand>true</__isEchoCommand>
+  <__exitCommand>/exit</__exitCommand>
+  <__fontName>Monospaced.plain</__fontName>
+  <__fontStyle>0</__fontStyle>
+  <__fontSize>12</__fontSize>
+  <__foregroundColor>
+    <red>0</red>
+    <green>0</green>
+    <blue>0</blue>
+    <alpha>255</alpha>
+  </__foregroundColor>
+  <__backgroundColor>
+    <red>255</red>
+    <green>255</green>
+    <blue>255</blue>
+    <alpha>255</alpha>
+  </__backgroundColor>
+</acide.configuration.console.AcideConsoleConfiguration>

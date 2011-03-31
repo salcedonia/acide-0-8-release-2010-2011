@@ -1,0 +1,10 @@
+expr:   mexpr ((PLUS|MINUS) mexpr)*
+    ;      
+
+mexpr      
+    :   atom (STAR atom)*
+    ;    
+
+atom:   INT 
+    |   LPAREN expr RPAREN 
+    ;
