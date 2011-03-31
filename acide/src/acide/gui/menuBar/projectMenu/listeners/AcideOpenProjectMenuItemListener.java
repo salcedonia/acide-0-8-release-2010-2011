@@ -160,9 +160,6 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 			// Loads the menu configuration
 			loadMenuConfiguration();
 
-			// Loads the grammar configuration
-			// loadGrammarConfiguration();
-
 			// Loads the console configuration
 			loadConsoleConfiguration();
 
@@ -171,11 +168,7 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 
 			// Loads the explorer configuration
 			loadExplorerConfiguration();
-
-			// Enables the show explorer panel menu item
-			AcideMainWindow.getInstance().getMenu().getViewMenu()
-					.getShowExplorerPanelCheckBoxMenuItem().setSelected(true);
-
+			
 			// Loads the file editor configuration
 			loadFileEditorConfiguration();
 
@@ -191,16 +184,9 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 			// Enables the open all files menu item
 			AcideMainWindow.getInstance().getMenu().getFileMenu()
 					.getOpenAllFilesMenuItem().setEnabled(true);
-
-			// Enables the save project button in the static tool bar
-			AcideStaticToolBar.getInstance().getSaveProjectButton()
-					.setEnabled(true);
-
-			// Validates the changes in the main window
-			AcideMainWindow.getInstance().validate();
-
-			// Repaints the main window
-			AcideMainWindow.getInstance().repaint();
+			
+			// Updates the static tool bar
+			AcideStaticToolBar.getInstance().updateStateOfFileButtons();
 		}
 	}
 
@@ -328,6 +314,10 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 			// Shows the explorer
 			AcideMainWindow.getInstance().getExplorerPanel()
 					.showExplorerPanel();
+		
+		// Enables the show explorer panel menu item
+		AcideMainWindow.getInstance().getMenu().getViewMenu()
+				.getShowExplorerPanelCheckBoxMenuItem().setSelected(true);
 	}
 
 	/**
@@ -394,7 +384,7 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 				AcideResourceManager.getInstance().setProperty(
 						"currentMenuConfiguration", name);
 
-				// Error message
+				// Displays an error message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
 						.getInstance().getLabels().getString("s956")
 						+ menuConfiguration
@@ -423,7 +413,7 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 						"currentMenuConfiguration",
 						"./configuration/menu/defaultAllOn.menuCfg");
 
-				// Error message
+				// Displays an error message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
 						.getInstance().getLabels().getString("s956")
 						+ menuConfiguration
@@ -513,7 +503,7 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 				AcideConsoleCommandConfiguration.getInstance().loadFinalList(
 						name);
 
-				// Error message
+				// Displays an error message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
 						.getInstance().getLabels().getString("s958")
 						+ currentToolBarConfiguration
@@ -542,7 +532,7 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 					exception2.printStackTrace();
 				}
 
-				// Error message
+				// Displays an error message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
 						.getInstance().getLabels().getString("s958")
 						+ currentToolBarConfiguration
@@ -701,12 +691,19 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 
 					// TODO: Load the predefined extension
 
-					// Creates the grammar configuration
-					AcideGrammarConfiguration grammarConfiguration = new AcideGrammarConfiguration();
+					// Creates the current grammar configuration
+					AcideGrammarConfiguration currentGrammarConfiguration = new AcideGrammarConfiguration();
 
-					// Sets the grammar configuration path
-					grammarConfiguration
-							.setPath(AcideGrammarConfiguration.DEFAULT_PATH);
+					// Sets the current grammar configuration path
+					currentGrammarConfiguration
+							.setPath(AcideGrammarConfiguration.DEFAULT_FILE);
+
+					// Creates the previous grammar configuration
+					AcideGrammarConfiguration previousGrammarConfiguration = new AcideGrammarConfiguration();
+
+					// Sets the previous grammar configuration path
+					previousGrammarConfiguration
+							.setPath(AcideGrammarConfiguration.DEFAULT_FILE);
 
 					// Updates the tabbed pane in the file editor
 					// manager
@@ -721,7 +718,8 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 									AcideProjectConfiguration.getInstance()
 											.getFileAt(index).getType(), 0, 0,
 									1, lexiconConfiguration,
-									grammarConfiguration);
+									currentGrammarConfiguration,
+									previousGrammarConfiguration);
 				}
 
 				// The project configuration has been modified
@@ -731,9 +729,11 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 				// If the file does not exist
 				if (!file.exists()) {
 
+					// If the file is not a directory
 					if (!AcideProjectConfiguration.getInstance()
 							.getFileAt(index).isDirectory()) {
-						// Error message
+
+						// Displays an error message
 						JOptionPane
 								.showMessageDialog(
 										null,

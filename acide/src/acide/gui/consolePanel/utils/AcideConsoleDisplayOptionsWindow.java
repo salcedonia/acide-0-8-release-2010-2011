@@ -31,6 +31,7 @@ package acide.gui.consolePanel.utils;
 
 import acide.configuration.console.AcideConsoleConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
+import acide.gui.listeners.AcideWindowClosingListener;
 import acide.gui.mainWindow.AcideMainWindow;
 
 import java.awt.BorderLayout;
@@ -92,27 +93,27 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 	/**
 	 * Current font size of the console in the main window.
 	 */
-	private int INITIAL_SIZE = AcideMainWindow.getInstance().getConsolePanel()
+	private int _initialSize = AcideMainWindow.getInstance().getConsolePanel()
 			.getTextPane().getFont().getSize();
 	/**
 	 * Current font style of the output in the main window.
 	 */
-	private int INITIAL_STYLE = AcideMainWindow.getInstance().getConsolePanel()
+	private int _initialStyle = AcideMainWindow.getInstance().getConsolePanel()
 			.getTextPane().getFont().getStyle();
 	/**
 	 * Current font name of the output in the main window.
 	 */
-	private String INITIAL_FONTNAME = AcideMainWindow.getInstance()
+	private String _initialFontname = AcideMainWindow.getInstance()
 			.getConsolePanel().getTextPane().getFont().getFamily();
 	/**
 	 * Current foreground color of the output in the main window.
 	 */
-	private Color INITIAL_FOREGROUND = AcideMainWindow.getInstance()
+	private Color _initialForegroundColor = AcideMainWindow.getInstance()
 			.getConsolePanel().getTextPane().getForeground();
 	/**
 	 * Current background color of the output in the main window.
 	 */
-	private Color INITIAL_BACKGROUND = AcideMainWindow.getInstance()
+	private Color _initialBackgroundColor = AcideMainWindow.getInstance()
 			.getConsolePanel().getTextPane().getBackground();
 	/**
 	 * Where the sample text is displayed.
@@ -197,15 +198,64 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 	 */
 	public AcideConsoleDisplayOptionsWindow() {
 
+		super();
+
+		// Builds the window components
+		buildComponents();
+
+		// Sets the listeners of the window components
+		setListeners();
+
+		// Adds the components to the window
+		addComponents();
+
+		// Sets the window configuration
+		setWindowConfiguration();
+
+		// Updates the log
+		AcideLog.getLog().info(
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s978"));
+	}
+
+	/**
+	 * Sets the ACIDE - A Configurable IDE console display options window
+	 * configuration.
+	 */
+	private void setWindowConfiguration() {
+
+		// Sets the window title
+		setTitle(AcideLanguageManager.getInstance().getLabels()
+				.getString("s977"));
+
+		// Sets the window icon image
+		setIconImage(ICON.getImage());
+
+		// Sets the window not resizable
+		setResizable(false);
+
+		// Packs the window components
+		pack();
+
+		// Centers the window
+		setLocationRelativeTo(null);
+
+		// Sets the window visible
+		setVisible(true);
+
 		// Disables the main window
 		AcideMainWindow.getInstance().setEnabled(false);
+	}
 
-		// Sets the layout
-		setLayout(new BorderLayout());
+	/**
+	 * Builds the ACIDE - A Configurable IDE console display options window
+	 * components.
+	 */
+	private void buildComponents() {
 
 		// Creates the controls panel
 		_controlsPanel = new JPanel(new GridBagLayout());
-		
+
 		// Sets the controls panel border
 		_controlsPanel.setBorder(BorderFactory
 				.createTitledBorder(AcideLanguageManager.getInstance()
@@ -262,27 +312,34 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 		// Creates the cancel button
 		_cancelButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s446"));
-		
+
 		// Adds the cancel button to the button panel
 		_buttonPanel.add(_cancelButton);
 
 		// Creates the preview panel
 		_previewPanel = new JPanel();
-		
+
 		// Sets the preview panel border
 		_previewPanel.setBorder(BorderFactory
 				.createTitledBorder(AcideLanguageManager.getInstance()
 						.getLabels().getString("s1011")));
 
 		// Creates a panel where display the fonts
-		_displayArea = new PreviewPanel(INITIAL_FONTNAME, INITIAL_STYLE,
-				INITIAL_SIZE, INITIAL_FOREGROUND, INITIAL_BACKGROUND);
+		_displayArea = new PreviewPanel(_initialFontname, _initialStyle,
+				_initialSize, _initialForegroundColor, _initialBackgroundColor);
 
 		// Adds the display area to the preview panel
 		_previewPanel.add(_displayArea);
-		
-		// Sets the listeners of the window components
-		setListeners();
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE console display
+	 * options window with the layout.
+	 */
+	private void addComponents() {
+
+		// Sets the layout
+		setLayout(new BorderLayout());
 
 		// Adds the components to the window with the layout
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -292,76 +349,76 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 		constraints.insets = new Insets(5, 5, 5, 5);
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		
+
 		// Adds the font label to the controls panel
 		_controlsPanel.add(_fontLabel, constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		
+
 		// Adds the font combo box to the controls panel
 		_controlsPanel.add(_fontComboBox, constraints);
-		
+
 		constraints.gridx = 1;
 		constraints.gridy = 0;
-		
+
 		// Adds the size label to the controls panel
 		_controlsPanel.add(_sizeLabel, constraints);
-		
+
 		constraints.gridx = 1;
 		constraints.gridy = 1;
-		
+
 		// Adds the size slider to the controls panel
 		_controlsPanel.add(_sizeSlider, constraints);
-		
+
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.gridwidth = 2;
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		
+
 		// Adds the font style label to the controls panel
 		_controlsPanel.add(_fontStyleLabel, constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 3;
-		
+
 		// Adds the font style combo box to the controls panel
 		_controlsPanel.add(_fontStyleComboBox, constraints);
-		
+
 		constraints.gridwidth = 1;
 		constraints.anchor = GridBagConstraints.EAST;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		
+
 		// Adds the foreground color label to the color buttons panel
 		_colorButtonsPanel.add(_foregroundColorLabel, constraints);
-		
+
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridx = 1;
 		constraints.gridy = 0;
-		
+
 		// Adds the foreground color button to the color buttons panel
 		_colorButtonsPanel.add(_foregroundColorButton, constraints);
-		
+
 		constraints.anchor = GridBagConstraints.EAST;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		
+
 		// Adds the background color label to the color buttons panel
 		_colorButtonsPanel.add(_backgroundColorLabel, constraints);
-		
+
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridx = 1;
 		constraints.gridy = 1;
-		
+
 		// Adds the background color button to the color buttons panel
 		_colorButtonsPanel.add(_backgroundColorButton, constraints);
-		
+
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridwidth = 2;
 		constraints.gridx = 0;
 		constraints.gridy = 4;
-		
+
 		// Adds the color buttons panel to the controls panel
 		_controlsPanel.add(_colorButtonsPanel, constraints);
 
@@ -370,37 +427,14 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 
 		// Adds the preview panel to the window
 		add(_previewPanel, BorderLayout.CENTER);
-		
+
 		// Adds the button panel to the window
 		add(_buttonPanel, BorderLayout.SOUTH);
-
-		// Sets the window title
-		setTitle(AcideLanguageManager.getInstance().getLabels()
-				.getString("s977"));
-		
-		// Sets the window icon image
-		setIconImage(ICON.getImage());
-		
-		// Sets the window not resizable
-		setResizable(false);
-		
-		// Packs the window components
-		pack();
-		
-		// Sets the window visible
-		setVisible(true);
-		
-		// Centers the window
-		setLocationRelativeTo(null);
-
-		// Updates the log
-		AcideLog.getLog().info(
-				AcideLanguageManager.getInstance().getLabels()
-						.getString("s978"));
 	}
 
 	/**
-	 * Sets the listeners of the window components.
+	 * Sets the listeners of the ACIDE - A Configurable IDE console display
+	 * options window components.
 	 */
 	public void setListeners() {
 
@@ -432,6 +466,9 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 
 		// Sets the font combo box action listener
 		_fontComboBox.addActionListener(new FontComboBoxAction());
+		
+		// Sets the window closing listener
+		addWindowListener(new AcideWindowClosingListener());
 	}
 
 	/**
@@ -444,32 +481,32 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 
 		// Creates the font style combo box
 		_fontStyleComboBox = new JComboBox();
-		
+
 		// Adds the font plain item to the font style combo box
 		_fontStyleComboBox.addItem(AcideLanguageManager.getInstance()
 				.getLabels().getString("s413"));
-		
+
 		// Adds the font italic item to the font style combo box
 		_fontStyleComboBox.addItem(AcideLanguageManager.getInstance()
 				.getLabels().getString("s414"));
-		
+
 		// Adds the font bold item to the font style combo box
 		_fontStyleComboBox.addItem(AcideLanguageManager.getInstance()
 				.getLabels().getString("s415"));
-		
+
 		// Adds the font bold + italic item to the font style combo box
 		_fontStyleComboBox.addItem(AcideLanguageManager.getInstance()
 				.getLabels().getString("s416"));
-		
+
 		// Enables the font style combo box
 		_fontStyleComboBox.setEnabled(true);
-		
+
 		// Sets the font style combo box tool tip text
 		_fontStyleComboBox.setToolTipText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s400"));
-		
+
 		// Selects the item that corresponds
-		_fontStyleComboBox.setSelectedItem(INITIAL_STYLE);
+		_fontStyleComboBox.setSelectedItem(_initialStyle);
 
 		// Sets the selected item
 		SwingUtilities.invokeLater(new Runnable() {
@@ -482,7 +519,7 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 			@Override
 			public void run() {
 
-				switch (INITIAL_STYLE) {
+				switch (_initialStyle) {
 				case Font.PLAIN:
 					_fontStyleComboBox.setSelectedItem(AcideLanguageManager
 							.getInstance().getLabels().getString("s413"));
@@ -510,17 +547,17 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 	public void createSizeSlider() {
 
 		// Creates the size slider
-		_sizeSlider = new JSlider(JSlider.HORIZONTAL, 5, 60, INITIAL_SIZE);
-		
+		_sizeSlider = new JSlider(JSlider.HORIZONTAL, 5, 60, _initialSize);
+
 		// Sets its major tick spacing as 10
 		_sizeSlider.setMajorTickSpacing(10);
-		
+
 		// Sets its minor tick spacing as 1
 		_sizeSlider.setMinorTickSpacing(1);
-		
+
 		// Paints its ticks
 		_sizeSlider.setPaintTicks(true);
-		
+
 		// Paints its labels
 		_sizeSlider.setPaintLabels(true);
 	}
@@ -548,9 +585,9 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 
 		// Creates the font combo box
 		_fontComboBox = new JComboBox(availableFonts);
-		
+
 		// Selects the item that corresponds
-		_fontComboBox.setSelectedItem(INITIAL_FONTNAME);
+		_fontComboBox.setSelectedItem(_initialFontname);
 	}
 
 	/**
@@ -575,7 +612,7 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 			Color foregroundColor = JColorChooser.showDialog(
 					null,
 					AcideLanguageManager.getInstance().getLabels()
-							.getString("s992"), INITIAL_FOREGROUND);
+							.getString("s992"), _initialForegroundColor);
 
 			// If the user has selected any
 			if (foregroundColor != null)
@@ -607,7 +644,7 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 			Color backgroundColor = JColorChooser.showDialog(
 					null,
 					AcideLanguageManager.getInstance().getLabels()
-							.getString("s991"), INITIAL_BACKGROUND);
+							.getString("s991"), _initialBackgroundColor);
 
 			// If the user has selected any
 			if (backgroundColor != null)
@@ -673,10 +710,10 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}
@@ -708,10 +745,10 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 
 			// Closes window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}
@@ -740,10 +777,10 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}

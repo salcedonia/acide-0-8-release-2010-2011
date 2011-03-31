@@ -33,11 +33,9 @@ import acide.gui.mainWindow.AcideMainWindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE edit menu paste menu item listener.
@@ -56,42 +54,37 @@ public class AcidePasteMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-			
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s98"));
+		AcideLog.getLog()
+				.info(AcideLanguageManager.getInstance().getLabels()
+						.getString("s98"));
 
-		// PASTE
-		int numEditors = AcideMainWindow.getInstance().getFileEditorManager()
-				.getNumberOfFileEditorPanels();
+		// If there are file editors opened
+		if (AcideMainWindow.getInstance().getFileEditorManager()
+				.getNumberOfFileEditorPanels() > 0) {
 
-		if (numEditors > 0) {
-
+			// If the console has the focus
 			if (AcideMainWindow.getInstance().getMenu().getIsConsoleFocused())
-				AcideMainWindow.getInstance().getConsolePanel().getTextPane().paste();
+				
+				// Pastes the text in the console panel text pane
+				AcideMainWindow.getInstance().getConsolePanel().getTextPane()
+						.paste();
 			else
+				
+				// Pastes the text in the active file editor
 				AcideMainWindow
 						.getInstance()
 						.getFileEditorManager()
 						.getFileEditorPanelAt(
-								AcideMainWindow.getInstance().getFileEditorManager()
-										.getSelectedFileEditorPanelIndex()).getActiveTextEditionArea()
-						.paste();
+								AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getSelectedFileEditorPanelIndex())
+						.getActiveTextEditionArea().paste();
 		} else {
-			AcideMainWindow.getInstance().getConsolePanel().getTextPane().paste();
+			
+			// Pastes the text in the console panel text pane
+			AcideMainWindow.getInstance().getConsolePanel().getTextPane()
+					.paste();
 		}
 	}
 }

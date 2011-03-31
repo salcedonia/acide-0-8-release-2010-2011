@@ -29,15 +29,12 @@
  */
 package acide.gui.menuBar.editMenu.listeners;
 
-import acide.gui.menuBar.editMenu.gui.replace.AcideReplaceWindow;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
+import acide.gui.menuBar.editMenu.gui.AcideSearchReplaceWindow;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE edit menu replace menu item listener.
@@ -56,27 +53,19 @@ public class AcideReplaceMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s96"));
+		AcideLog.getLog()
+				.info(AcideLanguageManager.getInstance().getLabels()
+						.getString("s96"));
 
-		if (AcideReplaceWindow.getInstance().isShowing())
-			AcideReplaceWindow.getInstance().setVisible(false);
+		// If the window is already showing
+		if (AcideSearchReplaceWindow.getInstance().isShowing())
+			
+			// Hides it
+			AcideSearchReplaceWindow.getInstance().setVisible(false);
 		else
-			AcideReplaceWindow.getInstance().setVisible(true);
+			
+			// Shows it with the replace configuration
+			AcideSearchReplaceWindow.getInstance().showWindow(true);
 	}
 }

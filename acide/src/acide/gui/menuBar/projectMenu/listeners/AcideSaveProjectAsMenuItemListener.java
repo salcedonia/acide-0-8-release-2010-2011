@@ -136,12 +136,6 @@ public class AcideSaveProjectAsMenuItemListener implements ActionListener {
 									+ AcideProjectConfiguration.getInstance()
 											.getName());
 
-			// Validates the changes in the main window
-			AcideMainWindow.getInstance().validate();
-
-			// Repaint the main window with the new changes
-			AcideMainWindow.getInstance().repaint();
-
 			// Is the first time that the project has been saved
 			AcideProjectConfiguration.getInstance().setFirstSave(true);
 

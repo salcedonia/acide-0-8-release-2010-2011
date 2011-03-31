@@ -31,6 +31,7 @@ package acide.gui.fileEditor.fileEditorPanel.utils;
 
 import acide.configuration.fileEditor.AcideFileEditorConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
+import acide.gui.listeners.AcideWindowClosingListener;
 import acide.gui.mainWindow.AcideMainWindow;
 
 import java.awt.BorderLayout;
@@ -63,6 +64,7 @@ import javax.swing.event.ChangeListener;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
+import acide.process.AcideApplyLexiconProcess;
 
 import acide.utils.PreviewPanel;
 
@@ -203,104 +205,88 @@ public class AcideFileEditorDisplayOptionsWindow extends JFrame {
 
 		if (AcideMainWindow.getInstance().getFileEditorManager()
 				.getNumberOfFileEditorPanels() > 0) {
-			
+
 			// Gets the initial size from the selected file editor
 			_initialSize = AcideMainWindow.getInstance().getFileEditorManager()
 					.getSelectedFileEditorPanel().getActiveTextEditionArea()
 					.getFont().getSize();
-			
+
 			// Gets the initial style from the selected file editor
 			_initialStyle = AcideMainWindow.getInstance()
 					.getFileEditorManager().getSelectedFileEditorPanel()
 					.getActiveTextEditionArea().getFont().getStyle();
-			
+
 			// Gets the initial font name from the selected file editor
 			_initialFontName = AcideMainWindow.getInstance()
 					.getFileEditorManager().getSelectedFileEditorPanel()
 					.getActiveTextEditionArea().getFont().getFamily();
-			
+
 			// Gets the initial foreground color from the selected file editor
 			_initialForegroundColor = AcideMainWindow.getInstance()
 					.getFileEditorManager().getSelectedFileEditorPanel()
 					.getActiveTextEditionArea().getForeground();
-			
+
 			// Gets the initial background color from the selected file editor
 			_initialBackgroundColor = AcideMainWindow.getInstance()
 					.getFileEditorManager().getSelectedFileEditorPanel()
 					.getActiveTextEditionArea().getBackground();
 		}
-		
-		// Disables the main window
-		AcideMainWindow.getInstance().setEnabled(false);
 
-		// Sets the layout
-		setLayout(new BorderLayout());
-
-		// Creates the controls panel
-		_controlsPanel = new JPanel(new GridBagLayout());
-
-		// Sets the controls panel border
-		_controlsPanel.setBorder(BorderFactory
-				.createTitledBorder(AcideLanguageManager.getInstance()
-						.getLabels().getString("s1010")));
-
-		// Creates the button panel
-		_buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-		// Creates the color buttons panel
-		_colorButtonsPanel = new JPanel(new GridBagLayout());
-
-		// Creates the font label
-		_fontLabel = new JLabel(AcideLanguageManager.getInstance().getLabels()
-				.getString("s981"));
-
-		// Creates the font combo box
-		getFontComboBox();
-
-		// Creates the font style label
-		_fontStyleLabel = new JLabel(AcideLanguageManager.getInstance()
-				.getLabels().getString("s983"), JLabel.CENTER);
-
-		// Create the font style combo box
-		getFontStyleComboBox();
-
-		// Creates the size label
-		_sizeLabel = new JLabel(AcideLanguageManager.getInstance().getLabels()
-				.getString("s982"));
-
-		// Creates the size slide
-		createSizeSlider();
-
-		// Creates the foreground color label
-		_foregroundColorLabel = new JLabel(AcideLanguageManager.getInstance()
-				.getLabels().getString("s984"));
-
-		// Creates the foreground color button
-		_foregroundColorButton = new JButton(COLOR_PALETTE_IMAGE);
-
-		// Creates the background color label
-		_backgroundColorLabel = new JLabel(AcideLanguageManager.getInstance()
-				.getLabels().getString("s985"));
-
-		// Creates the background color button
-		_backgroundColorButton = new JButton(COLOR_PALETTE_IMAGE);
-
-		// Creates the accept button
-		_acceptButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s445"));
-
-		// Adds the accept button to the button panel
-		_buttonPanel.add(_acceptButton);
-
-		// Creates the cancel button
-		_cancelButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s446"));
-
-		// Adds the cancel button to the button panel
-		_buttonPanel.add(_cancelButton);
+		// Builds the window components
+		buildComponents();
 
 		// Sets the listeners of the window components
 		setListeners();
+
+		// Adds the components to the window
+		addComponents();
+
+		// Sets the window configuration
+		setWindowConfiguration();
+
+		// Updates the log
+		AcideLog.getLog().info(
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s1042"));
+	}
+
+	/**
+	 * Sets the ACIDE - A Configurable IDE file editor display options window
+	 * configuration.
+	 */
+	private void setWindowConfiguration() {
+
+		// Sets the window title
+		setTitle(AcideLanguageManager.getInstance().getLabels()
+				.getString("s1041"));
+
+		// Sets the window icon image
+		setIconImage(ICON.getImage());
+
+		// The window is not resizable
+		setResizable(false);
+
+		// Packs the window components
+		pack();
+
+		// Centers the window
+		setLocationRelativeTo(null);
+
+		// Sets the window as visible
+		setVisible(true);
+
+		// Disables the main window
+		AcideMainWindow.getInstance().setEnabled(false);
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE file editor display
+	 * options window with the layout.
+	 */
+	private void addComponents() {
+
+		// Sets the layout
+		setLayout(new BorderLayout());
 
 		// Adds the components to the window with the layout
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -386,6 +372,65 @@ public class AcideFileEditorDisplayOptionsWindow extends JFrame {
 		// Adds the controls panel to the window
 		add(_controlsPanel, BorderLayout.NORTH);
 
+		// Adds the preview panel to the window
+		add(_previewPanel, BorderLayout.CENTER);
+
+		// Adds the button panel to the window
+		add(_buttonPanel, BorderLayout.SOUTH);
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE file editor display options window
+	 * components.
+	 */
+	private void buildComponents() {
+
+		// Creates the controls panel
+		_controlsPanel = new JPanel(new GridBagLayout());
+
+		// Sets the controls panel border
+		_controlsPanel.setBorder(BorderFactory
+				.createTitledBorder(AcideLanguageManager.getInstance()
+						.getLabels().getString("s1010")));
+
+		// Creates the color buttons panel
+		_colorButtonsPanel = new JPanel(new GridBagLayout());
+
+		// Creates the font label
+		_fontLabel = new JLabel(AcideLanguageManager.getInstance().getLabels()
+				.getString("s981"));
+
+		// Creates the font combo box
+		getFontComboBox();
+
+		// Creates the font style label
+		_fontStyleLabel = new JLabel(AcideLanguageManager.getInstance()
+				.getLabels().getString("s983"), JLabel.CENTER);
+
+		// Create the font style combo box
+		getFontStyleComboBox();
+
+		// Creates the size label
+		_sizeLabel = new JLabel(AcideLanguageManager.getInstance().getLabels()
+				.getString("s982"));
+
+		// Creates the size slide
+		createSizeSlider();
+
+		// Creates the foreground color label
+		_foregroundColorLabel = new JLabel(AcideLanguageManager.getInstance()
+				.getLabels().getString("s984"));
+
+		// Creates the foreground color button
+		_foregroundColorButton = new JButton(COLOR_PALETTE_IMAGE);
+
+		// Creates the background color label
+		_backgroundColorLabel = new JLabel(AcideLanguageManager.getInstance()
+				.getLabels().getString("s985"));
+
+		// Creates the background color button
+		_backgroundColorButton = new JButton(COLOR_PALETTE_IMAGE);
+
 		// Creates the preview panel
 		_previewPanel = new JPanel();
 
@@ -396,45 +441,42 @@ public class AcideFileEditorDisplayOptionsWindow extends JFrame {
 
 		// Creates a panel where display the fonts
 		_displayArea = new PreviewPanel(_initialFontName, _initialStyle,
-				_initialSize, _initialForegroundColor,
-				_initialBackgroundColor);
+				_initialSize, _initialForegroundColor, _initialBackgroundColor);
 
 		// Adds the display area to the preview panel
 		_previewPanel.add(_displayArea);
 
-		// Adds the preview panel to the window
-		add(_previewPanel, BorderLayout.CENTER);
-
-		// Adds the button panel to the window
-		add(_buttonPanel, BorderLayout.SOUTH);
-
-		// Sets the window title
-		setTitle(AcideLanguageManager.getInstance().getLabels()
-				.getString("s1041"));
-
-		// Sets the window icon image
-		setIconImage(ICON.getImage());
-
-		// The window is not resizable
-		setResizable(false);
-
-		// Packs the window components
-		pack();
-
-		// Sets the window as visible
-		setVisible(true);
-
-		// Centers the window
-		setLocationRelativeTo(null);
-
-		// Updates the log
-		AcideLog.getLog().info(
-				AcideLanguageManager.getInstance().getLabels()
-						.getString("s1042"));
+		// Builds the button panel
+		buildButtonPanel();
 	}
 
 	/**
-	 * Sets the listeners of the window components.
+	 * Builds the ACIDE - A Configurable IDE file editor display options window
+	 * button panel.
+	 */
+	private void buildButtonPanel() {
+
+		// Creates the button panel
+		_buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+		// Creates the accept button
+		_acceptButton = new JButton(AcideLanguageManager.getInstance()
+				.getLabels().getString("s445"));
+
+		// Adds the accept button to the button panel
+		_buttonPanel.add(_acceptButton);
+
+		// Creates the cancel button
+		_cancelButton = new JButton(AcideLanguageManager.getInstance()
+				.getLabels().getString("s446"));
+
+		// Adds the cancel button to the button panel
+		_buttonPanel.add(_cancelButton);
+	}
+
+	/**
+	 * Sets the listeners of the ACIDE - A Configurable IDE file editor display
+	 * options window components.
 	 */
 	public void setListeners() {
 
@@ -466,6 +508,9 @@ public class AcideFileEditorDisplayOptionsWindow extends JFrame {
 
 		// Sets the size slider change listener
 		_sizeSlider.addChangeListener(new SizeSliderListener());
+		
+		// Sets the window closing listener
+		addWindowListener(new AcideWindowClosingListener());
 	}
 
 	/**
@@ -685,15 +730,8 @@ public class AcideFileEditorDisplayOptionsWindow extends JFrame {
 								_displayArea.getBackground(),
 								_displayArea.getForeground());
 
-				// Gets the caret position of the file editor panel
-				int caretPosition = AcideMainWindow.getInstance()
-						.getFileEditorManager().getFileEditorPanelAt(index)
-						.getActiveTextEditionArea().getCaretPosition();
-
-				// Resets the file editor text edition area
-				AcideMainWindow.getInstance().getFileEditorManager()
-						.getFileEditorPanelAt(index)
-						.resetStyledDocument(caretPosition);
+				// Applies the lexicon configuration
+				SwingUtilities.invokeLater(new AcideApplyLexiconProcess());
 			}
 
 			// If it is not the default project
@@ -710,10 +748,10 @@ public class AcideFileEditorDisplayOptionsWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}
@@ -745,10 +783,10 @@ public class AcideFileEditorDisplayOptionsWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}
@@ -777,10 +815,10 @@ public class AcideFileEditorDisplayOptionsWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}

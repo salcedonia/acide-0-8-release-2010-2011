@@ -29,23 +29,18 @@
  */
 package acide.gui.menuBar.helpMenu;
 
-import acide.configuration.menu.AcideMenuConfiguration;
-import acide.gui.menuBar.helpMenu.listeners.AcideShowAboutUsMenuItemListener;
-import acide.gui.menuBar.helpMenu.listeners.AcideShowHelpMenuItemListener;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import acide.resources.AcideResourceManager;
-
+import acide.configuration.menu.AcideMenuConfiguration;
+import acide.gui.menuBar.helpMenu.listeners.AcideShowAboutUsMenuItemListener;
+import acide.gui.menuBar.helpMenu.listeners.AcideShowHelpMenuItemListener;
 import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
 
 /**																
  * ACIDE - A Configurable IDE help menu.											
@@ -105,28 +100,13 @@ public class AcideHelpMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-			
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
 		// SHOW HELP MENU ITEM
-		_showHelpMenuItem.setText(labels.getString("s38"));
+		_showHelpMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s38"));
 		_showHelpMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H,
 				ActionEvent.CTRL_MASK));
 
 		// SHOW ABOUT US MENU ITEM
-		_showAboutUsMenuItem.setText(labels.getString("s39"));
+		_showAboutUsMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s39"));
 	}
 
 	/**

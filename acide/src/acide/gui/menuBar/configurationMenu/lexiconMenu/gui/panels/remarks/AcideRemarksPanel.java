@@ -86,11 +86,11 @@ public class AcideRemarksPanel extends JPanel {
 	/**
 	 * ACIDE - A Configurable IDE remarks panel remark symbol label.
 	 */
-	private final JLabel _remarkSymbolLabel;
+	private JLabel _remarkSymbolLabel;
 	/**
 	 * ACIDE - A Configurable IDE remarks panel remark symbol text field.
 	 */
-	private final JTextField _remarkSymbolTextField;
+	private JTextField _remarkSymbolTextField;
 	/**
 	 * ACIDE - A Configurable IDE remarks panel color frame dialog.
 	 */
@@ -106,37 +106,60 @@ public class AcideRemarksPanel extends JPanel {
 	/**
 	 * ACIDE - A Configurable IDE remarks panel case sensitive label.
 	 */
-	private final JLabel _caseSensitiveLabel;
+	private JLabel _caseSensitiveLabel;
 	/**
 	 * ACIDE - A Configurable IDE remarks panel case sensitive check box.
 	 */
 	private JCheckBox _caseSensitiveCheckBox;
-
+	/**
+	 * ACIDE - A Configurable IDE lexicon configuration window are there changes
+	 * flag.
+	 */
+	private boolean _areThereChanges;
+	
 	/**
 	 * Creates a new ACIDE - A Configurable IDE remarks panel.
 	 */
 	public AcideRemarksPanel(AcideReservedWordsPanel reservedWordsPanel) {
 
-		// Sets the layout
-		setLayout(new GridBagLayout());
-
+		super();
+		
+		// There are no changes yet
+		_areThereChanges = false;
+		
 		// Sets the border
 		setBorder(BorderFactory.createTitledBorder(null, AcideLanguageManager
 				.getInstance().getLabels().getString("s430"),
 				TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION));
 
-		// CASE SENSITIVE LABEL
+		buildComponents(reservedWordsPanel);
+
+		// Sets the listeners of the window components
+		setListeners();
+
+		// Adds the components to the panel
+		addComponents();
+	}
+
+	/**
+	 * Builds the panel components.
+	 * 
+	 * @param reservedWordsPanel reserved words panel.
+	 */
+	private void buildComponents(AcideReservedWordsPanel reservedWordsPanel) {
+		
+		// Creates the case sensitive label
 		_caseSensitiveLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s431"), JLabel.CENTER);
 
-		// CASE SENSITIVE CHECK BOX
+		// Creates the case sensitive check box
 		_caseSensitiveCheckBox = new JCheckBox();
 
-		// PREVIEW LABEL
+		// Creates the preview label
 		_previewLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s392"), JLabel.CENTER);
 
-		// PREVIEW TEXT FIELD
+		// Creates the preview text field
 		_previewTextField = new JTextField();
 
 		// Sets the tool tip text
@@ -173,11 +196,11 @@ public class AcideRemarksPanel extends JPanel {
 						.getRemarksManager().getFontStyle(), reservedWordsPanel
 						.getReservedWordLabel().getFont().getSize()));
 
-		// REMARK SYMBOL LABEL
+		// Creates the remarks symbol label
 		_remarkSymbolLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s433"), JLabel.CENTER);
 
-		// REMARK SYMBOL TEXT FIELD
+		// Creates the remarks symbol text field
 		_remarkSymbolTextField = new JTextField();
 
 		// Sets the remark symbol from configuration
@@ -185,33 +208,33 @@ public class AcideRemarksPanel extends JPanel {
 				.getFileEditorManager().getSelectedFileEditorPanel()
 				.getLexiconConfiguration().getRemarksManager().getSymbol());
 
-		// COLOR PALETTE LABEL
+		// Creates the color palette label
 		_colorPaletteLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s391"), JLabel.CENTER);
 
-		// COLOR PALETTE BUTTON
+		// Creates the color palette button
 		_colorPaletteButton = new JButton(COLOR_PALETTE_IMAGE);
 
-		// FONT TYPE LABEL
+		// Creates the font type label
 		_fontTypeLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s395"), JLabel.CENTER);
 
-		// FONT TYPE COMBO BOX
+		// Creates the font type combo box
 		_fontTypeComboBox = new JComboBox();
 
-		// Adds the plain item
+		// Adds the plain item to the font type combo box
 		_fontTypeComboBox.addItem(AcideLanguageManager.getInstance()
 				.getLabels().getString("s396"));
 
-		// Adds the italic item
+		// Adds the italic item to the font type combo box
 		_fontTypeComboBox.addItem(AcideLanguageManager.getInstance()
 				.getLabels().getString("s398"));
 
-		// Adds the bold item
+		// Adds the bold item to the font type combo box
 		_fontTypeComboBox.addItem(AcideLanguageManager.getInstance()
 				.getLabels().getString("s397"));
 
-		// Adds the bold + italic item
+		// Adds the bold + italic item to the font type combo box
 		_fontTypeComboBox.addItem(AcideLanguageManager.getInstance()
 				.getLabels().getString("s399"));
 
@@ -224,10 +247,16 @@ public class AcideRemarksPanel extends JPanel {
 
 		// Sets the selected item in the combo box
 		setItemFontTypeComboBox();
+	}
 
-		// Sets the listeners of the window components
-		setListeners();
-
+	/**
+	 * Adds the components to the panel with the layout.
+	 */
+	private void addComponents() {
+		
+		// Sets the layout
+		setLayout(new GridBagLayout());
+		
 		// Adds the components to the panel with the layout
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.NONE;
@@ -358,6 +387,25 @@ public class AcideRemarksPanel extends JPanel {
 	}
 
 	/**
+	 * Returns the are there changes flag.
+	 * 
+	 * @return the are there changes flag.
+	 */
+	public boolean getAreThereChanges() {
+		return _areThereChanges;
+	}
+
+	/**
+	 * Sets a new value to the are there changes flag.
+	 * 
+	 * @param areThereChanges
+	 *            new value to set.
+	 */
+	public void setAreThereChanges(boolean areThereChanges) {
+		_areThereChanges = areThereChanges;
+	}
+	
+	/**
 	 * ACIDE - A Configurable IDE remarks panel color palette button action
 	 * listener.
 	 * 
@@ -385,6 +433,9 @@ public class AcideRemarksPanel extends JPanel {
 
 				// Updates the preview text color
 				_previewTextField.setForeground(color);
+				
+				// There are changes in the panel
+				_areThereChanges = true;
 			}
 		}
 	}
@@ -425,10 +476,14 @@ public class AcideRemarksPanel extends JPanel {
 		 */
 		@Override
 		public void keyReleased(KeyEvent keyEvent) {
+			
 			_previewTextField.setText(_remarkSymbolTextField.getText()
 					+ " "
 					+ AcideLanguageManager.getInstance().getLabels()
 							.getString("s444"));
+			
+			// There are changes in the panel
+			_areThereChanges = true;
 		}
 	}
 
@@ -489,6 +544,9 @@ public class AcideRemarksPanel extends JPanel {
 						+ " "
 						+ AcideLanguageManager.getInstance().getLabels()
 								.getString("s444"));
+			
+			// There are changes in the panel
+			_areThereChanges = true;
 		}
 	}
 }

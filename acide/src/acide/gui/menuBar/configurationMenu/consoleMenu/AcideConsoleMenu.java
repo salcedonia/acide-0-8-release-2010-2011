@@ -29,19 +29,15 @@
  */
 package acide.gui.menuBar.configurationMenu.consoleMenu;
 
-import java.util.ResourceBundle;
-
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 import acide.configuration.menu.AcideMenuConfiguration;
 import acide.gui.menuBar.configurationMenu.consoleMenu.listeners.AcideConfigureMenuItemListener;
-import acide.gui.menuBar.configurationMenu.consoleMenu.listeners.AcideExternalCommandMenuItemListener;
 import acide.gui.menuBar.configurationMenu.consoleMenu.listeners.AcideConsoleDisplayOptionsMenuItemListener;
+import acide.gui.menuBar.configurationMenu.consoleMenu.listeners.AcideExternalCommandMenuItemListener;
+import acide.language.AcideLanguageManager;
 
 /**
  * ACIDE - A Configurable IDE console menu.
@@ -106,10 +102,10 @@ public class AcideConsoleMenu extends JMenu {
 
 		// CONFIGURE MENU ITEM
 		_configureMenuItem = new JMenuItem(CONFIGURE_IMAGE);
-		
+
 		// EXTERNAL COMMAND MENU ITEM
 		_externalCommandMenuItem = new JMenuItem(EXTERNAL_COMMAND_IMAGE);
-		
+
 		// CONSOLE DISPLAY MENU ITEM
 		_consoleDisplayOptionsMenuItem = new JMenuItem(
 				CONSOLE_DISPLAY_OPTIONS_IMAGE);
@@ -124,30 +120,17 @@ public class AcideConsoleMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		// CONFIGURE MENU ITEM
-		_configureMenuItem.setText(labels.getString("s333"));
+		_configureMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s333"));
 
 		// EXTERNAL COMMAND MENU ITEM
-		_externalCommandMenuItem.setText(labels.getString("s341"));
+		_externalCommandMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s341"));
 
 		// CONSOLE DISPLAY OPTIONS MENU ITEM
-		_consoleDisplayOptionsMenuItem.setText(labels.getString("s977"));
+		_consoleDisplayOptionsMenuItem.setText(AcideLanguageManager
+				.getInstance().getLabels().getString("s977"));
 	}
 
 	/**
@@ -195,8 +178,8 @@ public class AcideConsoleMenu extends JMenu {
 	 * Returns the ACIDE - A Configurable IDE console menu external command menu
 	 * item.
 	 * 
-	 * @return the ACIDE - A Configurable IDE console menu external command menu
-	 *         item.
+	 * @return the ACIDE - A Configurable IDE console menu external command menu.
+	 *         item
 	 */
 	public JMenuItem getExternalCommandMenuItem() {
 		return _externalCommandMenuItem;

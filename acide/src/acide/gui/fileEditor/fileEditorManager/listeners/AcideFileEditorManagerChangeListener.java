@@ -29,8 +29,6 @@
  */
 package acide.gui.fileEditor.fileEditorManager.listeners;
 
-import acide.gui.mainWindow.AcideMainWindow;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.event.ChangeEvent;
@@ -40,14 +38,24 @@ import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Utilities;
 
+import acide.configuration.project.AcideProjectConfiguration;
+import acide.gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
+import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 
 /**
+ * <p>
  * ACIDE - A Configurable IDE file editor manager change listener.
- * 
- * Implements the actions taken when the active tab has changed in the tabbed
+ * <p>
+ * <p>
+ * Implements the actions taken when the index tab has changed in the tabbed
  * pane.
+ * </p>
+ * <p>
+ * NOTE: It does not capture the closing tab events. There is not such a thing,
+ * except in the action listener of the closing buttons in the tabbed pane.
+ * </p>
  * 
  * @version 0.8
  * @see ChangeListener
@@ -73,21 +81,22 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 			return;
 
 		// Updates the menu bar
-		updateMenuBar(tabbedPane.getSelectedIndex());
+		updateMenuBar(tabbedPane);
 
-		// Updates the status bar with the new info
-		updateStatusBar(tabbedPane.getSelectedIndex());
+		// Updates the status bar
+		updateStatusBar(tabbedPane);
 	}
+
 
 	/**
 	 * Updates the menu bar depending on the number of opened file editors.
 	 * 
-	 * @param selectedIndex
-	 *            selected tab index in the tabbed pane.
+	 * @param tabbedPane
+	 *            tabbed pane.
 	 */
-	private void updateMenuBar(int selectedIndex) {
+	private void updateMenuBar(JTabbedPane tabbedPane) {
 
-		if (selectedIndex == -1) {
+		if (tabbedPane.getSelectedIndex() == -1) {
 
 			// Disables the file menu
 			AcideMainWindow.getInstance().getMenu().disableFileMenu();
@@ -119,23 +128,131 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
 					.getGrammarMenu().setEnabled(true);
 
-			// If the current grammar configuration is lastModified or newGrammar
-			if (AcideMainWindow.getInstance().getFileEditorManager()
-					.getFileEditorPanelAt(selectedIndex)
-					.getCurrentGrammarConfiguration().getName()
-					.matches("newGrammar")
-					|| AcideMainWindow.getInstance().getFileEditorManager()
-							.getFileEditorPanelAt(selectedIndex)
-							.getCurrentGrammarConfiguration().getName()
-							.matches("lastModified"))
+			// Gets the selected file editor panel
+			AcideFileEditorPanel selectedFileEditorPanel = (AcideFileEditorPanel) tabbedPane
+					.getSelectedComponent();
+
+			// If the current grammar configuration is lastModified or
+			// newGrammar
+			if (selectedFileEditorPanel.getCurrentGrammarConfiguration()
+					.getName().matches("newGrammar")
+					|| selectedFileEditorPanel.getCurrentGrammarConfiguration()
+							.getName().matches("lastModified"))
 
 				// Enables the save grammar menu
 				AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
-						.getGrammarMenu().getSaveGrammarMenuItem().setEnabled(true);
+						.getGrammarMenu().getSaveGrammarMenuItem()
+						.setEnabled(true);
 			else
 				// Disables the save grammar menu
 				AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
-						.getGrammarMenu().getSaveGrammarMenuItem().setEnabled(false);
+						.getGrammarMenu().getSaveGrammarMenuItem()
+						.setEnabled(false);
+		}
+
+		// Updates the project menu
+		updateProjectMenu(tabbedPane);
+	}
+
+	/**
+	 * Updates the project menu in the menu bar.
+	 */
+	private void updateProjectMenu(JTabbedPane tabbedPane) {
+
+		// Disables the remove file menu item
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getRemoveFileMenuItem().setEnabled(false);
+
+		// Disables the delete file menu item
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getDeleteFileMenuItem().setEnabled(false);
+
+		// Disables the set compilable menu item
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getSetCompilableFileMenuItem().setEnabled(false);
+
+		// Disables the unset compilable menu item
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getUnsetCompilableFileMenuItem().setEnabled(false);
+
+		// Disables the set main menu item
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getSetMainFileMenuItem().setEnabled(false);
+
+		// Disables the unset main menu item
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getUnsetMainFileMenuItem().setEnabled(false);
+
+		// If there are opened file editors
+		if (tabbedPane.getSelectedIndex() != -1) {
+
+			// Gets the selected file editor panel
+			AcideFileEditorPanel selectedFileEditorPanel = AcideMainWindow
+					.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel();
+
+			// If it is not the NEW FILE or the LOG TAB
+			if (!AcideMainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().isNewFile()
+					&& !AcideMainWindow.getInstance().getFileEditorManager()
+							.getSelectedFileEditorPanel().isLogFile()) {
+
+				if (!selectedFileEditorPanel.isMainFile())
+					// Enables the set main menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getSetMainFileMenuItem().setEnabled(true);
+				if (selectedFileEditorPanel.isMainFile())
+					// Enables the unset main menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getUnsetMainFileMenuItem().setEnabled(true);
+				if (!selectedFileEditorPanel.isCompilableFile()
+						|| (selectedFileEditorPanel.isCompilableFile() && selectedFileEditorPanel
+								.isMainFile()))
+					// Enables the set compilable menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getSetCompilableFileMenuItem().setEnabled(true);
+				if (selectedFileEditorPanel.isCompilableFile()
+						&& !selectedFileEditorPanel.isMainFile())
+					// Enables the unset compilable menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getUnsetCompilableFileMenuItem().setEnabled(true);
+
+				// Gets the file editor panel absolute path
+				String fileAbsolutePath = AcideMainWindow
+						.getInstance()
+						.getFileEditorManager()
+						.getFileEditorPanelAt(
+								AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getSelectedFileEditorPanelIndex())
+						.getAbsolutePath();
+
+				// Searches for the file in the project configuration list
+				int fileProjectIndex = AcideProjectConfiguration.getInstance()
+						.getIndexOfFile(fileAbsolutePath);
+
+				// If belongs to the project configuration
+				if (fileProjectIndex != -1) {
+
+					// Enables the delete file menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getDeleteFileMenuItem().setEnabled(true);
+
+					// Enables the remove file menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getRemoveFileMenuItem().setEnabled(true);
+
+				} else {
+
+					// Disables the remove file menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getRemoveFileMenuItem().setEnabled(false);
+
+					// Enables the delete file menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getDeleteFileMenuItem().setEnabled(false);
+				}
+			}
 		}
 	}
 
@@ -143,17 +260,19 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 	 * Updates the number of lines and the line and column message in the status
 	 * bar.
 	 * 
-	 * @param selectedTabIndex
-	 *            selected tab index in the tabbed pane.
+	 * @param tabbedPane
+	 *            tabbed pane.
 	 */
-	public void updateStatusBar(int selectedTabIndex) {
+	public void updateStatusBar(JTabbedPane tabbedPane) {
 
-		if (selectedTabIndex != -1) {
+		if (tabbedPane.getSelectedIndex() != -1) {
+
+			// Gets the selected file editor panel
+			AcideFileEditorPanel selectedFileEditorPanel = (AcideFileEditorPanel) tabbedPane
+					.getSelectedComponent();
 
 			// Gets the active text edition area
-			JTextPane activeTextPane = AcideMainWindow.getInstance()
-					.getFileEditorManager()
-					.getFileEditorPanelAt(selectedTabIndex)
+			JTextPane activeTextPane = selectedFileEditorPanel
 					.getActiveTextEditionArea();
 
 			// Gets the line of the caret position
@@ -197,11 +316,7 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 							AcideLanguageManager.getInstance().getLabels()
 									.getString("s449")
 									+ " "
-									+ AcideMainWindow
-											.getInstance()
-											.getFileEditorManager()
-											.getFileEditorPanelAt(
-													selectedTabIndex)
+									+ selectedFileEditorPanel
 											.getLexiconConfiguration()
 											.getName());
 
@@ -213,11 +328,7 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 							AcideLanguageManager.getInstance().getLabels()
 									.getString("s248")
 									+ " "
-									+ AcideMainWindow
-											.getInstance()
-											.getFileEditorManager()
-											.getFileEditorPanelAt(
-													selectedTabIndex)
+									+ selectedFileEditorPanel
 											.getCurrentGrammarConfiguration()
 											.getName());
 

@@ -72,12 +72,19 @@ public class AcideLogTab {
 
 			// TODO: Load the predefined extension
 
-			// Creates the grammar configuration
-			AcideGrammarConfiguration grammarConfiguration = new AcideGrammarConfiguration();
+			// Creates the current grammar configuration
+			AcideGrammarConfiguration currentGrammarConfiguration = new AcideGrammarConfiguration();
 
-			// Sets the grammar configuration path
-			grammarConfiguration
-					.setPath(AcideGrammarConfiguration.DEFAULT_PATH);
+			// Sets the current grammar configuration path
+			currentGrammarConfiguration
+					.setPath(AcideGrammarConfiguration.DEFAULT_FILE);
+
+			// Creates the previous grammar configuration
+			AcideGrammarConfiguration previousGrammarConfiguration = new AcideGrammarConfiguration();
+
+			// Sets the previous grammar configuration path
+			previousGrammarConfiguration
+					.setPath(AcideGrammarConfiguration.DEFAULT_FILE);
 
 			// Updates the tabbed pane in the file editor manager
 			AcideMainWindow
@@ -85,7 +92,8 @@ public class AcideLogTab {
 					.getFileEditorManager()
 					.updatesTabbedPane("Log", _logFileContent, false,
 							AcideProjectFileType.NORMAL, 0, 0, 1,
-							lexiconConfiguration, grammarConfiguration);
+							lexiconConfiguration, currentGrammarConfiguration,
+							previousGrammarConfiguration);
 		}
 	}
 

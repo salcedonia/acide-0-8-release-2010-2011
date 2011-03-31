@@ -78,12 +78,6 @@ public class AcideSaveGrammarMenuItemListener implements ActionListener {
 					.getSelectedFileEditorPanel()
 					.getCurrentGrammarConfiguration()
 					.setPath(previousGrammarConfiguration);
-
-			// Updates the previous grammar configuration path
-			AcideMainWindow.getInstance().getFileEditorManager()
-					.getSelectedFileEditorPanel()
-					.getPreviousGrammarConfiguration()
-					.setPath(currentGrammarConfiguration);
 			
 			// Disables the save grammar menu item
 			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
@@ -112,7 +106,7 @@ public class AcideSaveGrammarMenuItemListener implements ActionListener {
 
 		} catch (Exception exception) {
 
-			// Error message
+			// Displays an error message
 			JOptionPane.showMessageDialog(
 					null,
 					exception.getMessage(),

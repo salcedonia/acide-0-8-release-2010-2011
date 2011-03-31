@@ -29,18 +29,13 @@
  */
 package acide.gui.menuBar.configurationMenu.fileEditor;
 
-import acide.configuration.menu.AcideMenuConfiguration;
-import acide.gui.menuBar.configurationMenu.fileEditor.listeners.AcideFileEditorDisplayOptionsMenuItemListener;
-
-import java.util.ResourceBundle;
-
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import acide.configuration.menu.AcideMenuConfiguration;
+import acide.gui.menuBar.configurationMenu.fileEditor.listeners.AcideFileEditorDisplayOptionsMenuItemListener;
 import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE file editor menu.
@@ -66,7 +61,8 @@ public class AcideFileEditorMenu extends JMenu {
 	private final static ImageIcon CONSOLE_DISPLAY_OPTIONS_IMAGE = new ImageIcon(
 			"./resources/icons/menu/configuration/fileEditor/fileEditorDisplayOptions.png");
 	/**
-	 * ACIDE - A Configurable IDE file editor menu file editor display options menu item.
+	 * ACIDE - A Configurable IDE file editor menu file editor display options
+	 * menu item.
 	 */
 	private JMenuItem _fileEditorDisplayOptionsMenuItem;
 
@@ -76,36 +72,22 @@ public class AcideFileEditorMenu extends JMenu {
 	public AcideFileEditorMenu() {
 
 		// FILE EDITOR DISPLAY OPTIONS MENU ITEM
-		_fileEditorDisplayOptionsMenuItem = new JMenuItem(CONSOLE_DISPLAY_OPTIONS_IMAGE);
+		_fileEditorDisplayOptionsMenuItem = new JMenuItem(
+				CONSOLE_DISPLAY_OPTIONS_IMAGE);
 
 		// Sets the text of the file editor menu components
 		setTextOfMenuComponets();
 	}
 
 	/**
-	 * Sets the text of the ACIDE - A Configurable IDE file editor menu components
-	 * with the labels in the selected language to display.
+	 * Sets the text of the ACIDE - A Configurable IDE file editor menu
+	 * components with the labels in the selected language to display.
 	 */
 	public void setTextOfMenuComponets() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		// FILE EDITOR DISPLAY OPTIONS
-		_fileEditorDisplayOptionsMenuItem.setText(labels.getString("s1041"));
+		_fileEditorDisplayOptionsMenuItem.setText(AcideLanguageManager
+				.getInstance().getLabels().getString("s1041"));
 	}
 
 	/**

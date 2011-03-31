@@ -66,6 +66,7 @@ import acide.log.AcideLog;
 import acide.resources.AcideResourceManager;
 import acide.configuration.toolBar.consoleComandToolBar.AcideConsoleCommand;
 import acide.configuration.toolBar.consoleComandToolBar.AcideConsoleCommandConfiguration;
+import acide.gui.listeners.AcideWindowClosingListener;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.utils.AcideComboBoxTableCellEditor;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.utils.AcideComboBoxTableCellRenderer;
@@ -168,103 +169,24 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s132"));
 
-		// Sets the layout
-		setLayout(new GridBagLayout());
-
-		// Disables the main window
-		AcideMainWindow.getInstance().setEnabled(false);
-
-		// Creates the table panel
-		_tablePanel = new JPanel(new BorderLayout());
-
-		// Creates the button panel
-		_buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-		// Creates the table buttons panel
-		_tableButtonsPanel = new JPanel(new GridBagLayout());
-
-		// Creates the add button
-		_addButton = new JButton(AcideLanguageManager.getInstance().getLabels()
-				.getString("s137"));
-
-		// Sets the add button tool tip text
-		_addButton.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s138"));
-
-		// Creates the quit button
-		_quitButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s148"));
-
-		// Sets the quit button tool tip text
-		_quitButton.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s149"));
-
-		// Adds the components to the window with the layout
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.gridy = 0;
-		constraints.gridwidth = 1;
-		constraints.ipadx = 0;
-		constraints.ipady = 0;
-		constraints.insets = new Insets(5, 5, 5, 5);
-
-		// Adds the add button to the table buttons panel
-		_tableButtonsPanel.add(_addButton, constraints);
-
-		constraints.gridx = 1;
-
-		// Adds the quit button to the table buttons panel
-		_tableButtonsPanel.add(_quitButton, constraints);
-
-		// Creates the table
-		buildTable();
-
-		// Creates the accept button
-		_acceptButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s154"));
-
-		// Sets the accept button tool tip text
-		_acceptButton.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s155"));
-
-		// Creates the cancel button
-		_cancelButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s162"));
-
-		// Sets the cancel button tool tip text
-		_cancelButton.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s163"));
+		// Builds the window components
+		buildComponents();
+		
+		// Adds the components to the window
+		addComponents();
 
 		// Sets the action listeners of the window componens
 		setListeners();
+		
+		// Sets the window configuration
+		setWindowConfiguration();
+	}
 
-		// Adds the panels to the frame with the layout
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.insets = new Insets(5, 5, 5, 5);
-		constraints.ipadx = 0;
-		constraints.ipady = 0;
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.gridwidth = 1;
-
-		// Adds the table buttons panel to the window
-		add(_tableButtonsPanel, constraints);
-
-		constraints.gridy = 1;
-
-		// Adds the table panel to the window
-		add(_tablePanel, constraints);
-
-		// Adds the accept button to the button panel
-		_buttonPanel.add(_acceptButton);
-
-		// Adds the cancel button to the button panel
-		_buttonPanel.add(_cancelButton);
-
-		constraints.gridy = 2;
-
-		// Adds the button panel to the window
-		add(_buttonPanel, constraints);
+	/**
+	 * Sets the ACIDE - A Configurable IDE tool bar configuration window
+	 * configuration.
+	 */
+	private void setWindowConfiguration() {
 
 		// If the window is used for modifying the tool bar configuration
 		if (_forModifying) {
@@ -295,7 +217,7 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 
 			} catch (Exception exception) {
 
-				// Error message
+				// Displays an error message
 				JOptionPane.showMessageDialog(null, exception.getMessage(),
 						AcideLanguageManager.getInstance().getLabels()
 								.getString("s295"), JOptionPane.ERROR_MESSAGE);
@@ -322,7 +244,7 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 
 			} catch (Exception exception) {
 
-				// Error message
+				// Displays an error message
 				JOptionPane.showMessageDialog(null, exception.getMessage(),
 						AcideLanguageManager.getInstance().getLabels()
 								.getString("s269"), JOptionPane.ERROR_MESSAGE);
@@ -356,10 +278,118 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 		// Shows the window
 		setVisible(true);
 
+		// Disables the main window
+		AcideMainWindow.getInstance().setEnabled(false);
+
 		// Updates the log
 		AcideLog.getLog().info(
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s207"));
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE tool bar
+	 * configuration window with the layout.
+	 */
+	private void addComponents() {
+
+		// Sets the layout
+		setLayout(new GridBagLayout());
+
+		// Adds the components to the window with the layout
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		constraints.ipadx = 0;
+		constraints.ipady = 0;
+		constraints.insets = new Insets(5, 5, 5, 5);
+
+		// Adds the add button to the table buttons panel
+		_tableButtonsPanel.add(_addButton, constraints);
+
+		constraints.gridx = 1;
+
+		// Adds the quit button to the table buttons panel
+		_tableButtonsPanel.add(_quitButton, constraints);
+
+		// Creates the table
+		buildTable();
+
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.insets = new Insets(5, 5, 5, 5);
+		constraints.ipadx = 0;
+		constraints.ipady = 0;
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+
+		// Adds the table buttons panel to the window
+		add(_tableButtonsPanel, constraints);
+
+		constraints.gridy = 1;
+
+		// Adds the table panel to the window
+		add(_tablePanel, constraints);
+
+		constraints.gridy = 2;
+
+		// Adds the button panel to the window
+		add(_buttonPanel, constraints);
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE tool bar configuration window
+	 * components.
+	 */
+	private void buildComponents() {
+
+		// Creates the table panel
+		_tablePanel = new JPanel(new BorderLayout());
+
+		// Creates the button panel
+		_buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+		// Creates the table buttons panel
+		_tableButtonsPanel = new JPanel(new GridBagLayout());
+
+		// Creates the add button
+		_addButton = new JButton(AcideLanguageManager.getInstance().getLabels()
+				.getString("s137"));
+
+		// Sets the add button tool tip text
+		_addButton.setToolTipText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s138"));
+
+		// Creates the quit button
+		_quitButton = new JButton(AcideLanguageManager.getInstance()
+				.getLabels().getString("s148"));
+
+		// Sets the quit button tool tip text
+		_quitButton.setToolTipText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s149"));
+		
+		// Creates the accept button
+		_acceptButton = new JButton(AcideLanguageManager.getInstance()
+				.getLabels().getString("s154"));
+
+		// Sets the accept button tool tip text
+		_acceptButton.setToolTipText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s155"));
+
+		// Creates the cancel button
+		_cancelButton = new JButton(AcideLanguageManager.getInstance()
+				.getLabels().getString("s162"));
+
+		// Sets the cancel button tool tip text
+		_cancelButton.setToolTipText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s163"));
+		
+		// Adds the accept button to the button panel
+		_buttonPanel.add(_acceptButton);
+
+		// Adds the cancel button to the button panel
+		_buttonPanel.add(_cancelButton);
 	}
 
 	/**
@@ -411,7 +441,8 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 	}
 
 	/**
-	 * Sets the listeners of the window components.
+	 * Sets the listeners of the ACIDE - A Configurable IDE tool bar
+	 * configuration window components.
 	 */
 	private void setListeners() {
 
@@ -436,6 +467,9 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 
 		// Sets the table mouse listener
 		_table.addMouseListener(new TableMouseListener());
+
+		// Sets the window closing listener
+		addWindowListener(new AcideWindowClosingListener());
 	}
 
 	/**
@@ -735,7 +769,7 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 
 					} catch (Exception exception) {
 
-						// Error message
+						// Displays an error message
 						JOptionPane.showMessageDialog(null,
 								exception.getMessage(),
 								AcideLanguageManager.getInstance().getLabels()
@@ -869,7 +903,7 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 				_areThereChanges = true;
 			} else {
 
-				// Error message
+				// Displays an error message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
 						.getInstance().getLabels().getString("s156"),
 						AcideLanguageManager.getInstance().getLabels()

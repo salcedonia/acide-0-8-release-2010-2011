@@ -31,16 +31,12 @@ package acide.gui.menuBar.projectMenu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 import acide.configuration.menu.AcideMenuConfiguration;
 import acide.gui.menuBar.projectMenu.listeners.AcideAddFileMenuItemListener;
 import acide.gui.menuBar.projectMenu.listeners.AcideAddFolderMenuItemListener;
@@ -59,6 +55,7 @@ import acide.gui.menuBar.projectMenu.listeners.AcideSetCompilableFileMenuItemLis
 import acide.gui.menuBar.projectMenu.listeners.AcideSetMainFileMenuItemListener;
 import acide.gui.menuBar.projectMenu.listeners.AcideUnsetCompilableFileMenuItemListener;
 import acide.gui.menuBar.projectMenu.listeners.AcideUnsetMainFileMenuItemListener;
+import acide.language.AcideLanguageManager;
 
 /**																
  * ACIDE - A Configurable IDE project menu.											
@@ -343,83 +340,69 @@ public class AcideProjectMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-		
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-			
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
+		// Disables the menu
 		disableMenu();
 
 		// NEW PROJECT MENU ITEM
-		_newProjectMenuItem.setText(labels.getString("s14"));
+		_newProjectMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s14"));
 		_newProjectMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
 				ActionEvent.ALT_MASK + ActionEvent.SHIFT_MASK));
 
 		// OPEN PROJECT MENU ITEM
-		_openProjectMenuItem.setText(labels.getString("s15"));
+		_openProjectMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s15"));
 		_openProjectMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
 				ActionEvent.ALT_MASK + ActionEvent.SHIFT_MASK));
 
 		// SAVE PROJECT MENU ITEM
-		_saveProjectMenuItem.setText(labels.getString("s16"));
+		_saveProjectMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s16"));
 		_saveProjectMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				ActionEvent.ALT_MASK + ActionEvent.SHIFT_MASK));
 
 		// NEW PROJECT FILE MENU ITEM
-		_newProjectFileMenuItem.setText(labels.getString("s947"));
+		_newProjectFileMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s947"));
 
 		// ADD FILE MENU ITEM
-		_addFileMenuItem.setText(labels.getString("s17"));
+		_addFileMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s17"));
 		_addFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
 				ActionEvent.ALT_MASK + ActionEvent.SHIFT_MASK));
 
 		// REMOVE FILE MENU ITEM
-		_removeFileMenuItem.setText(labels.getString("s218"));
+		_removeFileMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s218"));
 
 		// DELETE FILE MENU ITEM
-		_deleteFileMenuItem.setText(labels.getString("s950"));
+		_deleteFileMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s950"));
 
 		// ADD FOLDER MENU ITEM
-		_addFolderMenuItem.setText(labels.getString("s219"));
+		_addFolderMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s219"));
 
 		// REMOVE FOLDER MENU ITEM
-		_removeFolderMenuItem.setText(labels.getString("s220"));
+		_removeFolderMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s220"));
 
 		// SAVE AS PROJECT MENU ITEM
-		_saveProjectAsMenuItem.setText(labels.getString("s926"));
+		_saveProjectAsMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s926"));
 
 		// CLOSE PROJECT MENU ITEM
-		_closeProjectMenuItem.setText(labels.getString("s228"));
+		_closeProjectMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s228"));
 
 		// SET COMPILABLE MENU ITEM
-		_setCompilableFileMenuItem.setText(labels.getString("s254"));
+		_setCompilableFileMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s254"));
 
 		// UNSET COMPILABLE MENU ITEM
-		_unsetCompilableFileMenuItem.setText(labels.getString("s255"));
+		_unsetCompilableFileMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s255"));
 
 		// SET MAIN MENU ITEM
-		_setMainFileMenuItem.setText(labels.getString("s256"));
+		_setMainFileMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s256"));
 
 		// UNSET MAIN MENU ITEM
-		_unsetMainFileMenuItem.setText(labels.getString("s952"));
+		_unsetMainFileMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s952"));
 
 		// COMPILE MENU ITEM
-		_compileMenuItem.setText(labels.getString("s18"));
+		_compileMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s18"));
 		_compileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
 				ActionEvent.ALT_MASK));
 
 		// EXECUTE MENU ITEM
-		_executeMenuItem.setText(labels.getString("s19"));
+		_executeMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s19"));
 		_executeMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
 				ActionEvent.ALT_MASK));
 	}
@@ -760,29 +743,29 @@ public class AcideProjectMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE project menu set compilable menu item.
+	 * Returns the ACIDE - A Configurable IDE project menu set compilable file menu item.
 	 * 
-	 * @return the ACIDE - A Configurable IDE project menu set compilable menu item.
+	 * @return the ACIDE - A Configurable IDE project menu set compilable file menu item.
 	 */
-	public JMenuItem getSetCompilableMenuItem() {
+	public JMenuItem getSetCompilableFileMenuItem() {
 		return _setCompilableFileMenuItem;
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE project menu set main menu item.
+	 * Returns the ACIDE - A Configurable IDE project menu set main file menu item.
 	 * 
-	 * @return the ACIDE - A Configurable IDE project menu set main menu item.
+	 * @return the ACIDE - A Configurable IDE project menu set main file menu item.
 	 */
-	public JMenuItem getSetMainMenuItem() {
+	public JMenuItem getSetMainFileMenuItem() {
 		return _setMainFileMenuItem;
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE project menu unset compilable menu item.
+	 * Returns the ACIDE - A Configurable IDE project menu unset compilable file menu item.
 	 * 
-	 * @return the ACIDE - A Configurable IDE project menu unset compilable menu item.
+	 * @return the ACIDE - A Configurable IDE project menu unset compilable file menu item.
 	 */
-	public JMenuItem getUnsetCompilableMenuItem() {
+	public JMenuItem getUnsetCompilableFileMenuItem() {
 		return _unsetCompilableFileMenuItem;
 	}
 
@@ -805,11 +788,11 @@ public class AcideProjectMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE project menu unset main menu item.
+	 * Returns the ACIDE - A Configurable IDE project menu unset main file menu item.
 	 * 
-	 * @return the ACIDE - A Configurable IDE project menu unset main menu item.
+	 * @return the ACIDE - A Configurable IDE project menu unset main file menu item.
 	 */
-	public JMenuItem getUnsetMainMenuItem() {
+	public JMenuItem getUnsetMainFileMenuItem() {
 		return _unsetMainFileMenuItem;
 	}
 }

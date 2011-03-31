@@ -74,7 +74,7 @@ public class AcideExplorerPanelKeyboardListener extends KeyAdapter {
 			AcideProjectFile currentProjectFile = (AcideProjectFile) currentNode
 					.getUserObject();
 
-			// Sets the focus on the selected file at the editor
+			// Selects the file editor
 			for (int index = 0; index < AcideMainWindow.getInstance()
 					.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
 
@@ -88,12 +88,6 @@ public class AcideExplorerPanelKeyboardListener extends KeyAdapter {
 							.setSelectedFileEditorPanelAt(index);
 				}
 			}
-
-			// Validates the main window
-			AcideMainWindow.getInstance().validate();
-
-			// Repaints the main window
-			AcideMainWindow.getInstance().repaint();
 		}
 	}
 
@@ -107,7 +101,7 @@ public class AcideExplorerPanelKeyboardListener extends KeyAdapter {
 
 		switch (keyEvent.getKeyCode()) {
 
-		// NOW THE SELECTED ELEMENT IS THE PREVIOUS IN THE TREE
+		// The next selected element will be the previous node in the tree
 		case KeyEvent.VK_UP:
 			setFocusEditorFile(AcideMainWindow
 					.getInstance()
@@ -118,7 +112,7 @@ public class AcideExplorerPanelKeyboardListener extends KeyAdapter {
 									.getTree().getLeadSelectionRow() - 1));
 			break;
 
-		// NOW THE SELECTED ELEMENT IS THE NEXT IN THE TREE
+		// The next selected element will be the next node in the tree
 		case KeyEvent.VK_DOWN:
 			setFocusEditorFile(AcideMainWindow
 					.getInstance()
@@ -129,7 +123,7 @@ public class AcideExplorerPanelKeyboardListener extends KeyAdapter {
 									.getTree().getLeadSelectionRow() + 1));
 			break;
 
-		// THE SELECTED ELEMENT IS THE ACTUAL
+		// The next selected element is the current one
 		case KeyEvent.VK_ENTER:
 			setFocusEditorFile(AcideMainWindow.getInstance().getExplorerPanel()
 					.getTree().getSelectionPath());

@@ -29,17 +29,12 @@
  */
 package acide.gui.fileEditor.fileEditorManager.utils.logic.closeButton.listeners;
 
-import acide.configuration.project.AcideProjectConfiguration;
-import acide.gui.fileEditor.fileEditorManager.utils.logic.closeButton.AcideFileEditorCloseButton;
-import acide.gui.mainWindow.AcideMainWindow;
-
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
-import javax.swing.JOptionPane;
 import javax.swing.plaf.UIResource;
 
-import acide.language.AcideLanguageManager;
+import acide.gui.mainWindow.AcideMainWindow;
 
 /**
  * ACIDE - A Configurable IDE file editor close button action listener.
@@ -67,7 +62,10 @@ public class AcideFileEditorCloseButtonActionListener extends AbstractAction {
 	 *            close button editor index.
 	 */
 	public AcideFileEditorCloseButtonActionListener(int index) {
+		
 		super();
+		
+		// Stores the button index
 		_index = index;
 	}
 
@@ -80,167 +78,7 @@ public class AcideFileEditorCloseButtonActionListener extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		boolean isCancelOption = false;
-
-		// Is the file modified?
-		if (AcideMainWindow.getInstance().getFileEditorManager()
-				.isRedButton(_index)) {
-
-			// Asks the user if he wants to save it
-			int returnValue = JOptionPane.showConfirmDialog(
-					null,
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s643"), AcideLanguageManager
-							.getInstance().getLabels().getString("s994"),
-					JOptionPane.YES_NO_CANCEL_OPTION);
-
-			// If OK
-			if (returnValue == JOptionPane.OK_OPTION) {
-
-				// Saves the file
-				AcideMainWindow.getInstance().getMenu().getFileMenu()
-						.saveFile(_index);
-
-				// If it is not the default project
-				if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
-
-					// Sets opened to false to the project file
-					for (int index = 0; index < AcideProjectConfiguration
-							.getInstance().getFileListSize(); index++) {
-
-						if (AcideProjectConfiguration
-								.getInstance()
-								.getFileAt(index)
-								.getAbsolutePath()
-								.equals(AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.getFileEditorPanelAt(_index)
-										.getAbsolutePath())) {
-							AcideProjectConfiguration.getInstance()
-									.getFileAt(index).setIsOpened(false);
-						}
-					}
-
-					// Sets the project to modified
-					AcideProjectConfiguration.getInstance().setIsModified(true);
-				}
-
-			} else if (returnValue == JOptionPane.NO_OPTION) {
-
-				// If it is not the default project
-				if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
-
-					// Sets opened to false to the project file
-					for (int index = 0; index < AcideProjectConfiguration
-							.getInstance().getFileListSize(); index++) {
-
-						if (AcideProjectConfiguration
-								.getInstance()
-								.getFileAt(index)
-								.getAbsolutePath()
-								.equals(AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.getFileEditorPanelAt(_index)
-										.getAbsolutePath())) {
-							AcideProjectConfiguration.getInstance()
-									.getFileAt(index).setIsOpened(false);
-						}
-					}
-
-					// Sets the project to modified
-					AcideProjectConfiguration.getInstance().setIsModified(true);
-				}
-			} else
-				isCancelOption = true;
-		} else {
-
-			// Is not modified
-
-			// If it is not the default project
-			if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
-
-				// Sets opened to false to the project file
-				for (int index = 0; index < AcideProjectConfiguration
-						.getInstance().getFileListSize(); index++) {
-
-					if (AcideProjectConfiguration
-							.getInstance()
-							.getFileAt(index)
-							.getAbsolutePath()
-							.equals(AcideMainWindow.getInstance()
-									.getFileEditorManager()
-									.getFileEditorPanelAt(_index)
-									.getAbsolutePath())) {
-						AcideProjectConfiguration.getInstance()
-								.getFileAt(index).setIsOpened(false);
-					}
-				}
-
-				// Sets the project to modified
-				AcideProjectConfiguration.getInstance().setIsModified(true);
-			}
-		}
-
-		if (!isCancelOption) {
-
-			// Removes the tab from the file editor
-			AcideMainWindow.getInstance().getFileEditorManager()
-					.getTabbedPane().remove(_index);
-
-			// Validates the changes in the tabbed pane
-			AcideMainWindow.getInstance().getFileEditorManager()
-					.getTabbedPane().validate();
-
-			// Exchanges the closing buttons
-			for (int index = _index; index < AcideMainWindow.getInstance()
-					.getFileEditorManager().getTabbedPaneUI().getCloseButtons()
-					.size() - 1; index++) {
-
-				// Gets the current close button
-				AcideFileEditorCloseButton currentCloseButton = (AcideFileEditorCloseButton) AcideMainWindow
-						.getInstance().getFileEditorManager().getTabbedPaneUI()
-						.getCloseButtons().get(index);
-
-				// Gets the next close button
-				AcideFileEditorCloseButton nextCloseButton = (AcideFileEditorCloseButton) AcideMainWindow
-						.getInstance().getFileEditorManager().getTabbedPaneUI()
-						.getCloseButtons().get(index + 1);
-
-				// If it is red button
-				if (nextCloseButton.isRedButton())
-
-					// Sets the red button
-					currentCloseButton.setRedCloseButton();
-				else
-					// Sets the green button
-					currentCloseButton.setGreenCloseButton();
-
-				// Sets the position
-				AcideMainWindow.getInstance().getFileEditorManager()
-						.getTabbedPaneUI().getCloseButtons()
-						.set(index, currentCloseButton);
-			}
-		}
-
-		// No more tabs?
-		if (AcideMainWindow.getInstance().getFileEditorManager()
-				.getTabbedPane().getTabCount() == 0) {
-
-			// Disables the file menu
-			AcideMainWindow.getInstance().getMenu().disableFileMenu();
-
-			// Disables the edit menu
-			AcideMainWindow.getInstance().getMenu().disableEditMenu();
-		} else {
-
-			// Updates the focus, the caret and so on...
-			AcideMainWindow
-					.getInstance()
-					.getFileEditorManager()
-					.updatesFileEditorAt(
-							AcideMainWindow.getInstance()
-									.getFileEditorManager()
-									.getSelectedFileEditorPanelIndex());
-		}
+		// Closes the file
+		AcideMainWindow.getInstance().getMenu().getFileMenu().closeFile(_index);
 	}
 }

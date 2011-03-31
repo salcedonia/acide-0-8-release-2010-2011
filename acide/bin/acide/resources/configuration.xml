@@ -4,7 +4,7 @@
 <comment>ACIDE Configuration</comment>
 <entry key="fileEditorConfiguration">./configuration/fileEditor/configuration.xml</entry>
 <entry key="previousMenuConfiguration">./configuration/menu/defaultAllOn.menuCfg</entry>
-<entry key="currentToolBarConfiguration">C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\toolbar\des.TBcfg</entry>
+<entry key="currentToolBarConfiguration">C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\toolbar\default.TBcfg</entry>
 <entry key="previousToolBarConfiguration">C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\toolbar\asdads.TBcfg</entry>
 <entry key="currentMenuConfiguration">./configuration/menu/defaultAllOn.menuCfg</entry>
 <entry key="language">spanish</entry>
@@ -12,7 +12,7 @@
 <entry key="projectConfiguration">C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\project\proyecto1.acidePrj</entry>
 <entry key="javaPath">C:\Archivos de programa\Java\jdk1.6.0_21\bin\java.exe</entry>
 <entry key="jarPath">C:\Archivos de programa\Java\jdk1.6.0_21\bin\jar.exe</entry>
-<entry key="defaultPath">C:\Documents and Settings\Salcedonia\Escritorio\Copia de file3.txt</entry>
-<entry key="javacPath">C:\Archivos de programa\Java\jdk1.6.0_21\bin\javac.exe</entry>
+<entry key="defaultPath">C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\project\proyecto1.acidePrj</entry>
 <entry key="consoleConfiguration">./configuration/console/configuration.xml</entry>
+<entry key="javacPath">C:\Archivos de programa\Java\jdk1.6.0_21\bin\javac.exe</entry>
 </properties>

@@ -59,7 +59,7 @@ public class AcideFileEditorConfiguration {
 	 * ACIDE - A Configurable IDE file editor configuration file list which
 	 * contains the list of opened files in the configuration file.
 	 */
-	private FileEditorPanelConfigurationList _fileEditorPanelConfigurationList;
+	private AcideFileEditorPanelConfigurationList _fileEditorPanelConfigurationList;
 	/**
 	 * ACIDE - A Configurable IDE file editor configuration selected file editor
 	 * panel selected index.
@@ -96,11 +96,11 @@ public class AcideFileEditorConfiguration {
 	public AcideFileEditorConfiguration() {
 
 		// Creates the file editor panel configuration list
-		_fileEditorPanelConfigurationList = new FileEditorPanelConfigurationList();
-		
+		_fileEditorPanelConfigurationList = new AcideFileEditorPanelConfigurationList();
+
 		// The selected file editor panel index is -1 by default
 		_selectedFileEditorPanelIndex = -1;
-		
+
 		// The edition mode is insert by default
 		_editionMode = true;
 	}
@@ -126,7 +126,7 @@ public class AcideFileEditorConfiguration {
 	 * @return the ACIDE - A Configurable IDE file editor configuration file
 	 *         list.
 	 */
-	public FileEditorPanelConfigurationList getFileList() {
+	public AcideFileEditorPanelConfigurationList getFileList() {
 		return _fileEditorPanelConfigurationList;
 	}
 
@@ -137,7 +137,7 @@ public class AcideFileEditorConfiguration {
 	 * @param fileList
 	 *            new value to set.
 	 */
-	public void setFileList(FileEditorPanelConfigurationList fileList) {
+	public void setFileList(AcideFileEditorPanelConfigurationList fileList) {
 		_fileEditorPanelConfigurationList = fileList;
 	}
 
@@ -314,7 +314,7 @@ public class AcideFileEditorConfiguration {
 	 * @return the file editor panel configuration at the position in the list
 	 *         given as a parameter.
 	 */
-	public FileEditorPanelConfiguration getFileAt(int index) {
+	public AcideFileEditorPanelConfiguration getFileAt(int index) {
 		return _fileEditorPanelConfigurationList
 				.getFileEditorPanelConfigurationAt(index);
 	}
@@ -344,61 +344,61 @@ public class AcideFileEditorConfiguration {
 				AcideFileEditorConfiguration fileEditorManagerConfiguration = (AcideFileEditorConfiguration) xStream
 						.fromXML(fileInputStream);
 
-				// FILE LIST
-				FileEditorPanelConfigurationList fileEditorPanelConfigurationList = fileEditorManagerConfiguration
+				// Gets the file editor panel configuration list
+				AcideFileEditorPanelConfigurationList fileEditorPanelConfigurationList = fileEditorManagerConfiguration
 						.getFileList();
 
-				// SELECTED FILE EDITOR PANEL INDEX
+				// Gets the selected file editor panel index
 				int selectedFileEditorPanelIndex = fileEditorManagerConfiguration
 						.getSelectedFileEditorPanelIndex();
 
-				// FONT NAME
+				// Gets the font name
 				String fontName = fileEditorManagerConfiguration.getFontName();
 
-				// FONT STYLE
+				// Gets the font style
 				Integer fontStyle = fileEditorManagerConfiguration
 						.getFontStyle();
 
-				// FONT SIZE
+				// Gets the font size
 				Integer fontSize = fileEditorManagerConfiguration.getFontSize();
 
-				// FOREGROUND COLOR
+				// Gets the foreground color
 				Color foregroundColor = fileEditorManagerConfiguration
 						.getForegroundColor();
 
-				// BACKGROUND COLOR
+				// Gets the background color
 				Color backgroundColor = fileEditorManagerConfiguration
 						.getBackgroundColor();
 
-				// EDITION MODE
+				// Gets the edition mode
 				Boolean editionMode = fileEditorManagerConfiguration
 						.getEditionMode();
 
 				// Closes the file input stream
 				fileInputStream.close();
 
-				// FILE LIST
+				// Sets the file editor panel configuration list
 				_fileEditorPanelConfigurationList = fileEditorPanelConfigurationList;
 
-				// SELECTED FILE EDITOR PANEL INDEX
+				// Sets the selected file editor panel index
 				_selectedFileEditorPanelIndex = selectedFileEditorPanelIndex;
 
-				// FONT NAME
+				// Sets the font name
 				_fontName = fontName;
 
-				// FONT STYLE
+				// Sets the font style
 				_fontStyle = fontStyle;
 
-				// FONT SIZE
+				// Sets the font size
 				_fontSize = fontSize;
 
-				// FOREGROUND COLOR
+				// Sets the foreground color
 				_foregroundColor = foregroundColor;
 
-				// BACKGROUND COLOR
+				// Sets the background color
 				_backgroundColor = backgroundColor;
 
-				// EDITION MODE
+				// Sets the edition mode
 				_editionMode = editionMode;
 
 				// Updates the ACIDE - A Configurable IDE file editor
@@ -431,15 +431,12 @@ public class AcideFileEditorConfiguration {
 	 */
 	public boolean save() {
 
-		// FILE LIST
-		_fileEditorPanelConfigurationList = new FileEditorPanelConfigurationList();
-
-		// Gets the selected file editor panel index
-		int selectedFileEditorPanelIndex = AcideMainWindow.getInstance()
-				.getFileEditorManager().getSelectedFileEditorPanelIndex();
+		// Creates the file editor panel configuration list
+		_fileEditorPanelConfigurationList = new AcideFileEditorPanelConfigurationList();
 
 		// If there are opened file editors
-		if (selectedFileEditorPanelIndex != -1) {
+		if (AcideMainWindow.getInstance()
+				.getFileEditorManager().getNumberOfFileEditorPanels() > 0) {
 
 			// Analyzes all the opened file editor panels
 			for (int index = 0; index < AcideMainWindow.getInstance()
@@ -452,17 +449,27 @@ public class AcideFileEditorConfiguration {
 
 				// Creates the file editor panel configuration for the current
 				// file editor panel
-				FileEditorPanelConfiguration fileEditorPanelConfiguration = new FileEditorPanelConfiguration();
+				AcideFileEditorPanelConfiguration fileEditorPanelConfiguration = new AcideFileEditorPanelConfiguration();
 
-				// PATH
+				// Sets the path
 				fileEditorPanelConfiguration.setPath(fileEditorPanel
 						.getAbsolutePath());
 
-				// CARET POSITION
-				fileEditorPanelConfiguration.setCaretPosition(fileEditorPanel
-						.getActiveTextEditionArea().getCaretPosition());
+				// Gets the caret position
+				int caretPosition = fileEditorPanel
+				.getActiveTextEditionArea().getCaretPosition();
+				
+				// If the caret is no valid
+				if(caretPosition < 0 || caretPosition > fileEditorPanel
+						.getActiveTextEditionArea().getText().length())
+					
+					// Puts it in the first position by default
+					caretPosition = 0;
+				
+				// Sets the caret position
+				fileEditorPanelConfiguration.setCaretPosition(caretPosition);
 
-				// TYPE
+				// Sets the type
 				String type = "Normal";
 				if (fileEditorPanel.isCompilableFile())
 					type = "Compilable";
@@ -470,68 +477,69 @@ public class AcideFileEditorConfiguration {
 					type = "Main";
 				fileEditorPanelConfiguration.setType(type);
 
-				// SPLIT PANE DIVIDER LOCATION
+				// Sets the split pane divider location
 				fileEditorPanelConfiguration
 						.setSplitPaneDividerLocation(fileEditorPanel
 								.getHorizontalSplitPane().getDividerLocation());
 
-				// ACTIVE TEXT EDITION AREA
+				// Sets the active text edition area
 				fileEditorPanelConfiguration
 						.setActiveTextEditionArea(fileEditorPanel
 								.getActiveTextEditionAreaIndex());
 
-				// LEXICON CONFIGURATION
+				// Sets the lexicon configuration
 				fileEditorPanelConfiguration
-				.setLexiconConfiguration(fileEditorPanel
-						.getLexiconConfiguration().getPath());
-				
-				// PREVIOUS GRAMMAR CONFIGURATION
+						.setLexiconConfiguration(fileEditorPanel
+								.getLexiconConfiguration().getPath());
+
+				// Sets the previous grammar configuration
 				fileEditorPanelConfiguration
-				.setPreviousGrammarConfiguration(fileEditorPanel
-						.getPreviousGrammarConfiguration().getPath());
-				
-				// CURRENT GRAMMAR CONFIGURATION
+						.setPreviousGrammarConfiguration(fileEditorPanel
+								.getPreviousGrammarConfiguration().getPath());
+
+				// Sets the current grammar configuration
 				fileEditorPanelConfiguration
-				.setCurrentGrammarConfiguration(fileEditorPanel
-						.getCurrentGrammarConfiguration().getPath());
-				
+						.setCurrentGrammarConfiguration(fileEditorPanel
+								.getCurrentGrammarConfiguration().getPath());
+
 				// Inserts the file editor panel configuration into the list
 				_fileEditorPanelConfigurationList
 						.insertFileEditorPanelConfiguration(fileEditorPanelConfiguration);
 			}
 
-			// FONT NAME
+			// Sets the font name
 			_fontName = AcideMainWindow.getInstance().getFileEditorManager()
 					.getSelectedFileEditorPanel().getActiveTextEditionArea()
 					.getFont().getFontName();
 
-			// FONT STYLE
+			// Sets the font style
 			_fontStyle = AcideMainWindow.getInstance().getFileEditorManager()
 					.getSelectedFileEditorPanel().getActiveTextEditionArea()
 					.getFont().getStyle();
 
-			// FONT SIZE
+			// Sets the font size
 			_fontSize = AcideMainWindow.getInstance().getFileEditorManager()
 					.getSelectedFileEditorPanel().getActiveTextEditionArea()
 					.getFont().getSize();
 
-			// FOREGROUND COLOR
+			// Sets the foreground color
 			_foregroundColor = AcideMainWindow.getInstance()
 					.getFileEditorManager().getSelectedFileEditorPanel()
 					.getActiveTextEditionArea().getForeground();
 
-			// BACKGROUND COLOR
+			// Sets the background color
 			_backgroundColor = AcideMainWindow.getInstance()
 					.getFileEditorManager().getSelectedFileEditorPanel()
 					.getActiveTextEditionArea().getBackground();
 
-			// EDITION MODE
-			_editionMode = AcideMainWindow.getInstance().getStatusBar()
-					.getEditionModeMessage().equals("INS");
+			// Sets the edition mode
+			_editionMode = AcideMainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().getEditionMode();
 		}
-
-		// SELECTED FILE EDITOR PANEL INDEX
-		_selectedFileEditorPanelIndex = selectedFileEditorPanelIndex;
+		
+		// Sets the selected file editor panel index
+		_selectedFileEditorPanelIndex = AcideMainWindow.getInstance()
+		.getFileEditorManager().getSelectedFileEditorPanelIndex();
 
 		// Creates the xStream object to handle XML files
 		XStream xStream = new XStream();

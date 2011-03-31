@@ -112,7 +112,7 @@ public class AcideByteFileManager {
 					fileInputStream.close();
 				} catch (IOException exception) {
 
-					// Error message
+					// Displays an error message
 					JOptionPane.showMessageDialog(null, AcideLanguageManager
 							.getInstance().getLabels().getString("s265")
 							+ sourcePath, AcideLanguageManager.getInstance()
@@ -130,7 +130,7 @@ public class AcideByteFileManager {
 					fileOutputStream.close();
 				} catch (IOException exception) {
 
-					// Error message
+					// Displays an error message
 					JOptionPane.showMessageDialog(null, AcideLanguageManager
 							.getInstance().getLabels().getString("s267")
 							+ targetPath, AcideLanguageManager.getInstance()
@@ -168,7 +168,7 @@ public class AcideByteFileManager {
 			targetFile.createNewFile();
 		} catch (IOException exception) {
 
-			// Error message
+			// Displays an error message
 			JOptionPane.showMessageDialog(
 					null,
 					AcideLanguageManager.getInstance().getLabels()
@@ -199,7 +199,7 @@ public class AcideByteFileManager {
 			// They have not been copied succesfully
 			saved = false;
 
-			// Error message
+			// Displays an error message
 			JOptionPane.showMessageDialog(
 					null,
 					exception.getMessage(),

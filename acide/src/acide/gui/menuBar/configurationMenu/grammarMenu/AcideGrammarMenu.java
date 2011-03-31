@@ -32,7 +32,6 @@ package acide.gui.menuBar.configurationMenu.grammarMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.ResourceBundle;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
@@ -47,11 +46,7 @@ import acide.gui.menuBar.configurationMenu.grammarMenu.listeners.AcideNewGrammar
 import acide.gui.menuBar.configurationMenu.grammarMenu.listeners.AcideSaveAsGrammarMenuItemListener;
 import acide.gui.menuBar.configurationMenu.grammarMenu.listeners.AcideSaveGrammarMenuItemListener;
 import acide.gui.menuBar.configurationMenu.grammarMenu.listeners.AcideSetPathsMenuItemListener;
-
 import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
-
-import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE grammar menu.
@@ -128,43 +123,28 @@ public class AcideGrammarMenu extends JMenu {
 	 */
 	public AcideGrammarMenu() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		// NEW GRAMMAR MENU ITEM
 		_newGrammarMenuItem = new JMenuItem();
-		
+
 		// LOAD GRAMMAR MENU ITEM
 		_loadGrammarMenuItem = new JMenuItem();
-		
+
 		// MODIFY GRAMMAR MENU ITEM
 		_modifyGrammarMenuItem = new JMenuItem();
-		
+
 		// SAVE GRAMMAR MENU ITEM
 		_saveGrammarMenuItem = new JMenuItem();
 		_saveGrammarMenuItem.setEnabled(false);
-		
+
 		// SAVE GRAMMAR AS MENU ITEM
 		_saveGrammarAsMenuItem = new JMenuItem();
-		
+
 		// SET PATHS MENU ITEM
 		_setPathsMenuItem = new JMenuItem();
-		
+
 		// AUTO ANALYSIS CHECK BOX MENU ITEM
 		_autoAnalysisCheckBoxMenuItem = new JCheckBoxMenuItem(
-				labels.getString("s911"));
+				AcideLanguageManager.getInstance().getLabels().getString("s911"));
 		_autoAnalysisCheckBoxMenuItem.setSelected(false);
 
 		// Sets the text of the grammar menu components
@@ -177,43 +157,35 @@ public class AcideGrammarMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		// NEW GRAMMAR MENU ITEM
-		_newGrammarMenuItem.setText(labels.getString("s30"));
+		_newGrammarMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s30"));
 		_newGrammarMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_T, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 
-		// LOAD GRAMMAR MENU ITEM 
-		_loadGrammarMenuItem.setText(labels.getString("s226"));
+		// LOAD GRAMMAR MENU ITEM
+		_loadGrammarMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s226"));
 
 		// MODIFY GRAMMAR MENU ITEM
-		_modifyGrammarMenuItem.setText(labels.getString("s227"));
+		_modifyGrammarMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s227"));
 
 		// SAVE GRAMMAR MENU ITEM
-		_saveGrammarMenuItem.setText(labels.getString("s251"));
+		_saveGrammarMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s251"));
 
 		// SAVE GRAMMAR AS MENU ITEM
-		_saveGrammarAsMenuItem.setText(labels.getString("s285"));
+		_saveGrammarAsMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s285"));
 
 		// SET PATHS MENU ITEM
-		_setPathsMenuItem.setText(labels.getString("s912"));
+		_setPathsMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s912"));
 
 		// AUTO GRAMMAR ANALYSIS CHECK BOX MENU ITEM
-		_autoAnalysisCheckBoxMenuItem.setText(labels.getString("s911"));
+		_autoAnalysisCheckBoxMenuItem.setText(AcideLanguageManager
+				.getInstance().getLabels().getString("s911"));
 	}
 
 	/**

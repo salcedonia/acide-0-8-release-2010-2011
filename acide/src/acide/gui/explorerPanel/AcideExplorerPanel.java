@@ -29,27 +29,34 @@
  */
 package acide.gui.explorerPanel;
 
-import javax.swing.*;
-import javax.swing.tree.*;
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.HeadlessException;
+import java.io.File;
+import java.util.ArrayList;
 
-import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 import acide.configuration.lexicon.validExtensions.AcideValidExtensionsManager;
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.files.project.AcideProjectFile;
-import java.awt.*;
-import java.io.*;
-import java.util.ArrayList;
-import acide.gui.explorerPanel.listeners.AcideExplorerPanelClickMouseListener;
-import acide.gui.explorerPanel.listeners.AcideExplorerPanelDoubleClickMouseListener;
 import acide.gui.explorerPanel.listeners.AcideExplorerPanelFocusListener;
 import acide.gui.explorerPanel.listeners.AcideExplorerPanelKeyboardListener;
+import acide.gui.explorerPanel.listeners.AcideExplorerPanelMouseListener;
 import acide.gui.explorerPanel.listeners.AcideExplorerPanelPopupMenuListener;
 import acide.gui.explorerPanel.popup.AcideExplorerPanelPopupMenu;
 import acide.gui.explorerPanel.utils.AcideExplorerTreeCellRenderer;
 import acide.gui.listeners.AcideStatusBarKeyboardListener;
 import acide.gui.mainWindow.AcideMainWindow;
+import acide.language.AcideLanguageManager;
+import acide.log.AcideLog;
 
 /**
  * ACIDE - A Configurable IDE explorer panel.
@@ -167,15 +174,12 @@ public class AcideExplorerPanel extends JPanel {
 		
 		// Sets the ACIDE - A Configurable IDE explorer panel focus listener
 		_tree.addFocusListener(new AcideExplorerPanelFocusListener());
-		
-		// Sets the ACIDE - A Configurable IDE explorer panel click mouse listener
-		_tree.addMouseListener(new AcideExplorerPanelClickMouseListener());
-		
+				
 		// Sets the ACIDE - A Configurable IDE explorer panel popup menu listener
 		_tree.addMouseListener(new AcideExplorerPanelPopupMenuListener());
 		
 		// Sets the ACIDE - A Configurable IDE explorer double click listener
-		_tree.addMouseListener(new AcideExplorerPanelDoubleClickMouseListener());
+		_tree.addMouseListener(new AcideExplorerPanelMouseListener());
 		
 		// Sets the ACIDE - A Configurable IDE explorer panel keyboard listener
 		_tree.addKeyListener(new AcideExplorerPanelKeyboardListener());

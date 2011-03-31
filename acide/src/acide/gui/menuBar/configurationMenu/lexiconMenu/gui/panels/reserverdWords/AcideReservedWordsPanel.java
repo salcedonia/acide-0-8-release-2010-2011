@@ -107,11 +107,11 @@ public class AcideReservedWordsPanel extends JPanel {
 	 * ACIDE - A Configurable IDE lexicon configuration window case sensitive
 	 * label.
 	 */
-	private final JLabel _caseSensitiveLabel;
+	private JLabel _caseSensitiveLabel;
 	/**
 	 * ACIDE - A Configurable IDE lexicon configuration window word label.
 	 */
-	private final JLabel _reservedWordLabel;
+	private JLabel _reservedWordLabel;
 	/**
 	 * ACIDE - A Configurable IDE lexicon configuration window color label.
 	 */
@@ -170,7 +170,6 @@ public class AcideReservedWordsPanel extends JPanel {
 	 * Table model.
 	 */
 	private LexiconTableModel _tableModel;
-
 	/**
 	 * ACIDE - A Configurable IDE lexicon configuration window are there changes
 	 * flag.
@@ -196,189 +195,289 @@ public class AcideReservedWordsPanel extends JPanel {
 		_tableColumns[2] = AcideLanguageManager.getInstance().getLabels()
 				.getString("s375");
 
-		// Sets the layout
-		setLayout(new GridBagLayout());
-
 		// Sets a border
 		setBorder(BorderFactory.createTitledBorder(null, AcideLanguageManager
 				.getInstance().getLabels().getString("s428"),
 				TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION));
 
-		// CASE SENSITIVE LABEL
-		_caseSensitiveLabel = new JLabel(AcideLanguageManager.getInstance()
-				.getLabels().getString("s431"), JLabel.CENTER);
-
-		// CASE SENSITIVE CHECK BOX
-		_caseSensitiveCheckBox = new Checkbox();
-
-		// RESERVED WORD LABEL
-		_reservedWordLabel = new JLabel(AcideLanguageManager.getInstance()
-				.getLabels().getString("s389"), JLabel.CENTER);
-
-		// RESERVED WORD TEXT FIELD
-		_reservedWordTextField = new JTextField();
-		_reservedWordTextField.setToolTipText(AcideLanguageManager
-				.getInstance().getLabels().getString("s390"));
-
-		// COLOR LABEL
-		_colorLabel = new JLabel(AcideLanguageManager.getInstance().getLabels()
-				.getString("s391"), JLabel.CENTER);
-
-		// PREVIEW LABEL
-		_previewLabel = new JLabel(AcideLanguageManager.getInstance()
-				.getLabels().getString("s392"), JLabel.CENTER);
-
-		// PREVIEW TEXT FIELD
-		_previewTextField = new JTextField();
-		_previewTextField.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s393"));
-		_previewTextField.setEditable(false);
-		_previewTextField.setHorizontalAlignment(JTextField.CENTER);
-		_previewTextField.setFont(new Font(_reservedWordLabel.getFont()
-				.getFontName(), Font.PLAIN, _reservedWordLabel.getFont()
-				.getSize()));
-		_previewTextField.setForeground(Color.BLACK);
-		_previewTextField.setText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s394"));
-
-		// FONT TYPE LABEL
-		_fontTypeLabel = new JLabel(AcideLanguageManager.getInstance()
-				.getLabels().getString("s395"), JLabel.CENTER);
-
-		// FONT TYPE COMBO BOX
-		_fontTypeComboBox = new JComboBox();
-		_fontTypeComboBox.addItem(AcideLanguageManager.getInstance()
-				.getLabels().getString("s396"));
-		_fontTypeComboBox.addItem(AcideLanguageManager.getInstance()
-				.getLabels().getString("s397"));
-		_fontTypeComboBox.addItem(AcideLanguageManager.getInstance()
-				.getLabels().getString("s398"));
-		_fontTypeComboBox.addItem(AcideLanguageManager.getInstance()
-				.getLabels().getString("s399"));
-		_fontTypeComboBox.setEnabled(true);
-		_fontTypeComboBox.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s400"));
-
-		// COLOR PALETTE BUTTON
-		_colorPaletteButton = new JButton(COLOR_PALETTE_IMAGE);
-
-		// ADD BUTTON
-		_addButton = new JButton(AcideLanguageManager.getInstance().getLabels()
-				.getString("s385"));
-		_addButton.setVerticalTextPosition(AbstractButton.CENTER);
-		_addButton.setHorizontalTextPosition(AbstractButton.LEADING);
-		_addButton.setMnemonic(KeyEvent.VK_A);
-		_addButton.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s386"));
-
-		// QUIT BUTTON
-		_quitButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s387"));
-		_quitButton.setVerticalTextPosition(AbstractButton.CENTER);
-		_quitButton.setHorizontalTextPosition(AbstractButton.LEADING);
-		_quitButton.setMnemonic(KeyEvent.VK_Q);
-		_quitButton.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s388"));
-
-		// MODIFY BUTTON
-		_modifyButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s436"));
-		_modifyButton.setVerticalTextPosition(AbstractButton.CENTER);
-		_modifyButton.setHorizontalTextPosition(AbstractButton.LEADING);
-		_modifyButton.setMnemonic(KeyEvent.VK_M);
-		_modifyButton.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s437"));
-
-		// APPLY FOR ALL DELIMITERS BUTTON
-		_applyForAllDelimitersButton = new JButton(AcideLanguageManager
-				.getInstance().getLabels().getString("s438"));
-		_applyForAllDelimitersButton
-				.setVerticalTextPosition(AbstractButton.CENTER);
-		_applyForAllDelimitersButton
-				.setHorizontalTextPosition(AbstractButton.LEADING);
-		_applyForAllDelimitersButton.setMnemonic(KeyEvent.VK_S);
-		_applyForAllDelimitersButton.setToolTipText(AcideLanguageManager
-				.getInstance().getLabels().getString("s439"));
+		// Builds the panel components
+		buildComponents();
 
 		// Sets the listeners of the window components
 		setListeners();
 
-		// Adds the components to the frame with the layout
+		// Adds the components to the panel
+		addComponents();
+	}
+
+	/**
+	 * Builds the panel components.
+	 */
+	private void buildComponents() {
+		
+		// Creates the case sensitive label
+		_caseSensitiveLabel = new JLabel(AcideLanguageManager.getInstance()
+				.getLabels().getString("s431"), JLabel.CENTER);
+
+		// Creates the case sensitive check box
+		_caseSensitiveCheckBox = new Checkbox();
+
+		// Creates the reserved word label
+		_reservedWordLabel = new JLabel(AcideLanguageManager.getInstance()
+				.getLabels().getString("s389"), JLabel.CENTER);
+
+		// Creates the reserved word text field
+		_reservedWordTextField = new JTextField();
+		
+		// Sets the reserved word text field tool tip text
+		_reservedWordTextField.setToolTipText(AcideLanguageManager
+				.getInstance().getLabels().getString("s390"));
+
+		// Creates the color label
+		_colorLabel = new JLabel(AcideLanguageManager.getInstance().getLabels()
+				.getString("s391"), JLabel.CENTER);
+
+		// Creates the preview label
+		_previewLabel = new JLabel(AcideLanguageManager.getInstance()
+				.getLabels().getString("s392"), JLabel.CENTER);
+
+		// Creates the preview text field
+		_previewTextField = new JTextField();
+		
+		// Sets the preview text field tool tip text
+		_previewTextField.setToolTipText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s393"));
+		
+		// It is not editable
+		_previewTextField.setEditable(false);
+		
+		// Sets its horizontal alignment as center
+		_previewTextField.setHorizontalAlignment(JTextField.CENTER);
+		
+		// Sets its font
+		_previewTextField.setFont(new Font(_reservedWordLabel.getFont()
+				.getFontName(), Font.PLAIN, _reservedWordLabel.getFont()
+				.getSize()));
+		
+		// Sets its foreground color
+		_previewTextField.setForeground(Color.BLACK);
+		
+		// Sets its text
+		_previewTextField.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s394"));
+
+		// Creates the font type label
+		_fontTypeLabel = new JLabel(AcideLanguageManager.getInstance()
+				.getLabels().getString("s395"), JLabel.CENTER);
+
+		// Creates the font type combo box
+		_fontTypeComboBox = new JComboBox();
+		
+		// Adds the plain font to the font type combo box
+		_fontTypeComboBox.addItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s396"));
+		
+		// Adds the italic font to the font type combo box
+		_fontTypeComboBox.addItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s397"));
+		
+		// Adds the bold font to the font type combo box
+		_fontTypeComboBox.addItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s398"));
+		
+		// Adds the italic + bold font to the font type combo box
+		_fontTypeComboBox.addItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s399"));
+		
+		// It is not enabled
+		_fontTypeComboBox.setEnabled(true);
+		
+		// Sets its tool tip text
+		_fontTypeComboBox.setToolTipText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s400"));
+
+		// Creates the color palette button
+		_colorPaletteButton = new JButton(COLOR_PALETTE_IMAGE);
+
+		// Creates the add button 
+		_addButton = new JButton(AcideLanguageManager.getInstance().getLabels()
+				.getString("s385"));
+		
+		// Sets the add button vertical text position as center
+		_addButton.setVerticalTextPosition(AbstractButton.CENTER);
+		
+		// Sets the add button horizontal text position as leading
+		_addButton.setHorizontalTextPosition(AbstractButton.LEADING);
+		
+		// Sets the add button mnemonic
+		_addButton.setMnemonic(KeyEvent.VK_A);
+		
+		// Sets the add button tool tip text
+		_addButton.setToolTipText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s386"));
+
+		// Creates the quit button
+		_quitButton = new JButton(AcideLanguageManager.getInstance()
+				.getLabels().getString("s387"));
+		
+		// Sets the quit button vertical text position as center
+		_quitButton.setVerticalTextPosition(AbstractButton.CENTER);
+		
+		// Sets the quit button horizontal text position as leading
+		_quitButton.setHorizontalTextPosition(AbstractButton.LEADING);
+		
+		// Sets the quit button mnemonic
+		_quitButton.setMnemonic(KeyEvent.VK_Q);
+		
+		// Sets the quit button tool tip text
+		_quitButton.setToolTipText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s388"));
+
+		// Creates the modify button
+		_modifyButton = new JButton(AcideLanguageManager.getInstance()
+				.getLabels().getString("s436"));
+		
+		// Sets the modify button vertical text position as center
+		_modifyButton.setVerticalTextPosition(AbstractButton.CENTER);
+		
+		// Sets the modify button horizontal text position as leading
+		_modifyButton.setHorizontalTextPosition(AbstractButton.LEADING);
+		
+		// Sets the modify button vertical mnemonic
+		_modifyButton.setMnemonic(KeyEvent.VK_M);
+		
+		// Sets the modify button vertical tool tip text
+		_modifyButton.setToolTipText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s437"));
+
+		// Creates the apply for all delimiters button
+		_applyForAllDelimitersButton = new JButton(AcideLanguageManager
+				.getInstance().getLabels().getString("s438"));
+		
+		// Sets the apply for all delimiters button vertical text position as center
+		_applyForAllDelimitersButton
+				.setVerticalTextPosition(AbstractButton.CENTER);
+		
+		// Sets the apply for all delimiters button horizontal text position as leading
+		_applyForAllDelimitersButton
+				.setHorizontalTextPosition(AbstractButton.LEADING);
+		
+		// // Sets the apply for all delimiters button mnemonic
+		_applyForAllDelimitersButton.setMnemonic(KeyEvent.VK_S);
+		
+		// Sets the apply for all delimiters button tool tip text
+		_applyForAllDelimitersButton.setToolTipText(AcideLanguageManager
+				.getInstance().getLabels().getString("s439"));
+	}
+
+	/**
+	 * Adds the components to the panel with the layout.
+	 */
+	private void addComponents() {
+		
+		// Sets the layout
+		setLayout(new GridBagLayout());
+		
+		// Adds the components to the panel with the layout
 		GridBagConstraints constraints = new GridBagConstraints();
 
-		// RESERVED WORD
 		constraints.insets = new Insets(5, 5, 5, 5);
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.anchor = GridBagConstraints.EAST;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
+		
+		// Adds the reserved word label to the panel
 		add(_reservedWordLabel, constraints);
+		
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridx = 1;
+		
+		// Adds the reserved word text field to the panel
 		add(_reservedWordTextField, constraints);
 
-		// CASE SENSITIVE
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.anchor = GridBagConstraints.EAST;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
+		
+		// Adds the case sensitive label to the panel
 		add(_caseSensitiveLabel, constraints);
+		
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridx = 1;
+		
+		// Adds the case sensitive check box to the panel
 		add(_caseSensitiveCheckBox, constraints);
 
-		// COLOR
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.anchor = GridBagConstraints.EAST;
 		constraints.gridx = 0;
 		constraints.gridy = 2;
+		
+		// Adds the color label to the panel
 		add(_colorLabel, constraints);
+		
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridx = 1;
+		
+		// Adds the color palette button to the panel
 		add(_colorPaletteButton, constraints);
 
-		// FONT TYPE
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.anchor = GridBagConstraints.EAST;
 		constraints.gridx = 0;
 		constraints.gridy = 3;
+		
+		// Adds the font type label to the panel
 		add(_fontTypeLabel, constraints);
+		
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridx = 1;
+		
+		// Adds the font type combo box to the panel
 		add(_fontTypeComboBox, constraints);
 
-		// PREVIEW
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.anchor = GridBagConstraints.EAST;
 		constraints.gridx = 0;
 		constraints.gridy = 4;
+		
+		// Adds the preview label to the panel
 		add(_previewLabel, constraints);
+		
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridx = 1;
+		
+		// Adds the preview text field to the panel
 		add(_previewTextField, constraints);
 
-		// ADD BUTTON
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 0;
 		constraints.gridy = 5;
+		
+		// Adds the add button to the panel
 		add(_addButton, constraints);
 
-		// QUIT BUTTON
 		constraints.gridx = 1;
+		
+		// Adds the quit button to the panel
 		add(_quitButton, constraints);
 
-		// APPLY FOR ALL DELIMITERS BUTTON
 		constraints.gridy = 6;
 		constraints.gridx = 0;
+		
+		// Adds the apply for all delimiters button to the panel
 		add(_applyForAllDelimitersButton, constraints);
 
-		// MODIFY BUTTON
 		constraints.gridx = 1;
+		
+		// Adds the modify button to the panel
 		add(_modifyButton, constraints);
 	}
 
@@ -387,31 +486,31 @@ public class AcideReservedWordsPanel extends JPanel {
 	 */
 	private void setListeners() {
 
-		// FONT TYPE COMBO BOX
+		// Sets the font type combo box action listener
 		_fontTypeComboBox.addActionListener(new FontTypeComboBoxAction());
 
-		// COLOR PALETTE BUTTON
+		// Sets the color palette button action listener
 		_colorPaletteButton.addActionListener(new ColorPaletteButtonAction());
 
-		// APPLY FOR ALL DELIMITERS BUTTON
+		// Sets the apply for all delimiters button action listener
 		_applyForAllDelimitersButton
 				.addActionListener(new ApplyForAllDelimitersButtonAction());
 
-		// MODIFY BUTTON
+		// Sets the modify button action listener
 		_modifyButton.addActionListener(new ModifyButtonAction());
 
-		// QUIT BUTTON
+		// Sets the quit button action listener
 		_quitButton.addActionListener(new QuitButtonAction());
 
-		// ADD BUTTON
+		// Sets the add button action listener
 		_addButton.addActionListener(new AddButtonAction());
 
-		// RESERVED WORD TEXT FIELD
+		// When the enter key is pressed down the enter key action is performed
 		_reservedWordTextField.registerKeyboardAction(new EnterKeyAction(),
 				KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false),
 				JComponent.WHEN_FOCUSED);
 
-		// RESERVED WORD TEXT FIELD
+		// Sets the reserved word text field key listener
 		_reservedWordTextField
 				.addKeyListener(new ReservedWordTextFieldListener());
 	}
@@ -447,7 +546,10 @@ public class AcideReservedWordsPanel extends JPanel {
 		// Adds the reserved word table sorter
 		_tableSorter.addTableHeaderMouseListeners(_table);
 
+		// Sets the table renderer
 		_table.setDefaultRenderer(Color.class, new AcideColorCellRenderer(true));
+		
+		// Sets the table editor
 		_table.setDefaultEditor(Color.class, new AcideCellColorEditor());
 
 		// Single selection mode allowed
@@ -816,8 +918,12 @@ public class AcideReservedWordsPanel extends JPanel {
 						AcideLanguageManager.getInstance().getLabels()
 								.getString("s417")
 								+ _reservedWordTextField.getText());
+				
+				// There are changes in the panel
+				_areThereChanges = true;
+				
 			} else
-				// Error message
+				// Displays an error message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
 						.getInstance().getLabels().getString("s1002"), "Error",
 						JOptionPane.ERROR_MESSAGE);
@@ -890,6 +996,9 @@ public class AcideReservedWordsPanel extends JPanel {
 				// Updates the form fields with the selected row data
 				updateFieldsWithRowSelectedInTable();
 
+				// There are changes in the panel
+				_areThereChanges = true;
+				
 				// Updates the log
 				AcideLog.getLog().info(
 						AcideLanguageManager.getInstance().getLabels()
@@ -960,6 +1069,9 @@ public class AcideReservedWordsPanel extends JPanel {
 
 			// Clears the preview text field
 			_previewTextField.setText("");
+			
+			// There are changes in the panel
+			_areThereChanges = true;
 		}
 	}
 
@@ -1025,13 +1137,13 @@ public class AcideReservedWordsPanel extends JPanel {
 
 				// Creates the table data
 				createTableData();
-
+				
 				// Updates the table model and sorter with the data
 				updatesTableModelAndSorter();
-
+				
 				// Selects the new reserved word in the table
 				_table.setRowSelectionInterval(_table.getRowCount() - 1,
-						_table.getRowCount() - 1);
+					_table.getRowCount() - 1);
 
 				// Updates the form fields with the selected row data
 				updateFieldsWithRowSelectedInTable();
@@ -1041,6 +1153,9 @@ public class AcideReservedWordsPanel extends JPanel {
 
 				// Clears the preview text field
 				_previewTextField.setText("");
+				
+				// There are changes in the panel
+				_areThereChanges = true;
 			}
 		}
 	}

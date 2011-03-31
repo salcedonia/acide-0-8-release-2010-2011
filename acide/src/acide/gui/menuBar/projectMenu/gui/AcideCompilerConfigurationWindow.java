@@ -30,9 +30,10 @@
 package acide.gui.menuBar.projectMenu.gui;
 
 import acide.configuration.project.AcideProjectConfiguration;
-import acide.configuration.project.workbench.AcideWorkbenchManager;
+import acide.configuration.workbench.AcideWorkbenchManager;
 import acide.files.AcideFileExtensionFilterManager;
 import acide.files.AcideFileManager;
+import acide.gui.listeners.AcideWindowClosingListener;
 import acide.gui.mainWindow.AcideMainWindow;
 
 import java.awt.FlowLayout;
@@ -153,8 +154,7 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 	 */
 	public AcideCompilerConfigurationWindow() {
 
-		// Disables the main window
-		AcideMainWindow.getInstance().setEnabled(false);
+		super();
 
 		// The compiler has not been checked yet
 		AcideProjectConfiguration.getInstance().setCheckCompiler(false);
@@ -164,12 +164,28 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s646"));
 
-		// Sets the layout
-		setLayout(new GridBagLayout());
+		// Builds the window components
+		buildComponents();
+
+		// Sets the listeners of the window components
+		setListeners();
+
+		// Adds the components to the window
+		addComponents();
+
+		// Sets the window configuration
+		setWindowConfiguration();
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE compiler configuration window
+	 * components.
+	 */
+	private void buildComponents() {
 
 		// Creates the configuration panel
 		_configurationPanel = new JPanel(new GridBagLayout());
-		
+
 		// Sets the configuration panel border
 		_configurationPanel.setBorder(BorderFactory.createTitledBorder(null,
 				AcideLanguageManager.getInstance().getLabels()
@@ -178,7 +194,7 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 
 		// Creates the options panel
 		optionsPanel = new JPanel(new GridBagLayout());
-		
+
 		// Sets the options panel border
 		optionsPanel.setBorder(BorderFactory.createTitledBorder(null,
 				AcideLanguageManager.getInstance().getLabels()
@@ -194,7 +210,7 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 
 		// Creates the shell name text field
 		_shellNameTextField = new JTextField();
-		
+
 		// Sets the shell name text field
 		_shellNameTextField.setToolTipText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s607"));
@@ -205,7 +221,7 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 
 		// Creates the arguments text field
 		_argumentsTextField = new JTextField();
-		
+
 		// Sets the arguments text field tool tip text
 		_argumentsTextField.setToolTipText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s610"));
@@ -220,14 +236,14 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 
 		// Creates the extension text field
 		_extensionTextField = new JTextField(7);
-		
+
 		// Sets the extension text field
 		_extensionTextField.setToolTipText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s652"));
 
 		// Creates the compiler check box
 		_compilerCheckBox = new JCheckBox();
-		
+
 		// Sets the compiler check box tool tip text
 		_compilerCheckBox.setToolTipText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s650"));
@@ -238,21 +254,21 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 
 		// Creates the separator text field
 		_separatorTextField = new JTextField(1);
-		
+
 		// Sets the separator text field tool tip text
 		_separatorTextField.setToolTipText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s651"));
-		
+
 		// Disables the separator text field
 		_separatorTextField.setEnabled(false);
 
 		// Creates the examine path button
 		_examinePathButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s596"));
-		
+
 		// Sets the examine path button horizontal alignment as center
 		_examinePathButton.setHorizontalAlignment(JButton.CENTER);
-		
+
 		// Sets the examine path button tool tip text
 		_examinePathButton.setToolTipText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s641"));
@@ -260,10 +276,10 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 		// Creates the accept button
 		_acceptButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s154"));
-		
+
 		// Sets the accept button horizontal alignment as center
 		_acceptButton.setHorizontalAlignment(JButton.CENTER);
-		
+
 		// Sets the accept button tool tip text
 		_acceptButton.setToolTipText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s154"));
@@ -271,128 +287,143 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 		// Creates the cancel button
 		_cancelButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s162"));
-		
+
 		// Sets the cancel button horizontal alignment as center
 		_cancelButton.setHorizontalAlignment(JButton.CENTER);
-		
+
 		// Sets the cancel button tool tip text
 		_cancelButton.setToolTipText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s162"));
 
-		// Sets the listeners of the window components
-		setListeners();
+		// Adds the accept button to the button panel
+		_buttonPanel.add(_acceptButton);
+
+		// Adds the cancel button to the button panel
+		_buttonPanel.add(_cancelButton);
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE compiler
+	 * configuration window with the layout.
+	 */
+	private void addComponents() {
+
+		// Sets the layout
+		setLayout(new GridBagLayout());
 
 		// Adds the components to the window with the layout
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.BOTH;
 		constraints.insets = new Insets(5, 5, 5, 5);
 		constraints.gridx = 0;
-		constraints.gridy = 0;	
-		
+		constraints.gridy = 0;
+
 		// Adds the shell name label to the configuration panel
 		_configurationPanel.add(_shellNameLabel, constraints);
-		
+
 		constraints.gridx = 1;
 		constraints.ipadx = 200;
-		
+
 		// Adds the shell name text field to the configuration panel
 		_configurationPanel.add(_shellNameTextField, constraints);
-		
+
 		constraints.ipadx = 0;
 		constraints.gridx = 2;
 		constraints.ipadx = 0;
-		
+
 		// Adds the examine path button to the configuration panel
 		_configurationPanel.add(_examinePathButton, constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		
+
 		// Adds the arguments label to the configuration panel
 		_configurationPanel.add(_argumentsLabel, constraints);
-		
+
 		constraints.gridx = 1;
 		constraints.ipadx = 150;
-		
+
 		// Adds the arguments text field to the configuration panel
 		_configurationPanel.add(_argumentsTextField, constraints);
-		
+
 		constraints.ipadx = 0;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		
+
 		// Adds the configuration panel to the window
 		add(_configurationPanel, constraints);
 
 		// Adds the check label to the options panel
 		optionsPanel.add(_checkLabel, constraints);
-		
+
 		constraints.gridx = 1;
-		
+
 		// Adds the compiler check box to the options panel
 		optionsPanel.add(_compilerCheckBox, constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		
+
 		// Adds the separator label to the options panel
 		optionsPanel.add(_separatorLabel, constraints);
-		
+
 		constraints.gridx = 1;
 		constraints.gridy = 1;
-		
+
 		// Adds the separator text field to the options panel
 		optionsPanel.add(_separatorTextField, constraints);
-		
+
 		constraints.gridx = 2;
 		constraints.gridy = 1;
-		
+
 		// Adds the extension label to the options panel
 		optionsPanel.add(_extensionLabel, constraints);
-		
+
 		constraints.gridx = 3;
 		constraints.gridy = 1;
-		
+
 		// Adds the extension text field to the options panel
 		optionsPanel.add(_extensionTextField, constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		
+
 		// Adds the options panel to the window
 		add(optionsPanel, constraints);
 
-		// Adds the accept button to the button panel
-		_buttonPanel.add(_acceptButton, constraints);
-		
-		// Adds the cancel button to the button panel
-		_buttonPanel.add(_cancelButton, constraints);
-		
+		constraints.insets = new Insets(0, 0, 0, 0);
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		
+
 		// Adds the button panel to the window
 		add(_buttonPanel, constraints);
+	}
+
+	/**
+	 * Sets the ACIDE - A Configurable IDE compiler configuration window
+	 * configuration.
+	 */
+	private void setWindowConfiguration() {
 
 		// Sets the window title
 		setTitle(AcideLanguageManager.getInstance().getLabels()
 				.getString("s647"));
-		
-		// Sets the window icon image 
+
+		// Sets the window icon image
 		setIconImage(ICON.getImage());
-		
+
 		// The window is not resizable
 		setResizable(false);
-		
+
 		// Packs the window components
 		pack();
-		
+
 		// Centers the window
 		setLocationRelativeTo(null);
-		
+
 		// Displays the window
 		setVisible(true);
-		
+
 		// Disables the main window
 		AcideMainWindow.getInstance().setEnabled(false);
 
@@ -401,7 +432,8 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 	}
 
 	/**
-	 * Sets the listeners of the window components.
+	 * Sets the listeners of the ACIDE - A Configurable IDE compiler
+	 * configuration window components.
 	 */
 	private void setListeners() {
 
@@ -423,6 +455,9 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 
 		// Adds the keyboard listener
 		addKeyListener(new AcideCompilerConfigurationWindowKeyListener());
+
+		// Sets the window closing listener
+		addWindowListener(new AcideWindowClosingListener());
 	}
 
 	/**
@@ -451,9 +486,11 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 					_extensionTextField.getText());
 			AcideProjectConfiguration.getInstance().setSeparatorFile(
 					_separatorTextField.getText());
-			
-			if (AcideMainWindow.getInstance().getNewProjectWindowConfiguration() != null)
-				AcideMainWindow.getInstance().getNewProjectWindowConfiguration()
+
+			if (AcideMainWindow.getInstance()
+					.getNewProjectWindowConfiguration() != null)
+				AcideMainWindow.getInstance()
+						.getNewProjectWindowConfiguration()
 						.setAreCompilerPathsDefined(true);
 
 			// Enables the main window
@@ -461,10 +498,10 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}
@@ -493,10 +530,10 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}
@@ -589,7 +626,8 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 	}
 
 	/**
-	 * ACIDE - A Configurable IDE compiler configuration window extension text field action listener.
+	 * ACIDE - A Configurable IDE compiler configuration window extension text
+	 * field action listener.
 	 * 
 	 * @version 0.8
 	 * @see ActionListener
@@ -634,7 +672,7 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 
 				// Brings the main window to the front
 				AcideMainWindow.getInstance().setAlwaysOnTop(true);
-				
+
 				// But not permanently
 				AcideMainWindow.getInstance().setAlwaysOnTop(false);
 			}

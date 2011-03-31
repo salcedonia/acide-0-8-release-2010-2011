@@ -47,27 +47,16 @@ public class AcideNewProjectFileMenuItemListener implements ActionListener {
 				.getNumberOfFileEditorPanels() > 0) {
 
 			// Asks to the user for saving the file
-			filePath = AcideFileManager.getInstance().askSavingFileEditorFile(true);
+			filePath = AcideFileManager.getInstance().askSavingFileEditorFile(
+					true);
 
 			// If the user selected something
 			if (filePath.equals(" ")) {
 
-				// Sets the selected file editor to the previous one
-				AcideMainWindow
-						.getInstance()
-						.getFileEditorManager()
-						.setSelectedFileEditorPanelAt(
-								selectedFileEditorPanelIndex);
+				// Sets the selected file editor panel at it
+				AcideMainWindow.getInstance().getFileEditorManager()
+						.setSelectedFileEditorPanelAt(selectedFileEditorPanelIndex);
 
-				// Updates the focus, caret and so on...
-				AcideMainWindow
-						.getInstance()
-						.getFileEditorManager()
-						.updatesFileEditorAt(
-								AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.getSelectedFileEditorPanelIndex());
-				
 				// Updates the log
 				AcideLog.getLog().info(
 						AcideLanguageManager.getInstance().getLabels()
@@ -137,15 +126,10 @@ public class AcideNewProjectFileMenuItemListener implements ActionListener {
 					AcideMainWindow.getInstance().getFileEditorManager()
 							.getSelectedFileEditorPanel()
 							.setLastChange(file.length());
-					
-					// Updates the focus, caret and so on..
-					AcideMainWindow
-							.getInstance()
-							.getFileEditorManager()
-							.updatesFileEditorAt(
-									AcideMainWindow.getInstance()
-											.getFileEditorManager()
-											.getSelectedFileEditorPanelIndex());
+
+					// Sets the selected file editor panel at it
+					AcideMainWindow.getInstance().getFileEditorManager()
+							.setSelectedFileEditorPanelAt(selectedFileEditorPanelIndex);
 				} else {
 
 					// Updates the log
@@ -155,8 +139,8 @@ public class AcideNewProjectFileMenuItemListener implements ActionListener {
 									+ filePath);
 				}
 			}
-		}else{
-			
+		} else {
+
 			// Updates the log
 			AcideLog.getLog().info(
 					AcideLanguageManager.getInstance().getLabels()
@@ -263,12 +247,6 @@ public class AcideNewProjectFileMenuItemListener implements ActionListener {
 
 				// Adds the node to the tree
 				currentNode.add(newNode);
-
-				// Validates the changes in the main window
-				AcideMainWindow.getInstance().validate();
-
-				// Repaints the main window
-				AcideMainWindow.getInstance().repaint();
 
 				// Reloads the explorer panel tree
 				AcideMainWindow.getInstance().getExplorerPanel().getTreeModel()

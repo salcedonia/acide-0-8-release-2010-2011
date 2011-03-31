@@ -130,16 +130,9 @@ public class AcideRemoveFolderMenuItemListener implements ActionListener {
 							AcideMainWindow.getInstance().setTitle(AcideLanguageManager.getInstance().getLabels().getString("s425")
 									+ " - <empty>");
 							
-							// Creates the file manager
-							AcideFileManager fileManager = new AcideFileManager();
-							fileManager.write("./configuration/file_acidePrj",
+							// Writes a default file
+							AcideFileManager.getInstance().write("./configuration/file_acidePrj",
 									"<EMPTY>");
-							
-							// Validates the changes in the main window
-							AcideMainWindow.getInstance().validate();
-							
-							// Repaints the main window
-							AcideMainWindow.getInstance().repaint();
 							
 							// Sets the name in the project configuration
 							AcideProjectConfiguration.getInstance()

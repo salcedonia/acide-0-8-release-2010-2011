@@ -127,20 +127,20 @@ public class AcideLexiconConfiguration {
 
 		// Creates the delimiters manager
 		_delimitersManager = new AcideLexiconDelimitersManager();
-		
+
 		// Saves it
 		save(_name, false);
 	}
 
 	/**
-	 * Saves the lexicon configuration for a programming language in a XML file
-	 * and returns true if the operation was succeed or false in other case.
+	 * Saves the the ACIDE - A Configurable IDE lexicon configuration into a XML
+	 * file and returns true if the operation was succeed or false in other
+	 * case.
 	 * 
 	 * @param name
-	 *            name of the lexicon configuration for the language.
+	 *            lexicon configuration name.
 	 * @param isCompiledOrInterpreted
-	 *            indicates if the programming language is compiled or
-	 *            interpreted.
+	 *            lexicon configuration is compiled or interpreted flag.
 	 * 
 	 * @return true if the operation was succeed or false in other case.
 	 */
@@ -149,7 +149,10 @@ public class AcideLexiconConfiguration {
 		// If the name is already set by the user
 		if ((_name != null) && (!_name.trim().equalsIgnoreCase(""))) {
 
+			// Stores the name
 			_name = name;
+
+			// Stores the is compiled or interpreted flag
 			_isCompiledOrInterpreted = isCompiledOrInterpreted;
 
 			// Creates the XStream object to write in the XML file
@@ -176,19 +179,18 @@ public class AcideLexiconConfiguration {
 	}
 
 	/**
-	 * Saves the lexicon configuration for a programming language in a XML file
-	 * in a defined path given as a parameter, returning true if the operation
-	 * was succeed or false in other case.
+	 * Saves the ACIDE - A Configurable IDE lexicon configuration into a XML
+	 * file in a defined path given as a parameter, returning true if the
+	 * operation succeed or false in other case.
 	 * 
 	 * @param name
-	 *            name of the lexicon configuration for the language.
+	 *            lexicon configuration name.
 	 * @param isCompiledOrInterpreted
-	 *            indicates if the programming language is compiled or
-	 *            interpreted.
+	 *            lexicon configuration is compiled or interpreted flag.
 	 * @param path
-	 *            path for the new file.
+	 *            new lexicon configuration path.
 	 * 
-	 * @return true if the operation was succeed or false in other case.
+	 * @return true if the operation succeed or false in other case.
 	 */
 	public boolean saveAs(String name, boolean IsCompiledOrInterpreted,
 			String path) {
@@ -196,9 +198,12 @@ public class AcideLexiconConfiguration {
 		// If the name is already set by the user
 		if ((_name != null) && (!_name.trim().equalsIgnoreCase(""))) {
 
+			// Stores the name
 			_name = name;
+
+			// Stores the is compiled or interpreted flag
 			_isCompiledOrInterpreted = IsCompiledOrInterpreted;
-			
+
 			// Creates the XStream object to write in the XML file
 			XStream xStream = new XStream();
 
@@ -224,28 +229,30 @@ public class AcideLexiconConfiguration {
 	}
 
 	/**
-	 * Saves the lexicon configuration of a programming language in a temporal
-	 * XML file, returning true if the operation was succeed or false in other
-	 * case.
+	 * Saves the ACIDE - A Configurable IDE lexicon configuration into a
+	 * temporal XML file, returning true if the operation succeed or false in
+	 * other case.
 	 * 
 	 * @param name
-	 *            name of the lexicon configuration for the language.
+	 *            lexicon configuration name.
 	 * @param isCompiledOrInterpreted
-	 *            indicates if the programming language is compiled or
-	 *            interpreted.
+	 *            lexicon configuration is compiled or interpreted flag.
 	 * 
-	 * @return True if the operation was succeed or false in other case.
+	 * @return true if the operation succeed or false in other case.
 	 */
-	public String saveTemp(String name, boolean isCompiledOrInterpreted) {
+	public String saveTemporalFile(String name, boolean isCompiledOrInterpreted) {
 
 		File temporalFile = null;
 
 		// If the name is already set by the user
 		if ((_name != null) && (!_name.trim().equalsIgnoreCase(""))) {
 
+			// Stores the name
 			_name = name;
+
+			// Stores the is compiled or interpreted flag
 			_isCompiledOrInterpreted = isCompiledOrInterpreted;
-			
+
 			// Creates the XStream object to write in the XML file
 			XStream xStream = new XStream();
 
@@ -276,21 +283,22 @@ public class AcideLexiconConfiguration {
 				return null;
 			}
 
+			// Returns the path
 			return "./configuration/lexicon/temp/" + temporalFile.getName();
 		}
 
+		// Returns the path
 		return "./configuration/lexicon/temp/NULL.xml";
 	}
 
 	/**
-	 * Loads the lexicon configuration for a programming language in the
-	 * application from a temporal XML file which is located in a path given as
-	 * a parameter.
+	 * Loads the ACIDE - A Configurable IDE lexicon configuration from a
+	 * temporal XML file which is located in a path given as a parameter.
 	 * 
 	 * @param path
 	 *            file path of the file to extract the configuration from.
 	 */
-	public void loadTemp(String path) {
+	public void loadTemporalFile(String path) {
 
 		// If the name is already set by the user
 		if ((path != null) && (!path.trim().equalsIgnoreCase(""))) {
@@ -307,52 +315,49 @@ public class AcideLexiconConfiguration {
 				AcideLexiconConfiguration lexiconConfiguration = (AcideLexiconConfiguration) x
 						.fromXML(fileInputStream);
 
-				// NAME
+				// Gets the name
 				String name = lexiconConfiguration.getName();
 
-				// IS COMPILED OR INTERPRETED
+				// Gets the is compiled or interpreted flag
 				Boolean isCompiledOrInterpreted = lexiconConfiguration
 						.getIsCompiledOrInterpreted();
 
-				// TOKEN TYPE MANAGER
+				// Gets the token type manager
 				AcideLexiconTokenTypeManager tokenTypeManager = lexiconConfiguration
 						.getTokenTypeManager();
 
-				// VALID EXTENSIONS MANAGER
+				// Gets the valid extensions manager
 				AcideValidExtensionsManager validExtensionsManager = lexiconConfiguration
 						.getValidExtensionsManager();
 
-				// DELIMITERS MANAGER
+				// Gets the delimiters manager
 				AcideLexiconDelimitersManager delimitersManager = lexiconConfiguration
 						.getDelimitersManager();
 
-				// REMARKS MANAGER
+				// Gets the remarks manager
 				AcideLexiconRemarksManager remarksManager = lexiconConfiguration
 						.getRemarksManager();
 
 				// Closes the file input stream
 				fileInputStream.close();
 
-				// NAME
+				// Stores the name
 				_name = name;
 
-				// IS COMPILED OR INTERPRETED
+				// Stores the is compiled or interpreted
 				_isCompiledOrInterpreted = isCompiledOrInterpreted;
 
-				// TOKEN TYPE MANAGER
+				// Stores the token type manager
 				_tokenTypeManager = tokenTypeManager;
 
-				// VALID EXTENSIONS MANAGER
+				// Stores the valid extensions manager
 				_validExtensionsManager = validExtensionsManager;
 
-				// DELIMITERS MANAGER
+				// Stores the delimiters manager
 				_delimitersManager = delimitersManager;
 
-				// REMARKS MANAGER
+				// Stores the remarks manager
 				_remarksManager = remarksManager;
-
-				// PATH
-				_path = path;
 
 			} catch (Exception exception) {
 
@@ -364,9 +369,8 @@ public class AcideLexiconConfiguration {
 	}
 
 	/**
-	 * Loads the lexicon configuration for a programming language in the
-	 * application from a XML file which is located in a path given as a
-	 * parameter.
+	 * Loads the ACIDE - A Configurable IDE lexicon configuration from a XML
+	 * file which is located in a path given as a parameter.
 	 * 
 	 * @param path
 	 *            File path of the file to extract the configuration from.
@@ -387,62 +391,63 @@ public class AcideLexiconConfiguration {
 				AcideLexiconConfiguration lexiconConfiguration = (AcideLexiconConfiguration) x
 						.fromXML(fileInputStream);
 
-				// NAME
+				// Gets the name
 				String name = lexiconConfiguration.getName();
 
-				// IS COMPILED OR INTERPRETED
+				// Gets the is compiled or interpreted flag
 				Boolean isCompiledOrInterpreted = lexiconConfiguration
 						.getIsCompiledOrInterpreted();
 
-				// TOKEN TYPE MANAGER
-				AcideLexiconTokenTypeManager tokenTypeList = lexiconConfiguration
+				// Gets the token type manager
+				AcideLexiconTokenTypeManager tokenTypeManager = lexiconConfiguration
 						.getTokenTypeManager();
 
-				// VALID EXTENSIONS MANAGER
+				// Gets the valid extensions manager
 				AcideValidExtensionsManager validExtensionsManager = lexiconConfiguration
 						.getValidExtensionsManager();
 
-				// DELIMITERS MANAGER
+				// Gets the delimiters manager
 				AcideLexiconDelimitersManager delimitersManager = lexiconConfiguration
 						.getDelimitersManager();
 
-				// REMARKS MANAGER
+				// Gets the remarks manager
 				AcideLexiconRemarksManager remarksManager = lexiconConfiguration
 						.getRemarksManager();
 
 				// Closes the file input stream
 				fileInputStream.close();
 
-				// NAME
+				// Stores the name
 				_name = name;
-				
-				// IS COMPILED OR INTERPRETED
+
+				// Stores the is compiled or interpreted flag
 				_isCompiledOrInterpreted = isCompiledOrInterpreted;
-				
-				// TOKEN TYPE MANAGER
-				_tokenTypeManager = tokenTypeList;
-				
-				// VALID EXTENSIONS MANAGER
+
+				// Stores the token type manager
+				_tokenTypeManager = tokenTypeManager;
+
+				// Stores the valid extensions manager
 				_validExtensionsManager = validExtensionsManager;
-				
-				// DELIMITERS MANAGER
+
+				// Stores the delimiters manager
 				_delimitersManager = delimitersManager;
-				
-				// REMARKS MANAGER
+
+				// Stores the remarks manager
 				_remarksManager = remarksManager;
-				
-				// PATH
+
+				// Stores the path
 				_path = path;
 
 			} catch (Exception exception) {
 
-				// Error message
+				// Displays an error message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
 						.getInstance().getLabels().getString("s968")
 						+ path
 						+ AcideLanguageManager.getInstance().getLabels()
 								.getString("s957")
-						+ DEFAULT_PATH + DEFAULT_NAME);
+						+ DEFAULT_PATH
+						+ DEFAULT_NAME);
 
 				// If the file does not exist, loads the default configuration
 				load(DEFAULT_PATH + DEFAULT_NAME);
@@ -455,7 +460,7 @@ public class AcideLexiconConfiguration {
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns the ACIDE - A Configurable IDE lexicon configuration remarks
 	 * manager.

@@ -29,6 +29,7 @@
  */
 package acide.gui.menuBar.fileMenu.gui;
 
+import acide.gui.listeners.AcideWindowClosingListener;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.fileMenu.utils.AcidePrinterManager;
 
@@ -136,26 +137,41 @@ public class AcidePrintConfigurationWindow extends JFrame {
 	 */
 	public AcidePrintConfigurationWindow() {
 
-		// Disables the main window
-		AcideMainWindow.getInstance().setEnabled(false);
-
-		// Sets the layout
-		setLayout(new GridBagLayout());
+		super();
 
 		// Creates the printer manager
 		_printerManager = new AcidePrinterManager(AcideMainWindow.getInstance()
 				.getFileEditorManager().getSelectedFileEditorPanel()
 				.getActiveTextEditionArea(), false, false);
 
+		// Builds the window components
+		buildComponents();
+
+		// Sets the listeners of the window components
+		setListeners();
+
+		// Adds the components to the window
+		addComponents();
+
+		// Sets the window configuration
+		setWindowConfiguration();
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE print configuration window
+	 * components.
+	 */
+	private void buildComponents() {
+
 		// Creates the page number check box
 		_pageNumberCheckBox = new JCheckBox();
-		
+
 		// Disables the page number check box
 		_pageNumberCheckBox.setEnabled(false);
 
 		// Creates the main panel
 		_mainPanel = new JPanel(new GridBagLayout());
-		
+
 		// Sets the main panel border
 		_mainPanel.setBorder(BorderFactory.createTitledBorder(null,
 				AcideLanguageManager.getInstance().getLabels()
@@ -172,31 +188,31 @@ public class AcidePrintConfigurationWindow extends JFrame {
 
 		// Creates the date check box
 		_dateCheckBox = new JCheckBox();
-		
+
 		// Disables the date cjack box
 		_dateCheckBox.setEnabled(false);
 
 		// Creates the print button
 		_printButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s624"));
-		
+
 		// Sets the print button horizontal alignment as center
 		_printButton.setHorizontalAlignment(JButton.CENTER);
-		
+
 		// Sets the print button tool tip text
 		_printButton.setToolTipText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s624"));
-		
+
 		// Disables the print button
 		_printButton.setEnabled(false);
 
 		// Creates the cancel button
 		_cancelButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s919"));
-		
+
 		// Sets the cancel button horizontal alignment as center
 		_cancelButton.setHorizontalAlignment(JButton.CENTER);
-		
+
 		// Sets the cancel button tool tip text
 		_cancelButton.setToolTipText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s919"));
@@ -204,16 +220,61 @@ public class AcidePrintConfigurationWindow extends JFrame {
 		// Creates the configure page button
 		_configurePageButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s961"));
-		
+
 		// Sets the configure page button horizontal alignment as center
 		_configurePageButton.setHorizontalAlignment(JButton.CENTER);
-		
+
 		// Sets the configure page button tool tip text
 		_configurePageButton.setToolTipText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s961"));
 
-		// Sets the listeners of the window components.
-		setListeners();
+		// Creates the button panel
+		_buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+		// Adds the print button to the button panel
+		_buttonPanel.add(_printButton);
+
+		// Adds the cancel button to the button panel
+		_buttonPanel.add(_cancelButton);
+	}
+
+	/**
+	 * Sets the ACIDE - A Configurable IDE print configuration window
+	 * configuration.
+	 */
+	private void setWindowConfiguration() {
+
+		// Sets the window title
+		setTitle(AcideLanguageManager.getInstance().getLabels()
+				.getString("s964"));
+
+		// Sets the window icon image
+		setIconImage(ICON.getImage());
+
+		// The window is not resizable
+		setResizable(false);
+
+		// Packs the window components
+		pack();
+
+		// Centers the window
+		setLocationRelativeTo(null);
+
+		// Displays the window
+		setVisible(true);
+
+		// Disables the main window
+		AcideMainWindow.getInstance().setEnabled(false);
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE print configuration
+	 * window with the layout.
+	 */
+	private void addComponents() {
+
+		// Sets the layout
+		setLayout(new GridBagLayout());
 
 		// Adds the components to the window with the layout
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -224,71 +285,44 @@ public class AcidePrintConfigurationWindow extends JFrame {
 
 		// Adds the configure page button to the main panel
 		_mainPanel.add(_configurePageButton, constraints);
-	
+
 		constraints.gridy = 1;
-		
+
 		// Adds the page number label to the main panel
 		_mainPanel.add(_pageNumberLabel, constraints);
-		
+
 		constraints.gridx = 1;
-		
+
 		// Adds the page number check box to the main panel
 		_mainPanel.add(_pageNumberCheckBox, constraints);
-		
+
 		constraints.gridy = 2;
 		constraints.gridx = 0;
-		
+
 		// Adds the date label to the main panel
 		_mainPanel.add(_dateLabel, constraints);
-		
+
 		constraints.gridx = 1;
-		
+
 		// Adds the date check box to the main panel
 		_mainPanel.add(_dateCheckBox, constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		
+
 		// Adds the main panel to the window
 		add(_mainPanel, constraints);
 
-		// Creates the button panel
-		_buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		
-		// Adds the print button to the button panel 
-		_buttonPanel.add(_printButton);
-		
-		// Adds the cancel button to the button panel
-		_buttonPanel.add(_cancelButton);
-		
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		
+
 		// Adds the button panel to the window
 		add(_buttonPanel, constraints);
-
-		// Sets the window title
-		setTitle(AcideLanguageManager.getInstance().getLabels()
-				.getString("s964"));
-		
-		// Sets the window icon image
-		setIconImage(ICON.getImage());
-		
-		// The window is not resizable
-		setResizable(false);
-		
-		// Packs the window components
-		pack();
-		
-		// Centers the window
-		setLocationRelativeTo(null);	
-		
-		// Displays the window
-		setVisible(true);
 	}
 
 	/**
-	 * Sets the listeners of the window components.
+	 * Sets the listeners of the ACIDE - A Configurable IDE print configuration
+	 * window components.
 	 */
 	private void setListeners() {
 
@@ -300,24 +334,27 @@ public class AcidePrintConfigurationWindow extends JFrame {
 
 		// Sets the configure page button action listener
 		_configurePageButton.addActionListener(new ConfigurePageButtonAction());
-		
+
 		// Sets the configure page button keyboard listener
 		_configurePageButton
 				.addKeyListener(new PrintConfigurationWindowKeyboardListener());
 
 		// Sets the cancel button action listener
 		_cancelButton.addActionListener(new CancelButtonAction());
-		
+
 		// Sets the cancel button keyboard listener
 		_cancelButton
 				.addKeyListener(new PrintConfigurationWindowKeyboardListener());
 
 		// Sets the print button action listener
 		_printButton.addActionListener(new PrintButtonAction());
-		
+
 		// Sets the print button keyboard listener
 		_printButton
 				.addKeyListener(new PrintConfigurationWindowKeyboardListener());
+
+		// Sets the window closing listener
+		addWindowListener(new AcideWindowClosingListener());
 	}
 
 	/**
@@ -475,10 +512,10 @@ public class AcidePrintConfigurationWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}
@@ -508,10 +545,10 @@ public class AcidePrintConfigurationWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}
@@ -533,16 +570,16 @@ public class AcidePrintConfigurationWindow extends JFrame {
 		public void keyPressed(KeyEvent keyEvent) {
 
 			if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
-				
+
 				// Enables the main window
 				AcideMainWindow.getInstance().setEnabled(true);
-				
+
 				// Closes the window
 				dispose();
-				
+
 				// Brings the main window to the front
 				AcideMainWindow.getInstance().setAlwaysOnTop(true);
-				
+
 				// But only this time
 				AcideMainWindow.getInstance().setAlwaysOnTop(false);
 			}

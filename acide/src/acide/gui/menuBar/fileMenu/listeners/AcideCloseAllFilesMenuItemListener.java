@@ -62,13 +62,9 @@ public class AcideCloseAllFilesMenuItemListener implements ActionListener {
 			// Checks the opened editors
 			for (int index = numberOfFileEditorPanels - 1; index >= 0; index--) {
 
-				// Sets the selected file editor panel
-				AcideMainWindow.getInstance().getFileEditorManager()
-						.setSelectedFileEditorPanelAt(index);
-
 				// Closes the current file editor
 				AcideMainWindow.getInstance().getMenu().getFileMenu()
-						.getCloseFileMenuItem().doClick();
+						.closeFile(index);
 			}
 		}
 	}

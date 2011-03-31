@@ -47,6 +47,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import acide.gui.listeners.AcideWindowClosingListener;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
@@ -106,29 +107,38 @@ public class AcideAboutUsWindow extends JFrame {
 
 		super();
 
-		// Disables the main window
-		AcideMainWindow.getInstance().setEnabled(false);
-
 		// Updates the log
 		AcideLog.getLog().info(
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s619"));
 
-		// Sets the layout
-		setLayout(new BorderLayout());
+		// Builds the window components
+		buildComponents();
+
+		// Sets the listeners of the window components
+		setListeners();
+
+		// Adds the components to the window
+		addComponents();
+
+		// Sets the window configuration
+		setWindowConfiguration();
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE about us window components.
+	 */
+	private void buildComponents() {
 
 		// Creates the main panel
 		_mainPanel = new JPanel(new GridBagLayout());
-	
+
 		// Creates the image label
 		_image = new JLabel(IMAGE);
-		
-		// Adds the image label to the window
-		add(_image, BorderLayout.NORTH);
 
 		// Creates the info panel
 		_infoPanel = new JPanel(new GridBagLayout());
-		
+
 		// Sets the info panel border
 		_infoPanel.setBorder(BorderFactory.createTitledBorder(null,
 				AcideLanguageManager.getInstance().getLabels()
@@ -140,7 +150,7 @@ public class AcideAboutUsWindow extends JFrame {
 
 		// Creates the developers panel
 		_developersPanel = new JPanel(new GridBagLayout());
-		
+
 		// Sets the developers panel border
 		_developersPanel.setBorder(BorderFactory.createTitledBorder(null,
 				AcideLanguageManager.getInstance().getLabels()
@@ -150,9 +160,44 @@ public class AcideAboutUsWindow extends JFrame {
 		// Creates the accept button
 		_acceptButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s177"));
-		
-		// Sets the listeners of the window components
-		setListeners();
+	}
+
+	/**
+	 * Sets the ACIDE - A Configurable IDE about us window configuration.
+	 */
+	private void setWindowConfiguration() {
+
+		// Sets the window title
+		setTitle(AcideLanguageManager.getInstance().getLabels()
+				.getString("s622"));
+
+		// Sets the window icon image
+		setIconImage(ICON.getImage());
+
+		// The window is not resizable
+		setResizable(false);
+
+		// Packs all the window components
+		pack();
+
+		// Centers the window
+		setLocationRelativeTo(null);
+
+		// Displays the window
+		setVisible(true);
+
+		// Disables the main window
+		AcideMainWindow.getInstance().setEnabled(false);
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE about us window
+	 * with the layout.
+	 */
+	private void addComponents() {
+
+		// Sets the layout
+		setLayout(new BorderLayout());
 
 		// Adds the components to the window with the layout
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -161,129 +206,117 @@ public class AcideAboutUsWindow extends JFrame {
 		constraints.weightx = 500;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		
+
 		_infoPanel.add(new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s631")), constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		
+
 		_infoPanel.add(new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s632")), constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		
+
 		_infoPanel.add(new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s633")), constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 3;
-		
+
 		_infoPanel.add(new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s634")), constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 4;
-		
+
 		_infoPanel.add(new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s635")), constraints);
 
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		
+
 		_developersPanel.add(new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s626")), constraints);
-		
+
 		constraints.insets = new Insets(5, 25, 5, 5);
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		
+
 		_developersPanel.add(new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s627")), constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		
+
 		_developersPanel.add(new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s628")), constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 3;
-		
+
 		_developersPanel.add(new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s629")), constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 4;
-		
+
 		_developersPanel.add(new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s966")), constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 5;
-		
+
 		_developersPanel.add(new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s967")), constraints);
 
 		constraints.insets = new Insets(5, 5, 5, 5);
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		
+
 		// Adds the info panel to the main panel
 		_mainPanel.add(_infoPanel, constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		
+
 		// Adds the developers panel to the main panel
 		_mainPanel.add(_developersPanel, constraints);
-		
+
+		// Adds the image label to the window
+		add(_image, BorderLayout.NORTH);
+
 		// Adds the main panel to the window
 		add(_mainPanel, BorderLayout.CENTER);
 
 		// Adds the accept button to the button panel
 		_buttonPanel.add(_acceptButton);
-		
+
 		// Adds the button panel to the window
 		add(_buttonPanel, BorderLayout.SOUTH);
-
-		// Sets the window title
-		setTitle(AcideLanguageManager.getInstance().getLabels()
-				.getString("s622"));
-		
-		// Sets the window icon image
-		setIconImage(ICON.getImage());
-		
-		// The window is not resizable
-		setResizable(false);
-		
-		// Packs all the window components
-		pack();
-		
-		// Centers the window
-		setLocationRelativeTo(null);
-		
-		// Displays the window
-		setVisible(true);
 	}
 
 	/**
-	 * Sets the listeners of the window components.
+	 * Sets the listeners of the ACIDE - A Configurable IDE about us window
+	 * components.
 	 */
 	public void setListeners() {
-		
+
 		// Adds the accept button action listener
 		_acceptButton.addActionListener(new AcceptButtonAction());
-		
+
 		// Adds the accept button keyboard listener
 		_acceptButton.addKeyListener(new AboutUsWindowKeyboardListener());
-		
+
 		// Adds the developers panel keyboard listener
 		_developersPanel.addKeyListener(new AboutUsWindowKeyboardListener());
-		
+
 		// Adds the info panel keyboard listener
 		_infoPanel.addKeyListener(new AboutUsWindowKeyboardListener());
+
+		// Sets the window closing listener
+		addWindowListener(new AcideWindowClosingListener());
 	}
 
 	/**
@@ -292,15 +325,18 @@ public class AcideAboutUsWindow extends JFrame {
 	 * @version 0.8
 	 * @see ActionListener
 	 */
-	class AcceptButtonAction implements ActionListener{
+	class AcceptButtonAction implements ActionListener {
 
 		/*
 		 * (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		 * 
+		 * @see
+		 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent
+		 * )
 		 */
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
-			
+
 			// Updates the log
 			AcideLog.getLog().info(
 					AcideLanguageManager.getInstance().getLabels()
@@ -308,18 +344,18 @@ public class AcideAboutUsWindow extends JFrame {
 
 			// Enables the main window
 			AcideMainWindow.getInstance().setEnabled(true);
-			
+
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
-		}	
+		}
 	}
-	
+
 	/**
 	 * ACIDE - A Configurable IDE about us window keyboard listener.
 	 * 
@@ -342,10 +378,10 @@ public class AcideAboutUsWindow extends JFrame {
 
 				// Closes the window
 				dispose();
-				
+
 				// Brings the main window to the front
 				AcideMainWindow.getInstance().setAlwaysOnTop(true);
-				
+
 				// But not permanently
 				AcideMainWindow.getInstance().setAlwaysOnTop(false);
 			}

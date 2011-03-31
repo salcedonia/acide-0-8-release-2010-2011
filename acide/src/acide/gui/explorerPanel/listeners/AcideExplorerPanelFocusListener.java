@@ -79,6 +79,6 @@ public class AcideExplorerPanelFocusListener implements FocusListener {
 			
 			// Hides the caret in the opened editor
 			AcideMainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel()
-					.setCaretVisible(isVisible);
+					.getActiveTextEditionArea().getCaret().setVisible(isVisible);
 	}
 }

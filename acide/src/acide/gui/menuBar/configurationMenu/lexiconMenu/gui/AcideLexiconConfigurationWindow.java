@@ -35,13 +35,17 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.panels.delimiters.AcideDelimitersPanel;
@@ -49,6 +53,7 @@ import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.panels.remarks.AcideR
 import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.panels.reserverdWords.AcideReservedWordsPanel;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
+import acide.process.AcideApplyLexiconProcess;
 
 /**
  * ACIDE - A Configurable IDE lexicon configuration window.
@@ -99,12 +104,16 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 	 */
 	private JButton _cancelButton;
 	/**
-	 * Temporal path while the lexicon configuration.
+	 * ACIDE - A Configurable IDE lexicon configuration current file path.
+	 */
+	private String _currentPath;
+	/**
+	 * ACIDE - A Configurable IDE lexicon configuration temporal file path.
 	 */
 	private String _temporalPath;
 
 	/**
-	 * Creates a new lexicon configuration window.
+	 * Creates a new ACIDE - A Configurable IDE lexicon configuration window.
 	 */
 	public AcideLexiconConfigurationWindow() {
 
@@ -115,22 +124,78 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s376"));
 
-		// Sets the layout
-		setLayout(new GridBagLayout());
-		
-		// Enables the main window again
-		AcideMainWindow.getInstance().setEnabled(false);
-		
-		// Gets the temporal path
+		// Gets the current path from the lexicon configuration
+		_currentPath = AcideMainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanel().getLexiconConfiguration()
+				.getPath();
+
+		// Gets the temporal path from the temporal file
 		_temporalPath = AcideMainWindow
 				.getInstance()
 				.getFileEditorManager()
 				.getSelectedFileEditorPanel()
 				.getLexiconConfiguration()
-				.saveTemp(
+				.saveTemporalFile(
 						AcideMainWindow.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel()
 								.getLexiconConfiguration().getName(), false);
+
+		// Builds the window components
+		buildComponents();
+
+		// Adds the components to the window
+		addComponents();
+
+		// Sets the listeners of the window components
+		setListeners();
+
+		// Sets the window configuration
+		setWindowConfiguration();
+	}
+
+	/**
+	 * Sets the ACIDE - A Configurable IDE lexicon configuration window
+	 * configuration.
+	 */
+	private void setWindowConfiguration() {
+
+		// Sets the window title
+		setTitle(AcideLanguageManager.getInstance().getLabels()
+				.getString("s377")
+				+ " - "
+				+ AcideMainWindow.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanel().getLexiconConfiguration()
+						.getName());
+
+		// Sets the window icon image
+		setIconImage(ICON.getImage());
+
+		// Sets the window not resizable
+		setResizable(false);
+
+		// Packs the window components
+		pack();
+
+		// Centers the window
+		setLocationRelativeTo(null);
+
+		// Sets the window visible
+		setVisible(true);
+
+		// Enables the main window again
+		AcideMainWindow.getInstance().setEnabled(false);
+
+		// Updates the log
+		AcideLog.getLog().info(
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s420"));
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE lexicon configuration window
+	 * components.
+	 */
+	private void buildComponents() {
 
 		// Creates the reserved words panel
 		_reservedWordsPanel = new AcideReservedWordsPanel();
@@ -144,19 +209,18 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 		// Creates the delimiters and remarks panel
 		_delimitersAndRemarksPanel = new JPanel(new GridBagLayout());
 
-		// Creates the button panel
-		_buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		// Builds the button panel
+		buildButtonPanel();
+	}
 
-		// Creates the apply button
-		_applyButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s434"));
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE lexicon
+	 * configuration window with the layout.
+	 */
+	private void addComponents() {
 
-		// Creates the cancel button
-		_cancelButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s435"));
-
-		// Sets the listeners of the window components
-		setListeners();
+		// Sets the layout
+		setLayout(new GridBagLayout());
 
 		// Creates the tables to display
 		addTablesToWindow();
@@ -204,42 +268,31 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 		constraints.gridy = 1;
 		constraints.gridwidth = 2;
 
+		// Adds the button panel to the window
+		add(_buttonPanel, constraints);
+	}
+
+	/**
+	 * Builds the button panel and its components.
+	 */
+	private void buildButtonPanel() {
+
+		// Creates the button panel
+		_buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+		// Creates the apply button
+		_applyButton = new JButton(AcideLanguageManager.getInstance()
+				.getLabels().getString("s434"));
+
+		// Creates the cancel button
+		_cancelButton = new JButton(AcideLanguageManager.getInstance()
+				.getLabels().getString("s435"));
+
 		// Adds the apply buttons to the button panel
 		_buttonPanel.add(_applyButton);
 
 		// Adds the cancel button to the button panel
 		_buttonPanel.add(_cancelButton);
-
-		// Adds the button panel to the window
-		add(_buttonPanel, constraints);
-
-		// Sets the window title
-		setTitle(AcideLanguageManager.getInstance().getLabels()
-				.getString("s377")
-				+ " - "
-				+ AcideMainWindow.getInstance().getFileEditorManager()
-						.getSelectedFileEditorPanel().getLexiconConfiguration()
-						.getName());
-
-		// Sets the window icon image
-		setIconImage(ICON.getImage());
-
-		// Sets the window not resizable
-		setResizable(false);
-
-		// Packs the window components
-		pack();
-
-		// Centers the window
-		setLocationRelativeTo(null);
-
-		// Sets the window visible
-		setVisible(true);
-
-		// Updates the log
-		AcideLog.getLog().info(
-				AcideLanguageManager.getInstance().getLabels()
-						.getString("s420"));
 	}
 
 	/**
@@ -257,6 +310,9 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 		_cancelButton.registerKeyboardAction(new EscapeAction(), "EscapeKey",
 				KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0,
 						true), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+		// Adds the window listener
+		addWindowListener(new AcideLexiconConfigurationWindowListener());
 	}
 
 	/**
@@ -309,10 +365,10 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}
@@ -336,85 +392,122 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Gets the text from the remarks panel text field
-			AcideMainWindow
-					.getInstance()
-					.getFileEditorManager()
-					.getSelectedFileEditorPanel()
-					.getLexiconConfiguration()
+			if (_reservedWordsPanel.getAreThereChanges()
+					|| _delimitersPanel.getAreThereChanges()
+					|| _remarksPanel.getAreThereChanges()) {
 
-					.getRemarksManager()
-					.setSymbol(
-							_remarksPanel.getRemarkSymbolTextField().getText());
+				// Asks the user if wants to save the changes
+				int returnValue = JOptionPane.showConfirmDialog(null,
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s1068"), AcideLanguageManager
+								.getInstance().getLabels().getString("s1067"),
+						JOptionPane.YES_NO_CANCEL_OPTION);
 
-			// Gets the color from the remarks panel preview text field
-			AcideMainWindow
-					.getInstance()
-					.getFileEditorManager()
-					.getSelectedFileEditorPanel()
-					.getLexiconConfiguration()
-					.getRemarksManager()
-					.setColor(
-							_remarksPanel.getPreviewTextField().getForeground());
+				switch (returnValue) {
 
-			// Gets the is case sensitive from the remarks panel is case
-			// sensitive check box
-			AcideMainWindow
-					.getInstance()
-					.getFileEditorManager()
-					.getSelectedFileEditorPanel()
-					.getLexiconConfiguration()
-					.getRemarksManager()
-					.setIsCaseSensitive(
-							_remarksPanel.getIsCaseSensitiveCheckBox()
-									.isSelected());
+				// YES
+				case JOptionPane.YES_OPTION:
 
-			// Gets the font style from the remarks panel preview text field
-			AcideMainWindow
-					.getInstance()
-					.getFileEditorManager()
-					.getSelectedFileEditorPanel()
-					.getLexiconConfiguration()
-					.getRemarksManager()
-					.setFontStyle(
-							_remarksPanel.getPreviewTextField().getFont()
-									.getStyle());
+					// Gets the text from the remarks panel text field
+					AcideMainWindow
+							.getInstance()
+							.getFileEditorManager()
+							.getSelectedFileEditorPanel()
+							.getLexiconConfiguration()
 
-			// Gets the selected file editor panel caret position
-			int caretPosition = AcideMainWindow.getInstance()
-					.getFileEditorManager().getSelectedFileEditorPanel()
-					.getActiveTextEditionArea().getCaretPosition();
+							.getRemarksManager()
+							.setSymbol(
+									_remarksPanel.getRemarkSymbolTextField()
+											.getText());
 
-			// Resets the selected file editor text edition area
-			AcideMainWindow.getInstance().getFileEditorManager()
-					.getSelectedFileEditorPanel()
-					.resetStyledDocument(caretPosition);
+					// Gets the color from the remarks panel preview text field
+					AcideMainWindow
+							.getInstance()
+							.getFileEditorManager()
+							.getSelectedFileEditorPanel()
+							.getLexiconConfiguration()
+							.getRemarksManager()
+							.setColor(
+									_remarksPanel.getPreviewTextField()
+											.getForeground());
 
-			// Set the main window enabled again
-			AcideMainWindow.getInstance().setEnabled(true);
+					// Gets the is case sensitive from the remarks panel is case
+					// sensitive check box
+					AcideMainWindow
+							.getInstance()
+							.getFileEditorManager()
+							.getSelectedFileEditorPanel()
+							.getLexiconConfiguration()
+							.getRemarksManager()
+							.setIsCaseSensitive(
+									_remarksPanel.getIsCaseSensitiveCheckBox()
+											.isSelected());
 
-			// Closes the window
-			dispose();
-			
-			// Brings the main window to the front
-			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
-			// But not permanently
-			AcideMainWindow.getInstance().setAlwaysOnTop(false);
+					// Gets the font style from the remarks panel preview text
+					// field
+					AcideMainWindow
+							.getInstance()
+							.getFileEditorManager()
+							.getSelectedFileEditorPanel()
+							.getLexiconConfiguration()
+							.getRemarksManager()
+							.setFontStyle(
+									_remarksPanel.getPreviewTextField()
+											.getFont().getStyle());
 
-			// Updates the lexicon message in the status bar
-			AcideMainWindow
-					.getInstance()
-					.getStatusBar()
-					.setLexiconMessage(
-							AcideLanguageManager.getInstance().getLabels()
-									.getString("s449")
-									+ " "
-									+ AcideMainWindow.getInstance()
-											.getFileEditorManager()
-											.getSelectedFileEditorPanel()
-											.getLexiconConfiguration()
-											.getName());
+					// Applies the lexicon configuration
+					SwingUtilities.invokeLater(new AcideApplyLexiconProcess());
+
+					// Set the main window enabled again
+					AcideMainWindow.getInstance().setEnabled(true);
+
+					// Closes the window
+					dispose();
+
+					// Brings the main window to the front
+					AcideMainWindow.getInstance().setAlwaysOnTop(true);
+
+					// But not permanently
+					AcideMainWindow.getInstance().setAlwaysOnTop(false);
+
+					// Updates the lexicon message in the status bar
+					AcideMainWindow
+							.getInstance()
+							.getStatusBar()
+							.setLexiconMessage(
+									AcideLanguageManager.getInstance()
+											.getLabels().getString("s449")
+											+ " "
+											+ AcideMainWindow
+													.getInstance()
+													.getFileEditorManager()
+													.getSelectedFileEditorPanel()
+													.getLexiconConfiguration()
+													.getName());
+
+					break;
+
+				// YES
+				case JOptionPane.NO_OPTION:
+
+					// Performs the cancel button action
+					_cancelButton.doClick();
+					break;
+				}
+			} else {
+
+				// Set the main window enabled again
+				AcideMainWindow.getInstance().setEnabled(true);
+
+				// Closes the window
+				dispose();
+
+				// Brings the main window to the front
+				AcideMainWindow.getInstance().setAlwaysOnTop(true);
+
+				// But not permanently
+				AcideMainWindow.getInstance().setAlwaysOnTop(false);
+			}
 		}
 	}
 
@@ -437,10 +530,12 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 
 			try {
 
-				// Loads the temp file
+				// Loads the temporal file into the lexicon configuration once
+				// again
+				// to restore the previous lexicon configuration
 				AcideMainWindow.getInstance().getFileEditorManager()
 						.getSelectedFileEditorPanel().getLexiconConfiguration()
-						.loadTemp(_temporalPath);
+						.loadTemporalFile(_temporalPath);
 			} catch (Exception exception) {
 
 				// Updates the log
@@ -453,12 +548,53 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
+		}
+	}
+
+	/**
+	 * ACIDE - A Configurable IDE lexicon configuration window window listener.
+	 * 
+	 * @version 0.8
+	 * @see WindowAdapter
+	 */
+	class AcideLexiconConfigurationWindowListener extends WindowAdapter {
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent
+		 * )
+		 */
+		public void windowClosing(WindowEvent windowEvent) {
+
+			// Enables the main window
+			AcideMainWindow.getInstance().setEnabled(true);
+
+			// Brings the main window to the front
+			AcideMainWindow.getInstance().setAlwaysOnTop(true);
+
+			// But not permanently
+			AcideMainWindow.getInstance().setAlwaysOnTop(false);
+
+			try {
+
+				// Restores the current path
+				AcideMainWindow.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanel().getLexiconConfiguration()
+						.load(_currentPath);
+			} catch (Exception exception) {
+
+				// Updates the log
+				AcideLog.getLog().error(exception.getMessage());
+				exception.printStackTrace();
+			}
 		}
 	}
 }

@@ -82,74 +82,136 @@ public class AcideLanguageManager {
 	}
 
 	/**
-	 * Sets the language to display.
+	 * Sets the language to display in ACIDE - A Configurable IDE.
 	 * 
-	 * @param string code of the language.
+	 * @param language language.
 	 */
-	public void getLanguage(String string) {
+	public void setLanguage(String language) {
 
 		try {
 
-			if(string.matches("english")){
+			// If it is English
+			if(language.matches("english")){
+				
+				// Creates a new English locale
 				_currentLocale = new Locale("en", "EN");
+				
+				// Updates the bundle
 				_bundle = BUNDLE_PATH + "english";
 			}
 			
-			if(string.matches("spanish")){ 
+			// If it is Spanish
+			if(language.matches("spanish")){ 
+				
+				// Creates a new Spanish locale
 				_currentLocale = new Locale("es", "ES");
+				
+				// Updates the bundle
 				_bundle = BUNDLE_PATH + "spanish";
 			}
 
+			// Creates the labels to display in ACIDE - A configurable IDE
 			_labels = ResourceBundle.getBundle(_bundle, _currentLocale);
 			
+			// Updates the file chooser save button text
 			UIManager.put("FileChooser.saveButtonText",
 					_labels.getString("s40"));
+			
+			// Updates the file chooser open button text
 			UIManager.put("FileChooser.openButtonText",
 					_labels.getString("s41"));
+			
+			// Updates the file chooser cancel button text
 			UIManager.put("FileChooser.cancelButtonText",
 					_labels.getString("s42"));
+			
+			// Updates the file chooser update button text
 			UIManager.put("FileChooser.updateButtonText",
 					_labels.getString("s43"));
+			
+			// Updates the file chooser help button text
 			UIManager.put("FileChooser.helpButtonText",
 					_labels.getString("s44"));
+			
+			// Updates the file chooser save button tool tip text
 			UIManager.put("FileChooser.saveButtonToolTipText",
 					_labels.getString("s45"));
+			
+			// Updates the file chooser open button tool tip text
 			UIManager.put("FileChooser.openButtonToolTipText",
 					_labels.getString("s46"));
+			
+			// Updates the file chooser cancel button tool tip text
 			UIManager.put("FileChooser.cancelButtonToolTipText",
 					_labels.getString("s47"));
+			
+			// Updates the file chooser file name label text
 			UIManager.put("FileChooser.fileNameLabelText",
 					_labels.getString("s48"));
+			
+			// Updates the file chooser look in label text
 			UIManager.put("FileChooser.lookInLabelText",
 					_labels.getString("s49"));
+			
+			// Updates the file chooser up folder tool tip text
 			UIManager.put("FileChooser.upFolderToolTipText",
 					_labels.getString("s50"));
+			
+			// Updates the file chooser new folder tool tip text
 			UIManager.put("FileChooser.newFolderToolTipText",
 					_labels.getString("s51"));
+			
+			// Updates the file chooser up folder accessible name
 			UIManager.put("FileChooser.newFolderAccessibleName",
 					_labels.getString("s52"));
+			
+			// Updates the file chooser list view button tool tip text
 			UIManager.put("FileChooser.listViewButtonToolTipText",
 					_labels.getString("s53"));
+			
+			// Updates the file chooser details view button tool tip text
 			UIManager.put("FileChooser.detailsViewButtonToolTipText",
 					_labels.getString("s54"));
+			
+			// Updates the file chooser files of type label text
 			UIManager.put("FileChooser.filesOfTypeLabelText",
 					_labels.getString("s55"));
+			
+			// Updates the file chooser accept all file filter text
 			UIManager.put("FileChooser.acceptAllFileFilterText",
 					_labels.getString("s56"));
+			
+			// Updates the file chooser file name header text
 			UIManager.put("FileChooser.fileNameHeaderText",
 					_labels.getString("s57"));
+			
+			// Updates the file chooser file size header text
 			UIManager.put("FileChooser.fileSizeHeaderText",
 					_labels.getString("s58"));
+			
+			// Updates the file chooser file type header text
 			UIManager.put("FileChooser.fileTypeHeaderText",
 					_labels.getString("s59"));
+			
+			// Updates the file chooser file date header text
 			UIManager.put("FileChooser.fileDateHeaderText",
 					_labels.getString("s60"));
+			
+			// Updates the file chooser file attribute header text
 			UIManager.put("FileChooser.fileAttrHeaderText",
 					_labels.getString("s61"));
+			
+			// Updates the option pane yes button text
 			UIManager.put("OptionPane.yesButtonText", _labels.getString("s62"));
+			
+			// Updates the option pane no button text
 			UIManager.put("OptionPane.noButtonText", _labels.getString("s63"));
+			
+			// Updates the option pane cancel button text
 			UIManager.put("OptionPane.cancelButtonText",
 					_labels.getString("s64"));
+			
+			// Updates the option pane ok button text
 			UIManager.put("OptionPane.okButtonText", _labels.getString("s548"));
 
 		} catch (RuntimeException exception) {

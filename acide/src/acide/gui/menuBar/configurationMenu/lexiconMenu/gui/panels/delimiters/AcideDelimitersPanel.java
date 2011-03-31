@@ -70,11 +70,11 @@ public class AcideDelimitersPanel extends JPanel {
 	/**
 	 * ACIDE - A Configurable IDE delimiter panel delimiter label.
 	 */
-	private final JLabel _delimiterLabel;
+	private JLabel _delimiterLabel;
 	/**
 	 * ACIDE - A Configurable IDE delimiter panel delimiter text field.
 	 */
-	private final JTextField _delimiterTextField;
+	private JTextField _delimiterTextField;
 	/**
 	 * ACIDE - A Configurable IDE delimiter panel add button.
 	 */
@@ -95,24 +95,47 @@ public class AcideDelimitersPanel extends JPanel {
 	 * ACIDE - A Configurable IDE delimiter panel sorter delimiter list table.
 	 */
 	private LexiconTableSorter _delimiterListTableSorter;
+	/**
+	 * ACIDE - A Configurable IDE lexicon configuration window are there changes
+	 * flag.
+	 */
+	private boolean _areThereChanges;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE delimiter panel.
 	 */
 	public AcideDelimitersPanel() {
 
+		super();
+		
+		// There are no changes yet
+		_areThereChanges = false;
+		
+		// Creates the delimiter list table columns
 		_delimiterListTableColumns = new String[1];
 		_delimiterListTableColumns[0] = AcideLanguageManager.getInstance()
 				.getLabels().getString("s440");
-
-		// Sets the layout
-		setLayout(new GridBagLayout());
 
 		// Sets the border
 		setBorder(BorderFactory.createTitledBorder(null, AcideLanguageManager
 				.getInstance().getLabels().getString("s429"),
 				TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION));
 
+		// Builds the panel components
+		buildComponents();
+
+		// Sets the listeners of the panel components
+		setListeners();
+
+		// Adds the components to the panel
+		addComponents();
+	}
+
+	/**
+	 * Builds the panel components.
+	 */
+	private void buildComponents() {
+		
 		// Creates the delimiter label
 		_delimiterLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s432"), JLabel.CENTER);
@@ -141,10 +164,16 @@ public class AcideDelimitersPanel extends JPanel {
 		// Sets the delete button horizontal text position as leading
 		_deleteButton.setHorizontalTextPosition(AbstractButton.LEADING);
 		// deleteDivider.setToolTipText(labels.getString("s388"));
+	}
 
-		// Sets the listeners of the window components
-		setListeners();
-
+	/**
+	 * Adds the components to the panel with the layout.
+	 */
+	private void addComponents() {
+		
+		// Sets the layout
+		setLayout(new GridBagLayout());
+		
 		// Adds the components to the panel with the layout
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -228,6 +257,25 @@ public class AcideDelimitersPanel extends JPanel {
 	}
 
 	/**
+	 * Returns the are there changes flag.
+	 * 
+	 * @return the are there changes flag.
+	 */
+	public boolean getAreThereChanges() {
+		return _areThereChanges;
+	}
+
+	/**
+	 * Sets a new value to the are there changes flag.
+	 * 
+	 * @param areThereChanges
+	 *            new value to set.
+	 */
+	public void setAreThereChanges(boolean areThereChanges) {
+		_areThereChanges = areThereChanges;
+	}
+	
+	/**
 	 * ACIDE - A Configurable IDE delimiter panel escape add button action
 	 * listener.
 	 * 
@@ -270,6 +318,9 @@ public class AcideDelimitersPanel extends JPanel {
 				_delimiterListTableSorter.sortByColumn(column);
 			_delimiterListTableSorter.fireTableDataChanged();
 			_delimiterTextField.setText("");
+			
+			// There are changes in the panel
+			_areThereChanges = true;
 		}
 	}
 
@@ -322,6 +373,9 @@ public class AcideDelimitersPanel extends JPanel {
 				if (column != -1)
 					_delimiterListTableSorter.sortByColumn(column);
 				_delimiterListTableSorter.fireTableDataChanged();
+				
+				// There are changes in the panel
+				_areThereChanges = true;
 			}
 		}
 	}

@@ -29,7 +29,7 @@
  */
 package acide.gui.menuBar.editMenu.listeners;
 
-import acide.gui.menuBar.editMenu.gui.search.AcideSearchWindow;
+import acide.gui.menuBar.editMenu.gui.AcideSearchReplaceWindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,9 +51,14 @@ public class AcideSearchMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		if (AcideSearchWindow.getInstance().isShowing())
-			AcideSearchWindow.getInstance().setVisible(false);
+		// If the window is already showing
+		if (AcideSearchReplaceWindow.getInstance().isShowing())
+			
+			// Hides it
+			AcideSearchReplaceWindow.getInstance().setVisible(false);
 		else
-			AcideSearchWindow.getInstance().setVisible(true);
+			
+			// Shows it with the search configuration
+			AcideSearchReplaceWindow.getInstance().showWindow(false);
 	}
 }

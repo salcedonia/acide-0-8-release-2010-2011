@@ -29,21 +29,16 @@
  */
 package acide.gui.menuBar.configurationMenu.toolBarMenu;
 
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+
 import acide.configuration.menu.AcideMenuConfiguration;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.listeners.AcideLoadToolBarMenuItemListener;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.listeners.AcideModifyToolBarMenuItemListener;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.listeners.AcideNewToolBarMenuItemListener;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.listeners.AcideSaveAsToolBaMenuItemrListener;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.listeners.AcideSaveToolBarMenuItemListener;
-
-import java.util.ResourceBundle;
-
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-
 import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE tool bar menu.
@@ -106,17 +101,17 @@ public class AcideToolBarMenu extends JMenu {
 
 		// NEW TOOL BAR MENU ITEM
 		_newToolBarMenuItem = new JMenuItem();
-		
+
 		// LOAD TOOL BAR MENU ITEM
 		_loadToolBarMenuItem = new JMenuItem();
-		
+
 		// MODIFY TOOL BAR MENU ITEM
 		_modifyToolBarMenuItem = new JMenuItem();
-		
+
 		// SAVE TOOL BAR MENU ITEM
 		_saveToolBarMenuItem = new JMenuItem();
 		_saveToolBarMenuItem.setEnabled(false);
-		
+
 		// SAVE TOOL BAR AS MENU ITEM
 		_saveToolBarAsMenuItem = new JMenuItem();
 
@@ -130,36 +125,25 @@ public class AcideToolBarMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
 		// NEW TOOL BAR MENU ITEM
-		_newToolBarMenuItem.setText(labels.getString("s280"));
+		_newToolBarMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s280"));
 
 		// LOAD TOOL BAR MENU ITEM
-		_loadToolBarMenuItem.setText(labels.getString("s281"));
+		_loadToolBarMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s281"));
 
 		// MODIFY TOOL BAR MENU ITEM
-		_modifyToolBarMenuItem.setText(labels.getString("s282"));
+		_modifyToolBarMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s282"));
 
 		// SAVE TOOL BAR MENU ITEM
-		_saveToolBarMenuItem.setText(labels.getString("s283"));
+		_saveToolBarMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s283"));
 
 		// SAVE TOOL BAR AS MENU ITEM
-		_saveToolBarAsMenuItem.setText(labels.getString("s284"));
+		_saveToolBarAsMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s284"));
 	}
 
 	/**

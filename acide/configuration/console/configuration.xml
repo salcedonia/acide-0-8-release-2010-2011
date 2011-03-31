@@ -1,8 +1,8 @@
 <acide.configuration.console.AcideConsoleConfiguration>
-  <__shellPath></__shellPath>
-  <__shellDirectory></__shellDirectory>
-  <__isEchoCommand>false</__isEchoCommand>
-  <__exitCommand></__exitCommand>
+  <__shellPath>C:\Documents and Settings\Salcedonia\Escritorio\des\des.exe</__shellPath>
+  <__shellDirectory>C:\Documents and Settings\Salcedonia\Escritorio\des</__shellDirectory>
+  <__isEchoCommand>true</__isEchoCommand>
+  <__exitCommand>/exit</__exitCommand>
   <__fontName>Monospaced.plain</__fontName>
   <__fontStyle>0</__fontStyle>
   <__fontSize>12</__fontSize>

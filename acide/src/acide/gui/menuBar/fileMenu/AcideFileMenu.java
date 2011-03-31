@@ -29,13 +29,24 @@
  */
 package acide.gui.menuBar.fileMenu;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.Locale;
+
+import javax.swing.ImageIcon;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
+
 import acide.configuration.grammar.AcideGrammarConfiguration;
 import acide.configuration.lexicon.AcideLexiconConfiguration;
 import acide.configuration.menu.AcideMenuConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
-import acide.configuration.project.workbench.AcideWorkbenchManager;
+import acide.configuration.workbench.AcideWorkbenchManager;
 import acide.files.AcideFileManager;
 import acide.files.project.AcideProjectFileType;
+import acide.gui.fileEditor.fileEditorManager.utils.logic.closeButton.AcideFileEditorCloseButton;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.fileMenu.listeners.AcideCloseAllFilesMenuItemListener;
 import acide.gui.menuBar.fileMenu.listeners.AcideCloseFileMenuItemListener;
@@ -48,21 +59,8 @@ import acide.gui.menuBar.fileMenu.listeners.AcideSaveAllFilesMenuItemListener;
 import acide.gui.menuBar.fileMenu.listeners.AcideSaveFileAsMenuItemListener;
 import acide.gui.menuBar.fileMenu.listeners.AcideSaveFileMenuItemListener;
 import acide.gui.menuBar.fileMenu.recentFilesMenu.AcideRecentFilesMenu;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import javax.swing.ImageIcon;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
-
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
-
-import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE file menu.
@@ -221,37 +219,37 @@ public class AcideFileMenu extends JMenu {
 	 */
 	public AcideFileMenu() {
 
-		// NEW FILE MENU ITEM
+		// Creates the new file menu item
 		_newFileMenuItem = new JMenuItem(NEW_FILE_IMAGE);
 
-		// OPEN FILE MENU ITEM
+		// Creates the open file menu item
 		_openFileMenuItem = new JMenuItem(OPEN_FILE_IMAGE);
 
-		// OPEN RECENT FILES MENU
+		// Creates the open recent files menu item
 		_openRecentFilesMenu = new AcideRecentFilesMenu();
 
-		// OPEN ALL FILE MENU ITEM
+		// Creates the open all files menu item
 		_openAllFilesMenuItem = new JMenuItem(OPEN_ALL_FILES_IMAGE);
 
-		// CLOSE FILE MENU ITEM
+		// Creates the close file menu item
 		_closeFileMenuItem = new JMenuItem(CLOSE_FILE_IMAGE);
 
-		// CLOSE ALL FILE MENU ITEM
+		// Creates the all files menu item
 		_closeAllFilesMenuItem = new JMenuItem(CLOSE_ALL_FILES_IMAGE);
 
-		// SAVE FILE AS MENU ITEM
+		// Creates the save file as menu item
 		_saveFileAsMenuItem = new JMenuItem(SAVE_FILE_AS_IMAGE);
 
-		// SAVE ALL FILE MENU ITEM
+		// Creates the save all files menu item
 		_saveAllFilesMenuItem = new JMenuItem(SAVE_ALL_FILES_IMAGE);
 
-		// SAVE FILE MENU ITEM
+		// Creates the save file menu item
 		_saveFileMenuItem = new JMenuItem(SAVE_FILE_IMAGE);
 
-		// PRINT FILE MENU ITEM
+		// Creates the print file menu item
 		_printFileMenuItem = new JMenuItem(PRINT_FILE_IMAGE);
 
-		// EXIT MENU ITEM
+		// Creates the exit menu item
 		_exitMenuItem = new JMenuItem(EXIT_IMAGE);
 
 		// Sets the text of the file menu components
@@ -264,60 +262,67 @@ public class AcideFileMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
+		// Sets the new file menu item text
+		_newFileMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s8"));
 
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
-		// NEW FILE MENU ITEM
-		_newFileMenuItem.setText(labels.getString("s8"));
+		// Sets the new file menu item accelerator
 		_newFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
 				ActionEvent.CTRL_MASK));
 
-		// OPEN FILE MENU ITEM
-		_openFileMenuItem.setText(labels.getString("s9"));
-		if (language.getCurrentLocale().equals(new Locale("en", "EN")))
+		// Sets the open file menu item text
+		_openFileMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s9"));
+
+		// Sets the open file menu item accelerator
+		if (AcideLanguageManager.getInstance().getCurrentLocale()
+				.equals(new Locale("en", "EN")))
 			_openFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 					KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		else
 			_openFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 					KeyEvent.VK_A, ActionEvent.CTRL_MASK));
 
-		// OPEN RECENT FILES MENU
-		_openRecentFilesMenu.setText(labels.getString("s1038"));
+		// Sets the open recent files menu item text
+		_openRecentFilesMenu.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s1038"));
 
-		// OPEN ALL FILES MENU ITEM
-		_openAllFilesMenuItem.setText(labels.getString("s1004"));
+		// Sets the open all files menu item text
+		_openAllFilesMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s1004"));
 
-		// CLOSE FILE MENU ITEM
-		_closeFileMenuItem.setText(labels.getString("s238"));
+		// Sets the close file menu item text
+		_closeFileMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s238"));
 
-		// CLOSE ALL FILES MENU ITEM
-		_closeAllFilesMenuItem.setText(labels.getString("s239"));
+		// Sets the close all files menu item text
+		_closeAllFilesMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s239"));
 
-		// SAVE FILE MENU ITEM
-		_saveFileAsMenuItem.setText(labels.getString("s10"));
+		// Sets the save file as menu item text
+		_saveFileAsMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s10"));
 
-		// SAVE FILE AS MENU ITEM
-		_saveFileMenuItem.setText(labels.getString("s617"));
-		if (language.getCurrentLocale().equals(new Locale("en", "EN")))
+		// Sets the save file menu item text
+		_saveFileMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s617"));
+
+		// Sets the save file menu item accelerator
+		if (AcideLanguageManager.getInstance().getCurrentLocale()
+				.equals(new Locale("en", "EN")))
 			_saveFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 					KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		else
 			_saveFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 					KeyEvent.VK_G, ActionEvent.CTRL_MASK));
 
-		// SAVE ALL FILES MENU ITEM
-		_saveAllFilesMenuItem.setText(labels.getString("s217"));
-		if (language.getCurrentLocale().equals(new Locale("en", "EN")))
+		// Sets the save all files menu item text
+		_saveAllFilesMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s217"));
+
+		// Sets the save all files menu item accelerator
+		if (AcideLanguageManager.getInstance().getCurrentLocale()
+				.equals(new Locale("en", "EN")))
 			_saveAllFilesMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 					KeyEvent.VK_S, ActionEvent.CTRL_MASK
 							+ ActionEvent.SHIFT_MASK));
@@ -326,13 +331,19 @@ public class AcideFileMenu extends JMenu {
 					KeyEvent.VK_G, ActionEvent.CTRL_MASK
 							+ ActionEvent.SHIFT_MASK));
 
-		// PRINT FILE MENU ITEM
-		_printFileMenuItem.setText(labels.getString("s624"));
+		// Sets the print file menu item text
+		_printFileMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s624"));
+
+		// Sets the print file menu item accelerator
 		_printFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
 				ActionEvent.CTRL_MASK));
 
-		// EXIT MENU ITEM
-		_exitMenuItem.setText(labels.getString("s13"));
+		// Sets the exit menu item text
+		_exitMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s13"));
+
+		// Sets the exit file menu item accelerator
 		_exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
 				ActionEvent.ALT_MASK));
 
@@ -360,46 +371,41 @@ public class AcideFileMenu extends JMenu {
 
 	/**
 	 * Builds the ACIDE - A Configurable IDE file menu.
-	 * 
-	 * @param labels
-	 *            labels to display in the selected language.
-	 * @param language
-	 *            selected language.
 	 */
-	public void buildMenu(ResourceBundle labels, AcideLanguageManager language) {
+	public void build() {
 
 		// Removes all the menu components
 		removeAll();
 
-		// NEW FILE MENU ITEM
+		// Adds the new file menu item to the file menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME))
 			add(_newFileMenuItem);
 
-		// OPEN FILE MENU ITEM
+		// Adds the open file menu item to the file menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(OPEN_FILE_NAME))
 			add(_openFileMenuItem);
 
-		// OPEN RECENT FILES MENU
+		// Adds the open recent files menu item to the file menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				OPEN_RECENT_FILES_NAME))
 			add(_openRecentFilesMenu);
 
-		// OPEN ALL FILES MENU ITEM
+		// Adds the open all files menu item to the file menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				OPEN_ALL_FILES_NAME))
 			add(_openAllFilesMenuItem);
 
-		// CLOSE FILE MENU ITEM
+		// Adds the close file menu item to the file menu
 		if (AcideMenuConfiguration.getInstance()
 				.getIsDisplayed(CLOSE_FILE_NAME))
 			add(_closeFileMenuItem);
 
-		// CLOSE ALL FILES MENU ITEM
+		// Adds the close all files menu item to the file menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				CLOSE_ALL_FILES_NAME))
 			add(_closeAllFilesMenuItem);
 
-		// SEPARATOR
+		// Adds a separator to the file menu
 		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						OPEN_FILE_NAME)
@@ -413,21 +419,21 @@ public class AcideFileMenu extends JMenu {
 						.getInstance().getIsDisplayed(SAVE_ALL_FILES_NAME)))
 			addSeparator();
 
-		// SAVE FILE MENU ITEM
+		// Adds the save file menu item to the file menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_FILE_NAME))
 			add(_saveFileMenuItem);
 
-		// SAVE FILE AS MENU ITEM
+		// Adds the save file as menu item to the file menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				SAVE_FILE_AS_NAME))
 			add(_saveFileAsMenuItem);
 
-		// SAVE ALL FILES MENU ITEM
+		// Adds the save all files menu item to the file menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				SAVE_ALL_FILES_NAME))
 			add(_saveAllFilesMenuItem);
 
-		// SEPARATOR
+		// Adds a separator to the file menu
 		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						OPEN_FILE_NAME)
@@ -444,12 +450,12 @@ public class AcideFileMenu extends JMenu {
 						.getIsDisplayed(PRINT_FILE_NAME)))
 			addSeparator();
 
-		// PRINT FILE MENU ITEM
+		// Adds the print file menu item to the file menu
 		if (AcideMenuConfiguration.getInstance()
 				.getIsDisplayed(PRINT_FILE_NAME))
 			add(_printFileMenuItem);
 
-		// SEPARATOR
+		// Adds a separator to the file menu
 		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						SAVE_FILE_AS_NAME)
@@ -466,7 +472,7 @@ public class AcideFileMenu extends JMenu {
 						EXIT_NAME))
 			addSeparator();
 
-		// EXIT MENU ITEM
+		// Adds the exit menu item to the file menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(EXIT_NAME))
 			add(_exitMenuItem);
 	}
@@ -476,41 +482,41 @@ public class AcideFileMenu extends JMenu {
 	 */
 	public void setListeners() {
 
-		// NEW FILE MENU ITEM
+		// Sets the new file menu item action listener
 		_newFileMenuItem.addActionListener(new AcideNewFileMenuItemListener());
 
-		// OPEN FILE MENU ITEM
+		// Sets the open file menu item action listener
 		_openFileMenuItem
 				.addActionListener(new AcideOpenFileMenuItemListener());
 
-		// OPEN ALL FILES MENU ITEM
+		// Sets the open all files menu item action listener
 		_openAllFilesMenuItem
 				.addActionListener(new AcideOpenAllFilesMenuItemListener());
 
-		// SAVE FILE AS MENU ITEM
+		// Sets the save file as menu item action listener
 		_saveFileAsMenuItem
 				.addActionListener(new AcideSaveFileAsMenuItemListener());
 
-		// SAVE FILE MENU ITEM
+		// Sets the save file menu item action listener
 		_saveFileMenuItem
 				.addActionListener(new AcideSaveFileMenuItemListener());
 
-		// PRINT FILE MENU ITEM
+		// Sets the print file menu item action listener
 		_printFileMenuItem
 				.addActionListener(new AcidePrintFileMenuItemListener());
 
-		// EXIT MENU ITEM
+		// Sets the exit menu item action listener
 		_exitMenuItem.addActionListener(new AcideExitMenuItemListener());
 
-		// CLOSE FILE MENU ITEM
+		// Sets the close file menu item action listener
 		_closeFileMenuItem
 				.addActionListener(new AcideCloseFileMenuItemListener());
 
-		// CLOSE ALL FILES MENU ITEM
+		// Sets the close all files menu item action listener
 		_closeAllFilesMenuItem
 				.addActionListener(new AcideCloseAllFilesMenuItemListener());
 
-		// SAVE ALL FILES MENU ITEM
+		// Sets the save all files menu item action listener
 		_saveAllFilesMenuItem
 				.addActionListener(new AcideSaveAllFilesMenuItemListener());
 	}
@@ -520,7 +526,7 @@ public class AcideFileMenu extends JMenu {
 	 * it is red it will save it as. If it is green it will just save it.
 	 * 
 	 * @param index
-	 *            tab index.
+	 *            tab index
 	 */
 	public void saveFile(int index) {
 
@@ -561,10 +567,10 @@ public class AcideFileMenu extends JMenu {
 	/**
 	 * Opens file in the file editor it is not already opened yet.
 	 * 
-	 * If so, puts the focus on its text edition area.
+	 * If so, puts the focus on its text edition area
 	 * 
 	 * @param filePath
-	 *            path of the file to be opened.
+	 *            path of the file to be opened
 	 */
 	public void openFile(String filePath) {
 
@@ -595,7 +601,7 @@ public class AcideFileMenu extends JMenu {
 				// Gets the file project index
 				int fileProjectIndex = AcideProjectConfiguration.getInstance()
 						.getIndexOfFile(filePath);
-				
+
 				// TODO: Load the predefined extension
 
 				// Creates the lexicon configuration
@@ -608,12 +614,19 @@ public class AcideFileMenu extends JMenu {
 
 				// TODO: Load the predefined extension
 
-				// Creates the grammar configuration
-				AcideGrammarConfiguration grammarConfiguration = new AcideGrammarConfiguration();
+				// Creates the current grammar configuration
+				AcideGrammarConfiguration currentGrammarConfiguration = new AcideGrammarConfiguration();
 
-				// Sets the grammar configuration path
-				grammarConfiguration
-						.setPath(AcideGrammarConfiguration.DEFAULT_PATH);
+				// Sets the current grammar configuration path
+				currentGrammarConfiguration
+						.setPath(AcideGrammarConfiguration.DEFAULT_FILE);
+
+				// Creates the previous grammar configuration
+				AcideGrammarConfiguration previousGrammarConfiguration = new AcideGrammarConfiguration();
+
+				// Sets the previous grammar configuration path
+				previousGrammarConfiguration
+						.setPath(AcideGrammarConfiguration.DEFAULT_FILE);
 
 				// It is a normal file
 				AcideProjectFileType fileType = AcideProjectFileType.NORMAL;
@@ -631,7 +644,8 @@ public class AcideFileMenu extends JMenu {
 						.getFileEditorManager()
 						.updatesTabbedPane(filePath, fileContent, true,
 								fileType, 0, 0, 1, lexiconConfiguration,
-								grammarConfiguration);
+								currentGrammarConfiguration,
+								previousGrammarConfiguration);
 
 				// If belongs to the project
 				if (fileProjectIndex != -1)
@@ -675,11 +689,186 @@ public class AcideFileMenu extends JMenu {
 
 		} else {
 
-			// IT IS ALREADY OPENED
+			// The file is already opened
 
-			// Sets the selected file editor panel at it
+			// Updates the selected file editor index
+			AcideMainWindow
+					.getInstance()
+					.getFileEditorManager()
+					.updateRelatedComponentsAt(fileEditorPanelIndex);
+		}
+	}
+
+	/**
+	 * Closes a tab in the file editor manager specified by a parameter.
+	 * 
+	 * @param fileEditorIndex
+	 *            file editor index to close.
+	 */
+	public void closeFile(int fileEditorIndex) {
+
+		boolean isCancelOption = false;
+
+		// Is the file modified?
+		if (AcideMainWindow.getInstance().getFileEditorManager()
+				.isRedButton(fileEditorIndex)) {
+
+			// Asks the user if he wants to save it
+			int returnValue = JOptionPane.showConfirmDialog(
+					null,
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s643"), AcideLanguageManager
+							.getInstance().getLabels().getString("s994"),
+					JOptionPane.YES_NO_CANCEL_OPTION);
+
+			// If it is ok
+			if (returnValue == JOptionPane.OK_OPTION) {
+
+				// Saves the file
+				AcideMainWindow.getInstance().getMenu().getFileMenu()
+						.saveFile(fileEditorIndex);
+
+				// If it is not the default project
+				if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
+
+					// Sets opened to false to the project file
+					for (int index = 0; index < AcideProjectConfiguration
+							.getInstance().getFileListSize(); index++) {
+
+						if (AcideProjectConfiguration
+								.getInstance()
+								.getFileAt(index)
+								.getAbsolutePath()
+								.equals(AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getFileEditorPanelAt(fileEditorIndex)
+										.getAbsolutePath())) {
+
+							// Sets the file as not opened in the project
+							// configuration
+							AcideProjectConfiguration.getInstance()
+									.getFileAt(index).setIsOpened(false);
+						}
+					}
+
+					// Sets the project to modified
+					AcideProjectConfiguration.getInstance().setIsModified(true);
+				}
+
+			} else if (returnValue == JOptionPane.NO_OPTION) {
+
+				// If it is not the default project
+				if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
+
+					for (int index = 0; index < AcideProjectConfiguration
+							.getInstance().getFileListSize(); index++) {
+
+						if (AcideProjectConfiguration
+								.getInstance()
+								.getFileAt(index)
+								.getAbsolutePath()
+								.equals(AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getFileEditorPanelAt(fileEditorIndex)
+										.getAbsolutePath())) {
+
+							// Sets the file as not opened at the project
+							// configuration
+							AcideProjectConfiguration.getInstance()
+									.getFileAt(index).setIsOpened(false);
+						}
+					}
+
+					// Sets the project to modified
+					AcideProjectConfiguration.getInstance().setIsModified(true);
+				}
+			} else
+				isCancelOption = true;
+		} else {
+
+			// Is not modified
+
+			// If it is not the default project
+			if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
+
+				for (int index = 0; index < AcideProjectConfiguration
+						.getInstance().getFileListSize(); index++) {
+
+					if (AcideProjectConfiguration
+							.getInstance()
+							.getFileAt(index)
+							.getAbsolutePath()
+							.equals(AcideMainWindow.getInstance()
+									.getFileEditorManager()
+									.getFileEditorPanelAt(fileEditorIndex)
+									.getAbsolutePath())) {
+
+						// Sets the file as not opened in the project
+						// configuration
+						AcideProjectConfiguration.getInstance()
+								.getFileAt(index).setIsOpened(false);
+					}
+				}
+
+				// Sets the project to modified
+				AcideProjectConfiguration.getInstance().setIsModified(true);
+			}
+		}
+
+		// If it is not cancel option
+		if (!isCancelOption) {
+
+			// Removes the tab from the file editor
 			AcideMainWindow.getInstance().getFileEditorManager()
-					.updatesFileEditorAt(fileEditorPanelIndex);
+					.getTabbedPane().remove(fileEditorIndex);
+
+			// Exchanges the closing buttons
+			for (int index = fileEditorIndex; index < AcideMainWindow
+					.getInstance().getFileEditorManager().getTabbedPaneUI()
+					.getCloseButtons().size() - 1; index++) {
+
+				// Gets the current close button
+				AcideFileEditorCloseButton currentCloseButton = (AcideFileEditorCloseButton) AcideMainWindow
+						.getInstance().getFileEditorManager().getTabbedPaneUI()
+						.getCloseButtons().get(index);
+
+				// Gets the next close button
+				AcideFileEditorCloseButton nextCloseButton = (AcideFileEditorCloseButton) AcideMainWindow
+						.getInstance().getFileEditorManager().getTabbedPaneUI()
+						.getCloseButtons().get(index + 1);
+
+				// If it is red button
+				if (nextCloseButton.isRedButton())
+
+					// Sets the red button
+					currentCloseButton.setRedCloseButton();
+				else
+					// Sets the green button
+					currentCloseButton.setGreenCloseButton();
+
+				// Sets the position
+				AcideMainWindow.getInstance().getFileEditorManager()
+						.getTabbedPaneUI().getCloseButtons()
+						.set(index, currentCloseButton);
+			}
+
+			// Validates the changes in the tabbed pane
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.getTabbedPane().validate();
+		}
+
+		// If there are opened file editor panels
+		if (AcideMainWindow.getInstance().getFileEditorManager()
+				.getNumberOfFileEditorPanels() > 0) {
+
+			// Updates the selected file editor index
+			AcideMainWindow
+					.getInstance()
+					.getFileEditorManager()
+					.updateRelatedComponentsAt(
+							AcideMainWindow.getInstance()
+									.getFileEditorManager()
+									.getSelectedFileEditorPanelIndex());		
 		}
 	}
 
@@ -691,7 +880,7 @@ public class AcideFileMenu extends JMenu {
 		_closeFileMenuItem.setEnabled(true);
 		_closeAllFilesMenuItem.setEnabled(true);
 		_saveFileAsMenuItem.setEnabled(true);
-		_saveFileMenuItem.setEnabled(true);
+		_saveFileMenuItem.setEnabled(false);
 		_saveAllFilesMenuItem.setEnabled(true);
 		_printFileMenuItem.setEnabled(true);
 	}
@@ -714,32 +903,19 @@ public class AcideFileMenu extends JMenu {
 	 */
 	public void enableSaveFileAs() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
+		// Enables the save file as menu item
 		_saveFileAsMenuItem.setEnabled(true);
 
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s75"));
+		AcideLog.getLog()
+				.info(AcideLanguageManager.getInstance().getLabels()
+						.getString("s75"));
 	}
 
 	/**
 	 * Returns the ACIDE - A Configurable IDE file menu new file menu item.
 	 * 
-	 * @return the ACIDE - A Configurable IDE file menu new file menu item.
+	 * @return the ACIDE - A Configurable IDE file menu new file menu item
 	 */
 	public JMenuItem getNewFileMenuItem() {
 		return _newFileMenuItem;
@@ -748,7 +924,7 @@ public class AcideFileMenu extends JMenu {
 	/**
 	 * Returns the ACIDE - A Configurable IDE file menu exit menu item.
 	 * 
-	 * @return the ACIDE - A Configurable IDE file menu exit menu item.
+	 * @return the ACIDE - A Configurable IDE file menu exit menu item
 	 */
 	public JMenuItem getExitMenuItem() {
 		return _exitMenuItem;
@@ -766,7 +942,7 @@ public class AcideFileMenu extends JMenu {
 	/**
 	 * Returns the ACIDE - A Configurable IDE file menu save file menu item.
 	 * 
-	 * @return the ACIDE - A Configurable IDE file menu save file menu item.
+	 * @return the ACIDE - A Configurable IDE file menu save file menu item
 	 */
 	public JMenuItem getSaveFileMenuItem() {
 		return _saveFileMenuItem;
@@ -776,8 +952,7 @@ public class AcideFileMenu extends JMenu {
 	 * Returns the ACIDE - A Configurable IDE file menu save all files menu
 	 * item.
 	 * 
-	 * @return the ACIDE - A Configurable IDE file menu save all files menu
-	 *         item.
+	 * @return the ACIDE - A Configurable IDE file menu save all files menu item
 	 */
 	public JMenuItem getSaveAllFilesMenuItem() {
 		return _saveAllFilesMenuItem;
@@ -786,7 +961,7 @@ public class AcideFileMenu extends JMenu {
 	/**
 	 * Returns the ACIDE - A Configurable IDE file menu print file menu item.
 	 * 
-	 * @return the ACIDE - A Configurable IDE file menu print file menu item.
+	 * @return the ACIDE - A Configurable IDE file menu print file menu item
 	 */
 	public JMenuItem getPrintFileMenuItem() {
 		return _printFileMenuItem;
@@ -797,7 +972,7 @@ public class AcideFileMenu extends JMenu {
 	 * item.
 	 * 
 	 * @return the ACIDE - A Configurable IDE file menu close all files menu
-	 *         item.
+	 *         item
 	 */
 	public JMenuItem getCloseAllFilesMenuItem() {
 		return _closeAllFilesMenuItem;
@@ -806,7 +981,7 @@ public class AcideFileMenu extends JMenu {
 	/**
 	 * Returns the ACIDE - A Configurable IDE file menu close file menu item.
 	 * 
-	 * @return the ACIDE - A Configurable IDE file menu close file menu item.
+	 * @return the ACIDE - A Configurable IDE file menu close file menu item
 	 */
 	public JMenuItem getCloseFileMenuItem() {
 		return _closeFileMenuItem;
@@ -815,7 +990,7 @@ public class AcideFileMenu extends JMenu {
 	/**
 	 * Returns the ACIDE - A Configurable IDE file menu open file menu item.
 	 * 
-	 * @return the ACIDE - A Configurable IDE file menu open file menu item.
+	 * @return the ACIDE - A Configurable IDE file menu open file menu item
 	 */
 	public JMenuItem getOpenFileMenuItem() {
 		return _openFileMenuItem;
@@ -824,7 +999,7 @@ public class AcideFileMenu extends JMenu {
 	/**
 	 * Returns the ACIDE - A Configurable IDE file menu open recent files menu.
 	 * 
-	 * @return the ACIDE - A Configurable IDE file menu open recent files menu.
+	 * @return the ACIDE - A Configurable IDE file menu open recent files menu
 	 */
 	public AcideRecentFilesMenu getOpenRecentFilesMenu() {
 		return _openRecentFilesMenu;
@@ -834,8 +1009,7 @@ public class AcideFileMenu extends JMenu {
 	 * Returns the ACIDE - A Configurable IDE file menu open all files menu
 	 * item.
 	 * 
-	 * @return the ACIDE - A Configurable IDE file menu open all files menu
-	 *         item.
+	 * @return the ACIDE - A Configurable IDE file menu open all files menu item
 	 */
 	public JMenuItem getOpenAllFilesMenuItem() {
 		return _openAllFilesMenuItem;

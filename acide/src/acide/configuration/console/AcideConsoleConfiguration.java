@@ -37,7 +37,6 @@ import java.io.FileOutputStream;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 
-
 import acide.resources.AcideResourceManager;
 
 import acide.gui.mainWindow.AcideMainWindow;
@@ -110,7 +109,8 @@ public class AcideConsoleConfiguration {
 	}
 
 	/**
-	 * Sets a new value to the is echo command flag.
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration is echo command flag.
 	 * 
 	 * @param isEchoCommand
 	 *            new value to set.
@@ -120,7 +120,8 @@ public class AcideConsoleConfiguration {
 	}
 
 	/**
-	 * Sets a new value to console exit command.
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration exit command.
 	 * 
 	 * @param exitCommand
 	 *            new value to set.
@@ -130,7 +131,8 @@ public class AcideConsoleConfiguration {
 	}
 
 	/**
-	 * Sets a new value to the shell directory.
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration shell directory.
 	 * 
 	 * @param shellDirectory
 	 *            new value to set.
@@ -140,53 +142,63 @@ public class AcideConsoleConfiguration {
 	}
 
 	/**
-	 * Returns the is echo command flag value.
+	 * Returns the ACIDE - A Configurable IDE console panel configuration is
+	 * echo command flag value.
 	 * 
-	 * @return the is echo command flag value.
+	 * @return the ACIDE - A Configurable IDE console panel configuration is
+	 *         echo command flag value.
 	 */
 	public boolean getIsEchoCommand() {
 		return _isEchoCommand;
 	}
 
 	/**
-	 * Returns the console exit command.
+	 * Returns the ACIDE - A Configurable IDE console panel configuration exit
+	 * command.
 	 * 
-	 * @return the console exit command.
+	 * @return the ACIDE - A Configurable IDE console panel configuration exit
+	 *         command.
 	 */
 	public String getExitCommand() {
 		return _exitCommand;
 	}
 
 	/**
-	 * Returns the shell directory.
+	 * Returns the ACIDE - A Configurable IDE console panel configuration shell
+	 * directory.
 	 * 
-	 * @return the shell directory.
+	 * @return the ACIDE - A Configurable IDE console panel configuration shell
+	 *         directory.
 	 */
 	public String getShellDirectory() {
 		return _shellDirectory;
 	}
 
 	/**
-	 * Sets a new value to the shell path.
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration shell path.
 	 * 
 	 * @param shellPath
-	 *            new value to set.
+	 *            new value to set
 	 */
 	public void setShellPath(String shellPath) {
 		_shellPath = shellPath;
 	}
 
 	/**
-	 * Returns the shell path.
+	 * Returns the ACIDE - A Configurable IDE console panel configuration shell
+	 * path.
 	 * 
-	 * @return the shell path.
+	 * @return the ACIDE - A Configurable IDE console panel configuration shell
+	 *         path
 	 */
 	public String getShellPath() {
 		return _shellPath;
 	}
 
 	/**
-	 * Sets a new value to the font name.
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration font name.
 	 * 
 	 * @param fontName
 	 *            new value to set.
@@ -196,16 +208,19 @@ public class AcideConsoleConfiguration {
 	}
 
 	/**
-	 * Returns the font name.
+	 * Returns the ACIDE - A Configurable IDE console panel configuration font
+	 * name.
 	 * 
-	 * @return the font name.
+	 * @return the ACIDE - A Configurable IDE console panel configuration font
+	 *         name.
 	 */
 	public String getFontName() {
 		return _fontName;
 	}
 
 	/**
-	 * Sets a new value to the font size.
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration font size.
 	 * 
 	 * @param fontSize
 	 *            new value to set.
@@ -215,25 +230,30 @@ public class AcideConsoleConfiguration {
 	}
 
 	/**
-	 * Returns the font size.
+	 * Returns the ACIDE - A Configurable IDE console panel configuration font
+	 * size.
 	 * 
-	 * @return the font size.
+	 * @return the ACIDE - A Configurable IDE console panel configuration font
+	 *         size.
 	 */
 	public int getFontSize() {
 		return _fontSize;
 	}
 
 	/**
-	 * Returns the font style.
+	 * Returns the ACIDE - A Configurable IDE console panel configuration font
+	 * style.
 	 * 
-	 * @return the font style.
+	 * @return the ACIDE - A Configurable IDE console panel configuration font
+	 *         style.
 	 */
 	public int getFontStyle() {
 		return _fontStyle;
 	}
 
 	/**
-	 * Sets a new value to the font style.
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration font style.
 	 * 
 	 * @param fontStyle
 	 *            new value to set.
@@ -243,7 +263,8 @@ public class AcideConsoleConfiguration {
 	}
 
 	/**
-	 * Sets a new value to the foreground color.
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration foreground color.
 	 * 
 	 * @param foregroundColor
 	 *            new value to set.
@@ -253,7 +274,8 @@ public class AcideConsoleConfiguration {
 	}
 
 	/**
-	 * Sets a new value to the background color.
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration background color.
 	 * 
 	 * @param backgroundColor
 	 *            new value to set.
@@ -263,18 +285,22 @@ public class AcideConsoleConfiguration {
 	}
 
 	/**
-	 * Returns the foreground color of the output.
+	 * Returns the ACIDE - A Configurable IDE console panel configuration
+	 * foreground color.
 	 * 
-	 * @return the foreground color of the output.
+	 * @return the ACIDE - A Configurable IDE console panel configuration
+	 *         foreground color.
 	 */
 	public Color getForegroundColor() {
 		return _foregroundColor;
 	}
 
 	/**
-	 * Returns the background color of the output.
+	 * Returns the ACIDE - A Configurable IDE console panel configuration
+	 * background color.
 	 * 
-	 * @return the background color of the output.
+	 * @return the ACIDE - A Configurable IDE console panel configuration
+	 *         background color.
 	 */
 	public Color getBackgroundColor() {
 		return _backgroundColor;
@@ -305,61 +331,64 @@ public class AcideConsoleConfiguration {
 				AcideConsoleConfiguration consoleConfiguration = (AcideConsoleConfiguration) xStream
 						.fromXML(fileInputStream);
 
-				// SHELL PATH
+				// Gets the shell path
 				String shellPath = consoleConfiguration.getShellPath();
 
-				// SHELL DIRECTORY
-				String shellDirectory = consoleConfiguration.getShellDirectory();
+				// Gets the shell directory
+				String shellDirectory = consoleConfiguration
+						.getShellDirectory();
 
-				// ECHO COMMAND
+				// Gets the echo command
 				Boolean echoCommand = consoleConfiguration.getIsEchoCommand();
 
-				// EXIT COMMAND
+				// Gets the exit command
 				String exitCommand = consoleConfiguration.getExitCommand();
 
-				// FONT NAME
+				// Gets the font name
 				String fontName = consoleConfiguration.getFontName();
 
-				// FONT STYLE
+				// Gets the font style
 				Integer fontStyle = consoleConfiguration.getFontStyle();
 
-				// FONT SIZE
+				// Gets the font size
 				Integer fontSize = consoleConfiguration.getFontSize();
 
-				// FOREGROUND COLOR
-				Color foregroundColor = consoleConfiguration.getForegroundColor();
+				// Gets the foreground color
+				Color foregroundColor = consoleConfiguration
+						.getForegroundColor();
 
-				// BLACKGROUND COLOR
-				Color backgroundColor = consoleConfiguration.getBackgroundColor();
+				// Gets the background color
+				Color backgroundColor = consoleConfiguration
+						.getBackgroundColor();
 
 				// Closes the file input stream
 				fileInputStream.close();
 
-				// SHELL PATH
+				// Sets the shell path
 				_shellPath = shellPath;
 
-				// SHELL DIRECTORY
+				// Sets the shell directory
 				_shellDirectory = shellDirectory;
 
-				// IS ECHO COMMAND
+				// Sets the is echo command
 				_isEchoCommand = echoCommand;
 
-				// EXIT COMMAND
+				// Sets the exit command
 				_exitCommand = exitCommand;
 
-				// FONT NAME
+				// Sets the font name
 				_fontName = fontName;
 
-				// FONT STYLE
+				// Sets the font style
 				_fontStyle = fontStyle;
 
-				// FONT SIZE
+				// Sets the font size
 				_fontSize = fontSize;
 
-				// FOREGROUND COLOR
+				// Sets the foreground color
 				_foregroundColor = foregroundColor;
 
-				// BACKGROUND COLOR
+				// Sets the background color
 				_backgroundColor = backgroundColor;
 
 				// Updates the ACIDE - A Configurable IDE console configuration
@@ -374,15 +403,31 @@ public class AcideConsoleConfiguration {
 								.getString("s990"));
 				exception.printStackTrace();
 
-				// Loads the default configuration
+				// The shell path is null
 				_shellPath = null;
+
+				// The shell directory is null
 				_shellDirectory = null;
+
+				// The is echo command is false
 				_isEchoCommand = false;
+
+				// The exit command is null
 				_exitCommand = null;
+
+				// The font name is monospaced
 				_fontName = "Monospaced";
+
+				// The font style is plain
 				_fontStyle = Font.PLAIN;
+
+				// The font size is 12
 				_fontSize = 12;
+
+				// The foreground color is black
 				_foregroundColor = Color.BLACK;
+
+				// The background color is white
 				_backgroundColor = Color.WHITE;
 
 				// Sets the console background
@@ -413,26 +458,25 @@ public class AcideConsoleConfiguration {
 	 */
 	public boolean save() {
 
-		// NOTE: THE REST OF THE OPTIONS HAVE BEEN SAVED PREVIOUSLY
-		// SO THERE IS NO NEED TO DO IT AGAIN
+		// NOTE: The rest of parameters have been saved previously
 
-		// FONT NAME
-		_fontName = AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-				.getFont().getFontName();
+		// Sets the font name
+		_fontName = AcideMainWindow.getInstance().getConsolePanel()
+				.getTextPane().getFont().getFontName();
 
-		// FONT STYLE
-		_fontStyle = AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-				.getFont().getStyle();
+		// Sets the font style
+		_fontStyle = AcideMainWindow.getInstance().getConsolePanel()
+				.getTextPane().getFont().getStyle();
 
-		// FONT SIZE
-		_fontSize = AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-				.getFont().getSize();
+		// Sets the font size
+		_fontSize = AcideMainWindow.getInstance().getConsolePanel()
+				.getTextPane().getFont().getSize();
 
-		// FOREGROUND COLOR
+		// Sets the foreground color
 		_foregroundColor = AcideMainWindow.getInstance().getConsolePanel()
 				.getTextPane().getForeground();
 
-		// BACKGROUND COLOR
+		// Sets the background color
 		_backgroundColor = AcideMainWindow.getInstance().getConsolePanel()
 				.getTextPane().getBackground();
 
@@ -440,14 +484,14 @@ public class AcideConsoleConfiguration {
 		XStream xStream = new XStream();
 
 		try {
-			
+
 			// Creates the file output stream to write on the file
 			FileOutputStream fileOutputStream = new FileOutputStream(
 					"./configuration/console/configuration.xml");
-			
+
 			// Parses to XML format
 			xStream.toXML(this, fileOutputStream);
-			
+
 			// Closes the file output stream
 			fileOutputStream.close();
 		} catch (Exception exception) {

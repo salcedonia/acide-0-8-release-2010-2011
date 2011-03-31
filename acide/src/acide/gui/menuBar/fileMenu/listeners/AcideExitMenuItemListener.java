@@ -32,7 +32,7 @@ package acide.gui.menuBar.fileMenu.listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import acide.configuration.project.workbench.AcideWorkbenchManager;
+import acide.configuration.workbench.AcideWorkbenchManager;
 
 /**																
  * ACIDE - A Configurable IDE file menu exit menu item listener.											

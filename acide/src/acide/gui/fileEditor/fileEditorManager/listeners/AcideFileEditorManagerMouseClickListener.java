@@ -31,13 +31,13 @@ package acide.gui.fileEditor.fileEditorManager.listeners;
 
 import acide.files.AcideFileManager;
 import acide.gui.mainWindow.AcideMainWindow;
+import acide.gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.JOptionPane;
-
 import acide.language.AcideLanguageManager;
 
 /**
@@ -78,7 +78,7 @@ public class AcideFileEditorManagerMouseClickListener extends MouseAdapter {
 
 		// If there are opened editors
 		if (AcideMainWindow.getInstance().getFileEditorManager()
-				.getTabbedPane().getComponentCount() != 0) {
+				.getTabbedPane().getComponentCount() > 0) {
 
 			// Gets the selected editor path
 			String selectedEditorPath = AcideMainWindow.getInstance()
@@ -88,40 +88,61 @@ public class AcideFileEditorManagerMouseClickListener extends MouseAdapter {
 			// If has path
 			if (selectedEditorPath != null) {
 
-				// Builds the file to check its last modification and size
-				// properties
-				File file = new File(selectedEditorPath);
+				// If it is not the NEW FILE or LOG TAB
+				if (!selectedEditorPath.equals(AcideLanguageManager
+						.getInstance().getLabels().getString("s79"))
+						&& !selectedEditorPath.equals("Log")) {
 
-				// If the file exists
-				if (file.exists()) {
+					// Builds the file to check its last modification and size
+					// properties
+					File file = new File(selectedEditorPath);
 
-					// If something has modified the file content from outside
-					if ((file.lastModified() != AcideMainWindow.getInstance()
-							.getFileEditorManager()
-							.getSelectedFileEditorPanel().getLastChange())
-							|| (file.length() != AcideMainWindow.getInstance()
-									.getFileEditorManager()
-									.getSelectedFileEditorPanel().getLastSize())) {
+					// If the file exists
+					if (file.exists()) {
 
-						// Ask to the user for saving
-						int returnValue = JOptionPane.showConfirmDialog(null,
-								AcideLanguageManager.getInstance().getLabels()
-										.getString("s65"));
-
-						// OK OPTION
-						if (returnValue == JOptionPane.OK_OPTION) {
-
-							// Gets its file content
-							String fileContent = AcideFileManager.getInstance()
-									.load(selectedEditorPath);
-
-							if (fileContent != null) {
-
-								// Sets the file content
-								AcideMainWindow.getInstance()
-										.getFileEditorManager()
+						// If something has modified the file content from
+						// outside
+						if ((file.lastModified() != AcideMainWindow
+								.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel().getLastChange())
+								|| (file.length() != AcideMainWindow
+										.getInstance().getFileEditorManager()
 										.getSelectedFileEditorPanel()
-										.setFileContent(fileContent);
+										.getLastSize())) {
+
+							// Ask to the user for saving
+							int returnValue = JOptionPane.showConfirmDialog(
+									null, AcideLanguageManager.getInstance()
+											.getLabels().getString("s65"));
+
+							// If it is ok
+							if (returnValue == JOptionPane.OK_OPTION) {
+
+								// Gets its file content
+								String fileContent = AcideFileManager
+										.getInstance().load(selectedEditorPath);
+
+								if (fileContent != null) {
+
+									// Sets the file content
+									AcideMainWindow.getInstance()
+											.getFileEditorManager()
+											.getSelectedFileEditorPanel()
+											.setFileContent(fileContent);
+
+									// Sets last change
+									AcideMainWindow.getInstance()
+											.getFileEditorManager()
+											.getSelectedFileEditorPanel()
+											.setLastChange(file.lastModified());
+
+									// Sets last size
+									AcideMainWindow.getInstance()
+											.getFileEditorManager()
+											.getSelectedFileEditorPanel()
+											.setLastSize(file.length());
+								}
+							} else {
 
 								// Sets last change
 								AcideMainWindow.getInstance()
@@ -135,61 +156,49 @@ public class AcideFileEditorManagerMouseClickListener extends MouseAdapter {
 										.getSelectedFileEditorPanel()
 										.setLastSize(file.length());
 							}
-						} else {
-
-							// NO OPTION
-
-							// Sets last change
-							AcideMainWindow.getInstance()
-									.getFileEditorManager()
-									.getSelectedFileEditorPanel()
-									.setLastChange(file.lastModified());
-
-							// Sets last size
-							AcideMainWindow.getInstance()
-									.getFileEditorManager()
-									.getSelectedFileEditorPanel()
-									.setLastSize(file.length());
 						}
-					}
-				}else{
-					
-					// Error message
-					JOptionPane.showMessageDialog(AcideMainWindow.getInstance(),
-							AcideLanguageManager.getInstance().getLabels()
-									.getString("s1046"), "Error", JOptionPane.ERROR_MESSAGE);
-					
-					// Removes the tab from the file editor manager
-					// tabbed pane
-					AcideMainWindow
-							.getInstance()
-							.getFileEditorManager()
-							.getTabbedPane()
-							.remove(AcideMainWindow
-									.getInstance()
-									.getFileEditorManager()
-									.getSelectedFileEditorPanelIndex());
+					} else {
 
-					// Validates the changes in the file editor
-					// manager tabbed pane
-					AcideMainWindow.getInstance()
-							.getFileEditorManager().getTabbedPane()
-							.validate();
+						// Displays an error message
+						JOptionPane.showMessageDialog(
+								AcideMainWindow.getInstance(),
+								AcideLanguageManager.getInstance().getLabels()
+										.getString("s1046"), "Error",
+								JOptionPane.ERROR_MESSAGE);
+
+						// Removes the tab from the file editor manager
+						// tabbed pane
+						AcideMainWindow
+								.getInstance()
+								.getFileEditorManager()
+								.getTabbedPane()
+								.remove(AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getSelectedFileEditorPanelIndex());
+
+						// Validates the changes in the file editor
+						// manager tabbed pane
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getTabbedPane().validate();
+					}
 				}
 			}
 
 			// Updates the button icons
 			AcideMainWindow.getInstance().getFileEditorManager()
 					.updatesButtonIcons();
-			
-			// Updates the focus, caret and so on..
+
+			// Updates the file editor panel
 			AcideMainWindow
 					.getInstance()
 					.getFileEditorManager()
-					.updatesFileEditorAt(
+					.updateRelatedComponentsAt(
 							AcideMainWindow.getInstance()
 									.getFileEditorManager()
 									.getSelectedFileEditorPanelIndex());
+			
+			// Updates the static tool bar
+			AcideStaticToolBar.getInstance().updateStateOfFileButtons();
 		}
 	}
 }

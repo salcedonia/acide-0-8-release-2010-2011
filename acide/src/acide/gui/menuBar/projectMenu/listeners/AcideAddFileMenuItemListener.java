@@ -125,7 +125,7 @@ public class AcideAddFileMenuItemListener implements ActionListener {
 						if (!currentFile.isDirectory()) {
 
 							// Gets the parent node
-							currentNode = (DefaultMutableTreeNode) ((MutableTreeNode)(currentNode
+							currentNode = (DefaultMutableTreeNode) ((MutableTreeNode) (currentNode
 									.getParent()));
 
 							// Transforms the selected node into a project file
@@ -213,7 +213,7 @@ public class AcideAddFileMenuItemListener implements ActionListener {
 	public void addToFileEditor(AcideProjectFile projectFile) {
 
 		// Checks if the file is opened in the editor
-		boolean isOpened = false;
+		int fileEditorPanelIndex = -1;
 		for (int index = 0; index < AcideMainWindow.getInstance()
 				.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
 
@@ -223,12 +223,12 @@ public class AcideAddFileMenuItemListener implements ActionListener {
 					.equals(projectFile.getAbsolutePath())) {
 
 				// Found it
-				isOpened = true;
+				fileEditorPanelIndex = index;
 			}
 		}
 
 		// If it is not opened in the editor
-		if (!isOpened) {
+		if (fileEditorPanelIndex == -1) {
 
 			// Gets the file content
 			String fileContent = null;
@@ -257,12 +257,19 @@ public class AcideAddFileMenuItemListener implements ActionListener {
 
 				// TODO: Load the predefined extension
 
-				// Creates the grammar configuration
-				AcideGrammarConfiguration grammarConfiguration = new AcideGrammarConfiguration();
+				// Creates the current grammar configuration
+				AcideGrammarConfiguration currentGrammarConfiguration = new AcideGrammarConfiguration();
 
-				// Sets the grammar configuration path
-				grammarConfiguration
-						.setPath(AcideGrammarConfiguration.DEFAULT_PATH);
+				// Sets the current grammar configuration path
+				currentGrammarConfiguration
+						.setPath(AcideGrammarConfiguration.DEFAULT_FILE);
+
+				// Creates the previous grammar configuration
+				AcideGrammarConfiguration previousGrammarConfiguration = new AcideGrammarConfiguration();
+
+				// Sets the previous grammar configuration path
+				previousGrammarConfiguration
+						.setPath(AcideGrammarConfiguration.DEFAULT_FILE);
 
 				// Updates the tabbed pane in the file editor manager
 				AcideMainWindow
@@ -270,8 +277,17 @@ public class AcideAddFileMenuItemListener implements ActionListener {
 						.getFileEditorManager()
 						.updatesTabbedPane(projectFile.getAbsolutePath(),
 								fileContent, true, projectFileType, 0, 0, 1,
-								lexiconConfiguration, grammarConfiguration);
+								lexiconConfiguration,
+								currentGrammarConfiguration,
+								previousGrammarConfiguration);
 			}
+		} else {
+
+			// Updates the selected file editor index
+			AcideMainWindow
+					.getInstance()
+					.getFileEditorManager()
+					.updateRelatedComponentsAt(fileEditorPanelIndex);
 		}
 	}
 
@@ -328,12 +344,6 @@ public class AcideAddFileMenuItemListener implements ActionListener {
 
 			// Adds the file
 			currentNode.add(newNode);
-
-			// Validates the main window
-			AcideMainWindow.getInstance().validate();
-
-			// Repaints the main window
-			AcideMainWindow.getInstance().repaint();
 
 			// Updates the tree model
 			AcideMainWindow.getInstance().getExplorerPanel().getTreeModel()

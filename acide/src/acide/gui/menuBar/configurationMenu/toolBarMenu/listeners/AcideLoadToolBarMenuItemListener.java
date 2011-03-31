@@ -136,7 +136,7 @@ public class AcideLoadToolBarMenuItemListener implements ActionListener {
 
 			} catch (Exception exception) {
 
-				// Error message
+				// Displays an error message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
 						.getInstance().getLabels().getString("s906")
 						+ absolutePath, AcideLanguageManager.getInstance()

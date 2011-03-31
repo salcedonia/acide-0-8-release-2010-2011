@@ -90,7 +90,7 @@ public class AcideSaveAsLexiconMenuItemListener implements ActionListener {
 		// If the path is ok
 		if (!absolutePath.equals(" ")) {
 
-			// Gets the lexicon name
+			// Gets the lexicon configuration name
 			int index = absolutePath.lastIndexOf("\\");
 			if (index == -1)
 				index = absolutePath.lastIndexOf("/");
@@ -111,19 +111,19 @@ public class AcideSaveAsLexiconMenuItemListener implements ActionListener {
 			// If it could save it
 			if (isSaved) {
 
-				// Success message
+				// Displays a success message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
 						.getInstance().getLabels().getString("s451"),
 						AcideLanguageManager.getInstance().getLabels()
-								.getString("s450"), 1);
+								.getString("s450"), JOptionPane.INFORMATION_MESSAGE);
 
 			} else {
 
-				// Error message
+				// Displays an error message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
 						.getInstance().getLabels().getString("s452"),
 						AcideLanguageManager.getInstance().getLabels()
-								.getString("s450"), 0);
+								.getString("s450"), JOptionPane.ERROR_MESSAGE);
 			}
 		} else
 

@@ -32,6 +32,7 @@ package acide.gui.menuBar.configurationMenu.consoleMenu.gui;
 import acide.configuration.console.AcideConsoleConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.files.AcideFileManager;
+import acide.gui.listeners.AcideWindowClosingListener;
 import acide.gui.mainWindow.AcideMainWindow;
 
 import java.awt.FlowLayout;
@@ -90,11 +91,6 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 	 */
 	private JPanel _buttonPanel;
 	/**
-	 * ACIDE - A Configurable IDE console configuration window echo command
-	 * label.
-	 */
-	private JLabel _echoCommandLabel;
-	/**
 	 * ACIDE - A Configurable IDE console configuration window shell path label.
 	 */
 	private JLabel _shellPathLabel;
@@ -107,37 +103,32 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 	 * ACIDE - A Configurable IDE console configuration window shell directory
 	 * label.
 	 */
-	private final JLabel _shellDirectoryLabel;
+	private JLabel _shellDirectoryLabel;
 	/**
 	 * ACIDE - A Configurable IDE console configuration window shell path text
 	 * field.
 	 */
-	private final JTextField _shellPathTextField;
+	private JTextField _shellPathTextField;
 	/**
 	 * ACIDE - A Configurable IDE console configuration window exit command text
 	 * field.
 	 */
-	private final JTextField _exitCommandTextField;
+	private JTextField _exitCommandTextField;
 	/**
 	 * ACIDE - A Configurable IDE console configuration window shell directory
 	 * text field.
 	 */
-	private final JTextField _shellDirectoryTextField;
+	private JTextField _shellDirectoryTextField;
 	/**
 	 * ACIDE - A Configurable IDE console configuration window manual path
 	 * label.
 	 */
-	private JLabel _manualPathLabel;
-	/**
-	 * ACIDE - A Configurable IDE console configuration window manual path
-	 * label.
-	 */
-	private final JCheckBox _manualPathCheckBox;
+	private JCheckBox _manualPathCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE console configuration window echo command
 	 * check box.
 	 */
-	private final JCheckBox _echoCommandCheckBox;
+	private JCheckBox _echoCommandCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE console configuration window apply button.
 	 */
@@ -151,7 +142,7 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 	 * ACIDE - A Configurable IDE console configuration window examine shell
 	 * directory button.
 	 */
-	private final JButton _examineShellDirectoryButton;
+	private JButton _examineShellDirectoryButton;
 	/**
 	 * ACIDE - A Configurable IDE console configuration window cancel button.
 	 */
@@ -164,17 +155,58 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 
 		super();
 
+		// Builds the window components
+		buildComponents();
+
+		// Sets the listeners of the window components
+		setListeners();
+
+		// Adds the components to the window
+		addComponents();
+
+		// Sets the window configuration
+		setWindowConfiguration();
+
 		// Updates the log
 		AcideLog.getLog().info(
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s331"));
+	}
 
-		// Sets the layout
-		setLayout(new GridBagLayout());
+	/**
+	 * Sets the ACIDE - A Configurable IDE console window configuration.
+	 */
+	private void setWindowConfiguration() {
+
+		// Sets the window title
+		setTitle(AcideLanguageManager.getInstance().getLabels()
+				.getString("s334"));
+
+		// Sets the window icon image
+		setIconImage(ICON.getImage());
+
+		// The window is not resizable
+		setResizable(false);
+
+		// Packs the window components
+		pack();
+
+		// Centers the window
+		setLocationRelativeTo(null);
+
+		// Displays the window
+		setVisible(true);
 
 		// Disables the main window
 		AcideMainWindow.getInstance().setEnabled(false);
-		
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE console configuration window
+	 * components.
+	 */
+	private void buildComponents() {
+
 		// Creates the main panel
 		_mainPanel = new JPanel(new GridBagLayout());
 
@@ -184,95 +216,61 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 		// Creates the shell directory label
 		_shellDirectoryLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s337"), JLabel.LEFT);
-		
+
 		// Disables the shell directory label
 		_shellDirectoryLabel.setEnabled(false);
-		
+
 		// Creates the shell directory text field
-		_shellDirectoryTextField = new JTextField();
+		_shellDirectoryTextField = new JTextField(AcideConsoleConfiguration
+				.getInstance().getShellDirectory());
+
+		// Sets the shell directory text field columns
+		_shellDirectoryTextField.setColumns(35);
 		
 		// Disables the shell directory text field
 		_shellDirectoryTextField.setEnabled(false);
 
-		// Creates the manual path label
-		_manualPathLabel = new JLabel(AcideLanguageManager.getInstance()
-				.getLabels().getString("s350"), JLabel.LEFT);
-		
 		// Creates the manual path check box
-		_manualPathCheckBox = new JCheckBox();
+		_manualPathCheckBox = new JCheckBox(AcideLanguageManager.getInstance()
+				.getLabels().getString("s350"));
 
 		// Creates the shell path label
 		_shellPathLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s338"), JLabel.LEFT);
-		
-		// Creates the shell path text field
-		_shellPathTextField = new JTextField();
 
+		// Creates the shell path text field
+		_shellPathTextField = new JTextField(AcideConsoleConfiguration
+				.getInstance().getShellPath());
+		
 		// Creates the exit command label
 		_exitCommandLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s339"), JLabel.LEFT);
-		
-		// Creates the exit command text field
-		_exitCommandTextField = new JTextField(10);
 
-		// Creates the echo command label
-		_echoCommandLabel = new JLabel(AcideLanguageManager.getInstance()
-				.getLabels().getString("s340"), JLabel.LEFT);
+		// Creates the exit command text field
+		_exitCommandTextField = new JTextField(AcideConsoleConfiguration
+				.getInstance().getExitCommand());
+
+		// Sets the exit command text field columns
+		_exitCommandTextField.setColumns(5);
 		
 		// Creates the echo command check box
-		_echoCommandCheckBox = new JCheckBox();
-
-		// Sets the values into the text fields
-		try {
-
-			// SHELL PATH
-			if (AcideConsoleConfiguration.getInstance().getShellPath()
-					.matches("null"))
-				_shellPathTextField.setText("");
-			else
-				_shellPathTextField.setText(AcideConsoleConfiguration
-						.getInstance().getShellPath());
-
-			// SHELL DIRECTORY
-			if (AcideConsoleConfiguration.getInstance().getShellDirectory()
-					.matches("null"))
-				_shellDirectoryTextField.setText("");
-			else
-				_shellDirectoryTextField.setText(AcideConsoleConfiguration
-						.getInstance().getShellDirectory());
-
-			// EXIT COMMAND
-			if (AcideConsoleConfiguration.getInstance().getExitCommand()
-					.matches("null"))
-				_exitCommandTextField.setText("null");
-			else
-				_exitCommandTextField.setText(AcideConsoleConfiguration
-						.getInstance().getExitCommand());
-
-			// ECHO COMMAND
-			_echoCommandCheckBox.setSelected(AcideConsoleConfiguration
-					.getInstance().getIsEchoCommand());
-
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
+		_echoCommandCheckBox = new JCheckBox(AcideLanguageManager.getInstance()
+				.getLabels().getString("s340"), AcideConsoleConfiguration
+				.getInstance().getIsEchoCommand());
 
 		// Creates the apply button
 		_applyButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s335"));
-		
+
 		// Sets the apply button vertical text position as center
 		_applyButton.setVerticalTextPosition(AbstractButton.CENTER);
-		
+
 		// Sets the apply button horizontal text position as leading
 		_applyButton.setHorizontalTextPosition(AbstractButton.LEADING);
-		
+
 		// Sets the apply button mnemonic
 		_applyButton.setMnemonic(KeyEvent.VK_A);
-		
+
 		// Sets the apply button tool tip text
 		_applyButton.setToolTipText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s336"));
@@ -280,17 +278,17 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 		// Creates the cancel button
 		_cancelButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s178"));
-		
+
 		// Sets the cancel button vertical text position as center
 		_cancelButton.setVerticalTextPosition(AbstractButton.CENTER);
-		
+
 		// Sets the cancel button horizontal text position as leading
 		_cancelButton.setHorizontalTextPosition(AbstractButton.LEADING);
 
 		// Creates the examine shell path button
 		_examineShellPathButton = new JButton(AcideLanguageManager
 				.getInstance().getLabels().getString("s142"));
-		
+
 		// Sets the examine shell path button tool tip text
 		_examineShellPathButton.setToolTipText(AcideLanguageManager
 				.getInstance().getLabels().getString("s301"));
@@ -298,149 +296,119 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 		// Creates the examine shell directory button
 		_examineShellDirectoryButton = new JButton(AcideLanguageManager
 				.getInstance().getLabels().getString("s142"));
-		
+
 		// Sets the examine shell directory button tool tip text
 		_examineShellDirectoryButton.setToolTipText(AcideLanguageManager
 				.getInstance().getLabels().getString("s301"));
-		
+
 		// Disables the examine shell directory button
 		_examineShellDirectoryButton.setEnabled(false);
+	}
 
-		// Sets the listeners of the window components
-		setListeners();
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE console
+	 * configuration window with the layout.
+	 */
+	private void addComponents() {
+
+		// Sets the layout
+		setLayout(new GridBagLayout());
 
 		// Adds the components to the window with the layout
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.BOTH;
 		constraints.insets = new Insets(5, 5, 5, 5);
 		constraints.anchor = GridBagConstraints.EAST;
-		constraints.ipadx = 0;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		
+
 		// Adds the examine shell path label to the main panel
 		_mainPanel.add(_shellPathLabel, constraints);
-		
+
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridx = 1;
-		constraints.ipadx = 150;
 		constraints.gridy = 0;
-		
+
 		// Adds the examine shell path text field to the main panel
 		_mainPanel.add(_shellPathTextField, constraints);
-		
+
 		constraints.anchor = GridBagConstraints.WEST;
-		constraints.ipadx = 0;
 		constraints.gridx = 2;
 		constraints.gridy = 0;
-		
+
 		// Adds the examine shell path button to the main panel
 		_mainPanel.add(_examineShellPathButton, constraints);
 
 		constraints.anchor = GridBagConstraints.EAST;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		
-		// Adds the manual path label to the main panel
-		_mainPanel.add(_manualPathLabel, constraints);
-		
-		constraints.anchor = GridBagConstraints.WEST;
-		constraints.gridx = 1;
-		constraints.gridy = 1;
-		
+
 		// Adds the manual path check box to the main panel
 		_mainPanel.add(_manualPathCheckBox, constraints);
 
 		constraints.anchor = GridBagConstraints.EAST;
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		
+
 		// Adds the examine shell directory label to the main panel
 		_mainPanel.add(_shellDirectoryLabel, constraints);
-		
+
 		constraints.anchor = GridBagConstraints.WEST;
-		constraints.ipadx = 150;
 		constraints.gridx = 1;
 		constraints.gridy = 2;
-		
+
 		// Adds the examine shell directory text field to the main panel
 		_mainPanel.add(_shellDirectoryTextField, constraints);
-		
+
 		constraints.anchor = GridBagConstraints.WEST;
-		constraints.ipadx = 0;
 		constraints.gridx = 2;
 		constraints.gridy = 2;
-		
+
 		// Adds the examine shell directory button to the main panel
 		_mainPanel.add(_examineShellDirectoryButton, constraints);
 
 		constraints.anchor = GridBagConstraints.EAST;
 		constraints.gridx = 0;
 		constraints.gridy = 3;
-		
+
 		// Adds the exit command label to the main panel
 		_mainPanel.add(_exitCommandLabel, constraints);
-		
+
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.gridx = 1;
 		constraints.gridy = 3;
-		
+
 		// Adds the exit command text field to the main panel
 		_mainPanel.add(_exitCommandTextField, constraints);
 
 		constraints.anchor = GridBagConstraints.EAST;
 		constraints.gridx = 0;
 		constraints.gridy = 4;
-		
-		// Adds the echo command label to the main panel
-		_mainPanel.add(_echoCommandLabel, constraints);
-		
-		constraints.anchor = GridBagConstraints.WEST;
-		constraints.gridx = 1;
-		constraints.gridy = 4;
-		
+
 		// Adds the echo command check box to the main panel
 		_mainPanel.add(_echoCommandCheckBox, constraints);
-		
+
 		// Adds the main panel to the window
 		add(_mainPanel, constraints);
 
 		// Adds the apply button to the button panel
 		_buttonPanel.add(_applyButton);
-		
+
 		// Adds the cancel button to the button panel
 		_buttonPanel.add(_cancelButton);
-		
+
 		constraints.insets = new Insets(0, 0, 0, 0);
 		constraints.gridwidth = 2;
 		constraints.gridx = 0;
 		constraints.gridy = 5;
-		
+
 		// Adds the button panel to the window
 		add(_buttonPanel, constraints);
-
-		// Sets the window title
-		setTitle(AcideLanguageManager.getInstance().getLabels()
-				.getString("s334"));
-		
-		// Sets the window icon image
-		setIconImage(ICON.getImage());
-		
-		// The window is not resizable
-		setResizable(false);
-		
-		// Packs the window components
-		pack();
-		
-		// Centers the window
-		setLocationRelativeTo(null);
-		
-		// Displays the window
-		setVisible(true);
 	}
 
 	/**
-	 * Sets the listeners of the window components.
+	 * Sets the listeners of the ACIDE - A Configurable IDE console
+	 * configuration window components.
 	 */
 	private void setListeners() {
 
@@ -455,7 +423,7 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 				"EscapeKey", KeyStroke.getKeyStroke(
 						java.awt.event.KeyEvent.VK_ESCAPE, 0, true),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
-		
+
 		// Sets the manual path check box item listener
 		_manualPathCheckBox.addItemListener(new ManualPathCheckBoxAction());
 
@@ -466,6 +434,9 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 		// Sets the examine shell path button action listener
 		_examineShellPathButton
 				.addActionListener(new ExamineShellPathButtonAction());
+		
+		// Sets the window closing listener
+		addWindowListener(new AcideWindowClosingListener());
 	}
 
 	/**
@@ -505,7 +476,8 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 						// If the shell directory is enabled
 						if (_shellDirectoryTextField.isEnabled()) {
 
-							// Sets the shell directory in the console configuration
+							// Sets the shell directory in the console
+							// configuration
 							AcideConsoleConfiguration.getInstance()
 									.setShellDirectory(
 											_shellDirectoryTextField.getText());
@@ -517,7 +489,8 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 									.getText();
 							String separator = "\\";
 
-							int lastIndexOfSlash = execTextField.lastIndexOf("\\");
+							int lastIndexOfSlash = execTextField
+									.lastIndexOf("\\");
 							if (lastIndexOfSlash == -1)
 								separator = "/";
 							StringTokenizer stringTokenizer = new StringTokenizer(
@@ -529,7 +502,8 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 										+ stringTokenizer.nextToken()
 										+ separator;
 
-							// Sets the shell directory in the console configuration
+							// Sets the shell directory in the console
+							// configuration
 							AcideConsoleConfiguration.getInstance()
 									.setShellDirectory(calculatedPath);
 						}
@@ -550,11 +524,12 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 						AcideMainWindow.getInstance().getConsolePanel()
 								.resetConsole();
 
-						// Updates the ACIDE - A Configurable IDE console configuration
+						// Updates the ACIDE - A Configurable IDE console
+						// configuration
 						AcideResourceManager.getInstance().setProperty(
 								"consoleConfiguration",
 								"./configuration/console/configuration.xml");
-						
+
 						// Saves the console configuration
 						AcideConsoleConfiguration.getInstance().save();
 
@@ -578,7 +553,7 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 
 					} else {
 
-						// Shows an error message
+						// Displays an error message
 						JOptionPane.showMessageDialog(null,
 								AcideLanguageManager.getInstance().getLabels()
 										.getString("s993"), "Error",
@@ -607,13 +582,15 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 							_exitCommandTextField.getText());
 
 					// Resets the console
-					AcideMainWindow.getInstance().getConsolePanel().resetConsole();
+					AcideMainWindow.getInstance().getConsolePanel()
+							.resetConsole();
 
-					// Updates the ACIDE - A Configurable IDE console configuration
+					// Updates the ACIDE - A Configurable IDE console
+					// configuration
 					AcideResourceManager.getInstance().setProperty(
 							"consoleConfiguration",
 							"./configuration/console/configuration.xml");
-					
+
 					// Saves the console configuration
 					AcideConsoleConfiguration.getInstance().save();
 
@@ -641,16 +618,16 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 				AcideLog.getLog().error(exception.getMessage());
 				exception.printStackTrace();
 			}
-			
+
 			// Set the main window enabled again
 			AcideMainWindow.getInstance().setEnabled(true);
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}
@@ -680,10 +657,10 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}
@@ -711,7 +688,7 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 			// Asks the path to the user
 			String absolutePath = AcideFileManager.getInstance()
 					.askAbsolutePath();
-			
+
 			// Updates the shell path text field with the absolute path
 			_shellPathTextField.setText(absolutePath);
 		}
@@ -787,7 +764,7 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 			}
 		}
 	}
-	
+
 	/**
 	 * ACIDE - A Configurable IDE console configuration window escape key action
 	 * listener.
@@ -811,10 +788,10 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}

@@ -36,6 +36,7 @@ import acide.factory.gui.AcideGUIFactory;
 import acide.files.AcideFileExtensionFilterManager;
 import acide.files.AcideFileManager;
 import acide.files.project.AcideProjectFile;
+import acide.gui.listeners.AcideWindowClosingListener;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
 
@@ -164,109 +165,66 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 		_areCompilerPathsDefined = false;
 		_areShellPathsDefined = false;
 
+		// Updates the log
+		AcideLog.getLog().info(
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s587"));
+
+		// Builds the window components
+		buildComponents();
+
+		// Sets the listener for the window components
+		setListeners();
+
+		// Adds the components to the window
+		addComponents();
+
+		// Sets the window configuration
+		setWindowConfiguration();
+	}
+
+	/**
+	 * Sets the ACIDE - A Configurable IDE new project configuration window
+	 * configuration.
+	 */
+	private void setWindowConfiguration() {
+
+		// Sets the window title
+		setTitle(AcideLanguageManager.getInstance().getLabels()
+				.getString("s588"));
+
+		// Sets the window icon image
+		setIconImage(ICON.getImage());
+
+		// The window is not resizable
+		setResizable(false);
+
+		// Packs the window components
+		pack();
+
+		// Centers the window
+		setLocationRelativeTo(null);
+
+		// Displays the window
+		setVisible(true);
+
 		// Disables the main window
 		AcideMainWindow.getInstance().setEnabled(false);
 
 		// Updates the log
 		AcideLog.getLog().info(
 				AcideLanguageManager.getInstance().getLabels()
-						.getString("s587"));
+						.getString("s613"));
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE new project
+	 * configuration window with the layout.
+	 */
+	private void addComponents() {
 
 		// Sets the layout
 		setLayout(new GridBagLayout());
-
-		// Creates the main panel
-		_mainPanel = new JPanel(new GridBagLayout());
-		
-		// Sets the main panel border
-		_mainPanel.setBorder(BorderFactory.createTitledBorder(null,
-				AcideLanguageManager.getInstance().getLabels()
-						.getString("s589"), TitledBorder.LEADING,
-				TitledBorder.DEFAULT_POSITION));
-		
-		// Creates the compiler panel
-		_compilerPanel = new JPanel(new GridBagLayout());
-		
-		// Sets the compiler panel border
-		_compilerPanel.setBorder(BorderFactory.createTitledBorder(null,
-				AcideLanguageManager.getInstance().getLabels()
-						.getString("s591"), TitledBorder.LEADING,
-				TitledBorder.DEFAULT_POSITION));
-		
-		// Creates the button panel
-		_buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-		// Creates the name label
-		_nameLabel = new JLabel(AcideLanguageManager.getInstance().getLabels()
-				.getString("s592"));
-		
-		// Creates the name text field
-		_nameTextField = new JTextField();
-		
-		// Sets the name text field tool tip text
-		_nameTextField.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s593"));
-
-		// Creates the output button
-		_outputButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s637"));
-		
-		// Sets the output button horizontal alignment as center
-		_outputButton.setHorizontalAlignment(JButton.CENTER);
-		
-		// Sets the output button tool tip text
-		_outputButton.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s637"));
-
-		// Creates the compiler button
-		_compilerButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s636"));
-		
-		// Sets the compiler button horizontal alignment as center
-		_compilerButton.setHorizontalAlignment(JButton.CENTER);
-		
-		// Sets the compiler button tool tip text
-		_compilerButton.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s636"));
-
-		// Creates the workspace button
-		_workspaceButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s948"));
-		
-		// Sets the workspace button horizontal alignment as right
-		_workspaceButton.setHorizontalAlignment(JButton.RIGHT);
-		
-		// Creates the workspace text field
-		_workspaceTextField = new JTextField("");
-		
-		// Creates the workspace label
-		_workspaceLabel = new JLabel(AcideLanguageManager.getInstance()
-				.getLabels().getString("s949"));
-
-		// Creates the accept button
-		_acceptButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s154"));
-		
-		// Sets the accept button horizontal alignment as center
-		_acceptButton.setHorizontalAlignment(JButton.CENTER);
-		
-		// Sets the accept button tool tip text
-		_acceptButton.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s611"));
-
-		// Creates the cancel button
-		_cancelButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s162"));
-		
-		// Sets the cancel button horizontal alignment as center
-		_cancelButton.setHorizontalAlignment(JButton.CENTER);
-		
-		// Sets the cancel button tool tip text
-		_cancelButton.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s612"));
-
-		// Sets the listener for the window components
-		setListeners();
 
 		// Adds the components to the window with the layout
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -275,43 +233,43 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.ipady = 10;
-		
+
 		// Adds the name label to the main panel
 		_mainPanel.add(_nameLabel, constraints);
-		
+
 		constraints.gridx = 1;
 		constraints.ipadx = 250;
 		constraints.ipady = 0;
-		
+
 		// Adds the name text field to the main panel
 		_mainPanel.add(_nameTextField, constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		constraints.ipadx = 0;
 		constraints.ipady = 0;
-		
+
 		// Adds the workspace label to the main panel
 		_mainPanel.add(_workspaceLabel, constraints);
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		constraints.ipadx = 0;
 		constraints.ipady = 0;
-		
+
 		// Adds the workspace text field to the main panel
 		_mainPanel.add(_workspaceTextField, constraints);
-		
+
 		constraints.gridx = 2;
 		constraints.gridy = 1;
 		constraints.ipadx = 0;
 		constraints.ipady = 0;
-		
+
 		// Adds the workspace button to the main panel
 		_mainPanel.add(_workspaceButton, constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		
+
 		// Adds the main panel to the window
 		add(_mainPanel, constraints);
 
@@ -319,67 +277,141 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		
+
 		// Adds the compiler button to the compiler panel
 		_compilerPanel.add(_compilerButton, constraints);
-		
+
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 1;
 		constraints.gridy = 0;
-		
+
 		// Adds the output button to the compiler panel
 		_compilerPanel.add(_outputButton, constraints);
-		
+
 		constraints.fill = GridBagConstraints.BOTH;
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		
+
 		// Adds the compiler panel to the window
 		add(_compilerPanel, constraints);
-		
-		// Adds the accept button to the button panel
-		_buttonPanel.add(_acceptButton);
-		
-		// Adds the cancel button to the button panel
-		_buttonPanel.add(_cancelButton);
-		
-		constraints.insets = new Insets(5, 5, 5, 5);
+
+		constraints.insets = new Insets(0, 0, 0, 0);
 		constraints.fill = GridBagConstraints.BOTH;
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridx = 0;
 		constraints.gridy = 3;
-		
+
 		// Adds the button panel to the window
 		add(_buttonPanel, constraints);
-
-		// Sets the window title
-		setTitle(AcideLanguageManager.getInstance().getLabels()
-				.getString("s588"));
-		
-		// Sets the window icon image
-		setIconImage(ICON.getImage());
-		
-		// The window is not resizable
-		setResizable(false);
-		
-		// Packs the window components
-		pack();
-		
-		// Centers the window
-		setLocationRelativeTo(null);
-
-		// Displays the window
-		setVisible(true);
-		
-		// Updates the log
-		AcideLog.getLog().info(
-				AcideLanguageManager.getInstance().getLabels()
-						.getString("s613"));
 	}
 
 	/**
-	 * Sets the listeners for the window components.
+	 * Builds the ACIDE - A Configurable IDE new project configuration window
+	 * components.
+	 */
+	private void buildComponents() {
+
+		// Creates the main panel
+		_mainPanel = new JPanel(new GridBagLayout());
+
+		// Sets the main panel border
+		_mainPanel.setBorder(BorderFactory.createTitledBorder(null,
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s589"), TitledBorder.LEADING,
+				TitledBorder.DEFAULT_POSITION));
+
+		// Creates the compiler panel
+		_compilerPanel = new JPanel(new GridBagLayout());
+
+		// Sets the compiler panel border
+		_compilerPanel.setBorder(BorderFactory.createTitledBorder(null,
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s591"), TitledBorder.LEADING,
+				TitledBorder.DEFAULT_POSITION));
+
+		// Creates the button panel
+		_buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+		// Creates the name label
+		_nameLabel = new JLabel(AcideLanguageManager.getInstance().getLabels()
+				.getString("s592"));
+
+		// Creates the name text field
+		_nameTextField = new JTextField();
+
+		// Sets the name text field tool tip text
+		_nameTextField.setToolTipText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s593"));
+
+		// Creates the output button
+		_outputButton = new JButton(AcideLanguageManager.getInstance()
+				.getLabels().getString("s637"));
+
+		// Sets the output button horizontal alignment as center
+		_outputButton.setHorizontalAlignment(JButton.CENTER);
+
+		// Sets the output button tool tip text
+		_outputButton.setToolTipText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s637"));
+
+		// Creates the compiler button
+		_compilerButton = new JButton(AcideLanguageManager.getInstance()
+				.getLabels().getString("s636"));
+
+		// Sets the compiler button horizontal alignment as center
+		_compilerButton.setHorizontalAlignment(JButton.CENTER);
+
+		// Sets the compiler button tool tip text
+		_compilerButton.setToolTipText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s636"));
+
+		// Creates the workspace button
+		_workspaceButton = new JButton(AcideLanguageManager.getInstance()
+				.getLabels().getString("s948"));
+
+		// Sets the workspace button horizontal alignment as right
+		_workspaceButton.setHorizontalAlignment(JButton.RIGHT);
+
+		// Creates the workspace text field
+		_workspaceTextField = new JTextField("");
+
+		// Creates the workspace label
+		_workspaceLabel = new JLabel(AcideLanguageManager.getInstance()
+				.getLabels().getString("s949"));
+
+		// Creates the accept button
+		_acceptButton = new JButton(AcideLanguageManager.getInstance()
+				.getLabels().getString("s154"));
+
+		// Sets the accept button horizontal alignment as center
+		_acceptButton.setHorizontalAlignment(JButton.CENTER);
+
+		// Sets the accept button tool tip text
+		_acceptButton.setToolTipText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s611"));
+
+		// Creates the cancel button
+		_cancelButton = new JButton(AcideLanguageManager.getInstance()
+				.getLabels().getString("s162"));
+
+		// Sets the cancel button horizontal alignment as center
+		_cancelButton.setHorizontalAlignment(JButton.CENTER);
+
+		// Sets the cancel button tool tip text
+		_cancelButton.setToolTipText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s612"));
+
+		// Adds the accept button to the button panel
+		_buttonPanel.add(_acceptButton);
+
+		// Adds the cancel button to the button panel
+		_buttonPanel.add(_cancelButton);
+	}
+
+	/**
+	 * Sets the listeners for the ACIDE - A Configurable IDE new project
+	 * configuration window components.
 	 */
 	public void setListeners() {
 
@@ -397,6 +429,9 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 
 		// Sets the compiler button action listener
 		_compilerButton.addActionListener(new CompilerButtonButtonAction());
+
+		// Sets the window closing listener
+		addWindowListener(new AcideWindowClosingListener());
 	}
 
 	/**
@@ -729,12 +764,6 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 						AcideMainWindow.getInstance().getConsolePanel()
 								.getHeight());
 
-		// Validates the changes in the main window
-		AcideMainWindow.getInstance().validate();
-
-		// Repaints the main window
-		AcideMainWindow.getInstance().repaint();
-
 		// Enables the add file menu item in the explorer panel
 		// popup menu
 		AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
@@ -765,10 +794,10 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 
 		// Brings the main window to the front
 		AcideMainWindow.getInstance().setAlwaysOnTop(true);
-		
+
 		// But not permanently
 		AcideMainWindow.getInstance().setAlwaysOnTop(false);
-		
+
 		// If the show explorer panel menu item is not selected
 		if (!AcideMainWindow.getInstance().getMenu().getViewMenu()
 				.getShowExplorerPanelCheckBoxMenuItem().isSelected())
@@ -1086,10 +1115,10 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}

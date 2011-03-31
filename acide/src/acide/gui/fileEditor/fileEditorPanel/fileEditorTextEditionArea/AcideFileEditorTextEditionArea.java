@@ -34,15 +34,16 @@ import acide.gui.fileEditor.fileEditorManager.utils.gui.AcideLineNumberComponent
 import acide.gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorAdjustmentListener;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorCaretListener;
+import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorFocusListener;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorMouseListener;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorScrollPaneMouseListener;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.AcideTextPane;
 import acide.gui.fileEditor.fileEditorPanel.listeners.AcideFileEditorPanelDocumentListener;
 import acide.gui.fileEditor.fileEditorPanel.popup.AcideEditorPanelPopupMenuListener;
-import acide.gui.listeners.AcideSearchAndReplaceWindowKeyboardListener;
+import acide.gui.listeners.AcideSearchReplaceWindowKeyboardListener;
 
 import acide.gui.listeners.AcideMenuBarKeyboardListener;
-import acide.gui.listeners.AcideSearchAndReplaceWindowMouseListener;
+import acide.gui.listeners.AcideSearchReplaceWindowMouseListener;
 import acide.gui.listeners.AcideStatusBarKeyboardListener;
 
 import java.awt.Component;
@@ -222,6 +223,9 @@ public class AcideFileEditorTextEditionArea {
 			}
 		};
 
+		// Updates the name
+		_textPane.setName((String)styledDocument.getProperty("name"));
+		
 		// Sets the configuration from the configuration file
 		setConfiguration();
 
@@ -272,17 +276,20 @@ public class AcideFileEditorTextEditionArea {
 		_textPane.addCaretListener(new AcideFileEditorCaretListener());
 
 		// Adds the ACIDE - A Configurable IDE search and replace window keyboard listener
-		_textPane.addKeyListener(new AcideSearchAndReplaceWindowKeyboardListener());
+		_textPane.addKeyListener(new AcideSearchReplaceWindowKeyboardListener());
 
 		// Adds the ACIDE - A Configurable IDE  search and replace window mouse listener
 		_textPane
-				.addMouseListener(new AcideSearchAndReplaceWindowMouseListener());
+				.addMouseListener(new AcideSearchReplaceWindowMouseListener());
 		
 		// Adds the ACIDE - A Configurable IDE status bar keyboard listener
 		_textPane.addKeyListener(new AcideStatusBarKeyboardListener());
 		
 		// Adds the ACIDE - A Configurable IDE menu bar keyboard listener
 		_textPane.addKeyListener(new AcideMenuBarKeyboardListener());
+		
+		// Adds the ACIDE - A Configurable IDE focus listener
+		_textPane.addFocusListener(new AcideFileEditorFocusListener());
 	}
 
 	/**
@@ -375,5 +382,14 @@ public class AcideFileEditorTextEditionArea {
 	 */
 	public JScrollPane getScrollPane() {
 		return _scrollPane;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString(){
+		return "File editor " + _textPane.getName();
 	}
 }

@@ -51,31 +51,13 @@ public class AcideSelectAllMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Sets the caret in the first position of the editor
+		// Selects all the text in the text edition area
 		AcideMainWindow
 				.getInstance()
 				.getFileEditorManager()
 				.getFileEditorPanelAt(
 						AcideMainWindow.getInstance().getFileEditorManager()
-								.getSelectedFileEditorPanelIndex()).getActiveTextEditionArea()
-				.setCaretPosition(0);
-
-		// Get the text length
-		int length = AcideMainWindow
-				.getInstance()
-				.getFileEditorManager()
-				.getFileEditorPanelAt(
-						AcideMainWindow.getInstance().getFileEditorManager()
-								.getSelectedFileEditorPanelIndex()).getActiveTextEditionArea()
-				.getText().length();
-
-		// Sets the selection from the first the last
-		AcideMainWindow
-				.getInstance()
-				.getFileEditorManager()
-				.getFileEditorPanelAt(
-						AcideMainWindow.getInstance().getFileEditorManager()
-								.getSelectedFileEditorPanelIndex()).getActiveTextEditionArea()
-				.setSelectionEnd(length);
+								.getSelectedFileEditorPanelIndex())
+				.getActiveTextEditionArea().selectAll();
 	}
 }

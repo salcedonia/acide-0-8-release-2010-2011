@@ -163,6 +163,7 @@ public class AcideSplashScreenWindow extends JWindow {
 	 * Shows the ACIDE - A Configurable IDE splash screen window.
 	 */
 	public void showSplashScreenWindow() {
+		
 		// Displays it
 		setVisible(true);	
 	}
@@ -171,6 +172,7 @@ public class AcideSplashScreenWindow extends JWindow {
 	 * Closes the ACIDE - A Configurable IDE splash screen window.
 	 */
 	public void closeSplashScreenWindow() {
+		
 		// Closes it
 		dispose();
 	}
@@ -184,7 +186,7 @@ public class AcideSplashScreenWindow extends JWindow {
 	 * @param message
 	 *            new message to display.           
 	 */
-	public void setProgressBar(final int percent, final String message) {
+	public void setProgressBar(int percent, String message) {
 		
 		_progressBar.setValue(percent);
 		_messageLabel.setText(message);	

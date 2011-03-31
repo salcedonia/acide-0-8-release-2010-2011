@@ -676,11 +676,11 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 
 			// Enables the project menu set compilable menu item
 			AcideMainWindow.getInstance().getMenu().getProjectMenu()
-					.getSetCompilableMenuItem().setEnabled(true);
+					.getSetCompilableFileMenuItem().setEnabled(true);
 
 			// Calls to set compilable action performed
 			AcideMainWindow.getInstance().getMenu().getProjectMenu()
-					.getSetCompilableMenuItem().doClick();
+					.getSetCompilableFileMenuItem().doClick();
 		}
 	}
 
@@ -703,11 +703,11 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 
 			// Enables the project menu unset compilable menu item
 			AcideMainWindow.getInstance().getMenu().getProjectMenu()
-					.getUnsetCompilableMenuItem().setEnabled(true);
+					.getUnsetCompilableFileMenuItem().setEnabled(true);
 
 			// Calls to unset compilable action performed
 			AcideMainWindow.getInstance().getMenu().getProjectMenu()
-					.getUnsetCompilableMenuItem().doClick();
+					.getUnsetCompilableFileMenuItem().doClick();
 		}
 	}
 
@@ -731,11 +731,11 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 
 			// Enables the project menu set main menu item
 			AcideMainWindow.getInstance().getMenu().getProjectMenu()
-					.getSetMainMenuItem().setEnabled(true);
+					.getSetMainFileMenuItem().setEnabled(true);
 
 			// Calls to set main action performed
 			AcideMainWindow.getInstance().getMenu().getProjectMenu()
-					.getSetMainMenuItem().doClick();
+					.getSetMainFileMenuItem().doClick();
 		}
 	}
 
@@ -758,11 +758,11 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 
 			// Enables the project menu unset main menu item
 			AcideMainWindow.getInstance().getMenu().getProjectMenu()
-					.getUnsetMainMenuItem().setEnabled(true);
+					.getUnsetMainFileMenuItem().setEnabled(true);
 
 			// Calls to unset main action performed
 			AcideMainWindow.getInstance().getMenu().getProjectMenu()
-					.getUnsetMainMenuItem().doClick();
+					.getUnsetMainFileMenuItem().doClick();
 		}
 	}
 

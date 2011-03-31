@@ -33,13 +33,11 @@ import acide.gui.mainWindow.AcideMainWindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE edit menu go to line menu item listener.
@@ -58,39 +56,26 @@ public class AcideGoToLineMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-			
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		// Ask the user for the line number
-		String line = (String) JOptionPane.showInputDialog(null,
-				labels.getString("s448"), labels.getString("s447"),
+		String lineNumber = (String) JOptionPane.showInputDialog(null,
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s448"), AcideLanguageManager.getInstance()
+						.getLabels().getString("s447"),
 				JOptionPane.YES_NO_CANCEL_OPTION, null, null, null);
 
-		// TODO: COMPROBAR QUE EL NòMERO DE LêNEA SEA UN NòMERO
-		if ((line != null)) {
+		if ((lineNumber != null)) {
 			try {
 
-				int selectedEditor = AcideMainWindow.getInstance()
-						.getFileEditorManager().getSelectedFileEditorPanelIndex();
-
-				if (selectedEditor >= 0)
+				// If there are file editors opened
+				if (AcideMainWindow.getInstance().getFileEditorManager()
+						.getNumberOfFileEditorPanels() > 0)
+					
+					// Go to line in the selected one
 					AcideMainWindow.getInstance().getFileEditorManager()
-							.getFileEditorPanelAt(selectedEditor)
-							.goToLine(Integer.parseInt(line));
+							.getSelectedFileEditorPanel()
+							.goToLine(Integer.parseInt(lineNumber));
 			} catch (Exception exception) {
-				
+
 				// Updates the log
 				AcideLog.getLog().error(exception.getMessage());
 				exception.printStackTrace();

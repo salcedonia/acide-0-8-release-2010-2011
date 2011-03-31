@@ -30,11 +30,8 @@
 package acide.configuration.menu;
 
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 
 import acide.configuration.menu.exception.AcideMenuConfigurationFileFormatException;
 import acide.files.AcideFileManager;
@@ -70,7 +67,7 @@ public class AcideMenuConfiguration {
 	 * instance.
 	 * 
 	 * @return the ACIDE - A Configurable IDE menu configuration unique class
-	 *         instance.
+	 *         instance
 	 */
 	public static AcideMenuConfiguration getInstance() {
 
@@ -80,41 +77,20 @@ public class AcideMenuConfiguration {
 	}
 
 	/**
-	 * Sets all the values to a value given as a parameter.
-	 * 
-	 * @param values
-	 *            new values to set.
-	 */
-	public void setMenuElementList(
-			ArrayList<AcideMenuItemInformation> menuElementList) {
-		
-		_menuItemList = menuElementList;
-		/*
-		// Clear the list
-		_menuItemList.clear();
-		
-		for(int index = 0; index < menuElementList.size(); index++)
-			_menuItemList.add(menuElementList.get(index));*/
-	}
-
-	/**
 	 * Saves the ACIDE - A Configurable IDE menu configuration into a
 	 * configuration file.
 	 * 
 	 * @param fileName
-	 *            file name.
-	 * @param menuElementList
-	 *            menu element list to save.
+	 *            file name
 	 */
-	public void saveMenuConfigurationFile(String fileName,
-			ArrayList<AcideMenuItemInformation> menuElementList) {
+	public void saveMenuConfigurationFile(String fileName) {
 
 		String fileContent = "";
 
 		for (AcideMenuItemInformation menuElement : _menuItemList)
 			fileContent += menuElement.getName() + " = "
 					+ menuElement.getIsDisplayed() + "\n";
-	
+
 		// Saves its content
 		AcideFileManager.getInstance().write(fileName, fileContent);
 	}
@@ -124,29 +100,12 @@ public class AcideMenuConfiguration {
 	 * stores the info in the menu item information array list.
 	 * 
 	 * @param filePath
-	 *            file path.
+	 *            file path
 	 * @return the new menu item list with the loaded values from the menu
-	 *         configuration file given as a parameter.
+	 *         configuration file given as a parameter
 	 */
 	public ArrayList<AcideMenuItemInformation> loadMenuConfigurationFile(
-			String filePath)
-			throws AcideMenuConfigurationFileFormatException {
-
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
+			String filePath) throws AcideMenuConfigurationFileFormatException {
 
 		// Clear the list
 		_menuItemList.clear();
@@ -167,9 +126,14 @@ public class AcideMenuConfiguration {
 			// If the format is incorrect
 			if (equalsSymbolIndex == -1)
 				throw new AcideMenuConfigurationFileFormatException(
-						labels.getString("s533"));
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s533"));
 			else {
+
+				// Gets the name
 				String name = menuItems[index].substring(0, equalsSymbolIndex);
+
+				// Gets the is displayed string
 				String isDisplayedString = menuItems[index].substring(
 						equalsSymbolIndex + 3, menuItems[index].length());
 
@@ -182,10 +146,12 @@ public class AcideMenuConfiguration {
 					isDisplayed = false;
 				else
 					throw new AcideMenuConfigurationFileFormatException(
-							labels.getString("s533"));
+							AcideLanguageManager.getInstance().getLabels()
+									.getString("s533"));
 
 				// Adds the new menu item information
-				_menuItemList.add(new AcideMenuItemInformation(name, isDisplayed));
+				_menuItemList.add(new AcideMenuItemInformation(name,
+						isDisplayed));
 			}
 		}
 
@@ -214,23 +180,14 @@ public class AcideMenuConfiguration {
 	}
 
 	/**
-	 * Returns the menu item list.
-	 * 
-	 * @return the menu item list.
-	 */
-	public ArrayList<AcideMenuItemInformation> getMenuItemList() {
-		return _menuItemList;
-	}
-
-	/**
 	 * Returns the menu item display flag of the menu item from the list
 	 * specified by the parameter menuItemName.
 	 * 
 	 * @param menuItemName
-	 *            menu item name to get its display flag.
+	 *            menu item name to get its display flag
 	 * 
 	 * @return the menu item display flag of the menu item from the list
-	 *         specified by the parameter menuItemName.
+	 *         specified by the parameter menuItemName
 	 */
 	public boolean getIsDisplayed(String menuItemName) {
 
@@ -239,4 +196,27 @@ public class AcideMenuConfiguration {
 				return menuItem.getIsDisplayed();
 		return false;
 	}
+	
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE menu configuration
+	 * menu item list.
+	 * 
+	 * @param menuItemList
+	 *            new values to set
+	 */
+	public void setMenuElementList(
+			ArrayList<AcideMenuItemInformation> menuItemList) {
+
+		_menuItemList = menuItemList;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE menu configuration menu item list.
+	 * 
+	 * @return the ACIDE - A Configurable IDE menu configuration menu item list
+	 */
+	public ArrayList<AcideMenuItemInformation> getMenuItemList() {
+		return _menuItemList;
+	}
+	
 }

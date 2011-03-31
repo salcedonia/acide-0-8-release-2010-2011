@@ -111,12 +111,6 @@ public class AcideLoadGrammarMenuItemListener implements ActionListener{
 					.getSelectedFileEditorPanel()
 					.getCurrentGrammarConfiguration().setPath(absolutePath);
 
-			// Validates the changes in the main window
-			AcideMainWindow.getInstance().validate();
-
-			// Repaints the main window
-			AcideMainWindow.getInstance().repaint();
-
 			// Disables the save grammar menu item
 			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
 					.getGrammarMenu().getSaveGrammarMenuItem()

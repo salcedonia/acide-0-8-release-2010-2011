@@ -30,7 +30,7 @@
 package acide.gui.menuBar.projectMenu.listeners;
 
 import acide.configuration.project.AcideProjectConfiguration;
-import acide.configuration.project.workbench.AcideWorkbenchManager;
+import acide.configuration.workbench.AcideWorkbenchManager;
 import acide.files.project.AcideProjectFile;
 
 import java.awt.event.ActionEvent;
@@ -72,7 +72,7 @@ public class AcideCompileMenuItemListener implements ActionListener {
 				for (int index = 0; index < AcideProjectConfiguration
 						.getInstance().getNumberOfFilesFromList(); index++) {
 
-					// IS COMPILABLE?
+					// If it is a compilable file
 					if (AcideProjectConfiguration.getInstance()
 							.getFileAt(index).isCompilableFile()) {
 
@@ -94,7 +94,7 @@ public class AcideCompileMenuItemListener implements ActionListener {
 					if (AcideProjectConfiguration.getInstance()
 							.getCompilerPath() != null)
 
-						// EXECUTES THE COMPILATION
+						// Executes the compilation
 						Runtime.getRuntime().exec(
 								AcideProjectConfiguration.getInstance()
 										.getCompilerPath()
@@ -134,7 +134,7 @@ public class AcideCompileMenuItemListener implements ActionListener {
 							if (AcideProjectConfiguration.getInstance()
 									.getCompilerPath() != null) {
 
-								// EXECUTES THE COMPILATION
+								// Executes the compilation
 								Runtime.getRuntime().exec(
 										AcideProjectConfiguration.getInstance()
 												.getCompilerPath()
@@ -152,7 +152,7 @@ public class AcideCompileMenuItemListener implements ActionListener {
 			}
 		} catch (IOException exception) {
 
-			// Error message
+			// Displays an error message
 			JOptionPane.showMessageDialog(null, exception.getMessage());
 
 			// Updates the log

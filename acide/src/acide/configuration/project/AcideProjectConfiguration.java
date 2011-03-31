@@ -30,6 +30,7 @@
 package acide.configuration.project;
 
 import acide.files.project.AcideProjectFile;
+import acide.gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ import acide.resources.AcideResourceManager;
  * ACIDE - A Configurable IDE project configuration.
  * 
  * @version 0.8
+ * @see AcideProjectFile
  */
 public class AcideProjectConfiguration {
 
@@ -148,31 +150,55 @@ public class AcideProjectConfiguration {
 	 */
 	public String save() {
 
+		// Builds the file content
 		String fileContent = "";
+		
+		// Adds the name
 		fileContent = fileContent + _name + "\n";
+		
+		// Adds the path
 		fileContent = fileContent + _path + "\n";
+		
+		// Adds the window configuration
 		fileContent = fileContent + _windowConfiguration + "\n";
+		
+		// Adds the compiler path
 		fileContent = fileContent + _compilerPath + "\n";
+		
+		// Adds the compiler arguments
 		fileContent = fileContent + _compilerArguments + "\n";
+		
+		// Adds the console configuration
 		fileContent = fileContent + _consoleConfiguration + "\n";
+		
+		// Adds the language configuration
 		fileContent = fileContent + _languageConfiguration + "\n";
+		
+		// Adds the menu configuration
 		fileContent = fileContent + _menuConfiguration + "\n";
+		
+		// Adds the tool bar configuration
 		fileContent = fileContent + _toolBarConfiguration + "\n";
+		
+		// Adds the file editor
 		fileContent = fileContent + _fileEditorConfiguration + "\n";
 
-		// FILES ASSOCIATED TO THE PROJECT
+		// Adds the number of files associated
 		fileContent = fileContent + _fileList.size() + "\n";
 
 		for (int index = 0; index < _fileList.size(); index++) {
 
 			// Gets the ACIDE - A Configurable file from the list
 			AcideProjectFile file = (AcideProjectFile) _fileList.get(index);
+			
+			// Adds its information
 			fileContent = fileContent + file.getAbsolutePath() + "\n"
 					+ file.getName() + "\n" + file.getParent() + "\n"
 					+ file.isDirectory() + "\n" + file.isCompilableFile()
 					+ "\n" + file.isMainFile() + "\n" + file.isOpened() + "\n";
 		}
 
+		// Returns the file content
 		return fileContent;
 	}
 
@@ -215,63 +241,63 @@ public class AcideProjectConfiguration {
 		int initialPosition = 0;
 		int finalPosition = 0;
 
-		// PROJECT NAME
+		// Gets the project name
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_name = fileContent.substring(initialPosition, finalPosition);
 
-		// PROJECT PATH
+		// Gets the project path
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_path = fileContent.substring(initialPosition, finalPosition);
 
-		// WINDOW CONFIGURATION PATH
+		// Gets the window configuration
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_windowConfiguration = fileContent.substring(initialPosition,
 				finalPosition);
 
-		// COMPILER PATH
+		// Gets the compiler path
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_compilerPath = fileContent.substring(initialPosition, finalPosition);
 
-		// COMPILER ARGUMENTS
+		// Gets the compiler arguments
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_compilerArguments = fileContent.substring(initialPosition,
 				finalPosition);
 
-		// CONSOLE CONFIGURATION PATH
+		// Gets the console configuration
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_consoleConfiguration = fileContent.substring(initialPosition,
 				finalPosition);
 
-		// LANGUAGE OF THE APPLICATION
+		// Gets the language configuration
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_languageConfiguration = fileContent.substring(initialPosition,
 				finalPosition);
 
-		// MENU CONFIGURATION PATH
+		// Gets the menu configuration
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_menuConfiguration = fileContent.substring(initialPosition,
 				finalPosition);
 
-		// TOOLBAR CONFIGURATION PATH
+		// Gets the tool bar configuration
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_toolBarConfiguration = fileContent.substring(initialPosition,
 				finalPosition);
 
-		// FILE EDITOR CONFIGURATION PATH
+		// Gets the file editor configuration
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_fileEditorConfiguration = fileContent.substring(initialPosition,
 				finalPosition);
 
-		// NUM FILES
+		// Gets the number of files of the project
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		String numFiles = fileContent.substring(initialPosition, finalPosition);
@@ -293,52 +319,66 @@ public class AcideProjectConfiguration {
 			// Creates the ACIDE - A Configurable IDE file
 			AcideProjectFile file = new AcideProjectFile();
 
-			// ABSOLUTE PATH
+			// Gets the absolute path
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			path = fileContent.substring(initialPosition, finalPosition);
 			initialPosition = finalPosition + 1;
 
-			// NAME
+			// Gets the name
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			name = fileContent.substring(initialPosition, finalPosition);
 			initialPosition = finalPosition + 1;
 
-			// PARENT
+			// Gets the parent
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			parent = fileContent.substring(initialPosition, finalPosition);
 			initialPosition = finalPosition + 1;
 
-			// IS DIRECTORY
+			// Gets the is directory flag
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			isDirectory = Boolean.parseBoolean(fileContent.substring(
 					initialPosition, finalPosition));
 			initialPosition = finalPosition + 1;
 
-			// IS COMPILABLE FILE
+			// Gets the is compilable flag
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			isCompilableFile = Boolean.parseBoolean(fileContent.substring(
 					initialPosition, finalPosition));
 			initialPosition = finalPosition + 1;
 
-			// IS MAIN FILE
+			// Gets the is main flag
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			isMainFile = Boolean.parseBoolean(fileContent.substring(
 					initialPosition, finalPosition));
 			initialPosition = finalPosition + 1;
 
-			// IS OPENED
+			// Gets the is opened flag
 			finalPosition = fileContent.indexOf("\n", initialPosition);
 			isOpened = Boolean.parseBoolean(fileContent.substring(
 					initialPosition, finalPosition));
 			initialPosition = finalPosition + 1;
 
 			// Updates the ACIDE - A Configurable IDE file with the info
+			
+			// Sets the is main flag
 			file.setIsMainFile(isMainFile);
+			
+			// Sets the is compilable flag
 			file.setIsCompilableFile(isCompilableFile);
+			
+			// Sets the absolute path
 			file.setAbsolutePath(path);
+			
+			// Sets the parent
 			file.setParent(parent);
+			
+			// Sets the name
 			file.setName(name);
+			
+			// Sets the is directory flag
 			file.setIsDirectory(isDirectory);
+			
+			// Sets the is opened flag
 			file.setIsOpened(isOpened);
 
 			// Always add the folders as they do not exist
@@ -355,7 +395,7 @@ public class AcideProjectConfiguration {
 					_fileList.add(file);
 				} else {
 
-					// Error message
+					// Displays an error message
 					JOptionPane.showMessageDialog(null, AcideLanguageManager
 							.getInstance().getLabels().getString("s970")
 							+ path
@@ -701,7 +741,12 @@ public class AcideProjectConfiguration {
 	 *            new value to set.
 	 */
 	public void setIsModified(boolean isProjectModified) {
+		
+		// Stores the flag
 		_isModified = isProjectModified;
+		
+		// Updates the save project in the static tool bar
+		AcideStaticToolBar.getInstance().updateSaveProjectButtonState(isProjectModified);
 	}
 
 	/**

@@ -39,8 +39,8 @@ import acide.utils.OSValidator;
 /**
  * ACIDE - A Configurable IDE status bar keyboard listener.
  * 
- * Handles the keyboard events which update the status bar panels, such as
- * CAPS LOCK, NUM LOCK, SCROLL LOCK and INSERT.
+ * Handles the keyboard events which update the status bar panels, such as CAPS
+ * LOCK, NUM LOCK, SCROLL LOCK and INSERT.
  * 
  * @version 0.8
  * @see KeyAdapter
@@ -125,18 +125,18 @@ public class AcideStatusBarKeyboardListener extends KeyAdapter {
 		if (keyEvent.getKeyCode() == KeyEvent.VK_INSERT) {
 
 			if (AcideMainWindow.getInstance().getStatusBar()
-					.getEditionModeMessage().equals("INS")) {
+					.getEditionModeMessage().equals("INS"))
 
 				// Updates the insert message in the status bar
 				AcideMainWindow.getInstance().getStatusBar()
-						.setEditionModeMessage("   ");
+						.setEditionModeMessage("OVR");
 
-			} else {
+			else if (AcideMainWindow.getInstance().getStatusBar()
+					.getEditionModeMessage().equals("OVR"))
 
 				// Updates the insert message in the status bar
 				AcideMainWindow.getInstance().getStatusBar()
 						.setEditionModeMessage("INS");
-			}
 
 			// Sets the edition mode to overwrite in all the opened file editor
 			// panels
@@ -154,11 +154,5 @@ public class AcideStatusBarKeyboardListener extends KeyAdapter {
 										.getEditionMode());
 			}
 		}
-
-		// Validates the changes in the main window
-		AcideMainWindow.getInstance().validate();
-
-		// Repaints the changes in the main window
-		AcideMainWindow.getInstance().repaint();
 	}
 }

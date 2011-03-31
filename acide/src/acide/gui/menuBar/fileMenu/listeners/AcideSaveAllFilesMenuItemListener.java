@@ -57,7 +57,11 @@ public class AcideSaveAllFilesMenuItemListener implements ActionListener {
 				.getFileEditorManager().getNumberOfFileEditorPanels();
 
 		// If there are any opened file editor panels
-		if (numberOfFileEditorPanels != 0) {
+		if (numberOfFileEditorPanels > 0) {
+
+			// Gets the selected file editor panel index
+			int selectedFileEditorPanelIndex = AcideMainWindow.getInstance()
+					.getFileEditorManager().getSelectedFileEditorPanelIndex();
 
 			// From the first to the last file editor
 			for (int index = 0; index < numberOfFileEditorPanels; index++) {
@@ -70,6 +74,10 @@ public class AcideSaveAllFilesMenuItemListener implements ActionListener {
 				AcideMainWindow.getInstance().getMenu().getFileMenu()
 						.saveFile(index);
 			}
+
+			// Restores the original selected file editor panel
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.setSelectedFileEditorPanelAt(selectedFileEditorPanelIndex);
 		}
 	}
 }

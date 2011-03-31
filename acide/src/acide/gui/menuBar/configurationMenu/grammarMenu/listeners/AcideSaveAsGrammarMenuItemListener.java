@@ -151,7 +151,7 @@ public class AcideSaveAsGrammarMenuItemListener implements ActionListener {
 			}
 		} catch (Exception exception) {
 
-			// Error message
+			// Displays an error message
 			JOptionPane.showMessageDialog(
 					null,
 					exception.getMessage(),

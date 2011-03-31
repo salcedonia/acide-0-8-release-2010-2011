@@ -59,6 +59,7 @@ import acide.configuration.menu.AcideMenuConfiguration;
 import acide.configuration.menu.AcideMenuItemInformation;
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.files.text.AcideTextFileExtensionFilterManager;
+import acide.gui.listeners.AcideWindowClosingListener;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.configurationMenu.AcideConfigurationMenu;
 import acide.gui.menuBar.configurationMenu.consoleMenu.AcideConsoleMenu;
@@ -146,343 +147,343 @@ public class AcideMenuConfigurationWindow extends JFrame {
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window new file check box.
 	 */
-	private final JCheckBox _newFileCheckBox;
+	private JCheckBox _newFileCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window open file check box.
 	 */
-	private final JCheckBox _openFileCheckBox;
+	private JCheckBox _openFileCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window open recent files
 	 * check box.
 	 */
-	private final JCheckBox _openRecentFilesCheckBox;
+	private JCheckBox _openRecentFilesCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window open all files check
 	 * box.
 	 */
-	private final JCheckBox _openAllFilesCheckBox;
+	private JCheckBox _openAllFilesCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window save file as check
 	 * box.
 	 */
-	private final JCheckBox _saveFileAsCheckBox;
+	private JCheckBox _saveFileAsCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window save file check box.
 	 */
-	private final JCheckBox _saveFileCheckBox;
+	private JCheckBox _saveFileCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window save all files check
 	 * box.
 	 */
-	private final JCheckBox _saveAllFilesCheckBox;
+	private JCheckBox _saveAllFilesCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window close file check
 	 * box.
 	 */
-	private final JCheckBox _closeFileCheckBox;
+	private JCheckBox _closeFileCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window close all files
 	 * check box.
 	 */
-	private final JCheckBox _closeAllFilesCheckBox;
+	private JCheckBox _closeAllFilesCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window print file check
 	 * box.
 	 */
-	private final JCheckBox _printFileCheckBox;
+	private JCheckBox _printFileCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window exit check box.
 	 */
-	private final JCheckBox _exitCheckBox;
+	private JCheckBox _exitCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window undo check box.
 	 */
-	private final JCheckBox _undoCheckBox;
+	private JCheckBox _undoCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window redo check box.
 	 */
-	private final JCheckBox _redoCheckBox;
+	private JCheckBox _redoCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window copy check box.
 	 */
-	private final JCheckBox _copyCheckBox;
+	private JCheckBox _copyCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window paste check box.
 	 */
-	private final JCheckBox _pasteCheckBox;
+	private JCheckBox _pasteCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window cut check box.
 	 */
-	private final JCheckBox _cutCheckBox;
+	private JCheckBox _cutCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window select all files
 	 * check box.
 	 */
-	private final JCheckBox _selectAllFilesCheckBox;
+	private JCheckBox _selectAllFilesCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window go to line check
 	 * box.
 	 */
-	private final JCheckBox _goToLineCheckBox;
+	private JCheckBox _goToLineCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window search check box.
 	 */
-	private final JCheckBox _searchCheckBox;
+	private JCheckBox _searchCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window replace check box.
 	 */
-	private final JCheckBox _replaceCheckBox;
+	private JCheckBox _replaceCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window new project check
 	 * box.
 	 */
-	private final JCheckBox _newProjectCheckBox;
+	private JCheckBox _newProjectCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window open project check
 	 * box.
 	 */
-	private final JCheckBox _openProjectCheckBox;
+	private JCheckBox _openProjectCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window save project check
 	 * box.
 	 */
-	private final JCheckBox _saveProjectCheckBox;
+	private JCheckBox _saveProjectCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window close project check
 	 * box.
 	 */
-	private final JCheckBox _closeProjectCheckBox;
+	private JCheckBox _closeProjectCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window new project file
 	 * check box.
 	 */
-	private final JCheckBox _newProjectFileCheckBox;
+	private JCheckBox _newProjectFileCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window add file check box.
 	 */
-	private final JCheckBox _addFileCheckBox;
+	private JCheckBox _addFileCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window remove file check
 	 * box.
 	 */
-	private final JCheckBox _removeFileCheckBox;
+	private JCheckBox _removeFileCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window delete file check
 	 * box.
 	 */
-	private final JCheckBox _deleteFileCheckBox;
+	private JCheckBox _deleteFileCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window add folder check
 	 * box.
 	 */
-	private final JCheckBox _addFolderCheckBox;
+	private JCheckBox _addFolderCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window remove folder check
 	 * box.
 	 */
-	private final JCheckBox _removeFolderCheckBox;
+	private JCheckBox _removeFolderCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window compile check box.
 	 */
-	private final JCheckBox _compileCheckBox;
+	private JCheckBox _compileCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window execute check box.
 	 */
-	private final JCheckBox _executeCheckBox;
+	private JCheckBox _executeCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window set compilable file
 	 * check box.
 	 */
-	private final JCheckBox _setCompilableFileCheckBox;
+	private JCheckBox _setCompilableFileCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window unset compilable
 	 * check box.
 	 */
-	private final JCheckBox _unsetCompilableFileCheckBox;
+	private JCheckBox _unsetCompilableFileCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window set main file check
 	 * box.
 	 */
-	private final JCheckBox _setMainFileCheckBox;
+	private JCheckBox _setMainFileCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window unset main file
 	 * check box.
 	 */
-	private final JCheckBox _unsetMainFileCheckBox;
+	private JCheckBox _unsetMainFileCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window save project as
 	 * check box.
 	 */
-	private final JCheckBox _saveProjectAsCheckBox;
+	private JCheckBox _saveProjectAsCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window show log tab check
 	 * box.
 	 */
-	private final JCheckBox _showLogTabCheckBox;
+	private JCheckBox _showLogTabCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window show explorer panel
 	 * check box.
 	 */
-	private final JCheckBox _showExplorerPanelCheckBox;
+	private JCheckBox _showExplorerPanelCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window show output panel
 	 * check box.
 	 */
-	private final JCheckBox _showOutputPanelCheckBox;
+	private JCheckBox _showOutputPanelCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window new lexicon check
 	 * box.
 	 */
-	private final JCheckBox _newLexiconCheckBox;
+	private JCheckBox _newLexiconCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window load lexicon check
 	 * box.
 	 */
-	private final JCheckBox _loadLexiconCheckBox;
+	private JCheckBox _loadLexiconCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window modify lexicon check
 	 * box.
 	 */
-	private final JCheckBox _modifyLexiconCheckBox;
+	private JCheckBox _modifyLexiconCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window save lexicon check
 	 * box.
 	 */
-	private final JCheckBox _saveLexiconCheckBox;
+	private JCheckBox _saveLexiconCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window save lexicon as
 	 * check box.
 	 */
-	private final JCheckBox _saveLexiconAsCheckBox;
+	private JCheckBox _saveLexiconAsCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window new grammar check
 	 * box.
 	 */
-	private final JCheckBox _newGrammarCheckBox;
+	private JCheckBox _newGrammarCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window load grammar check
 	 * box.
 	 */
-	private final JCheckBox _loadGrammarCheckBox;
+	private JCheckBox _loadGrammarCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window modify grammar check
 	 * box.
 	 */
-	private final JCheckBox _modifyGrammarCheckBox;
+	private JCheckBox _modifyGrammarCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window save grammar check
 	 * box.
 	 */
-	private final JCheckBox _saveGrammarCheckBox;
+	private JCheckBox _saveGrammarCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window save grammar as
 	 * check box.
 	 */
-	private final JCheckBox _saveGrammarAsCheckBox;
+	private JCheckBox _saveGrammarAsCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window set paths check box.
 	 */
-	private final JCheckBox _setPathsCheckBox;
+	private JCheckBox _setPathsCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window auto analysis check
 	 * box.
 	 */
-	private final JCheckBox _autoAnalysisCheckBox;
+	private JCheckBox _autoAnalysisCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window configure check box.
 	 */
-	private final JCheckBox _configureCheckBox;
+	private JCheckBox _configureCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window external command
 	 * check box.
 	 */
-	private final JCheckBox _externalCommandCheckBox;
+	private JCheckBox _externalCommandCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window Spanish check box.
 	 */
-	private final JCheckBox _spanishCheckBox;
+	private JCheckBox _spanishCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window English check box.
 	 */
-	private final JCheckBox _englishCheckBox;
+	private JCheckBox _englishCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window new menu check box.
 	 */
-	private final JCheckBox _newMenuCheckBox;
+	private JCheckBox _newMenuCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window load menu check box.
 	 */
-	private final JCheckBox _loadMenuCheckBox;
+	private JCheckBox _loadMenuCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window modify menu check
 	 * box.
 	 */
-	private final JCheckBox _modifyMenu;
+	private JCheckBox _modifyMenu;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window save menu check box.
 	 */
-	private final JCheckBox _saveMenuCheckBox;
+	private JCheckBox _saveMenuCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window save menu as check
 	 * box.
 	 */
-	private final JCheckBox _saveMenuAsCheckBox;
+	private JCheckBox _saveMenuAsCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window new tool bar check
 	 * box.
 	 */
-	private final JCheckBox _newToolBarCheckBox;
+	private JCheckBox _newToolBarCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window load tool bar check
 	 * box.
 	 */
-	private final JCheckBox _loadToolBarCheckBox;
+	private JCheckBox _loadToolBarCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window modify tool bar
 	 * check box.
 	 */
-	private final JCheckBox _modifyToolBarCheckBox;
+	private JCheckBox _modifyToolBarCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window save tool bar check
 	 * box.
 	 */
-	private final JCheckBox _saveToolBarCheckBox;
+	private JCheckBox _saveToolBarCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window save tool bar as
 	 * check box.
 	 */
-	private final JCheckBox _saveToolBarAsCheckBox;
+	private JCheckBox _saveToolBarAsCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window compiler check box.
 	 */
-	private final JCheckBox _compilerCheckBox;
+	private JCheckBox _compilerCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window show help check box.
 	 */
-	private final JCheckBox _showHelpCheckBox;
+	private JCheckBox _showHelpCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window show about us check
 	 * box.
 	 */
-	private final JCheckBox _showAboutUsCheckBox;
+	private JCheckBox _showAboutUsCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window menu check box.
 	 */
-	private final JCheckBox _menuCheckBox;
+	private JCheckBox _menuCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window tool bar check box.
 	 */
-	private final JCheckBox _toolBarCheckBox;
+	private JCheckBox _toolBarCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window shell display
 	 * options check box.
 	 */
-	private final JCheckBox _shellDisplayOptionsCheckBox;
+	private JCheckBox _shellDisplayOptionsCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE menu configuration window file editor display
 	 * options check box.
 	 */
-	private final JCheckBox _fileEditorDisplayOptionsCheckBox;
+	private JCheckBox _fileEditorDisplayOptionsCheckBox;
 	/**
 	 * Flag that indicates if the changes are saved or not.
 	 */
@@ -513,52 +514,27 @@ public class AcideMenuConfigurationWindow extends JFrame {
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s531"));
 
-		// Sets the layout
-		setLayout(new BorderLayout());
+		// Builds the window components
+		buildComponents();
+
+		// Sets the listeners of the window components
+		setListeners();
+
+		// Adds the components to the window
+		addComponents();
+
+		// Sets the window configuration
+		setWindowConfiguration();
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE menu configuration window
+	 * components.
+	 */
+	private void buildComponents() {
 
 		// MAIN PANEL
 		_mainPanel = new JPanel(new GridBagLayout());
-
-		// Sets the window icon
-		setIconImage(new ImageIcon(WINDOW_ICON).getImage());
-
-		// Sets the title
-		if (forModifying) {
-
-			String currentMenuConfiguration = null;
-
-			try {
-
-				// Gets the the ACIDE - A Configurable IDE current menu
-				// configuration
-				currentMenuConfiguration = AcideResourceManager.getInstance()
-						.getProperty("currentMenuConfiguration");
-
-				// Gets the name
-				int index = currentMenuConfiguration.lastIndexOf("\\");
-				if (index == -1)
-					index = currentMenuConfiguration.lastIndexOf("/");
-				currentMenuConfiguration = currentMenuConfiguration.substring(
-						index + 1, currentMenuConfiguration.length() - 8);
-			} catch (Exception exception) {
-
-				// Updates the log
-				AcideLog.getLog().error(exception.getMessage());
-
-				// Error message
-				JOptionPane.showMessageDialog(null, exception.getMessage(),
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s295"), JOptionPane.ERROR_MESSAGE);
-			}
-
-			// Sets the window title
-			setTitle(AcideLanguageManager.getInstance().getLabels()
-					.getString("s532")
-					+ " - " + currentMenuConfiguration);
-		} else
-			// Sets the window title
-			setTitle(AcideLanguageManager.getInstance().getLabels()
-					.getString("s298"));
 
 		// FILE PANEL
 		_filePanel = new JPanel(new GridLayout(0, 3));
@@ -885,12 +861,87 @@ public class AcideMenuConfigurationWindow extends JFrame {
 		_modifyMenu.setEnabled(false);
 
 		// If the window is for modifying the menu items
-		if (forModifying)
+		if (_forModifying)
 			// Sets the check boxes from the menu item list
 			setCheckBoxesFromMenuItemList();
+	}
 
-		// Sets the listeners of the window components
-		setListeners();
+	/**
+	 * Sets the ACIDE - A Configurable IDE menu configuration window
+	 * configuration.
+	 */
+	private void setWindowConfiguration() {
+
+		// Sets the title
+		if (_forModifying) {
+
+			String currentMenuConfiguration = null;
+
+			try {
+
+				// Gets the the ACIDE - A Configurable IDE current menu
+				// configuration
+				currentMenuConfiguration = AcideResourceManager.getInstance()
+						.getProperty("currentMenuConfiguration");
+
+				// Gets the name
+				int index = currentMenuConfiguration.lastIndexOf("\\");
+				if (index == -1)
+					index = currentMenuConfiguration.lastIndexOf("/");
+				currentMenuConfiguration = currentMenuConfiguration.substring(
+						index + 1, currentMenuConfiguration.length() - 8);
+			} catch (Exception exception) {
+
+				// Updates the log
+				AcideLog.getLog().error(exception.getMessage());
+
+				// Displays an error message
+				JOptionPane.showMessageDialog(null, exception.getMessage(),
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s295"), JOptionPane.ERROR_MESSAGE);
+			}
+
+			// Sets the window title
+			setTitle(AcideLanguageManager.getInstance().getLabels()
+					.getString("s532")
+					+ " - " + currentMenuConfiguration);
+		} else
+			// Sets the window title
+			setTitle(AcideLanguageManager.getInstance().getLabels()
+					.getString("s298"));
+
+		// Sets the window icon
+		setIconImage(new ImageIcon(WINDOW_ICON).getImage());
+
+		// The window is not resizable
+		setResizable(false);
+
+		// Packs the window components
+		pack();
+
+		// Centers the window
+		setLocationRelativeTo(null);
+
+		// Displays the window
+		setVisible(true);
+
+		// Disables the main window
+		AcideMainWindow.getInstance().setEnabled(false);
+
+		// Updates the log
+		AcideLog.getLog().info(
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s530"));
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE menu configuration
+	 * window with the layout.
+	 */
+	private void addComponents() {
+
+		// Sets the layout
+		setLayout(new BorderLayout());
 
 		// Adds the components with the layout to the window
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -1023,21 +1074,11 @@ public class AcideMenuConfigurationWindow extends JFrame {
 		_buttonPanel.add(_acceptButton);
 		_buttonPanel.add(_cancelButton);
 		add(_buttonPanel, BorderLayout.SOUTH);
-
-		// FRAME
-		setVisible(true);
-		setResizable(false);
-		pack();
-		setLocationRelativeTo(null);
-
-		// Updates the log
-		AcideLog.getLog().info(
-				AcideLanguageManager.getInstance().getLabels()
-						.getString("s530"));
 	}
 
 	/**
-	 * Sets the listeners to the window components.
+	 * Sets the listeners to the ACIDE - A Configurable IDE menu configuration
+	 * window components.
 	 */
 	private void setListeners() {
 
@@ -1059,6 +1100,9 @@ public class AcideMenuConfigurationWindow extends JFrame {
 
 		// SELECT NONE BUTTON
 		_selectNoneButton.addActionListener(new SelectNoneButtonAction());
+
+		// Sets the window closing listener
+		addWindowListener(new AcideWindowClosingListener());
 	}
 
 	/**
@@ -1923,9 +1967,6 @@ public class AcideMenuConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Creates the menu item information list
-			ArrayList<AcideMenuItemInformation> menuItemList = buildMenuItemInformationList();
-
 			// Creates and configures the file chooser
 			JFileChooser fileChooser = new JFileChooser();
 
@@ -1956,7 +1997,7 @@ public class AcideMenuConfigurationWindow extends JFrame {
 
 				// Save the menu configuration
 				AcideMenuConfiguration.getInstance().saveMenuConfigurationFile(
-						fileName, menuItemList);
+						fileName);
 
 				// Updates the the ACIDE - A Configurable IDE current menu
 				// configuration
@@ -1974,7 +2015,7 @@ public class AcideMenuConfigurationWindow extends JFrame {
 								+ AcideLanguageManager.getInstance()
 										.getLabels().getString("s529"));
 			} else {
-				
+
 				// If it is cancel
 				if (returnValue == JFileChooser.CANCEL_OPTION) {
 
@@ -2013,8 +2054,17 @@ public class AcideMenuConfigurationWindow extends JFrame {
 					AcideLanguageManager.getInstance().getLabels()
 							.getString("s520"));
 
+			// Enables the main window again
+			AcideMainWindow.getInstance().setEnabled(true);
+
 			// Closes the window
 			dispose();
+
+			// Brings the main window to the front
+			AcideMainWindow.getInstance().setAlwaysOnTop(true);
+
+			// But not permanently
+			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}
 	}
 
@@ -2052,7 +2102,7 @@ public class AcideMenuConfigurationWindow extends JFrame {
 
 			// Saves the new configuration
 			AcideMenuConfiguration.getInstance().saveMenuConfigurationFile(
-					newName, menuItemList);
+					newName);
 
 			try {
 
@@ -2098,8 +2148,17 @@ public class AcideMenuConfigurationWindow extends JFrame {
 				// The changes are not saved
 				_changesAreSaved = false;
 
+				// Enables the main window again
+				AcideMainWindow.getInstance().setEnabled(true);
+
 				// Closes the window
 				dispose();
+
+				// Brings the main window to the front
+				AcideMainWindow.getInstance().setAlwaysOnTop(true);
+
+				// But not permanently
+				AcideMainWindow.getInstance().setAlwaysOnTop(false);
 
 				// Updates the log
 				AcideLog.getLog().info(
@@ -2116,7 +2175,7 @@ public class AcideMenuConfigurationWindow extends JFrame {
 				// Updates the log
 				AcideLog.getLog().error(exception.getMessage());
 
-				// Error message
+				// Displays an error message
 				JOptionPane.showMessageDialog(null, exception.getMessage(),
 						AcideLanguageManager.getInstance().getLabels()
 								.getString("s292"), JOptionPane.ERROR_MESSAGE);
@@ -2142,8 +2201,17 @@ public class AcideMenuConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
+			// Enables the main window again
+			AcideMainWindow.getInstance().setEnabled(true);
+
 			// Closes the window
 			dispose();
+
+			// Brings the main window to the front
+			AcideMainWindow.getInstance().setAlwaysOnTop(true);
+
+			// But not permanently
+			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}
 	}
 }

@@ -147,6 +147,15 @@ public class AcideDeleteFileMenuItemListener implements ActionListener {
 			if (AcideProjectConfiguration.getInstance()
 					.getNumberOfFilesFromList() > 0) {
 
+				// Updates the selected file editor index
+				AcideMainWindow
+						.getInstance()
+						.getFileEditorManager()
+						.updateRelatedComponentsAt(
+								AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getSelectedFileEditorPanelIndex());
+				
 				// Enables the remove file menu item in the explorer panel popup
 				// menu
 				AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()

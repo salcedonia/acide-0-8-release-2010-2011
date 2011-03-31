@@ -29,24 +29,20 @@
  */
 package acide.gui.menuBar.configurationMenu.lexiconMenu;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
+
 import acide.configuration.menu.AcideMenuConfiguration;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideLoadLexiconMenuItemListener;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideModifyLexiconMenuItemListener;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideNewLexiconMenuItemListener;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideSaveAsLexiconMenuItemListener;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideSaveLexiconMenuItemListener;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.util.ResourceBundle;
-
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
-
 import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE lexicon menu.
@@ -131,40 +127,29 @@ public class AcideLexiconMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		// NEW LEXICON MENU ITEM
-		_newLexiconMenuItem.setText(labels.getString("s249"));
+		_newLexiconMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s249"));
 
 		// LOAD LEXICON MENU ITEM
-		_loadLexiconMenuItem.setText(labels.getString("s35"));
+		_loadLexiconMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s35"));
 		_loadLexiconMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_L, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 
 		// MODIFY LEXICON MENU ITEM
-		_modifyLexiconMenuItem.setText(labels.getString("s29"));
+		_modifyLexiconMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s29"));
 		_modifyLexiconMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_X, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 
 		// SAVE LEXICON MENU ITEM
-		_saveLexiconMenuItem.setText(labels.getString("s250"));
+		_saveLexiconMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s250"));
 
 		// SAVE LEXICON AS MENU ITEM
-		_saveLexiconAsMenuItem.setText(labels.getString("s286"));
+		_saveLexiconAsMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s286"));
 	}
 
 	/**

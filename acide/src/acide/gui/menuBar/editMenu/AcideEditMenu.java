@@ -32,16 +32,12 @@ package acide.gui.menuBar.editMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 import acide.configuration.menu.AcideMenuConfiguration;
 import acide.gui.menuBar.editMenu.listeners.AcideCopyMenuItemListener;
 import acide.gui.menuBar.editMenu.listeners.AcideCutMenuItemListener;
@@ -52,6 +48,8 @@ import acide.gui.menuBar.editMenu.listeners.AcideReplaceMenuItemListener;
 import acide.gui.menuBar.editMenu.listeners.AcideSearchMenuItemListener;
 import acide.gui.menuBar.editMenu.listeners.AcideSelectAllMenuItemListener;
 import acide.gui.menuBar.editMenu.listeners.AcideUndoMenuItemListener;
+import acide.language.AcideLanguageManager;
+import acide.log.AcideLog;
 
 /**
  * ACIDE - A Configurable IDE edit menu.
@@ -104,39 +102,49 @@ public class AcideEditMenu extends JMenu {
 	/**
 	 * ACIDE - A Configurable IDE edit menu undo menu item image icon.
 	 */
-	private final static ImageIcon UNDO_IMAGE = new ImageIcon("./resources/icons/menu/edit/undo.png");
+	private final static ImageIcon UNDO_IMAGE = new ImageIcon(
+			"./resources/icons/menu/edit/undo.png");
 	/**
 	 * ACIDE - A Configurable IDE edit menu redo menu item image icon.
 	 */
-	private final static ImageIcon REDO_IMAGE = new ImageIcon("./resources/icons/menu/edit/redo.png");
+	private final static ImageIcon REDO_IMAGE = new ImageIcon(
+			"./resources/icons/menu/edit/redo.png");
 	/**
 	 * ACIDE - A Configurable IDE edit menu copy menu item image icon.
 	 */
-	private final static ImageIcon COPY_IMAGE = new ImageIcon("./resources/icons/menu/edit/copy.png");
+	private final static ImageIcon COPY_IMAGE = new ImageIcon(
+			"./resources/icons/menu/edit/copy.png");
 	/**
 	 * ACIDE - A Configurable IDE edit menu paste menu item image icon.
 	 */
-	private final static ImageIcon PASTE_IMAGE = new ImageIcon("./resources/icons/menu/edit/paste.png");
+	private final static ImageIcon PASTE_IMAGE = new ImageIcon(
+			"./resources/icons/menu/edit/paste.png");
 	/**
 	 * ACIDE - A Configurable IDE edit menu cut menu item image icon.
 	 */
-	private final static ImageIcon CUT_IMAGE = new ImageIcon("./resources/icons/menu/edit/cut.png");
+	private final static ImageIcon CUT_IMAGE = new ImageIcon(
+			"./resources/icons/menu/edit/cut.png");
 	/**
-	 * ACIDE - A Configurable IDE edit menu select all files menu item image icon.
+	 * ACIDE - A Configurable IDE edit menu select all files menu item image
+	 * icon.
 	 */
-	private final static ImageIcon SELECT_ALL_FILES_IMAGE = new ImageIcon("./resources/icons/menu/edit/selectAll.png");
+	private final static ImageIcon SELECT_ALL_FILES_IMAGE = new ImageIcon(
+			"./resources/icons/menu/edit/selectAll.png");
 	/**
 	 * ACIDE - A Configurable IDE edit menu go to line menu item image icon.
 	 */
-	private final static ImageIcon GO_TO_LINE_IMAGE = new ImageIcon("./resources/icons/menu/edit/goToLine.png");
+	private final static ImageIcon GO_TO_LINE_IMAGE = new ImageIcon(
+			"./resources/icons/menu/edit/goToLine.png");
 	/**
 	 * ACIDE - A Configurable IDE edit menu search menu item image icon.
 	 */
-	private final static ImageIcon SEARCH_IMAGE = new ImageIcon("./resources/icons/menu/edit/search.png");
+	private final static ImageIcon SEARCH_IMAGE = new ImageIcon(
+			"./resources/icons/menu/edit/search.png");
 	/**
 	 * ACIDE - A Configurable IDE edit menu replace menu item image icon.
 	 */
-	private final static ImageIcon REPLACE_IMAGE = new ImageIcon("./resources/icons/menu/edit/replace.png");
+	private final static ImageIcon REPLACE_IMAGE = new ImageIcon(
+			"./resources/icons/menu/edit/replace.png");
 	/**
 	 * ACIDE - A Configurable IDE edit menu undo menu item.
 	 */
@@ -173,7 +181,7 @@ public class AcideEditMenu extends JMenu {
 	 * ACIDE - A Configurable IDE edit menu replace menu item.
 	 */
 	private JMenuItem _replaceMenuItem;
-	
+
 	/**
 	 * Creates a new ACIDE - A Configurable IDE edit menu.
 	 */
@@ -181,108 +189,105 @@ public class AcideEditMenu extends JMenu {
 
 		// UNDO MENU ITEM
 		_undoMenuItem = new JMenuItem(UNDO_IMAGE);
-		
+
 		// REDO MENU ITEM
 		_redoMenuItem = new JMenuItem(REDO_IMAGE);
-		
+
 		// COPY MENU ITEM
 		_copyMenuItem = new JMenuItem(COPY_IMAGE);
-		
+
 		// PASTE MENU ITEM
 		_pasteMenuItem = new JMenuItem(PASTE_IMAGE);
-		
+
 		// CUT MENU ITEM
 		_cutMenuItem = new JMenuItem(CUT_IMAGE);
-		
+
 		// SEARCH MENU ITEM
 		_searchMenuItem = new JMenuItem(SEARCH_IMAGE);
-		
+
 		// REPLACE MENU ITEM
 		_replaceMenuItem = new JMenuItem(REPLACE_IMAGE);
-		
+
 		// SELECT ALL MENU ITEM
 		_selectAllMenuItem = new JMenuItem(SELECT_ALL_FILES_IMAGE);
-		
+
 		// GO TO LINE MENU ITEM
 		_goToLineMenuItem = new JMenuItem(GO_TO_LINE_IMAGE);
-		
+
 		// Sets the text of the edit menu components
 		setTextOfMenuComponents();
 	}
-	
+
 	/**
-	 * Sets the text of the ACIDE - A Configurable IDE edit menu components
-	 * with the labels in the selected language to display.
+	 * Sets the text of the ACIDE - A Configurable IDE edit menu components with
+	 * the labels in the selected language to display.
 	 */
 	public void setTextOfMenuComponents() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
+		// Disables the menu
 		disableMenu();
 
 		// UNDO MENU ITEM
-		_undoMenuItem.setText(labels.getString("s21"));
+		_undoMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s21"));
 		_undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
 				ActionEvent.CTRL_MASK));
 
 		// REDO MENU ITEM
-		_redoMenuItem.setText(labels.getString("s22"));
+		_redoMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s22"));
 		_redoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y,
 				ActionEvent.CTRL_MASK));
 
 		// COPY MENU ITEM
-		_copyMenuItem.setText(labels.getString("s23"));
+		_copyMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s23"));
 		_copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
 				ActionEvent.CTRL_MASK));
 
 		// CUT MENU ITEM
-		_cutMenuItem.setText(labels.getString("s24"));
+		_cutMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s24"));
 		_cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
 				ActionEvent.CTRL_MASK));
 
 		// PASTE MENU ITEM
-		_pasteMenuItem.setText(labels.getString("s25"));
+		_pasteMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s25"));
 		_pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,
 				ActionEvent.CTRL_MASK));
 
 		// SEARCH MENU ITEM
-		_searchMenuItem.setText(labels.getString("s26"));
-		if (language.getCurrentLocale().equals(new Locale("en", "EN")))
-			_searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
-					ActionEvent.CTRL_MASK));
+		_searchMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s26"));
+		if (AcideLanguageManager.getInstance().getCurrentLocale()
+				.equals(new Locale("en", "EN")))
+			_searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+					KeyEvent.VK_F, ActionEvent.CTRL_MASK));
 		else
-			_searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B,
-					ActionEvent.CTRL_MASK));
+			_searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+					KeyEvent.VK_B, ActionEvent.CTRL_MASK));
 
 		// REPLACE MENU ITEM
-		_replaceMenuItem.setText(labels.getString("s27"));
-		if (language.getCurrentLocale().equals(new Locale("en", "EN")))
-			_replaceMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,
-					ActionEvent.CTRL_MASK));
+		_replaceMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s27"));
+		if (AcideLanguageManager.getInstance().getCurrentLocale()
+				.equals(new Locale("en", "EN")))
+			_replaceMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+					KeyEvent.VK_R, ActionEvent.CTRL_MASK));
 		else
-			_replaceMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,
-					ActionEvent.CTRL_MASK));
+			_replaceMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+					KeyEvent.VK_L, ActionEvent.CTRL_MASK));
 
 		// SELECT ALL MENU ITEM
-		_selectAllMenuItem.setText(labels.getString("s190"));
+		_selectAllMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s190"));
 		_selectAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
 				ActionEvent.CTRL_MASK));
 
 		// GO TO LINE MENU ITEM
-		_goToLineMenuItem.setText(labels.getString("s222"));
+		_goToLineMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s222"));
 	}
 
 	/**
@@ -296,66 +301,82 @@ public class AcideEditMenu extends JMenu {
 		// UNDO MENU ITEM
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME))
 			add(_undoMenuItem);
-		
+
 		// REDO MENU ITEM
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(REDO_NAME))
 			add(_redoMenuItem);
-		
+
 		// SEPARATOR
-		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME) 
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(REDO_NAME))
-				&& (AcideMenuConfiguration.getInstance().getIsDisplayed(COPY_NAME) 
-						|| AcideMenuConfiguration.getInstance().getIsDisplayed(PASTE_NAME)
-						|| AcideMenuConfiguration.getInstance().getIsDisplayed(CUT_NAME) 
-						|| AcideMenuConfiguration.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME)))
+		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME) || AcideMenuConfiguration
+				.getInstance().getIsDisplayed(REDO_NAME))
+				&& (AcideMenuConfiguration.getInstance().getIsDisplayed(
+						COPY_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								PASTE_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								CUT_NAME) || AcideMenuConfiguration
+						.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME)))
 			addSeparator();
-		
+
 		// COPY MENU ITEM
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(COPY_NAME))
 			add(_copyMenuItem);
-		
+
 		// PASTE MENU ITEM
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(PASTE_NAME))
 			add(_pasteMenuItem);
-		
+
 		// CUT MENU ITEM
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(CUT_NAME))
 			add(_cutMenuItem);
-		
+
 		// SELECT ALL MENU ITEM
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME))
+		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
+				SELECT_ALL_FILES_NAME))
 			add(_selectAllMenuItem);
-		
+
 		// SEPARATOR
-		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME) 
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(REDO_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(COPY_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(PASTE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(CUT_NAME) 
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME)) 
-				&& AcideMenuConfiguration.getInstance().getIsDisplayed(GO_TO_LINE_NAME))
+		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						REDO_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						COPY_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						PASTE_NAME)
+				|| AcideMenuConfiguration.getInstance()
+						.getIsDisplayed(CUT_NAME) || AcideMenuConfiguration
+				.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME))
+				&& AcideMenuConfiguration.getInstance().getIsDisplayed(
+						GO_TO_LINE_NAME))
 			addSeparator();
-		
+
 		// GO TO LINE MENU ITEM
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(GO_TO_LINE_NAME))
+		if (AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(GO_TO_LINE_NAME))
 			add(_goToLineMenuItem);
-		
+
 		// SEPARATOR
-		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME) 
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(REDO_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(COPY_NAME) 
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(PASTE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(CUT_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME) 
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(GO_TO_LINE_NAME))
-				&& (AcideMenuConfiguration.getInstance().getIsDisplayed(SEARCH_NAME) 
-						|| AcideMenuConfiguration.getInstance().getIsDisplayed(REPLACE_NAME)))
+		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						REDO_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						COPY_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						PASTE_NAME)
+				|| AcideMenuConfiguration.getInstance()
+						.getIsDisplayed(CUT_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						SELECT_ALL_FILES_NAME) || AcideMenuConfiguration
+				.getInstance().getIsDisplayed(GO_TO_LINE_NAME))
+				&& (AcideMenuConfiguration.getInstance().getIsDisplayed(
+						SEARCH_NAME) || AcideMenuConfiguration.getInstance()
+						.getIsDisplayed(REPLACE_NAME)))
 			addSeparator();
-		
+
 		// SEARCH MENU ITEM
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SEARCH_NAME))
 			add(_searchMenuItem);
-		
+
 		// REPLACE MENU ITEM
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(REPLACE_NAME))
 			add(_replaceMenuItem);
@@ -388,10 +409,12 @@ public class AcideEditMenu extends JMenu {
 		_copyMenuItem.addActionListener(new AcideCopyMenuItemListener());
 
 		// SELECT ALL MENU ITEM
-		_selectAllMenuItem.addActionListener(new AcideSelectAllMenuItemListener());
+		_selectAllMenuItem
+				.addActionListener(new AcideSelectAllMenuItemListener());
 
 		// GO TO LINE MENU ITEM
-		_goToLineMenuItem.addActionListener(new AcideGoToLineMenuItemListener());
+		_goToLineMenuItem
+				.addActionListener(new AcideGoToLineMenuItemListener());
 	}
 
 	/**
@@ -399,25 +422,13 @@ public class AcideEditMenu extends JMenu {
 	 */
 	public void disablePaste() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
+		// Disables the paste menu item
 		_pasteMenuItem.setEnabled(false);
 
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s73"));
+		AcideLog.getLog()
+				.info(AcideLanguageManager.getInstance().getLabels()
+						.getString("s73"));
 	}
 
 	/**
@@ -425,25 +436,13 @@ public class AcideEditMenu extends JMenu {
 	 */
 	public void enablePaste() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
+		// Enables the paste menu item
 		_pasteMenuItem.setEnabled(true);
 
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s74"));
+		AcideLog.getLog()
+				.info(AcideLanguageManager.getInstance().getLabels()
+						.getString("s74"));
 	}
 
 	/**

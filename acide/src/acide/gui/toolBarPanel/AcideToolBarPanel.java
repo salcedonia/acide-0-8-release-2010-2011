@@ -40,7 +40,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -51,7 +50,6 @@ import javax.swing.JToolBar;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE tool bar panel.
@@ -222,21 +220,21 @@ public class AcideToolBarPanel extends JPanel {
 
 		// TOOL BAR SCROLL PANE
 		_toolBarScrollPane = new JScrollPane();
-		
+
 		// Hides the vertical scroll bar
 		_toolBarScrollPane
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-		
+
 		// Hides the horizontal scroll bar
 		_toolBarScrollPane
 				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		
-		// Sets the tool bar panel as its viewport view 
+
+		// Sets the tool bar panel as its viewport view
 		_toolBarScrollPane.setViewportView(_toolBar);
-		
+
 		// No border
 		_toolBarScrollPane.setBorder(BorderFactory.createEmptyBorder());
-		
+
 		// Adds the tool bar to the window
 		add(_toolBarScrollPane, BorderLayout.CENTER);
 	}
@@ -250,7 +248,8 @@ public class AcideToolBarPanel extends JPanel {
 		addStaticToolBar(AcideStaticToolBar.getInstance().build());
 
 		// Builds the modifiable tool bar
-		addConsoleCommandToolBar(AcideConsoleCommandToolBar.getInstance().build());
+		addConsoleCommandToolBar(AcideConsoleCommandToolBar.getInstance()
+				.build());
 
 		// Creates the components
 		initComponents();
@@ -292,24 +291,12 @@ public class AcideToolBarPanel extends JPanel {
 	public void addConsoleCommandToolBar(
 			AcideConsoleCommandToolBar consoleCommandToolBar) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s130"));
+		AcideLog.getLog().info(
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s130"));
+
+		// Adds a separator to the tool bar
 		_toolBar.addSeparator();
 
 		// Adds the console command buttons
@@ -317,7 +304,9 @@ public class AcideToolBarPanel extends JPanel {
 			_toolBar.add(consoleCommandButton);
 
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s125"));
+		AcideLog.getLog().info(
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s125"));
 	}
 
 	/**
@@ -329,22 +318,6 @@ public class AcideToolBarPanel extends JPanel {
 	 */
 	public void addStaticToolBar(AcideStaticToolBar staticToolBar) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
 		// Removes the previous components
 		_toolBar.removeAll();
 
@@ -353,6 +326,8 @@ public class AcideToolBarPanel extends JPanel {
 			_toolBar.add(staticButton);
 
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s125"));
+		AcideLog.getLog().info(
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s125"));
 	}
 }

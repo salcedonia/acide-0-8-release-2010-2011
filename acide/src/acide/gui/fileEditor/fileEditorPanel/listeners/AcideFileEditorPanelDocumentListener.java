@@ -29,16 +29,35 @@
  */
 package acide.gui.fileEditor.fileEditorPanel.listeners;
 
-import acide.configuration.project.workbench.AcideWorkbenchManager;
+import acide.configuration.workbench.AcideWorkbenchManager;
 import acide.gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
 import acide.gui.mainWindow.AcideMainWindow;
+import acide.gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
 
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 /**
+ * <p>
  * ACIDE - A Configurable IDE file editor panel document listener.
+ * </p>
+ * <p>
+ * Checks the name of the file editor panel which provokes the document event,
+ * selects it in the tabbed pane (if any) and updates its closing button
+ * depending on the state of its file content. The document event can be
+ * provoked by an undoable edit event, not only from the document currently in
+ * use. With this we get the effect on changing between tabs when the undo or
+ * redo events affect to another opened tab without the focus.
+ * </p>
+ * <p>
+ * To determine if a file has been modified, the current text is compared with
+ * the disk copy of the file.
+ * </p>
+ * <p>
+ * Additionally, the static tool bar is also updated, enabling or disabling the
+ * save file and save all files button, depending on the new state of the
+ * closing button in the selected file editor panel.
+ * </p>
  * 
  * @version 0.8
  * @see DocumentListener
@@ -81,113 +100,67 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 	/**
 	 * Updates the close button and the modification project state.
 	 */
-	public void dispatchEvent(final DocumentEvent documentEvent) {
+	public void dispatchEvent(DocumentEvent documentEvent) {
+
+		// Gets the syntax document which contains
+		AcideStyledDocument document = (AcideStyledDocument) documentEvent
+				.getDocument();
 
 		// If the workbench configuration has been loaded
 		if (AcideWorkbenchManager.getInstance().isWorkbenchLoaded()) {
 
-			// Gets the syntax document which contains
-			AcideStyledDocument document = (AcideStyledDocument) documentEvent
-					.getDocument();
-
 			// Gets the file editor panel index which has to be on focus
-			final int fileEditorPanelIndexOnFocus = AcideMainWindow
+			int indexOnFocus = AcideMainWindow
 					.getInstance()
 					.getFileEditorManager()
-					.getIndexOfFileEditorPanelByName(
-							document.getFileEditorPanelName());
+					.getFileEditorPanelAt((String) document.getProperty("name"));
 
-			if (fileEditorPanelIndexOnFocus != -1) {
+			// If there is any
+			if (indexOnFocus != -1) {
 
-				// Puts the focus on the tab which provokes the change
-				AcideMainWindow
-						.getInstance()
-						.getFileEditorManager()
-						.setSelectedFileEditorPanelAt(
-								fileEditorPanelIndexOnFocus);
+				if (AcideMainWindow.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanelIndex() != indexOnFocus)
 
-				// Updates the focus, caret and so on..
-				AcideMainWindow
-						.getInstance()
-						.getFileEditorManager()
-						.updatesFileEditorAt(
-								AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.getSelectedFileEditorPanelIndex());
+					// Sets the selected file editor
+					AcideMainWindow.getInstance().getFileEditorManager()
+							.setSelectedFileEditorPanelAt(indexOnFocus);
+
+				// Selects the tree node
+				AcideMainWindow.getInstance().getExplorerPanel()
+						.selectTreeNodeFromFileEditor();
 
 				// Gets the current content
 				String fileContent = AcideMainWindow.getInstance()
 						.getFileEditorManager()
-						.getFileEditorPanelAt(fileEditorPanelIndexOnFocus)
+						.getFileEditorPanelAt(indexOnFocus)
 						.getTextEditionAreaContent();
 
 				// If has been changes in the file
 				if (!AcideMainWindow.getInstance().getFileEditorManager()
-						.getFileEditorPanelAt(fileEditorPanelIndexOnFocus)
+						.getFileEditorPanelAt(indexOnFocus)
 						.isEqualToFileDiskCopy(fileContent)) {
 
-					SwingUtilities.invokeLater(new Runnable() {
-						/*
-						 * (non-Javadoc)
-						 * 
-						 * @see java.lang.Runnable#run()
-						 */
-						@Override
-						public void run() {
-							// Sets the red icon to the close button
-							AcideMainWindow
-									.getInstance()
-									.getFileEditorManager()
-									.getTabbedPaneUI()
-									.getCloseButtonAt(
-											fileEditorPanelIndexOnFocus)
-									.setRedCloseButton();
-						}
-					});
+					// Sets the red icon to the close button
+					AcideMainWindow.getInstance().getFileEditorManager()
+							.setRedButtonAt(indexOnFocus);
 
-					// Enables the save menu item
-					AcideMainWindow.getInstance().getMenu().getFileMenu()
-							.getSaveFileMenuItem().setEnabled(true);
-					
 					// The file editor manager has been modified
 					AcideMainWindow.getInstance().getFileEditorManager()
 							.setIsModified(true);
 				} else {
 
-					SwingUtilities.invokeLater(new Runnable() {
-						/*
-						 * (non-Javadoc)
-						 * 
-						 * @see java.lang.Runnable#run()
-						 */
-						@Override
-						public void run() {
-							// Sets the red icon to the close button
-							AcideMainWindow
-									.getInstance()
-									.getFileEditorManager()
-									.getTabbedPaneUI()
-									.getCloseButtonAt(
-											fileEditorPanelIndexOnFocus)
-									.setGreenCloseButton();
-						}
-					});
-
-					// Disables the save menu item
-					AcideMainWindow.getInstance().getMenu().getFileMenu()
-							.getSaveFileMenuItem().setEnabled(false);
+					// Sets the green icon to the close button
+					AcideMainWindow.getInstance().getFileEditorManager()
+							.setGreenButtonAt(indexOnFocus);
 
 					// The file editor manager has not been modified
 					AcideMainWindow.getInstance().getFileEditorManager()
 							.setIsModified(false);
 				}
+
+				// Updates the static tool bar
+				AcideStaticToolBar.getInstance().updateStateOfFileButtons();
 			}
-			
-			// Validates the changes in the main window
-			AcideMainWindow.getInstance().validate();
-			
-			// Updates the main window
-			AcideMainWindow.getInstance().repaint();
 		}
 	}
 }

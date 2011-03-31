@@ -114,6 +114,7 @@ public class AcideConsoleCommandToolBar extends ArrayList<Component> {
 		for (int command = 0; command < AcideConsoleCommandConfiguration
 				.getInstance().getSize(); command++) {
 
+			// Creates the new command to add to the tool bar
 			final AcideConsoleCommand newCommand = AcideConsoleCommandConfiguration
 					.getInstance().getShellCommandAt(command);
 
@@ -195,6 +196,7 @@ public class AcideConsoleCommandToolBar extends ArrayList<Component> {
 
 						if (returnValue == JFileChooser.APPROVE_OPTION) {
 
+							// Executes the command that corresponds
 							AcideMainWindow
 									.getInstance()
 									.getConsolePanel()
@@ -218,9 +220,10 @@ public class AcideConsoleCommandToolBar extends ArrayList<Component> {
 											.getConsolePanel().getTextPane()
 											.getDocument().getLength());
 
-					// Sets the focus in the console panel
-					AcideMainWindow.getInstance().getConsolePanel()
-							.getTextPane().requestFocusInWindow();
+					// Sets the focus in the last element focus in window
+					// (console or file editor)
+					AcideMainWindow.getInstance().getLastElementOnFocus()
+							.requestFocusInWindow();
 				}
 			});
 

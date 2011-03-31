@@ -29,7 +29,8 @@
  */
 package acide.gui.mainWindow.listeners;
 
-import acide.configuration.project.workbench.AcideWorkbenchManager;
+import acide.configuration.workbench.AcideWorkbenchManager;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 

@@ -82,24 +82,24 @@ public class AcideConsoleCommandConfiguration {
 
 		for (AcideConsoleCommand shellCommand : temporalList) {
 
-			// NAME
+			// Gets the name
 			String name = shellCommand.getName();
 			textContent += "// Command " + name + "\n";
 			textContent += "name = " + name + "\n";
 
-			// ACTION
+			// Gets the action
 			String action = shellCommand.getAction();
 			textContent += "action = " + action + "\n";
 
-			// HINT TEXT
+			// Gets the hint text
 			String hintText = shellCommand.getHintText();
 			textContent += "hintText = " + hintText + "\n";
 
-			// ICON
+			// Gets the icon
 			String icon = shellCommand.getIcon();
 			textContent += "icon = " + icon + "\n";
 
-			// EXTRA PARAMETER
+			// Gets the parameter type
 			AcideParameterType parameterType = shellCommand.getParameterType();
 
 			switch (parameterType) {
@@ -176,7 +176,8 @@ public class AcideConsoleCommandConfiguration {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
 		String line = null;
 
-		AcideConsoleCommand shellCommand = new AcideConsoleCommand();
+		// Creates the console command
+		AcideConsoleCommand consoleCommand = new AcideConsoleCommand();
 
 		// Full read commands. It increases when it finds the mark //
 		int count = 0;
@@ -190,27 +191,27 @@ public class AcideConsoleCommandConfiguration {
 
 					int lastIndexOfParentesis = line.lastIndexOf("=");
 
-					// NAME
+					// Sets the name
 					if (line.startsWith("name"))
-						shellCommand.setName(line.substring(
+						consoleCommand.setName(line.substring(
 								lastIndexOfParentesis + 2, line.length()));
 
-					// ACTION
+					// Sets the action
 					if (line.startsWith("action"))
-						shellCommand.setAction(line.substring(
+						consoleCommand.setAction(line.substring(
 								lastIndexOfParentesis + 2, line.length()));
 
-					// HINT TEXT
+					// Sets the hint text
 					if (line.startsWith("hintText"))
-						shellCommand.setHintText(line.substring(
+						consoleCommand.setHintText(line.substring(
 								lastIndexOfParentesis + 2, line.length()));
 
-					// ICON
+					// Sets the icon
 					if (line.startsWith("icon"))
-						shellCommand.setIcon(line.substring(
+						consoleCommand.setIcon(line.substring(
 								lastIndexOfParentesis + 2, line.length()));
 
-					// PARAMETER TYPE
+					// Sets the parameter type
 					if (line.startsWith("parameterType")) {
 
 						parameterTypeString = line.substring(
@@ -223,7 +224,7 @@ public class AcideConsoleCommandConfiguration {
 							parameterType = AcideParameterType.FILE;
 						if (parameterTypeString.matches("DIRECTORY"))
 							parameterType = AcideParameterType.DIRECTORY;
-						shellCommand.setParameterType(parameterType);
+						consoleCommand.setParameterType(parameterType);
 					}
 				} else {
 
@@ -232,10 +233,10 @@ public class AcideConsoleCommandConfiguration {
 					if (count > 1) {
 
 						// Adds the shell command to the list
-						temporalList.add(shellCommand);
+						temporalList.add(consoleCommand);
 
 						// Creates a new object for the next one
-						shellCommand = new AcideConsoleCommand();
+						consoleCommand = new AcideConsoleCommand();
 					}
 				}
 			}

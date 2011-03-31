@@ -33,8 +33,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import acide.language.AcideLanguageManager;
+import acide.process.AcideApplyLexiconProcess;
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.gui.mainWindow.AcideMainWindow;
 
@@ -80,15 +82,8 @@ public class AcideNewLexiconMenuItemListener implements ActionListener {
 					.getSelectedFileEditorPanel().getLexiconConfiguration()
 					.newLexicon(lexiconConfiguration);
 
-			// Gets the selected file editor panel caret position
-			int caretPosition = AcideMainWindow.getInstance()
-						.getFileEditorManager().getSelectedFileEditorPanel()
-						.getActiveTextEditionArea().getCaretPosition();
-
-			// Resets the selected file editor text edition area
-			AcideMainWindow.getInstance().getFileEditorManager()
-						.getSelectedFileEditorPanel()
-						.resetStyledDocument(caretPosition);
+			// Applies the lexicon configuration
+			SwingUtilities.invokeLater(new AcideApplyLexiconProcess());
 			
 			// Updates the lexicon message in the status bar
 			AcideMainWindow
@@ -112,7 +107,7 @@ public class AcideNewLexiconMenuItemListener implements ActionListener {
 			}
 		} else {
 
-			// Warning message about the missing name
+			// Displays a "missing name" warning message
 			JOptionPane.showMessageDialog(
 					null,
 					AcideLanguageManager.getInstance().getLabels()

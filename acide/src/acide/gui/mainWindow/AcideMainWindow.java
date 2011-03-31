@@ -30,8 +30,8 @@
 package acide.gui.mainWindow;
 
 import acide.configuration.fileEditor.AcideFileEditorConfiguration;
-import acide.configuration.project.workbench.AcideWorkbenchManager;
 import acide.configuration.toolBar.consoleComandToolBar.AcideConsoleCommandConfiguration;
+import acide.configuration.workbench.AcideWorkbenchManager;
 import acide.factory.gui.AcideGUIFactory;
 import acide.gui.consolePanel.AcideConsolePanel;
 import acide.gui.explorerPanel.AcideExplorerPanel;
@@ -43,12 +43,14 @@ import acide.gui.statusBarPanel.AcideStatusBar;
 import acide.gui.toolBarPanel.AcideToolBarPanel;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.HeadlessException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
@@ -111,6 +113,10 @@ public class AcideMainWindow extends JFrame {
 	 * ACIDE - A Configurable IDE main window horizontal split panel.
 	 */
 	private JSplitPane _horizontalSplitPanel;
+	/**
+	 * ACIDE - A Configurable IDE main window last element on focus.
+	 */
+	private Component _lastElementOnFocus;
 
 	/**
 	 * Returns the unique ACIDE - A Configurable IDE main window class instance.
@@ -133,20 +139,16 @@ public class AcideMainWindow extends JFrame {
 				.info(AcideLanguageManager.getInstance().getLabels()
 						.getString("s67"));
 
-		// Sets the window icon
-		setIconImage(ICON.getImage());
-
-		// Sets the title
-		setTitle(AcideLanguageManager.getInstance().getLabels()
-				.getString("s425"));
-
 		// Builds the menu
 		_menu = AcideGUIFactory.getInstance().buildAcideMenu();
 
 		// Sets the menu bar
 		setJMenuBar(_menu);
 
-		// EXPLORER
+		// Sets the menu listeners
+		setMenuListeners();
+
+		// Builds the explorer panel
 		_explorerPanel = AcideGUIFactory.getInstance()
 				.buildAcideExplorerPanel();
 
@@ -159,9 +161,6 @@ public class AcideMainWindow extends JFrame {
 
 		// Builds the status bar
 		_statusBar = AcideGUIFactory.getInstance().buildAcideStatusBar();
-
-		// Adds the status bar to the window
-		add(_statusBar, BorderLayout.SOUTH);
 
 		// Builds the tool bar panel
 		buildToolBarPanel();
@@ -194,17 +193,21 @@ public class AcideMainWindow extends JFrame {
 		// Adds the horizontal split panel to the window
 		add(_horizontalSplitPanel, BorderLayout.CENTER);
 
-		// Do not close automatically
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-
-		// Centers the window
-		setLocationRelativeTo(null);
+		// Adds the status bar to the window
+		add(_statusBar, BorderLayout.SOUTH);
 
 		// Adds the Listeners
 		addWindowListener(new AcideMainWindowWindowListener());
 
-		// Sets the menu listeners
-		setMenuListeners();
+		// Sets the title
+		setTitle(AcideLanguageManager.getInstance().getLabels()
+				.getString("s425"));
+
+		// Sets the window icon
+		setIconImage(ICON.getImage());
+
+		// Do not close automatically
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 		// Updates the log
 		AcideLog.getLog()
@@ -255,7 +258,8 @@ public class AcideMainWindow extends JFrame {
 			try {
 
 				// Load the console command configuration final list
-				AcideConsoleCommandConfiguration.getInstance().loadFinalList(name);
+				AcideConsoleCommandConfiguration.getInstance().loadFinalList(
+						name);
 
 				// Information message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
@@ -277,9 +281,11 @@ public class AcideMainWindow extends JFrame {
 
 				try {
 
-					// Loads the console command configuration final list by default
+					// Loads the console command configuration final list by
+					// default
 					AcideConsoleCommandConfiguration.getInstance()
-							.loadFinalList("./configuration/toolbar/default.TBcfg");
+							.loadFinalList(
+									"./configuration/toolbar/default.TBcfg");
 
 					// Information message
 					JOptionPane.showMessageDialog(null, AcideLanguageManager
@@ -491,12 +497,42 @@ public class AcideMainWindow extends JFrame {
 	}
 
 	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE main window last
+	 * element on focus.
+	 * 
+	 * @param lastElementOnFocus
+	 *            new value to set.
+	 */
+	public void setLastElementOnFocus(Component lastElementOnFocus) {
+		_lastElementOnFocus = lastElementOnFocus;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE main window last element on focus.
+	 * If the last element on focus is null then returns the console panel by
+	 * default.
+	 * 
+	 * @return returns the ACIDE - A Configurable IDE main window last element
+	 *         on focus. If the last element on focus is null then returns the
+	 *         console panel by default.
+	 */
+	public Component getLastElementOnFocus() {
+
+		if (_lastElementOnFocus != null)
+			return _lastElementOnFocus;
+		return getConsolePanel().getTextPane();
+	}
+
+	/**
 	 * Shows the main window, once the workbech configuration has been loaded.
 	 * As the main window is already visible, it is possible to paint the caret
 	 * in the selected editor. It also closes the splash screen window and sets
 	 * the workbench configuration loaded attribute to true.
 	 */
 	public void showAcideMainWindow() {
+
+		// Centers the window
+		setLocationRelativeTo(null);
 
 		// Shows the main window
 		AcideMainWindow.getInstance().setVisible(true);
@@ -518,41 +554,45 @@ public class AcideMainWindow extends JFrame {
 						.getInstance().getFileEditorManager().getTabbedPane()
 						.getTabCount())
 
-					// Sets the selected file editor from the file editor
-					// configuration
-					AcideMainWindow
-							.getInstance()
-							.getFileEditorManager()
-							.setSelectedFileEditorPanelAt(
-									AcideFileEditorConfiguration.getInstance()
-											.getSelectedFileEditorPanelIndex());
+					// Puts the following into the DispatchEventThread
+					SwingUtilities.invokeLater(new Runnable() {
+
+						@Override
+						public void run() {
+							// Sets the selected file editor from the file
+							// editor
+							// configuration
+							AcideMainWindow
+									.getInstance()
+									.getFileEditorManager()
+									.updateRelatedComponentsAt(
+											AcideFileEditorConfiguration
+													.getInstance()
+													.getSelectedFileEditorPanelIndex());
+						}
+					});
+
 				else
-					// Sets the selected file editor as the last tab in the file
-					// editor
-					AcideMainWindow
-							.getInstance()
-							.getFileEditorManager()
-							.setSelectedFileEditorPanelAt(
-									AcideMainWindow.getInstance()
-											.getFileEditorManager()
-											.getTabbedPane().getTabCount() - 1);
 
-				// Sets the focus in the edition area
-				AcideMainWindow.getInstance().getFileEditorManager()
-						.getSelectedFileEditorPanel()
-						.putFocusOnActiveTextEditionArea();
+					// Puts the following into the DispatchEventThread
+					SwingUtilities.invokeLater(new Runnable() {
 
-				// Sets the caret visible
-				AcideMainWindow.getInstance().getFileEditorManager()
-						.getSelectedFileEditorPanel().setCaretVisible(true);
-
-				// Selects the tree node
-				AcideMainWindow.getInstance().getExplorerPanel()
-						.selectTreeNodeFromFileEditor();
-
-				// Updates the status bar with the selected editor
-				AcideMainWindow.getInstance().getStatusBar()
-						.updateStatusMessageFromFileEditor();
+						@Override
+						public void run() {
+							// Sets the selected file editor as the last tab in
+							// the file
+							// editor
+							// Updates the selected file editor index
+							AcideMainWindow
+									.getInstance()
+									.getFileEditorManager()
+									.updateRelatedComponentsAt(
+											AcideMainWindow.getInstance()
+													.getFileEditorManager()
+													.getTabbedPane()
+													.getTabCount() - 1);
+						}
+					});
 			}
 		} else {
 

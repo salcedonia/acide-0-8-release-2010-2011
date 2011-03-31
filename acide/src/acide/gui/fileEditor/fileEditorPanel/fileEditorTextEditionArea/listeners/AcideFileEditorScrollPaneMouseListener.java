@@ -45,6 +45,7 @@ public class AcideFileEditorScrollPaneMouseListener implements MouseListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
 	 */
 	@Override
@@ -54,24 +55,27 @@ public class AcideFileEditorScrollPaneMouseListener implements MouseListener {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
 	 */
 	@Override
 	public void mouseEntered(MouseEvent mouseEvent) {
-		dispatchEvent(mouseEvent);
+		//dispatchEvent(mouseEvent);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
 	 */
 	@Override
 	public void mouseExited(MouseEvent mouseEvent) {
-		dispatchEvent(mouseEvent);
+		//dispatchEvent(mouseEvent);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
 	 */
 	@Override
@@ -81,7 +85,9 @@ public class AcideFileEditorScrollPaneMouseListener implements MouseListener {
 
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
+	 * 
+	 * @see
+	 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent) {
@@ -91,13 +97,18 @@ public class AcideFileEditorScrollPaneMouseListener implements MouseListener {
 	/**
 	 * Dispatches the mouse event.
 	 * 
-	 * @param mouseEvent mouse event.
+	 * @param mouseEvent
+	 *            mouse event.
 	 */
 	private void dispatchEvent(MouseEvent mouseEvent) {
-		
-		// Updates the caret, focus and so on...
-		AcideMainWindow.getInstance()
-				.getFileEditorManager().updatesFileEditorAt(AcideMainWindow.getInstance()
-				.getFileEditorManager().getSelectedFileEditorPanelIndex());
+
+		// Updates the selected file editor index
+		AcideMainWindow
+				.getInstance()
+				.getFileEditorManager()
+				.updateRelatedComponentsAt(
+						AcideMainWindow.getInstance()
+								.getFileEditorManager()
+								.getSelectedFileEditorPanelIndex());
 	}
 }

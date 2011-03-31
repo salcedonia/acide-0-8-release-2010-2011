@@ -35,19 +35,17 @@ import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 
-/**																
- * ACIDE - A Configurable IDE help menu show help menu item listener.											
- *					
- * @version 0.8	
- * @see ActionListener																													
+/**
+ * ACIDE - A Configurable IDE help menu show help menu item listener.
+ * 
+ * @version 0.8
+ * @see ActionListener
  */
 public class AcideShowHelpMenuItemListener implements ActionListener {
 
@@ -59,7 +57,7 @@ public class AcideShowHelpMenuItemListener implements ActionListener {
 	 * Help URL of the help file in English.
 	 */
 	private final static String ENGLISH_HELP_URL = "resources/help/help.txt";
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -71,7 +69,7 @@ public class AcideShowHelpMenuItemListener implements ActionListener {
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		String path = "";
-		
+
 		try {
 
 			if (AcideProjectConfiguration.getInstance()
@@ -81,37 +79,25 @@ public class AcideShowHelpMenuItemListener implements ActionListener {
 			else
 				// ENGLISH USER'S GUIDE
 				path = ENGLISH_HELP_URL;
-			
-			Desktop.getDesktop().open(new File(path));	
-				
+
+			Desktop.getDesktop().open(new File(path));
+
 		} catch (Exception exception) {
-			
+
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
-			
-			// Gets the language
-			AcideLanguageManager language = AcideLanguageManager.getInstance();
 
-			try {
-				language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-			} catch (Exception exception2) {
-				
-				// Updates the log
-				AcideLog.getLog().error(exception2.getMessage());
-				exception2.printStackTrace();
-			}
-
-			// Gets the labels
-			final ResourceBundle labels = language.getLabels();
-			
 			// HELP GUIDE NOT FOUND
-			JOptionPane.showMessageDialog(null, labels.getString("s969") + path, labels.getString("s945"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, AcideLanguageManager
+					.getInstance().getLabels().getString("s969")
+					+ path, AcideLanguageManager.getInstance().getLabels()
+					.getString("s945"), JOptionPane.ERROR_MESSAGE);
 		}
 		// GUIFactory.getInstance().buildHelp();
 		/*
 		 * try { Desktop.getDesktop().browse(new URI(HELP_URL)); } catch
-		 * (IOException e) { e.printStackTrace(); } catch
-		 * (URISyntaxException e) { e.printStackTrace(); }
+		 * (IOException e) { e.printStackTrace(); } catch (URISyntaxException e)
+		 * { e.printStackTrace(); }
 		 */
 	}
 }

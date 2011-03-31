@@ -32,7 +32,6 @@ package acide.gui.fileEditor.fileEditorManager.utils.logic;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Hashtable;
-import java.util.Properties;
 
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
@@ -54,7 +53,7 @@ import acide.log.AcideLog;
  * ACIDE - A Configurable IDE styled document for the editors.
  * 
  * @version 0.8
- * @see Properties
+ * @see DefaultStyledDocument
  */
 public class AcideStyledDocument extends DefaultStyledDocument {
 
@@ -87,11 +86,6 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	 */
 	private Hashtable<String, Object>[] _keywords;
 	/**
-	 * File editor panel name. It is used for knowing where the focus has to be
-	 * set when a CTRL+Z or CTRL+Y is pressed.
-	 */
-	private String _fileEditorPanelName;
-	/**
 	 * Lexicon configuration.
 	 */
 	private AcideLexiconConfiguration _lexiconConfiguration;
@@ -113,10 +107,11 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 			// Gets the default root element
 			_rootElement = getDefaultRootElement();
 
+			// Stores the lexicon configuration
 			_lexiconConfiguration = lexiconConfiguration;
 
-			// Initializes the styled document
-			init();
+			// Builds the attribute sets
+			buildAttributeSets();
 		}
 
 		catch (Exception exception) {
@@ -135,9 +130,9 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	}
 
 	/**
-	 * Initializes the styled document properties.
+	 * Builds the ACIDE - A Configurable IDE style document attribute sets.
 	 */
-	public void init() {
+	private void buildAttributeSets() {
 
 		// The string "\n" is the end of the line
 		putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
@@ -156,6 +151,15 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 
 		// KEYWORD
 		buildKeywordAttributeSet();
+	}
+
+	/**
+	 * Initializes the styled document properties.
+	 */
+	public void init() {
+
+		// Builds the attribute sets
+		buildAttributeSets();
 
 		// Applies the styles
 		try {
@@ -514,9 +518,13 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	}
 
 	/**
+	 * Adds a "\n}" or "\n)" or "\n]" to the text.
 	 * 
 	 * @param offset
-	 * @return
+	 *            offset.
+	 * 
+	 * @return the new text generated.
+	 * 
 	 * @throws BadLocationException
 	 */
 	public String addMatchingBrace(int offset) throws BadLocationException {
@@ -578,25 +586,29 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 		int endOffset = _rootElement.getElement(line).getEndOffset() - 1;
 		int lineLength = endOffset - startOffset;
 
-		try {
+		// If the line lenght is positive
+		if (lineLength > 0) {
 
-			// Gets the current text to analyze
-			text = getText(startOffset, lineLength);
+			try {
 
-			// Gets the remark content position
-			int position = text.indexOf(remarkContent);
+				// Gets the current text to analyze
+				text = getText(startOffset, lineLength);
 
-			// If it is a valid position
-			if (position >= 0)
+				// Gets the remark content position
+				int position = text.indexOf(remarkContent);
 
-				// Applies the remark style
-				setCharacterAttributes(startOffset + position, lineLength
-						- position, _remarkAttributeSet, true);
-		} catch (BadLocationException exception) {
+				// If it is a valid position
+				if (position >= 0)
 
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
+					// Applies the remark style
+					setCharacterAttributes(startOffset + position, lineLength
+							- position, _remarkAttributeSet, true);
+			} catch (BadLocationException exception) {
+
+				// Updates the log
+				AcideLog.getLog().error(exception.getMessage());
+				exception.printStackTrace();
+			}
 		}
 	}
 
@@ -678,10 +690,10 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 								true);
 
 					/*
-					 * IMPORTANT: With this call to the method we guarantee: -
+					 * IMPORTANT: With this call to the method we guarantee that
 					 * If it is at a line which contains remarks, apply the
-					 * remarks - Deletes the highlighting related to the
-					 * matching brace perfectly
+					 * remarks and deletes the highlighting related to the
+					 * matching brace perfectly.
 					 */
 					processChangedLines(offset, _rootElement.getDocument()
 							.getLength());
@@ -839,24 +851,5 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 		// If it is case sensitive then parses it to lower case
 		if (_lexiconConfiguration.getRemarksManager().getIsCaseSensitive())
 			_lexiconConfiguration.getRemarksManager().getSymbol().toLowerCase();
-	}
-
-	/**
-	 * Returns the file editor panel name.
-	 * 
-	 * @return the file editor panel name.
-	 */
-	public String getFileEditorPanelName() {
-		return _fileEditorPanelName;
-	}
-
-	/**
-	 * Sets a new value to the file editor panel name.
-	 * 
-	 * @param fileEditorPanelName
-	 *            new value to set.
-	 */
-	public void setFileEditorPanelName(String fileEditorPanelName) {
-		_fileEditorPanelName = fileEditorPanelName;
 	}
 }

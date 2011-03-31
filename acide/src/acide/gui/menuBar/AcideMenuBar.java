@@ -39,7 +39,6 @@ import acide.configuration.menu.AcideMenuConfiguration;
 import acide.resources.AcideResourceManager;
 
 import java.awt.HeadlessException;
-import java.util.ResourceBundle;
 
 import acide.gui.menuBar.configurationMenu.AcideConfigurationMenu;
 import acide.gui.menuBar.editMenu.AcideEditMenu;
@@ -97,41 +96,27 @@ public class AcideMenuBar extends JMenuBar {
 
 		super();
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s68"));
+		AcideLog.getLog()
+				.info(AcideLanguageManager.getInstance().getLabels()
+						.getString("s68"));
 
-		// FILE MENU
+		// Creates the file menu
 		_fileMenu = new AcideFileMenu();
-		
-		// EDIT MENU
+
+		// Creates the edit menu
 		_editMenu = new AcideEditMenu();
-		
-		// PROJECT MENU
+
+		// Creates the project menu
 		_projectMenu = new AcideProjectMenu();
-		
-		// VIEW MENU
+
+		// Creates the view menu
 		_viewMenu = new AcideViewMenu();
-		
-		// CONFIGURATION MENU
+
+		// Creates the configuration menu
 		_configurationMenu = new AcideConfigurationMenu();
-		
-		// HELP MENU
+
+		// Creates the help menu
 		_helpMenu = new AcideHelpMenu();
 
 		// Sets the text for the menu bar components
@@ -141,53 +126,57 @@ public class AcideMenuBar extends JMenuBar {
 		build();
 
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s69"));
+		AcideLog.getLog()
+				.info(AcideLanguageManager.getInstance().getLabels()
+						.getString("s69"));
 	}
 
 	/**
-	 * Sets the text of the ACIDE - A Configurable IDE menu bar components with the
-	 * labels in the selected language to display.
+	 * Sets the text of the ACIDE - A Configurable IDE menu bar components with
+	 * the labels in the selected language to display.
 	 */
 	public void setTextOfMenuComponents() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
+		// Sets the file menu text
+		_fileMenu.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s1"));
 
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
-		// FILE MENU
-		_fileMenu.setText(labels.getString("s1"));
+		// Sets the file menu items text
 		_fileMenu.setTextOfMenuComponents();
 
-		// EDIT MENU
-		_editMenu.setText(labels.getString("s2"));
+		// Sets the edit menu text
+		_editMenu.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s2"));
+
+		// Sets the edit menu items text
 		_editMenu.setTextOfMenuComponents();
 
-		// PROJECT MENU
-		_projectMenu.setText(labels.getString("s3"));
+		// Sets the project menu text
+		_projectMenu.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s3"));
+
+		// Sets the project menu items text
 		_projectMenu.setTextOfMenuComponents();
 
-		// VIEW MENU
-		_viewMenu.setText(labels.getString("s4"));
+		// Sets the view menu text
+		_viewMenu.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s4"));
+
+		// Sets the view menu items text
 		_viewMenu.setTextOfMenuComponents();
 
-		// CONFIGURATION MENU
-		_configurationMenu.setText(labels.getString("s5"));
+		// Sets the configuration menu text
+		_configurationMenu.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s5"));
+
+		// Sets the configuration menu items text
 		_configurationMenu.setTextOfMenuComponents();
 
-		// HELP MENU
-		_helpMenu.setText(labels.getString("s7"));
+		// Sets the help menu text
+		_helpMenu.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s7"));
+
+		// Sets the help menu items text
 		_helpMenu.setTextOfMenuComponents();
 	}
 
@@ -196,46 +185,37 @@ public class AcideMenuBar extends JMenuBar {
 	 */
 	public void build() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
 		String currentMenuConfiguration = null;
 
 		try {
 
 			// Gets the ACIDE - A Configurable IDE current menu configuration
-			currentMenuConfiguration = AcideResourceManager.getInstance().getProperty(
-					"currentMenuConfiguration");
+			currentMenuConfiguration = AcideResourceManager.getInstance()
+					.getProperty("currentMenuConfiguration");
 
 			// Sets the new menu item list
-			AcideMenuConfiguration.getInstance().setMenuElementList(
-					AcideMenuConfiguration.getInstance()
-							.loadMenuConfigurationFile(currentMenuConfiguration));
+			AcideMenuConfiguration.getInstance()
+					.setMenuElementList(
+							AcideMenuConfiguration.getInstance()
+									.loadMenuConfigurationFile(
+											currentMenuConfiguration));
 
 			// Updates the ACIDE - A Configurable IDE current menu configuration
 			AcideResourceManager.getInstance().setProperty(
 					"currentMenuConfiguration", currentMenuConfiguration);
 
 			// Updates the log
-			AcideLog.getLog().info(labels.getString("s70") + " " + currentMenuConfiguration);
+			AcideLog.getLog().info(
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s70")
+							+ " " + currentMenuConfiguration);
 		} catch (Exception exception) {
 
 			// Updates the log
 			AcideLog.getLog().info(
-					labels.getString("s71") + exception.getMessage());
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s71")
+							+ exception.getMessage());
 
 			// Gets the name
 			String name;
@@ -243,7 +223,8 @@ public class AcideMenuBar extends JMenuBar {
 			if (index == -1)
 				index = currentMenuConfiguration.lastIndexOf("/");
 			name = ".\\configuration\\menu\\"
-					+ currentMenuConfiguration.substring(index + 1, currentMenuConfiguration.length());
+					+ currentMenuConfiguration.substring(index + 1,
+							currentMenuConfiguration.length());
 
 			try {
 
@@ -252,19 +233,23 @@ public class AcideMenuBar extends JMenuBar {
 						AcideMenuConfiguration.getInstance()
 								.loadMenuConfigurationFile(name));
 
-				// Updates the ACIDE - A Configurable IDE current menu configuration
+				// Updates the ACIDE - A Configurable IDE current menu
+				// configuration
 				AcideResourceManager.getInstance().setProperty(
 						"currentMenuConfiguration", name);
 
 				// Updates the log
 				AcideLog.getLog().info(
-						labels.getString("s70") + " " + name);
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s70")
+								+ " " + name);
 
-				// Error message
-				JOptionPane
-						.showMessageDialog(null, labels.getString("s956")
-								+ currentMenuConfiguration + labels.getString("s957")
-								+ name);
+				// Displays an error message
+				JOptionPane.showMessageDialog(null, AcideLanguageManager
+						.getInstance().getLabels().getString("s956")
+						+ currentMenuConfiguration
+						+ AcideLanguageManager.getInstance().getLabels()
+								.getString("s957") + name);
 			} catch (Exception exception1) {
 				try {
 
@@ -281,16 +266,18 @@ public class AcideMenuBar extends JMenuBar {
 											.loadMenuConfigurationFile(
 													"./configuration/menu/defaultAllOn.menuCfg"));
 
-					// Updates the ACIDE - A Configurable IDE current menu configuration
+					// Updates the ACIDE - A Configurable IDE current menu
+					// configuration
 					AcideResourceManager.getInstance().setProperty(
 							"currentMenuConfiguration",
 							"./configuration/menu/defaultAllOn.menuCfg");
 
-					// Error message
-					JOptionPane.showMessageDialog(
-							null,
-							labels.getString("s956") + currentMenuConfiguration
-									+ labels.getString("s959"));
+					// Displays an error message
+					JOptionPane.showMessageDialog(null, AcideLanguageManager
+							.getInstance().getLabels().getString("s956")
+							+ currentMenuConfiguration
+							+ AcideLanguageManager.getInstance().getLabels()
+									.getString("s959"));
 				} catch (HeadlessException exception2) {
 
 					// Updates the log
@@ -308,15 +295,10 @@ public class AcideMenuBar extends JMenuBar {
 		// Removes all the menu components
 		removeAll();
 
-		// Builds the submenus
-		_fileMenu.buildMenu(labels, language);
-		_editMenu.build();
-		_projectMenu.build();
-		_viewMenu.build();
-		_configurationMenu.build();
-		_helpMenu.build();
-
-		// FILE MENU
+		// Builds the file menu
+		_fileMenu.build();
+		
+		// Adds the file menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				AcideFileMenu.NEW_FILE_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -335,7 +317,10 @@ public class AcideMenuBar extends JMenuBar {
 						AcideFileMenu.EXIT_NAME))
 			add(_fileMenu);
 
-		// EDIT MENU
+		// Builds the edit menu
+		_editMenu.build();
+		
+		// Adds the edit menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				AcideEditMenu.UNDO_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -356,7 +341,10 @@ public class AcideMenuBar extends JMenuBar {
 						AcideEditMenu.REPLACE_NAME))
 			add(_editMenu);
 
-		// PROJECT MENU
+		// Builds the project menu
+		_projectMenu.build();
+		
+		// Adds the project menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				AcideProjectMenu.NEW_PROJECT_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -383,7 +371,10 @@ public class AcideMenuBar extends JMenuBar {
 						AcideProjectMenu.EXECUTE_NAME))
 			add(_projectMenu);
 
-		// VIEW MENU
+		// Builds the view menu
+		_viewMenu.build();
+		
+		// Adds the view menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				AcideViewMenu.SHOW_LOG_TAB_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -392,10 +383,16 @@ public class AcideMenuBar extends JMenuBar {
 						AcideViewMenu.SHOW_CONSOLE_PANEL_NAME))
 			add(_viewMenu);
 
-		// CONFIGURATION MENU
+		// Builds the configuration menu
+		_configurationMenu.build();
+		
+		// Adds the configuration menu
 		add(_configurationMenu);
 
-		// HELP MENU
+		// Builds the help menu
+		_helpMenu.build();
+		
+		// Adds the help menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				AcideHelpMenu.SHOW_HELP_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -411,49 +408,47 @@ public class AcideMenuBar extends JMenuBar {
 	 */
 	public void setListeners() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
-		// FILE MENU
+		// Sets the file menu mouse listener
 		_fileMenu.addMouseListener(new AcideMenuBarMouseClickListener());
+
+		// Sets the file menu items listeners
 		_fileMenu.setListeners();
 
-		// EDIT MENU
+		// Sets the edit menu mouse listener
 		_editMenu.addMouseListener(new AcideMenuBarMouseClickListener());
+
+		// Sets the edit menu items listeners
 		_editMenu.setListeners();
 
-		// PROJECT MENU
+		// Sets the project menu mouse listener
 		_projectMenu.addMouseListener(new AcideMenuBarMouseClickListener());
+
+		// Sets the project menu items listeners
 		_projectMenu.setListeners();
 
-		// VIEW MENU
+		// Sets the view menu mouse listener
 		_viewMenu.addMouseListener(new AcideMenuBarMouseClickListener());
+
+		// Sets the view menu items listeners
 		_viewMenu.setListeners();
 
-		// CONFIGURATION MENU
+		// Sets the configuration menu mouse listener
 		_configurationMenu
 				.addMouseListener(new AcideMenuBarMouseClickListener());
+
+		// Sets the configuration menu items listeners
 		_configurationMenu.setListeners();
 
-		// HELP MENU
+		// Sets the help menu menu mouse listener
 		_helpMenu.addMouseListener(new AcideMenuBarMouseClickListener());
+
+		// Sets the help menu items listeners
 		_helpMenu.setListeners();
 
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s72"));
+		AcideLog.getLog()
+				.info(AcideLanguageManager.getInstance().getLabels()
+						.getString("s72"));
 	}
 
 	/**
@@ -483,7 +478,7 @@ public class AcideMenuBar extends JMenuBar {
 	public void disableProjectMenu() {
 		_projectMenu.disableMenu();
 	}
-	
+
 	/**
 	 * Enables the ACIDE - A Configurable IDE menu bar edit menu.
 	 */
@@ -497,7 +492,7 @@ public class AcideMenuBar extends JMenuBar {
 	public void disableEditMenu() {
 		_editMenu.disableMenu();
 	}
-	
+
 	/**
 	 * Returns the ACIDE - A Configurable IDE menu bar file menu.
 	 * 
@@ -515,7 +510,7 @@ public class AcideMenuBar extends JMenuBar {
 	public AcideEditMenu getEditMenu() {
 		return _editMenu;
 	}
-	
+
 	/**
 	 * Returns the ACIDE - A Configurable IDE menu project menu.
 	 * 
@@ -551,7 +546,7 @@ public class AcideMenuBar extends JMenuBar {
 	public AcideHelpMenu getHelpMenu() {
 		return _helpMenu;
 	}
-	
+
 	/**
 	 * Returns the ACIDE - A Configurable IDE menu bar is shell focused flag.
 	 * 

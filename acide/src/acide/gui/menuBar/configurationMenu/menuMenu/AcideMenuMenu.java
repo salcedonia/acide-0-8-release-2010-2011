@@ -29,20 +29,16 @@
  */
 package acide.gui.menuBar.configurationMenu.menuMenu;
 
-import java.util.ResourceBundle;
-
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 import acide.configuration.menu.AcideMenuConfiguration;
 import acide.gui.menuBar.configurationMenu.menuMenu.listeners.AcideLoadMenuMenuItemListener;
 import acide.gui.menuBar.configurationMenu.menuMenu.listeners.AcideModifyMenuMenuItemListener;
 import acide.gui.menuBar.configurationMenu.menuMenu.listeners.AcideNewMenuMenuItemListener;
 import acide.gui.menuBar.configurationMenu.menuMenu.listeners.AcideSaveAsMenuMenuItemListener;
 import acide.gui.menuBar.configurationMenu.menuMenu.listeners.AcideSaveMenuMenuItemListener;
+import acide.language.AcideLanguageManager;
 
 /**
  * ACIDE - A Configurable IDE menu menu.
@@ -128,36 +124,20 @@ public class AcideMenuMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty(
-					"language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
 		// NEW MENU MENU ITEM
-		_newMenuMenuItem.setText(labels.getString("s275"));
+		_newMenuMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s275"));
 
 		// LOAD MENU MENU ITEM
-		_loadMenuMenuItem.setText(labels.getString("s276"));
+		_loadMenuMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s276"));
 
 		// MODIFY MENU MENU ITEM
-		_modifyMenuMenuItem.setText(labels.getString("s277"));
+		_modifyMenuMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s277"));
 
 		// SAVE MENU MENU ITEM
-		_saveMenuMenuItem.setText(labels.getString("s278"));
+		_saveMenuMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s278"));
 
 		// SAVE MENU AS MENU ITEM
-		_saveMenuAsMenuItem.setText(labels.getString("s279"));
+		_saveMenuAsMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s279"));
 	}
 
 	/**

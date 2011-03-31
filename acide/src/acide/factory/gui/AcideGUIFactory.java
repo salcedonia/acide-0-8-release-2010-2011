@@ -41,8 +41,6 @@ import acide.gui.menuBar.configurationMenu.consoleMenu.gui.AcideConsoleConfigura
 import acide.gui.menuBar.configurationMenu.grammarMenu.gui.AcideGrammarConfigurationWindow;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.AcideLexiconConfigurationWindow;
 import acide.gui.menuBar.configurationMenu.menuMenu.gui.AcideMenuConfigurationWindow;
-import acide.gui.menuBar.editMenu.gui.replace.AcideReplaceWindow;
-import acide.gui.menuBar.editMenu.gui.search.AcideSearchWindow;
 import acide.gui.menuBar.fileMenu.gui.AcidePrintConfigurationWindow;
 import acide.gui.menuBar.helpMenu.gui.AcideAboutUsWindow;
 import acide.gui.menuBar.projectMenu.gui.AcideCompilerConfigurationWindow;
@@ -104,26 +102,6 @@ public class AcideGUIFactory {
 	 */
 	public AcideAboutUsWindow buildAcideAboutUsWindow() {
 		return new AcideAboutUsWindow();
-	}
-
-	/**
-	 * Builds the ACIDE - A Configurable IDE replace window.
-	 * 
-	 * @return the ACIDE - A Configurable IDE replace window.
-	 * @see AcideReplaceWindow
-	 */
-	public AcideReplaceWindow buildAcideReplaceWindow() {
-		return new AcideReplaceWindow();
-	}
-
-	/**
-	 * Builds the ACIDE - A Configurable IDE search window.
-	 * 
-	 * @return the ACIDE - A Configurable IDE search window.
-	 * @see AcideSearchWindow
-	 */
-	public AcideSearchWindow buildAcideSearchWindow() {
-		return new AcideSearchWindow();
 	}
 
 	/**

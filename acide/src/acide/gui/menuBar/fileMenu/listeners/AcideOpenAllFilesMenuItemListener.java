@@ -86,7 +86,7 @@ public class AcideOpenAllFilesMenuItemListener implements ActionListener {
 					// If the file does not exist
 					if (!file.exists()) {
 
-						// Error message
+						// Displays an error message
 						JOptionPane.showMessageDialog(null,
 								AcideLanguageManager.getInstance().getLabels()
 										.getString("s970")

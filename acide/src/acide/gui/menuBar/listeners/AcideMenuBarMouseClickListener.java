@@ -57,32 +57,40 @@ public class AcideMenuBarMouseClickListener extends MouseAdapter {
 	@Override
 	public void mousePressed(MouseEvent mouseEvent) {
 
-		// PROJECT MENU
-		if (AcideMainWindow.getInstance().getMenu().getProjectMenu().isSelected())
+		// If project menu is selected
+		if (AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.isSelected())
 			configureProjectMenu();
 
-		// FILE MENU
+		// If file menu is selected
 		if (AcideMainWindow.getInstance().getMenu().getFileMenu().isSelected())
 			configureFileMenu();
 
-		// EDIT MENU
+		// If edit menu is selected
 		if (AcideMainWindow.getInstance().getMenu().getEditMenu().isSelected())
 			configureEditMenu();
 
-		// Updates the is console panel focused variable
+		// Updates the is console panel focused variable for the copy, cut and
+		// paste menu items
 		AcideMainWindow
 				.getInstance()
 				.getMenu()
 				.setIsConsoleFocused(
-						AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-								.isFocusOwner());
+						AcideMainWindow.getInstance().getConsolePanel()
+								.getTextPane().isFocusOwner());
+
+		// Validates the changes in the menu
+		AcideMainWindow.getInstance().getMenu().validate();
+
+		// Repaints the menu
+		AcideMainWindow.getInstance().getMenu().repaint();
 	}
 
 	/**
 	 * Configures the edit menu menu item options.
 	 */
 	public void configureEditMenu() {
-		
+
 		// Disables the undo menu item
 		AcideMainWindow.getInstance().getMenu().getEditMenu().getUndoMenuItem()
 				.setEnabled(false);
@@ -96,8 +104,8 @@ public class AcideMenuBarMouseClickListener extends MouseAdapter {
 				.setEnabled(false);
 
 		// Disables the paste menu item
-		AcideMainWindow.getInstance().getMenu().getEditMenu().getPasteMenuItem()
-				.setEnabled(false);
+		AcideMainWindow.getInstance().getMenu().getEditMenu()
+				.getPasteMenuItem().setEnabled(false);
 
 		// Disables the cut menu item
 		AcideMainWindow.getInstance().getMenu().getEditMenu().getCutMenuItem()
@@ -107,46 +115,42 @@ public class AcideMenuBarMouseClickListener extends MouseAdapter {
 		if (AcideUndoManager.getInstance().canUndo()) {
 
 			// Enables the undo menu item
-			AcideMainWindow.getInstance().getMenu().getEditMenu().getUndoMenuItem()
-					.setEnabled(true);
+			AcideMainWindow.getInstance().getMenu().getEditMenu()
+					.getUndoMenuItem().setEnabled(true);
 		}
 
 		// If can redo
 		if (AcideUndoManager.getInstance().canRedo()) {
 
 			// Disables the redo menu item
-			AcideMainWindow.getInstance().getMenu().getEditMenu().getRedoMenuItem()
-					.setEnabled(true);
+			AcideMainWindow.getInstance().getMenu().getEditMenu()
+					.getRedoMenuItem().setEnabled(true);
 		}
 
 		// If the system clipboard is not empty
-		if (Toolkit.getDefaultToolkit().getSystemClipboard()
-				.getContents(null) != null) {
+		if (Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null) != null) {
 
 			// If the console panel does not have the focus in the window
 			if (!AcideMainWindow.getInstance().getConsolePanel().getTextPane()
 					.hasFocus())
 
 				// Enables the paste menu item
-				AcideMainWindow.getInstance().getMenu().getEditMenu().getPasteMenuItem()
-						.setEnabled(true);
+				AcideMainWindow.getInstance().getMenu().getEditMenu()
+						.getPasteMenuItem().setEnabled(true);
 			else
-				// If the caret is after the prompt position
-				if (AcideMainWindow.getInstance().getConsolePanel()
-					.getTextPane().getSelectionStart() >= AcideMainWindow
-					.getInstance().getConsolePanel().getPromptCaretPosition())
+			// If the caret is after the prompt position
+			if (AcideMainWindow.getInstance().getConsolePanel().getTextPane()
+					.getSelectionStart() >= AcideMainWindow.getInstance()
+					.getConsolePanel().getPromptCaretPosition())
 
 				// Enables the paste menu item
-				AcideMainWindow.getInstance().getMenu().getEditMenu().getPasteMenuItem()
-						.setEnabled(true);
+				AcideMainWindow.getInstance().getMenu().getEditMenu()
+						.getPasteMenuItem().setEnabled(true);
 		}
 
-		// Gets the number of file editor panels
-		int numberOfFileEditorPanels = AcideMainWindow.getInstance().getFileEditorManager()
-				.getNumberOfFileEditorPanels();
-
 		// If there are opened editors
-		if (numberOfFileEditorPanels > 0) {
+		if (AcideMainWindow.getInstance().getFileEditorManager()
+				.getNumberOfFileEditorPanels() > 0) {
 
 			// If the console panel has the focus and there is selected text
 			if (AcideMainWindow.getInstance().getConsolePanel().getTextPane()
@@ -155,35 +159,36 @@ public class AcideMenuBarMouseClickListener extends MouseAdapter {
 							.getTextPane().getSelectedText() != null) {
 
 				// Enables the copy menu item
-				AcideMainWindow.getInstance().getMenu().getEditMenu().getCopyMenuItem()
-						.setEnabled(true);
+				AcideMainWindow.getInstance().getMenu().getEditMenu()
+						.getCopyMenuItem().setEnabled(true);
 
 				// If the caret position is after the prompt position
-				if (AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-						.getSelectionStart() >= AcideMainWindow.getInstance()
-						.getConsolePanel().getPromptCaretPosition())
+				if (AcideMainWindow.getInstance().getConsolePanel()
+						.getTextPane().getSelectionStart() >= AcideMainWindow
+						.getInstance().getConsolePanel()
+						.getPromptCaretPosition())
 
 					// Enables the cut menu item
-					AcideMainWindow.getInstance().getMenu().getEditMenu().getCutMenuItem()
-							.setEnabled(true);
+					AcideMainWindow.getInstance().getMenu().getEditMenu()
+							.getCutMenuItem().setEnabled(true);
 			} else
-				
-				// If the file editor text edition area has the focus and
-				// there is something selected
-				if (AcideMainWindow.getInstance().getFileEditorManager()
-					.getSelectedFileEditorPanel()
-					.getActiveTextEditionArea().hasFocus()
+
+			// If the file editor text edition area has the focus and
+			// there is something selected
+			if (AcideMainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().getActiveTextEditionArea()
+					.hasFocus()
 					&& AcideMainWindow.getInstance().getFileEditorManager()
 							.getSelectedFileEditorPanel()
 							.getActiveTextEditionArea().getSelectedText() != null) {
 
 				// Enables the copy menu item
-				AcideMainWindow.getInstance().getMenu().getEditMenu().getCopyMenuItem()
-						.setEnabled(true);
+				AcideMainWindow.getInstance().getMenu().getEditMenu()
+						.getCopyMenuItem().setEnabled(true);
 
 				// Enables the cut menu item
-				AcideMainWindow.getInstance().getMenu().getEditMenu().getCutMenuItem()
-						.setEnabled(true);
+				AcideMainWindow.getInstance().getMenu().getEditMenu()
+						.getCutMenuItem().setEnabled(true);
 			}
 		} else {
 
@@ -192,17 +197,18 @@ public class AcideMenuBarMouseClickListener extends MouseAdapter {
 					.getSelectedText() != null) {
 
 				// Enables the copy menu item
-				AcideMainWindow.getInstance().getMenu().getEditMenu().getCopyMenuItem()
-						.setEnabled(true);
+				AcideMainWindow.getInstance().getMenu().getEditMenu()
+						.getCopyMenuItem().setEnabled(true);
 
 				// If the caret position is after the prompt position
-				if (AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-						.getSelectionStart() >= AcideMainWindow.getInstance()
-						.getConsolePanel().getPromptCaretPosition())
+				if (AcideMainWindow.getInstance().getConsolePanel()
+						.getTextPane().getSelectionStart() >= AcideMainWindow
+						.getInstance().getConsolePanel()
+						.getPromptCaretPosition())
 
 					// Enables the cut menu item
-					AcideMainWindow.getInstance().getMenu().getEditMenu().getCutMenuItem()
-							.setEnabled(true);
+					AcideMainWindow.getInstance().getMenu().getEditMenu()
+							.getCutMenuItem().setEnabled(true);
 			}
 		}
 	}
@@ -211,95 +217,83 @@ public class AcideMenuBarMouseClickListener extends MouseAdapter {
 	 * Configures the file menu menu item options.
 	 */
 	public void configureFileMenu() {
-		
+
 		// Disables the save file menu item
-		AcideMainWindow.getInstance().getMenu().getFileMenu().getSaveFileMenuItem()
-				.setEnabled(false);
+		AcideMainWindow.getInstance().getMenu().getFileMenu()
+				.getSaveFileMenuItem().setEnabled(false);
 
 		// Disables the save all files menu item
-		AcideMainWindow.getInstance().getMenu().getFileMenu().getSaveAllFilesMenuItem()
-				.setEnabled(false);
-
-		// Gets the number of file editor panels
-		int numberOfFileEditorPanels = AcideMainWindow.getInstance().getFileEditorManager()
-				.getNumberOfFileEditorPanels();
+		AcideMainWindow.getInstance().getMenu().getFileMenu()
+				.getSaveAllFilesMenuItem().setEnabled(false);
 
 		// If there are opened editors
-		if (numberOfFileEditorPanels > 0) {
+		if (AcideMainWindow.getInstance().getFileEditorManager()
+				.getNumberOfFileEditorPanels() > 0) {
 
-			// If there is a modified opened editor
-			if (AcideMainWindow.getInstance().getFileEditorManager()
-					.isRedButton())
+			// Enables or disables the save file menu item if the selected file
+			// editor is modified or not
+			AcideMainWindow
+					.getInstance()
+					.getMenu()
+					.getFileMenu()
+					.getSaveFileMenuItem()
+					.setEnabled(
+							AcideMainWindow.getInstance()
+									.getFileEditorManager().isRedButton());
 
-				// Enables the save file menu item
-				AcideMainWindow.getInstance().getMenu().getFileMenu().getSaveFileMenuItem()
-						.setEnabled(true);
-		}
+			// Checks the opened file editors
+			boolean isAnyModified = false;
+			for (int index = 0; index < AcideMainWindow.getInstance()
+					.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
 
-		// Gets the selected file editor panel index
-		int selectedFileEditorPanelIndex = AcideMainWindow.getInstance()
-				.getFileEditorManager().getSelectedFileEditorPanelIndex();
-
-		// Start checking from the last opened editor
-		AcideMainWindow.getInstance().getFileEditorManager()
-				.setSelectedFileEditorPanelAt(numberOfFileEditorPanels - 1);
-
-		for (int index = numberOfFileEditorPanels - 1; index >= 0; index--) {
-
-			AcideMainWindow.getInstance().getFileEditorManager()
-					.setSelectedFileEditorPanelAt(index);
-
-			// If the file is modified
-			if (AcideMainWindow.getInstance().getFileEditorManager()
-					.isRedButton()) {
-
-				// Enables the save all files menu item
-				AcideMainWindow.getInstance().getMenu().getFileMenu()
-						.getSaveAllFilesMenuItem().setEnabled(true);
+				// If any of them is modified
+				if (AcideMainWindow.getInstance().getFileEditorManager()
+						.isRedButton(index))
+					isAnyModified = true;
 			}
-		}
 
-		// Restores the original selected editor
-		AcideMainWindow.getInstance().getFileEditorManager()
-				.setSelectedFileEditorPanelAt(selectedFileEditorPanelIndex);
+			// Disables or enables the save all files menu item
+			AcideMainWindow.getInstance().getMenu().getFileMenu()
+					.getSaveAllFilesMenuItem().setEnabled(isAnyModified);
+		}
 	}
 
 	/**
 	 * Configures the project menu menu item options.
 	 */
 	public void configureProjectMenu() {
-		
+
 		// Disables the save project menu item
-		AcideMainWindow.getInstance().getMenu().getProjectMenu().getSaveProjectMenuItem()
-				.setEnabled(false);
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getSaveProjectMenuItem().setEnabled(false);
 
 		// Disables the remove file menu item
-		AcideMainWindow.getInstance().getMenu().getProjectMenu().getRemoveFileMenuItem()
-				.setEnabled(false);
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getRemoveFileMenuItem().setEnabled(false);
 
 		// Disables the delete file menu item
-		AcideMainWindow.getInstance().getMenu().getProjectMenu().getDeleteFileMenuItem()
-				.setEnabled(false);
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getDeleteFileMenuItem().setEnabled(false);
 
 		// Disables the set main file menu item
-		AcideMainWindow.getInstance().getMenu().getProjectMenu().getSetMainMenuItem()
-				.setEnabled(false);
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getSetMainFileMenuItem().setEnabled(false);
 
 		// Disables the unset main file menu item
-		AcideMainWindow.getInstance().getMenu().getProjectMenu().getUnsetMainMenuItem()
-				.setEnabled(false);
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getUnsetMainFileMenuItem().setEnabled(false);
 
 		// Disables the set compilable file menu item
-		AcideMainWindow.getInstance().getMenu().getProjectMenu().getSetCompilableMenuItem()
-				.setEnabled(false);
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getSetCompilableFileMenuItem().setEnabled(false);
 
 		// Disables the unset compilable menu item
 		AcideMainWindow.getInstance().getMenu().getProjectMenu()
-				.getUnsetCompilableMenuItem().setEnabled(false);
+				.getUnsetCompilableFileMenuItem().setEnabled(false);
 
 		// Disables the remove folder menu item
-		AcideMainWindow.getInstance().getMenu().getProjectMenu().getRemoveFolderMenuItem()
-				.setEnabled(false);
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getRemoveFolderMenuItem().setEnabled(false);
 
 		// If the project configuration has been modified
 		if (AcideProjectConfiguration.getInstance().isModified())
@@ -309,20 +303,19 @@ public class AcideMenuBarMouseClickListener extends MouseAdapter {
 					.getSaveProjectMenuItem().setEnabled(true);
 
 		// Gets the selection path from the explorer tree
-		TreePath treeSelection = AcideMainWindow.getInstance().getExplorerPanel().getTree()
-				.getSelectionPath();
-		
-		DefaultMutableTreeNode fileNode;
-		AcideProjectFile projectFile;
+		TreePath treeSelection = AcideMainWindow.getInstance()
+				.getExplorerPanel().getTree().getSelectionPath();
 
 		// If there is anything selected in the explorer tree
 		if (treeSelection != null) {
 
 			// Gets the node from the explorer tree from the tree selection
-			fileNode = (DefaultMutableTreeNode) treeSelection.getLastPathComponent();
+			DefaultMutableTreeNode fileNode = (DefaultMutableTreeNode) treeSelection
+					.getLastPathComponent();
 
 			// Gets the project file from the file node info
-			projectFile = (AcideProjectFile) fileNode.getUserObject();
+			AcideProjectFile projectFile = (AcideProjectFile) fileNode
+					.getUserObject();
 
 			// It is not a directory
 			if (!projectFile.isDirectory()) {
@@ -338,25 +331,24 @@ public class AcideMenuBarMouseClickListener extends MouseAdapter {
 				if (!projectFile.isMainFile())
 					// Enables the set main menu item
 					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getSetMainMenuItem().setEnabled(true);
+							.getSetMainFileMenuItem().setEnabled(true);
 
 				if (projectFile.isMainFile())
 					// Enables the unset main menu item
 					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getUnsetMainMenuItem().setEnabled(true);
+							.getUnsetMainFileMenuItem().setEnabled(true);
 
 				if (!projectFile.isCompilableFile()
 						|| (projectFile.isCompilableFile() && projectFile
 								.isMainFile()))
 					// Enables the set compilable menu item
 					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getSetCompilableMenuItem().setEnabled(true);
+							.getSetCompilableFileMenuItem().setEnabled(true);
 
-				if (projectFile.isCompilableFile()
-						&& !projectFile.isMainFile())
+				if (projectFile.isCompilableFile() && !projectFile.isMainFile())
 					// Enables the unset compilable menu item
 					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getUnsetCompilableMenuItem().setEnabled(true);
+							.getUnsetCompilableFileMenuItem().setEnabled(true);
 			} else {
 
 				// Enables the remove folder menu item
@@ -366,8 +358,7 @@ public class AcideMenuBarMouseClickListener extends MouseAdapter {
 		}
 
 		// If it is not the default project
-		if (!AcideProjectConfiguration.getInstance()
-				.isDefaultProject()) {
+		if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
 
 			// Gets the number of the file editor panels
 			int numberOfFileEditorPanels = AcideMainWindow.getInstance()
@@ -376,44 +367,42 @@ public class AcideMenuBarMouseClickListener extends MouseAdapter {
 			// If there are opened editor
 			if (numberOfFileEditorPanels > 0) {
 
-				// SET MAIN FILE
 				if (!AcideMainWindow.getInstance().getFileEditorManager()
 						.getSelectedFileEditorPanel().isMainFile())
-					
+
 					// Enables the set main menu item
 					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getSetMainMenuItem().setEnabled(true);
+							.getSetMainFileMenuItem().setEnabled(true);
 
-				// UNSET MAIN FILE
 				if (AcideMainWindow.getInstance().getFileEditorManager()
 						.getSelectedFileEditorPanel().isMainFile())
-					
+
 					// Enables the unset main menu item
 					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getUnsetMainMenuItem().setEnabled(true);
+							.getUnsetMainFileMenuItem().setEnabled(true);
 
-				// SET COMPILABLE FILE
 				if (!AcideMainWindow.getInstance().getFileEditorManager()
 						.getSelectedFileEditorPanel().isCompilableFile()
-						|| (AcideMainWindow.getInstance().getFileEditorManager()
+						|| (AcideMainWindow.getInstance()
+								.getFileEditorManager()
 								.getSelectedFileEditorPanel()
 								.isCompilableFile() && AcideMainWindow
 								.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel().isMainFile()))
-					
+
 					// Enables the set compilable menu item
 					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getSetCompilableMenuItem().setEnabled(true);
+							.getSetCompilableFileMenuItem().setEnabled(true);
 
-				// UNSET COMPILABLE FILE
 				if (AcideMainWindow.getInstance().getFileEditorManager()
 						.getSelectedFileEditorPanel().isCompilableFile()
-						&& !AcideMainWindow.getInstance().getFileEditorManager()
+						&& !AcideMainWindow.getInstance()
+								.getFileEditorManager()
 								.getSelectedFileEditorPanel().isMainFile())
-					
+
 					// Enables the unset compilable menu item
 					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getUnsetCompilableMenuItem().setEnabled(true);
+							.getUnsetCompilableFileMenuItem().setEnabled(true);
 			}
 		}
 	}

@@ -110,14 +110,25 @@ public class AcideGrammarFileCreationProcess extends Thread {
 		if (_verboseProcess)
 			// Enables the close button in the progress window
 			AcideProgressWindow.getInstance().enableCloseButton();
-		else
-			// Success message
+		else {
+
+			// Displays a success message
 			JOptionPane.showMessageDialog(
 					AcideMainWindow.getInstance(),
 					AcideLanguageManager.getInstance().getLabels()
 							.getString("s1065"), AcideLanguageManager
 							.getInstance().getLabels().getString("s1066"),
 					JOptionPane.INFORMATION_MESSAGE);
+
+			// Enables the main window
+			AcideMainWindow.getInstance().setEnabled(true);
+
+			// Brings the main window to the front
+			AcideMainWindow.getInstance().setAlwaysOnTop(true);
+
+			// Only this time
+			AcideMainWindow.getInstance().setAlwaysOnTop(false);
+		}
 	}
 
 	/**
@@ -139,7 +150,7 @@ public class AcideGrammarFileCreationProcess extends Thread {
 						.getLabels().getString("s927"));
 		} catch (Exception exception) {
 
-			// Error message
+			// Displays an error message
 			JOptionPane.showMessageDialog(
 					null,
 					AcideLanguageManager.getInstance().getLabels()
@@ -275,7 +286,7 @@ public class AcideGrammarFileCreationProcess extends Thread {
 						.getLabels().getString("s929"));
 		} catch (Exception exception) {
 
-			// Error message
+			// Displays an error message
 			JOptionPane.showMessageDialog(
 					null,
 					AcideLanguageManager.getInstance().getLabels()
@@ -402,7 +413,7 @@ public class AcideGrammarFileCreationProcess extends Thread {
 						.getLabels().getString("s930"));
 		} catch (Exception exception) {
 
-			// Error message
+			// Displays an error message
 			JOptionPane.showMessageDialog(
 					null,
 					AcideLanguageManager.getInstance().getLabels()
@@ -510,8 +521,9 @@ public class AcideGrammarFileCreationProcess extends Thread {
 
 		// Deletes the acide folder
 		file = new File("acide");
+		deleteSubdirectories(file);
 		file.delete();
-
+		
 		// Updates the progress window
 		AcideProgressWindow.getInstance().setText(
 				AcideLanguageManager.getInstance().getLabels()
@@ -538,5 +550,31 @@ public class AcideGrammarFileCreationProcess extends Thread {
 		AcideProgressWindow.getInstance().setText(
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s1062"));
+	}
+
+	/**
+	 * Deletes the sub directories of a directory given as a parameter.
+	 * 
+	 * The method file.delete() only works for empty directories. This method
+	 * deletes all the files in each sub directory from the original directory
+	 * using recursion.
+	 * 
+	 * @param directory directory to delete.
+	 */
+	private void deleteSubdirectories(File directory) {
+
+		// Gets the files for the directory
+		File[] files = directory.listFiles();
+
+		for (int index = 0; index < files.length; index++) {
+
+			// Recursion for the directories
+			if (files[index].isDirectory()) {
+				deleteSubdirectories(files[index]);
+			}
+
+			// Delete the file
+			files[index].delete();
+		}
 	}
 }

@@ -195,17 +195,6 @@ public class AcideRemoveFileMenuItemListener implements ActionListener {
 						// tabbed pane
 						AcideMainWindow.getInstance().getFileEditorManager()
 								.getTabbedPane().validate();
-
-						// Updates the focus and so on...
-						AcideMainWindow
-								.getInstance()
-								.getFileEditorManager()
-								.updatesFileEditorAt(
-										AcideMainWindow
-												.getInstance()
-												.getFileEditorManager()
-												.getSelectedFileEditorPanelIndex());
-
 					}
 
 					// The project has been modified
@@ -218,6 +207,15 @@ public class AcideRemoveFileMenuItemListener implements ActionListener {
 		// If there are more opened files
 		if (AcideProjectConfiguration.getInstance().getNumberOfFilesFromList() > 0) {
 
+			// Updates the selected file editor index
+			AcideMainWindow
+					.getInstance()
+					.getFileEditorManager()
+					.updateRelatedComponentsAt(
+							AcideMainWindow.getInstance()
+									.getFileEditorManager()
+									.getSelectedFileEditorPanelIndex());
+			
 			// Enables the remove file menu item in the explorer popup menu
 			AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
 					.getRemoveFileMenuItem().setEnabled(true);

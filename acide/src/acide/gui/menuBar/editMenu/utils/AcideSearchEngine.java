@@ -41,36 +41,36 @@ import java.util.regex.Matcher;
 public class AcideSearchEngine {
 
 	/**
-	 * Pattern for regular expressions sequences
+	 * Pattern for regular expressions sequences.
 	 */
 	private Pattern _pattern;
 	/**
-	 * Matcher for the regular expressions sequences
+	 * Matcher for the regular expressions sequences.
 	 */
 	private Matcher _matcher;
 	/**
-	 * Regular expression to search for
+	 * Regular expression to search for.
 	 */
 	private String _regularExpresion;
 	/**
-	 * Counter of coincidences
+	 * Counter of coincidences.
 	 */
 	private int _counter;
 	/**
-	 * Temporal position to use to fetch the search
+	 * Temporal position to use to fetch the search.
 	 */
 	private int _temporalPosition;
 	/**
-	 * Regular expression list to search for
+	 * Regular expression list to search for.
 	 */
 	private ArrayList<String> _regularExpresionList;
 	/**
-	 * Flag that indicates if the search is cyclic or not
+	 * Flag that indicates if the search is cyclic or not.
 	 */
 	private static boolean _isCycle;
 
 	/**
-	 * Class constructor
+	 * Creates a new ACIDE - A Configurable IDE search engine.
 	 */
 	public AcideSearchEngine() {
 		_regularExpresion = " ";
@@ -81,30 +81,30 @@ public class AcideSearchEngine {
 	}
 
 	/**
-	 * Searches for a string
+	 * Searches the wanted string in the text a string.
 	 * 
-	 * @param currentCarerPosition
-	 *            current caret position
+	 * @param currentCaretPosition
+	 *            current caret position.
 	 * @param wantedString
-	 *            wanted string
+	 *            wanted string.
 	 * @param text
-	 *            text in which the wanted string is searched for
+	 *            text in which the wanted string is searched for.
 	 * @param isCaseSensitive
-	 *            is case sensitive flag
+	 *            is case sensitive flag.
 	 * @param isRegularExpresion
-	 *            is regular expression flag
+	 *            is regular expression flag.
 	 * @param isCompleted
-	 *            is completed flag
+	 *            is completed flag.
 	 * @param direction
-	 *            search direction
+	 *            search direction.
 	 * 
-	 * @return the position of the found coincidence
+	 * @return the position of the found coincidence.
 	 */
-	public int search(int currentCarerPosition, String wantedString,
+	public int search(int currentCaretPosition, String wantedString,
 			String text, boolean isCaseSensitive, boolean isRegularExpresion,
 			boolean isCompleted, AcideSearchDirection direction) {
 
-		// REGULAR EXPRESSION
+		// If regular expressions are selected
 		if (isRegularExpresion) {
 
 			if (!isCaseSensitive)
@@ -116,18 +116,19 @@ public class AcideSearchEngine {
 			_matcher = _pattern.matcher(text);
 			_regularExpresion = " ";
 
-			if ((direction == AcideSearchDirection.FORWARD)
-					|| (direction == AcideSearchDirection.BOTH)) {
+			switch (direction) {
 
-				if (_matcher.find(currentCarerPosition)) {
+			case FORWARD:
+			case BOTH:
+				if (_matcher.find(currentCaretPosition)) {
 					_regularExpresion = " ";
 					_regularExpresion = _matcher.group(0).toString();
 				}
-
-			} else {
+				break;
+			case BACKWARD:
 
 				int index = 0;
-				int limit = currentCarerPosition;
+				int limit = currentCaretPosition;
 				boolean end = false;
 				_regularExpresionList.clear();
 
@@ -142,51 +143,49 @@ public class AcideSearchEngine {
 								.size() - 1);
 					}
 				}
+
+				break;
 			}
 		}
 
-		int position = -1;
+		switch (direction) {
 
-		// FORWARD DIRECTION
-		if (direction == AcideSearchDirection.FORWARD) {
-			position = forwardSearch(currentCarerPosition, wantedString, text,
+		case FORWARD:
+			return forwardSearch(currentCaretPosition, wantedString, text,
+					isCaseSensitive, isRegularExpresion, isCompleted, direction);
+
+		case BACKWARD:
+			return backwardSearch(currentCaretPosition, wantedString, text,
+					isCaseSensitive, isRegularExpresion, isCompleted, direction);
+
+		case BOTH:
+			return bothSearch(currentCaretPosition, wantedString, text,
 					isCaseSensitive, isRegularExpresion, isCompleted, direction);
 		}
 
-		// BACKWARD DIRECTION
-		if (direction == AcideSearchDirection.BACKWARD) {
-			position = backwardSearch(currentCarerPosition, wantedString, text,
-					isCaseSensitive, isRegularExpresion, isCompleted, direction);
-		}
-
-		// BOTH DIRECTIONS
-		else if (direction == AcideSearchDirection.BOTH) {
-			position = bothSearch(currentCarerPosition, wantedString, text,
-					isCaseSensitive, isRegularExpresion, isCompleted, direction);
-		}
-
-		return position;
+		return -1;
 	}
 
 	/**
-	 * Both search
+	 * Searches the wanted string in the text in both directions.
 	 * 
 	 * @param currentCarerPosition
-	 *            current caret position
+	 *            current caret position.
 	 * @param wantedString
-	 *            wanted string
+	 *            wanted string.
 	 * @param text
-	 *            text in which the wanted string is searched for
+	 *            text in which the wanted string is searched for.
 	 * @param isCaseSensitive
-	 *            is case sensitive flag
+	 *            is case sensitive flag.
 	 * @param isRegularExpresion
-	 *            is regular expression flag
+	 *            is regular expression flag.
 	 * @param isCompleted
-	 *            is completed flag
+	 *            is completed flag.
 	 * @param direction
-	 *            search direction
+	 *            search direction.
 	 * 
-	 * @return the position of the found coincidence
+	 * @return the position of the found coincidence. If does not find any,
+	 *         returns -1.
 	 */
 	public int bothSearch(int currentCaretPosition, String wantedString,
 			String text, boolean isCaseSensitive, boolean isRegularExpresion,
@@ -309,24 +308,26 @@ public class AcideSearchEngine {
 	}
 
 	/**
-	 * Backward search
+	 * Searches for the wanted string in the text backwards from the current
+	 * caret position.
 	 * 
 	 * @param currentCarerPosition
-	 *            current caret position
+	 *            current caret position.
 	 * @param wantedString
-	 *            wanted string
+	 *            wanted string.
 	 * @param text
-	 *            text in which the wanted string is searched for
+	 *            text in which the wanted string is searched for.
 	 * @param isCaseSensitive
-	 *            is case sensitive flag
+	 *            is case sensitive flag.
 	 * @param isRegularExpresion
-	 *            is regular expression flag
+	 *            is regular expression flag.
 	 * @param isCompleted
-	 *            is completed flag
+	 *            is completed flag.
 	 * @param direction
-	 *            search direction
+	 *            search direction.
 	 * 
-	 * @return the position of the found coincidence
+	 * @return the position of the found coincidence. If does not find any,
+	 *         returns -1.
 	 */
 	public int backwardSearch(int currentCaretPosition, String wantedString,
 			String text, boolean isCaseSensitive, boolean isRegularExpresion,
@@ -450,24 +451,26 @@ public class AcideSearchEngine {
 	}
 
 	/**
-	 * Forward search
+	 * Search for the wanted string in the text forwards from the
+	 * current caret position.
 	 * 
 	 * @param currentCarerPosition
-	 *            current caret position
+	 *            current caret position.
 	 * @param wantedString
-	 *            wanted string
+	 *            wanted string.
 	 * @param text
-	 *            text in which the wanted string is searched for
+	 *            text in which the wanted string is searched for.
 	 * @param isCaseSensitive
-	 *            is case sensitive flag
+	 *            is case sensitive flag.
 	 * @param isRegularExpresion
-	 *            is regular expression flag
+	 *            is regular expression flag.
 	 * @param isCompleted
-	 *            is completed flag
+	 *            is completed flag.
 	 * @param direction
-	 *            search direction
+	 *            search direction.
 	 * 
-	 * @return the position of the found coincidence
+	 * @return the position of the found coincidence. If does not find any,
+	 *         returns -1.
 	 */
 	public int forwardSearch(int currentCaretPosition, String wantedString,
 			String text, boolean isCaseSensitive, boolean isRegularExpresion,
@@ -580,9 +583,9 @@ public class AcideSearchEngine {
 	}
 
 	/**
-	 * Returns the regular expression to search for
+	 * Returns the regular expression to search for.
 	 * 
-	 * @return the regular expression to search for
+	 * @return the regular expression to search for.
 	 */
 	public String getRegularExpresion() {
 		return _regularExpresion;
@@ -590,49 +593,49 @@ public class AcideSearchEngine {
 
 	/**
 	 * Returns a regular expression from the list at the position given as a
-	 * parameter
+	 * parameter.
 	 * 
 	 * @param position
-	 *            position to get
-	 * @return a regular expression from the list parsed to string
+	 *            position to get.
+	 * @return a regular expression from the list parsed to string.
 	 */
 	public String getRegularExpresionAt(int position) {
 		return _regularExpresionList.get(position).toString();
 	}
 
 	/**
-	 * Returns the is cycle flag
+	 * Returns the is cycle flag.
 	 * 
-	 * @return the is cycle flag
+	 * @return the is cycle flag.
 	 */
 	public boolean getIsCycle() {
 		return _isCycle;
 	}
 
 	/**
-	 * Sets a new value to the is cycle flag
+	 * Sets a new value to the is cycle flag.
 	 * 
 	 * @param isCycle
-	 *            new value to set
+	 *            new value to set.
 	 */
 	public void setIsCycle(boolean isCycle) {
 		_isCycle = isCycle;
 	}
 
 	/**
-	 * Returns the temporal position
+	 * Returns the temporal position.
 	 * 
-	 * @return the temporal position
+	 * @return the temporal position.
 	 */
 	public int getTemporalPosition() {
 		return _temporalPosition;
 	}
 
 	/**
-	 * Sets a new value to the temporal position
+	 * Sets a new value to the temporal position.
 	 * 
 	 * @param temporalPosition
-	 *            new value to set
+	 *            new value to set.
 	 */
 	public void setTemporalPosition(int temporalPosition) {
 		_temporalPosition = temporalPosition;

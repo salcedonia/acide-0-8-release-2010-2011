@@ -29,32 +29,28 @@
  */
 package acide.gui.fileEditor.fileEditorManager.utils.logic.closeButton;
 
-import acide.gui.fileEditor.fileEditorManager.utils.logic.closeButton.listeners.AcideFileEditorCloseButtonActionListener;
-
 import java.awt.Insets;
-import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.plaf.UIResource;
 
+import acide.gui.fileEditor.fileEditorManager.utils.logic.closeButton.listeners.AcideFileEditorCloseButtonActionListener;
 import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 
-/**																
+/**
  * ACIDE - A Configurable IDE file editor close button.
  * 
- * Implements used UIResource when the close button is added to the
- * TabbedPane.
- *					
- * @version 0.8	
- * @see UIResource																													
+ * Implements used UIResource when the close button is added to the TabbedPane.
+ * 
+ * @version 0.8
+ * @see UIResource
  */
 public class AcideFileEditorCloseButton extends JButton implements UIResource {
 
 	/**
-	 * ACIDE - A Configurable IDE file editor close button class serial version UID.
+	 * ACIDE - A Configurable IDE file editor close button class serial version
+	 * UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
@@ -79,30 +75,21 @@ public class AcideFileEditorCloseButton extends JButton implements UIResource {
 	public AcideFileEditorCloseButton(int index) {
 
 		super(new AcideFileEditorCloseButtonActionListener(index));
-		
+
 		// Sets the green icon
 		_selectedIcon = GREEN_ICON;
+		
+		// Sets the icon
 		setIcon(new ImageIcon(_selectedIcon));
-		
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
 
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-			
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-		
 		// Sets the tool tip text
-		setToolTipText(labels.getString("s316"));
-		
+		setToolTipText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s316"));
+
+		// Sets its margin
 		setMargin(new Insets(0, 0, 0, 0));
+		
+		// Validates the changes
 		validate();
 	}
 

@@ -33,11 +33,9 @@ import acide.gui.mainWindow.AcideMainWindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE edit menu cut menu item listener.
@@ -56,34 +54,34 @@ public class AcideCutMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-			
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		// Updates the log
-		AcideLog.getLog().info(labels.getString("s97"));
+		AcideLog.getLog()
+				.info(AcideLanguageManager.getInstance().getLabels()
+						.getString("s97"));
 
-		// CUT
-		if (AcideMainWindow.getInstance().getFileEditorManager().getNumberOfFileEditorPanels() > 0)
-			AcideMainWindow
-					.getInstance()
-					.getFileEditorManager()
-					.getFileEditorPanelAt(
-							AcideMainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanelIndex()).getActiveTextEditionArea()
-					.cut();
-		AcideMainWindow.getInstance().getConsolePanel().getTextPane().cut();
+		// If there are file editors opened
+		if (AcideMainWindow.getInstance().getFileEditorManager()
+				.getNumberOfFileEditorPanels() > 0)
+
+			// If the console has the focus
+			if (AcideMainWindow.getInstance().getMenu().getIsConsoleFocused())
+
+				// Cuts the text in the console panel text pane
+				AcideMainWindow.getInstance().getConsolePanel().getTextPane()
+						.cut();
+			else
+				// Cuts the selected text in the selected file editor
+				AcideMainWindow
+						.getInstance()
+						.getFileEditorManager()
+						.getFileEditorPanelAt(
+								AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getSelectedFileEditorPanelIndex())
+						.getActiveTextEditionArea().cut();
+		else
+
+			// Cuts the selected text in the console panel text pane
+			AcideMainWindow.getInstance().getConsolePanel().getTextPane().cut();
 	}
 }
-

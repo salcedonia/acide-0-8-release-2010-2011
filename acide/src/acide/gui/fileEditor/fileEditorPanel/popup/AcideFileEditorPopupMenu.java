@@ -597,32 +597,14 @@ public class AcideFileEditorPopupMenu extends JPopupMenu {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Puts the caret in the first position
+			// Selects all the text in the text edition area
 			AcideMainWindow
 					.getInstance()
 					.getFileEditorManager()
 					.getFileEditorPanelAt(
 							AcideMainWindow.getInstance().getFileEditorManager()
 									.getSelectedFileEditorPanelIndex())
-					.getActiveTextEditionArea().setCaretPosition(0);
-
-			// Gets the file content length
-			int length = AcideMainWindow
-					.getInstance()
-					.getFileEditorManager()
-					.getFileEditorPanelAt(
-							AcideMainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanelIndex())
-					.getActiveTextEditionArea().getText().length();
-
-			// Sets the selection from the first position to the last one
-			AcideMainWindow
-					.getInstance()
-					.getFileEditorManager()
-					.getFileEditorPanelAt(
-							AcideMainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanelIndex())
-					.getActiveTextEditionArea().setSelectionEnd(length);
+					.getActiveTextEditionArea().selectAll();
 		}
 	}
 
@@ -761,12 +743,6 @@ public class AcideFileEditorPopupMenu extends JPopupMenu {
 
 						// Adds the node to the explorer tree
 						currentNode.add(newNode);
-
-						// Validates the changes in the main window
-						AcideMainWindow.getInstance().validate();
-
-						// Repaints the main window
-						AcideMainWindow.getInstance().repaint();
 
 						// Updates the explorer tree
 						AcideMainWindow.getInstance().getExplorerPanel()

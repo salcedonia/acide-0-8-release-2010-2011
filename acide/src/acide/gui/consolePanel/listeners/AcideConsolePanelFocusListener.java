@@ -31,6 +31,7 @@ package acide.gui.consolePanel.listeners;
 
 import acide.gui.mainWindow.AcideMainWindow;
 
+import java.awt.Component;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
@@ -49,6 +50,13 @@ public class AcideConsolePanelFocusListener implements FocusListener {
 	 */
 	@Override
 	public void focusGained(FocusEvent focusEvent) {
+		
+		//System.out.println("Console: " + focusEvent.toString() +"\n");
+		
+		// Updates the last element on focus in the main window
+		AcideMainWindow.getInstance().setLastElementOnFocus(
+				(Component) focusEvent.getSource());
+		
 		dispatchEvent(focusEvent, false);
 	}
 
@@ -59,6 +67,13 @@ public class AcideConsolePanelFocusListener implements FocusListener {
 	 */
 	@Override
 	public void focusLost(FocusEvent focusEvent) {
+		
+		//System.out.println("Console: " + focusEvent.toString() +"\n");
+		
+		// Updates the last element on focus in the main window
+		AcideMainWindow.getInstance().setLastElementOnFocus(
+				(Component) focusEvent.getSource());
+		
 		dispatchEvent(focusEvent, true);
 	}
 	
@@ -79,6 +94,6 @@ public class AcideConsolePanelFocusListener implements FocusListener {
 			
 			// Hides the caret in the opened editor
 			AcideMainWindow.getInstance().getFileEditorManager().getSelectedFileEditorPanel()
-					.setCaretVisible(false);
+					.getActiveTextEditionArea().getCaret().setVisible(isVisible);
 	}
 }

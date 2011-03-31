@@ -36,7 +36,6 @@ import acide.gui.menuBar.viewMenu.listeners.AcideShowAcideConsolePanelMenuItemLi
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -45,9 +44,6 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
-
-import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE view menu.
@@ -136,32 +132,19 @@ public class AcideViewMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		final ResourceBundle labels = language.getLabels();
-
 		// SHOW LOG TAB MENU ITEM
-		_showLogTabMenuItem.setText(labels.getString("s28"));
+		_showLogTabMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s28"));
 		_showLogTabMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_G, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 
 		// SHOW EXPLORER PANEL CHECK BOX MENU ITEM
-		_showExplorerPanelCheckBoxMenuItem.setText(labels.getString("s221"));
+		_showExplorerPanelCheckBoxMenuItem.setText(AcideLanguageManager
+				.getInstance().getLabels().getString("s221"));
 
 		// SHOW CONSOLE PANEL CHECK BOX MENU ITEM
-		_showConsolePanelCheckBoxMenuItem.setText(labels.getString("s223"));
+		_showConsolePanelCheckBoxMenuItem.setText(AcideLanguageManager
+				.getInstance().getLabels().getString("s223"));
 	}
 
 	/**

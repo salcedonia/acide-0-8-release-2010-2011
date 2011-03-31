@@ -29,6 +29,12 @@
  */
 package acide.gui.menuBar.configurationMenu;
 
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+
 import acide.configuration.menu.AcideMenuConfiguration;
 import acide.gui.menuBar.configurationMenu.consoleMenu.AcideConsoleMenu;
 import acide.gui.menuBar.configurationMenu.fileEditor.AcideFileEditorMenu;
@@ -38,17 +44,7 @@ import acide.gui.menuBar.configurationMenu.lexiconMenu.AcideLexiconMenu;
 import acide.gui.menuBar.configurationMenu.listeners.AcideCompilerMenuItemListener;
 import acide.gui.menuBar.configurationMenu.menuMenu.AcideMenuMenu;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.AcideToolBarMenu;
-
-import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
-
-import javax.swing.ImageIcon;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-
 import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE configuration menu.
@@ -138,28 +134,28 @@ public class AcideConfigurationMenu extends JMenu {
 	 */
 	public AcideConfigurationMenu() {
 
-		// CONSOLE MENU
+		// Creates the console menu
 		_consoleMenu = new AcideConsoleMenu();
-		
-		// FILE EDITOR MENU
+
+		// Creates the file editor menu
 		_fileEditorMenu = new AcideFileEditorMenu();
-		
-		// LANGUAGE MENU
+
+		// Creates the language menu
 		_languageMenu = new AcideLanguageMenu();
-		
-		// MENU MENU
+
+		// Creates the menu menu
 		_menuMenu = new AcideMenuMenu();
-		
-		// TOOL BAR MENU
+
+		// Creates the tool bar menu
 		_toolBarMenu = new AcideToolBarMenu();
-		
-		// LEXICON MENU
+
+		// Creates the lexicon menu
 		_lexiconMenu = new AcideLexiconMenu();
-		
-		// GRAMMAR MENU
+
+		// Creates the grammar menu
 		_grammarMenu = new AcideGrammarMenu();
-		
-		// COMPILER MENU ITEM
+
+		// Creates the compiler menu item
 		_compilerMenuItem = new JMenuItem(COMPILER_IMAGE);
 
 		// Sets the text of the configuration menu components
@@ -172,54 +168,64 @@ public class AcideConfigurationMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
-		// LANGUAGE MENU
-		_languageMenu.setText(labels.getString("s6"));
+		// Sets the language menu text
+		_languageMenu.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s6"));
+		
+		// Sets the language menu items text
 		_languageMenu.setTextOfMenuComponents();
 
-		// CONSOLE MENU
-		_consoleMenu.setText(labels.getString("s332"));
+		// Sets the console menu text
+		_consoleMenu.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s332"));
+		
+		// Sets the console menu items text
 		_consoleMenu.setTextOfMenuComponents();
 
-		// FILE EDITOR MENU
-		_fileEditorMenu.setText(labels.getString("s1045"));
+		// Sets the file editor menu text
+		_fileEditorMenu.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s1045"));
+		
+		// Sets the file editor menu items text
 		_fileEditorMenu.setTextOfMenuComponets();
 
-		// MENU MENU
-		_menuMenu.setText(labels.getString("s34"));
+		// Sets the menu menu text
+		_menuMenu.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s34"));
+		
+		// Sets the menu menu items text
 		_menuMenu.setTextOfMenuComponents();
 
-		// TOOL BAR MENU
-		_toolBarMenu.setText(labels.getString("s169"));
+		// Sets the tool bar menu text
+		_toolBarMenu.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s169"));
+		
+		// Sets the tool bar menu items text
 		_toolBarMenu.setTextOfMenuComponents();
 
-		// LEXICON MENU
-		_lexiconMenu.setText(labels.getString("s224"));
+		// Sets the lexicon menu text
+		_lexiconMenu.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s224"));
+		
+		// Sets the lexicon menu items text
 		_lexiconMenu.setTextOfMenuComponents();
+		
+		// Disables the lexicon menu
 		_lexiconMenu.setEnabled(false);
 
-		// GRAMMAR MENU
-		_grammarMenu.setText(labels.getString("s225"));
+		// Sets the grammar menu text
+		_grammarMenu.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s225"));
+		
+		// Sets the grammar menu items text
 		_grammarMenu.setTextOfMenuComponents();
+		
+		// Disables the grammar menu
 		_grammarMenu.setEnabled(false);
 
-		// COMPILER MENU ITEM
-		_compilerMenuItem.setText(labels.getString("s240"));
+		// Sets the compiler menu item text
+		_compilerMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s240"));
 	}
 
 	/**
@@ -230,8 +236,10 @@ public class AcideConfigurationMenu extends JMenu {
 		// Removes all the menu components
 		removeAll();
 
-		// LEXICON MENU
+		// Builds the lexicon menu
 		_lexiconMenu.build();
+		
+		// Adds the lexicon menu to the configuration menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				AcideLexiconMenu.LOAD_LEXICON_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -245,8 +253,10 @@ public class AcideConfigurationMenu extends JMenu {
 
 			add(_lexiconMenu);
 
-		// GRAMMAR MENU
+		// Builds the grammar menu
 		_grammarMenu.build();
+		
+		// Adds the grammar menu to the configuration menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				AcideGrammarMenu.NEW_GRAMMAR_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -259,11 +269,11 @@ public class AcideConfigurationMenu extends JMenu {
 						AcideGrammarMenu.SAVE_GRAMMAR_AS_NAME))
 			add(_grammarMenu);
 
-		// COMPILER MENU ITEM
+		// Adds the compiler menu item to the configuration menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(COMPILER_NAME))
 			add(_compilerMenuItem);
 
-		// SEPARATOR
+		// Adds a separator to the configuration menu
 		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(
 				AcideLexiconMenu.LOAD_LEXICON_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -288,14 +298,18 @@ public class AcideConfigurationMenu extends JMenu {
 								AcideConsoleMenu.EXTERNAL_COMMAND_NAME)))
 			addSeparator();
 
-		// FILE EDITOR MENU
+		// Builds the file editor menu
 		_fileEditorMenu.build();
+		
+		// Adds the file editor menu to the configuration menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				AcideFileEditorMenu.FILE_EDITOR_DISPLAY_OPTIONS_NAME))
 			add(_fileEditorMenu);
 
-		// CONSOLE MENU
+		// builds the console menu
 		_consoleMenu.build();
+		
+		// Adds the console menu to the configuration menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				AcideConsoleMenu.CONFIGURE_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -304,7 +318,7 @@ public class AcideConfigurationMenu extends JMenu {
 						AcideConsoleMenu.CONSOLE_DISPLAY_OPTIONS_NAME))
 			add(_consoleMenu);
 
-		// SEPARATOR
+		// Adds a separator to the configuration menu
 		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(
 				AcideLexiconMenu.LOAD_LEXICON_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -338,16 +352,20 @@ public class AcideConfigurationMenu extends JMenu {
 						.getInstance().getIsDisplayed(TOOLBAR_NAME)))
 			addSeparator();
 
-		// LANGUAGE MENU
+		// Builds the language menu
 		_languageMenu.build();
+		
+		// Adds the language menu to the configuration menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				AcideLanguageMenu.SPANISH_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						AcideLanguageMenu.ENGLISH_NAME))
 			add(_languageMenu);
 
-		// MENU MENU
+		// Builds the menu menu
 		_menuMenu.build();
+		
+		// Adds the menu menu to the configuration menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				AcideMenuMenu.NEW_MENU_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -360,8 +378,10 @@ public class AcideConfigurationMenu extends JMenu {
 						AcideMenuMenu.SAVE_MENU_AS_NAME))
 			add(_menuMenu);
 
-		// TOOL BAR MENU
+		// Builds the tool bar menu
 		_toolBarMenu.build();
+		
+		// Adds the tool bar menu to the configuration menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				AcideToolBarMenu.NEW_TOOLBAR_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -381,28 +401,28 @@ public class AcideConfigurationMenu extends JMenu {
 	 */
 	public void setListeners() {
 
-		// LEXICON MENU
+		// Sets the lexicon menu listeners
 		_lexiconMenu.setListeners();
 
-		// GRAMMAR MENU
+		// Sets the grammar menu listeners
 		_grammarMenu.setListeners();
 
-		// FILE EDITOR MENU
+		// Sets the file editor menu listeners
 		_fileEditorMenu.setListeners();
 
-		// CONSOLE MENU
+		// Sets the console menu listeners
 		_consoleMenu.setListeners();
 
-		// MENU MENU
+		// Sets the menu menu listeners
 		_menuMenu.setListeners();
 
-		// LANGUAGE MENU
+		// Sets the language menu listeners
 		_languageMenu.setListeners();
 
-		// TOOL BAR MENU
+		// Sets the tool bar menu listeners
 		_toolBarMenu.setListeners();
 
-		// COMPILER MENU ITEM
+		// Sets the compiler menu item listener
 		_compilerMenuItem
 				.addActionListener(new AcideCompilerMenuItemListener());
 	}
@@ -444,9 +464,11 @@ public class AcideConfigurationMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE configuration menu file editor menu.
+	 * Returns the ACIDE - A Configurable IDE configuration menu file editor
+	 * menu.
 	 * 
-	 * @return the ACIDE - A Configurable IDE configuration menu file editor menu.
+	 * @return the ACIDE - A Configurable IDE configuration menu file editor
+	 *         menu.
 	 */
 	public AcideFileEditorMenu getFileEditorMenu() {
 		return _fileEditorMenu;

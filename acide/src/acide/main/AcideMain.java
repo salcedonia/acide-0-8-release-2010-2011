@@ -29,7 +29,7 @@
  */
 package acide.main;
 
-import acide.configuration.project.workbench.AcideWorkbenchManager;
+import acide.configuration.workbench.AcideWorkbenchManager;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.splashScreen.AcideSplashScreenWindow;
 
@@ -38,7 +38,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -53,7 +52,7 @@ import acide.resources.AcideResourceManager;
  * 
  * @version 0.8
  */
-public class AcideMain {
+public class AcideMain{
 
 	/**
 	 * Creation message used for specifying the expected message to determine if
@@ -64,11 +63,6 @@ public class AcideMain {
 	 * Socket listening port for the server socket and the connections.
 	 */
 	public static final int PORT = 7777;
-	/**
-	 * ACIDE - A Configurable IDE language labels to display in the selected
-	 * language.
-	 */
-	private ResourceBundle _labels;
 
 	/**
 	 * Creates a new instance of ACIDE - A Configurable IDE main class.
@@ -82,12 +76,11 @@ public class AcideMain {
 		// Starts the log
 		AcideLog.startLog();
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
 		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
+
+			// Sets the ACIDE - A Configurable IDE language
+			AcideLanguageManager.getInstance().setLanguage(
+					AcideResourceManager.getInstance().getProperty("language"));
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -95,11 +88,8 @@ public class AcideMain {
 			exception.printStackTrace();
 		}
 
-		// Gets the labels
-		_labels = language.getLabels();
-
 		// Sets the Look and Feel
-		setLookAndFeel(_labels);
+		setLookAndFeel();
 
 		new Thread() {
 
@@ -144,26 +134,30 @@ public class AcideMain {
 				// already being executed
 				if (CREATION_MESSAGE.equals(message))
 
-					// Shows an error message
-					JOptionPane.showMessageDialog(null,
-							_labels.getString("s1025"),
-							_labels.getString("s1023"),
+					// Displays an error message
+					JOptionPane.showMessageDialog(null, AcideLanguageManager
+							.getInstance().getLabels().getString("s1025"),
+							AcideLanguageManager.getInstance().getLabels()
+									.getString("s1023"),
 							JOptionPane.WARNING_MESSAGE);
 
 			} catch (IOException ioexception) {
-				// Shows an error message
-				JOptionPane.showMessageDialog(null, _labels.getString("s1026"),
-						_labels.getString("s1023"), JOptionPane.ERROR_MESSAGE);
+				// Displays an error message
+				JOptionPane.showMessageDialog(null, AcideLanguageManager
+						.getInstance().getLabels().getString("s1026"),
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s1023"), JOptionPane.ERROR_MESSAGE);
 			} finally {
 				try {
 					if (socket != null)
 						socket.close();
 				} catch (Exception ex) {
 
-					// Shows an error message
-					JOptionPane.showMessageDialog(null,
-							_labels.getString("s1026"),
-							_labels.getString("s1023"),
+					// Displays an error message
+					JOptionPane.showMessageDialog(null, AcideLanguageManager
+							.getInstance().getLabels().getString("s1026"),
+							AcideLanguageManager.getInstance().getLabels()
+									.getString("s1023"),
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -171,7 +165,9 @@ public class AcideMain {
 		}
 
 		// Updates the log
-		AcideLog.getLog().info(_labels.getString("s1024"));
+		AcideLog.getLog().info(
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s1024"));
 
 		new Thread() {
 			/*
@@ -207,9 +203,13 @@ public class AcideMain {
 			}
 		} catch (Exception exception) {
 
-			// Shows an error message
-			JOptionPane.showMessageDialog(null, _labels.getString("s1025"),
-					_labels.getString("s1023"), JOptionPane.ERROR_MESSAGE);
+			// Displays an error message
+			JOptionPane.showMessageDialog(
+					null,
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s1025"),
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s1023"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -222,17 +222,19 @@ public class AcideMain {
 		AcideSplashScreenWindow.getInstance().showSplashScreenWindow();
 
 		// Updates the log
-		AcideLog.getLog().info(_labels.getString("s555"));
+		AcideLog.getLog().info(
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s555"));
 
 		// Updates the splash screen window
 		AcideSplashScreenWindow.getInstance().setProgressBar(
 				12,
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s1027"));
-		
+
 		// Loads the ACIDE - A Configurable IDE workbench configuration
 		AcideWorkbenchManager.getInstance()
-				.loadMainWindowWorkbenchConfiguration(
+				.load(
 						AcideWorkbenchManager.getInstance()
 								.getConfigurationFileContent());
 
@@ -245,48 +247,57 @@ public class AcideMain {
 
 	/**
 	 * Sets the look and feel of ACIDE - A Configurable IDE.
-	 * 
-	 * @param labels
-	 *            labels to display in the selected language.
 	 */
-	public void setLookAndFeel(ResourceBundle labels) {
+	public void setLookAndFeel() {
 
 		try {
 
 			// Sets the operative system look and feel
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			// UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 
 			// Updates the log
-			AcideLog.getLog().info(labels.getString("s549"));
+			AcideLog.getLog().info(
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s549"));
 		} catch (ClassNotFoundException exception) {
 
 			// Updates the log
 			AcideLog.getLog().error(
-					labels.getString("s550") + exception.getMessage()
-							+ labels.getString("s551"));
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s550")
+							+ exception.getMessage()
+							+ AcideLanguageManager.getInstance().getLabels()
+									.getString("s551"));
 			exception.printStackTrace();
 		} catch (InstantiationException exception) {
 
 			// Updates the log
 			AcideLog.getLog().error(
-					labels.getString("s552") + exception.getMessage()
-							+ labels.getString("s551"));
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s552")
+							+ exception.getMessage()
+							+ AcideLanguageManager.getInstance().getLabels()
+									.getString("s551"));
 			exception.printStackTrace();
 		} catch (IllegalAccessException exception) {
 
 			// Updates the log
 			AcideLog.getLog().error(
-					labels.getString("s553") + exception.getMessage()
-							+ labels.getString("s551"));
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s553")
+							+ exception.getMessage()
+							+ AcideLanguageManager.getInstance().getLabels()
+									.getString("s551"));
 			exception.printStackTrace();
 		} catch (UnsupportedLookAndFeelException exception) {
 
 			// Updates the log
 			AcideLog.getLog().error(
-					labels.getString("s554") + exception.getMessage()
-							+ labels.getString("s551"));
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s554")
+							+ exception.getMessage()
+							+ AcideLanguageManager.getInstance().getLabels()
+									.getString("s551"));
 			exception.printStackTrace();
 		}
 	}
@@ -299,11 +310,17 @@ public class AcideMain {
 	 * Creates and configures the application log, load the project
 	 * configuration and builds the main window of the application.
 	 * </p>
+	 * <p>
+	 * Also it is listening for new connections to the port 7777 to determine if 
+	 * there is a running instance at that time.
+	 * </p>
+	 * Runs the application in the event dispatching thread to make the access to
+	 * the swing components thread safe.
 	 * 
 	 * @param args
 	 *            entry arguments for the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
 		new AcideMain();
 	}
 }

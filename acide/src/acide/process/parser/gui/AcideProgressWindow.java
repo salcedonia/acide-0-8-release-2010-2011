@@ -106,9 +106,24 @@ public class AcideProgressWindow extends JFrame {
 
 		super();
 
-		// Sets the layout
-		setLayout(new BorderLayout());
+		// Builds the window components
+		buildComponents();
 
+		// Sets the window components listeners
+		setListeners();
+		
+		// Adds the components to the window
+		addComponents();
+
+		// Sets the window configuration
+		setWindowConfiguration();
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE progress window components.
+	 */
+	private void buildComponents() {
+		
 		// Creates the main panel
 		_mainPanel = new JPanel(new BorderLayout());
 
@@ -147,21 +162,33 @@ public class AcideProgressWindow extends JFrame {
 		_closeButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s1048"));
 
-		// It is disabled at the begining
+		// It is disabled at the beginning
 		_closeButton.setEnabled(false);
+	}
 
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE progress window.
+	 */
+	private void addComponents() {
+		
+		// Sets the layout
+		setLayout(new BorderLayout());
+		
 		// Adds the close button to the button panel
 		_buttonPanel.add(_closeButton);
-
-		// Sets the window components listeners
-		setListeners();
 
 		// Adds the main panel to the window
 		add(_mainPanel, BorderLayout.CENTER);
 		
 		// Adds the button panel to the window
 		add(_buttonPanel, BorderLayout.SOUTH);
+	}
 
+	/**
+	 * Sets the ACIDE - A Configurable IDE progress window configuration.
+	 */
+	private void setWindowConfiguration() {
+		
 		// Sets the window title
 		setTitle(AcideLanguageManager.getInstance().getLabels()
 				.getString("s1047"));
@@ -180,11 +207,11 @@ public class AcideProgressWindow extends JFrame {
 	}
 
 	/**
-	 * Sets the window components listeners.
+	 * Sets the ACIDE - A Configurable IDE progress window components listeners.
 	 */
 	private void setListeners() {
 
-		// CLOSE BUTTON
+		// Sets the close button action listener
 		_closeButton.addActionListener(new CloseButtonAction());
 	}
 
@@ -201,9 +228,9 @@ public class AcideProgressWindow extends JFrame {
 	 * Closes the ACIDE - A Configurable IDE progress window.
 	 */
 	public void closeWindow() {
-		
-		// Sets the window invisible
-		setVisible(false);
+
+		// Closes the configuration window
+		dispose();
 	}
 
 	/**

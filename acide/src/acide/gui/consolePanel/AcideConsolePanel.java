@@ -445,15 +445,19 @@ public class AcideConsolePanel extends JPanel {
 					command = command.replace("$activeFile$", AcideMainWindow
 							.getInstance().getFileEditorManager()
 							.getSelectedFileEditorPanel().getAbsolutePath());
-					command = command.replace("$activeFilePath$", AcideMainWindow
-							.getInstance().getFileEditorManager()
-							.getSelectedFileEditorPanel().getFilePath());
-					command = command.replace("$activeFileExt$", AcideMainWindow
-							.getInstance().getFileEditorManager()
-							.getSelectedFileEditorPanel().getFileExtension());
-					command = command.replace("$activeFileName$", AcideMainWindow
-							.getInstance().getFileEditorManager()
-							.getSelectedFileEditorPanel().getFileName());
+					command = command
+							.replace("$activeFilePath$", AcideMainWindow
+									.getInstance().getFileEditorManager()
+									.getSelectedFileEditorPanel().getFilePath());
+					command = command.replace("$activeFileExt$",
+							AcideMainWindow.getInstance()
+									.getFileEditorManager()
+									.getSelectedFileEditorPanel()
+									.getFileExtension());
+					command = command
+							.replace("$activeFileName$", AcideMainWindow
+									.getInstance().getFileEditorManager()
+									.getSelectedFileEditorPanel().getFileNameWithoutExtension());
 				}
 
 				// If it is the default project
@@ -466,15 +470,19 @@ public class AcideConsolePanel extends JPanel {
 						command = command.replace("$mainFile$", AcideMainWindow
 								.getInstance().getFileEditorManager()
 								.getMainFileEditorPanel().getAbsolutePath());
-						command = command.replace("$mainFilePath$", AcideMainWindow
-								.getInstance().getFileEditorManager()
-								.getMainFileEditorPanel().getFilePath());
-						command = command.replace("$mainFileExt$", AcideMainWindow
-								.getInstance().getFileEditorManager()
-								.getMainFileEditorPanel().getFileExtension());
-						command = command.replace("$mainFileName$", AcideMainWindow
-								.getInstance().getFileEditorManager()
-								.getMainFileEditorPanel().getFileName());
+						command = command
+								.replace("$mainFilePath$", AcideMainWindow
+										.getInstance().getFileEditorManager()
+										.getMainFileEditorPanel().getFilePath());
+						command = command.replace("$mainFileExt$",
+								AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getMainFileEditorPanel()
+										.getFileExtension());
+						command = command
+								.replace("$mainFileName$", AcideMainWindow
+										.getInstance().getFileEditorManager()
+										.getMainFileEditorPanel().getFileNameWithoutExtension());
 					}
 				} else {
 
@@ -576,25 +584,92 @@ public class AcideConsolePanel extends JPanel {
 			@Override
 			public void run() {
 
-				// Sets the caret at the end of the command
-				_textPane.setCaretPosition(_promptCaretPosition);
+				try {
+					// Sets the caret at the end of the command
+					_textPane.setCaretPosition(_promptCaretPosition);
+
+				} catch (Exception exception) {
+
+					// Updates the log
+					AcideLog.getLog().error(exception.getMessage());
+				}
 
 				// The blank command does not count
 				if (!command.matches("")) {
 
-					// Updates the command record
+					// If the command record contains the command
 					if (_commandRecord.contains(command)) {
+
+						// Decreases the command record maximum index
 						_commandRecordMaximumIndex--;
+
+						// Removes the command from the command record
 						_commandRecord.remove(command);
 					}
+
+					// Adds the command to the command record
 					_commandRecord.add(command);
+
+					// Increases the command record maximum index
 					_commandRecordMaximumIndex++;
+
+					// The current command record current index is the maximum
+					// index
 					_commandRecordCurrentIndex = _commandRecordMaximumIndex;
 				}
 			}
 		});
 	}
 
+	/**
+	 * Clears the console text buffer, leaving only the prompt ready for the
+	 * next command execution.
+	 */
+	public void clearConsoleBuffer() {
+
+		SwingUtilities.invokeLater(new Runnable() {
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see java.lang.Runnable#run()
+			 */
+			@Override
+			public void run() {
+
+				// Gets the last line in the text pane
+				Document document = _textPane.getDocument();
+				Element rootElem = document.getDefaultRootElement();
+				int numLines = rootElem.getElementCount();
+				Element lineElem = rootElem.getElement(numLines - 1);
+				int lineStart = lineElem.getStartOffset();
+				int lineEnd = lineElem.getEndOffset() - 1;
+
+				String lineText = "";
+				try {
+
+					// Gets the text until the prompt
+					lineText = document.getText(lineStart, lineEnd - lineStart);
+				} catch (BadLocationException exception) {
+
+					// Updates the log
+					AcideLog.getLog().error(exception.getMessage());
+					exception.printStackTrace();
+				}
+				
+				// Puts only the last line in the text pane as the text,
+				// clearing all the rest and without a \n in the beginning
+				_textPane.setText(lineText.replaceFirst("\n", ""));
+
+				// Updates the prompt caret position
+				_promptCaretPosition = _textPane.getText().lastIndexOf(">") + 1;
+
+				// Updates the caret position
+				_textPane.setCaretPosition(_textPane.getText().length());
+			}
+		});
+	}
+	
 	/**
 	 * Returns the ACIDE - A Configurable IDE console panel text pane.
 	 * 
@@ -775,55 +850,5 @@ public class AcideConsolePanel extends JPanel {
 	 */
 	public AcideConsolePanelPopupMenu getPopupMenu() {
 		return _popupMenu;
-	}
-
-	/**
-	 * Clears the console text buffer, leaving only the prompt ready for the
-	 * next command execution.
-	 */
-	public void clearConsoleBuffer() {
-
-		SwingUtilities.invokeLater(new Runnable() {
-
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
-
-				// Gets the last line in the text pane
-				Document document = _textPane.getDocument();
-				Element rootElem = document.getDefaultRootElement();
-				int numLines = rootElem.getElementCount();
-				Element lineElem = rootElem.getElement(numLines - 1);
-				int lineStart = lineElem.getStartOffset();
-				int lineEnd = lineElem.getEndOffset() - 1;
-
-				String lineText = "";
-				try {
-
-					// Gets the text until the prompt
-					lineText = document.getText(lineStart, lineEnd - lineStart);
-				} catch (BadLocationException exception) {
-
-					// Updates the log
-					AcideLog.getLog().error(exception.getMessage());
-					exception.printStackTrace();
-				}
-
-				// Puts only the last line in the text pane as the text,
-				// clearing all the rest
-				_textPane.setText(lineText);
-
-				// Updates the prompt caret position
-				_promptCaretPosition = _textPane.getText().lastIndexOf(">") + 1;
-
-				// Updates the caret position
-				_textPane.setCaretPosition(_textPane.getText().length());
-			}
-		});
-
 	}
 }

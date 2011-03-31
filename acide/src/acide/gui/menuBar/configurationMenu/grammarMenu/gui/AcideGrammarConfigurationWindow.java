@@ -53,6 +53,7 @@ import acide.configuration.grammar.AcideGrammarConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.files.AcideFileManager;
 import acide.files.bytes.AcideByteFileManager;
+import acide.gui.listeners.AcideWindowClosingListener;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
@@ -102,11 +103,11 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 	 * ACIDE - A Configurable IDE grammar configuration window categories text
 	 * area.
 	 */
-	private final JTextArea _categoriesTextArea;
+	private JTextArea _categoriesTextArea;
 	/**
 	 * ACIDE - A Configurable IDE grammar configuration window rules text area.
 	 */
-	private final JTextArea _rulesTextArea;
+	private JTextArea _rulesTextArea;
 	/**
 	 * ACIDE - A Configurable IDE grammar configuration window categories scroll
 	 * pane.
@@ -146,10 +147,11 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 	 */
 	private JButton _saveRulesButton;
 	/**
-	 * ACIDE - A Configurable IDE grammar configuration window verbose process check box.
+	 * ACIDE - A Configurable IDE grammar configuration window verbose process
+	 * check box.
 	 */
 	private JCheckBox _verboseProcessCheckBox;
-	
+
 	/**
 	 * ACIDE - A Configurable IDE grammar configuration window is for modifying
 	 * flag.
@@ -175,12 +177,154 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s173"));
 
-		// Sets the layout
-		setLayout(new GridBagLayout());
+		// Builds the window components
+		buildComponents();
+
+		// Sets the listener of the window components
+		setListeners();
+
+		// Adds the components to the window
+		addComponents();
+
+		// Sets the window configuration
+		setWindowConfiguration();
+	}
+
+	/**
+	 * Sets the ACIDE - A Configurable IDE grammar configuration window
+	 * configuration.
+	 */
+	private void setWindowConfiguration() {
+
+		if (_isForModifying) {
+
+			// Gets the ACIDE - A Configuration IDE current grammar
+			// configuration
+			String currentGrammarConfiguration = AcideMainWindow.getInstance()
+					.getFileEditorManager().getSelectedFileEditorPanel()
+					.getCurrentGrammarConfiguration().getPath();
+
+			// Gets the name
+			int lastIndexOfSlash = currentGrammarConfiguration
+					.lastIndexOf("\\");
+			if (lastIndexOfSlash == -1)
+				lastIndexOfSlash = currentGrammarConfiguration.lastIndexOf("/");
+			String name = currentGrammarConfiguration.substring(
+					lastIndexOfSlash + 1,
+					currentGrammarConfiguration.length() - 4);
+
+			// Sets the title for an existent grammar
+			setTitle(AcideLanguageManager.getInstance().getLabels()
+					.getString("s230")
+					+ " - " + name);
+
+			String jarPath = null;
+
+			try {
+
+				// Gets the ACIDE - A Configurable IDE jar path
+				jarPath = AcideResourceManager.getInstance().getProperty(
+						"jarPath");
+			} catch (Exception exception) {
+
+				// Displays an error message
+				JOptionPane.showMessageDialog(null, exception.getMessage(),
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s938"), JOptionPane.ERROR_MESSAGE);
+
+				// Updates the log
+				AcideLog.getLog().error(exception.getMessage());
+			}
+
+			// Reallocates the grammar.g file
+			AcideByteFileManager.getInstance().reallocateFile(
+					"src/acide/process/parser/grammar/grammar.g", "grammar.g");
+
+			// Reallocates the syntaxRules.txt file
+			AcideByteFileManager.getInstance().reallocateFile(
+					"src/acide/process/parser/grammar/syntaxRules.txt",
+					"syntaxRules.txt");
+
+			// Reallocates the lexicalCategories.txt file
+			AcideByteFileManager.getInstance().reallocateFile(
+					"src/acide/process/parser/grammar/lexicalCategories.txt",
+					"lexicalCategories.txt");
+
+			// Gets the syntaxRules.txt and lexical categories from the .jar
+			// file
+			Process process = null;
+			try {
+				process = Runtime.getRuntime().exec(
+						"\"" + jarPath + "\" xvf " + name + ".jar "
+								+ "syntaxRules.txt " + "lexicalCategories.txt");
+				process.waitFor();
+			} catch (Exception exception) {
+
+				// Displays an error message
+				JOptionPane.showMessageDialog(null, exception.getMessage(),
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s938"), JOptionPane.ERROR_MESSAGE);
+
+				// Updates the log
+				AcideLog.getLog().error(exception.getMessage());
+			}
+
+			// Gets its content
+			String fileContent = AcideFileManager.getInstance().load(
+					"lexicalCategories.txt");
+
+			if (fileContent != null)
+				// Updates the categories text area
+				_categoriesTextArea.setText(fileContent);
+
+			// Gets its content
+			fileContent = AcideFileManager.getInstance()
+					.load("syntaxRules.txt");
+
+			if (fileContent != null)
+				// Updates the rules text area
+				_rulesTextArea.setText(fileContent);
+
+			// Updates the log
+			AcideLog.getLog().info(
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s174"));
+
+		} else
+			// Sets the title for a new grammar
+			setTitle(AcideLanguageManager.getInstance().getLabels()
+					.getString("s184"));
+
+		// Sets the window icon image
+		setIconImage(new ImageIcon(ICON).getImage());
+
+		// The window is not resizable
+		setResizable(false);
+
+		// Packs the window components
+		pack();
+
+		// Centers the window
+		setLocationRelativeTo(null);
+
+		// Sets the window visible
+		setVisible(true);
 
 		// Disables the main window
 		AcideMainWindow.getInstance().setEnabled(false);
-		
+
+		// Updates the log
+		AcideLog.getLog().info(
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s174"));
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE grammar configuration window
+	 * components.
+	 */
+	private void buildComponents() {
+
 		// Creates the categories panel
 		_categoriesPanel = new JPanel(new GridBagLayout());
 
@@ -278,11 +422,18 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 				.getLabels().getString("s199"));
 
 		// Creates the verbose process check box
-		_verboseProcessCheckBox = new JCheckBox(AcideLanguageManager.getInstance()
-				.getLabels().getString("s1064"));
-		
-		// Sets the listener of the window components
-		setListeners();
+		_verboseProcessCheckBox = new JCheckBox(AcideLanguageManager
+				.getInstance().getLabels().getString("s1064"));
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE grammar
+	 * configuration window with the layout.
+	 */
+	private void addComponents() {
+
+		// Sets the layout
+		setLayout(new GridBagLayout());
 
 		// Adds the components to the window with the layout
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -358,144 +509,20 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 		constraints.gridwidth = 2;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		
+
 		// Adds the verbose process check box to the window
 		add(_verboseProcessCheckBox, constraints);
 		constraints.fill = GridBagConstraints.BOTH;
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.gridy = 2;
-		
+
 		// Adds the button panel to the window
 		add(_buttonPanel, constraints);
-
-		if (_isForModifying) {
-
-			// Gets the ACIDE - A Configuration IDE current grammar
-			// configuration
-			String currentGrammarConfiguration = AcideMainWindow.getInstance()
-					.getFileEditorManager().getSelectedFileEditorPanel()
-					.getCurrentGrammarConfiguration().getPath();
-
-			// Gets the name
-			int lastIndexOfSlash = currentGrammarConfiguration
-					.lastIndexOf("\\");
-			if (lastIndexOfSlash == -1)
-				lastIndexOfSlash = currentGrammarConfiguration.lastIndexOf("/");
-			String name = currentGrammarConfiguration.substring(
-					lastIndexOfSlash + 1,
-					currentGrammarConfiguration.length() - 4);
-
-			// Sets the title for an existent grammar
-			setTitle(AcideLanguageManager.getInstance().getLabels()
-					.getString("s230")
-					+ " - " + name);
-
-			String jarPath = null;
-
-			try {
-
-				// Gets the ACIDE - A Configurable IDE jar path
-				jarPath = AcideResourceManager.getInstance().getProperty(
-						"jarPath");
-			} catch (Exception exception) {
-
-				// Error message
-				JOptionPane.showMessageDialog(null, exception.getMessage(),
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s938"), JOptionPane.ERROR_MESSAGE);
-
-				// Updates the log
-				AcideLog.getLog().error(exception.getMessage());
-			}
-
-			// Reallocates the grammar.g file
-			AcideByteFileManager.getInstance().reallocateFile(
-					"src/acide/process/parser/grammar/grammar.g", "grammar.g");
-
-			// Reallocates the syntaxRules.txt file
-			AcideByteFileManager.getInstance().reallocateFile(
-					"src/acide/process/parser/grammar/syntaxRules.txt",
-					"syntaxRules.txt");
-
-			// Reallocates the lexicalCategories.txt file
-			AcideByteFileManager.getInstance().reallocateFile(
-					"src/acide/process/parser/grammar/lexicalCategories.txt",
-					"lexicalCategories.txt");
-
-			// Gets the syntaxRules.txt and lexical categories from the .jar
-			// file
-			Process process = null;
-			try {
-				process = Runtime
-						.getRuntime()
-						.exec("\""
-								+ jarPath
-								+ "\" xvf "
-								+ name
-								+ ".jar "
-								+ "syntaxRules.txt "
-								+ "lexicalCategories.txt");
-				process.waitFor();
-			} catch (Exception exception) {
-
-				// Error message
-				JOptionPane.showMessageDialog(null, exception.getMessage(),
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s938"), JOptionPane.ERROR_MESSAGE);
-
-				// Updates the log
-				AcideLog.getLog().error(exception.getMessage());
-			}
-
-			// Gets its content
-			String fileContent = AcideFileManager.getInstance().load(
-					"lexicalCategories.txt");
-
-			if (fileContent != null)
-				// Updates the categories text area
-				_categoriesTextArea.setText(fileContent);
-
-			// Gets its content
-			fileContent = AcideFileManager.getInstance()
-					.load("syntaxRules.txt");
-
-			if (fileContent != null)
-				// Updates the rules text area
-				_rulesTextArea.setText(fileContent);
-
-			// Updates the log
-			AcideLog.getLog().info(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s174"));
-
-		} else
-			// Sets the title for a new grammar
-			setTitle(AcideLanguageManager.getInstance().getLabels()
-					.getString("s184"));
-
-		// Sets the window icon image
-		setIconImage(new ImageIcon(ICON).getImage());
-
-		// The window is not resizable
-		setResizable(false);
-
-		// Packs the window components
-		pack();
-
-		// Centers the window
-		setLocationRelativeTo(null);
-
-		// Sets the window visible
-		setVisible(true);
-
-		// Updates the log
-		AcideLog.getLog().info(
-				AcideLanguageManager.getInstance().getLabels()
-						.getString("s174"));
 	}
 
 	/**
-	 * Sets the listeners of the window components.
+	 * Sets the listeners of the ACIDE - A Configurable IDE grammar
+	 * configuration window components.
 	 */
 	public void setListeners() {
 
@@ -504,7 +531,7 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 
 		// Sets the cancel button action listener
 		_cancelButton.addActionListener(new CancelButtonAction());
-		
+
 		// When the escape key is pressed the executes the escape key action
 		_cancelButton.registerKeyboardAction(new EscapeKeyAction(),
 				"EscapeKey", KeyStroke.getKeyStroke(
@@ -524,6 +551,9 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 		// Sets the save categories button action listener
 		_saveCategoriesButton
 				.addActionListener(new SaveCategoriesButtonAction());
+
+		// Sets the window closing listener
+		addWindowListener(new AcideWindowClosingListener());
 	}
 
 	/**
@@ -584,19 +614,19 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
-			
+
 			// Selects the new grammar name
 			String newGrammarName = "";
 			if (_isForModifying)
-				newGrammarName = "lastModified";
+				newGrammarName = "lastModified.jar";
 			else
-				newGrammarName = "newGrammar";
+				newGrammarName = "newGrammar.jar";
 
 			// Selects the new grammar path
 			String newGrammarPath = AcideGrammarConfiguration.DEFAULT_PATH
@@ -611,18 +641,28 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 				// Starts the process
 				process.start();
 
-				// Sets the previous grammar path
-				AcideMainWindow
-						.getInstance()
-						.getFileEditorManager()
+				// If the previous grammar configuration does not contain newGrammar or lastModified
+				if (!AcideMainWindow.getInstance().getFileEditorManager()
 						.getSelectedFileEditorPanel()
-						.getPreviousGrammarConfiguration()
-						.setPath(
-								AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.getSelectedFileEditorPanel()
-										.getCurrentGrammarConfiguration()
-										.getPath());
+						.getPreviousGrammarConfiguration().getPath()
+						.contains("newGrammar")
+						|| !AcideMainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.getPreviousGrammarConfiguration().getPath()
+								.contains("lastModified"))
+					
+					// Sets the previous grammar path
+					AcideMainWindow
+							.getInstance()
+							.getFileEditorManager()
+							.getSelectedFileEditorPanel()
+							.getPreviousGrammarConfiguration()
+							.setPath(
+									AcideMainWindow.getInstance()
+											.getFileEditorManager()
+											.getSelectedFileEditorPanel()
+											.getCurrentGrammarConfiguration()
+											.getPath());
 
 				// Sets the current grammar path
 				AcideMainWindow.getInstance().getFileEditorManager()
@@ -635,12 +675,6 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 						.getGrammarMenu().getSaveGrammarMenuItem()
 						.setEnabled(true);
 
-				// Validates the changes in the main window
-				AcideMainWindow.getInstance().validate();
-
-				// Repaints the main window
-				AcideMainWindow.getInstance().repaint();
-
 				// Updates the grammar message in the status bar
 				AcideMainWindow
 						.getInstance()
@@ -648,7 +682,13 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 						.setGrammarMessage(
 								AcideLanguageManager.getInstance().getLabels()
 										.getString("s248")
-										+ " " + newGrammarName);
+										+ " "
+										+ AcideMainWindow
+												.getInstance()
+												.getFileEditorManager()
+												.getSelectedFileEditorPanel()
+												.getCurrentGrammarConfiguration()
+												.getName());
 
 				// Updates the log
 				AcideLog.getLog().info(
@@ -656,7 +696,7 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 								.getString("s935"));
 			} catch (Exception exception) {
 
-				// Error message
+				// Displays an error message
 				JOptionPane.showMessageDialog(null, exception.getMessage(),
 						AcideLanguageManager.getInstance().getLabels()
 								.getString("s930"), JOptionPane.ERROR_MESSAGE);
@@ -696,10 +736,10 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 
@@ -899,17 +939,12 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 
 			// Closes the window
 			dispose();
-			
+
 			// Brings the main window to the front
 			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-			
+
 			// But not permanently
 			AcideMainWindow.getInstance().setAlwaysOnTop(false);
-
-			// Updates the log
-			AcideLog.getLog().info(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s183"));
 		}
 	}
 }

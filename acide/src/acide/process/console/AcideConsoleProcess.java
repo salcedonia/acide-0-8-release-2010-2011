@@ -161,7 +161,7 @@ public class AcideConsoleProcess extends Thread {
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
 
-			// Error message
+			// Displays an error message
 			JOptionPane.showMessageDialog(
 					AcideMainWindow.getInstance(),
 					AcideLanguageManager.getInstance().getLabels()

@@ -37,9 +37,13 @@ package acide.configuration.grammar;
 public class AcideGrammarConfiguration {
 
 	/**
+	 * ACIDE - A Configurable IDE grammar configuration default file.
+	 */
+	public final static String DEFAULT_FILE = "./configuration/grammars/bytes.jar";
+	/**
 	 * ACIDE - A Configurable IDE grammar configuration default path.
 	 */
-	public final static String DEFAULT_PATH = "./configuration/grammars/bytes.jar";
+	public final static String DEFAULT_PATH = "./configuration/grammars/";
 	/**
 	 * ACIDE - A Configurable IDE grammar configuration unique class instance.
 	 */
@@ -106,15 +110,11 @@ public class AcideGrammarConfiguration {
 	 * @return the ACIDE - A Configurable IDE grammar configuration name.
 	 */
 	public String getName() {
-		
+
 		// Gets the name
-		int lastIndexOfSlash = _path
-				.lastIndexOf("\\");
+		int lastIndexOfSlash = _path.lastIndexOf("\\");
 		if (lastIndexOfSlash == -1)
-			lastIndexOfSlash = _path
-					.lastIndexOf("/");
-		return _path.substring(
-				lastIndexOfSlash + 1,
-				_path.length() - 4);
+			lastIndexOfSlash = _path.lastIndexOf("/");
+		return _path.substring(lastIndexOfSlash + 1, _path.length() - 4);
 	}
 }

@@ -31,7 +31,6 @@ package acide.gui.menuBar.configurationMenu.languageMenu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
@@ -43,8 +42,7 @@ import acide.configuration.project.AcideProjectConfiguration;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.configurationMenu.languageMenu.listeners.AcideEnglishMenuItemListener;
 import acide.gui.menuBar.configurationMenu.languageMenu.listeners.AcideSpanishMenuItemListener;
-import acide.gui.menuBar.editMenu.gui.replace.AcideReplaceWindow;
-import acide.gui.menuBar.editMenu.gui.search.AcideSearchWindow;
+import acide.gui.menuBar.editMenu.gui.AcideSearchReplaceWindow;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 import acide.resources.AcideResourceManager;
@@ -109,29 +107,15 @@ public class AcideLanguageMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// Gets the language
-		AcideLanguageManager language = AcideLanguageManager.getInstance();
-
-		try {
-			language.getLanguage(AcideResourceManager.getInstance()
-					.getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Gets the labels
-		ResourceBundle labels = language.getLabels();
-
 		// SPANISH MENU ITEM
-		_spanishMenuItem.setText(labels.getString("s11"));
+		_spanishMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s11"));
 		_spanishMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				ActionEvent.ALT_MASK));
 
 		// ENGLISH MENU ITEM
-		_englishMenuItem.setText(labels.getString("s12"));
+		_englishMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s12"));
 		_englishMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I,
 				ActionEvent.ALT_MASK));
 	}
@@ -192,18 +176,6 @@ public class AcideLanguageMenu extends JMenu {
 	 */
 	public void changeLanguage(String selectedLanguage) {
 
-		try {
-
-			// Gets the ACIDE - A Configurable IDE language
-			AcideLanguageManager.getInstance().getLanguage(
-					AcideResourceManager.getInstance().getProperty("language"));
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
 		// Updates the ACIDE - A Configurable IDE language
 		AcideResourceManager.getInstance().setProperty("language",
 				selectedLanguage);
@@ -213,8 +185,43 @@ public class AcideLanguageMenu extends JMenu {
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s100"));
 
+		try {
+
+			// Sets the ACIDE - A Configurable IDE language
+			AcideLanguageManager.getInstance().setLanguage(
+					AcideResourceManager.getInstance().getProperty("language"));
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+
 		// Resets the text of the menu bar
 		AcideMainWindow.getInstance().getMenu().setTextOfMenuComponents();
+
+		// If there are opened file editors
+		if (AcideMainWindow.getInstance().getFileEditorManager()
+				.getNumberOfFileEditorPanels() > 0) {
+
+			// Enables the lexicon menu in the configuration menu
+			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+					.getLexiconMenu().setEnabled(true);
+
+			// Enables the grammar menu in the configuration menu
+			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+					.getGrammarMenu().setEnabled(true);
+
+		} else {
+
+			// Disables the lexicon menu in the configuration menu
+			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+					.getLexiconMenu().setEnabled(false);
+
+			// Disables the grammar menu in the configuration menu
+			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+					.getGrammarMenu().setEnabled(false);
+		}
 
 		// Resets the tool bar panel
 		AcideMainWindow.getInstance().buildToolBarPanel();
@@ -228,7 +235,6 @@ public class AcideLanguageMenu extends JMenu {
 		// Resets the status bar popup menu
 		AcideMainWindow.getInstance().getStatusBar().buildPopupMenu();
 
-		// Resets the file editor panels
 		for (int index = 0; index < AcideMainWindow.getInstance()
 				.getFileEditorManager().getNumberOfFileEditorPanels(); index++)
 
@@ -242,17 +248,14 @@ public class AcideLanguageMenu extends JMenu {
 		// Repaints the main window
 		AcideMainWindow.getInstance().repaint();
 
-		// Resets the SEARCH GUI
-		AcideSearchWindow searchGUI = AcideSearchWindow.getInstance();
-		searchGUI.initialize();
-		searchGUI.validate();
-		searchGUI.repaint();
+		// Resets the search/replace window
+		AcideSearchReplaceWindow.getInstance().initialize();
 
-		// Resets the REPLACE GUI
-		AcideReplaceWindow replaceGUI = AcideReplaceWindow.getInstance();
-		replaceGUI.initialize();
-		replaceGUI.validate();
-		replaceGUI.repaint();
+		// Validates the changes in the search/replace window
+		AcideSearchReplaceWindow.getInstance().validate();
+
+		// Repaints the search/replace window
+		AcideSearchReplaceWindow.getInstance().repaint();
 
 		// Gets the current lines number message
 		String currentNumLinesMessage = AcideMainWindow.getInstance()

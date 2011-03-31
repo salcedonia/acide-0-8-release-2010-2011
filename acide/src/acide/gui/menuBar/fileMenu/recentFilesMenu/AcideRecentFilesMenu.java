@@ -37,7 +37,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
-import acide.configuration.project.workbench.AcideWorkbenchManager;
+import acide.configuration.workbench.AcideWorkbenchManager;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
 
