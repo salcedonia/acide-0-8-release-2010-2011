@@ -1,4 +1,0 @@
-]N] dir ]C] dir ]T] Shows the file list of the current directory ]B] false ]I] ]F]
-]N] pwd ]C] cd ]T] Current Directory ]B] false ]I] ]F]
-]N] type ]C] type $activeFile$ ]T] Type Current File ]B] false ]I] ]F]
-]N] cd ]C] cd.. ]T] Change to the previous directory ]B] false ]I] ]F]
