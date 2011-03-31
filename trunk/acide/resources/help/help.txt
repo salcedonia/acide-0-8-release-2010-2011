@@ -1,1 +1,0 @@
-This the help file for ACIDE - A Configurable IDE.

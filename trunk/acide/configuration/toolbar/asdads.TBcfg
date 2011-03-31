@@ -1,8 +1,0 @@
-// Command dir
-name = dir
-action = dir
-hintText = asd
-icon = 
-parameterType = NONE
-
-// End
