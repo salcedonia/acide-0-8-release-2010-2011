@@ -4,6 +4,7 @@ action = consult($activeFile$).
 hintText = Consults the selected file
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command listing
 name = listing
@@ -11,6 +12,7 @@ action = listing.
 hintText = Lists the contents of the database
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command shell
 name = shell
@@ -18,6 +20,7 @@ action = shell.
 hintText = Opens an OS shell
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command pwd
 name = pwd
@@ -25,5 +28,6 @@ action = working_directory(X,X).
 hintText = Displays the current folder
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // End

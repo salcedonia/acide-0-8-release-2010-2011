@@ -60,7 +60,7 @@ public class AcideCompileMenuItemListener implements ActionListener {
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		// Saves the file editor panel configuration
-		AcideWorkbenchManager.getInstance().saveFileEditorPanelConfiguration();
+		AcideWorkbenchManager.getInstance().saveFileEditorOpenedFilesConfiguration();
 
 		try {
 

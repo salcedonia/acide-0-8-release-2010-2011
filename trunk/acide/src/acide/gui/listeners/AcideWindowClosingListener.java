@@ -42,14 +42,14 @@ import acide.gui.mainWindow.AcideMainWindow;
  * @version 0.8
  * @see WindowAdapter
  */
-public 	class AcideWindowClosingListener extends WindowAdapter{
+public class AcideWindowClosingListener extends WindowAdapter{
 	
 	/*
 	 * (non-Javadoc)
 	 * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
 	 */
 	@Override
-	public void windowClosing(WindowEvent arg0) {
+	public void windowClosing(WindowEvent windowEvent) {
 		
 		// Enables the main window
 		AcideMainWindow.getInstance().setEnabled(true);

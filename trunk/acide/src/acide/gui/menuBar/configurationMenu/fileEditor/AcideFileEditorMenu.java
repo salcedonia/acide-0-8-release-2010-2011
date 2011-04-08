@@ -71,7 +71,7 @@ public class AcideFileEditorMenu extends JMenu {
 	 */
 	public AcideFileEditorMenu() {
 
-		// FILE EDITOR DISPLAY OPTIONS MENU ITEM
+		// Creates the file editor display options menu item
 		_fileEditorDisplayOptionsMenuItem = new JMenuItem(
 				CONSOLE_DISPLAY_OPTIONS_IMAGE);
 
@@ -85,7 +85,7 @@ public class AcideFileEditorMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponets() {
 
-		// FILE EDITOR DISPLAY OPTIONS
+		// Sets the file editor display options menu item text
 		_fileEditorDisplayOptionsMenuItem.setText(AcideLanguageManager
 				.getInstance().getLabels().getString("s1041"));
 	}
@@ -98,7 +98,7 @@ public class AcideFileEditorMenu extends JMenu {
 		// Removes all the menu components
 		removeAll();
 
-		// FILE EDITOR DISPLAY OPTIONS MENU ITEM
+		// Adds the file editor display options menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				FILE_EDITOR_DISPLAY_OPTIONS_NAME))
 			add(_fileEditorDisplayOptionsMenuItem);
@@ -109,7 +109,7 @@ public class AcideFileEditorMenu extends JMenu {
 	 */
 	public void setListeners() {
 
-		// FILE EDITOR DISPLAY OPTIONS MENU ITEM
+		// Sets the file editor display options menu item action listener
 		_fileEditorDisplayOptionsMenuItem
 				.addActionListener(new AcideFileEditorDisplayOptionsMenuItemListener());
 	}

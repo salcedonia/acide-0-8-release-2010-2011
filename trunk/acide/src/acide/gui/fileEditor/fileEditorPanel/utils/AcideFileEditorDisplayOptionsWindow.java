@@ -64,7 +64,6 @@ import javax.swing.event.ChangeListener;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
-import acide.process.AcideApplyLexiconProcess;
 
 import acide.utils.PreviewPanel;
 
@@ -508,7 +507,7 @@ public class AcideFileEditorDisplayOptionsWindow extends JFrame {
 
 		// Sets the size slider change listener
 		_sizeSlider.addChangeListener(new SizeSliderListener());
-		
+
 		// Sets the window closing listener
 		addWindowListener(new AcideWindowClosingListener());
 	}
@@ -730,8 +729,9 @@ public class AcideFileEditorDisplayOptionsWindow extends JFrame {
 								_displayArea.getBackground(),
 								_displayArea.getForeground());
 
-				// Applies the lexicon configuration
-				SwingUtilities.invokeLater(new AcideApplyLexiconProcess());
+				// Resets the selected file editor text edition area
+				AcideMainWindow.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanel().resetStyledDocument();
 			}
 
 			// If it is not the default project

@@ -4,6 +4,7 @@ action = :l "$activeFile$"
 hintText = 
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command programa
 name = programa
@@ -11,6 +12,7 @@ action = ejecuta "programa { si (x<5) entonces {x=x+2;};y=x;}"
 hintText = 
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command incrementa
 name = incrementa
@@ -18,6 +20,7 @@ action = mainComienza(ejecuta "programa { si (x<5) entonces {x=x+2;};y=x;}")
 hintText = 
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command programa gordisimo
 name = programa gordisimo
@@ -25,6 +28,7 @@ action = ejecuta "programa { 	 si (x < 5) entonces{ 		x = x + 2; };  mientras (x
 hintText = 
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command incrementa gordisimo
 name = incrementa gordisimo
@@ -32,6 +36,7 @@ action = mainComienza(ejecuta "programa { 	 si (x < 5) entonces{ 		x = x + 2; };
 hintText = 
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command mainCajas
 name = mainCajas
@@ -39,5 +44,6 @@ action = mainCajas "&"
 hintText = 
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // End

@@ -91,8 +91,7 @@ public class AcideOpenAllFilesMenuItemListener implements ActionListener {
 								AcideLanguageManager.getInstance().getLabels()
 										.getString("s970")
 										+ AcideProjectConfiguration
-												.getInstance()
-												.getFileAt(index)
+												.getInstance().getFileAt(index)
 												.getAbsolutePath()
 										+ AcideLanguageManager.getInstance()
 												.getLabels().getString("s971"),
@@ -108,6 +107,19 @@ public class AcideOpenAllFilesMenuItemListener implements ActionListener {
 					}
 				}
 			}
+		}
+
+		// If there are files assigned to the project
+		if (AcideProjectConfiguration.getInstance().getNumberOfFilesFromList() > 0) {
+
+			// Selects the first of the opened files in the editor
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.setSelectedFileEditorPanelAt(0);
+			
+			// Puts the focus in the active text area
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().getActiveTextEditionArea()
+					.requestFocusInWindow();
 		}
 	}
 }

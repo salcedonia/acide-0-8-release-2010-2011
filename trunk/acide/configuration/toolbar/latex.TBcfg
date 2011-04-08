@@ -4,6 +4,7 @@ action = latex $mainFileName$\$mainFilePaht$
 hintText = LaTeX Compiler
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command BibTeX
 name = BibTeX
@@ -11,6 +12,7 @@ action = bibtex $mainFileName$
 hintText = BibTeX Bibliography
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command dvi2pdf
 name = dvi2pdf
@@ -18,6 +20,7 @@ action = dvipdfm $mainFileName$
 hintText = dvi2pdf
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command Yap
 name = Yap
@@ -25,6 +28,7 @@ action = yap $mainFilePath$\$mainFileName$
 hintText = Yet Another Previewer
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command TeXify
 name = TeXify
@@ -32,6 +36,7 @@ action = elatex.bat $mainFileName$
 hintText = LaTex+BibTeX+LaTeX+LaTeX
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command Acrobat
 name = Acrobat
@@ -39,6 +44,7 @@ action = "C:\Archivos de programa\Adobe\Acrobat 7.0\Acrobat\acrobat" $mainFilePa
 hintText = Acrobat Reader
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command PDFLaTeX
 name = PDFLaTeX
@@ -46,5 +52,6 @@ action = pdflatex $mainFile$
 hintText = dvi2pdf
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // End

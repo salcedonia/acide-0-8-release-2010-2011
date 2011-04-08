@@ -59,6 +59,7 @@ import acide.gui.menuBar.fileMenu.listeners.AcideSaveAllFilesMenuItemListener;
 import acide.gui.menuBar.fileMenu.listeners.AcideSaveFileAsMenuItemListener;
 import acide.gui.menuBar.fileMenu.listeners.AcideSaveFileMenuItemListener;
 import acide.gui.menuBar.fileMenu.recentFilesMenu.AcideRecentFilesMenu;
+import acide.gui.toolBarPanel.menuBarToolBar.AcideMenuBarToolBar;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 
@@ -562,6 +563,9 @@ public class AcideFileMenu extends JMenu {
 						AcideMainWindow.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel()
 								.getTextEditionAreaContent());
+		
+		// Updates the static tool bar
+		AcideMenuBarToolBar.getInstance().updateStateOfFileButtons();
 	}
 
 	/**
@@ -877,11 +881,22 @@ public class AcideFileMenu extends JMenu {
 	 */
 	public void enableMenu() {
 
+		// Enables the close file menu item
 		_closeFileMenuItem.setEnabled(true);
+		
+		// Enables the close all files menu item
 		_closeAllFilesMenuItem.setEnabled(true);
+		
+		// Enables the save file as menu item
 		_saveFileAsMenuItem.setEnabled(true);
+		
+		// Disables the save file menu item
 		_saveFileMenuItem.setEnabled(false);
+		
+		// Enables the save all files as menu item
 		_saveAllFilesMenuItem.setEnabled(true);
+		
+		// Enables the print file menu item
 		_printFileMenuItem.setEnabled(true);
 	}
 
@@ -890,11 +905,22 @@ public class AcideFileMenu extends JMenu {
 	 */
 	public void disableMenu() {
 
+		// Disables the close file menu item
 		_closeFileMenuItem.setEnabled(false);
+		
+		// Disables the close all files menu item
 		_closeAllFilesMenuItem.setEnabled(false);
+		
+		// Disables the save file as menu item
 		_saveFileAsMenuItem.setEnabled(false);
+		
+		// Disables the save file menu item
 		_saveFileMenuItem.setEnabled(false);
+		
+		// Disables the save all files menu item
 		_saveAllFilesMenuItem.setEnabled(false);
+		
+		// Disables the print file menu item
 		_printFileMenuItem.setEnabled(false);
 	}
 

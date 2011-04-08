@@ -30,7 +30,7 @@
 package acide.gui.menuBar.configurationMenu.toolBarMenu.listeners;
 
 import acide.configuration.project.AcideProjectConfiguration;
-import acide.configuration.toolBar.consoleComandToolBar.AcideConsoleCommandConfiguration;
+import acide.configuration.toolBar.AcideToolBarConfiguration;
 import acide.files.text.AcideTextFileExtensionFilterManager;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.gui.AcideToolBarConfigurationWindow;
@@ -93,15 +93,19 @@ public class AcideLoadToolBarMenuItemListener implements ActionListener {
 			try {
 
 				// Loads the final list
-				AcideConsoleCommandConfiguration.getInstance().loadFinalList(
+				AcideToolBarConfiguration
+				.getInstance()
+				.getConsolePanelToolBarConfiguration().loadFinalList(
 						absolutePath);
 
 				// Loads the temporal list
-				AcideConsoleCommandConfiguration.getInstance()
+				AcideToolBarConfiguration
+				.getInstance()
+				.getConsolePanelToolBarConfiguration()
 						.loadTemporalList(absolutePath);
 
 				// Updates the tool bar panel
-				AcideMainWindow.getInstance().updateToolBarPanel();
+				AcideMainWindow.getInstance().buildToolBarPanel();
 
 				// Updates the ACIDE - A Configurable IDE current tool bar
 				// configuration

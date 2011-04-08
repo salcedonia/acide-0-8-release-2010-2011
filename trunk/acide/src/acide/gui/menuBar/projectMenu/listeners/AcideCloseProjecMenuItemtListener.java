@@ -29,15 +29,12 @@
  */
 package acide.gui.menuBar.projectMenu.listeners;
 
-import acide.configuration.project.AcideProjectConfiguration;
-import acide.gui.mainWindow.AcideMainWindow;
-import acide.gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JOptionPane;
-
+import acide.configuration.project.AcideProjectConfiguration;
+import acide.gui.mainWindow.AcideMainWindow;
+import acide.gui.toolBarPanel.menuBarToolBar.AcideMenuBarToolBar;
 import acide.language.AcideLanguageManager;
 import acide.resources.AcideResourceManager;
 
@@ -59,42 +56,23 @@ public class AcideCloseProjecMenuItemtListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		boolean isCancelOptionSelected = false;
+		// Asks to the user for saving the project
+		boolean isCancelSelected = AcideProjectConfiguration.getInstance()
+				.askForSavingProject();
 
-		// Are the project configuration modified or the file editor manager modified?
-		if (AcideProjectConfiguration.getInstance().isModified()
-				|| AcideMainWindow.getInstance().getFileEditorManager()
-						.isModified()) {
+		// If in the closing project operation the cancel option has not
+		// been
+		// selected
+		if (!isCancelSelected) {
 
-			// Do you want to save it?
-			int returnValue = JOptionPane.showConfirmDialog(
-					null,
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s657"), AcideLanguageManager
-							.getInstance().getLabels().getString("s953"),
-					JOptionPane.YES_NO_CANCEL_OPTION);
+			// Enables the close all files menu item
+			AcideMainWindow.getInstance().getMenu().getFileMenu()
+					.getCloseAllFilesMenuItem().setEnabled(true);
 
-			// If it is OK
-			if (returnValue == JOptionPane.OK_OPTION) {
-
-				// Enables the save project menu item
-				AcideMainWindow.getInstance().getMenu().getProjectMenu()
-						.getSaveProjectMenuItem().setEnabled(true);
-
-				// Save the project
-				AcideMainWindow.getInstance().getMenu().getProjectMenu()
-						.getSaveProjectMenuItem().doClick();
-			} else {
-
-				// If it is not NO
-				if (returnValue != JOptionPane.NO_OPTION)
-					isCancelOptionSelected = true;
-			}
-		}
-
-		// If the cancel option has not been
-		if (!isCancelOptionSelected) {
-
+			// Close all files in the project
+			AcideMainWindow.getInstance().getMenu().getFileMenu()
+					.getCloseAllFilesMenuItem().doClick();
+			
 			// Removes all the nodes in the explorer tree
 			AcideMainWindow.getInstance().getExplorerPanel().getRoot()
 					.removeAllChildren();
@@ -120,21 +98,29 @@ public class AcideCloseProjecMenuItemtListener implements ActionListener {
 			AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
 					.getDeleteFileMenuItem().setEnabled(false);
 
+			// Removes all the files related to the project
+			AcideProjectConfiguration.getInstance().removeFiles();
+
+			// Disables the project menu
+			AcideMainWindow.getInstance().getMenu().disableProjectMenu();
+
+			// Disables the open all files menu item
+			AcideMainWindow.getInstance().getMenu().getFileMenu()
+					.getOpenAllFilesMenuItem().setEnabled(false);
+
+			// Disables the save project button in the static tool bar
+			AcideMenuBarToolBar.getInstance().getSaveProjectButton()
+					.setEnabled(false);
+			
+			// Updates the status message in the status bar
+			AcideMainWindow.getInstance().getStatusBar().setStatusMessage(" ");
+
 			// Sets the default title to the project
 			AcideMainWindow.getInstance().setTitle(
 					AcideLanguageManager.getInstance().getLabels()
 							.getString("s425")
 							+ " - <empty>");
-
-			// Removes all the files related to the project
-			AcideProjectConfiguration.getInstance().removeFiles();
-
-			// Updates the changes in the main window
-			AcideMainWindow.getInstance().validate();
-
-			// Repaints the main window
-			AcideMainWindow.getInstance().repaint();
-
+			
 			// Updates the ACIDE - A Configurable IDE project configuration
 			AcideResourceManager.getInstance().setProperty(
 					"projectConfiguration",
@@ -145,28 +131,12 @@ public class AcideCloseProjecMenuItemtListener implements ActionListener {
 
 			// The project has not been modified yet
 			AcideProjectConfiguration.getInstance().setIsModified(false);
+			
+			// Updates the changes in the main window
+			AcideMainWindow.getInstance().validate();
 
-			// Enables the close all files menu item
-			AcideMainWindow.getInstance().getMenu().getFileMenu()
-					.getCloseAllFilesMenuItem().setEnabled(true);
-
-			// Close all files in the project
-			AcideMainWindow.getInstance().getMenu().getFileMenu()
-					.getCloseAllFilesMenuItem().doClick();
-
-			// Disables the project menu
-			AcideMainWindow.getInstance().getMenu().disableProjectMenu();
-
-			// Disables the open all files menu item
-			AcideMainWindow.getInstance().getMenu().getFileMenu()
-					.getOpenAllFilesMenuItem().setEnabled(false);
-
-			// Updates the status bar
-			AcideMainWindow.getInstance().getStatusBar().setStatusMessage(" ");
-
-			// Disables the save project button in the static tool bar
-			AcideStaticToolBar.getInstance().getSaveProjectButton()
-					.setEnabled(false);
+			// Repaints the main window
+			AcideMainWindow.getInstance().repaint();
 		}
 	}
 }

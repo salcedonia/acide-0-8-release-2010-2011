@@ -100,13 +100,13 @@ public class AcideConsoleMenu extends JMenu {
 	 */
 	public AcideConsoleMenu() {
 
-		// CONFIGURE MENU ITEM
+		// Creates the configure menu item
 		_configureMenuItem = new JMenuItem(CONFIGURE_IMAGE);
 
-		// EXTERNAL COMMAND MENU ITEM
+		// Creates the external command menu item
 		_externalCommandMenuItem = new JMenuItem(EXTERNAL_COMMAND_IMAGE);
 
-		// CONSOLE DISPLAY MENU ITEM
+		// Creates the console display options menu item
 		_consoleDisplayOptionsMenuItem = new JMenuItem(
 				CONSOLE_DISPLAY_OPTIONS_IMAGE);
 
@@ -120,15 +120,15 @@ public class AcideConsoleMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// CONFIGURE MENU ITEM
+		// Sets the configure menu item text
 		_configureMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s333"));
 
-		// EXTERNAL COMMAND MENU ITEM
+		// Sets the external command menu item text
 		_externalCommandMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s341"));
 
-		// CONSOLE DISPLAY OPTIONS MENU ITEM
+		// Sets the console display options menu item text
 		_consoleDisplayOptionsMenuItem.setText(AcideLanguageManager
 				.getInstance().getLabels().getString("s977"));
 	}
@@ -141,16 +141,16 @@ public class AcideConsoleMenu extends JMenu {
 		// Removes all the menu components
 		removeAll();
 
-		// CONFIGURE MENU ITEM
+		// Adds the configure menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(CONFIGURE_NAME))
 			add(_configureMenuItem);
 
-		// EXTERNAL COMMAND MENU ITEM
+		// Adds the external command menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				EXTERNAL_COMMAND_NAME))
 			add(_externalCommandMenuItem);
 
-		// CONSOLE DISPLAY OPTIONS MENU ITEM
+		// Adds the console display options menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				CONSOLE_DISPLAY_OPTIONS_NAME))
 			add(_consoleDisplayOptionsMenuItem);
@@ -161,15 +161,15 @@ public class AcideConsoleMenu extends JMenu {
 	 */
 	public void setListeners() {
 
-		// CONFIGURE MENU ITEM
+		// Sets the configure menu item action listener
 		_configureMenuItem
 				.addActionListener(new AcideConfigureMenuItemListener());
 
-		// EXTERNAL COMMAND MENU ITEM
+		// Sets the external command menu item action listener
 		_externalCommandMenuItem
 				.addActionListener(new AcideExternalCommandMenuItemListener());
 
-		// CONSOLE DISPLAY OPTIONS MENU ITEM
+		// Sets the console display options menu item action listener
 		_consoleDisplayOptionsMenuItem
 				.addActionListener(new AcideConsoleDisplayOptionsMenuItemListener());
 	}

@@ -41,6 +41,7 @@ import javax.swing.tree.TreePath;
 import acide.configuration.grammar.AcideGrammarConfiguration;
 import acide.configuration.lexicon.AcideLexiconConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
+import acide.configuration.workbench.AcideWorkbenchManager;
 import acide.files.AcideFileManager;
 import acide.files.project.AcideProjectFile;
 import acide.files.project.AcideProjectFileType;
@@ -180,6 +181,10 @@ public class AcideAddFileMenuItemListener implements ActionListener {
 						// Adds it to the file editor
 						addToFileEditor(newProjectFile);
 
+						// Adds the file to the recent files list
+						AcideWorkbenchManager.getInstance()
+								.addRecentFileToList(absolutePath);
+
 						// Updates the ACIDE - A Configurable IDE default path
 						AcideResourceManager.getInstance().setProperty(
 								"defaultPath", absolutePath);
@@ -284,9 +289,7 @@ public class AcideAddFileMenuItemListener implements ActionListener {
 		} else {
 
 			// Updates the selected file editor index
-			AcideMainWindow
-					.getInstance()
-					.getFileEditorManager()
+			AcideMainWindow.getInstance().getFileEditorManager()
 					.updateRelatedComponentsAt(fileEditorPanelIndex);
 		}
 	}

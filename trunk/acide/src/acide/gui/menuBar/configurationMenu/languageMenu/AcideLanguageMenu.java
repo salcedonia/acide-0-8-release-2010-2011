@@ -91,10 +91,10 @@ public class AcideLanguageMenu extends JMenu {
 	 */
 	public AcideLanguageMenu() {
 
-		// SPANISH MENU ITEM
+		// Creates the Spanish menu item
 		_spanishMenuItem = new JMenuItem(SPANISH_IMAGE);
 
-		// ENGLISH MENU ITEM
+		// Creates the English menu item
 		_englishMenuItem = new JMenuItem(ENGLISH_IMAGE);
 
 		// Sets the text of the language menu components
@@ -107,15 +107,19 @@ public class AcideLanguageMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// SPANISH MENU ITEM
+		// Sets the Spanish menu item text
 		_spanishMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s11"));
+		
+		// Sets the Spanish menu item accelerator
 		_spanishMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				ActionEvent.ALT_MASK));
 
-		// ENGLISH MENU ITEM
+		// Sets the Spanish menu item text
 		_englishMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s12"));
+		
+		// Creates the English menu item accelerator
 		_englishMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I,
 				ActionEvent.ALT_MASK));
 	}
@@ -128,11 +132,11 @@ public class AcideLanguageMenu extends JMenu {
 		// Removes all the menu components
 		removeAll();
 
-		// SPANISH MENU ITEM
+		// Adds the Spanish menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SPANISH_NAME))
 			add(_spanishMenuItem);
 
-		// ENGLISH MENU ITEM
+		// Adds the English menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(ENGLISH_NAME))
 			add(_englishMenuItem);
 	}
@@ -142,10 +146,10 @@ public class AcideLanguageMenu extends JMenu {
 	 */
 	public void setListeners() {
 
-		// SPANISH MENU ITEM
+		// Sets the Spanish menu item action listener
 		_spanishMenuItem.addActionListener(new AcideSpanishMenuItemListener());
 
-		// ENGLISH MENU ITEM
+		// Sets the Spanish menu item action listener
 		_englishMenuItem.addActionListener(new AcideEnglishMenuItemListener());
 	}
 

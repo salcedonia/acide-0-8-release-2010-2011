@@ -40,7 +40,7 @@ import acide.gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
 import acide.gui.fileEditor.fileEditorPanel.listeners.AcideFileEditorPanelDocumentListener;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.editMenu.utils.AcideUndoManager;
-import acide.gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
+import acide.gui.toolBarPanel.menuBarToolBar.AcideMenuBarToolBar;
 
 import java.io.File;
 
@@ -81,10 +81,6 @@ public class AcideFileEditorManager {
 	 * Handles the painting for the tabbed pane and the closing buttons.
 	 */
 	private AcideFileEditorTabbedPaneUI _tabbedPanelUI;
-	/**
-	 * Flag that indicates if the file editor has been modified or not.
-	 */
-	private boolean _isModified;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE file editor manager.
@@ -354,7 +350,7 @@ public class AcideFileEditorManager {
 				.selectTreeNodeFromFileEditor();
 
 		// Updates the static tool bar
-		AcideStaticToolBar.getInstance().updateStateOfFileButtons();
+		AcideMenuBarToolBar.getInstance().updateStateOfFileButtons();
 	}
 
 	/**
@@ -412,12 +408,6 @@ public class AcideFileEditorManager {
 			String fileEditorPanelName = ((AcideFileEditorPanel) _tabbedPane
 					.getComponentAt(index)).getFileNameWithExtension();
 
-			/*
-			 * DEBUG MODE: 
-			 * System.err.println("Property Name: " + name + ", Editor name: "
-			 *		+ fileEditorPanelName);
-			 */
-			
 			// If it is the name
 			if (fileEditorPanelName != null && name != null
 					&& fileEditorPanelName.matches(name))
@@ -486,25 +476,21 @@ public class AcideFileEditorManager {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE file editor manager is modified
-	 * flag.
+	 * Returns true if any of the opened file editors is modified and false in
+	 * other case.
 	 * 
-	 * @return the ACIDE - A Configurable IDE file editor manager is modified
-	 *         flag.
+	 * @return true if any of the opened file editors is modified and false in
+	 *         other case.
 	 */
 	public boolean isModified() {
-		return _isModified;
-	}
 
-	/**
-	 * Sets a new value to the ACIDE - A Configurable IDE file editor manager is
-	 * modified flag.
-	 * 
-	 * @param isModified
-	 *            new value to set.
-	 */
-	public void setIsModified(boolean isModified) {
-		_isModified = isModified;
+		for (int index = 0; index < _tabbedPane.getTabCount(); index++) {
+
+			if (isRedButton(index))
+				return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -539,7 +525,6 @@ public class AcideFileEditorManager {
 	 * Sets the close button to green.
 	 */
 	public void setGreenButton() {
-
 		_tabbedPanelUI.getCloseButtonAt(_tabbedPane.getSelectedIndex())
 				.setGreenCloseButton();
 	}
@@ -562,7 +547,6 @@ public class AcideFileEditorManager {
 	 *            button list index to set.
 	 */
 	public void setRedButtonAt(int index) {
-
 		_tabbedPanelUI.getCloseButtonAt(index).setRedCloseButton();
 	}
 
@@ -574,7 +558,6 @@ public class AcideFileEditorManager {
 	 *            button list index to set.
 	 */
 	public void setGreenButtonAt(int index) {
-
 		_tabbedPanelUI.getCloseButtonAt(index).setGreenCloseButton();
 	}
 

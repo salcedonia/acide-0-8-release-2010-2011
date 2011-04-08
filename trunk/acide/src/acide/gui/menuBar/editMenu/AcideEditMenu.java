@@ -187,31 +187,31 @@ public class AcideEditMenu extends JMenu {
 	 */
 	public AcideEditMenu() {
 
-		// UNDO MENU ITEM
+		// Creates the undo menu item
 		_undoMenuItem = new JMenuItem(UNDO_IMAGE);
 
-		// REDO MENU ITEM
+		// Creates the redo menu item
 		_redoMenuItem = new JMenuItem(REDO_IMAGE);
 
-		// COPY MENU ITEM
+		// Creates the copy menu item
 		_copyMenuItem = new JMenuItem(COPY_IMAGE);
 
-		// PASTE MENU ITEM
+		// Creates the paste menu item
 		_pasteMenuItem = new JMenuItem(PASTE_IMAGE);
 
-		// CUT MENU ITEM
+		// Creates the cut menu item
 		_cutMenuItem = new JMenuItem(CUT_IMAGE);
 
-		// SEARCH MENU ITEM
+		// Creates the search menu item
 		_searchMenuItem = new JMenuItem(SEARCH_IMAGE);
 
-		// REPLACE MENU ITEM
+		// Creates the replace menu item
 		_replaceMenuItem = new JMenuItem(REPLACE_IMAGE);
 
-		// SELECT ALL MENU ITEM
+		// Creates the select all menu item
 		_selectAllMenuItem = new JMenuItem(SELECT_ALL_FILES_IMAGE);
 
-		// GO TO LINE MENU ITEM
+		// Creates the go to line menu item
 		_goToLineMenuItem = new JMenuItem(GO_TO_LINE_IMAGE);
 
 		// Sets the text of the edit menu components
@@ -227,39 +227,51 @@ public class AcideEditMenu extends JMenu {
 		// Disables the menu
 		disableMenu();
 
-		// UNDO MENU ITEM
+		// Sets the undo menu item text
 		_undoMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s21"));
+		
+		// Sets the undo menu item accelerator
 		_undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
 				ActionEvent.CTRL_MASK));
 
-		// REDO MENU ITEM
+		// Sets the redo menu item text
 		_redoMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s22"));
+		
+		// Sets the redo menu item accelerator
 		_redoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y,
 				ActionEvent.CTRL_MASK));
 
-		// COPY MENU ITEM
+		// Sets the copy menu item text
 		_copyMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s23"));
+		
+		// Sets the copy menu item accelerator
 		_copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
 				ActionEvent.CTRL_MASK));
 
-		// CUT MENU ITEM
+		// Sets the cut menu item text
 		_cutMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s24"));
+		
+		// Sets the cut menu item accelerator
 		_cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
 				ActionEvent.CTRL_MASK));
 
-		// PASTE MENU ITEM
+		// Sets the paste menu item text
 		_pasteMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s25"));
+		
+		// Sets the paste menu item accelerator
 		_pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,
 				ActionEvent.CTRL_MASK));
 
-		// SEARCH MENU ITEM
+		// Sets the search menu item text
 		_searchMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s26"));
+		
+		// Sets the search menu item accelerator
 		if (AcideLanguageManager.getInstance().getCurrentLocale()
 				.equals(new Locale("en", "EN")))
 			_searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(
@@ -268,9 +280,11 @@ public class AcideEditMenu extends JMenu {
 			_searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 					KeyEvent.VK_B, ActionEvent.CTRL_MASK));
 
-		// REPLACE MENU ITEM
+		// Sets the replace menu item text
 		_replaceMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s27"));
+		
+		// Sets the replace menu item accelerator
 		if (AcideLanguageManager.getInstance().getCurrentLocale()
 				.equals(new Locale("en", "EN")))
 			_replaceMenuItem.setAccelerator(KeyStroke.getKeyStroke(
@@ -279,13 +293,15 @@ public class AcideEditMenu extends JMenu {
 			_replaceMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 					KeyEvent.VK_L, ActionEvent.CTRL_MASK));
 
-		// SELECT ALL MENU ITEM
+		// Sets the select all menu item text
 		_selectAllMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s190"));
+		
+		// Sets the select all menu item accelerator
 		_selectAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
 				ActionEvent.CTRL_MASK));
 
-		// GO TO LINE MENU ITEM
+		// Sets the go to line menu item text
 		_goToLineMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s222"));
 	}
@@ -298,15 +314,15 @@ public class AcideEditMenu extends JMenu {
 		// Removes all the menu components
 		removeAll();
 
-		// UNDO MENU ITEM
+		// Adds the undo menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME))
 			add(_undoMenuItem);
 
-		// REDO MENU ITEM
+		// Adds the redo menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(REDO_NAME))
 			add(_redoMenuItem);
 
-		// SEPARATOR
+		// Adds a separator to the menu
 		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME) || AcideMenuConfiguration
 				.getInstance().getIsDisplayed(REDO_NAME))
 				&& (AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -318,24 +334,24 @@ public class AcideEditMenu extends JMenu {
 						.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME)))
 			addSeparator();
 
-		// COPY MENU ITEM
+		// Adds the copy menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(COPY_NAME))
 			add(_copyMenuItem);
 
-		// PASTE MENU ITEM
+		// Adds the paste menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(PASTE_NAME))
 			add(_pasteMenuItem);
 
-		// CUT MENU ITEM
+		// Adds the cut menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(CUT_NAME))
 			add(_cutMenuItem);
 
-		// SELECT ALL MENU ITEM
+		// Adds the select all menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				SELECT_ALL_FILES_NAME))
 			add(_selectAllMenuItem);
 
-		// SEPARATOR
+		// Adds a separator to the menu
 		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						REDO_NAME)
@@ -350,12 +366,12 @@ public class AcideEditMenu extends JMenu {
 						GO_TO_LINE_NAME))
 			addSeparator();
 
-		// GO TO LINE MENU ITEM
+		// Adds the go to line menu item to the menu
 		if (AcideMenuConfiguration.getInstance()
 				.getIsDisplayed(GO_TO_LINE_NAME))
 			add(_goToLineMenuItem);
 
-		// SEPARATOR
+		// Adds a separator to the menu
 		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						REDO_NAME)
@@ -373,11 +389,11 @@ public class AcideEditMenu extends JMenu {
 						.getIsDisplayed(REPLACE_NAME)))
 			addSeparator();
 
-		// SEARCH MENU ITEM
+		// Adds the search menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SEARCH_NAME))
 			add(_searchMenuItem);
 
-		// REPLACE MENU ITEM
+		// Adds the replace menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(REPLACE_NAME))
 			add(_replaceMenuItem);
 	}
@@ -387,32 +403,32 @@ public class AcideEditMenu extends JMenu {
 	 */
 	public void setListeners() {
 
-		// UNDO MENU ITEM
+		// Sets the undo menu item action listener
 		_undoMenuItem.addActionListener(new AcideUndoMenuItemListener());
 
-		// REDO MENU ITEM
+		// Sets the redo menu item action listener
 		_redoMenuItem.addActionListener(new AcideRedoMenuItemListener());
 
-		// SEARCH MENU ITEM
+		// Sets the search menu item action listener
 		_searchMenuItem.addActionListener(new AcideSearchMenuItemListener());
 
-		// REPLACE MENU ITEM
+		// Sets the replace menu item action listener
 		_replaceMenuItem.addActionListener(new AcideReplaceMenuItemListener());
 
-		// CUT MENU ITEM
+		// Sets the cut menu item action listener
 		_cutMenuItem.addActionListener(new AcideCutMenuItemListener());
 
-		// PASTE MENU ITEM
+		// Sets the paste menu item action listener
 		_pasteMenuItem.addActionListener(new AcidePasteMenuItemListener());
 
-		// COPY MENU ITEM
+		// Sets the copy menu item action listener
 		_copyMenuItem.addActionListener(new AcideCopyMenuItemListener());
 
-		// SELECT ALL MENU ITEM
+		// Sets the select all menu item action listener
 		_selectAllMenuItem
 				.addActionListener(new AcideSelectAllMenuItemListener());
 
-		// GO TO LINE MENU ITEM
+		// Sets the go to line menu item action listener
 		_goToLineMenuItem
 				.addActionListener(new AcideGoToLineMenuItemListener());
 	}
@@ -531,14 +547,31 @@ public class AcideEditMenu extends JMenu {
 	 */
 	public void enableMenu() {
 
+		// Disables the undo menu item
 		_undoMenuItem.setEnabled(false);
+		
+		// Disables the redo menu item
 		_redoMenuItem.setEnabled(false);
+		
+		// Enables the copy menu item
 		_copyMenuItem.setEnabled(true);
+		
+		// Enables the paste menu item
 		_pasteMenuItem.setEnabled(true);
+		
+		// Enables the cut menu item
 		_cutMenuItem.setEnabled(true);
+		
+		// Enables the select all menu item
 		_selectAllMenuItem.setEnabled(true);
+		
+		// Enables the go to line menu item
 		_goToLineMenuItem.setEnabled(true);
+		
+		// Enables the search menu item
 		_searchMenuItem.setEnabled(true);
+		
+		// Enables the replace menu item
 		_replaceMenuItem.setEnabled(true);
 	}
 
@@ -547,14 +580,31 @@ public class AcideEditMenu extends JMenu {
 	 */
 	public void disableMenu() {
 
+		// Disables the undo menu item
 		_undoMenuItem.setEnabled(false);
+		
+		// Disables the redo menu item
 		_redoMenuItem.setEnabled(false);
+		
+		// Disables the copy menu item
 		_copyMenuItem.setEnabled(false);
+		
+		// Disables the paste menu item
 		_pasteMenuItem.setEnabled(false);
+		
+		// Disables the cut menu item
 		_cutMenuItem.setEnabled(false);
+		
+		// Disables the select all menu item
 		_selectAllMenuItem.setEnabled(false);
+		
+		// Disables the go the line menu item
 		_goToLineMenuItem.setEnabled(false);
+		
+		// Disables the search menu item
 		_searchMenuItem.setEnabled(false);
+		
+		// Disables the replace menu item
 		_replaceMenuItem.setEnabled(false);
 	}
 }

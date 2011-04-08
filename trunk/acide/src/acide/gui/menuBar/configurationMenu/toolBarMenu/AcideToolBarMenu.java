@@ -99,20 +99,22 @@ public class AcideToolBarMenu extends JMenu {
 	 */
 	public AcideToolBarMenu() {
 
-		// NEW TOOL BAR MENU ITEM
+		// Creates the new tool bar menu item
 		_newToolBarMenuItem = new JMenuItem();
 
-		// LOAD TOOL BAR MENU ITEM
+		// Creates the load tool bar menu item
 		_loadToolBarMenuItem = new JMenuItem();
 
-		// MODIFY TOOL BAR MENU ITEM
+		// Creates the modify tool bar menu item
 		_modifyToolBarMenuItem = new JMenuItem();
 
-		// SAVE TOOL BAR MENU ITEM
+		// Creates the save tool bar menu item
 		_saveToolBarMenuItem = new JMenuItem();
+		
+		// Disables the save tool bar menu item
 		_saveToolBarMenuItem.setEnabled(false);
 
-		// SAVE TOOL BAR AS MENU ITEM
+		// Creates the save tool bar as menu item
 		_saveToolBarAsMenuItem = new JMenuItem();
 
 		// Sets the text of the tool bar menu components
@@ -125,23 +127,23 @@ public class AcideToolBarMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// NEW TOOL BAR MENU ITEM
+		// Sets the new tool bar menu item text
 		_newToolBarMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s280"));
 
-		// LOAD TOOL BAR MENU ITEM
+		// Sets the load tool bar menu item text
 		_loadToolBarMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s281"));
 
-		// MODIFY TOOL BAR MENU ITEM
+		// Sets the modify tool bar menu item text
 		_modifyToolBarMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s282"));
 
-		// SAVE TOOL BAR MENU ITEM
+		// Sets the save tool bar menu item text
 		_saveToolBarMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s283"));
 
-		// SAVE TOOL BAR AS MENU ITEM
+		// Sets the save tool bar as menu item text
 		_saveToolBarAsMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s284"));
 	}
@@ -151,23 +153,23 @@ public class AcideToolBarMenu extends JMenu {
 	 */
 	public void setListeners() {
 
-		// NEW TOOL BAR MENU ITEM
+		// Sets the new tool bar menu item action listener
 		_newToolBarMenuItem
 				.addActionListener(new AcideNewToolBarMenuItemListener());
 
-		// LOAD TOOL BAR MENU ITEM
+		// Sets the load tool bar menu item action listener
 		_loadToolBarMenuItem
 				.addActionListener(new AcideLoadToolBarMenuItemListener());
 
-		// MODIFY TOOL BAR MENU ITEM
+		// Sets the modify tool bar menu item action listener
 		_modifyToolBarMenuItem
 				.addActionListener(new AcideModifyToolBarMenuItemListener());
 
-		// SAVE TOOL BAR MENU ITEM
+		// Sets the save tool bar menu item action listener
 		_saveToolBarMenuItem
 				.addActionListener(new AcideSaveToolBarMenuItemListener());
 
-		// SAVE TOOL BAR AS MENU ITEM
+		// Sets the save tool bar as menu item action listener
 		_saveToolBarAsMenuItem
 				.addActionListener(new AcideSaveAsToolBaMenuItemrListener());
 	}
@@ -180,27 +182,27 @@ public class AcideToolBarMenu extends JMenu {
 		// Removes all the menu components
 		removeAll();
 
-		// NEW TOOL BAR MENU ITEM
+		// Adds the new tool bar menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				NEW_TOOLBAR_NAME))
 			add(_newToolBarMenuItem);
 
-		// LOAD TOOL BAR MENU ITEM
+		// Adds the load tool bar menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				LOAD_TOOLBAR_NAME))
 			add(_loadToolBarMenuItem);
 
-		// MODIFY TOOL BAR MENU ITEM
+		// Adds the modify tool bar menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				MODIFY_TOOLBAR_NAME))
 			add(_modifyToolBarMenuItem);
 
-		// SAVE TOOL BAR MENU ITEM
+		// Adds the save tool bar menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				SAVE_TOOLBAR_NAME))
 			add(_saveToolBarMenuItem);
 
-		// SAVE TOOL BAR AS MENU ITEM
+		// Adds the save tool bar as menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				SAVE_TOOLBAR_AS_NAME))
 			add(_saveToolBarAsMenuItem);

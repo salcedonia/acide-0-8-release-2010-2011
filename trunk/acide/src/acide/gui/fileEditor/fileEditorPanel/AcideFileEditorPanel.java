@@ -334,8 +334,18 @@ public class AcideFileEditorPanel extends JPanel {
 	 */
 	public void resetStyledDocument() {
 
-		// Initializes the document
-		_styledDocument.init();
+		new Thread(new Runnable() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see java.lang.Runnable#run()
+			 */
+			@Override
+			public void run() {
+				// Initializes the document
+				_styledDocument.init();
+			}
+		}).start();
 	}
 
 	/**
@@ -436,7 +446,7 @@ public class AcideFileEditorPanel extends JPanel {
 	 * </p>
 	 * <p>
 	 * For instance {@link AcideConsolePanel},
-	 * {@link AcideExternalCommandConfigurationWindow} and 
+	 * {@link AcideExternalCommandConfigurationWindow} and
 	 * {@link AcideExecutionConfigurationWindow}
 	 * </p>
 	 * 
@@ -750,6 +760,39 @@ public class AcideFileEditorPanel extends JPanel {
 			// Sets the caret color
 			_textEditionAreaList.get(index).getTextPane()
 					.setCaretColor(foregroundColor);
+		}
+	}
+
+	/**
+	 * Zooms in or out the font size of all the text editors depending on a
+	 * boolean variable given as a parameter. Also the increment is given as
+	 * parameter as well.
+	 * 
+	 * @param zoom
+	 *            increment to apply.
+	 * @param hasToIncrement
+	 *            indicates if the zoom is in or out.
+	 */
+	public void zoomFont(int zoom, boolean hasToIncrement) {
+
+		for (int index = 0; index < NUM_TEXT_EDITORS; index++) {
+
+			// Gets the current font
+			Font currentFont = _textEditionAreaList.get(index).getTextPane()
+					.getFont();
+
+			Font newFont;
+
+			// If it is zoom out
+			if (hasToIncrement)
+				newFont = new Font(currentFont.getFontName(),
+						currentFont.getStyle(), currentFont.getSize() + zoom);
+			else
+				newFont = new Font(currentFont.getFontName(),
+						currentFont.getStyle(), currentFont.getSize() - zoom);
+
+			// Sets the new font
+			_textEditionAreaList.get(index).getTextPane().setFont(newFont);
 		}
 	}
 

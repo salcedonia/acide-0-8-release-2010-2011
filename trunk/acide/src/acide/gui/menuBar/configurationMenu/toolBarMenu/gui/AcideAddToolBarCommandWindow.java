@@ -39,6 +39,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -48,11 +49,10 @@ import javax.swing.JTextField;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
-import acide.configuration.toolBar.consoleComandToolBar.AcideConsoleCommand;
+import acide.configuration.toolBar.consolePanelToolBar.AcideConsolePanelToolBarButtonConf;
 import acide.files.AcideFileManager;
 import acide.gui.listeners.AcideWindowClosingListener;
-import acide.gui.mainWindow.AcideMainWindow;
-import acide.gui.toolBarPanel.consoleCommandToolBar.utils.AcideParameterType;
+import acide.gui.toolBarPanel.consolePanelToolBar.utils.AcideParameterType;
 
 /**
  * ACIDE - A Configurable IDE add tool bar command window.
@@ -139,6 +139,11 @@ public class AcideAddToolBarCommandWindow extends JFrame {
 	 * ACIDE - A Configurable IDE add tool bar command window examine button.
 	 */
 	private JButton _examineButton;
+	/**
+	 * ACIDE - A Configurable IDE add tool bar command window is executed in
+	 * system shell check box.
+	 */
+	private JCheckBox _isExecutedInSystemShellCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE add tool bar command window tool bar
 	 * configuration window.
@@ -231,6 +236,11 @@ public class AcideAddToolBarCommandWindow extends JFrame {
 		// Creates the extra parameter combo box with the previous items
 		_extraParameterComboBox = new JComboBox(data);
 
+		// Creates the is executed in system shell check box
+		_isExecutedInSystemShellCheckBox = new JCheckBox(
+				AcideLanguageManager.getInstance()
+				.getLabels().getString("s1069"));
+
 		// Creates the examine button
 		_examineButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s142"));
@@ -257,7 +267,7 @@ public class AcideAddToolBarCommandWindow extends JFrame {
 
 		// Creates the command panel
 		_commandPanel = new JPanel(new GridBagLayout());
-		
+
 		// Creates the button panel
 		_buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
@@ -292,9 +302,6 @@ public class AcideAddToolBarCommandWindow extends JFrame {
 
 		// Displays the window
 		setVisible(true);
-
-		// Enables the main window again
-		AcideMainWindow.getInstance().setEnabled(false);
 	}
 
 	/**
@@ -391,6 +398,14 @@ public class AcideAddToolBarCommandWindow extends JFrame {
 		// Adds the extra parameter combo box to the command panel
 		_commandPanel.add(_extraParameterComboBox, constraints);
 
+		constraints.anchor = GridBagConstraints.CENTER;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.gridx = 0;
+		constraints.gridy = 7;
+
+		// Adds the is executed in system shell check box to the command panel
+		_commandPanel.add(_isExecutedInSystemShellCheckBox, constraints);
+		
 		constraints.insets = new Insets(5, 5, 5, 5);
 		constraints.ipadx = 0;
 		constraints.ipady = 0;
@@ -421,7 +436,7 @@ public class AcideAddToolBarCommandWindow extends JFrame {
 
 		// Sets the cancel button action listener
 		_cancelButton.addActionListener(new CancelButtonAction());
-		
+
 		// Sets the window closing listener
 		addWindowListener(new AcideWindowClosingListener());
 	}
@@ -431,17 +446,8 @@ public class AcideAddToolBarCommandWindow extends JFrame {
 	 */
 	private void closeWindow() {
 
-		// Set the main window enabled again
-		AcideMainWindow.getInstance().setEnabled(true);
-
 		// Closes the window
 		dispose();
-
-		// Brings the main window to the front
-		AcideMainWindow.getInstance().setAlwaysOnTop(true);
-
-		// But not permanently
-		AcideMainWindow.getInstance().setAlwaysOnTop(false);
 	}
 
 	/**
@@ -488,30 +494,37 @@ public class AcideAddToolBarCommandWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
+			// Gets the name from the name text field
 			String name = _nameTextField.getText();
-			String command = _actionTextField.getText();
-			String helpText = _hintTextTextField.getText();
-			String image = _iconTextField.getText();
+
+			// Gets the action from the the
+			String action = _actionTextField.getText();
+
+			// Gets the hint text from the hint text text field
+			String hintText = _hintTextTextField.getText();
+
+			// Gets the icon from the icon text field
+			String icon = _iconTextField.getText();
+
+			// Gets the extra parameter string from the extra parameter combo
+			// box
 			String extraParameterString = (String) _extraParameterComboBox
 					.getSelectedItem();
 
+			// Gets the is executed in system shell flag from the is executed in
+			// system shell check box
+			boolean isExecutedInSystemShell = _isExecutedInSystemShellCheckBox
+					.isSelected();
+
 			// No empty name and command are accepted
-			if (!name.matches("") && !command.matches("")) {
+			if (!name.matches("") && !action.matches("")) {
 
 				// Creates the new row
-				AcideConsoleCommand editableToolBarCommand;
-
-				// Sets the image
-				if (image.equals(""))
-					editableToolBarCommand = new AcideConsoleCommand(name,
-							command, helpText,
-							AcideParameterType
-									.fromStringToEnum(extraParameterString));
-				else
-					editableToolBarCommand = new AcideConsoleCommand(name,
-							command, helpText, image,
-							AcideParameterType
-									.fromStringToEnum(extraParameterString));
+				AcideConsolePanelToolBarButtonConf editableToolBarCommand = new AcideConsolePanelToolBarButtonConf(
+						name, action, hintText, icon,
+						AcideParameterType
+								.fromStringToEnum(extraParameterString),
+						isExecutedInSystemShell);
 
 				// Adds the command
 				_toolBarConfigurationWindow.addCommand(editableToolBarCommand);
@@ -533,7 +546,7 @@ public class AcideAddToolBarCommandWindow extends JFrame {
 								.getString("s995"), JOptionPane.ERROR_MESSAGE);
 
 			// Action text field is empty
-			else if (command.matches(""))
+			else if (action.matches(""))
 				// Displays an error message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
 						.getInstance().getLabels().getString("s998"),
@@ -564,17 +577,8 @@ public class AcideAddToolBarCommandWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Set the main window enabled again
-			AcideMainWindow.getInstance().setEnabled(true);
-
 			// Closes the window
-			dispose();
-
-			// Brings the main window to the front
-			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-
-			// But not permanently
-			AcideMainWindow.getInstance().setAlwaysOnTop(false);
+			closeWindow();
 		}
 	}
 }

@@ -428,7 +428,7 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 		AcideMainWindow.getInstance().setEnabled(false);
 
 		// Saves the file editor panel configuration
-		AcideWorkbenchManager.getInstance().saveFileEditorPanelConfiguration();
+		AcideWorkbenchManager.getInstance().saveFileEditorOpenedFilesConfiguration();
 	}
 
 	/**

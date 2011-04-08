@@ -8,7 +8,7 @@ import acide.utils.ObjectList;
 
 import acide.language.AcideLanguageManager;
 
-import acide.configuration.toolBar.consoleComandToolBar.AcideConsoleCommand;
+import acide.configuration.toolBar.consolePanelToolBar.AcideConsolePanelToolBarButtonConf;
 
 /**
  * ACIDE - A Configurable IDE delimiters panel table model.
@@ -49,7 +49,7 @@ public class AcideDelimitersPanelTableModel extends DefaultTableModel {
 	 */
 	@Override
 	public int getColumnCount() {
-		return AcideConsoleCommand.NUMBER_OF_PARAMETERS;
+		return AcideConsolePanelToolBarButtonConf.NUMBER_OF_PARAMETERS;
 	}
 
 	/*

@@ -123,28 +123,32 @@ public class AcideGrammarMenu extends JMenu {
 	 */
 	public AcideGrammarMenu() {
 
-		// NEW GRAMMAR MENU ITEM
+		// Creates the new grammar menu item
 		_newGrammarMenuItem = new JMenuItem();
 
-		// LOAD GRAMMAR MENU ITEM
+		// Creates the load grammar menu item
 		_loadGrammarMenuItem = new JMenuItem();
 
-		// MODIFY GRAMMAR MENU ITEM
+		// Creates the modify grammar menu item
 		_modifyGrammarMenuItem = new JMenuItem();
 
-		// SAVE GRAMMAR MENU ITEM
+		// Creates the save grammar menu item
 		_saveGrammarMenuItem = new JMenuItem();
+		
+		// Disables the save grammar menu item
 		_saveGrammarMenuItem.setEnabled(false);
 
-		// SAVE GRAMMAR AS MENU ITEM
+		// Creates the save grammar as menu item
 		_saveGrammarAsMenuItem = new JMenuItem();
 
-		// SET PATHS MENU ITEM
+		// Creates the set paths menu item
 		_setPathsMenuItem = new JMenuItem();
 
-		// AUTO ANALYSIS CHECK BOX MENU ITEM
+		// Creates the auto analysis check box menu item
 		_autoAnalysisCheckBoxMenuItem = new JCheckBoxMenuItem(
 				AcideLanguageManager.getInstance().getLabels().getString("s911"));
+		
+		// Sets the auto analysis check box menu item as not selected
 		_autoAnalysisCheckBoxMenuItem.setSelected(false);
 
 		// Sets the text of the grammar menu components
@@ -157,33 +161,35 @@ public class AcideGrammarMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// NEW GRAMMAR MENU ITEM
+		// Sets the new grammar menu item text
 		_newGrammarMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s30"));
+		
+		// Sets the new grammar menu item accelerator
 		_newGrammarMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_T, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 
-		// LOAD GRAMMAR MENU ITEM
+		// Sets the load grammar menu item text
 		_loadGrammarMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s226"));
 
-		// MODIFY GRAMMAR MENU ITEM
+		// Sets the modify grammar menu item text
 		_modifyGrammarMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s227"));
 
-		// SAVE GRAMMAR MENU ITEM
+		// Sets the save grammar menu item text
 		_saveGrammarMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s251"));
 
-		// SAVE GRAMMAR AS MENU ITEM
+		// Sets the save grammar as menu item text
 		_saveGrammarAsMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s285"));
 
-		// SET PATHS MENU ITEM
+		// Sets the set paths menu item text
 		_setPathsMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s912"));
 
-		// AUTO GRAMMAR ANALYSIS CHECK BOX MENU ITEM
+		// Sets the auto analysis check box menu item text
 		_autoAnalysisCheckBoxMenuItem.setText(AcideLanguageManager
 				.getInstance().getLabels().getString("s911"));
 	}
@@ -193,31 +199,31 @@ public class AcideGrammarMenu extends JMenu {
 	 */
 	public void setListeners() {
 
-		// NEW GRAMMAR MENU ITEM
+		// Sets the new grammar menu item action listener
 		_newGrammarMenuItem
 				.addActionListener(new AcideNewGrammarMenuItemListener());
 
-		// LOAD GRAMMAR MENU ITEM
+		// Sets the load grammar menu item action listener
 		_loadGrammarMenuItem
 				.addActionListener(new AcideLoadGrammarMenuItemListener());
 
-		// MODIFY GRAMMAR MENU ITEM
+		// Sets the modify grammar menu item action listener
 		_modifyGrammarMenuItem
 				.addActionListener(new AcideModifyGrammaMenuItemrListener());
 
-		// SAVE GRAMMAR MENU ITEM
+		// Sets the save grammar menu item action listener
 		_saveGrammarMenuItem
 				.addActionListener(new AcideSaveGrammarMenuItemListener());
 
-		// SAVE AS GRAMMAR MENU ITEM
+		// Sets the save grammar as menu item action listener
 		_saveGrammarAsMenuItem
 				.addActionListener(new AcideSaveAsGrammarMenuItemListener());
 
-		// SET PATHS MENU ITEM
+		// Sets the set paths menu item action listener
 		_setPathsMenuItem
 				.addActionListener(new AcideSetPathsMenuItemListener());
 
-		// AUTO GRAMMAR ANALYSIS CHECK BOX MENU ITEM
+		// Sets the auto analysis check box menu item action listener
 		_autoAnalysisCheckBoxMenuItem
 				.addActionListener(new AcideAutoAnalysisMenuItemListener());
 	}
@@ -230,32 +236,32 @@ public class AcideGrammarMenu extends JMenu {
 		// Removes all the menu components
 		removeAll();
 
-		// NEW GRAMMAR MENU ITEM
+		// Adds the new grammar menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				NEW_GRAMMAR_NAME))
 			add(_newGrammarMenuItem);
 
-		// LOAD GRAMMAR MENU ITEM
+		// Adds the load grammar menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				LOAD_GRAMMAR_NAME))
 			add(_loadGrammarMenuItem);
 
-		// MODIFY GRAMMAR MENU ITEM
+		// Adds the modify grammar menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				MODIFY_GRAMMAR_NAME))
 			add(_modifyGrammarMenuItem);
 
-		// SAVE GRAMMAR MENU ITEM
+		// Adds the save grammar menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				SAVE_GRAMMAR_NAME))
 			add(_saveGrammarMenuItem);
 
-		// SAVE GRAMMAR AS MENU ITEM
+		// Adds the save grammar as menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				SAVE_GRAMMAR_AS_NAME))
 			add(_saveGrammarAsMenuItem);
 
-		// SEPARATOR
+		// Adds a separator to the menu
 		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(
 				NEW_GRAMMAR_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -269,11 +275,11 @@ public class AcideGrammarMenu extends JMenu {
 						.getIsDisplayed(SET_PATHS_NAME)))
 			addSeparator();
 
-		// SET PATHS MENU ITEM
+		// Adds the set paths menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SET_PATHS_NAME))
 			add(_setPathsMenuItem);
 
-		// SEPARATOR
+		// Adds a separator to the menu
 		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(
 				NEW_GRAMMAR_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -289,7 +295,7 @@ public class AcideGrammarMenu extends JMenu {
 						.getIsDisplayed(AUTO_ANALYSIS_NAME)))
 			addSeparator();
 
-		// AUTO ANALYSIS CHECK BOX MENU ITEM
+		// Adds the auto analysis check box menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				AUTO_ANALYSIS_NAME))
 			add(_autoAnalysisCheckBoxMenuItem);

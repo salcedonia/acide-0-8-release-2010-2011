@@ -34,10 +34,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JFileChooser;
-import javax.swing.SwingUtilities;
 
 import acide.language.AcideLanguageManager;
-import acide.process.AcideApplyLexiconProcess;
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.files.text.AcideTextFileExtensionFilterManager;
 import acide.gui.mainWindow.AcideMainWindow;
@@ -96,9 +94,10 @@ public class AcideLoadLexiconMenuItemListener implements ActionListener {
 					.getSelectedFileEditorPanel().getLexiconConfiguration()
 					.load(fileChooser.getSelectedFile().getAbsolutePath());
 
-			// Applies the lexicon configuration
-			SwingUtilities.invokeLater(new AcideApplyLexiconProcess());
-			
+			// Resets the selected file editor text edition area
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().resetStyledDocument();
+
 			// Updates the lexicon message status bar
 			AcideMainWindow
 					.getInstance()

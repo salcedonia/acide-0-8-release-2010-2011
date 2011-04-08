@@ -33,7 +33,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import acide.configuration.lexicon.tokens.AcideLexiconTokenType;
-import acide.configuration.toolBar.consoleComandToolBar.AcideConsoleCommand;
+import acide.configuration.toolBar.consolePanelToolBar.AcideConsolePanelToolBarButtonConf;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.panels.reserverdWords.AcideReservedWordsPanel;
 
@@ -97,7 +97,7 @@ public class AcideReservedWordsTableModel extends DefaultTableModel {
 	 */
 	@Override
 	public int getColumnCount() {
-		return AcideConsoleCommand.NUMBER_OF_PARAMETERS;
+		return AcideConsolePanelToolBarButtonConf.NUMBER_OF_PARAMETERS;
 	}
 
 	/*
@@ -237,7 +237,7 @@ public class AcideReservedWordsTableModel extends DefaultTableModel {
 	 * 
 	 * @return the item list.
 	 */
-	public ArrayList<AcideConsoleCommand> getItems() {
+	public ArrayList<AcideConsolePanelToolBarButtonConf> getItems() {
 		return null;
 	}
 
@@ -247,7 +247,7 @@ public class AcideReservedWordsTableModel extends DefaultTableModel {
 	 * @param items
 	 *            new value to set.
 	 */
-	public void setItems(ArrayList<AcideConsoleCommand> items) {
+	public void setItems(ArrayList<AcideConsolePanelToolBarButtonConf> items) {
 
 		/*
 		 * TokenTypeList.getInstance().reset();

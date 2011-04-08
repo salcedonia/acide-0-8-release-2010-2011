@@ -30,7 +30,6 @@
 package acide.gui.mainWindow;
 
 import acide.configuration.fileEditor.AcideFileEditorConfiguration;
-import acide.configuration.toolBar.consoleComandToolBar.AcideConsoleCommandConfiguration;
 import acide.configuration.workbench.AcideWorkbenchManager;
 import acide.factory.gui.AcideGUIFactory;
 import acide.gui.consolePanel.AcideConsolePanel;
@@ -44,17 +43,14 @@ import acide.gui.toolBarPanel.AcideToolBarPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.HeadlessException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE main window.
@@ -221,105 +217,17 @@ public class AcideMainWindow extends JFrame {
 	 */
 	public void buildToolBarPanel() {
 
-		String currentToolBarConfiguration = null;
+		if (_toolBarPanel != null)
+			remove(_toolBarPanel);
 
-		try {
+		// Creates the tool bar
+		_toolBarPanel = new AcideToolBarPanel();
 
-			// Clears the console command configuration lists
-			AcideConsoleCommandConfiguration.getInstance().clear();
+		// Builds the tool bar panel
+		_toolBarPanel.buildAcideToolBarPanel();
 
-			// Gets the ACIDE - A Configurable IDE current tool bar
-			// configuration
-			currentToolBarConfiguration = AcideResourceManager.getInstance()
-					.getProperty("currentToolBarConfiguration");
-
-			// Loads the console command final list from the current tool bar
-			// configuration
-			AcideConsoleCommandConfiguration.getInstance().loadFinalList(
-					currentToolBarConfiguration);
-
-			// Updates the ACIDE - A Configurable IDE current tool bar
-			// configuration
-			AcideResourceManager.getInstance().setProperty(
-					"currentToolBarConfiguration", currentToolBarConfiguration);
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-
-			// Gets the grammar name
-			String name;
-			int index = currentToolBarConfiguration.lastIndexOf("\\");
-			if (index == -1)
-				index = currentToolBarConfiguration.lastIndexOf("/");
-			name = "./configuration/toolbar/"
-					+ currentToolBarConfiguration.substring(index + 1,
-							currentToolBarConfiguration.length());
-			try {
-
-				// Load the console command configuration final list
-				AcideConsoleCommandConfiguration.getInstance().loadFinalList(
-						name);
-
-				// Information message
-				JOptionPane.showMessageDialog(null, AcideLanguageManager
-						.getInstance().getLabels().getString("s958")
-						+ currentToolBarConfiguration
-						+ AcideLanguageManager.getInstance().getLabels()
-								.getString("s957") + name);
-
-				// Updates the ACIDE - A Configurable IDE current tool bar
-				// configuration
-				AcideResourceManager.getInstance().setProperty(
-						"currentToolBarConfiguration", name);
-			} catch (Exception exception1) {
-
-				// Updates the log
-				AcideLog.getLog().error(
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s127"));
-
-				try {
-
-					// Loads the console command configuration final list by
-					// default
-					AcideConsoleCommandConfiguration.getInstance()
-							.loadFinalList(
-									"./configuration/toolbar/default.TBcfg");
-
-					// Information message
-					JOptionPane.showMessageDialog(null, AcideLanguageManager
-							.getInstance().getLabels().getString("s958")
-							+ currentToolBarConfiguration
-							+ AcideLanguageManager.getInstance().getLabels()
-									.getString("s959"));
-
-					// Updates the the ACIDE - A Configurable IDE current tool
-					// bar configuration
-					AcideResourceManager.getInstance().setProperty(
-							"currentToolBarConfiguration",
-							"./configuration/toolbar/default.TBcfg");
-				} catch (HeadlessException exception2) {
-
-					// Updates the log
-					AcideLog.getLog().error(exception2.getMessage());
-					exception2.printStackTrace();
-				} catch (Exception exception2) {
-
-					// Updates the log
-					AcideLog.getLog().error(exception2.getMessage());
-					exception2.printStackTrace();
-				}
-			}
-
-			// Updates the log
-			AcideLog.getLog().error(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s127"));
-		}
-
-		// Updates the tool bar panel
-		updateToolBarPanel();
+		// Adds the tool bar panel to the main window
+		add(_toolBarPanel, BorderLayout.NORTH);
 	}
 
 	/**
@@ -474,26 +382,6 @@ public class AcideMainWindow extends JFrame {
 	 */
 	public void setToolBarPanel(AcideToolBarPanel toolBar) {
 		_toolBarPanel = toolBar;
-	}
-
-	/**
-	 * Updates the ACIDE - A Configurable IDE main window tool bar panel.
-	 * Removes the tool bar panel if exists, and builds it, adding it to the
-	 * main window afterwards.
-	 */
-	public void updateToolBarPanel() {
-
-		if (_toolBarPanel != null)
-			remove(_toolBarPanel);
-
-		// Creates the tool bar
-		_toolBarPanel = new AcideToolBarPanel();
-
-		// Builds the tool bar panel
-		_toolBarPanel.buildAcideToolBarPanel();
-
-		// Adds the tool bar panel to the main window
-		add(_toolBarPanel, BorderLayout.NORTH);
 	}
 
 	/**

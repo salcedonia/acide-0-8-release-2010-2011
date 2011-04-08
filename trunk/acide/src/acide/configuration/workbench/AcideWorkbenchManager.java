@@ -29,6 +29,7 @@
  */
 package acide.configuration.workbench;
 
+import java.awt.HeadlessException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -47,6 +48,7 @@ import acide.configuration.fileEditor.AcideFileEditorConfiguration;
 import acide.configuration.grammar.AcideGrammarConfiguration;
 import acide.configuration.lexicon.AcideLexiconConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
+import acide.configuration.toolBar.AcideToolBarConfiguration;
 import acide.configuration.window.AcideWindowConfiguration;
 import acide.files.AcideFileManager;
 import acide.files.project.AcideProjectFile;
@@ -171,7 +173,10 @@ public class AcideWorkbenchManager {
 	public void load(String configurationFileContent) {
 
 		// Updates the splash screen window
-		AcideSplashScreenWindow.getInstance().setProgressBar(5, "Recent files");
+		AcideSplashScreenWindow.getInstance().setProgressBar(
+				5,
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s1071"));
 
 		// Loads the recent files configuration
 		loadRecentFilesWorkbenchConfiguration();
@@ -187,10 +192,19 @@ public class AcideWorkbenchManager {
 
 		// Updates the splash screen window
 		AcideSplashScreenWindow.getInstance().setProgressBar(
+				40,
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s1072"));
+
+		// Loads the tool bar configuration
+		loadToolBarConfiguration();
+		
+		// Updates the splash screen window
+		AcideSplashScreenWindow.getInstance().setProgressBar(
 				50,
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s1030"));
-
+		
 		// Loads the language configuration
 		loadLanguageWorkbenchConfiguration();
 
@@ -226,9 +240,109 @@ public class AcideWorkbenchManager {
 				99,
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s1035"));
-
+		
 		// Loads the main window configuration
 		loadMainWindowConfiguration();
+	}
+
+	/**
+	 * Loads the ACIDE - A Configurable tool bar configuration.
+	 */
+	private void loadToolBarConfiguration() {
+
+		String currentToolBarConfiguration = null;
+
+		try {
+
+			// Gets the ACIDE - A Configurable IDE current tool bar
+			// configuration
+			currentToolBarConfiguration = AcideResourceManager.getInstance()
+					.getProperty("currentToolBarConfiguration");
+
+			// Loads the ACIDE - A Configurable IDE tool bar configuration the
+			// current tool bar configuration
+			AcideToolBarConfiguration.getInstance().load(
+					currentToolBarConfiguration);
+
+			// Updates the ACIDE - A Configurable IDE current tool bar
+			// configuration
+			AcideResourceManager.getInstance().setProperty(
+					"currentToolBarConfiguration", currentToolBarConfiguration);
+			
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+
+			// Gets the tool bar configuration name
+			String name;
+			int index = currentToolBarConfiguration.lastIndexOf("\\");
+			if (index == -1)
+				index = currentToolBarConfiguration.lastIndexOf("/");
+			name = "./configuration/toolbar/"
+					+ currentToolBarConfiguration.substring(index + 1,
+							currentToolBarConfiguration.length());
+			try {
+
+				// Loads the ACIDE - A Configurable IDE tool bar configuration the
+				// current tool bar configuration
+				AcideToolBarConfiguration.getInstance().load(
+						name);
+
+				// Information message
+				JOptionPane.showMessageDialog(null, AcideLanguageManager
+						.getInstance().getLabels().getString("s958")
+						+ currentToolBarConfiguration
+						+ AcideLanguageManager.getInstance().getLabels()
+								.getString("s957") + name);
+
+				// Updates the ACIDE - A Configurable IDE current tool bar
+				// configuration
+				AcideResourceManager.getInstance().setProperty(
+						"currentToolBarConfiguration", name);
+			} catch (Exception exception1) {
+
+				// Updates the log
+				AcideLog.getLog().error(
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s127"));
+
+				try {
+
+					// Loads the default ACIDE - A Configurable IDE tool bar configuration
+					AcideToolBarConfiguration.getInstance().load(
+							"./configuration/toolbar/default.TBcfg");
+
+					// Information message
+					JOptionPane.showMessageDialog(null, AcideLanguageManager
+							.getInstance().getLabels().getString("s958")
+							+ currentToolBarConfiguration
+							+ AcideLanguageManager.getInstance().getLabels()
+									.getString("s959"));
+
+					// Updates the the ACIDE - A Configurable IDE current tool
+					// bar configuration
+					AcideResourceManager.getInstance().setProperty(
+							"currentToolBarConfiguration",
+							"./configuration/toolbar/default.TBcfg");
+				} catch (HeadlessException exception2) {
+
+					// Updates the log
+					AcideLog.getLog().error(exception2.getMessage());
+					exception2.printStackTrace();
+				} catch (Exception exception2) {
+
+					// Updates the log
+					AcideLog.getLog().error(exception2.getMessage());
+					exception2.printStackTrace();
+				}
+			}
+
+			// Updates the log
+			AcideLog.getLog().error(
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s127"));
+		}
 	}
 
 	/**
@@ -736,12 +850,16 @@ public class AcideWorkbenchManager {
 	}
 
 	/**
-	 * Saves the current file editor panel configuration. Closes the new and log
-	 * tab in the editor and saves the state of each one of the opened files in
-	 * the file editor into the project configuration, whether it is the default
-	 * project or not.
+	 * <p>
+	 * Saves the current opened files configuration in the file editor panel.
+	 * </p>
+	 * <p>
+	 * Closes the new and log tab in the editor and saves the state of each one
+	 * of the opened files in the file editor into the project configuration,
+	 * whether it is the default project or not.
+	 * </p>
 	 */
-	public void saveFileEditorPanelConfiguration() {
+	public void saveFileEditorOpenedFilesConfiguration() {
 
 		try {
 
@@ -855,11 +973,8 @@ public class AcideWorkbenchManager {
 	 */
 	public void saveWorkbenchConfiguration() {
 
-		// Are the project configuration modified or the file editor manager
-		// modified?
-		if (AcideProjectConfiguration.getInstance().isModified()
-				|| AcideMainWindow.getInstance().getFileEditorManager()
-						.isModified()) {
+		// Are the project configuration modified
+		if (AcideProjectConfiguration.getInstance().isModified()) {
 
 			// Ask the user to save the configuration
 			int returnValue = JOptionPane.showConfirmDialog(
@@ -874,63 +989,6 @@ public class AcideWorkbenchManager {
 
 				// If it is yes
 				if (returnValue == JOptionPane.YES_OPTION) {
-
-					// Gets the number of file editor panels
-					int numberOfFileEditorPanels = AcideMainWindow
-							.getInstance().getFileEditorManager()
-							.getNumberOfFileEditorPanels();
-
-					// If there are opened file editor panels
-					if (numberOfFileEditorPanels != 0) {
-
-						int selectedFileEditorPanelIndex = AcideMainWindow
-								.getInstance().getFileEditorManager()
-								.getSelectedFileEditorPanelIndex();
-
-						// Search for modified opened file editors
-						for (int index = numberOfFileEditorPanels - 1; index >= 0; index--) {
-
-							// If it is modified
-							if (AcideMainWindow.getInstance()
-									.getFileEditorManager().isRedButton(index)) {
-
-								// Puts the focus on the current checked file
-								// editor panel
-								AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.setSelectedFileEditorPanelAt(index);
-
-								// Do you want to save it?
-								int returnValue2 = JOptionPane
-										.showConfirmDialog(
-												null,
-												AcideLanguageManager
-														.getInstance()
-														.getLabels()
-														.getString("s643"),
-												AcideLanguageManager
-														.getInstance()
-														.getLabels()
-														.getString("s953"),
-												JOptionPane.YES_NO_OPTION);
-
-								// If it is OK
-								if (returnValue2 == JOptionPane.OK_OPTION) {
-
-									// Saves the file editor panel
-									AcideMainWindow.getInstance().getMenu()
-											.getFileMenu().saveFile(index);
-								}
-							}
-						}
-
-						// Restores the selected file editor panel
-						AcideMainWindow
-								.getInstance()
-								.getFileEditorManager()
-								.setSelectedFileEditorPanelAt(
-										selectedFileEditorPanelIndex);
-					}
 
 					// If it is not the default project
 					if (!AcideProjectConfiguration.getInstance()
@@ -949,28 +1007,95 @@ public class AcideWorkbenchManager {
 						// Save the rest of the workbench configuration
 						saveRestOfWorkbenchConfiguration();
 
-						// Closes the main window
-						System.exit(0);
-
 					} else {
 
 						// Save the rest of the workbench configuration
 						saveRestOfWorkbenchConfiguration();
-
-						// Closes the main window
-						System.exit(0);
 					}
-				} else if (returnValue == JOptionPane.NO_OPTION)
+
+					// Saves the file editor configuration
+					saveFileEditorConfiguration();
+
 					// Closes the main window
 					System.exit(0);
+
+				} else if (returnValue == JOptionPane.NO_OPTION) {
+
+					// Saves the file editor configuration
+					saveFileEditorConfiguration();
+
+					// Closes the main window
+					System.exit(0);
+				}
 			}
-		} else {
+		}
 
-			// Save the rest of the workbench configuration
-			saveRestOfWorkbenchConfiguration();
+		// Saves the file editor configuration
+		saveFileEditorConfiguration();
 
-			// Closes the main window
-			System.exit(0);
+		// Save the rest of the workbench configuration
+		saveRestOfWorkbenchConfiguration();
+
+		// Closes the main window
+		System.exit(0);
+	}
+
+	/**
+	 * Saves the file editor configuration.
+	 */
+	public void saveFileEditorConfiguration() {
+
+		// If the file editor manager is modified
+		if (AcideMainWindow.getInstance().getFileEditorManager().isModified()) {
+
+			// Gets the number of file editor panels
+			int numberOfFileEditorPanels = AcideMainWindow.getInstance()
+					.getFileEditorManager().getNumberOfFileEditorPanels();
+
+			// If there are opened file editor panels
+			if (numberOfFileEditorPanels > 0) {
+
+				int selectedFileEditorPanelIndex = AcideMainWindow
+						.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanelIndex();
+
+				// Search for modified opened file editors
+				for (int index = numberOfFileEditorPanels - 1; index >= 0; index--) {
+
+					// If it is modified
+					if (AcideMainWindow.getInstance().getFileEditorManager()
+							.isRedButton(index)) {
+
+						// Puts the focus on the current checked file
+						// editor panel
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.setSelectedFileEditorPanelAt(index);
+
+						// Do you want to save it?
+						int returnValue2 = JOptionPane.showConfirmDialog(null,
+								AcideLanguageManager.getInstance().getLabels()
+										.getString("s643"),
+								AcideLanguageManager.getInstance().getLabels()
+										.getString("s953"),
+								JOptionPane.YES_NO_OPTION);
+
+						// If it is OK
+						if (returnValue2 == JOptionPane.OK_OPTION) {
+
+							// Saves the file editor panel
+							AcideMainWindow.getInstance().getMenu()
+									.getFileMenu().saveFile(index);
+						}
+					}
+				}
+
+				// Restores the selected file editor panel
+				AcideMainWindow
+						.getInstance()
+						.getFileEditorManager()
+						.setSelectedFileEditorPanelAt(
+								selectedFileEditorPanelIndex);
+			}
 		}
 	}
 
@@ -1040,7 +1165,7 @@ public class AcideWorkbenchManager {
 		}
 
 		// Stores the configuration of the files
-		saveFileEditorPanelConfiguration();
+		saveFileEditorOpenedFilesConfiguration();
 
 		// Saves the window configuration
 		AcideWindowConfiguration.getInstance().save();

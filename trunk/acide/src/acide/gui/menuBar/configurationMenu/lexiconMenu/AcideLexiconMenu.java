@@ -102,19 +102,19 @@ public class AcideLexiconMenu extends JMenu {
 	 */
 	public AcideLexiconMenu() {
 
-		// NEW LEXICON MENU ITEM
+		// Creates the new lexicon menu item
 		_newLexiconMenuItem = new JMenuItem();
 
-		// LOAD LEXICON MENU ITEM
+		// Creates the load lexicon menu item
 		_loadLexiconMenuItem = new JMenuItem();
 
-		// MODIFY LEXICON MENU ITEM
+		// Creates the modify lexicon menu item
 		_modifyLexiconMenuItem = new JMenuItem();
 
-		// SAVE LEXICON MENU ITEM
+		// Creates the save lexicon menu item
 		_saveLexiconMenuItem = new JMenuItem();
 
-		// SAVE LEXICON AS MENU ITEM
+		// Creates the save lexicon as menu item
 		_saveLexiconAsMenuItem = new JMenuItem();
 
 		// Sets the text of the lexicon menu components
@@ -127,27 +127,31 @@ public class AcideLexiconMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// NEW LEXICON MENU ITEM
+		// Sets the new lexicon menu item text
 		_newLexiconMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s249"));
 
-		// LOAD LEXICON MENU ITEM
+		// Sets the load lexicon menu item text
 		_loadLexiconMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s35"));
+		
+		// Sets the load lexicon menu item accelerator
 		_loadLexiconMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_L, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 
-		// MODIFY LEXICON MENU ITEM
+		// Sets the modify lexicon menu item text
 		_modifyLexiconMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s29"));
+		
+		// Sets the modify lexicon menu item accelerator
 		_modifyLexiconMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_X, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 
-		// SAVE LEXICON MENU ITEM
+		// Sets the save lexicon menu item text
 		_saveLexiconMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s250"));
 
-		// SAVE LEXICON AS MENU ITEM
+		// Sets the save lexicon as menu item text
 		_saveLexiconAsMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s286"));
 	}
@@ -157,23 +161,23 @@ public class AcideLexiconMenu extends JMenu {
 	 */
 	public void setListeners() {
 
-		// NEW LEXICON MENU ITEM
+		// Sets the new lexicon menu item action listener
 		_newLexiconMenuItem
 				.addActionListener(new AcideNewLexiconMenuItemListener());
 
-		// MODIFY LEXICON MENU ITEM
+		// Sets the modify lexicon menu item action listener
 		_modifyLexiconMenuItem
 				.addActionListener(new AcideModifyLexiconMenuItemListener());
 
-		// LOAD LEXICON MENU ITEM
+		// Sets the load lexicon menu item action listener
 		_loadLexiconMenuItem
 				.addActionListener(new AcideLoadLexiconMenuItemListener());
 
-		// SAVE LEXICON MENU ITEM
+		// Sets the save lexicon menu item action listener
 		_saveLexiconMenuItem
 				.addActionListener(new AcideSaveLexiconMenuItemListener());
 
-		// SAVE LEXICON AS MENU ITEM
+		// Sets the save lexicon as menu item action listener
 		_saveLexiconAsMenuItem
 				.addActionListener(new AcideSaveAsLexiconMenuItemListener());
 	}
@@ -186,27 +190,27 @@ public class AcideLexiconMenu extends JMenu {
 		// Removes all the menu components
 		removeAll();
 
-		// NEW LEXICON MENU ITEM
+		// Adds the new lexicon menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				NEW_LEXICON_NAME))
 			add(_newLexiconMenuItem);
 
-		// LOAD LEXICON MENU ITEM
+		// Adds the load lexicon menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				LOAD_LEXICON_NAME))
 			add(_loadLexiconMenuItem);
 
-		// MODIFY LEXICON MENU ITEM
+		// Adds the modify lexicon menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				MODIFY_LEXICON_NAME))
 			add(_modifyLexiconMenuItem);
 
-		// SAVE LEXICON MENU ITEM
+		// Adds the save lexicon menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				SAVE_LEXICON_NAME))
 			add(_saveLexiconMenuItem);
 
-		// SAVE LEXICON AS MENU ITEM
+		// Adds the save lexicon as menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
 				SAVE_LEXICON_AS_NAME))
 			add(_saveLexiconAsMenuItem);

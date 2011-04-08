@@ -29,8 +29,9 @@
  */
 package acide.gui.toolBarPanel;
 
-import acide.gui.toolBarPanel.consoleCommandToolBar.AcideConsoleCommandToolBar;
-import acide.gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
+import acide.gui.toolBarPanel.consolePanelToolBar.AcideConsolePanelToolBar;
+import acide.gui.toolBarPanel.externaAppsToolBar.AcideExternalAppsToolBar;
+import acide.gui.toolBarPanel.menuBarToolBar.AcideMenuBarToolBar;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -89,7 +90,7 @@ public class AcideToolBarPanel extends JPanel {
 	 * the preferred size of the button. Otherwise because of the BorderLayout
 	 * of the main panel displays the button without it.
 	 */
-	private JPanel _buttonLeftPanel;
+	private JPanel _leftButtonPanel;
 	/**
 	 * ACIDE - A Configurable IDE tool bar panel button right panel.
 	 * 
@@ -97,7 +98,7 @@ public class AcideToolBarPanel extends JPanel {
 	 * the preferred size of the button. Otherwise because of the BorderLayout
 	 * of the main panel displays the button without it.
 	 */
-	private JPanel _buttonRightPanel;
+	private JPanel _rightButtonPanel;
 	/**
 	 * ACIDE - A Configurable IDE tool bar panel scroll left button.
 	 */
@@ -122,7 +123,7 @@ public class AcideToolBarPanel extends JPanel {
 	 * ACIDE - A Configurable IDE tool bar panel point where the scroll bar has
 	 * to be settled down.
 	 */
-	private Point point;
+	private Point _point;
 	/**
 	 * ACIDE - A Configurable IDE tool bar panel increment used for the
 	 * displacement.
@@ -136,89 +137,46 @@ public class AcideToolBarPanel extends JPanel {
 
 		super(new BorderLayout());
 
-		point = new Point(0, 0);
+		// Creates the location point
+		_point = new Point(0, 0);
 
-		// TOOL BAR
+		// Creates the tool bar
 		_toolBar = new JToolBar();
+
+		// The tool bar is static and it can not be moved
 		_toolBar.setFloatable(false);
 	}
 
 	/**
 	 * Creates the ACIDE - A Configurable IDE tool bar panel components.
 	 */
-	private void initComponents() {
+	private void buildComponents() {
 
-		// SCROLL LEFT BUTTON
+		// Creates the scroll left button
 		_scrollLeftButton = new JButton(LEFT_IMAGE_ICON);
+
+		// Sets the scroll left button preferred size
 		_scrollLeftButton.setPreferredSize(new Dimension(30, 32));
-		_scrollLeftButton.addActionListener(new ActionListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
 
-				// If is is below the threshold
-				if (_pointX - INCREMENT >= 0)
+		// Creates the button left panel
+		_leftButtonPanel = new JPanel();
 
-					// Decrements normally
-					_pointX -= INCREMENT;
-				else
-					// Then takes the minimum value
-					_pointX = 0;
+		// Adds the scroll left button to the left button panel
+		_leftButtonPanel.add(_scrollLeftButton);
 
-				// Updates the point
-				point.x = _pointX;
-
-				// Moves to the calculated point
-				_toolBarScrollPane.getViewport().setViewPosition(point);
-
-				// Tells to the scroll pane to move there
-				_toolBarScrollPane.validate();
-			}
-		});
-		_buttonLeftPanel = new JPanel();
-		_buttonLeftPanel.add(_scrollLeftButton);
-		add(_buttonLeftPanel, BorderLayout.LINE_START);
-
-		// SCROLL RIGHT BUTTON
+		// Creates the scroll right button
 		_scrollRightButton = new JButton(RIGHT_IMAGE_ICON);
+
+		// Sets the scroll left button preferred size
 		_scrollRightButton.setPreferredSize(new Dimension(30, 32));
-		_scrollRightButton.addActionListener(new ActionListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
 
-				// If it is below the bounds
-				if (_pointX + INCREMENT < _toolBarScrollPane.getVisibleRect().width)
-					// Increments normally
-					_pointX += INCREMENT;
+		// Creates the right button panel
+		_rightButtonPanel = new JPanel();
 
-				// Updates the point
-				point.x = _pointX;
+		// Adds the scroll right button to the right button panel
+		_rightButtonPanel.add(_scrollRightButton);
 
-				// Moves to the calculated point
-				_toolBarScrollPane.getViewport().setViewPosition(point);
-
-				// Tells to the scroll pane to move there
-				_toolBarScrollPane.validate();
-			}
-		});
-		_buttonRightPanel = new JPanel();
-		_buttonRightPanel.add(_scrollRightButton);
-		add(_buttonRightPanel, BorderLayout.LINE_END);
-
-		// TOOL BAR SCROLL PANE
+		// Creates the tool bar scroll pane
 		_toolBarScrollPane = new JScrollPane();
 
 		// Hides the vertical scroll bar
@@ -234,9 +192,6 @@ public class AcideToolBarPanel extends JPanel {
 
 		// No border
 		_toolBarScrollPane.setBorder(BorderFactory.createEmptyBorder());
-
-		// Adds the tool bar to the window
-		add(_toolBarScrollPane, BorderLayout.CENTER);
 	}
 
 	/**
@@ -244,52 +199,88 @@ public class AcideToolBarPanel extends JPanel {
 	 */
 	public void buildAcideToolBarPanel() {
 
-		// Builds the static tool bar
-		addStaticToolBar(AcideStaticToolBar.getInstance().build());
+		// Removes the previous components
+		_toolBar.removeAll();
 
-		// Builds the modifiable tool bar
-		addConsoleCommandToolBar(AcideConsoleCommandToolBar.getInstance()
-				.build());
+		// Builds the menu bar tool bar
+		addMenuBarToolBar(AcideMenuBarToolBar.getInstance().build());
 
-		// Creates the components
-		initComponents();
+		// Builds the console panel tool bar
+		addConsolePanelToolBar(AcideConsolePanelToolBar.getInstance().build());
 
-		// Add the component listener so it can resizes when it changes
-		_toolBarScrollPane.addComponentListener(new ComponentAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ComponentListener#componentResized(java.awt.event
-			 * .ComponentEvent)
-			 */
-			@Override
-			public void componentResized(ComponentEvent componentEvent) {
+		// Builds the external applications tool bar
+		addExternalAppsToolBar(AcideExternalAppsToolBar.getInstance().build());
 
-				_totalWidth = _toolBar.getBounds().width;
-				if (getBounds().width < _totalWidth) {
-					// added left/right buttons for side scrolling
-					_buttonLeftPanel.setVisible(true);
-					_buttonRightPanel.setVisible(true);
-				} else {
-					_buttonLeftPanel.setVisible(false);
-					_buttonRightPanel.setVisible(false);
-					_pointX = 0;
-				}
-				validate();
-			}
-		});
+		// Builds the tool bar panel components
+		buildComponents();
+
+		// Sets the listeners for the tool bar panel components
+		setListeners();
+
+		// Adds the components to the tool bar panel
+		addComponents();
 	}
 
 	/**
-	 * Adds a console command given as a parameter to the ACIDE - A Configurable
-	 * IDE tool bar panel.
-	 * 
-	 * @param consoleCommandToolBar
-	 *            new console command to add.
+	 * Adds the components to the ACIDE - A Configurable IDE tool bar panel.
 	 */
-	public void addConsoleCommandToolBar(
-			AcideConsoleCommandToolBar consoleCommandToolBar) {
+	private void addComponents() {
+
+		// Adds the left button panel to the tool bar panel
+		add(_leftButtonPanel, BorderLayout.LINE_START);
+
+		// Adds the right button panel to the tool bar panel
+		add(_rightButtonPanel, BorderLayout.LINE_END);
+
+		// Adds the tool bar to the window
+		add(_toolBarScrollPane, BorderLayout.CENTER);
+	}
+
+	/**
+	 * Sets the listeners for the ACIDE - A Configurable IDE tool bar panel.
+	 */
+	private void setListeners() {
+
+		// Sets the tool bar scroll pane component listener so it can resizes
+		// when it changes
+		_toolBarScrollPane
+				.addComponentListener(new ToolBarScrollPaneComponentListener());
+
+		// Sets the scroll right button action listener
+		_scrollRightButton.addActionListener(new ScrollRightButtonAction());
+
+		// Sets the scroll left button action listener
+		_scrollLeftButton.addActionListener(new ScrollLeftButtonAction());
+	}
+
+	/**
+	 * Adds the ACIDE - A Configurable IDE external applications tool bar to the
+	 * ACIDE - A Configurable IDE tool bar panel.
+	 * 
+	 * @param externalAppsToolBar
+	 *            ACIDE - A Configurable IDE external applications tool bar to
+	 *            add.
+	 */
+	private void addExternalAppsToolBar(
+			AcideExternalAppsToolBar externalAppsToolBar) {
+
+		// Adds a separator to the tool bar
+		_toolBar.addSeparator();
+
+		// Adds the buttons to the tool bar
+		for (Component button : externalAppsToolBar)
+			_toolBar.add(button);
+	}
+
+	/**
+	 * Adds the ACIDE - A Configurable IDE console panel tool bar to the ACIDE -
+	 * A Configurable IDE tool bar panel.
+	 * 
+	 * @param consolePanelToolBar
+	 *            ACIDE - A Configurable IDE console panel tool bar to add.
+	 */
+	public void addConsolePanelToolBar(
+			AcideConsolePanelToolBar consolePanelToolBar) {
 
 		// Updates the log
 		AcideLog.getLog().info(
@@ -299,9 +290,9 @@ public class AcideToolBarPanel extends JPanel {
 		// Adds a separator to the tool bar
 		_toolBar.addSeparator();
 
-		// Adds the console command buttons
-		for (Component consoleCommandButton : consoleCommandToolBar)
-			_toolBar.add(consoleCommandButton);
+		// Adds the buttons to the tool bar
+		for (Component button : consolePanelToolBar)
+			_toolBar.add(button);
 
 		// Updates the log
 		AcideLog.getLog().info(
@@ -310,24 +301,136 @@ public class AcideToolBarPanel extends JPanel {
 	}
 
 	/**
-	 * Adds the static tool bar command given as a parameter to the ACIDE - A
+	 * Adds the ACIDE - A Configurable IDE menu bar tool bar to the ACIDE - A
 	 * Configurable IDE tool bar panel.
 	 * 
-	 * @param staticToolBar
-	 *            static tool bar command to add.
+	 * @param menuBarToolBar
+	 *            ACIDE - A Configurable IDE menu bar tool bar to add.
 	 */
-	public void addStaticToolBar(AcideStaticToolBar staticToolBar) {
+	public void addMenuBarToolBar(AcideMenuBarToolBar menuBarToolBar) {
 
-		// Removes the previous components
-		_toolBar.removeAll();
-
-		// Adds the static buttons
-		for (Component staticButton : staticToolBar)
-			_toolBar.add(staticButton);
+		// Adds the buttons to the tool bar
+		for (Component button : menuBarToolBar)
+			_toolBar.add(button);
 
 		// Updates the log
 		AcideLog.getLog().info(
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s125"));
+	}
+
+	/**
+	 * ACIDE - A Configurable IDE tool bar scroll pane component listener.
+	 * 
+	 * @version 0.8
+	 * @see ComponentAdapter
+	 */
+	class ToolBarScrollPaneComponentListener extends ComponentAdapter {
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.awt.event.ComponentListener#componentResized(java.awt.event
+		 * .ComponentEvent)
+		 */
+		@Override
+		public void componentResized(ComponentEvent componentEvent) {
+
+			// Calculates the total width
+			_totalWidth = _toolBar.getBounds().width;
+
+			if (getBounds().width < _totalWidth) {
+
+				// Sets the left button panel as visible
+				_leftButtonPanel.setVisible(true);
+
+				// Sets the right button panel as visible
+				_rightButtonPanel.setVisible(true);
+			} else {
+
+				// Sets the left button panel as not visible
+				_leftButtonPanel.setVisible(false);
+
+				// Sets the right button panel as not visible
+				_rightButtonPanel.setVisible(false);
+
+				// Initializes the pointX
+				_pointX = 0;
+			}
+
+			// Validates the changes
+			validate();
+		}
+	}
+
+	/**
+	 * ACIDE - A Configurable IDE tool bar scroll left button action listener.
+	 * 
+	 * @version 0.8
+	 * @see ActionListener
+	 */
+	class ScrollLeftButtonAction implements ActionListener {
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
+		 * ActionEvent)
+		 */
+		@Override
+		public void actionPerformed(ActionEvent actionEvent) {
+
+			// If is is below the threshold
+			if (_pointX - INCREMENT >= 0)
+
+				// Decrements normally
+				_pointX -= INCREMENT;
+			else
+				// Then takes the minimum value
+				_pointX = 0;
+
+			// Updates the point
+			_point.x = _pointX;
+
+			// Moves to the calculated point
+			_toolBarScrollPane.getViewport().setViewPosition(_point);
+
+			// Tells to the scroll pane to move there
+			_toolBarScrollPane.validate();
+		}
+	}
+
+	/**
+	 * ACIDE - A Configurable IDE tool bar scroll right button action listener.
+	 * 
+	 * @version 0.8
+	 * @see ActionListener
+	 */
+	class ScrollRightButtonAction implements ActionListener {
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
+		 * ActionEvent)
+		 */
+		@Override
+		public void actionPerformed(ActionEvent actionEvent) {
+
+			// If it is below the bounds
+			if (_pointX + INCREMENT < _toolBarScrollPane.getVisibleRect().width)
+				
+				// Increments normally
+				_pointX += INCREMENT;
+
+			// Updates the point
+			_point.x = _pointX;
+
+			// Moves to the calculated point
+			_toolBarScrollPane.getViewport().setViewPosition(_point);
+
+			// Tells to the scroll pane to move there
+			_toolBarScrollPane.validate();
+		}
 	}
 }

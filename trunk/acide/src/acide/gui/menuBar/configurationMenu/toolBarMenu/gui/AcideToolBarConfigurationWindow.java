@@ -41,6 +41,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -64,9 +66,8 @@ import javax.swing.table.TableColumnModel;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 import acide.resources.AcideResourceManager;
-import acide.configuration.toolBar.consoleComandToolBar.AcideConsoleCommand;
-import acide.configuration.toolBar.consoleComandToolBar.AcideConsoleCommandConfiguration;
-import acide.gui.listeners.AcideWindowClosingListener;
+import acide.configuration.toolBar.AcideToolBarConfiguration;
+import acide.configuration.toolBar.consolePanelToolBar.AcideConsolePanelToolBarButtonConf;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.utils.AcideComboBoxTableCellEditor;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.utils.AcideComboBoxTableCellRenderer;
@@ -171,13 +172,13 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 
 		// Builds the window components
 		buildComponents();
-		
+
 		// Adds the components to the window
 		addComponents();
 
 		// Sets the action listeners of the window componens
 		setListeners();
-		
+
 		// Sets the window configuration
 		setWindowConfiguration();
 	}
@@ -234,13 +235,15 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 								"currentToolBarConfiguration");
 
 				// Loads the shell command temporal list
-				AcideConsoleCommandConfiguration.getInstance()
+				AcideToolBarConfiguration.getInstance()
+						.getConsolePanelToolBarConfiguration()
 						.loadTemporalList(currentToolBarConfiguration);
 
 				// Updates the model with the data
 				((AcideToolBarConfigurationWindowTableModel) _table.getModel())
-						.setItems(AcideConsoleCommandConfiguration
-								.getInstance().getTemporalList());
+						.setItems(AcideToolBarConfiguration.getInstance()
+								.getConsolePanelToolBarConfiguration()
+								.getTemporalList());
 
 			} catch (Exception exception) {
 
@@ -260,11 +263,14 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 
 			// Creates the model with empty data
 			((AcideToolBarConfigurationWindowTableModel) _table.getModel())
-					.setItems(new ArrayList<AcideConsoleCommand>());
+					.setItems(new ArrayList<AcideConsolePanelToolBarButtonConf>());
 		}
 
 		// Sets the window icon image
 		setIconImage(ICON.getImage());
+
+		// The window does not do anything on close
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		// The window is not resizable
 		setResizable(false);
@@ -368,7 +374,7 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 		// Sets the quit button tool tip text
 		_quitButton.setToolTipText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s149"));
-		
+
 		// Creates the accept button
 		_acceptButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s154"));
@@ -384,7 +390,7 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 		// Sets the cancel button tool tip text
 		_cancelButton.setToolTipText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s163"));
-		
+
 		// Adds the accept button to the button panel
 		_buttonPanel.add(_acceptButton);
 
@@ -431,7 +437,7 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 		_tableScrollPane = new JScrollPane(_table);
 
 		// Sets its preferred size
-		_tableScrollPane.setPreferredSize(new Dimension(650, 250));
+		_tableScrollPane.setPreferredSize(new Dimension(750, 250));
 
 		// Adds the table scroll panel to the window
 		_tablePanel.add(_tableScrollPane, BorderLayout.CENTER);
@@ -469,7 +475,7 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 		_table.addMouseListener(new TableMouseListener());
 
 		// Sets the window closing listener
-		addWindowListener(new AcideWindowClosingListener());
+		addWindowListener(new AcideToolBarConfigurationWindowClosingListener());
 	}
 
 	/**
@@ -506,6 +512,9 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 				columnWidth = (35 * width) / 100;
 				break;
 			case 4:
+				columnWidth = (25 * width) / 100;
+				break;
+			case 5:
 				columnWidth = (25 * width) / 100;
 				break;
 			}
@@ -571,6 +580,96 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 	}
 
 	/**
+	 * Applies the changes to the tool bar configuration and the tool bar panel.
+	 */
+	private void applyChanges() {
+
+		// Sets the list
+		AcideToolBarConfiguration
+				.getInstance()
+				.getConsolePanelToolBarConfiguration()
+				.setFinalList(
+						((AcideToolBarConfigurationWindowTableModel) _table
+								.getModel()).getItems());
+
+		// Sets the new tool bar configuration name
+		String newName = "";
+
+		if (_forModifying)
+			newName = "./configuration/toolbar/lastModified.TBcfg";
+		else
+			newName = "./configuration/toolbar/newToolBar.TBcfg";
+
+		// Saves the final list into the new tool bar configuration
+		AcideToolBarConfiguration.getInstance()
+				.getConsolePanelToolBarConfiguration().saveFinalList(newName);
+
+		try {
+
+			// Gets the ACIDE - A Configurable IDE current tool bar
+			// configuration
+			String currentToolBarConfiguration = AcideResourceManager
+					.getInstance().getProperty("currentToolBarConfiguration");
+
+			if (_areChangesSaved) {
+
+				if (!currentToolBarConfiguration.endsWith("lastModified.TBcfg")
+						&& !currentToolBarConfiguration
+								.endsWith("newToolBar.TBcfg")) {
+
+					// Updates the ACIDE - A Configurable IDE
+					// previous
+					// tool bar configuration
+					AcideResourceManager.getInstance().setProperty(
+							"previousToolBarConfiguration",
+							currentToolBarConfiguration);
+				}
+			}
+
+			// Updates the ACIDE - A Configurable IDE current tool
+			// bar configuration
+			AcideResourceManager.getInstance().setProperty(
+					"currentToolBarConfiguration", newName);
+
+			// Builds the tool bar
+			AcideMainWindow.getInstance().buildToolBarPanel();
+
+			// Enables the save tool bar menu option
+			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+					.getToolBarMenu().getSaveToolBarMenuItem().setEnabled(true);
+
+			// The changes are not saved
+			_areChangesSaved = false;
+
+			// Validates the changes in the main window
+			AcideMainWindow.getInstance().validate();
+
+			// Repaints the main window
+			AcideMainWindow.getInstance().repaint();
+
+			// Closes the tool bar configuration window
+			closeWindow();
+
+			// Updates the log
+			AcideLog.getLog().info(
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s170"));
+
+		} catch (Exception exception) {
+
+			// Displays an error message
+			JOptionPane.showMessageDialog(
+					null,
+					exception.getMessage(),
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s909"), JOptionPane.ERROR_MESSAGE);
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+		}
+	}
+
+	/**
 	 * Closes the ACIDE - A Configurable IDE tool bar configuration window.
 	 */
 	public void closeWindow() {
@@ -586,6 +685,44 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 
 		// But not always
 		AcideMainWindow.getInstance().setAlwaysOnTop(false);
+	}
+
+	/**
+	 * If there are changes in the window, asks to the user if he wants to save
+	 * them. If not, closes the window.
+	 */
+	private void askForSaving() {
+
+		// If there have been changes ask for saving the changes
+		if (_areThereChanges) {
+
+			// Asks the user if wants to save the changes
+			int returnValue = JOptionPane.showConfirmDialog(
+					null,
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s996"), AcideLanguageManager
+							.getInstance().getLabels().getString("s995"),
+					JOptionPane.YES_NO_CANCEL_OPTION);
+
+			// If it is not cancel or closed option
+			if (returnValue != JOptionPane.CANCEL_OPTION
+					&& returnValue != JOptionPane.CLOSED_OPTION) {
+
+				// If it is ok
+				if (returnValue == JOptionPane.YES_OPTION)
+
+					// Applies the changes
+					applyChanges();
+				else
+					// Performs the cancel button action
+					_cancelButton.doClick();
+			}
+
+		} else {
+
+			// Closes the tool bar configuration window
+			closeWindow();
+		}
 	}
 
 	/**
@@ -625,7 +762,7 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 	 * @param consoleCommand
 	 *            new command to be added.
 	 */
-	public void addCommand(AcideConsoleCommand consoleCommand) {
+	public void addCommand(AcideConsolePanelToolBarButtonConf consoleCommand) {
 
 		// Removes the selected row from the model
 		((AcideToolBarConfigurationWindowTableModel) _table.getModel())
@@ -679,119 +816,8 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// If there have been changes ask for saving the changes
-			if (_areThereChanges) {
-
-				// Asks the user if wants to save the changes
-				int returnValue = JOptionPane.showConfirmDialog(null,
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s996"), AcideLanguageManager
-								.getInstance().getLabels().getString("s995"),
-						JOptionPane.YES_NO_CANCEL_OPTION);
-
-				switch (returnValue) {
-
-				// YES
-				case JOptionPane.YES_OPTION:
-
-					// Sets the list
-					AcideConsoleCommandConfiguration
-							.getInstance()
-							.setFinalList(
-									((AcideToolBarConfigurationWindowTableModel) _table
-											.getModel()).getItems());
-
-					// Sets the new tool bar configuration name
-					String newName = "";
-
-					if (_forModifying)
-						newName = "./configuration/toolbar/lastModified.TBcfg";
-					else
-						newName = "./configuration/toolbar/newToolBar.TBcfg";
-
-					// Saves the final list into the new tool bar configuration
-					AcideConsoleCommandConfiguration.getInstance()
-							.saveFinalList(newName);
-
-					try {
-
-						// Gets the ACIDE - A Configurable IDE current tool bar
-						// configuration
-						String currentToolBarConfiguration = AcideResourceManager
-								.getInstance().getProperty(
-										"currentToolBarConfiguration");
-
-						if (_areChangesSaved) {
-
-							if (!currentToolBarConfiguration
-									.endsWith("lastModified.TBcfg")
-									|| !currentToolBarConfiguration
-											.endsWith("newToolBar.TBcfg")) {
-
-								// Updates the ACIDE - A Configurable IDE
-								// previous
-								// tool bar configuration
-								AcideResourceManager.getInstance().setProperty(
-										"previousToolBarConfiguration",
-										currentToolBarConfiguration);
-							}
-						}
-
-						// Updates the ACIDE - A Configurable IDE current tool
-						// bar configuration
-						AcideResourceManager.getInstance().setProperty(
-								"currentToolBarConfiguration", newName);
-
-						// Builds the tool bar
-						AcideMainWindow.getInstance().buildToolBarPanel();
-
-						// Enables the save tool bar menu option
-						AcideMainWindow.getInstance().getMenu()
-								.getConfigurationMenu().getToolBarMenu()
-								.getSaveToolBarMenuItem().setEnabled(true);
-
-						// The changes are not saved
-						_areChangesSaved = false;
-
-						// Validates the changes in the main window
-						AcideMainWindow.getInstance().validate();
-
-						// Repaints the main window
-						AcideMainWindow.getInstance().repaint();
-
-						// Closes the tool bar configuration window
-						closeWindow();
-
-						// Updates the log
-						AcideLog.getLog().info(
-								AcideLanguageManager.getInstance().getLabels()
-										.getString("s170"));
-
-					} catch (Exception exception) {
-
-						// Displays an error message
-						JOptionPane.showMessageDialog(null,
-								exception.getMessage(),
-								AcideLanguageManager.getInstance().getLabels()
-										.getString("s909"),
-								JOptionPane.ERROR_MESSAGE);
-
-						// Updates the log
-						AcideLog.getLog().error(exception.getMessage());
-					}
-
-					break;
-
-				// NO
-				case JOptionPane.NO_OPTION:
-					_cancelButton.doClick();
-					break;
-				}
-			} else {
-
-				// Closes the tool bar configuration window
-				closeWindow();
-			}
+			// Asks for saving the changes if any
+			askForSaving();
 		}
 	}
 
@@ -1004,6 +1030,30 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 			_acceptButton.doClick();
+		}
+	}
+
+	/**
+	 * ACIDE - A Configurable IDE tool bar configuration window closing
+	 * listener.
+	 * 
+	 * @version 0.8
+	 * @see WindowAdapter
+	 */
+	class AcideToolBarConfigurationWindowClosingListener extends WindowAdapter {
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent
+		 * )
+		 */
+		@Override
+		public void windowClosing(WindowEvent windowEvent) {
+
+			// Asks for saving the changes if any
+			askForSaving();
 		}
 	}
 }

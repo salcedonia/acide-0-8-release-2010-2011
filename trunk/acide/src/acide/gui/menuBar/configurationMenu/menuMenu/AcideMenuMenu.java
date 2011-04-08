@@ -98,20 +98,22 @@ public class AcideMenuMenu extends JMenu {
 	 */
 	public AcideMenuMenu() {
 
-		// NEW MENU MENU ITEM
+		// Creates the new menu menu item
 		_newMenuMenuItem = new JMenuItem();
 		
-		// LOAD MENU MENU ITEM
+		// Creates the load menu menu item
 		_loadMenuMenuItem = new JMenuItem();
 		
-		// MODIFY MENU MENU ITEM
+		// Creates the modify menu menu item
 		_modifyMenuMenuItem = new JMenuItem();
 		
-		// SAVE MENU MENU ITEM
+		// Creates the save menu menu item
 		_saveMenuMenuItem = new JMenuItem();
+		
+		// Disables the save menu menu item
 		_saveMenuMenuItem.setEnabled(false);
 		
-		// SAVE MENU AS MENU ITEM
+		// Creates the save menu as menu item
 		_saveMenuAsMenuItem = new JMenuItem();
 
 		// Sets the text of the menu menu components
@@ -124,19 +126,19 @@ public class AcideMenuMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// NEW MENU MENU ITEM
+		// Sets the new menu menu item text
 		_newMenuMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s275"));
 
-		// LOAD MENU MENU ITEM
+		// Sets the load menu menu item text
 		_loadMenuMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s276"));
 
-		// MODIFY MENU MENU ITEM
+		// Sets the modify menu menu item text
 		_modifyMenuMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s277"));
 
-		// SAVE MENU MENU ITEM
+		// Sets the save menu menu item text
 		_saveMenuMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s278"));
 
-		// SAVE MENU AS MENU ITEM
+		// Sets the save menu as menu item text
 		_saveMenuAsMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s279"));
 	}
 
@@ -148,23 +150,23 @@ public class AcideMenuMenu extends JMenu {
 		// Removes all the menu components
 		removeAll();
 
-		// NEW MENU MENU ITEM
+		// Adds the new menu menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_MENU_NAME))
 			add(_newMenuMenuItem);
 
-		// LOAD MENU MENU ITEM
+		// Adds the load menu menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(LOAD_MENU_NAME))
 			add(_loadMenuMenuItem);
 
-		// MODIFY MENU MENU ITEM
+		// Adds the modify menu menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(MODIFY_MENU_NAME))
 			add(_modifyMenuMenuItem);
 
-		// SAVE MENU MENU ITEM
+		// Adds the save menu menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_MENU_NAME))
 			add(_saveMenuMenuItem);
 
-		// SAVE MENU AS MENU ITEM
+		// Adds the save menu as menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_MENU_AS_NAME))
 			add(_saveMenuAsMenuItem);
 	}
@@ -174,19 +176,19 @@ public class AcideMenuMenu extends JMenu {
 	 */
 	public void setListeners() {
 
-		// NEW MENU MENU ITEM
+		// Sets the new menu menu item action listener
 		_newMenuMenuItem.addActionListener(new AcideNewMenuMenuItemListener());
 
-		// LOAD MENU MENU ITEM
+		// Sets the load menu menu item action listener
 		_loadMenuMenuItem.addActionListener(new AcideLoadMenuMenuItemListener());
 
-		// MODIFY MENU MENU ITEM
+		// Sets the modify menu menu item action listener
 		_modifyMenuMenuItem.addActionListener(new AcideModifyMenuMenuItemListener());
 
-		// SAVE MENU MENU ITEM
+		// Sets the save menu menu item action listener
 		_saveMenuMenuItem.addActionListener(new AcideSaveMenuMenuItemListener());
 
-		// SAVE MENU AS MENU ITEM
+		// Sets the save menu as menu item action listener
 		_saveMenuAsMenuItem.addActionListener(new AcideSaveAsMenuMenuItemListener());
 	}
 

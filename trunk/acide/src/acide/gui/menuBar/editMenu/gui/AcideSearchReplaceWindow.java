@@ -2303,6 +2303,15 @@ public class AcideSearchReplaceWindow extends JFrame {
 			AcideMainWindow.getInstance().setCursor(
 					Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
+			// Gets the original caret position
+			int caretPosition = AcideMainWindow.getInstance()
+					.getFileEditorManager().getSelectedFileEditorPanel()
+					.getActiveTextEditionArea().getCaretPosition();
+
+			// Gets the selected file editor panel index
+			int selectedFileEditorPanelIndex = AcideMainWindow.getInstance()
+					.getFileEditorManager().getSelectedFileEditorPanelIndex();
+
 			// Initializes the number of replacements
 			_globalNumberOfReplacements = 0;
 
@@ -2341,6 +2350,15 @@ public class AcideSearchReplaceWindow extends JFrame {
 							AcideLanguageManager.getInstance().getLabels()
 									.getString("s1000")
 									+ _globalNumberOfReplacements);
+
+			// Restores the original selected file editor panel
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.setSelectedFileEditorPanelAt(selectedFileEditorPanelIndex);
+
+			// Restores the original caret position
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().getActiveTextEditionArea()
+					.setCaretPosition(caretPosition);
 
 			// Puts the default cursor
 			AcideMainWindow.getInstance().setCursor(

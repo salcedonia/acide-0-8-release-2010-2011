@@ -30,7 +30,8 @@
 package acide.configuration.project;
 
 import acide.files.project.AcideProjectFile;
-import acide.gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
+import acide.gui.mainWindow.AcideMainWindow;
+import acide.gui.toolBarPanel.menuBarToolBar.AcideMenuBarToolBar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -746,7 +747,7 @@ public class AcideProjectConfiguration {
 		_isModified = isProjectModified;
 		
 		// Updates the save project in the static tool bar
-		AcideStaticToolBar.getInstance().updateSaveProjectButtonState(isProjectModified);
+		AcideMenuBarToolBar.getInstance().updateSaveProjectButtonState(isProjectModified);
 	}
 
 	/**
@@ -850,5 +851,50 @@ public class AcideProjectConfiguration {
 			if (_fileList.get(index).getAbsolutePath().equals(filePath))
 				return index;
 		return -1;
+	}
+	
+	/**
+	 * <p>
+	 * Check if the current project has been modified. If so, asks to the user
+	 * if he wants to save it. In the process stores the
+	 * </p>
+	 * 
+	 * @return true if the options OK or NO have not been selected and false in
+	 *         other case.
+	 */
+	public boolean askForSavingProject() {
+
+		boolean isCancelSelected = false;
+
+		// Is the project configuration modified
+		if (AcideProjectConfiguration.getInstance().isModified()) {
+
+			// Do you want to save it?
+			int returnValue = JOptionPane.showConfirmDialog(
+					null,
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s657"), AcideLanguageManager
+							.getInstance().getLabels().getString("s953"),
+					JOptionPane.YES_NO_CANCEL_OPTION);
+
+			// If it is OK
+			if (returnValue == JOptionPane.OK_OPTION) {
+
+				// Enables the save project menu item
+				AcideMainWindow.getInstance().getMenu().getProjectMenu()
+						.getSaveProjectMenuItem().setEnabled(true);
+
+				// Save the project
+				AcideMainWindow.getInstance().getMenu().getProjectMenu()
+						.getSaveProjectMenuItem().doClick();
+			} else {
+
+				// If it is not NO
+				if (returnValue != JOptionPane.NO_OPTION)
+					isCancelSelected = true;
+			}
+		}
+
+		return isCancelSelected;
 	}
 }

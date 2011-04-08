@@ -31,9 +31,10 @@ package acide.gui.menuBar.configurationMenu.toolBarMenu.utils;
 
 import java.util.ArrayList;
 
-import acide.configuration.toolBar.consoleComandToolBar.AcideConsoleCommand;
+import acide.configuration.toolBar.consolePanelToolBar.AcideConsolePanelToolBarButtonConf;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.gui.AcideToolBarConfigurationWindow;
-import acide.gui.toolBarPanel.consoleCommandToolBar.utils.AcideParameterType;
+import acide.gui.toolBarPanel.consolePanelToolBar.utils.AcideParameterType;
+
 import javax.swing.table.DefaultTableModel;
 
 import acide.language.AcideLanguageManager;
@@ -74,14 +75,19 @@ public class AcideToolBarConfigurationWindowTableModel extends
 	public static final int COLUMN_ICON = 3;
 	/**
 	 * ACIDE - A Configurable IDE tool bar configuration window table model
-	 * column icon constant.
+	 * column parameter type constant.
 	 */
 	public static final int COLUMN_PARAMETER_TYPE = 4;
+	/**
+	 * ACIDE - A Configurable IDE tool bar configuration window table model
+	 * column is executed in system shell constant.
+	 */
+	public static final int COLUMN_IS_EXECUTED_IN_SYSTEM_SHELL = 5;
 	/**
 	 * ACIDE - A Configurable IDE tool bar configuration window table model item
 	 * list.
 	 */
-	private ArrayList<AcideConsoleCommand> _items;
+	private ArrayList<AcideConsolePanelToolBarButtonConf> _items;
 	/**
 	 * ACIDE - A Configurable IDE tool bar configuration window instance.
 	 */
@@ -92,14 +98,24 @@ public class AcideToolBarConfigurationWindowTableModel extends
 	 * table model.
 	 * 
 	 * @param acideToolBarConfigurationWindow
+	 *            <p>
 	 *            ACIDE - A Configurable IDE tool bar configuration window
 	 *            instance.
+	 *            </p>
+	 *            <p>
+	 *            It is needed to tell it that there have been modifications on
+	 *            it. Otherwise, when a changed is performed in the model, the
+	 *            configuration window will not be able to notice it.
+	 *            </p>
 	 */
 	public AcideToolBarConfigurationWindowTableModel(
 			AcideToolBarConfigurationWindow acideToolBarConfigurationWindow) {
 
+		// Stores the tool bar configuration window instance
 		_toolBarConfigurationWindow = acideToolBarConfigurationWindow;
-		_items = new ArrayList<AcideConsoleCommand>();
+
+		// Creates the item list
+		_items = new ArrayList<AcideConsolePanelToolBarButtonConf>();
 	}
 
 	/*
@@ -109,7 +125,7 @@ public class AcideToolBarConfigurationWindowTableModel extends
 	 */
 	@Override
 	public int getColumnCount() {
-		return AcideConsoleCommand.NUMBER_OF_PARAMETERS;
+		return AcideConsolePanelToolBarButtonConf.NUMBER_OF_PARAMETERS;
 	}
 
 	/*
@@ -148,7 +164,9 @@ public class AcideToolBarConfigurationWindowTableModel extends
 		case COLUMN_PARAMETER_TYPE:
 			return AcideLanguageManager.getInstance().getLabels()
 					.getString("s1003");
-
+		case COLUMN_IS_EXECUTED_IN_SYSTEM_SHELL:
+			return AcideLanguageManager.getInstance().getLabels()
+					.getString("s1070");
 		default:
 			return "Column " + columnIndex;
 		}
@@ -162,7 +180,7 @@ public class AcideToolBarConfigurationWindowTableModel extends
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 
-		AcideConsoleCommand item = (AcideConsoleCommand) _items.get(rowIndex);
+		AcideConsolePanelToolBarButtonConf item = (AcideConsolePanelToolBarButtonConf) _items.get(rowIndex);
 
 		switch (columnIndex) {
 		case COLUMN_NAME:
@@ -175,6 +193,8 @@ public class AcideToolBarConfigurationWindowTableModel extends
 			return item.getIcon();
 		case COLUMN_PARAMETER_TYPE:
 			return item.getParameterType().toString();
+		case COLUMN_IS_EXECUTED_IN_SYSTEM_SHELL:
+			return item.isExecutedInSystemShell();
 		default:
 			return null;
 		}
@@ -214,7 +234,9 @@ public class AcideToolBarConfigurationWindowTableModel extends
 		// There are changes on the table in the tool bar configuration window
 		_toolBarConfigurationWindow.setAreThereChanges(true);
 
-		AcideConsoleCommand consoleCommand = (AcideConsoleCommand) _items.get(rowIndex);
+		// Gets the console command from the table row
+		AcideConsolePanelToolBarButtonConf consoleCommand = (AcideConsolePanelToolBarButtonConf) _items
+				.get(rowIndex);
 
 		switch (columnIndex) {
 		case COLUMN_NAME:
@@ -237,32 +259,41 @@ public class AcideToolBarConfigurationWindowTableModel extends
 			consoleCommand.setParameterType(AcideParameterType
 					.fromStringToEnum(value.toString()));
 			fireTableCellUpdated(rowIndex, columnIndex);
-
+			break;
+		case COLUMN_IS_EXECUTED_IN_SYSTEM_SHELL:
+			consoleCommand.setIsExecutedInSystemShell((Boolean) value);
+			fireTableCellUpdated(rowIndex, columnIndex);
+			break;
 		default:
 			return;
 		}
 	}
 
 	/**
-	 * Returns the item list.
+	 * Returns the ACIDE - A Configurable IDE tool bar configuration window
+	 * table model item list.
 	 * 
-	 * @return the item list.
+	 * @return the ACIDE - A Configurable IDE tool bar configuration window
+	 *         table model item list.
 	 */
-	public ArrayList<AcideConsoleCommand> getItems() {
+	public ArrayList<AcideConsolePanelToolBarButtonConf> getItems() {
 		return _items;
 	}
 
 	/**
-	 * Sets a new value to the item list.
+	 * Sets a new value to the ACIDE - A Configurable IDE tool bar configuration
+	 * window table model item list.
 	 * 
 	 * @param items
 	 *            new value to set.
 	 */
-	public void setItems(ArrayList<AcideConsoleCommand> items) {
+	public void setItems(ArrayList<AcideConsolePanelToolBarButtonConf> items) {
 
+		// Clears the item list
 		_items.clear();
 
-		for (AcideConsoleCommand consoleCommand : items)
+		// Adds all the items to it
+		for (AcideConsolePanelToolBarButtonConf consoleCommand : items)
 			_items.add(consoleCommand);
 
 		// Updates the model
@@ -275,7 +306,7 @@ public class AcideToolBarConfigurationWindowTableModel extends
 	 * @param consoleCommand
 	 *            new item to be added.
 	 */
-	public void addItem(AcideConsoleCommand consoleCommand) {
+	public void addItem(AcideConsolePanelToolBarButtonConf consoleCommand) {
 		_items.add(consoleCommand);
 	}
 

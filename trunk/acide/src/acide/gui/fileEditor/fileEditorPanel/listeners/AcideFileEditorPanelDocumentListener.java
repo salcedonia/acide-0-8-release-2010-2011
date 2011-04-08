@@ -32,7 +32,7 @@ package acide.gui.fileEditor.fileEditorPanel.listeners;
 import acide.configuration.workbench.AcideWorkbenchManager;
 import acide.gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
 import acide.gui.mainWindow.AcideMainWindow;
-import acide.gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
+import acide.gui.toolBarPanel.menuBarToolBar.AcideMenuBarToolBar;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -144,22 +144,15 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 					AcideMainWindow.getInstance().getFileEditorManager()
 							.setRedButtonAt(indexOnFocus);
 
-					// The file editor manager has been modified
-					AcideMainWindow.getInstance().getFileEditorManager()
-							.setIsModified(true);
 				} else {
 
 					// Sets the green icon to the close button
 					AcideMainWindow.getInstance().getFileEditorManager()
 							.setGreenButtonAt(indexOnFocus);
-
-					// The file editor manager has not been modified
-					AcideMainWindow.getInstance().getFileEditorManager()
-							.setIsModified(false);
 				}
 
 				// Updates the static tool bar
-				AcideStaticToolBar.getInstance().updateStateOfFileButtons();
+				AcideMenuBarToolBar.getInstance().updateStateOfFileButtons();
 			}
 		}
 	}

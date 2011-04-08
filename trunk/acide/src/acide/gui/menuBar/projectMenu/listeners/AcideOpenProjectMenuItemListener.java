@@ -29,6 +29,7 @@
  */
 package acide.gui.menuBar.projectMenu.listeners;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -46,7 +47,7 @@ import acide.configuration.grammar.AcideGrammarConfiguration;
 import acide.configuration.lexicon.AcideLexiconConfiguration;
 import acide.configuration.menu.AcideMenuConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
-import acide.configuration.toolBar.consoleComandToolBar.AcideConsoleCommandConfiguration;
+import acide.configuration.toolBar.AcideToolBarConfiguration;
 import acide.configuration.window.AcideWindowConfiguration;
 import acide.files.AcideFileExtensionFilterManager;
 import acide.files.AcideFileManager;
@@ -54,7 +55,7 @@ import acide.files.project.AcideProjectFile;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.configurationMenu.menuMenu.gui.AcideMenuConfigurationWindow;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.gui.AcideToolBarConfigurationWindow;
-import acide.gui.toolBarPanel.staticToolBar.AcideStaticToolBar;
+import acide.gui.toolBarPanel.menuBarToolBar.AcideMenuBarToolBar;
 
 /**
  * ACIDE -A Configurable IDE project menu open project menu item listener.
@@ -91,8 +92,22 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 		// If the file content is not empty
 		if (filePath != null) {
 
-			// Open the project
-			openProject(filePath);
+			// Asks to the user for saving the project
+			boolean isCancelSelected = AcideProjectConfiguration.getInstance()
+					.askForSavingProject();
+
+			// If in the closing project operation the cancel option has not
+			// been
+			// selected
+			if (!isCancelSelected) {
+
+				// Close all files in the project
+				AcideMainWindow.getInstance().getMenu().getFileMenu()
+						.getCloseAllFilesMenuItem().doClick();
+
+				// Open the project
+				openProject(filePath);
+			}
 		}
 	}
 
@@ -103,90 +118,142 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 	 * @param filePath
 	 *            file path which contains the project configuration file.
 	 */
-	public void openProject(String filePath) {
+	public void openProject(final String filePath) {
 
-		boolean cancelOptionSelected = false;
+		// Sets the wait cursor
+		AcideMainWindow.getInstance().setCursor(
+				Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-		// Are the project configuration modified or the file editor manager
-		// modified?
-		if (AcideProjectConfiguration.getInstance().isModified()
-				|| AcideMainWindow.getInstance().getFileEditorManager()
-						.isModified()) {
+		// Updates the status message in the status bar
+		AcideMainWindow.getInstance().getStatusBar().setStatusMessage(" ");
 
-			// Do you want to save it?
-			int returnValue = JOptionPane.showConfirmDialog(
-					null,
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s657"), AcideLanguageManager
-							.getInstance().getLabels().getString("s953"),
-					JOptionPane.YES_NO_CANCEL_OPTION);
+		// Loads the file editor configuration
+		loadProjectConfiguration(filePath);
 
-			// If it is OK
-			if (returnValue == JOptionPane.OK_OPTION) {
+		// Loads the language
+		loadLanguage();
 
-				// Enables the save project menu item
-				AcideMainWindow.getInstance().getMenu().getProjectMenu()
-						.getSaveProjectMenuItem().setEnabled(true);
+		// Loads the main window configuration
+		loadMainWindowConfiguration();
 
-				// Does the save project menu item action
-				AcideMainWindow.getInstance().getMenu().getProjectMenu()
-						.getSaveProjectMenuItem().doClick();
-			} else {
+		// Loads the menu configuration
+		loadMenuConfiguration();
 
-				// If it is not NO
-				if (returnValue != JOptionPane.NO_OPTION)
-					cancelOptionSelected = true;
+		// Loads the console configuration
+		loadConsoleConfiguration();
+
+		// Loads the tool bar configuration
+		loadToolBarConfiguration();
+
+		// Loads the explorer configuration
+		loadExplorerConfiguration();
+
+		// Loads the file editor configuration
+		loadFileEditorConfiguration();
+
+		// The project has not been modified
+		AcideProjectConfiguration.getInstance().setIsModified(false);
+
+		// This is the first time that it is saved
+		AcideProjectConfiguration.getInstance().setFirstSave(true);
+
+		// Enables the project menu
+		AcideMainWindow.getInstance().getMenu().enableProjectMenu();
+
+		// Enables the open all files menu item
+		AcideMainWindow.getInstance().getMenu().getFileMenu()
+				.getOpenAllFilesMenuItem().setEnabled(true);
+
+		// Updates the static tool bar
+		AcideMenuBarToolBar.getInstance().updateStateOfFileButtons();
+
+		// Updates the changes in the main window
+		AcideMainWindow.getInstance().validate();
+
+		// Repaints the main window
+		AcideMainWindow.getInstance().repaint();
+
+		// Sets the default cursor
+		AcideMainWindow.getInstance().setCursor(Cursor.getDefaultCursor());
+	}
+
+	/**
+	 * Checks if there are any modified opened file editors and asks to the user
+	 * if wants to save them or not.
+	 */
+	public void saveModifiedOpenedFileEditors() {
+
+		// If the file editor manager is modified
+		if (AcideMainWindow.getInstance().getFileEditorManager().isModified()) {
+
+			// Gets the number of file editor panels
+			int numberOfFileEditorPanels = AcideMainWindow.getInstance()
+					.getFileEditorManager().getNumberOfFileEditorPanels();
+
+			// If there are opened file editor panels
+			if (numberOfFileEditorPanels > 0) {
+
+				int selectedFileEditorPanelIndex = AcideMainWindow
+						.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanelIndex();
+
+				// Search for modified opened file editors
+				for (int index = numberOfFileEditorPanels - 1; index >= 0; index--) {
+
+					// If it is modified
+					if (AcideMainWindow.getInstance().getFileEditorManager()
+							.isRedButton(index)) {
+
+						// Puts the focus on the current checked file
+						// editor panel
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.setSelectedFileEditorPanelAt(index);
+
+						// Do you want to save it?
+						int returnValue2 = JOptionPane.showConfirmDialog(null,
+								AcideLanguageManager.getInstance().getLabels()
+										.getString("s643"),
+								AcideLanguageManager.getInstance().getLabels()
+										.getString("s953"),
+								JOptionPane.YES_NO_OPTION);
+
+						// If it is OK
+						if (returnValue2 == JOptionPane.OK_OPTION) {
+
+							// Saves the file editor panel
+							AcideMainWindow.getInstance().getMenu()
+									.getFileMenu().saveFile(index);
+						}
+					}
+				}
+
+				// Restores the selected file editor panel
+				AcideMainWindow
+						.getInstance()
+						.getFileEditorManager()
+						.setSelectedFileEditorPanelAt(
+								selectedFileEditorPanelIndex);
 			}
 		}
 
-		// If the user does not select the cancel option
-		if (!cancelOptionSelected) {
+		// Gets the number of file editor panels
+		int numberOfFileEditorPanels = AcideMainWindow.getInstance()
+				.getFileEditorManager().getNumberOfFileEditorPanels();
 
-			// Updates the status message in the status bar
-			AcideMainWindow.getInstance().getStatusBar().setStatusMessage(" ");
+		// Closes the file editor panels in the tabbed pane
+		for (int index = 0; index < numberOfFileEditorPanels; index++) {
 
-			// Closes the previous project configuration
-			closePreviousProjectConfiguration();
+			// Sets the selected tab at index 0
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.setSelectedFileEditorPanelAt(0);
 
-			// Loads the file editor configuration
-			loadProjectConfiguration(filePath);
+			// Removes it from the tabbed pane
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.getTabbedPane().remove(0);
 
-			// Loads the language
-			loadLanguage();
-
-			// Loads the main window configuration
-			loadMainWindowConfiguration();
-
-			// Loads the menu configuration
-			loadMenuConfiguration();
-
-			// Loads the console configuration
-			loadConsoleConfiguration();
-
-			// Loads the tool bar configuration
-			loadToolBarConfiguration();
-
-			// Loads the explorer configuration
-			loadExplorerConfiguration();
-			
-			// Loads the file editor configuration
-			loadFileEditorConfiguration();
-
-			// The project has not been modified
-			AcideProjectConfiguration.getInstance().setIsModified(false);
-
-			// This is the first time that it is saved
-			AcideProjectConfiguration.getInstance().setFirstSave(true);
-
-			// Enables the project menu
-			AcideMainWindow.getInstance().getMenu().enableProjectMenu();
-
-			// Enables the open all files menu item
-			AcideMainWindow.getInstance().getMenu().getFileMenu()
-					.getOpenAllFilesMenuItem().setEnabled(true);
-			
-			// Updates the static tool bar
-			AcideStaticToolBar.getInstance().updateStateOfFileButtons();
+			// Validates the changes in the tabbed pane
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.getTabbedPane().validate();
 		}
 	}
 
@@ -314,7 +381,7 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 			// Shows the explorer
 			AcideMainWindow.getInstance().getExplorerPanel()
 					.showExplorerPanel();
-		
+
 		// Enables the show explorer panel menu item
 		AcideMainWindow.getInstance().getMenu().getViewMenu()
 				.getShowExplorerPanelCheckBoxMenuItem().setSelected(true);
@@ -464,15 +531,14 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 
 		try {
 
-			// Clears the list of shell commands
-			AcideConsoleCommandConfiguration.getInstance().clear();
-
 			// Gets the ACIDE - A Configurable IDE tool bar configuration
 			String currentToolBarConfiguration = AcideProjectConfiguration
 					.getInstance().getToolBarConfiguration();
 
 			// Loads the command list from the configuration file
-			AcideConsoleCommandConfiguration.getInstance().loadFinalList(
+			AcideToolBarConfiguration
+			.getInstance()
+			.getConsolePanelToolBarConfiguration().loadFinalList(
 					currentToolBarConfiguration);
 
 			// Updates the ACIDE - A Configurable IDE current tool bar
@@ -500,7 +566,9 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 			try {
 
 				// Loads the command list from the configuration file
-				AcideConsoleCommandConfiguration.getInstance().loadFinalList(
+				AcideToolBarConfiguration
+				.getInstance()
+				.getConsolePanelToolBarConfiguration().loadFinalList(
 						name);
 
 				// Displays an error message
@@ -522,7 +590,9 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 				try {
 
 					// Loads the command list from the configuration file
-					AcideConsoleCommandConfiguration.getInstance()
+					AcideToolBarConfiguration
+					.getInstance()
+					.getConsolePanelToolBarConfiguration()
 							.loadFinalList(
 									"./configuration/toolbar/default.TBcfg");
 				} catch (Exception exception2) {
@@ -752,64 +822,6 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 								true);
 					}
 				}
-			}
-		}
-	}
-
-	/**
-	 * Closes the opened file editors and store the window parameters.
-	 * 
-	 * @return true if the user has selected cancel in any of the modified tabs
-	 *         and false in other case.
-	 */
-	public void closePreviousProjectConfiguration() {
-
-		// Gets the number of file editor panels
-		int numberOfFileEditorPanels = AcideMainWindow.getInstance()
-				.getFileEditorManager().getNumberOfFileEditorPanels();
-
-		// If there are opened file editor panels
-		if (numberOfFileEditorPanels != 0) {
-
-			// Search for modified opened file editors
-			for (int index = numberOfFileEditorPanels - 1; index >= 0; index--) {
-
-				// If it is modified
-				if (AcideMainWindow.getInstance().getFileEditorManager()
-						.isRedButton(index)) {
-
-					// Do you want to save it?
-					int returnValue = JOptionPane.showConfirmDialog(null,
-							AcideLanguageManager.getInstance().getLabels()
-									.getString("s643"), AcideLanguageManager
-									.getInstance().getLabels()
-									.getString("s953"),
-							JOptionPane.YES_NO_OPTION);
-
-					// If it is OK
-					if (returnValue == JOptionPane.OK_OPTION) {
-
-						// Saves the file editor panel
-						AcideMainWindow.getInstance().getMenu().getFileMenu()
-								.saveFile(index);
-					}
-				}
-			}
-
-			// Close the file editor panels in the tabbed pane
-			for (int index = 0; index < numberOfFileEditorPanels; index++) {
-
-				// Sets the selected tab at index 0
-				AcideMainWindow.getInstance().getFileEditorManager()
-						.setSelectedFileEditorPanelAt(0);
-
-				// Removes it from the tabbed pane
-				AcideMainWindow.getInstance().getFileEditorManager()
-						.getTabbedPane().remove(0);
-
-				// Validates the changes in the tabbed pane
-				AcideMainWindow.getInstance().getFileEditorManager()
-						.getTabbedPane().validate();
 			}
 		}
 	}

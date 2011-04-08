@@ -4,6 +4,7 @@ action = dir
 hintText = Directory Listing
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command pwd
 name = pwd
@@ -11,6 +12,7 @@ action = cd
 hintText = Current Directory
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command type
 name = type
@@ -18,6 +20,7 @@ action = type $activeFile$
 hintText = Type Current File
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = false
 
 // Command explorer
 name = explorer
@@ -25,5 +28,6 @@ action = explorer
 hintText = Launch the explorer
 icon = 
 parameterType = NONE
+isExecutedInSytemShell = true
 
 // End

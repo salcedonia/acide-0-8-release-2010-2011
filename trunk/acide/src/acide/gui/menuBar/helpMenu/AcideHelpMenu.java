@@ -84,10 +84,10 @@ public class AcideHelpMenu extends JMenu {
 	 */
 	public AcideHelpMenu() {
 
-		// SHOW HELP MENU ITEM
+		// Creates the show help menu item
 		_showHelpMenuItem = new JMenuItem(SHOW_HELP_IMAGE);
 		
-		// SHOW ABOUT US MENU ITEM
+		// Creates the show about us menu item
 		_showAboutUsMenuItem = new JMenuItem(SHOW_ABOUT_US_IMAGE);
 
 		// Sets the text of the help menu components
@@ -100,12 +100,14 @@ public class AcideHelpMenu extends JMenu {
 	 */
 	public void setTextOfMenuComponents() {
 
-		// SHOW HELP MENU ITEM
+		// Sets the show help menu item text
 		_showHelpMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s38"));
+		
+		// Sets the show help menu item accelerator
 		_showHelpMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H,
 				ActionEvent.CTRL_MASK));
 
-		// SHOW ABOUT US MENU ITEM
+		// Sets the show about us menu item text
 		_showAboutUsMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s39"));
 	}
 
@@ -117,16 +119,16 @@ public class AcideHelpMenu extends JMenu {
 		// Removes all the menu components
 		removeAll();
 
-		// SHOW HELP MENU ITEM
+		// Adds the show help menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SHOW_HELP_NAME))
 			add(_showHelpMenuItem);
 		
-		// SEPARATOR
+		// Adds a separator to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SHOW_HELP_NAME)
 				&& AcideMenuConfiguration.getInstance().getIsDisplayed(SHOW_ABOUT_US_NAME))
 			addSeparator();
 		
-		// SHOW ABOUT US MENU ITEM
+		// Adds the show about us menu item to the menu
 		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SHOW_ABOUT_US_NAME))
 			add(_showAboutUsMenuItem);
 	}
@@ -136,10 +138,10 @@ public class AcideHelpMenu extends JMenu {
 	 */
 	public void setListeners() {
 
-		// SHOW ABOUT US MENU ITEM
+		// Sets the show help menu item action listener
 		_showAboutUsMenuItem.addActionListener(new AcideShowAboutUsMenuItemListener());
 
-		// SHOW HELP MENU ITEM
+		// Sets the show about us menu item text
 		_showHelpMenuItem.addActionListener(new AcideShowHelpMenuItemListener());
 	}
 
