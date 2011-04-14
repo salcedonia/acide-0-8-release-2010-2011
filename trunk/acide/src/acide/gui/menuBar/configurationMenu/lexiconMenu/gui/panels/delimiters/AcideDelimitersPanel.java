@@ -38,14 +38,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.TitledBorder;
 
 import acide.configuration.lexicon.delimiters.AcideLexiconDelimitersManager;
 import acide.gui.mainWindow.AcideMainWindow;
@@ -115,11 +113,6 @@ public class AcideDelimitersPanel extends JPanel {
 		_delimiterListTableColumns = new String[1];
 		_delimiterListTableColumns[0] = AcideLanguageManager.getInstance()
 				.getLabels().getString("s440");
-
-		// Sets the border
-		setBorder(BorderFactory.createTitledBorder(null, AcideLanguageManager
-				.getInstance().getLabels().getString("s429"),
-				TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION));
 
 		// Builds the panel components
 		buildComponents();

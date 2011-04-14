@@ -38,7 +38,6 @@ import acide.files.AcideFileManager;
 import acide.files.project.AcideProjectFile;
 import acide.gui.listeners.AcideWindowClosingListener;
 import acide.gui.mainWindow.AcideMainWindow;
-import acide.gui.toolBarPanel.menuBarToolBar.AcideMenuBarToolBar;
 
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -774,10 +773,10 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 		AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
 				.getSaveProjectMenuItem().setEnabled(true);
 
-		// Enables the save project button in the static tool
+		// Enables the save project button in the menu bar tool
 		// bar
-		AcideMenuBarToolBar.getInstance().getSaveProjectButton()
-				.setEnabled(true);
+		AcideMainWindow.getInstance().getToolBarPanel().getMenuBarToolBar()
+				.getSaveProjectButton().setEnabled(true);
 
 		// Notifies to the model about the changes
 		AcideMainWindow.getInstance().getExplorerPanel().getTreeModel()

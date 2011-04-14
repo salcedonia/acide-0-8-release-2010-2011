@@ -214,7 +214,7 @@ public class AcideFileEditorTextEditionArea {
 
 			/*
 			 * Unset the foreground color (if any) whenever the user enters text
-			 * (if not for this, text entered after a paren would catch the
+			 * (if not for this, text entered after a parent would catch the
 			 * paren's color)
 			 */
 			@Override

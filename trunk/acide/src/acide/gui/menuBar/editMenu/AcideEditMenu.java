@@ -36,6 +36,7 @@ import java.util.Locale;
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
 import acide.configuration.menu.AcideMenuConfiguration;
@@ -84,9 +85,9 @@ public class AcideEditMenu extends JMenu {
 	 */
 	public static final String CUT_NAME = "Cut";
 	/**
-	 * ACIDE - A Configurable IDE edit menu select all files menu item name.
+	 * ACIDE - A Configurable IDE edit menu select all menu item name.
 	 */
-	public static final String SELECT_ALL_FILES_NAME = "Select All Files";
+	public static final String SELECT_ALL_NAME = "Select All";
 	/**
 	 * ACIDE - A Configurable IDE edit menu go to line menu item name.
 	 */
@@ -125,10 +126,10 @@ public class AcideEditMenu extends JMenu {
 	private final static ImageIcon CUT_IMAGE = new ImageIcon(
 			"./resources/icons/menu/edit/cut.png");
 	/**
-	 * ACIDE - A Configurable IDE edit menu select all files menu item image
+	 * ACIDE - A Configurable IDE edit menu select all menu item image
 	 * icon.
 	 */
-	private final static ImageIcon SELECT_ALL_FILES_IMAGE = new ImageIcon(
+	private final static ImageIcon SELECT_ALL_IMAGE = new ImageIcon(
 			"./resources/icons/menu/edit/selectAll.png");
 	/**
 	 * ACIDE - A Configurable IDE edit menu go to line menu item image icon.
@@ -181,41 +182,143 @@ public class AcideEditMenu extends JMenu {
 	 * ACIDE - A Configurable IDE edit menu replace menu item.
 	 */
 	private JMenuItem _replaceMenuItem;
+	/**
+	 * ACIDE - A Configurable IDE edit menu redo copy separator.
+	 */
+	private JSeparator _redoCopySeparator;
+	/**
+	 * ACIDE - A Configurable IDE edit menu select all go to line separator.
+	 */
+	private JSeparator _selectAllGoToLineSeparator;
+	/**
+	 * ACIDE - A Configurable IDE edit menu go to line search separator
+	 */
+	private JSeparator _goToLineSearchSeparator;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE edit menu.
 	 */
 	public AcideEditMenu() {
 
+		// Builds the menu components
+		buildComponents();
+
+		// Adds the components to the menu
+		addComponents();
+
+		// Sets the text of the edit menu components
+		setTextOfMenuComponents();
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE edit menu.
+	 */
+	private void addComponents() {
+
+		// Adds the undo menu item to the menu
+		add(_undoMenuItem);
+
+		// Adds the redo menu item to the menu
+		add(_redoMenuItem);
+
+		// Adds the redo copy menu item to the menu
+		add(_redoCopySeparator);
+
+		// Adds the copy menu item to the menu
+		add(_copyMenuItem);
+
+		// Adds the paste menu item to the menu
+		add(_pasteMenuItem);
+
+		// Adds the cut menu item to the menu
+		add(_cutMenuItem);
+
+		// Adds the select all menu item to the menu
+		add(_selectAllMenuItem);
+
+		// Adds the select all go to line menu item to the menu
+		add(_selectAllGoToLineSeparator);
+
+		// Adds the go to line menu item to the menu
+		add(_goToLineMenuItem);
+
+		// Adds the go to line search menu item to the menu
+		add(_goToLineSearchSeparator);
+
+		// Adds the search menu item to the menu
+		add(_searchMenuItem);
+
+		// Adds the replace menu item to the menu
+		add(_replaceMenuItem);
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE edit menu components.
+	 */
+	private void buildComponents() {
+
 		// Creates the undo menu item
 		_undoMenuItem = new JMenuItem(UNDO_IMAGE);
+
+		// Sets the undo menu item name
+		_undoMenuItem.setName(UNDO_NAME);
 
 		// Creates the redo menu item
 		_redoMenuItem = new JMenuItem(REDO_IMAGE);
 
+		// Sets the redo menu item name
+		_redoMenuItem.setName(REDO_NAME);
+
+		// Creates the redo copy separator
+		_redoCopySeparator = new JSeparator();
+
 		// Creates the copy menu item
 		_copyMenuItem = new JMenuItem(COPY_IMAGE);
+
+		// Sets the copy menu item name
+		_copyMenuItem.setName(COPY_NAME);
 
 		// Creates the paste menu item
 		_pasteMenuItem = new JMenuItem(PASTE_IMAGE);
 
+		// Sets the paste menu item name
+		_pasteMenuItem.setName(PASTE_NAME);
+
 		// Creates the cut menu item
 		_cutMenuItem = new JMenuItem(CUT_IMAGE);
 
-		// Creates the search menu item
-		_searchMenuItem = new JMenuItem(SEARCH_IMAGE);
-
-		// Creates the replace menu item
-		_replaceMenuItem = new JMenuItem(REPLACE_IMAGE);
+		// Sets the cut menu item name
+		_cutMenuItem.setName(CUT_NAME);
 
 		// Creates the select all menu item
-		_selectAllMenuItem = new JMenuItem(SELECT_ALL_FILES_IMAGE);
+		_selectAllMenuItem = new JMenuItem(SELECT_ALL_IMAGE);
+
+		// Sets the select all menu item
+		_selectAllMenuItem.setName(SELECT_ALL_NAME);
+
+		// Creates the select all go to line copy separator
+		_selectAllGoToLineSeparator = new JSeparator();
 
 		// Creates the go to line menu item
 		_goToLineMenuItem = new JMenuItem(GO_TO_LINE_IMAGE);
 
-		// Sets the text of the edit menu components
-		setTextOfMenuComponents();
+		// Sets the go to line menu item name
+		_goToLineMenuItem.setName(GO_TO_LINE_NAME);
+
+		// Creates the go to line search separator
+		_goToLineSearchSeparator = new JSeparator();
+
+		// Creates the search menu item
+		_searchMenuItem = new JMenuItem(SEARCH_IMAGE);
+
+		// Sets the search menu item name
+		_searchMenuItem.setName(SEARCH_NAME);
+
+		// Creates the replace menu item
+		_replaceMenuItem = new JMenuItem(REPLACE_IMAGE);
+
+		// Sets the replace menu item name
+		_replaceMenuItem.setName(REPLACE_NAME);
 	}
 
 	/**
@@ -230,7 +333,7 @@ public class AcideEditMenu extends JMenu {
 		// Sets the undo menu item text
 		_undoMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s21"));
-		
+
 		// Sets the undo menu item accelerator
 		_undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
 				ActionEvent.CTRL_MASK));
@@ -238,7 +341,7 @@ public class AcideEditMenu extends JMenu {
 		// Sets the redo menu item text
 		_redoMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s22"));
-		
+
 		// Sets the redo menu item accelerator
 		_redoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y,
 				ActionEvent.CTRL_MASK));
@@ -246,7 +349,7 @@ public class AcideEditMenu extends JMenu {
 		// Sets the copy menu item text
 		_copyMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s23"));
-		
+
 		// Sets the copy menu item accelerator
 		_copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
 				ActionEvent.CTRL_MASK));
@@ -254,7 +357,7 @@ public class AcideEditMenu extends JMenu {
 		// Sets the cut menu item text
 		_cutMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s24"));
-		
+
 		// Sets the cut menu item accelerator
 		_cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
 				ActionEvent.CTRL_MASK));
@@ -262,7 +365,7 @@ public class AcideEditMenu extends JMenu {
 		// Sets the paste menu item text
 		_pasteMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s25"));
-		
+
 		// Sets the paste menu item accelerator
 		_pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,
 				ActionEvent.CTRL_MASK));
@@ -270,7 +373,7 @@ public class AcideEditMenu extends JMenu {
 		// Sets the search menu item text
 		_searchMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s26"));
-		
+
 		// Sets the search menu item accelerator
 		if (AcideLanguageManager.getInstance().getCurrentLocale()
 				.equals(new Locale("en", "EN")))
@@ -283,7 +386,7 @@ public class AcideEditMenu extends JMenu {
 		// Sets the replace menu item text
 		_replaceMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s27"));
-		
+
 		// Sets the replace menu item accelerator
 		if (AcideLanguageManager.getInstance().getCurrentLocale()
 				.equals(new Locale("en", "EN")))
@@ -296,7 +399,7 @@ public class AcideEditMenu extends JMenu {
 		// Sets the select all menu item text
 		_selectAllMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s190"));
-		
+
 		// Sets the select all menu item accelerator
 		_selectAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
 				ActionEvent.CTRL_MASK));
@@ -307,23 +410,22 @@ public class AcideEditMenu extends JMenu {
 	}
 
 	/**
-	 * Builds the ACIDE - A Configurable IDE edit menu.
+	 * Updates the ACIDE - A Configurable IDE edit menu components visibility
+	 * with the menu configuration.
 	 */
-	public void build() {
+	public void updateComponentsVisibility() {
 
-		// Removes all the menu components
-		removeAll();
+		// Sets the undo menu item to visible or not visible
+		_undoMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(UNDO_NAME));
 
-		// Adds the undo menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME))
-			add(_undoMenuItem);
+		// Sets the redo menu item to visible or not visible
+		_redoMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(REDO_NAME));
 
-		// Adds the redo menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(REDO_NAME))
-			add(_redoMenuItem);
-
-		// Adds a separator to the menu
-		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME) || AcideMenuConfiguration
+		// Sets the redo copy separator to visible or not visible
+		_redoCopySeparator.setVisible((AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(UNDO_NAME) || AcideMenuConfiguration
 				.getInstance().getIsDisplayed(REDO_NAME))
 				&& (AcideMenuConfiguration.getInstance().getIsDisplayed(
 						COPY_NAME)
@@ -331,28 +433,27 @@ public class AcideEditMenu extends JMenu {
 								PASTE_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 								CUT_NAME) || AcideMenuConfiguration
-						.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME)))
-			addSeparator();
+						.getInstance().getIsDisplayed(SELECT_ALL_NAME)));
 
-		// Adds the copy menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(COPY_NAME))
-			add(_copyMenuItem);
+		// Sets the copy menu item to visible or not visible
+		_copyMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(COPY_NAME));
 
-		// Adds the paste menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(PASTE_NAME))
-			add(_pasteMenuItem);
+		// Sets the paste menu item to visible or not visible
+		_pasteMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(PASTE_NAME));
 
-		// Adds the cut menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(CUT_NAME))
-			add(_cutMenuItem);
+		// Sets the cut menu item to visible or not visible
+		_cutMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(CUT_NAME));
 
-		// Adds the select all menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				SELECT_ALL_FILES_NAME))
-			add(_selectAllMenuItem);
+		// Sets the select all menu item to visible or not visible
+		_selectAllMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(SELECT_ALL_NAME));
 
-		// Adds a separator to the menu
-		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME)
+		// Set the select all go to line separator to visible or not visible
+		_selectAllGoToLineSeparator.setVisible((AcideMenuConfiguration
+				.getInstance().getIsDisplayed(UNDO_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						REDO_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -361,18 +462,17 @@ public class AcideEditMenu extends JMenu {
 						PASTE_NAME)
 				|| AcideMenuConfiguration.getInstance()
 						.getIsDisplayed(CUT_NAME) || AcideMenuConfiguration
-				.getInstance().getIsDisplayed(SELECT_ALL_FILES_NAME))
+				.getInstance().getIsDisplayed(SELECT_ALL_NAME))
 				&& AcideMenuConfiguration.getInstance().getIsDisplayed(
-						GO_TO_LINE_NAME))
-			addSeparator();
+						GO_TO_LINE_NAME));
 
-		// Adds the go to line menu item to the menu
-		if (AcideMenuConfiguration.getInstance()
-				.getIsDisplayed(GO_TO_LINE_NAME))
-			add(_goToLineMenuItem);
+		// Sets the go to line menu item to visible or not visible
+		_goToLineMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(GO_TO_LINE_NAME));
 
-		// Adds a separator to the menu
-		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(UNDO_NAME)
+		// Sets go to line search separator to visible or not visible
+		_goToLineSearchSeparator.setVisible((AcideMenuConfiguration
+				.getInstance().getIsDisplayed(UNDO_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						REDO_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -382,20 +482,19 @@ public class AcideEditMenu extends JMenu {
 				|| AcideMenuConfiguration.getInstance()
 						.getIsDisplayed(CUT_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						SELECT_ALL_FILES_NAME) || AcideMenuConfiguration
+						SELECT_ALL_NAME) || AcideMenuConfiguration
 				.getInstance().getIsDisplayed(GO_TO_LINE_NAME))
 				&& (AcideMenuConfiguration.getInstance().getIsDisplayed(
 						SEARCH_NAME) || AcideMenuConfiguration.getInstance()
-						.getIsDisplayed(REPLACE_NAME)))
-			addSeparator();
+						.getIsDisplayed(REPLACE_NAME)));
 
-		// Adds the search menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SEARCH_NAME))
-			add(_searchMenuItem);
+		// Sets the search menu item to visible or not visible
+		_searchMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(SEARCH_NAME));
 
-		// Adds the replace menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(REPLACE_NAME))
-			add(_replaceMenuItem);
+		// Sets the replace menu item to visible or not visible
+		_replaceMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(REPLACE_NAME));
 	}
 
 	/**
@@ -549,28 +648,28 @@ public class AcideEditMenu extends JMenu {
 
 		// Disables the undo menu item
 		_undoMenuItem.setEnabled(false);
-		
+
 		// Disables the redo menu item
 		_redoMenuItem.setEnabled(false);
-		
+
 		// Enables the copy menu item
 		_copyMenuItem.setEnabled(true);
-		
+
 		// Enables the paste menu item
 		_pasteMenuItem.setEnabled(true);
-		
+
 		// Enables the cut menu item
 		_cutMenuItem.setEnabled(true);
-		
+
 		// Enables the select all menu item
 		_selectAllMenuItem.setEnabled(true);
-		
+
 		// Enables the go to line menu item
 		_goToLineMenuItem.setEnabled(true);
-		
+
 		// Enables the search menu item
 		_searchMenuItem.setEnabled(true);
-		
+
 		// Enables the replace menu item
 		_replaceMenuItem.setEnabled(true);
 	}
@@ -582,28 +681,28 @@ public class AcideEditMenu extends JMenu {
 
 		// Disables the undo menu item
 		_undoMenuItem.setEnabled(false);
-		
+
 		// Disables the redo menu item
 		_redoMenuItem.setEnabled(false);
-		
+
 		// Disables the copy menu item
 		_copyMenuItem.setEnabled(false);
-		
+
 		// Disables the paste menu item
 		_pasteMenuItem.setEnabled(false);
-		
+
 		// Disables the cut menu item
 		_cutMenuItem.setEnabled(false);
-		
+
 		// Disables the select all menu item
 		_selectAllMenuItem.setEnabled(false);
-		
+
 		// Disables the go the line menu item
 		_goToLineMenuItem.setEnabled(false);
-		
+
 		// Disables the search menu item
 		_searchMenuItem.setEnabled(false);
-		
+
 		// Disables the replace menu item
 		_replaceMenuItem.setEnabled(false);
 	}

@@ -40,7 +40,6 @@ import acide.gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
 import acide.gui.fileEditor.fileEditorPanel.listeners.AcideFileEditorPanelDocumentListener;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.editMenu.utils.AcideUndoManager;
-import acide.gui.toolBarPanel.menuBarToolBar.AcideMenuBarToolBar;
 
 import java.io.File;
 
@@ -349,8 +348,9 @@ public class AcideFileEditorManager {
 		AcideMainWindow.getInstance().getExplorerPanel()
 				.selectTreeNodeFromFileEditor();
 
-		// Updates the static tool bar
-		AcideMenuBarToolBar.getInstance().updateStateOfFileButtons();
+		// Updates the save project in the menu bar tool bar
+		AcideMainWindow.getInstance().getToolBarPanel().getMenuBarToolBar()
+				.updateStateOfFileButtons();
 	}
 
 	/**

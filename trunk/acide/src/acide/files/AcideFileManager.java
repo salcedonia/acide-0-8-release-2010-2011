@@ -34,7 +34,6 @@ import acide.gui.mainWindow.AcideMainWindow;
 
 import javax.swing.*;
 
-
 import acide.resources.AcideResourceManager;
 
 import java.io.*;
@@ -95,8 +94,8 @@ public class AcideFileManager {
 		try {
 
 			// Gets the default path for the start point
-			defaultPath = AcideResourceManager.getInstance()
-					.getProperty("defaultPath");
+			defaultPath = AcideResourceManager.getInstance().getProperty(
+					"defaultPath");
 			file = new File(defaultPath);
 
 			// Sets the title of the file chooser window
@@ -356,8 +355,9 @@ public class AcideFileManager {
 	/**
 	 * Writes on a text file.
 	 * 
-	 * @param isNewProjectFile flag that indicates if it is the new project file or not for the
-	 * new project file menu item.
+	 * @param isNewProjectFile
+	 *            flag that indicates if it is the new project file or not for
+	 *            the new project file menu item.
 	 * 
 	 * @return the absolute file path.
 	 */
@@ -370,8 +370,8 @@ public class AcideFileManager {
 		try {
 
 			// Gets the default path
-			defaultPath = AcideResourceManager.getInstance()
-					.getProperty("defaultPath");
+			defaultPath = AcideResourceManager.getInstance().getProperty(
+					"defaultPath");
 			file = new File(defaultPath);
 
 			// Sets the current directory to the default path
@@ -452,12 +452,13 @@ public class AcideFileManager {
 						.getInstance()
 						.getFileEditorManager()
 						.getTabbedPane()
-						.remove(AcideMainWindow.getInstance().getFileEditorManager()
+						.remove(AcideMainWindow.getInstance()
+								.getFileEditorManager()
 								.getSelectedFileEditorPanelIndex());
 
 				// Validates the changes in the file editor
-				AcideMainWindow.getInstance().getFileEditorManager().getTabbedPane()
-						.validate();
+				AcideMainWindow.getInstance().getFileEditorManager()
+						.getTabbedPane().validate();
 			}
 		}
 
@@ -521,7 +522,7 @@ public class AcideFileManager {
 					AcideLanguageManager.getInstance().getLabels()
 							.getString("s309")
 							+ fileName);
-			//exception.printStackTrace();
+			// exception.printStackTrace();
 
 			return null;
 		}

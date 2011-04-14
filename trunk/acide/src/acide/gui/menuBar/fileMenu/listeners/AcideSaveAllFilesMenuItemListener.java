@@ -78,6 +78,10 @@ public class AcideSaveAllFilesMenuItemListener implements ActionListener {
 			// Restores the original selected file editor panel
 			AcideMainWindow.getInstance().getFileEditorManager()
 					.setSelectedFileEditorPanelAt(selectedFileEditorPanelIndex);
+
+			// Updates the save project in the menu bar tool bar
+			AcideMainWindow.getInstance().getToolBarPanel().getMenuBarToolBar()
+					.updateStateOfFileButtons();
 		}
 	}
 }

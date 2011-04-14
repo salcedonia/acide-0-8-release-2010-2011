@@ -37,6 +37,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
 import acide.configuration.grammar.AcideGrammarConfiguration;
@@ -59,7 +60,6 @@ import acide.gui.menuBar.fileMenu.listeners.AcideSaveAllFilesMenuItemListener;
 import acide.gui.menuBar.fileMenu.listeners.AcideSaveFileAsMenuItemListener;
 import acide.gui.menuBar.fileMenu.listeners.AcideSaveFileMenuItemListener;
 import acide.gui.menuBar.fileMenu.recentFilesMenu.AcideRecentFilesMenu;
-import acide.gui.toolBarPanel.menuBarToolBar.AcideMenuBarToolBar;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 
@@ -214,47 +214,161 @@ public class AcideFileMenu extends JMenu {
 	 * ACIDE - A Configurable IDE file menu exit menu item.
 	 */
 	private JMenuItem _exitMenuItem;
+	/**
+	 * ACIDE - A Configurable IDE file menu close all files save file separator.
+	 */
+	private JSeparator _closeAllFilesSaveFileSeparator;
+	/**
+	 * ACIDE - A Configurable IDE file menu save all files print file separator.
+	 */
+	private JSeparator _saveAllFilesPrintFileSeparator;
+	/**
+	 * ACIDE - A Configurable IDE file menu print file exit separator.
+	 */
+	private JSeparator _printFileExitSeparator;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE file menu.
 	 */
 	public AcideFileMenu() {
 
+		// Builds the menu components
+		buildComponents();
+
+		// Adds the components to the menu
+		addComponents();
+
+		// Sets the text of the file menu components
+		setTextOfMenuComponents();
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE file menu.
+	 */
+	private void addComponents() {
+
+		// Adds the new file menu item to the file menu
+		add(_newFileMenuItem);
+
+		// Adds the open file menu item to the file menu
+		add(_openFileMenuItem);
+
+		// Adds the open recent files menu item to the file menu
+		add(_openRecentFilesMenu);
+
+		// Adds the open all files menu item to the file menu
+		add(_openAllFilesMenuItem);
+
+		// Adds the close file menu item to the file menu
+		add(_closeFileMenuItem);
+
+		// Adds the close all files menu item to the file menu
+		add(_closeAllFilesMenuItem);
+
+		// Adds the close all files save file separator to the file menu
+		add(_closeAllFilesSaveFileSeparator);
+
+		// Adds the save file menu item to the file menu
+		add(_saveFileMenuItem);
+
+		// Adds the save file as menu item to the file menu
+		add(_saveFileAsMenuItem);
+
+		// Adds the save all files menu item to the file menu
+		add(_saveAllFilesMenuItem);
+
+		// Adds the save all files print file separator to the file
+		add(_saveAllFilesPrintFileSeparator);
+
+		// Adds the print file menu item to the file menu
+		add(_printFileMenuItem);
+
+		// Adds the print file exit separator to the file menu
+		add(_printFileExitSeparator);
+
+		// Adds the exit menu item to the file menu
+		add(_exitMenuItem);
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE file menu components.
+	 */
+	private void buildComponents() {
+
 		// Creates the new file menu item
 		_newFileMenuItem = new JMenuItem(NEW_FILE_IMAGE);
+
+		// Sets the new file menu item name
+		_newFileMenuItem.setName(NEW_FILE_NAME);
 
 		// Creates the open file menu item
 		_openFileMenuItem = new JMenuItem(OPEN_FILE_IMAGE);
 
+		// Sets the open file menu item name
+		_openFileMenuItem.setName(OPEN_FILE_NAME);
+
 		// Creates the open recent files menu item
 		_openRecentFilesMenu = new AcideRecentFilesMenu();
+
+		// Sets the open recent files menu item name
+		_openRecentFilesMenu.setName(OPEN_RECENT_FILES_NAME);
 
 		// Creates the open all files menu item
 		_openAllFilesMenuItem = new JMenuItem(OPEN_ALL_FILES_IMAGE);
 
+		// Sets the open all files menu item name
+		_openAllFilesMenuItem.setName(OPEN_ALL_FILES_NAME);
+
 		// Creates the close file menu item
 		_closeFileMenuItem = new JMenuItem(CLOSE_FILE_IMAGE);
+
+		// Sets the close file menu item name
+		_closeFileMenuItem.setName(CLOSE_FILE_NAME);
 
 		// Creates the all files menu item
 		_closeAllFilesMenuItem = new JMenuItem(CLOSE_ALL_FILES_IMAGE);
 
+		// Sets the close all files menu item name
+		_closeAllFilesMenuItem.setName(CLOSE_ALL_FILES_NAME);
+
+		// Creates the close all files save file separator
+		_closeAllFilesSaveFileSeparator = new JSeparator();
+
 		// Creates the save file as menu item
 		_saveFileAsMenuItem = new JMenuItem(SAVE_FILE_AS_IMAGE);
+
+		// Sets the save file as menu item name
+		_saveFileAsMenuItem.setName(SAVE_FILE_AS_NAME);
 
 		// Creates the save all files menu item
 		_saveAllFilesMenuItem = new JMenuItem(SAVE_ALL_FILES_IMAGE);
 
+		// Sets the save all files menu item name
+		_saveAllFilesMenuItem.setName(SAVE_ALL_FILES_NAME);
+
+		// Creates the save all files print file separator
+		_saveAllFilesPrintFileSeparator = new JSeparator();
+
 		// Creates the save file menu item
 		_saveFileMenuItem = new JMenuItem(SAVE_FILE_IMAGE);
+
+		// Sets the save file menu item name
+		_saveFileMenuItem.setName(SAVE_FILE_NAME);
 
 		// Creates the print file menu item
 		_printFileMenuItem = new JMenuItem(PRINT_FILE_IMAGE);
 
+		// Sets the print file menu item name
+		_printFileMenuItem.setName(PRINT_FILE_NAME);
+
+		// Creates the print file exit separator
+		_printFileExitSeparator = new JSeparator();
+
 		// Creates the exit menu item
 		_exitMenuItem = new JMenuItem(EXIT_IMAGE);
 
-		// Sets the text of the file menu components
-		setTextOfMenuComponents();
+		// Sets the exit menu item name
+		_exitMenuItem.setName(EXIT_NAME);
 	}
 
 	/**
@@ -371,43 +485,39 @@ public class AcideFileMenu extends JMenu {
 	}
 
 	/**
-	 * Builds the ACIDE - A Configurable IDE file menu.
+	 * Updates the ACIDE - A Configurable IDE file menu components visibility
+	 * with the menu configuration.
 	 */
-	public void build() {
+	public void updateComponentsVisibiliy() {
 
-		// Removes all the menu components
-		removeAll();
+		// Sets the new file menu item as visible or not visible
+		_newFileMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(NEW_FILE_NAME));
 
-		// Adds the new file menu item to the file menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME))
-			add(_newFileMenuItem);
+		// Sets the open file menu item as visible or not visible
+		_openFileMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(OPEN_FILE_NAME));
 
-		// Adds the open file menu item to the file menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(OPEN_FILE_NAME))
-			add(_openFileMenuItem);
+		// Sets the open recent files menu item as visible or not visible
+		_openRecentFilesMenu.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(OPEN_RECENT_FILES_NAME));
 
-		// Adds the open recent files menu item to the file menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				OPEN_RECENT_FILES_NAME))
-			add(_openRecentFilesMenu);
+		// Sets the open all files menu item as visible or not visible
+		_openAllFilesMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(OPEN_ALL_FILES_NAME));
 
-		// Adds the open all files menu item to the file menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				OPEN_ALL_FILES_NAME))
-			add(_openAllFilesMenuItem);
+		// Sets the close file menu item as visible or not visible
+		_closeFileMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(CLOSE_FILE_NAME));
 
-		// Adds the close file menu item to the file menu
-		if (AcideMenuConfiguration.getInstance()
-				.getIsDisplayed(CLOSE_FILE_NAME))
-			add(_closeFileMenuItem);
+		// Sets the close all files menu item as visible or not visible
+		_closeAllFilesMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(CLOSE_ALL_FILES_NAME));
 
-		// Adds the close all files menu item to the file menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				CLOSE_ALL_FILES_NAME))
-			add(_closeAllFilesMenuItem);
-
-		// Adds a separator to the file menu
-		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME)
+		// Sets the close all files save file separator
+		// to visible or not visible
+		_closeAllFilesSaveFileSeparator.setVisible((AcideMenuConfiguration
+				.getInstance().getIsDisplayed(NEW_FILE_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						OPEN_FILE_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -417,25 +527,24 @@ public class AcideFileMenu extends JMenu {
 						SAVE_FILE_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 								SAVE_FILE_AS_NAME) || AcideMenuConfiguration
-						.getInstance().getIsDisplayed(SAVE_ALL_FILES_NAME)))
-			addSeparator();
+						.getInstance().getIsDisplayed(SAVE_ALL_FILES_NAME)));
 
-		// Adds the save file menu item to the file menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_FILE_NAME))
-			add(_saveFileMenuItem);
+		// Sets the save file menu item as visible or not visible
+		_saveFileMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(SAVE_FILE_NAME));
 
-		// Adds the save file as menu item to the file menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				SAVE_FILE_AS_NAME))
-			add(_saveFileAsMenuItem);
+		// Sets the save file as menu item as visible or not visible
+		_saveFileAsMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(SAVE_FILE_AS_NAME));
 
-		// Adds the save all files menu item to the file menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				SAVE_ALL_FILES_NAME))
-			add(_saveAllFilesMenuItem);
+		// Sets the save all files menu item as visible or not visible
+		_saveAllFilesMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(SAVE_ALL_FILES_NAME));
 
-		// Adds a separator to the file menu
-		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME)
+		// Sets the save all files print file separator to visible or not
+		// visible
+		_saveAllFilesPrintFileSeparator.setVisible((AcideMenuConfiguration
+				.getInstance().getIsDisplayed(NEW_FILE_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						OPEN_FILE_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -448,16 +557,15 @@ public class AcideFileMenu extends JMenu {
 						SAVE_FILE_AS_NAME) || AcideMenuConfiguration
 				.getInstance().getIsDisplayed(SAVE_ALL_FILES_NAME))
 				&& (AcideMenuConfiguration.getInstance()
-						.getIsDisplayed(PRINT_FILE_NAME)))
-			addSeparator();
+						.getIsDisplayed(PRINT_FILE_NAME)));
 
-		// Adds the print file menu item to the file menu
-		if (AcideMenuConfiguration.getInstance()
-				.getIsDisplayed(PRINT_FILE_NAME))
-			add(_printFileMenuItem);
+		// Sets the print file menu item as visible or not visible
+		_printFileMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(PRINT_FILE_NAME));
 
-		// Adds a separator to the file menu
-		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_FILE_NAME)
+		// Sets the print file exit separator to visible or not visible
+		_printFileExitSeparator.setVisible((AcideMenuConfiguration
+				.getInstance().getIsDisplayed(NEW_FILE_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						SAVE_FILE_AS_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -470,12 +578,11 @@ public class AcideFileMenu extends JMenu {
 						CLOSE_FILE_NAME) || AcideMenuConfiguration
 				.getInstance().getIsDisplayed(CLOSE_ALL_FILES_NAME))
 				&& AcideMenuConfiguration.getInstance().getIsDisplayed(
-						EXIT_NAME))
-			addSeparator();
+						EXIT_NAME));
 
-		// Adds the exit menu item to the file menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(EXIT_NAME))
-			add(_exitMenuItem);
+		// Sets the exit menu item as visible or not visible
+		_exitMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(EXIT_NAME));
 	}
 
 	/**
@@ -563,9 +670,6 @@ public class AcideFileMenu extends JMenu {
 						AcideMainWindow.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel()
 								.getTextEditionAreaContent());
-		
-		// Updates the static tool bar
-		AcideMenuBarToolBar.getInstance().updateStateOfFileButtons();
 	}
 
 	/**
@@ -696,9 +800,7 @@ public class AcideFileMenu extends JMenu {
 			// The file is already opened
 
 			// Updates the selected file editor index
-			AcideMainWindow
-					.getInstance()
-					.getFileEditorManager()
+			AcideMainWindow.getInstance().getFileEditorManager()
 					.updateRelatedComponentsAt(fileEditorPanelIndex);
 		}
 	}
@@ -872,7 +974,7 @@ public class AcideFileMenu extends JMenu {
 					.updateRelatedComponentsAt(
 							AcideMainWindow.getInstance()
 									.getFileEditorManager()
-									.getSelectedFileEditorPanelIndex());		
+									.getSelectedFileEditorPanelIndex());
 		}
 	}
 
@@ -883,19 +985,19 @@ public class AcideFileMenu extends JMenu {
 
 		// Enables the close file menu item
 		_closeFileMenuItem.setEnabled(true);
-		
+
 		// Enables the close all files menu item
 		_closeAllFilesMenuItem.setEnabled(true);
-		
+
 		// Enables the save file as menu item
 		_saveFileAsMenuItem.setEnabled(true);
-		
+
 		// Disables the save file menu item
 		_saveFileMenuItem.setEnabled(false);
-		
+
 		// Enables the save all files as menu item
 		_saveAllFilesMenuItem.setEnabled(true);
-		
+
 		// Enables the print file menu item
 		_printFileMenuItem.setEnabled(true);
 	}
@@ -907,19 +1009,19 @@ public class AcideFileMenu extends JMenu {
 
 		// Disables the close file menu item
 		_closeFileMenuItem.setEnabled(false);
-		
+
 		// Disables the close all files menu item
 		_closeAllFilesMenuItem.setEnabled(false);
-		
+
 		// Disables the save file as menu item
 		_saveFileAsMenuItem.setEnabled(false);
-		
+
 		// Disables the save file menu item
 		_saveFileMenuItem.setEnabled(false);
-		
+
 		// Disables the save all files menu item
 		_saveAllFilesMenuItem.setEnabled(false);
-		
+
 		// Disables the print file menu item
 		_printFileMenuItem.setEnabled(false);
 	}

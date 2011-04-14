@@ -48,7 +48,6 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.JTextPane;
 import javax.swing.text.Element;
 
 import acide.language.AcideLanguageManager;
@@ -357,7 +356,7 @@ public class AcideFileEditorPanel extends JPanel {
 	public void goToLine(int line) {
 
 		// Gets the active text edition area
-		JTextPane activeTextEditionArea = getActiveTextEditionArea();
+		AcideTextPane activeTextEditionArea = getActiveTextEditionArea();
 
 		// Calculates the line
 		Element root = activeTextEditionArea.getDocument()

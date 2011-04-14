@@ -1,6 +1,6 @@
 <acide.configuration.lexicon.AcideLexiconConfiguration>
   <__name>default</__name>
-  <__path>C:\Documents and Settings\Salcedonia\Escritorio\acide\configuration\lexicon\default.xml</__path>
+  <__path>./configuration/lexicon/default.xml</__path>
   <__isCompiledOrInterpreted>false</__isCompiledOrInterpreted>
   <__tokenTypeManager>
     <__list>

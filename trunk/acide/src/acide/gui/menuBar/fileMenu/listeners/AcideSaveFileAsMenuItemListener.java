@@ -64,7 +64,8 @@ public class AcideSaveFileAsMenuItemListener implements ActionListener {
 				.getNumberOfFileEditorPanels() != 0) {
 
 			// Asks for the file path to the user
-			filePath = AcideFileManager.getInstance().askSavingFileEditorFile(false);
+			filePath = AcideFileManager.getInstance().askSavingFileEditorFile(
+					false);
 
 			// If the file is not empty
 			if (!filePath.equals(" ")) {
@@ -143,6 +144,10 @@ public class AcideSaveFileAsMenuItemListener implements ActionListener {
 											.getFileEditorManager()
 											.getSelectedFileEditorPanel()
 											.getTextEditionAreaContent());
+
+					// Updates the save project in the menu bar tool bar
+					AcideMainWindow.getInstance().getToolBarPanel()
+							.getMenuBarToolBar().updateStateOfFileButtons();
 				} else
 					// Updates the log
 					AcideLog.getLog().info(

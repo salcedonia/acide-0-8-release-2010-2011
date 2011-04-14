@@ -29,15 +29,34 @@
  */
 package acide.gui.menuBar.projectMenu;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
+import javax.swing.tree.DefaultMutableTreeNode;
 
+import acide.configuration.console.AcideConsoleConfiguration;
+import acide.configuration.fileEditor.AcideFileEditorConfiguration;
+import acide.configuration.grammar.AcideGrammarConfiguration;
+import acide.configuration.lexicon.AcideLexiconConfiguration;
 import acide.configuration.menu.AcideMenuConfiguration;
+import acide.configuration.project.AcideProjectConfiguration;
+import acide.configuration.toolBar.AcideToolBarConfiguration;
+import acide.configuration.window.AcideWindowConfiguration;
+import acide.configuration.workbench.AcideWorkbenchManager;
+import acide.files.AcideFileManager;
+import acide.files.project.AcideProjectFile;
+import acide.gui.mainWindow.AcideMainWindow;
+import acide.gui.menuBar.configurationMenu.menuMenu.gui.AcideMenuConfigurationWindow;
+import acide.gui.menuBar.configurationMenu.toolBarMenu.gui.AcideToolBarConfigurationWindow;
 import acide.gui.menuBar.projectMenu.listeners.AcideAddFileMenuItemListener;
 import acide.gui.menuBar.projectMenu.listeners.AcideAddFolderMenuItemListener;
 import acide.gui.menuBar.projectMenu.listeners.AcideCloseProjecMenuItemtListener;
@@ -55,7 +74,10 @@ import acide.gui.menuBar.projectMenu.listeners.AcideSetCompilableFileMenuItemLis
 import acide.gui.menuBar.projectMenu.listeners.AcideSetMainFileMenuItemListener;
 import acide.gui.menuBar.projectMenu.listeners.AcideUnsetCompilableFileMenuItemListener;
 import acide.gui.menuBar.projectMenu.listeners.AcideUnsetMainFileMenuItemListener;
+import acide.gui.menuBar.projectMenu.recentProjectsMenu.AcideRecentProjectsMenu;
 import acide.language.AcideLanguageManager;
+import acide.log.AcideLog;
+import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE project menu.
@@ -77,6 +99,10 @@ public class AcideProjectMenu extends JMenu {
 	 * ACIDE - A Configurable IDE project menu open project menu item name.
 	 */
 	public static final String OPEN_PROJECT_NAME = "Open Project";
+	/**
+	 * ACIDE - A Configurable IDE project menu open recent projects menu name.
+	 */
+	public static final String OPEN_RECENT_PROJECTS_NAME = "Open Recent Projects";
 	/**
 	 * ACIDE - A Configurable IDE project menu save project menu item name.
 	 */
@@ -242,6 +268,10 @@ public class AcideProjectMenu extends JMenu {
 	 */
 	private JMenuItem _openProjectMenuItem;
 	/**
+	 * ACIDE - A Configurable IDE file menu open recent files menu.
+	 */
+	private AcideRecentProjectsMenu _openRecentProjectsMenu;
+	/**
 	 * ACIDE - A Configurable IDE project menu save project menu item.
 	 */
 	private JMenuItem _saveProjectMenuItem;
@@ -301,66 +331,238 @@ public class AcideProjectMenu extends JMenu {
 	 * ACIDE - A Configurable IDE project menu execute menu item.
 	 */
 	private JMenuItem _executeMenuItem;
+	/**
+	 * ACIDE - A Configurable IDE project menu close project save project
+	 * separator.
+	 */
+	private JSeparator _closeProjectSaveProjectSeparator;
+	/**
+	 * ACIDE - A Configurable IDE project menu save project as new project file
+	 * separator.
+	 */
+	private JSeparator _saveProjectAsNewProjectFileSeparator;
+	/**
+	 * ACIDE - A Configurable IDE project menu remove folder compile separator.
+	 */
+	private JSeparator _removeFolderCompileSeparator;
+	/**
+	 * ACIDE - A Configurable IDE project menu execute set compilable file
+	 * separator.
+	 */
+	private JSeparator _executeSetCompilableFileSeparator;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE project menu.
 	 */
 	public AcideProjectMenu() {
 
+		// Builds the menu components
+		buildComponents();
+
+		// Adds the components to the menu
+		addComponents();
+
+		// Sets the text of the project menu components
+		setTextOfMenuComponents();
+	}
+
+	/**
+	 * Adds the components the ACIDE - A Configurable IDE project menu.
+	 */
+	private void addComponents() {
+
+		// Adds the new project menu item to the menu
+		add(_newProjectMenuItem);
+
+		// Adds the open project menu item to the menu
+		add(_openProjectMenuItem);
+
+		// Adds the open recent projects menu item to the file menu
+		add(_openRecentProjectsMenu);
+
+		// Adds the close project menu item to the menu
+		add(_closeProjectMenuItem);
+
+		// Adds the close project save project separator to the menu
+		add(_closeProjectSaveProjectSeparator);
+
+		// Adds the save project menu item to the menu
+		add(_saveProjectMenuItem);
+
+		// Adds the save project as menu item to the menu
+		add(_saveProjectAsMenuItem);
+
+		// Adds the save project as new project file separator
+		add(_saveProjectAsNewProjectFileSeparator);
+
+		// Adds the new project file menu item to the menu
+		add(_newProjectFileMenuItem);
+
+		// Adds the add file menu item to the menu
+		add(_addFileMenuItem);
+
+		// Adds the remove file menu item to the menu
+		add(_removeFileMenuItem);
+
+		// Adds the delete file menu item to the menu
+		add(_deleteFileMenuItem);
+
+		// Adds the add folder menu item to the menu
+		add(_addFolderMenuItem);
+
+		// Adds the remove folder menu item to the menu
+		add(_removeFolderMenuItem);
+
+		// Adds the remove folder compile separator to the menu
+		add(_removeFolderCompileSeparator);
+
+		// Adds the compile menu item to the menu
+		add(_compileMenuItem);
+
+		// Adds the execute menu item to the menu
+		add(_executeMenuItem);
+
+		// Adds the execute set compilable file separator to the menu
+		add(_executeSetCompilableFileSeparator);
+
+		// Adds the set compilable file menu item to the menu
+		add(_setCompilableFileMenuItem);
+
+		// Adds the unset compilable file menu item to the menu
+		add(_unsetCompilableFileMenuItem);
+
+		// Adds the set main file menu item to the menu
+		add(_setMainFileMenuItem);
+
+		// Adds the unset main file menu item to the menu
+		add(_unsetMainFileMenuItem);
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE project menu components.
+	 */
+	private void buildComponents() {
+
 		// Creates the new project menu item
 		_newProjectMenuItem = new JMenuItem(NEW_PROJECT_IMAGE);
+
+		// Sets the new project menu item name
+		_newProjectMenuItem.setName(NEW_PROJECT_NAME);
 
 		// Creates the open project menu item
 		_openProjectMenuItem = new JMenuItem(OPEN_PROJECT_IMAGE);
 
-		// Creates the save project menu item
-		_saveProjectMenuItem = new JMenuItem(SAVE_PROJECT_IMAGE);
+		// Sets the open project menu item name
+		_openProjectMenuItem.setName(OPEN_PROJECT_NAME);
 
-		// Creates the save project as menu item
-		_saveProjectAsMenuItem = new JMenuItem(SAVE_PROJECT_AS_IMAGE);
+		// Creates the open recent projects menu
+		_openRecentProjectsMenu = new AcideRecentProjectsMenu();
 
-		// Creates the new project file menu item
-		_newProjectFileMenuItem = new JMenuItem(NEW_PROJECT_FILE_IMAGE);
+		// Sets the open recent projects menu name
+		_openRecentProjectsMenu.setName(OPEN_RECENT_PROJECTS_NAME);
 
-		// Creates the add file menu item
-		_addFileMenuItem = new JMenuItem(ADD_FILE_IMAGE);
-
-		// Creates the remove file menu item
-		_removeFileMenuItem = new JMenuItem(REMOVE_FILE_IMAGE);
-
-		// Creates the delete file menu item
-		_deleteFileMenuItem = new JMenuItem(DELETE_FILE_IMAGE);
+		// Creates the close project save project separator
+		_closeProjectSaveProjectSeparator = new JSeparator();
 
 		// Creates the close project menu item
 		_closeProjectMenuItem = new JMenuItem(CLOSE_PROJECT_IMAGE);
 
-		// Creates the compile menu item
-		_compileMenuItem = new JMenuItem(COMPILE_IMAGE);
+		// Sets the close project menu item name
+		_closeProjectMenuItem.setName(CLOSE_PROJECT_NAME);
 
-		// Creates the execute menu item
-		_executeMenuItem = new JMenuItem(EXECUTE_IMAGE);
+		// Creates the save project menu item
+		_saveProjectMenuItem = new JMenuItem(SAVE_PROJECT_IMAGE);
+
+		// Sets the save project menu item name
+		_saveProjectMenuItem.setName(SAVE_PROJECT_NAME);
+
+		// Creates the save project as menu item
+		_saveProjectAsMenuItem = new JMenuItem(SAVE_PROJECT_AS_IMAGE);
+
+		// Sets the save project as menu item name
+		_saveProjectAsMenuItem.setName(SAVE_PROJECT_AS_NAME);
+
+		// Creates the save project as new project file separator
+		_saveProjectAsNewProjectFileSeparator = new JSeparator();
+
+		// Creates the new project file menu item
+		_newProjectFileMenuItem = new JMenuItem(NEW_PROJECT_FILE_IMAGE);
+
+		// Sets the new project file menu item name
+		_newProjectFileMenuItem.setName(NEW_PROJECT_FILE_NAME);
+
+		// Creates the add file menu item
+		_addFileMenuItem = new JMenuItem(ADD_FILE_IMAGE);
+
+		// Sets the add file menu item name
+		_addFileMenuItem.setName(ADD_FILE_NAME);
+
+		// Creates the remove file menu item
+		_removeFileMenuItem = new JMenuItem(REMOVE_FILE_IMAGE);
+
+		// Sets the remove file menu item name
+		_removeFileMenuItem.setName(REMOVE_FILE_NAME);
+
+		// Creates the delete file menu item
+		_deleteFileMenuItem = new JMenuItem(DELETE_FILE_IMAGE);
+
+		// Sets the delete file menu item name
+		_deleteFileMenuItem.setName(DELETE_FILE_NAME);
 
 		// Creates the add folder menu item
 		_addFolderMenuItem = new JMenuItem(ADD_FOLDER_IMAGE);
 
+		// Sets the add folder menu item name
+		_addFolderMenuItem.setName(ADD_FOLDER_NAME);
+
 		// Creates the remove folder menu item
 		_removeFolderMenuItem = new JMenuItem(REMOVE_FOLDER_IMAGE);
 
-		// Creates the set main file menu item
-		_setMainFileMenuItem = new JMenuItem(SET_MAIN_FILE_IMAGE);
+		// Sets the remove folder menu item name
+		_removeFolderMenuItem.setName(REMOVE_FOLDER_NAME);
 
-		// Creates the unset main file menu item
-		_unsetMainFileMenuItem = new JMenuItem(UNSET_MAIN_FILE_IMAGE);
+		// Creates the remove folder compile separator
+		_removeFolderCompileSeparator = new JSeparator();
+
+		// Creates the compile menu item
+		_compileMenuItem = new JMenuItem(COMPILE_IMAGE);
+
+		// Sets the compile menu item name
+		_compileMenuItem.setName(COMPILE_NAME);
+
+		// Creates the execute menu item
+		_executeMenuItem = new JMenuItem(EXECUTE_IMAGE);
+
+		// Sets the execute menu item name
+		_executeMenuItem.setName(EXECUTE_NAME);
+
+		// Creates the execute set compilable file separator
+		_executeSetCompilableFileSeparator = new JSeparator();
 
 		// Creates the set compilable file menu item
 		_setCompilableFileMenuItem = new JMenuItem(SET_COMPILABLE_FILE_IMAGE);
+
+		// Sets the set compilable file menu item name
+		_setCompilableFileMenuItem.setName(SET_COMPILABLE_FILE_NAME);
 
 		// Creates the unset compilable file menu item
 		_unsetCompilableFileMenuItem = new JMenuItem(
 				UNSET_COMPILABLE_FILE_IMAGE);
 
-		// Sets the text of the project menu components
-		setTextOfMenuComponents();
+		// Sets the unset compilable file menu item name
+		_unsetCompilableFileMenuItem.setName(UNSET_COMPILABLE_FILE_NAME);
+
+		// Creates the set main file menu item
+		_setMainFileMenuItem = new JMenuItem(SET_MAIN_FILE_IMAGE);
+
+		// Sets the set main file menu item name
+		_setMainFileMenuItem.setName(SET_MAIN_FILE_NAME);
+
+		// Creates the unset main file menu item
+		_unsetMainFileMenuItem = new JMenuItem(UNSET_MAIN_FILE_IMAGE);
+
+		// Sets the unset main file menu item name
+		_unsetMainFileMenuItem.setName(UNSET_MAIN_FILE_NAME);
 	}
 
 	/**
@@ -375,7 +577,7 @@ public class AcideProjectMenu extends JMenu {
 		// Sets the new project menu item text
 		_newProjectMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s14"));
-		
+
 		// Sets the new project menu item accelerator
 		_newProjectMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_N, ActionEvent.ALT_MASK + ActionEvent.SHIFT_MASK));
@@ -383,15 +585,19 @@ public class AcideProjectMenu extends JMenu {
 		// Sets the open project menu item text
 		_openProjectMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s15"));
-		
+
 		// Sets the open project menu item accelerator
 		_openProjectMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_O, ActionEvent.ALT_MASK + ActionEvent.SHIFT_MASK));
 
+		// Sets the open recent projects menu text
+		_openRecentProjectsMenu.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s1078"));
+
 		// Sets the save project menu item text
 		_saveProjectMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s16"));
-		
+
 		// Sets the save project menu item accelerator
 		_saveProjectMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_S, ActionEvent.ALT_MASK + ActionEvent.SHIFT_MASK));
@@ -403,7 +609,7 @@ public class AcideProjectMenu extends JMenu {
 		// Sets the add file menu item text
 		_addFileMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s17"));
-		
+
 		// Sets the add file menu item accelerator
 		_addFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
 				ActionEvent.ALT_MASK + ActionEvent.SHIFT_MASK));
@@ -451,7 +657,7 @@ public class AcideProjectMenu extends JMenu {
 		// Sets the compile menu item text
 		_compileMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s18"));
-		
+
 		// Sets the compile menu item accelerator
 		_compileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
 				ActionEvent.ALT_MASK));
@@ -459,68 +665,120 @@ public class AcideProjectMenu extends JMenu {
 		// Sets the execute menu item text
 		_executeMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s19"));
-		
+
 		// Sets the execute menu item accelerator
 		_executeMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
 				ActionEvent.ALT_MASK));
 	}
 
 	/**
-	 * Builds the ACIDE - A Configurable IDE project menu.
+	 * Updates the ACIDE - A Configurable IDE project menu components visibility
+	 * with the menu configuration.
 	 */
-	public void build() {
+	public void updateComponentsVisibility() {
 
-		// Removes all the menu components
-		removeAll();
+		// Sets the new project menu item as visible or not visible
+		_newProjectMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(NEW_PROJECT_NAME));
 
-		// Adds the new project menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				NEW_PROJECT_NAME))
-			add(_newProjectMenuItem);
+		// Sets the open project menu item as visible or not visible
+		_openProjectMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(OPEN_PROJECT_NAME));
 
-		// Adds the open project menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				OPEN_PROJECT_NAME))
-			add(_openProjectMenuItem);
+		// Sets the open recent projects menu as visible or not visible
+		_openRecentProjectsMenu.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(OPEN_RECENT_PROJECTS_NAME));
 
-		// Adds the close project menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				CLOSE_PROJECT_NAME))
-			add(_closeProjectMenuItem);
+		// Sets the close project menu item as visible or not visible
+		_closeProjectMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(CLOSE_PROJECT_NAME));
 
-		// Adds a separator to the menu
-		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(
-				OPEN_PROJECT_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						NEW_PROJECT_NAME) || AcideMenuConfiguration
-				.getInstance().getIsDisplayed(CLOSE_PROJECT_NAME))
-				&& (AcideMenuConfiguration.getInstance().getIsDisplayed(
-						SAVE_PROJECT_NAME) || AcideMenuConfiguration
-						.getInstance().getIsDisplayed(SAVE_PROJECT_AS_NAME)))
-			addSeparator();
-
-		// Adds the save project menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				SAVE_PROJECT_NAME))
-			add(_saveProjectMenuItem);
-
-		// Adds the save project as menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				SAVE_PROJECT_AS_NAME))
-			add(_saveProjectAsMenuItem);
-
-		// Adds a separator to the menu
-		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(
-				OPEN_PROJECT_NAME)
+		// Sets the close project save project separator to visible or not
+		// visible
+		_closeProjectSaveProjectSeparator.setVisible((AcideMenuConfiguration
+				.getInstance().getIsDisplayed(OPEN_PROJECT_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						NEW_PROJECT_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						SAVE_PROJECT_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						CLOSE_PROJECT_NAME) || AcideMenuConfiguration
-				.getInstance().getIsDisplayed(SAVE_PROJECT_AS_NAME))
+						OPEN_RECENT_PROJECTS_NAME) || AcideMenuConfiguration
+				.getInstance().getIsDisplayed(CLOSE_PROJECT_NAME))
 				&& (AcideMenuConfiguration.getInstance().getIsDisplayed(
-						ADD_FILE_NAME)
+						SAVE_PROJECT_NAME) || AcideMenuConfiguration
+						.getInstance().getIsDisplayed(SAVE_PROJECT_AS_NAME)));
+
+		// Sets the save project menu item as visible or not visible
+		_saveProjectMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(SAVE_PROJECT_NAME));
+
+		// Sets the save project as menu item as visible or not visible
+		_saveProjectAsMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(SAVE_PROJECT_AS_NAME));
+
+		// Sets the save project as new project file separator as visible or not
+		// visible
+		_saveProjectAsNewProjectFileSeparator
+				.setVisible((AcideMenuConfiguration.getInstance()
+						.getIsDisplayed(OPEN_PROJECT_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								NEW_PROJECT_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								OPEN_RECENT_PROJECTS_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								SAVE_PROJECT_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								CLOSE_PROJECT_NAME) || AcideMenuConfiguration
+						.getInstance().getIsDisplayed(SAVE_PROJECT_AS_NAME))
+						&& (AcideMenuConfiguration.getInstance()
+								.getIsDisplayed(ADD_FILE_NAME)
+								|| AcideMenuConfiguration.getInstance()
+										.getIsDisplayed(REMOVE_FILE_NAME)
+								|| AcideMenuConfiguration.getInstance()
+										.getIsDisplayed(ADD_FOLDER_NAME)
+								|| AcideMenuConfiguration.getInstance()
+										.getIsDisplayed(REMOVE_FOLDER_NAME)
+								|| AcideMenuConfiguration.getInstance()
+										.getIsDisplayed(DELETE_FILE_NAME) || AcideMenuConfiguration
+								.getInstance().getIsDisplayed(
+										NEW_PROJECT_FILE_NAME)));
+
+		// Sets the new project file menu item as visible or not visible
+		_newProjectFileMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(NEW_PROJECT_FILE_NAME));
+
+		// Sets the add file menu item as visible or not visible
+		_addFileMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(ADD_FILE_NAME));
+
+		// Sets the remove file menu item as visible or not visible
+		_removeFileMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(REMOVE_FILE_NAME));
+
+		// Sets the delete file menu item as visible or not visible
+		_deleteFileMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(DELETE_FILE_NAME));
+
+		// Sets the add folder menu item as visible or not visible
+		_addFolderMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(ADD_FOLDER_NAME));
+
+		// Sets the remove folder menu item as visible or not visible
+		_removeFolderMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(REMOVE_FOLDER_NAME));
+
+		// Sets the remove folder compile separator to visible or not visible
+		_removeFolderCompileSeparator
+				.setVisible((AcideMenuConfiguration.getInstance()
+						.getIsDisplayed(OPEN_PROJECT_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								NEW_PROJECT_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								OPEN_RECENT_PROJECTS_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								SAVE_PROJECT_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								SAVE_PROJECT_AS_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								ADD_FILE_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 								REMOVE_FILE_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -529,127 +787,79 @@ public class AcideProjectMenu extends JMenu {
 								REMOVE_FOLDER_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 								DELETE_FILE_NAME) || AcideMenuConfiguration
-						.getInstance().getIsDisplayed(NEW_PROJECT_FILE_NAME)))
-			addSeparator();
+						.getInstance().getIsDisplayed(NEW_PROJECT_FILE_NAME))
+						&& (AcideMenuConfiguration.getInstance()
+								.getIsDisplayed(COMPILE_NAME)
+								|| AcideMenuConfiguration.getInstance()
+										.getIsDisplayed(EXECUTE_NAME)
+								|| AcideMenuConfiguration.getInstance()
+										.getIsDisplayed(
+												SET_COMPILABLE_FILE_NAME)
+								|| AcideMenuConfiguration.getInstance()
+										.getIsDisplayed(
+												UNSET_COMPILABLE_FILE_NAME) || AcideMenuConfiguration
+								.getInstance().getIsDisplayed(
+										SET_MAIN_FILE_NAME)));
 
-		// Adds the new project file menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				NEW_PROJECT_FILE_NAME))
-			add(_newProjectFileMenuItem);
+		// Sets the compile menu item as visible or not visible
+		_compileMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(COMPILE_NAME));
 
-		// Adds the add file menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(ADD_FILE_NAME))
-			add(_addFileMenuItem);
+		// Sets the execute menu item as visible or not visible
+		_executeMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(EXECUTE_NAME));
 
-		// Adds the remove file menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				REMOVE_FILE_NAME))
-			add(_removeFileMenuItem);
-
-		// Adds the delete file menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				DELETE_FILE_NAME))
-			add(_deleteFileMenuItem);
-
-		// Adds the add folder menu item to the menu
-		if (AcideMenuConfiguration.getInstance()
-				.getIsDisplayed(ADD_FOLDER_NAME))
-			add(_addFolderMenuItem);
-
-		// Adds the remove folder menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				REMOVE_FOLDER_NAME))
-			add(_removeFolderMenuItem);
-
-		// Adds a separator to the menu
-		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(
-				OPEN_PROJECT_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						NEW_PROJECT_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						SAVE_PROJECT_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						SAVE_PROJECT_AS_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						ADD_FILE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						REMOVE_FILE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						ADD_FOLDER_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						REMOVE_FOLDER_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						DELETE_FILE_NAME) || AcideMenuConfiguration
-				.getInstance().getIsDisplayed(NEW_PROJECT_FILE_NAME))
-				&& (AcideMenuConfiguration.getInstance().getIsDisplayed(
-						COMPILE_NAME)
+		// Sets the execute set compilable file separator to visible or not
+		// visible
+		_executeSetCompilableFileSeparator
+				.setVisible((AcideMenuConfiguration.getInstance()
+						.getIsDisplayed(OPEN_PROJECT_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-								EXECUTE_NAME)
+								NEW_PROJECT_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-								SET_COMPILABLE_FILE_NAME)
+								OPEN_RECENT_PROJECTS_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-								UNSET_COMPILABLE_FILE_NAME) || AcideMenuConfiguration
-						.getInstance().getIsDisplayed(SET_MAIN_FILE_NAME)))
-			addSeparator();
-
-		// Adds the compile menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(COMPILE_NAME))
-			add(_compileMenuItem);
-
-		// Adds the execute menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(EXECUTE_NAME))
-			add(_executeMenuItem);
-
-		// Adds a separator to the menu
-		if ((AcideMenuConfiguration.getInstance().getIsDisplayed(
-				OPEN_PROJECT_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						NEW_PROJECT_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						SAVE_PROJECT_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						SAVE_PROJECT_AS_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						ADD_FILE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						REMOVE_FILE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						ADD_FOLDER_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						REMOVE_FOLDER_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						DELETE_FILE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						NEW_PROJECT_FILE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						COMPILE_NAME) || AcideMenuConfiguration.getInstance()
-				.getIsDisplayed(EXECUTE_NAME))
-				&& (AcideMenuConfiguration.getInstance().getIsDisplayed(
-						SET_COMPILABLE_FILE_NAME)
+								SAVE_PROJECT_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-								UNSET_COMPILABLE_FILE_NAME) || AcideMenuConfiguration
-						.getInstance().getIsDisplayed(SET_MAIN_FILE_NAME)))
-			addSeparator();
+								SAVE_PROJECT_AS_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								ADD_FILE_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								REMOVE_FILE_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								ADD_FOLDER_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								REMOVE_FOLDER_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								DELETE_FILE_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								NEW_PROJECT_FILE_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								COMPILE_NAME) || AcideMenuConfiguration
+						.getInstance().getIsDisplayed(EXECUTE_NAME))
+						&& (AcideMenuConfiguration.getInstance()
+								.getIsDisplayed(SET_COMPILABLE_FILE_NAME)
+								|| AcideMenuConfiguration.getInstance()
+										.getIsDisplayed(
+												UNSET_COMPILABLE_FILE_NAME) || AcideMenuConfiguration
+								.getInstance().getIsDisplayed(
+										SET_MAIN_FILE_NAME)));
 
-		// Adds the set compilable file menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				SET_COMPILABLE_FILE_NAME))
-			add(_setCompilableFileMenuItem);
+		// Sets the set compilable file menu item as visible or not visible
+		_setCompilableFileMenuItem.setVisible(AcideMenuConfiguration
+				.getInstance().getIsDisplayed(SET_COMPILABLE_FILE_NAME));
 
-		// Adds the unset compilable file menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				UNSET_COMPILABLE_FILE_NAME))
-			add(_unsetCompilableFileMenuItem);
+		// Sets the unset compilable file menu item as visible or not visible
+		_unsetCompilableFileMenuItem.setVisible(AcideMenuConfiguration
+				.getInstance().getIsDisplayed(UNSET_COMPILABLE_FILE_NAME));
 
-		// Adds the set main file menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				SET_MAIN_FILE_NAME))
-			add(_setMainFileMenuItem);
+		// Sets the set main file menu item as visible or not visible
+		_setMainFileMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(SET_MAIN_FILE_NAME));
 
-		// Adds the unset main file menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				UNSET_MAIN_FILE_NAME))
-			add(_unsetMainFileMenuItem);
+		// Sets the unset main file menu item as visible or not visible
+		_unsetMainFileMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(UNSET_MAIN_FILE_NAME));
 	}
 
 	/**
@@ -702,7 +912,7 @@ public class AcideProjectMenu extends JMenu {
 
 		// Sets the compile menu item action listener
 		_compileMenuItem.addActionListener(new AcideCompileMenuItemListener());
-		
+
 		// Sets the execute menu item action listener
 		_executeMenuItem.addActionListener(new AcideExecuteMenuItemListener());
 
@@ -713,7 +923,7 @@ public class AcideProjectMenu extends JMenu {
 		// Sets the unset compilable file menu item action listener
 		_unsetCompilableFileMenuItem
 				.addActionListener(new AcideUnsetCompilableFileMenuItemListener());
-		
+
 		// Sets the set main file menu item action listener
 		_setMainFileMenuItem
 				.addActionListener(new AcideSetMainFileMenuItemListener());
@@ -731,46 +941,46 @@ public class AcideProjectMenu extends JMenu {
 
 		// Enables the close project menu item
 		_closeProjectMenuItem.setEnabled(true);
-		
+
 		// Enables the save project menu item
 		_saveProjectMenuItem.setEnabled(false);
-		
+
 		// Enables the save project as menu item
 		_saveProjectAsMenuItem.setEnabled(true);
-		
+
 		// Enables the new project file menu item
 		_newProjectFileMenuItem.setEnabled(true);
-		
+
 		// Enables the add file menu item
 		_addFileMenuItem.setEnabled(true);
-		
+
 		// Enables the remove file menu item
 		_removeFileMenuItem.setEnabled(false);
-		
+
 		// Enables the delete file menu item
 		_deleteFileMenuItem.setEnabled(false);
-		
+
 		// Enables the add folder menu item
 		_addFolderMenuItem.setEnabled(true);
-		
+
 		// Enables the remove folder menu item
 		_removeFolderMenuItem.setEnabled(false);
-		
+
 		// Enables the compile menu item
 		_compileMenuItem.setEnabled(true);
-		
+
 		// Enables the execute menu item
 		_executeMenuItem.setEnabled(true);
-		
+
 		// Disables the set main file menu item
 		_setMainFileMenuItem.setEnabled(false);
-		
+
 		// Disables the unset main file menu item
 		_unsetMainFileMenuItem.setEnabled(false);
-		
+
 		// Disables the set compilable file menu item
 		_setCompilableFileMenuItem.setEnabled(false);
-		
+
 		// Disables the unset compilable file menu item
 		_unsetCompilableFileMenuItem.setEnabled(false);
 	}
@@ -782,50 +992,767 @@ public class AcideProjectMenu extends JMenu {
 
 		// Disables the close project menu item
 		_closeProjectMenuItem.setEnabled(false);
-		
+
 		// Disables the save project menu item
 		_saveProjectMenuItem.setEnabled(false);
-		
+
 		// Disables the save project as menu item
 		_saveProjectAsMenuItem.setEnabled(false);
-		
+
 		// Disables the new project file menu item
 		_newProjectFileMenuItem.setEnabled(false);
-		
+
 		// Disables the add file menu item
 		_addFileMenuItem.setEnabled(false);
-		
+
 		// Disables the remove file menu item
 		_removeFileMenuItem.setEnabled(false);
-		
+
 		// Disables the delete file menu item
 		_deleteFileMenuItem.setEnabled(false);
-		
+
 		// Disables the add folder menu item
 		_addFolderMenuItem.setEnabled(false);
-		
+
 		// Disables the remove folder menu item
 		_removeFolderMenuItem.setEnabled(false);
-		
+
 		// Disables the compile menu item
 		_compileMenuItem.setEnabled(false);
-		
+
 		// Disables the execute menu item
 		_executeMenuItem.setEnabled(false);
-		
+
 		// Disables the set main file menu item
 		_setMainFileMenuItem.setEnabled(false);
-		
+
 		// Disables the unset main file menu item
 		_unsetMainFileMenuItem.setEnabled(false);
-		
+
 		// Disables the set compilable file menu item
 		_setCompilableFileMenuItem.setEnabled(false);
-		
+
 		// Disables the unset compilable file menu item
 		_unsetCompilableFileMenuItem.setEnabled(false);
 	}
 
+	/**
+	 * Opens an ACIDE - A Configurable IDE project from a file given as a
+	 * parameter.
+	 * 
+	 * @param filePath
+	 *            file path which contains the project configuration file.
+	 */
+	public void openProject(final String filePath) {
+
+		// Sets the wait cursor
+		AcideMainWindow.getInstance().setCursor(
+				Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+		// Updates the status message in the status bar
+		AcideMainWindow.getInstance().getStatusBar().setStatusMessage(" ");
+
+		// Loads the file editor configuration
+		loadProjectConfiguration(filePath);
+
+		// Loads the language
+		loadLanguage();
+
+		// Loads the main window configuration
+		loadMainWindowConfiguration();
+
+		// Loads the menu configuration
+		loadMenuConfiguration();
+
+		// Loads the console configuration
+		loadConsoleConfiguration();
+
+		// Loads the tool bar configuration
+		loadToolBarConfiguration();
+
+		// Loads the explorer configuration
+		loadExplorerConfiguration();
+
+		// Loads the file editor configuration
+		loadFileEditorConfiguration();
+
+		// The project has not been modified
+		AcideProjectConfiguration.getInstance().setIsModified(false);
+
+		// This is the first time that it is saved
+		AcideProjectConfiguration.getInstance().setFirstSave(true);
+
+		// Enables the project menu
+		AcideMainWindow.getInstance().getMenu().enableProjectMenu();
+
+		// Enables the open all files menu item
+		AcideMainWindow.getInstance().getMenu().getFileMenu()
+				.getOpenAllFilesMenuItem().setEnabled(true);
+
+		// Updates the menu bar tool bar
+		AcideMainWindow.getInstance().getToolBarPanel().getMenuBarToolBar()
+				.updateStateOfFileButtons();
+
+		// Updates the changes in the main window
+		AcideMainWindow.getInstance().validate();
+
+		// Repaints the main window
+		AcideMainWindow.getInstance().repaint();
+
+		// Adds the project to the recent projects list
+		AcideWorkbenchManager.getInstance().addRecentProjectToList(filePath);
+		
+		// Sets the default cursor
+		AcideMainWindow.getInstance().setCursor(Cursor.getDefaultCursor());
+	}
+
+	/**
+	 * Checks if there are any modified opened file editors and asks to the user
+	 * if wants to save them or not.
+	 */
+	public void saveModifiedOpenedFileEditors() {
+
+		// If the file editor manager is modified
+		if (AcideMainWindow.getInstance().getFileEditorManager().isModified()) {
+
+			// Gets the number of file editor panels
+			int numberOfFileEditorPanels = AcideMainWindow.getInstance()
+					.getFileEditorManager().getNumberOfFileEditorPanels();
+
+			// If there are opened file editor panels
+			if (numberOfFileEditorPanels > 0) {
+
+				int selectedFileEditorPanelIndex = AcideMainWindow
+						.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanelIndex();
+
+				// Search for modified opened file editors
+				for (int index = numberOfFileEditorPanels - 1; index >= 0; index--) {
+
+					// If it is modified
+					if (AcideMainWindow.getInstance().getFileEditorManager()
+							.isRedButton(index)) {
+
+						// Puts the focus on the current checked file
+						// editor panel
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.setSelectedFileEditorPanelAt(index);
+
+						// Do you want to save it?
+						int returnValue2 = JOptionPane.showConfirmDialog(null,
+								AcideLanguageManager.getInstance().getLabels()
+										.getString("s643"),
+								AcideLanguageManager.getInstance().getLabels()
+										.getString("s953"),
+								JOptionPane.YES_NO_OPTION);
+
+						// If it is OK
+						if (returnValue2 == JOptionPane.OK_OPTION) {
+
+							// Saves the file editor panel
+							AcideMainWindow.getInstance().getMenu()
+									.getFileMenu().saveFile(index);
+						}
+					}
+				}
+
+				// Restores the selected file editor panel
+				AcideMainWindow
+						.getInstance()
+						.getFileEditorManager()
+						.setSelectedFileEditorPanelAt(
+								selectedFileEditorPanelIndex);
+			}
+		}
+
+		// Gets the number of file editor panels
+		int numberOfFileEditorPanels = AcideMainWindow.getInstance()
+				.getFileEditorManager().getNumberOfFileEditorPanels();
+
+		// Closes the file editor panels in the tabbed pane
+		for (int index = 0; index < numberOfFileEditorPanels; index++) {
+
+			// Sets the selected tab at index 0
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.setSelectedFileEditorPanelAt(0);
+
+			// Removes it from the tabbed pane
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.getTabbedPane().remove(0);
+
+			// Validates the changes in the tabbed pane
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.getTabbedPane().validate();
+		}
+	}
+
+	/**
+	 * Loads the project explorer configuration.
+	 */
+	public void loadExplorerConfiguration() {
+
+		// Removes all the nodes in the tree
+		AcideMainWindow.getInstance().getExplorerPanel().getRoot()
+				.removeAllChildren();
+
+		// Creates the folder with the name of the project
+		AcideProjectFile rootProjectFile = new AcideProjectFile();
+
+		// Sets the absolute path
+		rootProjectFile.setAbsolutePath(AcideProjectConfiguration.getInstance()
+				.getName());
+
+		// Sets the name
+		rootProjectFile.setName(AcideProjectConfiguration.getInstance()
+				.getName());
+
+		// It is directory
+		rootProjectFile.setIsDirectory(true);
+
+		// It has no parent
+		rootProjectFile.setParent(null);
+
+		// Sets the main window title
+		AcideMainWindow.getInstance().setTitle(
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s425")
+						+ " - "
+						+ AcideProjectConfiguration.getInstance().getName());
+
+		// Creates the root node of the explorer tree
+		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(
+				rootProjectFile);
+
+		// Allows children
+		rootNode.setAllowsChildren(true);
+
+		// Adds the root node to the tree
+		AcideMainWindow.getInstance().getExplorerPanel().getRoot()
+				.add(rootNode);
+
+		// Creates the directory list
+		ArrayList<DefaultMutableTreeNode> directoryList = new ArrayList<DefaultMutableTreeNode>();
+
+		// Adds the associated project files to the explorer
+		for (int index = 0; index < AcideProjectConfiguration.getInstance()
+				.getNumberOfFilesFromList(); index++) {
+
+			// Gets the file from the project configuration
+			DefaultMutableTreeNode projectFileNode = new DefaultMutableTreeNode(
+					AcideProjectConfiguration.getInstance().getFileAt(index));
+
+			// If it is directory
+			if (AcideProjectConfiguration.getInstance().getFileAt(index)
+					.isDirectory()) {
+
+				// It can have files inside
+				projectFileNode.setAllowsChildren(true);
+
+				// Adds the file
+				directoryList.add(projectFileNode);
+			} else
+				// Can't have files inside
+				projectFileNode.setAllowsChildren(false);
+
+			// If the file is in the same folder than the project folder
+			if (AcideProjectConfiguration.getInstance().getFileAt(index)
+					.getParent()
+					.equals(AcideProjectConfiguration.getInstance().getName())) {
+				// Adds the file
+				rootNode.add(projectFileNode);
+			} else {
+
+				// Searches for it in the tree structure
+				DefaultMutableTreeNode parentNode = AcideMainWindow
+						.getInstance()
+						.getExplorerPanel()
+						.searchDirectoryList(
+								directoryList,
+								AcideProjectConfiguration.getInstance()
+										.getFileAt(index).getParent());
+
+				// Adds the file
+				parentNode.add(projectFileNode);
+			}
+		}
+
+		// Updates the explorer tree
+		AcideMainWindow.getInstance().getExplorerPanel().getTreeModel()
+				.reload();
+
+		// Repaints the explorer tree
+		AcideMainWindow.getInstance().getExplorerPanel().expandTree();
+
+		// If there are files associated to the project
+		if (AcideProjectConfiguration.getInstance().getNumberOfFilesFromList() > 0) {
+
+			// Enables the remove file menu item
+			AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
+					.getRemoveFileMenuItem().setEnabled(true);
+
+			// Enables the delete file menu item
+			AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
+					.getDeleteFileMenuItem().setEnabled(true);
+		} else {
+
+			// Disables the remove file menu item
+			AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
+					.getRemoveFileMenuItem().setEnabled(false);
+
+			// Disables the delete file menu item
+			AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
+					.getDeleteFileMenuItem().setEnabled(false);
+		}
+
+		// If the show explorer panel is selected
+		if (!AcideMainWindow.getInstance().getMenu().getViewMenu()
+				.getShowExplorerPanelCheckBoxMenuItem().isSelected())
+			// Shows the explorer
+			AcideMainWindow.getInstance().getExplorerPanel()
+					.showExplorerPanel();
+
+		// Enables the show explorer panel menu item
+		AcideMainWindow.getInstance().getMenu().getViewMenu()
+				.getShowExplorerPanelCheckBoxMenuItem().setSelected(true);
+	}
+
+	/**
+	 * Loads the project language.
+	 */
+	public void loadLanguage() {
+
+		// SPANISH
+		if (AcideProjectConfiguration.getInstance().getLanguageConfiguration()
+				.equals("spanish"))
+			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+					.getLanguageMenu().getSpanishMenuItem().doClick();
+
+		// ENGLISH
+		if (AcideProjectConfiguration.getInstance().getLanguageConfiguration()
+				.equals("english"))
+			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+					.getLanguageMenu().getEnglishMenuItem().doClick();
+	}
+
+	/**
+	 * Loads the project menu configuration.
+	 */
+	public void loadMenuConfiguration() {
+
+		// Gets the menu configuration from the project configuration
+		String menuConfiguration = AcideProjectConfiguration.getInstance()
+				.getMenuConfiguration();
+
+		try {
+
+			// Loads the new menu item list
+			AcideMenuConfiguration.getInstance().setMenuElementList(
+					AcideMenuConfiguration.getInstance()
+							.loadMenuConfigurationFile(menuConfiguration));
+
+			// Updates the ACIDE - A Configurable IDE current menu configuration
+			AcideResourceManager.getInstance().setProperty(
+					"currentMenuConfiguration", menuConfiguration);
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+
+			// Gets the name
+			String name;
+			int index = menuConfiguration.lastIndexOf("\\");
+			if (index == -1)
+				index = menuConfiguration.lastIndexOf("/");
+			name = ".\\configuration\\menu\\"
+					+ menuConfiguration.substring(index + 1,
+							menuConfiguration.length());
+
+			try {
+
+				// Load the new menu item list
+				AcideMenuConfiguration.getInstance().setMenuElementList(
+						AcideMenuConfiguration.getInstance()
+								.loadMenuConfigurationFile(menuConfiguration));
+
+				// Updates the ACIDE - A Configurable IDE current menu
+				// configuration
+				AcideResourceManager.getInstance().setProperty(
+						"currentMenuConfiguration", name);
+
+				// Displays an error message
+				JOptionPane.showMessageDialog(null, AcideLanguageManager
+						.getInstance().getLabels().getString("s956")
+						+ menuConfiguration
+						+ AcideLanguageManager.getInstance().getLabels()
+								.getString("s957") + name);
+
+			} catch (Exception exception1) {
+
+				try {
+
+					// Loads the menu configuration
+					AcideMenuConfiguration.getInstance().setMenuElementList(
+							AcideMenuConfiguration.getInstance()
+									.loadMenuConfigurationFile(
+											menuConfiguration));
+				} catch (Exception exception2) {
+
+					// Updates the log
+					AcideLog.getLog().error(exception2.getMessage());
+					exception2.printStackTrace();
+				}
+
+				// Updates the ACIDE - A Configurable IDE current menu
+				// configuration
+				AcideResourceManager.getInstance().setProperty(
+						"currentMenuConfiguration",
+						"./configuration/menu/defaultAllOn.menuCfg");
+
+				// Displays an error message
+				JOptionPane.showMessageDialog(null, AcideLanguageManager
+						.getInstance().getLabels().getString("s956")
+						+ menuConfiguration
+						+ AcideLanguageManager.getInstance().getLabels()
+								.getString("s959"));
+
+				// Updates the log
+				AcideLog.getLog().error(exception1.getMessage());
+				exception1.printStackTrace();
+			}
+		}
+
+		// Builds the menu
+		AcideMainWindow.getInstance().getMenu().updateComponentsVisibility();
+
+		// Validates the changes in the main window
+		AcideMainWindow.getInstance().validate();
+
+		// Repaints the main window
+		AcideMainWindow.getInstance().repaint();
+
+		// Enables the save menu menu item
+		AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+				.getMenuMenu().getSaveMenuMenuItem().setEnabled(true);
+
+		// The changes are saved
+		AcideMenuConfigurationWindow.setChangesAreSaved(true);
+	}
+
+	/**
+	 * Loads the project console configuration.
+	 */
+	public void loadConsoleConfiguration() {
+
+		// Gets the console configuration
+		AcideConsoleConfiguration.getInstance().load(
+				AcideProjectConfiguration.getInstance()
+						.getConsoleConfiguration());
+
+		// Resets the console panel
+		AcideMainWindow.getInstance().getConsolePanel().resetConsole();
+	}
+
+	/**
+	 * Loads the project tool bar configuration.
+	 */
+	public void loadToolBarConfiguration() {
+
+		try {
+
+			// Gets the ACIDE - A Configurable IDE tool bar configuration
+			String currentToolBarConfiguration = AcideProjectConfiguration
+					.getInstance().getToolBarConfiguration();
+
+			// Loads the command list from the configuration file
+			AcideToolBarConfiguration.getInstance()
+					.getConsolePanelToolBarConfiguration()
+					.loadFinalList(currentToolBarConfiguration);
+
+			// Updates the ACIDE - A Configurable IDE current tool bar
+			// configuration
+			AcideResourceManager.getInstance().setProperty(
+					"currentToolBarConfiguration", currentToolBarConfiguration);
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+
+			// Gets the ACIDE - A Configurable IDE tool bar configuration
+			String currentToolBarConfiguration = AcideProjectConfiguration
+					.getInstance().getToolBarConfiguration();
+
+			// Gets the name
+			String name = "";
+			int index = currentToolBarConfiguration.lastIndexOf("\\");
+			if (index == -1)
+				index = currentToolBarConfiguration.lastIndexOf("/");
+			name = ".\\configuration\\toolbar\\"
+					+ currentToolBarConfiguration.substring(index + 1,
+							currentToolBarConfiguration.length());
+			try {
+
+				// Loads the command list from the configuration file
+				AcideToolBarConfiguration.getInstance()
+						.getConsolePanelToolBarConfiguration()
+						.loadFinalList(name);
+
+				// Displays an error message
+				JOptionPane.showMessageDialog(null, AcideLanguageManager
+						.getInstance().getLabels().getString("s958")
+						+ currentToolBarConfiguration
+						+ AcideLanguageManager.getInstance().getLabels()
+								.getString("s957") + name);
+
+				// Updates the ACIDE - A Configurable IDE tool bar configuration
+				AcideResourceManager.getInstance().setProperty(
+						"currentToolBarConfiguration", name);
+			} catch (Exception exception1) {
+
+				// Updates the log
+				AcideLog.getLog().error(exception1.getMessage());
+				exception1.printStackTrace();
+
+				try {
+
+					// Loads the command list from the configuration file
+					AcideToolBarConfiguration
+							.getInstance()
+							.getConsolePanelToolBarConfiguration()
+							.loadFinalList(
+									"./configuration/toolbar/default.TBcfg");
+				} catch (Exception exception2) {
+
+					// Updates the log
+					AcideLog.getLog().error(exception2.getMessage());
+					exception2.printStackTrace();
+				}
+
+				// Displays an error message
+				JOptionPane.showMessageDialog(null, AcideLanguageManager
+						.getInstance().getLabels().getString("s958")
+						+ currentToolBarConfiguration
+						+ AcideLanguageManager.getInstance().getLabels()
+								.getString("s959"));
+
+				// Updates the ACIDE - A Configurable IDE tool bar configuration
+				AcideResourceManager.getInstance().setProperty(
+						"currentToolBarConfiguration",
+						"./configuration/toolbar/default.TBcfg");
+			}
+		}
+
+		// Builds the tool bar
+		AcideMainWindow.getInstance().buildToolBarPanel();
+
+		// Enables the save tool bar menu item
+		AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+				.getToolBarMenu().getSaveToolBarMenuItem().setEnabled(true);
+
+		// The changes are saved
+		AcideToolBarConfigurationWindow.setAreChangesSaved(true);
+	}
+
+	/**
+	 * Loads the project configuration from the configuration file.
+	 * 
+	 * @param configurationFilePath
+	 *            configuration file path.
+	 */
+	public void loadProjectConfiguration(String configurationFilePath) {
+
+		// Loads the configuration file content
+		String configurationFileContent = AcideFileManager.getInstance().load(
+				configurationFilePath);
+
+		// Updates the ACIDE - A Configurable IDE project configuration
+		AcideResourceManager.getInstance().setProperty("projectConfiguration",
+				configurationFilePath);
+
+		// Sets the project path
+		AcideProjectConfiguration.getInstance().setPath(configurationFilePath);
+
+		// Removes the previous associated files to the project
+		AcideProjectConfiguration.getInstance().removeFiles();
+
+		// Loads the project configuration
+		AcideProjectConfiguration.getInstance().load(configurationFileContent);
+	}
+
+	/**
+	 * Loads the project main window configuration.
+	 */
+	public void loadMainWindowConfiguration() {
+
+		// Is explorer panel showed?
+		if (!AcideWindowConfiguration.getInstance().isExplorerPanelShowed())
+
+			// Shows the explorer panel
+			AcideMainWindow.getInstance().getMenu().getViewMenu()
+					.getShowExplorerPanelCheckBoxMenuItem().doClick();
+
+		// Is console panel showed?
+		if (!AcideWindowConfiguration.getInstance().isConsolePanelShowed())
+
+			// Shows the console panel
+			AcideMainWindow.getInstance().getMenu().getViewMenu()
+					.getShowConsolePanelCheckBoxMenuItem().doClick();
+
+		// Sets the main window size
+		AcideMainWindow.getInstance().setSize(
+				AcideWindowConfiguration.getInstance().getWindowWidth(),
+				AcideWindowConfiguration.getInstance().getWindowHeight());
+
+		// Sets the main window location
+		AcideMainWindow.getInstance().setLocation(
+				AcideWindowConfiguration.getInstance().getXCoordinate(),
+				AcideWindowConfiguration.getInstance().getYCoordinate());
+
+		// Sets the vertical split pane divider location
+		AcideMainWindow
+				.getInstance()
+				.getVerticalSplitPane()
+				.setDividerLocation(
+						AcideWindowConfiguration.getInstance()
+								.getVerticalSplitPaneDividerLocation());
+
+		// Sets the horizontal split pane divider location
+		AcideMainWindow
+				.getInstance()
+				.getHorizontalSplitPane()
+				.setDividerLocation(
+						AcideWindowConfiguration.getInstance()
+								.getHorizontalSplitPanelDividerLocation());
+	}
+
+	/**
+	 * Loads the project file editor configuration. SwingUtilities is used to
+	 * wait until the end of the execution of all the previous events so it can
+	 * add all the editors properly and safety.
+	 */
+	public void loadFileEditorConfiguration() {
+
+		// Updates the ACIDE - A Configurable IDE file editor configuration
+		AcideResourceManager.getInstance().setProperty(
+				"fileEditorConfiguration",
+				AcideProjectConfiguration.getInstance()
+						.getFileEditorConfiguration());
+
+		// Gets the ACIDE - A Configurable IDE file editor configuration
+		AcideFileEditorConfiguration fileEditorConfiguration = AcideFileEditorConfiguration
+				.getInstance();
+		try {
+
+			// Loads the file editor configuration
+			fileEditorConfiguration.load(AcideResourceManager.getInstance()
+					.getProperty("fileEditorConfiguration"));
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+
+		for (int index = 0; index < AcideProjectConfiguration.getInstance()
+				.getNumberOfFilesFromList(); index++) {
+
+			// Checks if the file really exists
+			File file = new File(AcideProjectConfiguration.getInstance()
+					.getFileAt(index).getAbsolutePath());
+
+			// If the file is not a directory and exists
+			if (!AcideProjectConfiguration.getInstance().getFileAt(index)
+					.isDirectory()
+					&& file.exists()) {
+
+				// Loads the file content
+				String fileContent = null;
+				fileContent = AcideFileManager.getInstance().load(
+						AcideProjectConfiguration.getInstance()
+								.getFileAt(index).getAbsolutePath());
+
+				// If the file has to be opened
+				if (AcideProjectConfiguration.getInstance().getFileAt(index)
+						.isOpened()) {
+
+					// TODO: Load the predefined extension
+
+					// Creates the lexicon configuration
+					AcideLexiconConfiguration lexiconConfiguration = new AcideLexiconConfiguration();
+
+					// Loads the lexicon configuration
+					lexiconConfiguration
+							.load(AcideLexiconConfiguration.DEFAULT_PATH
+									+ AcideLexiconConfiguration.DEFAULT_NAME);
+
+					// TODO: Load the predefined extension
+
+					// Creates the current grammar configuration
+					AcideGrammarConfiguration currentGrammarConfiguration = new AcideGrammarConfiguration();
+
+					// Sets the current grammar configuration path
+					currentGrammarConfiguration
+							.setPath(AcideGrammarConfiguration.DEFAULT_FILE);
+
+					// Creates the previous grammar configuration
+					AcideGrammarConfiguration previousGrammarConfiguration = new AcideGrammarConfiguration();
+
+					// Sets the previous grammar configuration path
+					previousGrammarConfiguration
+							.setPath(AcideGrammarConfiguration.DEFAULT_FILE);
+
+					// Updates the tabbed pane in the file editor
+					// manager
+					AcideMainWindow
+							.getInstance()
+							.getFileEditorManager()
+							.updatesTabbedPane(
+									AcideProjectConfiguration.getInstance()
+											.getFileAt(index).getAbsolutePath(),
+									fileContent,
+									true,
+									AcideProjectConfiguration.getInstance()
+											.getFileAt(index).getType(), 0, 0,
+									1, lexiconConfiguration,
+									currentGrammarConfiguration,
+									previousGrammarConfiguration);
+				}
+
+				// The project configuration has been modified
+				AcideProjectConfiguration.getInstance().setIsModified(false);
+			} else {
+
+				// If the file does not exist
+				if (!file.exists()) {
+
+					// If the file is not a directory
+					if (!AcideProjectConfiguration.getInstance()
+							.getFileAt(index).isDirectory()) {
+
+						// Displays an error message
+						JOptionPane
+								.showMessageDialog(
+										null,
+										AcideLanguageManager.getInstance()
+												.getLabels().getString("s1020")
+												+ file.getAbsolutePath()
+												+ " "
+												+ AcideLanguageManager
+														.getInstance()
+														.getLabels()
+														.getString("s1021"),
+										"Warning", JOptionPane.WARNING_MESSAGE);
+
+						// The project configuration has been modified
+						AcideProjectConfiguration.getInstance().setIsModified(
+								true);
+					}
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Returns the ACIDE - A Configurable IDE project menu new project menu
 	 * item.
@@ -1003,5 +1930,16 @@ public class AcideProjectMenu extends JMenu {
 	 */
 	public JMenuItem getUnsetMainFileMenuItem() {
 		return _unsetMainFileMenuItem;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE project menu open recent projects
+	 * menu.
+	 * 
+	 * @return the ACIDE - A Configurable IDE project menu open recent projects
+	 *         menu.
+	 */
+	public AcideRecentProjectsMenu getOpenRecentProjectMenu() {
+		return _openRecentProjectsMenu;
 	}
 }

@@ -103,7 +103,7 @@ public class AcideToolBarConfiguration {
 		_consolePanelToolBarConfiguration.loadLists(filePath);
 			
 		// Loads the external applications tool bar configuration
-		_externalAppsToolBarConfiguration.load(filePath);
+		_externalAppsToolBarConfiguration.loadLists(filePath);
 	}
 
 	/**

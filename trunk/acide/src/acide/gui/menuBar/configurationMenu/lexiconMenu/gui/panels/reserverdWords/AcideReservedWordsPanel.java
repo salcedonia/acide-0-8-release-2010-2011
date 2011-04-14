@@ -45,7 +45,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -59,7 +58,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.TitledBorder;
 
 import acide.configuration.lexicon.tokens.AcideLexiconTokenType;
 import acide.configuration.lexicon.tokens.AcideLexiconTokenTypeManager;
@@ -194,11 +192,6 @@ public class AcideReservedWordsPanel extends JPanel {
 				.getString("s443");
 		_tableColumns[2] = AcideLanguageManager.getInstance().getLabels()
 				.getString("s375");
-
-		// Sets a border
-		setBorder(BorderFactory.createTitledBorder(null, AcideLanguageManager
-				.getInstance().getLabels().getString("s428"),
-				TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION));
 
 		// Builds the panel components
 		buildComponents();

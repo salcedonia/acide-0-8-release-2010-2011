@@ -88,7 +88,7 @@ public class AcideSearchReplaceWindowKeyboardListener extends KeyAdapter {
 							AcideSearchReplaceWindow.getInstance()
 									.getSearchTextField().setText(selectedText);
 
-							// Enables the current document radio button in the
+							// Selects the current document radio button in the
 							// search/replace
 							// window
 							AcideSearchReplaceWindow.getInstance()
@@ -124,12 +124,19 @@ public class AcideSearchReplaceWindowKeyboardListener extends KeyAdapter {
 					// If there is selected text
 					if (selectedText != null) {
 
+						// Sets the selected text radio button in the
+						// search/replace
+						// window as selected
+						AcideSearchReplaceWindow.getInstance()
+								.getSelectedTextRadioButton().setSelected(true);
+
 						// Enables the selected text radio button in the
 						// search/replace
 						// window
 						AcideSearchReplaceWindow.getInstance()
-								.getSelectedTextRadioButton().setSelected(true);
-
+								.getSelectedTextRadioButton()
+								.setEnabled(true);
+						
 						// Disables the all radio button in the search/replace
 						// window
 						AcideSearchReplaceWindow.getInstance()
@@ -144,13 +151,20 @@ public class AcideSearchReplaceWindowKeyboardListener extends KeyAdapter {
 								.getSearchTextField().setText(selectedText);
 					} else {
 
-						// Enables the current document radio button in the
+						// Sets the current document radio button in the
 						// search/replace
-						// window
+						// window as selected
 						AcideSearchReplaceWindow.getInstance()
 								.getCurrentDocumentRadioButton()
 								.setSelected(true);
 
+						// Disables the selected text radio button in the
+						// search/replace
+						// window
+						AcideSearchReplaceWindow.getInstance()
+								.getSelectedTextRadioButton()
+								.setEnabled(false);
+						
 						// Enables the all radio button in the search/replace
 						// window
 						AcideSearchReplaceWindow.getInstance()

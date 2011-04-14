@@ -109,25 +109,61 @@ public class AcideViewMenu extends JMenu {
 	 */
 	public AcideViewMenu() {
 
+		// Builds the menu components
+		buildComponents();
+
+		// Adds the components to the menu
+		addComponents();
+
+		// Sets the text of the view menu components
+		setTextOfMenuComponents();
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE view menu.
+	 */
+	private void addComponents() {
+
+		// Adds the show log tab menu item to the menu
+		add(_showLogTabMenuItem);
+
+		// Adds the show explorer panel check box menu item to the menu
+		add(_showExplorerPanelCheckBoxMenuItem);
+
+		// Adds the show console panel check box menu item to the menu
+		add(_showConsolePanelCheckBoxMenuItem);
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE view menu components.
+	 */
+	private void buildComponents() {
+
 		// Creates the show log tab menu item
 		_showLogTabMenuItem = new JMenuItem(SHOW_LOG_TAB_IMAGE);
+
+		// Sets the show log tab menu item name
+		_showLogTabMenuItem.setName(SHOW_LOG_TAB_NAME);
 
 		// Creates the show explorer panel check box menu item
 		_showExplorerPanelCheckBoxMenuItem = new JCheckBoxMenuItem(
 				SHOW_EXPLORER_PANEL_IMAGE);
-		
+
+		// Sets the show explorer panel check box menu item name
+		_showExplorerPanelCheckBoxMenuItem.setName(SHOW_EXPLORER_PANEL_NAME);
+
 		// Sets the show explorer panel check box menu item as not selected
 		_showExplorerPanelCheckBoxMenuItem.setSelected(true);
 
 		// Creates the show console panel check box menu item
 		_showConsolePanelCheckBoxMenuItem = new JCheckBoxMenuItem(
 				SHOW_CONSOLE_PANEL_IMAGE);
-		
+
+		// Sets the show console panel check box menu item name
+		_showConsolePanelCheckBoxMenuItem.setName(SHOW_CONSOLE_PANEL_NAME);
+
 		// Sets the show console panel check box menu item as not selected
 		_showConsolePanelCheckBoxMenuItem.setSelected(true);
-
-		// Sets the text of the view menu components
-		setTextOfMenuComponents();
 	}
 
 	/**
@@ -139,7 +175,7 @@ public class AcideViewMenu extends JMenu {
 		// Sets the show log tab menu item text
 		_showLogTabMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s28"));
-		
+
 		// Sets the show log tab menu item accelerator
 		_showLogTabMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_G, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
@@ -154,27 +190,23 @@ public class AcideViewMenu extends JMenu {
 	}
 
 	/**
-	 * Builds the ACIDE - A Configurable IDE view menu.
+	 * Updates the ACIDE - A Configurable IDE view menu components visibiliy
+	 * with the menu configuration.
 	 */
-	public void build() {
+	public void updateComponentsVisibility() {
 
-		// Removes all the menu components
-		removeAll();
+		// Sets the show log tab menu item to visible or not visible
+		_showLogTabMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(SHOW_LOG_TAB_NAME));
 
-		// Adds the show log tab menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				SHOW_LOG_TAB_NAME))
-			add(_showLogTabMenuItem);
+		// Sets the show explorer panel check box menu item as visible or not
+		// visible
+		_showExplorerPanelCheckBoxMenuItem.setVisible(AcideMenuConfiguration
+				.getInstance().getIsDisplayed(SHOW_EXPLORER_PANEL_NAME));
 
-		// Adds the show explorer panel check box menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				SHOW_EXPLORER_PANEL_NAME))
-			add(_showExplorerPanelCheckBoxMenuItem);
-
-		// Adds the show console panel check box menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				SHOW_CONSOLE_PANEL_NAME))
-			add(_showConsolePanelCheckBoxMenuItem);
+		// Sets the console panel check box menu item as visible or not visible
+		_showConsolePanelCheckBoxMenuItem.setVisible(AcideMenuConfiguration
+				.getInstance().getIsDisplayed(SHOW_CONSOLE_PANEL_NAME));
 	}
 
 	/**

@@ -1,4 +1,4 @@
-// Command dir
+// buttonConfiguration dir
 name = dir
 action = dir
 hintText = Directory Listing
@@ -6,7 +6,7 @@ icon =
 parameterType = NONE
 isExecutedInSytemShell = false
 
-// Command pwd
+// buttonConfiguration pwd
 name = pwd
 action = cd
 hintText = Current Directory
@@ -14,7 +14,7 @@ icon =
 parameterType = NONE
 isExecutedInSytemShell = false
 
-// Command type
+// buttonConfiguration type
 name = type
 action = type $activeFile$
 hintText = Type Current File
@@ -22,7 +22,7 @@ icon =
 parameterType = NONE
 isExecutedInSytemShell = false
 
-// Command explorer
+// buttonConfiguration explorer
 name = explorer
 action = explorer
 hintText = Launch the explorer
@@ -30,4 +30,12 @@ icon =
 parameterType = NONE
 isExecutedInSytemShell = true
 
-// End
+// End Of Console Panel Tool Bar Button Configuration
+
+// buttonConfiguration Acrobat Reader
+name = Acrobat Reader
+path = C:\Archivos de programa\Adobe\Reader 10.0\Reader\AcroRd32.exe
+hintText = Launch the Acrobat Reader
+icon = 
+
+// End Of External Applications Tool Bar Button Configuration

@@ -36,7 +36,7 @@ import acide.configuration.menu.AcideMenuConfiguration;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.listeners.AcideLoadToolBarMenuItemListener;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.listeners.AcideModifyToolBarMenuItemListener;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.listeners.AcideNewToolBarMenuItemListener;
-import acide.gui.menuBar.configurationMenu.toolBarMenu.listeners.AcideSaveAsToolBaMenuItemrListener;
+import acide.gui.menuBar.configurationMenu.toolBarMenu.listeners.AcideToolBaAsMenuItemListener;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.listeners.AcideSaveToolBarMenuItemListener;
 import acide.language.AcideLanguageManager;
 
@@ -99,26 +99,74 @@ public class AcideToolBarMenu extends JMenu {
 	 */
 	public AcideToolBarMenu() {
 
+		// Builds the menu components
+		buildComponents();
+
+		// Adds the components to the menu
+		addComponents();
+
+		// Sets the text of the tool bar menu components
+		setTextOfMenuComponents();
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE tool bar menu.
+	 */
+	private void addComponents() {
+
+		// Adds the new tool bar menu item to the menu
+		add(_newToolBarMenuItem);
+
+		// Adds the load tool bar menu item to the menu
+		add(_loadToolBarMenuItem);
+
+		// Adds the modify tool bar menu item to the menu
+		add(_modifyToolBarMenuItem);
+
+		// Adds the save tool bar menu item to the menu
+		add(_saveToolBarMenuItem);
+
+		// Adds the save tool bar as menu item to the menu
+		add(_saveToolBarAsMenuItem);
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE tool bar menu components.
+	 */
+	private void buildComponents() {
+
 		// Creates the new tool bar menu item
 		_newToolBarMenuItem = new JMenuItem();
+
+		// Sets the new tool bar menu item name
+		_newToolBarMenuItem.setName(NEW_TOOLBAR_NAME);
 
 		// Creates the load tool bar menu item
 		_loadToolBarMenuItem = new JMenuItem();
 
+		// Sets the load tool bar menu item name
+		_loadToolBarMenuItem.setName(LOAD_TOOLBAR_NAME);
+
 		// Creates the modify tool bar menu item
 		_modifyToolBarMenuItem = new JMenuItem();
 
+		// Sets the modify tool bar menu item name
+		_modifyToolBarMenuItem.setName(MODIFY_TOOLBAR_NAME);
+
 		// Creates the save tool bar menu item
 		_saveToolBarMenuItem = new JMenuItem();
-		
+
+		// Sets the save tool bar menu item name
+		_saveToolBarMenuItem.setName(SAVE_TOOLBAR_NAME);
+
 		// Disables the save tool bar menu item
 		_saveToolBarMenuItem.setEnabled(false);
 
 		// Creates the save tool bar as menu item
 		_saveToolBarAsMenuItem = new JMenuItem();
 
-		// Sets the text of the tool bar menu components
-		setTextOfMenuComponents();
+		// Sets the save tool bar as menu item name
+		_saveToolBarAsMenuItem.setName(SAVE_TOOLBAR_AS_NAME);
 	}
 
 	/**
@@ -171,41 +219,34 @@ public class AcideToolBarMenu extends JMenu {
 
 		// Sets the save tool bar as menu item action listener
 		_saveToolBarAsMenuItem
-				.addActionListener(new AcideSaveAsToolBaMenuItemrListener());
+				.addActionListener(new AcideToolBaAsMenuItemListener());
 	}
 
 	/**
-	 * Builds the ACIDE - A Configurable IDE tool bar menu.
+	 * Updates the ACIDE - A Configurable IDE tool bar menu components
+	 * visibility with the menu configuration.
 	 */
-	public void build() {
+	public void updateComponentsVisibility() {
 
-		// Removes all the menu components
-		removeAll();
+		// Sets the new tool bar menu item to visible or not visible
+		_newToolBarMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(NEW_TOOLBAR_NAME));
 
-		// Adds the new tool bar menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				NEW_TOOLBAR_NAME))
-			add(_newToolBarMenuItem);
+		// Sets the load tool bar menu item to visible or not visible
+		_loadToolBarMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(LOAD_TOOLBAR_NAME));
 
-		// Adds the load tool bar menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				LOAD_TOOLBAR_NAME))
-			add(_loadToolBarMenuItem);
+		// Sets the modify tool bar menu item to visible or not visible
+		_modifyToolBarMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(MODIFY_TOOLBAR_NAME));
 
-		// Adds the modify tool bar menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				MODIFY_TOOLBAR_NAME))
-			add(_modifyToolBarMenuItem);
+		// Sets the save tool bar menu item to visible or not visible
+		_saveToolBarMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(SAVE_TOOLBAR_NAME));
 
-		// Adds the save tool bar menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				SAVE_TOOLBAR_NAME))
-			add(_saveToolBarMenuItem);
-
-		// Adds the save tool bar as menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				SAVE_TOOLBAR_AS_NAME))
-			add(_saveToolBarAsMenuItem);
+		// Sets the save tool bar as menu item to visible or not visible
+		_saveToolBarAsMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(SAVE_TOOLBAR_AS_NAME));
 	}
 
 	/**

@@ -100,18 +100,54 @@ public class AcideConsoleMenu extends JMenu {
 	 */
 	public AcideConsoleMenu() {
 
+		// Builds the menu components
+		buildComponents();
+
+		// Adds the components to the menu
+		addComponents();
+
+		// Sets the text of the console menu components
+		setTextOfMenuComponents();
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE console menu.
+	 */
+	private void addComponents() {
+
+		// Adds the configure menu item
+		add(_configureMenuItem);
+
+		// Adds the external command menu item
+		add(_externalCommandMenuItem);
+
+		// Adds the console display options menu item
+		add(_consoleDisplayOptionsMenuItem);
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE components.
+	 */
+	private void buildComponents() {
+
 		// Creates the configure menu item
 		_configureMenuItem = new JMenuItem(CONFIGURE_IMAGE);
 
+		// Sets the configure menu item name
+		_configureMenuItem.setName(CONFIGURE_NAME);
+
 		// Creates the external command menu item
 		_externalCommandMenuItem = new JMenuItem(EXTERNAL_COMMAND_IMAGE);
+
+		// Sets the external command menu item name
+		_externalCommandMenuItem.setName(EXTERNAL_COMMAND_NAME);
 
 		// Creates the console display options menu item
 		_consoleDisplayOptionsMenuItem = new JMenuItem(
 				CONSOLE_DISPLAY_OPTIONS_IMAGE);
 
-		// Sets the text of the console menu components
-		setTextOfMenuComponents();
+		// Sets the console display options menu item
+		_consoleDisplayOptionsMenuItem.setName(CONSOLE_DISPLAY_OPTIONS_NAME);
 	}
 
 	/**
@@ -134,26 +170,22 @@ public class AcideConsoleMenu extends JMenu {
 	}
 
 	/**
-	 * Builds the ACIDE - A Configurable IDE console menu.
+	 * Updates the ACIDE - A Configurable IDE console menu components visibility
+	 * with the menu configuration.
 	 */
-	public void build() {
+	public void updateComponentsVisibility() {
 
-		// Removes all the menu components
-		removeAll();
+		// Sets the configure menu item to visible or not visible
+		_configureMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(CONFIGURE_NAME));
 
-		// Adds the configure menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(CONFIGURE_NAME))
-			add(_configureMenuItem);
+		// Sets the external command menu item to visible or not visible
+		_externalCommandMenuItem.setVisible(AcideMenuConfiguration
+				.getInstance().getIsDisplayed(EXTERNAL_COMMAND_NAME));
 
-		// Adds the external command menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				EXTERNAL_COMMAND_NAME))
-			add(_externalCommandMenuItem);
-
-		// Adds the console display options menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				CONSOLE_DISPLAY_OPTIONS_NAME))
-			add(_consoleDisplayOptionsMenuItem);
+		// Sets the console display options menu item to visible or not visible
+		_consoleDisplayOptionsMenuItem.setVisible(AcideMenuConfiguration
+				.getInstance().getIsDisplayed(CONSOLE_DISPLAY_OPTIONS_NAME));
 	}
 
 	/**
@@ -178,8 +210,8 @@ public class AcideConsoleMenu extends JMenu {
 	 * Returns the ACIDE - A Configurable IDE console menu external command menu
 	 * item.
 	 * 
-	 * @return the ACIDE - A Configurable IDE console menu external command menu.
-	 *         item
+	 * @return the ACIDE - A Configurable IDE console menu external command
+	 *         menu. item
 	 */
 	public JMenuItem getExternalCommandMenuItem() {
 		return _externalCommandMenuItem;

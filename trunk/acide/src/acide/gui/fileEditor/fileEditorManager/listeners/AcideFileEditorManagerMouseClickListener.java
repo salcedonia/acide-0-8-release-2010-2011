@@ -31,7 +31,6 @@ package acide.gui.fileEditor.fileEditorManager.listeners;
 
 import acide.files.AcideFileManager;
 import acide.gui.mainWindow.AcideMainWindow;
-import acide.gui.toolBarPanel.menuBarToolBar.AcideMenuBarToolBar;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -196,9 +195,10 @@ public class AcideFileEditorManagerMouseClickListener extends MouseAdapter {
 							AcideMainWindow.getInstance()
 									.getFileEditorManager()
 									.getSelectedFileEditorPanelIndex());
-			
-			// Updates the static tool bar
-			AcideMenuBarToolBar.getInstance().updateStateOfFileButtons();
+
+			// Updates the save project in the menu bar tool bar
+			AcideMainWindow.getInstance().getToolBarPanel().getMenuBarToolBar()
+					.updateStateOfFileButtons();
 		}
 	}
 }

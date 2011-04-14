@@ -72,13 +72,13 @@ public class AcideRecentFilesMenu extends JMenu {
 		_clearRecentFiles.addActionListener(new ClearListMenuItemAction());
 
 		// Builds the recent files menu
-		buildRecentFilesMenu();
+		build();
 	}
 
 	/**
-	 * Builds the recent files menu.
+	 * Builds the ACIDE - A Configurable IDE recent files menu.
 	 */
-	public void buildRecentFilesMenu() {
+	public void build() {
 
 		// Removes all the menu items
 		removeAll();
@@ -185,7 +185,7 @@ public class AcideRecentFilesMenu extends JMenu {
 			AcideWorkbenchManager.getInstance().getRecentFiles().clear();
 
 			// Rebuilds the recent files menu
-			buildRecentFilesMenu();
+			build();
 		}
 	}
 }

@@ -72,12 +72,16 @@ public class AcideSearchReplaceWindowMouseListener extends MouseAdapter {
 		// If something is selected
 		if (selectedText != null) {
 
-			// Sets the selected text radio button to true in the search/replace
-			// window
+			// Enables the selected text radio button in the search/replace window
+			AcideSearchReplaceWindow.getInstance().getSelectedTextRadioButton()
+					.setEnabled(true);
+			
+			// Sets the selected text radio button in the search/replace
+			// window as selected
 			AcideSearchReplaceWindow.getInstance().getSelectedTextRadioButton()
 					.setSelected(true);
 
-			// Sets the all radio button to false in the search/replace window
+			// Disables the all radio button in the search/replace window
 			AcideSearchReplaceWindow.getInstance().getBothDirectionsRadioButton()
 					.setEnabled(false);
 			
@@ -89,8 +93,12 @@ public class AcideSearchReplaceWindowMouseListener extends MouseAdapter {
 
 		} else {
 
-			// Sets the current document radio button to true in the
-			// search/replace window
+			// Disables the selected text radio button in the search/replace window
+			AcideSearchReplaceWindow.getInstance().getSelectedTextRadioButton()
+					.setEnabled(false);
+			
+			// Sets the current document radio button in the
+			// search/replace window as selected
 			AcideSearchReplaceWindow.getInstance()
 					.getCurrentDocumentRadioButton().setSelected(true);
 

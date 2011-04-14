@@ -35,10 +35,10 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JTextPane;
 import javax.swing.JViewport;
 import javax.swing.SwingConstants;
 
+import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.AcideTextPane;
 import acide.gui.mainWindow.AcideMainWindow;
 
 /**
@@ -94,7 +94,7 @@ public class AcideFileEditorScrollPaneKeyListener implements KeyListener {
 	private void dispatchEvent(KeyEvent keyEvent) {
 
 		// Gets the active text edition area
-		JTextPane textPane = AcideMainWindow.getInstance()
+		AcideTextPane textPane = AcideMainWindow.getInstance()
 				.getFileEditorManager().getSelectedFileEditorPanel()
 				.getActiveTextEditionArea();
 

@@ -111,7 +111,7 @@ public class AcideLoadMenuMenuItemListener implements ActionListener {
 						menuItemList);
 
 				// Builds the menu
-				AcideMainWindow.getInstance().getMenu().build();
+				AcideMainWindow.getInstance().getMenu().updateComponentsVisibility();
 
 				// Validates the changes in the main window
 				AcideMainWindow.getInstance().validate();

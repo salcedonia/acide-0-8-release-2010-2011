@@ -29,7 +29,6 @@
  */
 package acide.gui.consolePanel.listeners;
 
-import acide.gui.consolePanel.AcideConsolePanel;
 import acide.gui.mainWindow.AcideMainWindow;
 
 import java.awt.event.KeyEvent;
@@ -55,23 +54,24 @@ public class AcideConsolePanelKeyboardListener implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent keyEvent) {
 
-		// Gets the console panel
-		AcideConsolePanel consolePanel = AcideMainWindow.getInstance()
-				.getConsolePanel();
-
 		// If the console pane text pane is initialized
-		if (consolePanel.getTextPane() != null) {
+		if (AcideMainWindow.getInstance().getConsolePanel().getTextPane() != null) {
 
 			// If the caret position is behind the prompt caret position
-			if (consolePanel.getTextPane().getCaretPosition() < consolePanel
-					.getPromptCaretPosition())
+			if (AcideMainWindow.getInstance().getConsolePanel().getTextPane()
+					.getCaretPosition() < AcideMainWindow.getInstance()
+					.getConsolePanel().getPromptCaretPosition())
 
 				// Ignores the key
 				keyEvent.consume();
 			else
 				// Updates the selection size
-				consolePanel
-						.setSelectionSize(consolePanel.getSelectionSize() + 1);
+				AcideMainWindow
+						.getInstance()
+						.getConsolePanel()
+						.setSelectionSize(
+								AcideMainWindow.getInstance().getConsolePanel()
+										.getSelectionSize() + 1);
 		}
 	}
 
@@ -91,9 +91,10 @@ public class AcideConsolePanelKeyboardListener implements KeyListener {
 
 				// If the caret is in the limit with the prompt
 				// and the key is left, up or down
-				if ((AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-						.getCaretPosition() == AcideMainWindow.getInstance()
-						.getConsolePanel().getPromptCaretPosition())
+				if ((AcideMainWindow.getInstance().getConsolePanel()
+						.getTextPane().getCaretPosition() == AcideMainWindow
+						.getInstance().getConsolePanel()
+						.getPromptCaretPosition())
 						&& ((keyEvent.getKeyCode() == KeyEvent.VK_LEFT)
 								|| (keyEvent.getKeyCode() == 8) || keyEvent
 								.getKeyCode() == KeyEvent.VK_UP))
@@ -101,9 +102,10 @@ public class AcideConsolePanelKeyboardListener implements KeyListener {
 					keyEvent.consume();
 
 				// If the caret is behind the prompt
-				if (AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-						.getSelectionStart() < AcideMainWindow.getInstance()
-						.getConsolePanel().getPromptCaretPosition())
+				if (AcideMainWindow.getInstance().getConsolePanel()
+						.getTextPane().getSelectionStart() < AcideMainWindow
+						.getInstance().getConsolePanel()
+						.getPromptCaretPosition())
 
 					// Consumes the key
 					keyEvent.consume();
@@ -128,6 +130,8 @@ public class AcideConsolePanelKeyboardListener implements KeyListener {
 
 						if (AcideMainWindow.getInstance().getConsolePanel()
 								.getProcessThread().getWriter() != null)
+							
+							// Send the command to the console
 							AcideMainWindow.getInstance().getConsolePanel()
 									.sendCommandToConsole(command, "");
 					}
@@ -182,7 +186,8 @@ public class AcideConsolePanelKeyboardListener implements KeyListener {
 												.getPromptCaretPosition(),
 												command.length());
 
-								if (AcideMainWindow.getInstance().getConsolePanel()
+								if (AcideMainWindow.getInstance()
+										.getConsolePanel()
 										.getCommandRecordCurrentIndex() > -1)
 									// Puts the current command in the command
 									// record
@@ -371,16 +376,13 @@ public class AcideConsolePanelKeyboardListener implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent keyEvent) {
 
-		// Gets the console panel
-		AcideConsolePanel consolePanel = AcideMainWindow.getInstance()
-				.getConsolePanel();
-
 		// If the console panel text pane is initialized
-		if (consolePanel.getTextPane() != null)
+		if (AcideMainWindow.getInstance().getConsolePanel().getTextPane() != null)
 
 			// If the caret is the not editable zone
-			if (consolePanel.getTextPane().getCaretPosition() < consolePanel
-					.getPromptCaretPosition())
+			if (AcideMainWindow.getInstance().getConsolePanel().getTextPane()
+					.getCaretPosition() < AcideMainWindow.getInstance()
+					.getConsolePanel().getPromptCaretPosition())
 
 				// Consumes the key
 				keyEvent.consume();

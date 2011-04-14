@@ -91,14 +91,44 @@ public class AcideLanguageMenu extends JMenu {
 	 */
 	public AcideLanguageMenu() {
 
+		// Builds the menu components
+		buildComponents();
+
+		// Adds the components to the menu
+		addComponents();
+
+		// Sets the text of the language menu components
+		setTextOfMenuComponents();
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE language menu
+	 */
+	private void addComponents() {
+
+		// Adds the Spanish menu item to the menu
+		add(_spanishMenuItem);
+
+		// Adds the English menu item to the menu
+		add(_englishMenuItem);
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE language menu components.
+	 */
+	private void buildComponents() {
+
 		// Creates the Spanish menu item
 		_spanishMenuItem = new JMenuItem(SPANISH_IMAGE);
+
+		// Sets the Spanish menu item name
+		_spanishMenuItem.setName(SPANISH_NAME);
 
 		// Creates the English menu item
 		_englishMenuItem = new JMenuItem(ENGLISH_IMAGE);
 
-		// Sets the text of the language menu components
-		setTextOfMenuComponents();
+		// Sets the English menu item name
+		_englishMenuItem.setName(ENGLISH_NAME);
 	}
 
 	/**
@@ -110,7 +140,7 @@ public class AcideLanguageMenu extends JMenu {
 		// Sets the Spanish menu item text
 		_spanishMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s11"));
-		
+
 		// Sets the Spanish menu item accelerator
 		_spanishMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				ActionEvent.ALT_MASK));
@@ -118,27 +148,25 @@ public class AcideLanguageMenu extends JMenu {
 		// Sets the Spanish menu item text
 		_englishMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s12"));
-		
+
 		// Creates the English menu item accelerator
 		_englishMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I,
 				ActionEvent.ALT_MASK));
 	}
 
 	/**
-	 * Builds the ACIDE - A Configurable IDE language menu.
+	 * Updates the ACIDE - A Configurable IDE language menu components
+	 * visibility with the menu configuration.
 	 */
-	public void build() {
+	public void updateComponentsVisibility() {
 
-		// Removes all the menu components
-		removeAll();
+		// Sets the Spanish menu item to visible or not visible
+		_spanishMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(SPANISH_NAME));
 
-		// Adds the Spanish menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SPANISH_NAME))
-			add(_spanishMenuItem);
-
-		// Adds the English menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(ENGLISH_NAME))
-			add(_englishMenuItem);
+		// Adds the English menu item to visible or not visible
+		_englishMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(ENGLISH_NAME));
 	}
 
 	/**

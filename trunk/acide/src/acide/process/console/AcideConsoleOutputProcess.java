@@ -35,14 +35,14 @@ import java.io.*;
 
 import acide.log.AcideLog;
 
-/**																
+/**
  * Handles the ACIDE - A Configurable IDE output process thread.
- *					
- * @version 0.8		
- * @see Thread																												
+ * 
+ * @version 0.8
+ * @see Thread
  */
 class AcideConsoleOutputProcess extends Thread {
-	
+
 	/**
 	 * ACIDE - A Configurable IDE input stream.
 	 */
@@ -55,17 +55,24 @@ class AcideConsoleOutputProcess extends Thread {
 	 * ACIDE - A Configurable IDE
 	 */
 	private StringBuffer _stringBuffer;
-	
+
 	/**
 	 * Creates a new ACIDE - A Configurable IDE console process thread.
 	 * 
-	 * @param inputStream input stream.
-	 * @param consolePanel ACIDE - A Configurable IDE console panel.
+	 * @param inputStream
+	 *            input stream.
+	 * @param consolePanel
+	 *            ACIDE - A Configurable IDE console panel.
 	 * @see InputStream
 	 * @see AcideConsolePanel
 	 */
-	public AcideConsoleOutputProcess(InputStream inputStream, AcideConsolePanel consolePanel) {
+	public AcideConsoleOutputProcess(InputStream inputStream,
+			AcideConsolePanel consolePanel) {
+
+		// Stores the input stream
 		_inputStream = inputStream;
+
+		// Stores the console panel
 		_consolePanel = consolePanel;
 	}
 
@@ -73,23 +80,31 @@ class AcideConsoleOutputProcess extends Thread {
 	 * Main method of the output process thread.
 	 */
 	public synchronized void run() {
-		
+
 		try {
-			
-			InputStreamReader inputStreamReader = new InputStreamReader(_inputStream);
-			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-			_stringBuffer = new StringBuffer();
-			
+
+			// Creates the input stream reader
+			InputStreamReader inputStreamReader = new InputStreamReader(
+					_inputStream);
+
+			// Creates the buffered reader
+			BufferedReader bufferedReader = new BufferedReader(
+					inputStreamReader);
+
+			// Creates the string buffer
+			_stringBuffer = new StringBuffer(1024);
+
 			int character = 0;
-			
+
 			while ((character = bufferedReader.read()) != -1) {
-				
-				// If it is not the "\n"
+
+				// If it is not the carriage return
 				if (character != 13)
 					_stringBuffer.append((char) character);
-				
+
+				// When the buffer reader is empty
 				if (!bufferedReader.ready()) {
-					
+
 					// Adds the text to the console panel
 					_consolePanel.addText(_stringBuffer.toString());
 					
@@ -97,12 +112,9 @@ class AcideConsoleOutputProcess extends Thread {
 					_stringBuffer.delete(0, _stringBuffer.length());
 				}
 			}
-			
-			if (_stringBuffer.length() != 0)
-				_consolePanel.addText(_stringBuffer.toString());
-			
+
 		} catch (Exception exception) {
-			
+
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
 			exception.printStackTrace();

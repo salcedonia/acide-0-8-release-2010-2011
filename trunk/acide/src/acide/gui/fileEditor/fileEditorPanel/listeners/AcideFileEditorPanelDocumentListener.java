@@ -32,7 +32,6 @@ package acide.gui.fileEditor.fileEditorPanel.listeners;
 import acide.configuration.workbench.AcideWorkbenchManager;
 import acide.gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
 import acide.gui.mainWindow.AcideMainWindow;
-import acide.gui.toolBarPanel.menuBarToolBar.AcideMenuBarToolBar;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -151,8 +150,9 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 							.setGreenButtonAt(indexOnFocus);
 				}
 
-				// Updates the static tool bar
-				AcideMenuBarToolBar.getInstance().updateStateOfFileButtons();
+				// Updates the save project in the menu bar tool bar
+				AcideMainWindow.getInstance().getToolBarPanel()
+						.getMenuBarToolBar().updateStateOfFileButtons();
 			}
 		}
 	}

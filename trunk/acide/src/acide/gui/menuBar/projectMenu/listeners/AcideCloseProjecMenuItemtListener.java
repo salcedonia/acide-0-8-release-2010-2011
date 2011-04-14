@@ -34,7 +34,6 @@ import java.awt.event.ActionListener;
 
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.gui.mainWindow.AcideMainWindow;
-import acide.gui.toolBarPanel.menuBarToolBar.AcideMenuBarToolBar;
 import acide.language.AcideLanguageManager;
 import acide.resources.AcideResourceManager;
 
@@ -72,7 +71,7 @@ public class AcideCloseProjecMenuItemtListener implements ActionListener {
 			// Close all files in the project
 			AcideMainWindow.getInstance().getMenu().getFileMenu()
 					.getCloseAllFilesMenuItem().doClick();
-			
+
 			// Removes all the nodes in the explorer tree
 			AcideMainWindow.getInstance().getExplorerPanel().getRoot()
 					.removeAllChildren();
@@ -108,10 +107,10 @@ public class AcideCloseProjecMenuItemtListener implements ActionListener {
 			AcideMainWindow.getInstance().getMenu().getFileMenu()
 					.getOpenAllFilesMenuItem().setEnabled(false);
 
-			// Disables the save project button in the static tool bar
-			AcideMenuBarToolBar.getInstance().getSaveProjectButton()
-					.setEnabled(false);
-			
+			// Disables the save project button in the menu bar tool bar
+			AcideMainWindow.getInstance().getToolBarPanel().getMenuBarToolBar()
+					.getSaveProjectButton().setEnabled(false);
+
 			// Updates the status message in the status bar
 			AcideMainWindow.getInstance().getStatusBar().setStatusMessage(" ");
 
@@ -120,7 +119,7 @@ public class AcideCloseProjecMenuItemtListener implements ActionListener {
 					AcideLanguageManager.getInstance().getLabels()
 							.getString("s425")
 							+ " - <empty>");
-			
+
 			// Updates the ACIDE - A Configurable IDE project configuration
 			AcideResourceManager.getInstance().setProperty(
 					"projectConfiguration",
@@ -131,7 +130,7 @@ public class AcideCloseProjecMenuItemtListener implements ActionListener {
 
 			// The project has not been modified yet
 			AcideProjectConfiguration.getInstance().setIsModified(false);
-			
+
 			// Updates the changes in the main window
 			AcideMainWindow.getInstance().validate();
 

@@ -34,7 +34,6 @@ import acide.gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
 
 import javax.swing.JTextPane;
 
-
 /**
  * ACIDE - A Configurable IDE text pane.
  */
@@ -65,7 +64,7 @@ public class AcideTextPane extends JTextPane {
 	public AcideTextPane(AcideStyledDocument styledDocument) {
 
 		super(styledDocument);
-
+		
 		// Creates the insert mode caret
 		_insertModeCaret = new AcideInsertModeCaret();
 		

@@ -74,6 +74,14 @@ public class AcideWorkbenchManager {
 	 */
 	private static AcideWorkbenchManager _instance;
 	/**
+	 * ACIDE - A Configurable IDE workbench manager recent files path constant.
+	 */
+	private static final String RECENT_FILES_PATH = "./configuration/recentFiles.config";
+	/**
+	 * ACIDE - A Configurable IDE workbench manager recent projects path constant.
+	 */
+	private static final String RECENT_PROJECTS_PATH = "./configuration/recentProjects.config";
+	/**
 	 * Flag which is used to determine if the workbench configuration has been
 	 * finally loaded. The method updatesEditorAndProjectState in the class
 	 * AcideFileEditorPanelDocumentListener doesn't check the TestPlaf for the
@@ -84,6 +92,10 @@ public class AcideWorkbenchManager {
 	 * ACIDE - A Configurable IDE workbench manager recent files list.
 	 */
 	private ArrayList<String> _recentFiles;
+	/**
+	 * ACIDE - A Configurable IDE workbench manager recent projects list.
+	 */
+	private ArrayList<String> _recentProjects;
 
 	/**
 	 * Returns the Acide - A Configurable IDE workbench manager unique class
@@ -114,7 +126,7 @@ public class AcideWorkbenchManager {
 			// Creates and configures the buffered reader to read the
 			// configuration file
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(
-					"./configuration/recentFiles.config"));
+					RECENT_FILES_PATH));
 
 			String filePath = "";
 
@@ -146,10 +158,74 @@ public class AcideWorkbenchManager {
 			// Creates and configures the buffered writer to write into the
 			// configuration file
 			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(
-					"./configuration/recentFiles.config"));
+					RECENT_FILES_PATH));
 
 			// Writes the recent file list into the configuration file
 			for (String filePath : _recentFiles)
+				bufferedWriter.write(filePath + "\n");
+
+			// Closes the buffered writer
+			bufferedWriter.close();
+
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+	}
+
+	/**
+	 * Loads the configuration associated to the recent projects opened
+	 * previously in the application from its configuration file.
+	 */
+	public void loadRecentProjectsWorkbenchConfiguration() {
+
+		// Creates the recent projects list
+		_recentProjects = new ArrayList<String>();
+
+		// Loads the configuration file into the list
+		try {
+
+			// Creates and configures the buffered reader to read the
+			// configuration file
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(
+					RECENT_PROJECTS_PATH));
+
+			String filePath = "";
+
+			// Builds the recent projects list
+			while ((filePath = bufferedReader.readLine()) != null) {
+				_recentProjects.add(filePath);
+			}
+
+			// Closes the buffered reader
+			bufferedReader.close();
+
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+	}
+
+	/**
+	 * Saves the configuration associated to the recent projects opened
+	 * previously in the application into its configuration file.
+	 */
+	public void saveRecentProjectsWorkbenchConfiguration() {
+
+		// Saves the list into the configuration file
+		try {
+
+			// Creates and configures the buffered writer to write into the
+			// configuration file
+			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(
+					RECENT_PROJECTS_PATH));
+
+			// Writes the recent projects list into the configuration file
+			for (String filePath : _recentProjects)
 				bufferedWriter.write(filePath + "\n");
 
 			// Closes the buffered writer
@@ -183,7 +259,16 @@ public class AcideWorkbenchManager {
 
 		// Updates the splash screen window
 		AcideSplashScreenWindow.getInstance().setProgressBar(
-				25,
+				15,
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s1079"));
+
+		// Loads the recent projects configuration
+		loadRecentProjectsWorkbenchConfiguration();
+		
+		// Updates the splash screen window
+		AcideSplashScreenWindow.getInstance().setProgressBar(
+				30,
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s1028"));
 
@@ -192,19 +277,19 @@ public class AcideWorkbenchManager {
 
 		// Updates the splash screen window
 		AcideSplashScreenWindow.getInstance().setProgressBar(
-				40,
+				50,
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s1072"));
 
 		// Loads the tool bar configuration
 		loadToolBarConfiguration();
-		
+
 		// Updates the splash screen window
 		AcideSplashScreenWindow.getInstance().setProgressBar(
-				50,
+				60,
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s1030"));
-		
+
 		// Loads the language configuration
 		loadLanguageWorkbenchConfiguration();
 
@@ -240,7 +325,7 @@ public class AcideWorkbenchManager {
 				99,
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s1035"));
-		
+
 		// Loads the main window configuration
 		loadMainWindowConfiguration();
 	}
@@ -268,7 +353,7 @@ public class AcideWorkbenchManager {
 			// configuration
 			AcideResourceManager.getInstance().setProperty(
 					"currentToolBarConfiguration", currentToolBarConfiguration);
-			
+
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -284,10 +369,10 @@ public class AcideWorkbenchManager {
 							currentToolBarConfiguration.length());
 			try {
 
-				// Loads the ACIDE - A Configurable IDE tool bar configuration the
+				// Loads the ACIDE - A Configurable IDE tool bar configuration
+				// the
 				// current tool bar configuration
-				AcideToolBarConfiguration.getInstance().load(
-						name);
+				AcideToolBarConfiguration.getInstance().load(name);
 
 				// Information message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
@@ -309,7 +394,8 @@ public class AcideWorkbenchManager {
 
 				try {
 
-					// Loads the default ACIDE - A Configurable IDE tool bar configuration
+					// Loads the default ACIDE - A Configurable IDE tool bar
+					// configuration
 					AcideToolBarConfiguration.getInstance().load(
 							"./configuration/toolbar/default.TBcfg");
 
@@ -1172,6 +1258,9 @@ public class AcideWorkbenchManager {
 
 		// Saves the recent files configuration
 		saveRecentFilesWorkbenchConfiguration();
+		
+		// Saves the recent projects configuration
+		saveRecentProjectsWorkbenchConfiguration();
 	}
 
 	/**
@@ -1233,7 +1322,48 @@ public class AcideWorkbenchManager {
 
 			// Updates the menu
 			AcideMainWindow.getInstance().getMenu().getFileMenu()
-					.getOpenRecentFilesMenu().buildRecentFilesMenu();
+					.getOpenRecentFilesMenu().build();
+		}
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE workbench configuration recent
+	 * projects opened.
+	 * 
+	 * @return the ACIDE - A Configurable IDE workbench configuration recent
+	 *         projects opened.
+	 */
+	public ArrayList<String> getRecentProjects() {
+		return _recentProjects;
+	}
+
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE workbench
+	 * configuration recent projects opened.
+	 * 
+	 * @param recentProjects
+	 *            new value to set.
+	 */
+	public void setRecentProjects(ArrayList<String> recentProjects) {
+		_recentProjects = recentProjects;
+	}
+
+	/**
+	 * Adds a new file path to the recent project list, avoiding duplicates.
+	 * 
+	 * @param filePath
+	 *            new file path to add.
+	 */
+	public void addRecentProjectToList(String filePath) {
+
+		if (!_recentProjects.contains(filePath)) {
+
+			// Adds the project to the recent projects list
+			_recentProjects.add(filePath);
+
+			// Updates the menu
+			AcideMainWindow.getInstance().getMenu().getProjectMenu()
+					.getOpenRecentProjectMenu().build();
 		}
 	}
 }

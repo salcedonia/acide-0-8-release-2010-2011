@@ -39,7 +39,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -48,7 +47,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.TitledBorder;
 
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.panels.reserverdWords.AcideReservedWordsPanel;
@@ -126,12 +124,8 @@ public class AcideRemarksPanel extends JPanel {
 		
 		// There are no changes yet
 		_areThereChanges = false;
-		
-		// Sets the border
-		setBorder(BorderFactory.createTitledBorder(null, AcideLanguageManager
-				.getInstance().getLabels().getString("s430"),
-				TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION));
-
+			
+		// Builds the panel components
 		buildComponents(reservedWordsPanel);
 
 		// Sets the listeners of the window components

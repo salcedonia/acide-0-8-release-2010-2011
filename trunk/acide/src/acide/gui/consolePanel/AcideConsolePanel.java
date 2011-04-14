@@ -82,11 +82,11 @@ public class AcideConsolePanel extends JPanel {
 	/**
 	 * ACIDE - A Configurable IDE console panel text handler.
 	 */
-	private DefaultStyledDocument _defaultStyledDocument;
+	private DefaultStyledDocument _styledDocument;
 	/**
 	 * ACIDE - A Configurable IDE console panel process thread.
 	 */
-	private AcideConsoleProcess _processThread;
+	private AcideConsoleProcess _consoleProcess;
 	/**
 	 * ACIDE - A Configurable IDE console panel popup menu.
 	 */
@@ -123,9 +123,13 @@ public class AcideConsolePanel extends JPanel {
 
 		super();
 
-		// Initializes the Command Record variables
+		// Creates the command record list
 		_commandRecord = new ArrayList<String>();
+
+		// The command record current index is 0
 		_commandRecordCurrentIndex = 0;
+
+		// The command record maximum index is 0
 		_commandRecordMaximumIndex = 0;
 
 		try {
@@ -254,8 +258,11 @@ public class AcideConsolePanel extends JPanel {
 	 */
 	protected JTextComponent buildConsole() {
 
-		_defaultStyledDocument = new DefaultStyledDocument();
-		JTextPane textArea = new JTextPane(_defaultStyledDocument) {
+		// Creates the styled document
+		_styledDocument = new DefaultStyledDocument();
+
+		// Creates the text area
+		JTextPane textArea = new JTextPane(_styledDocument) {
 
 			/**
 			 * Text area class serial version UID.
@@ -294,26 +301,7 @@ public class AcideConsolePanel extends JPanel {
 	 * @param text
 	 *            text to add.
 	 */
-	public void addText(String text) {
-
-		try {
-			if (!AcideConsoleConfiguration.getInstance().getIsEchoCommand()
-					&& (_command.length() <= text.length())) {
-				if (text.substring(0, _command.length()).equals(_command)) {
-					text = text.substring(_command.length(), text.length());
-				}
-			}
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Updates the text in the text pane
-		String auxText = _textPane.getText();
-		auxText = auxText + text;
-		_textPane.setText(auxText);
+	public void addText(final String text) {
 
 		SwingUtilities.invokeLater(new Runnable() {
 
@@ -324,6 +312,33 @@ public class AcideConsolePanel extends JPanel {
 			 */
 			@Override
 			public void run() {
+
+				String newText = null;
+				try {
+					if (!AcideConsoleConfiguration.getInstance()
+							.getIsEchoCommand()
+							&& (_command.length() <= text.length())) {
+						if (text.substring(0, _command.length()).equals(
+								_command)) {
+							newText = text.substring(_command.length(),
+									text.length());
+						}
+					}
+				} catch (Exception exception) {
+
+					// Updates the log
+					AcideLog.getLog().error(exception.getMessage());
+					exception.printStackTrace();
+				}
+
+				// Updates the text in the text pane
+				String auxText = _textPane.getText();
+
+				if (newText != null)
+					auxText = auxText + newText;
+				else
+					auxText = auxText + text;
+				_textPane.setText(auxText);
 
 				// Updates the prompt caret position
 				_promptCaretPosition = _textPane.getText().length();
@@ -339,28 +354,42 @@ public class AcideConsolePanel extends JPanel {
 	 */
 	public void executeExitCommand() {
 
-		try {
+		SwingUtilities.invokeLater(new Runnable() {
 
-			// Gets the exit command
-			_command = AcideConsoleConfiguration.getInstance().getExitCommand();
+			@Override
+			public void run() {
 
-			if (_processThread.getWriter() != null) {
-				_processThread.getWriter().write(_command + '\n');
-				_processThread.getWriter().flush();
+				try {
+
+					// Gets the exit command
+					_command = AcideConsoleConfiguration.getInstance()
+							.getExitCommand();
+
+					// If the writer is initialized
+					if (_consoleProcess.getWriter() != null) {
+
+						// Sends the exit command to the writer
+						_consoleProcess.getWriter().write(_command + '\n');
+
+						// Flushes the writer
+						_consoleProcess.getWriter().flush();
+					}
+
+					// Kills the process anyway
+					killShellProcess();
+
+					// Clears the text pane content
+					_textPane.setText("");
+				} catch (Exception exception) {
+
+					// The stream is closed
+					
+					// Updates the log
+					AcideLog.getLog().error(exception.getMessage());
+					//exception.printStackTrace();
+				}
 			}
-
-			// Kills the process anyway
-			killShellProcess();
-
-			// Clears the console buffer
-			_textPane.setText("");
-
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
+		});
 	}
 
 	/**
@@ -436,7 +465,7 @@ public class AcideConsolePanel extends JPanel {
 	 */
 	public void executeCommand(String command, String parameter) {
 
-		if (_processThread.getWriter() != null) {
+		if (_consoleProcess.getWriter() != null) {
 			try {
 
 				if (AcideMainWindow.getInstance().getFileEditorManager()
@@ -454,10 +483,11 @@ public class AcideConsolePanel extends JPanel {
 									.getFileEditorManager()
 									.getSelectedFileEditorPanel()
 									.getFileExtension());
-					command = command
-							.replace("$activeFileName$", AcideMainWindow
-									.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel().getFileNameWithoutExtension());
+					command = command.replace("$activeFileName$",
+							AcideMainWindow.getInstance()
+									.getFileEditorManager()
+									.getSelectedFileEditorPanel()
+									.getFileNameWithoutExtension());
 				}
 
 				// If it is the default project
@@ -479,10 +509,11 @@ public class AcideConsolePanel extends JPanel {
 										.getFileEditorManager()
 										.getMainFileEditorPanel()
 										.getFileExtension());
-						command = command
-								.replace("$mainFileName$", AcideMainWindow
-										.getInstance().getFileEditorManager()
-										.getMainFileEditorPanel().getFileNameWithoutExtension());
+						command = command.replace("$mainFileName$",
+								AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getMainFileEditorPanel()
+										.getFileNameWithoutExtension());
 					}
 				} else {
 
@@ -542,26 +573,42 @@ public class AcideConsolePanel extends JPanel {
 
 		try {
 
-			// There is no text selection
-			_textSelectionSize = 0;
+			if (_consoleProcess.getWriter() != null) {
 
-			// Updates the command to be executed
-			_command = command;
+				// There is no text selection
+				_textSelectionSize = 0;
 
-			// Sends the command to the output shell
-			_processThread.getWriter().write(command + " " + parameter + "\n");
+				// Updates the command to be executed
+				_command = command;
 
-			// Flushes the writer
-			_processThread.getWriter().flush();
+				// If the parameter is not ""
+				if (!parameter.matches(""))
 
-			// Updates the command record
-			updateCommandRecord(command + " " + parameter);
+					// Sends the command to the output shell
+					_consoleProcess.getWriter().write(
+							command + " " + parameter + "\n");
+				else
+					// Sends the command to the output shell
+					_consoleProcess.getWriter().write(command + "\n");
 
+				// Flushes the writer
+				_consoleProcess.getWriter().flush();
+
+				// If the parameter is not ""
+				if (!parameter.matches(""))
+					// Updates the command record
+					updateCommandRecord(command + " " + parameter);
+				else
+					// Updates the command record
+					updateCommandRecord(command);
+			}
 		} catch (IOException exception) {
+
+			// The stream is closed
 
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
+			//exception.printStackTrace();
 		}
 	}
 
@@ -595,7 +642,7 @@ public class AcideConsolePanel extends JPanel {
 				}
 
 				// The blank command does not count
-				if (!command.matches("")) {
+				if (!command.matches("\n")) {
 
 					// If the command record contains the command
 					if (_commandRecord.contains(command)) {
@@ -656,7 +703,7 @@ public class AcideConsolePanel extends JPanel {
 					AcideLog.getLog().error(exception.getMessage());
 					exception.printStackTrace();
 				}
-				
+
 				// Puts only the last line in the text pane as the text,
 				// clearing all the rest and without a \n in the beginning
 				_textPane.setText(lineText.replaceFirst("\n", ""));
@@ -669,7 +716,7 @@ public class AcideConsolePanel extends JPanel {
 			}
 		});
 	}
-	
+
 	/**
 	 * Returns the ACIDE - A Configurable IDE console panel text pane.
 	 * 
@@ -689,20 +736,38 @@ public class AcideConsolePanel extends JPanel {
 	}
 
 	/**
-	 * Executes the ACIDE - A Configurable IDE console panel process thread.
+	 * Executes the ACIDE - A Configurable IDE console panel process.
 	 */
-	public void executeProcessThread() {
+	public void executeConsoleProcess() {
 
-		_processThread = new AcideConsoleProcess();
-		_processThread.start();
+		// Creates a new console process
+		_consoleProcess = new AcideConsoleProcess();
+
+		// Starts the console process
+		_consoleProcess.start();
 	}
 
 	/**
 	 * Resets the ACIDE - A Configurable IDE console panel.
 	 */
 	public void resetConsole() {
-		_textPane.setText("");
-		executeProcessThread();
+
+		SwingUtilities.invokeLater(new Runnable() {
+
+			/*
+			 * (non-Javadoc)
+			 * @see java.lang.Runnable#run()
+			 */
+			@Override
+			public void run() {
+
+				// Sets the text pane as ""
+				_textPane.setText("");
+
+				// Executes the process thread
+				executeConsoleProcess();
+			}
+		});
 	}
 
 	/**
@@ -773,7 +838,7 @@ public class AcideConsolePanel extends JPanel {
 	 * @return the default styled document.
 	 */
 	public DefaultStyledDocument getDefaultStyledDocument() {
-		return _defaultStyledDocument;
+		return _styledDocument;
 	}
 
 	/**
@@ -784,7 +849,7 @@ public class AcideConsolePanel extends JPanel {
 	 */
 	public void setDefaultStyledDocument(
 			DefaultStyledDocument defaultStyledDocument) {
-		_defaultStyledDocument = defaultStyledDocument;
+		_styledDocument = defaultStyledDocument;
 	}
 
 	/**
@@ -793,7 +858,7 @@ public class AcideConsolePanel extends JPanel {
 	 * @return the ACIDE - A Configurable IDE console process thread.
 	 */
 	public AcideConsoleProcess getProcessThread() {
-		return _processThread;
+		return _consoleProcess;
 	}
 
 	/**

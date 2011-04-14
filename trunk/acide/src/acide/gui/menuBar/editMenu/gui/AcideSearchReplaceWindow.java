@@ -210,10 +210,6 @@ public class AcideSearchReplaceWindow extends JFrame {
 	 */
 	private static boolean _isCycle = false;
 	/**
-	 * Flag that indicates if it is the first search.
-	 */
-	private static boolean _isFirstSearch;
-	/**
 	 * Current document index.
 	 */
 	private int _currentCheckedDocumentIndex;
@@ -735,9 +731,6 @@ public class AcideSearchReplaceWindow extends JFrame {
 		// Sets the selected text as null
 		_selectedText = null;
 
-		// Sets the is first search flag as true
-		_isFirstSearch = true;
-
 		// Sets the is first replacement as true
 		_isFirstReplacement = true;
 
@@ -1030,28 +1023,6 @@ public class AcideSearchReplaceWindow extends JFrame {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE search/replace window is first
-	 * flag.
-	 * 
-	 * @return the ACIDE - A Configurable IDE search/replace window is first
-	 *         flag.
-	 */
-	public boolean getIsFirstSearch() {
-		return _isFirstSearch;
-	}
-
-	/**
-	 * Sets a new value to the ACIDE - A Configurable IDE search/replace window
-	 * is first search flag.
-	 * 
-	 * @param isFirstSearch
-	 *            new value to set.
-	 */
-	public static void setIsFirstSearch(boolean isFirstSearch) {
-		_isFirstSearch = isFirstSearch;
-	}
-
-	/**
 	 * Sets a new value to the ACIDE - A Configurable IDE search/replace window
 	 * is cycle flag.
 	 * 
@@ -1217,7 +1188,7 @@ public class AcideSearchReplaceWindow extends JFrame {
 	 *            is search or replace flag. True -> replace action and false ->
 	 *            search action.
 	 */
-	public void allDocumentsSearch(AcideSearchDirection searchDirection,
+	public void allDocumentsSearchOrReplace(AcideSearchDirection searchDirection,
 			boolean isReplace) {
 
 		// Initializes the selected text
@@ -1315,6 +1286,9 @@ public class AcideSearchReplaceWindow extends JFrame {
 				// If the regular expressions check box is not selected
 				if (!_regularExpressionsCheckBox.isSelected()) {
 
+					// Brings the main window to foreground
+					AcideMainWindow.getInstance().setAlwaysOnTop(true);
+
 					// Selects the text in the editor from the result
 					// position
 					AcideMainWindow
@@ -1323,6 +1297,9 @@ public class AcideSearchReplaceWindow extends JFrame {
 							.getFileEditorPanelAt(_currentCheckedEditorIndex)
 							.selectText(_resultPosition,
 									_searchTextField.getText().length());
+
+					// Brings the main window to background
+					AcideMainWindow.getInstance().setAlwaysOnTop(false);
 
 					// If it is replace action
 					if (isReplace)
@@ -1362,6 +1339,9 @@ public class AcideSearchReplaceWindow extends JFrame {
 													.getString("s574"));
 				} else {
 
+					// Brings the main window to foreground
+					AcideMainWindow.getInstance().setAlwaysOnTop(true);
+
 					// Selects the text in the editor from the regular
 					// expression
 					AcideMainWindow
@@ -1370,6 +1350,9 @@ public class AcideSearchReplaceWindow extends JFrame {
 							.getFileEditorPanelAt(_currentCheckedEditorIndex)
 							.selectText(_resultPosition,
 									_search.getRegularExpresion().length());
+
+					// Brings the main window to background
+					AcideMainWindow.getInstance().setAlwaysOnTop(false);
 
 					// If it is replace action
 					if (isReplace)
@@ -1431,6 +1414,11 @@ public class AcideSearchReplaceWindow extends JFrame {
 						.getFileEditorPanelAt(_currentCheckedEditorIndex)
 						.getActiveTextEditionArea().setCaretPosition(0);
 
+				// Updates the rest of the components of the checked
+				// editor
+				AcideMainWindow.getInstance().getFileEditorManager()
+						.updateRelatedComponentsAt(_currentCheckedEditorIndex);
+
 				// If the forward radio button is selected
 				if (_forwardRadioButton.isSelected())
 
@@ -1468,31 +1456,18 @@ public class AcideSearchReplaceWindow extends JFrame {
 								.setSelectedFileEditorPanelAt(
 										_currentCheckedEditorIndex);
 
-						// Sets its text active text edition area
-						AcideMainWindow
-								.getInstance()
-								.getFileEditorManager()
-								.getFileEditorPanelAt(
-										_currentCheckedEditorIndex)
-								.setActiveTextEditionAreaIndex(
-										AcideMainWindow
-												.getInstance()
-												.getFileEditorManager()
-												.getFileEditorPanelAt(
-														_currentCheckedEditorIndex)
-												.getActiveTextEditionAreaIndex());
-
 						// Sets its caret position
-						AcideMainWindow
-								.getInstance()
-								.getFileEditorManager()
-								.getFileEditorPanelAt(
-										_currentCheckedEditorIndex)
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
 								.getActiveTextEditionArea().setCaretPosition(0);
 
-						// Selects the tree node
-						AcideMainWindow.getInstance().getExplorerPanel()
-								.selectTreeNodeFromFileEditor();
+						// Updates the rest of the components of the checked
+						// editor
+						AcideMainWindow
+								.getInstance()
+								.getFileEditorManager()
+								.updateRelatedComponentsAt(
+										_currentCheckedEditorIndex);
 
 						// Performs the search on it
 						_searchButton.doClick();
@@ -1517,39 +1492,26 @@ public class AcideSearchReplaceWindow extends JFrame {
 								.setSelectedFileEditorPanelAt(
 										_currentCheckedEditorIndex);
 
-						// Sets its text active text edition area
-						AcideMainWindow
-								.getInstance()
-								.getFileEditorManager()
-								.getFileEditorPanelAt(
-										_currentCheckedEditorIndex)
-								.setActiveTextEditionAreaIndex(
-										AcideMainWindow
-												.getInstance()
-												.getFileEditorManager()
-												.getFileEditorPanelAt(
-														_currentCheckedEditorIndex)
-												.getActiveTextEditionAreaIndex());
-
 						// Sets the caret position at the last position
 						AcideMainWindow
 								.getInstance()
 								.getFileEditorManager()
-								.getFileEditorPanelAt(
-										_currentCheckedEditorIndex)
+								.getSelectedFileEditorPanel()
 								.getActiveTextEditionArea()
 								.setCaretPosition(
-										AcideMainWindow
-												.getInstance()
+										AcideMainWindow.getInstance()
 												.getFileEditorManager()
-												.getFileEditorPanelAt(
-														_currentCheckedEditorIndex)
+												.getSelectedFileEditorPanel()
 												.getActiveTextEditionArea()
 												.getText().length() - 1);
 
-						// Selects the tree node
-						AcideMainWindow.getInstance().getExplorerPanel()
-								.selectTreeNodeFromFileEditor();
+						// Updates the rest of the components of the checked
+						// editor
+						AcideMainWindow
+								.getInstance()
+								.getFileEditorManager()
+								.updateRelatedComponentsAt(
+										_currentCheckedEditorIndex);
 
 						// Performs the search on it
 						_searchButton.doClick();
@@ -1578,32 +1540,19 @@ public class AcideSearchReplaceWindow extends JFrame {
 								.setSelectedFileEditorPanelAt(
 										_currentCheckedEditorIndex);
 
-						// Sets its text active text edition area
-						AcideMainWindow
-								.getInstance()
-								.getFileEditorManager()
-								.getFileEditorPanelAt(
-										_currentCheckedEditorIndex)
-								.setActiveTextEditionAreaIndex(
-										AcideMainWindow
-												.getInstance()
-												.getFileEditorManager()
-												.getFileEditorPanelAt(
-														_currentCheckedEditorIndex)
-												.getActiveTextEditionAreaIndex());
-
 						// Sets the caret position at the first position on
 						// it
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.getActiveTextEditionArea().setCaretPosition(0);
+
+						// Updates the rest of the components of the checked
+						// editor
 						AcideMainWindow
 								.getInstance()
 								.getFileEditorManager()
-								.getFileEditorPanelAt(
-										_currentCheckedEditorIndex)
-								.getActiveTextEditionArea().setCaretPosition(0);
-
-						// Selects the tree node
-						AcideMainWindow.getInstance().getExplorerPanel()
-								.selectTreeNodeFromFileEditor();
+								.updateRelatedComponentsAt(
+										_currentCheckedEditorIndex);
 
 						// Performs the search
 						_searchButton.doClick();
@@ -1618,28 +1567,19 @@ public class AcideSearchReplaceWindow extends JFrame {
 								.setSelectedFileEditorPanelAt(
 										_currentCheckedEditorIndex);
 
-						// Sets its text active text edition area
-						AcideMainWindow
-								.getInstance()
-								.getFileEditorManager()
-								.getFileEditorPanelAt(
-										_currentCheckedEditorIndex)
-								.setActiveTextEditionAreaIndex(
-										AcideMainWindow
-												.getInstance()
-												.getFileEditorManager()
-												.getFileEditorPanelAt(
-														_currentCheckedEditorIndex)
-												.getActiveTextEditionAreaIndex());
-
 						// Sets the caret position at the first position on
 						// it
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.getActiveTextEditionArea().setCaretPosition(0);
+
+						// Updates the rest of the components of the checked
+						// editor
 						AcideMainWindow
 								.getInstance()
 								.getFileEditorManager()
-								.getFileEditorPanelAt(
-										_currentCheckedEditorIndex)
-								.getActiveTextEditionArea().setCaretPosition(0);
+								.updateRelatedComponentsAt(
+										_currentCheckedEditorIndex);
 
 						// Performs the search
 						_searchButton.doClick();
@@ -1648,8 +1588,8 @@ public class AcideSearchReplaceWindow extends JFrame {
 			}
 		}
 
-		// If the search has finished and it is the first time
-		if (_isSearchEnd && _isFirstSearch) {
+		// If the search has finished
+		if (_isSearchEnd) {
 
 			// If there are no occurrences in all the documents
 			if (_allDocumentOccurrencesCounter == 0) {
@@ -1692,14 +1632,18 @@ public class AcideSearchReplaceWindow extends JFrame {
 								AcideLanguageManager.getInstance().getLabels()
 										.getString("s586"));
 			}
-
-			// It is not the first search anymore
-			_isFirstSearch = false;
 		}
 	}
 
 	/**
-	 * Performs the selected text search.
+	 * <p>
+	 * Performs the current document search/replace.
+	 * </p>
+	 * <p>
+	 * As the current document and the selected text search/replace are based in
+	 * the same principle, they are only one method and there is no need to
+	 * split it in two.
+	 * </p>
 	 * 
 	 * @param searchDirection
 	 *            search direction.
@@ -1707,264 +1651,8 @@ public class AcideSearchReplaceWindow extends JFrame {
 	 *            is search or replace flag. True -> replace action and false ->
 	 *            search action.
 	 */
-	public void selectedTextSearch(AcideSearchDirection searchDirection,
+	public void currentDocumentSearchOrReplace(AcideSearchDirection searchDirection,
 			boolean isReplace) {
-
-		// The all document occurrences counter is 0
-		_allDocumentOccurrencesCounter = 0;
-
-		// The current checked editor index is -1
-		_currentCheckedEditorIndex = -1;
-
-		// If the selected text is null
-		if (_selectedText == null) {
-
-			// Gets the selected text from the selected file
-			// editor panel
-			_selectedText = AcideMainWindow.getInstance()
-					.getFileEditorManager().getSelectedFileEditorPanel()
-					.getActiveTextEditionArea().getSelectedText();
-
-			// Gets the initial position from the selection
-			// start
-			_initialPosition = AcideMainWindow.getInstance()
-					.getFileEditorManager().getSelectedFileEditorPanel()
-					.getActiveTextEditionArea().getSelectionStart();
-
-			// Gets the final position from the selection end
-			_finalPosition = AcideMainWindow.getInstance()
-					.getFileEditorManager().getSelectedFileEditorPanel()
-					.getActiveTextEditionArea().getSelectionEnd();
-
-			// Sets the result position to 0
-			_resultPosition = 0;
-
-			// If the direction is backwards
-			if (searchDirection == AcideSearchDirection.BACKWARD)
-
-				// The result position is the final position
-				_resultPosition = _finalPosition;
-
-			// If the direction is not backwards and the regular
-			// expression check box is selected
-			if ((_regularExpressionsCheckBox.isSelected())
-					&& (searchDirection != AcideSearchDirection.BACKWARD))
-
-				// The result position is the intial position
-				_resultPosition = _initialPosition;
-
-		} else {
-
-			// Gets the result position from the caretPosition -
-			// initialPosition
-			_resultPosition = AcideMainWindow.getInstance()
-					.getFileEditorManager().getSelectedFileEditorPanel()
-					.getActiveTextEditionArea().getCaretPosition()
-					- _initialPosition;
-
-			// If the direction is backwards
-			if (searchDirection == AcideSearchDirection.BACKWARD) {
-
-				// Gets the result position from selectionStart -
-				// initialPosition
-				_resultPosition = AcideMainWindow.getInstance()
-						.getFileEditorManager().getSelectedFileEditorPanel()
-						.getActiveTextEditionArea().getSelectionStart()
-						- _initialPosition;
-			}
-		}
-
-		// If the selected text is null
-		if (_selectedText == null) {
-
-			// Brings the search/replace window background
-			AcideSearchReplaceWindow.getInstance().bringToFront(false);
-
-			// Displays a "must select text to search" message
-			JOptionPane.showMessageDialog(null, AcideLanguageManager
-					.getInstance().getLabels().getString("s616"));
-
-			// Brings the search/replace window foreground
-			AcideSearchReplaceWindow.getInstance().bringToFront(true);
-
-			// Updates the status message in the status bar
-			AcideMainWindow
-					.getInstance()
-					.getStatusBar()
-					.setStatusMessage(
-							AcideLanguageManager.getInstance().getLabels()
-									.getString("s616"));
-		}
-
-		else {
-
-			// Performs the search
-			_resultPosition = _search.search(_resultPosition,
-					_searchTextField.getText(), _selectedText,
-					_caseSensitiveCheckBox.isSelected(),
-					_regularExpressionsCheckBox.isSelected(),
-					_completeWordsCheckBox.isSelected(), searchDirection);
-
-			// If found something
-			if (_resultPosition != -1) {
-
-				// Selects the text in the editor from the search
-				AcideMainWindow
-						.getInstance()
-						.getFileEditorManager()
-						.getSelectedFileEditorPanel()
-						.selectText(_resultPosition + _initialPosition,
-								_searchTextField.getText().length());
-
-				// If it is replace action
-				if (isReplace)
-
-					// Replaces the selected text in the checked file editor
-					AcideMainWindow.getInstance().getFileEditorManager()
-							.getSelectedFileEditorPanel()
-							.getActiveTextEditionArea()
-							.replaceSelection(_replaceTextField.getText());
-
-				// Updates the log
-				AcideLog.getLog().info(
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s583")
-								+ _searchTextField.getText()
-								+ AcideLanguageManager.getInstance()
-										.getLabels().getString("s574"));
-
-				// Updates the status message in the status bar
-				AcideMainWindow
-						.getInstance()
-						.getStatusBar()
-						.setStatusMessage(
-								AcideLanguageManager.getInstance().getLabels()
-										.getString("s583")
-										+ " "
-										+ _searchTextField.getText()
-										+ " "
-										+ AcideLanguageManager.getInstance()
-												.getLabels().getString("s574"));
-
-				// If the regular expressions check box is selected
-				if (_regularExpressionsCheckBox.isSelected()) {
-
-					// Selects the text in the editor from the regular
-					// expression
-					AcideMainWindow
-							.getInstance()
-							.getFileEditorManager()
-							.getSelectedFileEditorPanel()
-							.selectText(_resultPosition + _initialPosition,
-									_search.getRegularExpresion().length());
-
-					// If it is replace action
-					if (isReplace)
-
-						// Replaces the selected text in the checked file editor
-						AcideMainWindow.getInstance().getFileEditorManager()
-								.getSelectedFileEditorPanel()
-								.getActiveTextEditionArea()
-								.replaceSelection(_replaceTextField.getText());
-
-					// Updates the log
-					AcideLog.getLog().info(
-							AcideLanguageManager.getInstance().getLabels()
-									.getString("s329")
-									+ " "
-									+ _search.getRegularExpresion()
-									+ " "
-									+ AcideLanguageManager.getInstance()
-											.getLabels().getString("s574"));
-
-					// Updates the status message in the status
-					// bar
-					AcideMainWindow
-							.getInstance()
-							.getStatusBar()
-							.setStatusMessage(
-									AcideLanguageManager.getInstance()
-											.getLabels().getString("s329")
-											+ " "
-											+ _searchTextField.getText()
-											+ " "
-											+ AcideLanguageManager
-													.getInstance().getLabels()
-													.getString("s574"));
-				}
-			} else {
-
-				// The selected text is null
-				_selectedText = null;
-
-				// Updates the log
-				AcideLog.getLog().info(
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s573"));
-
-				// Brings the search/replace window background
-				AcideSearchReplaceWindow.getInstance().bringToFront(false);
-
-				// Displays the "string/pattern not found" message
-				JOptionPane.showMessageDialog(null, AcideLanguageManager
-						.getInstance().getLabels().getString("s573"));
-
-				// Updates the status message in the status bar
-				AcideMainWindow
-						.getInstance()
-						.getStatusBar()
-						.setStatusMessage(
-								AcideLanguageManager.getInstance().getLabels()
-										.getString("s573"));
-
-				// Asks to the user if he/she wants to keep on searching
-				int returnValue = JOptionPane.showConfirmDialog(null,
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s575"));
-
-				// Brings the search/replace window foreground
-				AcideSearchReplaceWindow.getInstance().bringToFront(true);
-
-				// If it is ok
-				if (returnValue == JOptionPane.OK_OPTION) {
-
-					// Sets the current document radio button as selected
-					_currentDocumentRadioButton.setSelected(true);
-
-					// If the search direction is not backwards
-					if (searchDirection != AcideSearchDirection.BACKWARD)
-
-						// The result position is the final position
-						_resultPosition = _finalPosition;
-					else
-
-						// The result position is the initial position
-						_resultPosition = _initialPosition;
-
-					// Performs the search
-					_searchButton.doClick();
-				}
-			}
-		}
-	}
-
-	/**
-	 * Performs the current document search.
-	 * 
-	 * @param searchDirection
-	 *            search direction.
-	 * @param isReplace
-	 *            is search or replace flag. True -> replace action and false ->
-	 *            search action.
-	 */
-	public void currentDocumentSearch(AcideSearchDirection searchDirection,
-			boolean isReplace) {
-
-		// The current checked editor index is -1
-		_currentCheckedEditorIndex = -1;
-
-		// The all document occurrences counter is 0
-		_allDocumentOccurrencesCounter = 0;
 
 		// The result position is -1
 		_resultPosition = -1;
@@ -2158,23 +1846,19 @@ public class AcideSearchReplaceWindow extends JFrame {
 				AcideMainWindow.getInstance().setCursor(
 						Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-				// If the current document radio button is selected
-				if (_currentDocumentRadioButton.isSelected())
+				// If the current document radio button is selected or the
+				// selected text radio button is selected
+				if (_currentDocumentRadioButton.isSelected()
+						|| _selectedTextRadioButton.isSelected())
 
-					// Performs the current document search
-					currentDocumentSearch(searchDirection, isSearch);
-
-				// If the selected text radio button is selected
-				if (_selectedTextRadioButton.isSelected())
-
-					// Performs the selected text search
-					selectedTextSearch(searchDirection, isSearch);
+					// Performs the current document search/replace
+					currentDocumentSearchOrReplace(searchDirection, isSearch);
 
 				// If the all documents radio button is selected
 				if (_allDocumentsRadioButton.isSelected())
 
-					// Performs the all documents search
-					allDocumentsSearch(searchDirection, isSearch);
+					// Performs the all documents search/replace
+					allDocumentsSearchOrReplace(searchDirection, isSearch);
 
 				// Puts the default cursor
 				AcideMainWindow.getInstance().setCursor(

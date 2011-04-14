@@ -36,7 +36,7 @@ import acide.configuration.menu.AcideMenuConfiguration;
 import acide.gui.menuBar.configurationMenu.menuMenu.listeners.AcideLoadMenuMenuItemListener;
 import acide.gui.menuBar.configurationMenu.menuMenu.listeners.AcideModifyMenuMenuItemListener;
 import acide.gui.menuBar.configurationMenu.menuMenu.listeners.AcideNewMenuMenuItemListener;
-import acide.gui.menuBar.configurationMenu.menuMenu.listeners.AcideSaveAsMenuMenuItemListener;
+import acide.gui.menuBar.configurationMenu.menuMenu.listeners.AcideSaveMenuAsMenuItemListener;
 import acide.gui.menuBar.configurationMenu.menuMenu.listeners.AcideSaveMenuMenuItemListener;
 import acide.language.AcideLanguageManager;
 
@@ -98,81 +98,132 @@ public class AcideMenuMenu extends JMenu {
 	 */
 	public AcideMenuMenu() {
 
-		// Creates the new menu menu item
-		_newMenuMenuItem = new JMenuItem();
-		
-		// Creates the load menu menu item
-		_loadMenuMenuItem = new JMenuItem();
-		
-		// Creates the modify menu menu item
-		_modifyMenuMenuItem = new JMenuItem();
-		
-		// Creates the save menu menu item
-		_saveMenuMenuItem = new JMenuItem();
-		
-		// Disables the save menu menu item
-		_saveMenuMenuItem.setEnabled(false);
-		
-		// Creates the save menu as menu item
-		_saveMenuAsMenuItem = new JMenuItem();
+		// Builds the menu components
+		buildComponents();
+
+		// Adds the components to the menu
+		addComponents();
 
 		// Sets the text of the menu menu components
 		setTextOfMenuComponents();
 	}
 
 	/**
-	 * Sets the text of the ACIDE - A Configurable IDE menu menu components
-	 * with the labels in the selected language to display.
+	 * Adds the components to the ACIDE - A Configurable IDE menu menu.
+	 */
+	private void addComponents() {
+
+		// Adds the new menu menu item
+		add(_newMenuMenuItem);
+
+		// Adds the load menu menu item
+		add(_loadMenuMenuItem);
+
+		// Adds the modify menu menu item
+		add(_modifyMenuMenuItem);
+
+		// Adds the save menu menu item
+		add(_saveMenuMenuItem);
+
+		// Adds the save menu as menu item
+		add(_saveMenuAsMenuItem);
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE menu menu components.
+	 */
+	private void buildComponents() {
+
+		// Creates the new menu menu item
+		_newMenuMenuItem = new JMenuItem();
+
+		// Sets the new menu menu item name
+		_newMenuMenuItem.setName(NEW_MENU_NAME);
+
+		// Creates the load menu menu item
+		_loadMenuMenuItem = new JMenuItem();
+
+		// Sets the load menu menu item name
+		_loadMenuMenuItem.setName(LOAD_MENU_NAME);
+
+		// Creates the modify menu menu item
+		_modifyMenuMenuItem = new JMenuItem();
+
+		// Sets the modify menu menu item name
+		_modifyMenuMenuItem.setName(MODIFY_MENU_NAME);
+
+		// Creates the save menu menu item
+		_saveMenuMenuItem = new JMenuItem();
+
+		// Sets the save menu menu item name
+		_saveMenuMenuItem.setName(SAVE_MENU_NAME);
+
+		// Disables the save menu menu item
+		_saveMenuMenuItem.setEnabled(false);
+
+		// Creates the save menu as menu item
+		_saveMenuAsMenuItem = new JMenuItem();
+
+		// Sets the save menu as menu item name
+		_saveMenuAsMenuItem.setName(SAVE_MENU_AS_NAME);
+	}
+
+	/**
+	 * Sets the text of the ACIDE - A Configurable IDE menu menu components with
+	 * the labels in the selected language to display.
 	 */
 	public void setTextOfMenuComponents() {
 
 		// Sets the new menu menu item text
-		_newMenuMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s275"));
+		_newMenuMenuItem.setText(AcideLanguageManager.getInstance().getLabels()
+				.getString("s275"));
 
 		// Sets the load menu menu item text
-		_loadMenuMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s276"));
+		_loadMenuMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s276"));
 
 		// Sets the modify menu menu item text
-		_modifyMenuMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s277"));
+		_modifyMenuMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s277"));
 
 		// Sets the save menu menu item text
-		_saveMenuMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s278"));
+		_saveMenuMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s278"));
 
 		// Sets the save menu as menu item text
-		_saveMenuAsMenuItem.setText(AcideLanguageManager.getInstance().getLabels().getString("s279"));
+		_saveMenuAsMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s279"));
 	}
 
 	/**
-	 * Builds the ACIDE - A Configurable IDE menu menu.
+	 * Updates the ACIDE - A Configurable IDE menu menu components visibility
+	 * with the menu configuration.
 	 */
-	public void build() {
+	public void updateComponentsVisibility() {
 
-		// Removes all the menu components
-		removeAll();
+		// Sets the new menu menu item to visible or not visible
+		_newMenuMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(NEW_MENU_NAME));
 
-		// Adds the new menu menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(NEW_MENU_NAME))
-			add(_newMenuMenuItem);
+		// Sets the load menu menu item to visible or not visible
+		_loadMenuMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(LOAD_MENU_NAME));
 
-		// Adds the load menu menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(LOAD_MENU_NAME))
-			add(_loadMenuMenuItem);
+		// Sets the modify menu menu item to visible or not visible
+		_modifyMenuMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(MODIFY_MENU_NAME));
 
-		// Adds the modify menu menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(MODIFY_MENU_NAME))
-			add(_modifyMenuMenuItem);
+		// Sets the save menu menu item to visible or not visible
+		_saveMenuMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(SAVE_MENU_NAME));
 
-		// Adds the save menu menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_MENU_NAME))
-			add(_saveMenuMenuItem);
-
-		// Adds the save menu as menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(SAVE_MENU_AS_NAME))
-			add(_saveMenuAsMenuItem);
+		// Sets the save menu as menu item to visible or not visible
+		_saveMenuAsMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(SAVE_MENU_AS_NAME));
 	}
 
 	/**
-	 * Set the menu menu item listeners.
+	 * Set the ACIDE - A Configurable IDE menu menu item listeners.
 	 */
 	public void setListeners() {
 
@@ -180,16 +231,20 @@ public class AcideMenuMenu extends JMenu {
 		_newMenuMenuItem.addActionListener(new AcideNewMenuMenuItemListener());
 
 		// Sets the load menu menu item action listener
-		_loadMenuMenuItem.addActionListener(new AcideLoadMenuMenuItemListener());
+		_loadMenuMenuItem
+				.addActionListener(new AcideLoadMenuMenuItemListener());
 
 		// Sets the modify menu menu item action listener
-		_modifyMenuMenuItem.addActionListener(new AcideModifyMenuMenuItemListener());
+		_modifyMenuMenuItem
+				.addActionListener(new AcideModifyMenuMenuItemListener());
 
 		// Sets the save menu menu item action listener
-		_saveMenuMenuItem.addActionListener(new AcideSaveMenuMenuItemListener());
+		_saveMenuMenuItem
+				.addActionListener(new AcideSaveMenuMenuItemListener());
 
 		// Sets the save menu as menu item action listener
-		_saveMenuAsMenuItem.addActionListener(new AcideSaveAsMenuMenuItemListener());
+		_saveMenuAsMenuItem
+				.addActionListener(new AcideSaveMenuAsMenuItemListener());
 	}
 
 	/**
@@ -200,7 +255,7 @@ public class AcideMenuMenu extends JMenu {
 	public JMenuItem getNewMenuMenuItem() {
 		return _newMenuMenuItem;
 	}
-	
+
 	/**
 	 * Returns the ACIDE - A Configurable IDE menu menu load menu menu item.
 	 * 
@@ -227,7 +282,7 @@ public class AcideMenuMenu extends JMenu {
 	public JMenuItem getSaveMenuMenuItem() {
 		return _saveMenuMenuItem;
 	}
-	
+
 	/**
 	 * Returns the ACIDE - A Configurable IDE menu menu save menu as menu item
 	 * 

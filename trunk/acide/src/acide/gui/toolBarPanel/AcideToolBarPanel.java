@@ -84,6 +84,19 @@ public class AcideToolBarPanel extends JPanel {
 	 */
 	private JScrollPane _toolBarScrollPane;
 	/**
+	 * ACIDE - A Configurable IDE tool bar panel menu bar tool bar.
+	 */
+	private AcideMenuBarToolBar _menuBarToolBar;
+	/**
+	 * ACIDE - A Configurable IDE tool bar panel console panel tool bar.
+	 */
+	private AcideConsolePanelToolBar _consolePanelToolBar;
+	/**
+	 * ACIDE - A Configurable IDE tool bar panel external applications tool bar.
+	 */
+	private AcideExternalAppsToolBar _externalAppsToolBar;
+	
+	/**
 	 * ACIDE - A Configurable IDE tool bar panel button left panel.
 	 * 
 	 * It is used to encapsulate the button into it so the programmer can define
@@ -145,6 +158,15 @@ public class AcideToolBarPanel extends JPanel {
 
 		// The tool bar is static and it can not be moved
 		_toolBar.setFloatable(false);
+		
+		// Creates the menu bar tool bar
+		_menuBarToolBar = new AcideMenuBarToolBar();
+		
+		// Creates the console panel tool bar
+		_consolePanelToolBar = new AcideConsolePanelToolBar();
+		
+		// Creates the external applications tool bar
+		_externalAppsToolBar = new AcideExternalAppsToolBar();
 	}
 
 	/**
@@ -203,13 +225,13 @@ public class AcideToolBarPanel extends JPanel {
 		_toolBar.removeAll();
 
 		// Builds the menu bar tool bar
-		addMenuBarToolBar(AcideMenuBarToolBar.getInstance().build());
+		addMenuBarToolBar(_menuBarToolBar.build());
 
 		// Builds the console panel tool bar
-		addConsolePanelToolBar(AcideConsolePanelToolBar.getInstance().build());
+		addConsolePanelToolBar(_consolePanelToolBar.build());
 
 		// Builds the external applications tool bar
-		addExternalAppsToolBar(AcideExternalAppsToolBar.getInstance().build());
+		addExternalAppsToolBar(_externalAppsToolBar.build());
 
 		// Builds the tool bar panel components
 		buildComponents();
@@ -432,5 +454,29 @@ public class AcideToolBarPanel extends JPanel {
 			// Tells to the scroll pane to move there
 			_toolBarScrollPane.validate();
 		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public AcideMenuBarToolBar getMenuBarToolBar() {
+		return _menuBarToolBar;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public AcideConsolePanelToolBar getConsolePanelToolBar() {
+		return _consolePanelToolBar;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public AcideExternalAppsToolBar getExternalAppToolBar() {
+		return _externalAppsToolBar;
 	}
 }

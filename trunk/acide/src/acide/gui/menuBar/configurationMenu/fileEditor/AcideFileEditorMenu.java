@@ -71,12 +71,37 @@ public class AcideFileEditorMenu extends JMenu {
 	 */
 	public AcideFileEditorMenu() {
 
+		// Builds the menu components
+		buildComponents();
+
+		// Adds the components to the menu
+		addComponents();
+
+		// Sets the text of the file editor menu components
+		setTextOfMenuComponets();
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE file editor menu
+	 */
+	private void addComponents() {
+
+		// Adds the file editor display options menu item to the menu
+		add(_fileEditorDisplayOptionsMenuItem);
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE file editor menu components.
+	 */
+	private void buildComponents() {
+
 		// Creates the file editor display options menu item
 		_fileEditorDisplayOptionsMenuItem = new JMenuItem(
 				CONSOLE_DISPLAY_OPTIONS_IMAGE);
 
-		// Sets the text of the file editor menu components
-		setTextOfMenuComponets();
+		// Sets the file editor display options menu item name
+		_fileEditorDisplayOptionsMenuItem
+				.setName(FILE_EDITOR_DISPLAY_OPTIONS_NAME);
 	}
 
 	/**
@@ -91,17 +116,16 @@ public class AcideFileEditorMenu extends JMenu {
 	}
 
 	/**
-	 * Builds the ACIDE - A Configurable IDE file editor menu.
+	 * Updates the ACIDE - A Configurable IDE file editor menu components
+	 * visibility with the menu configuration.
 	 */
-	public void build() {
+	public void updateComponentsVisibility() {
 
-		// Removes all the menu components
-		removeAll();
-
-		// Adds the file editor display options menu item to the menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				FILE_EDITOR_DISPLAY_OPTIONS_NAME))
-			add(_fileEditorDisplayOptionsMenuItem);
+		// Sets the file editor display options menu item to visible or not
+		// visible
+		_fileEditorDisplayOptionsMenuItem
+				.setVisible(AcideMenuConfiguration.getInstance()
+						.getIsDisplayed(FILE_EDITOR_DISPLAY_OPTIONS_NAME));
 	}
 
 	/**

@@ -31,7 +31,6 @@ package acide.configuration.project;
 
 import acide.files.project.AcideProjectFile;
 import acide.gui.mainWindow.AcideMainWindow;
-import acide.gui.toolBarPanel.menuBarToolBar.AcideMenuBarToolBar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -153,34 +152,34 @@ public class AcideProjectConfiguration {
 
 		// Builds the file content
 		String fileContent = "";
-		
+
 		// Adds the name
 		fileContent = fileContent + _name + "\n";
-		
+
 		// Adds the path
 		fileContent = fileContent + _path + "\n";
-		
+
 		// Adds the window configuration
 		fileContent = fileContent + _windowConfiguration + "\n";
-		
+
 		// Adds the compiler path
 		fileContent = fileContent + _compilerPath + "\n";
-		
+
 		// Adds the compiler arguments
 		fileContent = fileContent + _compilerArguments + "\n";
-		
+
 		// Adds the console configuration
 		fileContent = fileContent + _consoleConfiguration + "\n";
-		
+
 		// Adds the language configuration
 		fileContent = fileContent + _languageConfiguration + "\n";
-		
+
 		// Adds the menu configuration
 		fileContent = fileContent + _menuConfiguration + "\n";
-		
+
 		// Adds the tool bar configuration
 		fileContent = fileContent + _toolBarConfiguration + "\n";
-		
+
 		// Adds the file editor
 		fileContent = fileContent + _fileEditorConfiguration + "\n";
 
@@ -191,7 +190,7 @@ public class AcideProjectConfiguration {
 
 			// Gets the ACIDE - A Configurable file from the list
 			AcideProjectFile file = (AcideProjectFile) _fileList.get(index);
-			
+
 			// Adds its information
 			fileContent = fileContent + file.getAbsolutePath() + "\n"
 					+ file.getName() + "\n" + file.getParent() + "\n"
@@ -360,25 +359,25 @@ public class AcideProjectConfiguration {
 			initialPosition = finalPosition + 1;
 
 			// Updates the ACIDE - A Configurable IDE file with the info
-			
+
 			// Sets the is main flag
 			file.setIsMainFile(isMainFile);
-			
+
 			// Sets the is compilable flag
 			file.setIsCompilableFile(isCompilableFile);
-			
+
 			// Sets the absolute path
 			file.setAbsolutePath(path);
-			
+
 			// Sets the parent
 			file.setParent(parent);
-			
+
 			// Sets the name
 			file.setName(name);
-			
+
 			// Sets the is directory flag
 			file.setIsDirectory(isDirectory);
-			
+
 			// Sets the is opened flag
 			file.setIsOpened(isOpened);
 
@@ -724,11 +723,11 @@ public class AcideProjectConfiguration {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE project configuration is project modified
-	 * flag.
+	 * Returns the ACIDE - A Configurable IDE project configuration is project
+	 * modified flag.
 	 * 
-	 * @return the ACIDE - A Configurable IDE project configuration is project modified
-	 *         flag.
+	 * @return the ACIDE - A Configurable IDE project configuration is project
+	 *         modified flag.
 	 */
 	public boolean isModified() {
 		return _isModified;
@@ -742,12 +741,13 @@ public class AcideProjectConfiguration {
 	 *            new value to set.
 	 */
 	public void setIsModified(boolean isProjectModified) {
-		
+
 		// Stores the flag
 		_isModified = isProjectModified;
-		
-		// Updates the save project in the static tool bar
-		AcideMenuBarToolBar.getInstance().updateSaveProjectButtonState(isProjectModified);
+
+		// Updates the save project in the menu bar tool bar
+		AcideMainWindow.getInstance().getToolBarPanel().getMenuBarToolBar()
+				.updateSaveProjectButtonState(isProjectModified);
 	}
 
 	/**
@@ -852,7 +852,7 @@ public class AcideProjectConfiguration {
 				return index;
 		return -1;
 	}
-	
+
 	/**
 	 * <p>
 	 * Check if the current project has been modified. If so, asks to the user

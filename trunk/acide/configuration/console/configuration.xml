@@ -1,14 +1,14 @@
 <acide.configuration.console.AcideConsoleConfiguration>
-  <__shellPath></__shellPath>
-  <__shellDirectory></__shellDirectory>
-  <__isEchoCommand>false</__isEchoCommand>
-  <__exitCommand></__exitCommand>
+  <__shellPath>C:\WINDOWS\system32\cmd.exe</__shellPath>
+  <__shellDirectory>C:\WINDOWS\system32\</__shellDirectory>
+  <__isEchoCommand>true</__isEchoCommand>
+  <__exitCommand>exit</__exitCommand>
   <__fontName>Monospaced.plain</__fontName>
   <__fontStyle>0</__fontStyle>
   <__fontSize>12</__fontSize>
   <__foregroundColor>
-    <red>0</red>
-    <green>0</green>
+    <red>51</red>
+    <green>153</green>
     <blue>0</blue>
     <alpha>255</alpha>
   </__foregroundColor>

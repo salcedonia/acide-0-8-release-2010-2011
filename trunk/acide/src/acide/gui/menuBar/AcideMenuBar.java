@@ -101,34 +101,88 @@ public class AcideMenuBar extends JMenuBar {
 				.info(AcideLanguageManager.getInstance().getLabels()
 						.getString("s68"));
 
-		// Creates the file menu
-		_fileMenu = new AcideFileMenu();
+		// Build the menu components
+		buildComponents();
 
-		// Creates the edit menu
-		_editMenu = new AcideEditMenu();
-
-		// Creates the project menu
-		_projectMenu = new AcideProjectMenu();
-
-		// Creates the view menu
-		_viewMenu = new AcideViewMenu();
-
-		// Creates the configuration menu
-		_configurationMenu = new AcideConfigurationMenu();
-
-		// Creates the help menu
-		_helpMenu = new AcideHelpMenu();
+		// Adds the components to the menu
+		addComponents();
 
 		// Sets the text for the menu bar components
 		setTextOfMenuComponents();
 
 		// Builds the menu bar
-		build();
+		updateComponentsVisibility();
 
 		// Updates the log
 		AcideLog.getLog()
 				.info(AcideLanguageManager.getInstance().getLabels()
 						.getString("s69"));
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE menu.
+	 */
+	private void addComponents() {
+
+		// Adds the file menu to the menu
+		add(_fileMenu);
+
+		// Adds the edit menu to the menu
+		add(_editMenu);
+
+		// Adds the project menu to the menu
+		add(_projectMenu);
+
+		// Adds the view menu to the menu
+		add(_viewMenu);
+
+		// Adds the configuration menu to the menu
+		add(_configurationMenu);
+		
+		// Adds the help menu to the menu
+		add(_helpMenu);
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE menu components.
+	 */
+	private void buildComponents() {
+
+		// Creates the file menu
+		_fileMenu = new AcideFileMenu();
+
+		// Sets the file menu name
+		_fileMenu.setName("fileMenu");
+
+		// Creates the edit menu
+		_editMenu = new AcideEditMenu();
+
+		// Sets the edit menu name
+		_editMenu.setName("editMenu");
+
+		// Creates the project menu
+		_projectMenu = new AcideProjectMenu();
+
+		// Sets the project menu name
+		_projectMenu.setName("projectMenu");
+
+		// Creates the view menu
+		_viewMenu = new AcideViewMenu();
+
+		// Sets the view menu name
+		_viewMenu.setName("viewMenu");
+
+		// Creates the configuration menu
+		_configurationMenu = new AcideConfigurationMenu();
+
+		// Sets the configuration menu name
+		_configurationMenu.setName("configurationMenu");
+
+		// Creates the help menu
+		_helpMenu = new AcideHelpMenu();
+
+		// Sets the help menu name
+		_helpMenu.setName("helpMenu");
 	}
 
 	/**
@@ -181,10 +235,122 @@ public class AcideMenuBar extends JMenuBar {
 	}
 
 	/**
-	 * Builds the ACIDE - A Configurable IDE menu bar.
+	 * Updates the ACIDE - A Configurable IDE menu bar components visibility
+	 * with the menu configuration.
 	 */
-	public void build() {
+	public void updateComponentsVisibility() {
 
+		// Loads the menu configuration
+		loadMenuConfiguration();
+
+		// Builds the file menu
+		_fileMenu.updateComponentsVisibiliy();
+
+		// Sets the file menu as visible or not visible
+		_fileMenu.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(AcideFileMenu.NEW_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideFileMenu.OPEN_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideFileMenu.OPEN_ALL_FILES_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideFileMenu.SAVE_FILE_AS_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideFileMenu.SAVE_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideFileMenu.SAVE_ALL_FILES_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideFileMenu.PRINT_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideFileMenu.EXIT_NAME));
+
+		// Builds the edit menu
+		_editMenu.updateComponentsVisibility();
+
+		// Sets the edit menu as visible or not visible
+		_editMenu.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(AcideEditMenu.UNDO_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideEditMenu.REDO_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideEditMenu.COPY_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideEditMenu.PASTE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideEditMenu.CUT_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideEditMenu.SELECT_ALL_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideEditMenu.GO_TO_LINE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideEditMenu.SEARCH_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideEditMenu.REPLACE_NAME));
+
+		// Builds the project menu
+		_projectMenu.updateComponentsVisibility();
+
+		// Sets the project menu as visible or not visible
+		_projectMenu.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(AcideProjectMenu.NEW_PROJECT_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideProjectMenu.OPEN_PROJECT_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideProjectMenu.SAVE_PROJECT_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideProjectMenu.CLOSE_PROJECT_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideProjectMenu.ADD_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideProjectMenu.REMOVE_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideProjectMenu.DELETE_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideProjectMenu.NEW_PROJECT_FILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideProjectMenu.ADD_FOLDER_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideProjectMenu.REMOVE_FOLDER_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideProjectMenu.COMPILE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideProjectMenu.EXECUTE_NAME));
+
+		// Builds the view menu
+		_viewMenu.updateComponentsVisibility();
+
+		// Sets the view menu as visible or not visible
+		_viewMenu.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(AcideViewMenu.SHOW_LOG_TAB_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideViewMenu.SHOW_EXPLORER_PANEL_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideViewMenu.SHOW_CONSOLE_PANEL_NAME));
+
+		// Builds the configuration menu
+		_configurationMenu.updateComponentsVisibility();
+
+		// Sets the edit menu as always visible
+		_configurationMenu.setVisible(true);
+
+		// Builds the help menu
+		_helpMenu.updateComponentsVisibility();
+
+		// Sets the help menu as visible or not visible
+		_helpMenu.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(AcideHelpMenu.SHOW_HELP_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						AcideHelpMenu.SHOW_ABOUT_US_NAME));
+
+		// Shows the menu bar
+		setVisible(true);
+	}
+
+	/**
+	 * Loads the ACIDE - A Configurable IDE menu configuration.
+	 */
+	private void loadMenuConfiguration() {
+		
 		String currentMenuConfiguration = null;
 
 		try {
@@ -291,116 +457,6 @@ public class AcideMenuBar extends JMenuBar {
 				}
 			}
 		}
-
-		// Removes all the menu components
-		removeAll();
-
-		// Builds the file menu
-		_fileMenu.build();
-		
-		// Adds the file menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				AcideFileMenu.NEW_FILE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideFileMenu.OPEN_FILE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideFileMenu.OPEN_ALL_FILES_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideFileMenu.SAVE_FILE_AS_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideFileMenu.SAVE_FILE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideFileMenu.SAVE_ALL_FILES_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideFileMenu.PRINT_FILE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideFileMenu.EXIT_NAME))
-			add(_fileMenu);
-
-		// Builds the edit menu
-		_editMenu.build();
-		
-		// Adds the edit menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				AcideEditMenu.UNDO_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideEditMenu.REDO_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideEditMenu.COPY_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideEditMenu.PASTE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideEditMenu.CUT_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideEditMenu.SELECT_ALL_FILES_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideEditMenu.GO_TO_LINE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideEditMenu.SEARCH_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideEditMenu.REPLACE_NAME))
-			add(_editMenu);
-
-		// Builds the project menu
-		_projectMenu.build();
-		
-		// Adds the project menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				AcideProjectMenu.NEW_PROJECT_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideProjectMenu.OPEN_PROJECT_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideProjectMenu.SAVE_PROJECT_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideProjectMenu.CLOSE_PROJECT_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideProjectMenu.ADD_FILE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideProjectMenu.REMOVE_FILE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideProjectMenu.DELETE_FILE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideProjectMenu.NEW_PROJECT_FILE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideProjectMenu.ADD_FOLDER_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideProjectMenu.REMOVE_FOLDER_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideProjectMenu.COMPILE_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideProjectMenu.EXECUTE_NAME))
-			add(_projectMenu);
-
-		// Builds the view menu
-		_viewMenu.build();
-		
-		// Adds the view menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				AcideViewMenu.SHOW_LOG_TAB_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideViewMenu.SHOW_EXPLORER_PANEL_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideViewMenu.SHOW_CONSOLE_PANEL_NAME))
-			add(_viewMenu);
-
-		// Builds the configuration menu
-		_configurationMenu.build();
-		
-		// Adds the configuration menu
-		add(_configurationMenu);
-
-		// Builds the help menu
-		_helpMenu.build();
-		
-		// Adds the help menu
-		if (AcideMenuConfiguration.getInstance().getIsDisplayed(
-				AcideHelpMenu.SHOW_HELP_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideHelpMenu.SHOW_ABOUT_US_NAME))
-			add(_helpMenu);
-
-		// Shows the menu bar
-		setVisible(true);
 	}
 
 	/**

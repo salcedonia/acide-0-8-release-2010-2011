@@ -29,9 +29,9 @@
  */
 package acide.gui.menuBar.configurationMenu.lexiconMenu.gui;
 
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,6 +44,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 
 import acide.gui.mainWindow.AcideMainWindow;
@@ -72,6 +73,10 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 	private static final ImageIcon ICON = new ImageIcon(
 			"./resources/images/icon.png");
 	/**
+	 * ACIDE - A Configurable IDE lexicon configuration window tabbed pane.
+	 */
+	private JTabbedPane _tabbedPane;
+	/**
 	 * ACIDE - A Configurable IDE lexicon configuration window reserved words
 	 * panel.
 	 */
@@ -84,11 +89,6 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 	 * ACIDE - A Configurable IDE lexicon configuration window remarks panel.
 	 */
 	private AcideRemarksPanel _remarksPanel;
-	/**
-	 * ACIDE - A Configurable IDE lexicon configuration window right panel which
-	 * contains the delimiters and remarks panels.
-	 */
-	private JPanel _delimitersAndRemarksPanel;
 	/**
 	 * ACIDE - A Configurable IDE lexicon configuration window button panel.
 	 */
@@ -189,17 +189,29 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 	 */
 	private void buildComponents() {
 
+		// Creates the tabbed pane
+		_tabbedPane = new JTabbedPane();
+
 		// Creates the reserved words panel
 		_reservedWordsPanel = new AcideReservedWordsPanel();
+
+		// Adds the reserved words panel to the tabbed pane
+		_tabbedPane.addTab(AcideLanguageManager.getInstance().getLabels()
+				.getString("s428"), _reservedWordsPanel);
 
 		// Creates the delimiters panel
 		_delimitersPanel = new AcideDelimitersPanel();
 
+		// Adds the delimiters panel to the tabbed pane
+		_tabbedPane.addTab(AcideLanguageManager.getInstance().getLabels()
+				.getString("s429"), _delimitersPanel);
+
 		// Creates the remarks panel
 		_remarksPanel = new AcideRemarksPanel(_reservedWordsPanel);
 
-		// Creates the delimiters and remarks panel
-		_delimitersAndRemarksPanel = new JPanel(new GridBagLayout());
+		// Adds the remarks panel to the tabbed pane
+		_tabbedPane.addTab(AcideLanguageManager.getInstance().getLabels()
+				.getString("s430"), _remarksPanel);
 
 		// Builds the button panel
 		buildButtonPanel();
@@ -212,56 +224,16 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 	private void addComponents() {
 
 		// Sets the layout
-		setLayout(new GridBagLayout());
+		setLayout(new BorderLayout());
 
 		// Creates the tables to display
 		addTablesToWindow();
 
-		// Adds the components to the frame with the layout
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.ipadx = 0;
-		constraints.ipady = 0;
-
-		// Adds the reserved words panel to the window
-		add(_reservedWordsPanel, constraints);
-
-		constraints.ipady = 22;
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.ipadx = 0;
-
-		// Adds the delimiters panel to the delimiters and remarks panel
-		_delimitersAndRemarksPanel.add(_delimitersPanel, constraints);
-
-		constraints.ipady = 22;
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		constraints.ipadx = 0;
-
-		// Adds the remarks panel to the delimiters and remarks panel
-		_delimitersAndRemarksPanel.add(_remarksPanel, constraints);
-
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.insets = new Insets(0, 0, 0, 0);
-		constraints.ipady = 0;
-		constraints.gridx = 1;
-		constraints.gridy = 0;
-		constraints.ipadx = 0;
-
-		// Adds the delimiters and remarks panel to the window
-		add(_delimitersAndRemarksPanel, constraints);
-
-		constraints.ipadx = 0;
-		constraints.ipady = 0;
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		constraints.gridwidth = 2;
+		// Adds the tabbed pane to the window
+		add(_tabbedPane, BorderLayout.CENTER);
 
 		// Adds the button panel to the window
-		add(_buttonPanel, constraints);
+		add(_buttonPanel, BorderLayout.SOUTH);
 	}
 
 	/**
@@ -539,7 +511,7 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 
 						// Applies the changes
 						applyChanges();
-					
+
 					// If it is no
 					else if (returnValue == JOptionPane.NO_OPTION)
 						// Performs the cancel button action
@@ -549,7 +521,7 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 			}
 
 			if (!isCancelSelected) {
-				
+
 				// Closes the window
 				closeWindow();
 			}

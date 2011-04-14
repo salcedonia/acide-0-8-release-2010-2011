@@ -179,7 +179,7 @@ public class AcideSaveFileMenuItemListener implements ActionListener {
 					AcideMainWindow.getInstance().getFileEditorManager()
 							.getSelectedFileEditorPanel()
 							.setLastSize(projectFile.length());
-					
+
 					// Updates the file disk copy
 					AcideMainWindow
 							.getInstance()
@@ -190,6 +190,10 @@ public class AcideSaveFileMenuItemListener implements ActionListener {
 											.getFileEditorManager()
 											.getSelectedFileEditorPanel()
 											.getTextEditionAreaContent());
+
+					// Updates the save project in the menu bar tool bar
+					AcideMainWindow.getInstance().getToolBarPanel()
+							.getMenuBarToolBar().updateStateOfFileButtons();
 				}
 			}
 		} else

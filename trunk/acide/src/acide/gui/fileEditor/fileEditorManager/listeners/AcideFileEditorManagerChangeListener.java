@@ -30,7 +30,6 @@
 package acide.gui.fileEditor.fileEditorManager.listeners;
 
 import javax.swing.JTabbedPane;
-import javax.swing.JTextPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.BadLocationException;
@@ -40,6 +39,7 @@ import javax.swing.text.Utilities;
 
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
+import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.AcideTextPane;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
@@ -272,7 +272,7 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 					.getSelectedComponent();
 
 			// Gets the active text edition area
-			JTextPane activeTextPane = selectedFileEditorPanel
+			AcideTextPane activeTextPane = selectedFileEditorPanel
 					.getActiveTextEditionArea();
 
 			// Gets the line of the caret position
