@@ -61,16 +61,12 @@ public class AcideLogTab {
 
 		if (_logFileContent != null) {
 
-			// TODO: Load the predefined extension
-
 			// Creates the lexicon configuration
 			AcideLexiconConfiguration lexiconConfiguration = new AcideLexiconConfiguration();
 
-			// Loads the lexicon configuration
+			// Loads the lexicon configuration by default
 			lexiconConfiguration.load(AcideLexiconConfiguration.DEFAULT_PATH
 					+ AcideLexiconConfiguration.DEFAULT_NAME);
-
-			// TODO: Load the predefined extension
 
 			// Creates the current grammar configuration
 			AcideGrammarConfiguration currentGrammarConfiguration = new AcideGrammarConfiguration();
@@ -90,7 +86,7 @@ public class AcideLogTab {
 			AcideMainWindow
 					.getInstance()
 					.getFileEditorManager()
-					.updatesTabbedPane("Log", _logFileContent, false,
+					.updateTabbedPane("Log", _logFileContent, false,
 							AcideProjectFileType.NORMAL, 0, 0, 1,
 							lexiconConfiguration, currentGrammarConfiguration,
 							previousGrammarConfiguration);

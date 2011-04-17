@@ -43,10 +43,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 import acide.resources.AcideResourceManager;
+import acide.resources.exception.MissedPropertyException;
 import acide.configuration.console.AcideConsoleConfiguration;
 import acide.configuration.fileEditor.AcideFileEditorConfiguration;
 import acide.configuration.grammar.AcideGrammarConfiguration;
 import acide.configuration.lexicon.AcideLexiconConfiguration;
+import acide.configuration.lexiconAssigner.AcideLexiconAssignerConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.configuration.toolBar.AcideToolBarConfiguration;
 import acide.configuration.window.AcideWindowConfiguration;
@@ -78,7 +80,8 @@ public class AcideWorkbenchManager {
 	 */
 	private static final String RECENT_FILES_PATH = "./configuration/recentFiles.config";
 	/**
-	 * ACIDE - A Configurable IDE workbench manager recent projects path constant.
+	 * ACIDE - A Configurable IDE workbench manager recent projects path
+	 * constant.
 	 */
 	private static final String RECENT_PROJECTS_PATH = "./configuration/recentProjects.config";
 	/**
@@ -265,12 +268,21 @@ public class AcideWorkbenchManager {
 
 		// Loads the recent projects configuration
 		loadRecentProjectsWorkbenchConfiguration();
-		
+
 		// Updates the splash screen window
 		AcideSplashScreenWindow.getInstance().setProgressBar(
 				30,
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s1028"));
+
+		// Loads the lexicon assigner configuration
+		loadLexiconAssignerWorkbenchConfiguration();
+
+		// Updates the splash screen window
+		AcideSplashScreenWindow.getInstance().setProgressBar(
+				40,
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s1092"));
 
 		// Loads the project configuration
 		AcideProjectConfiguration.getInstance().load(configurationFileContent);
@@ -328,6 +340,27 @@ public class AcideWorkbenchManager {
 
 		// Loads the main window configuration
 		loadMainWindowConfiguration();
+	}
+
+	/**
+	 * Loads the ACIDE - A Configurable IDE lexicon assigner workbench
+	 * configuration.
+	 */
+	private void loadLexiconAssignerWorkbenchConfiguration() {
+
+		try {
+
+			// Loads the ACIDE - A Configurable IDE lexicon assigner
+			// configuration
+			AcideLexiconAssignerConfiguration.getInstance().load(
+					AcideResourceManager.getInstance().getProperty(
+							"lexiconAssignerConfiguration"));
+		} catch (MissedPropertyException exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
 	}
 
 	/**
@@ -505,7 +538,7 @@ public class AcideWorkbenchManager {
 				AcideMainWindow
 						.getInstance()
 						.getFileEditorManager()
-						.updatesTabbedPane(
+						.updateTabbedPane(
 								AcideFileEditorConfiguration.getInstance()
 										.getFileAt(index).getPath(),
 								fileContent,
@@ -1256,9 +1289,12 @@ public class AcideWorkbenchManager {
 		// Saves the window configuration
 		AcideWindowConfiguration.getInstance().save();
 
+		// Saves the lexicon assigner configuration
+		AcideLexiconAssignerConfiguration.getInstance().save();
+
 		// Saves the recent files configuration
 		saveRecentFilesWorkbenchConfiguration();
-		
+
 		// Saves the recent projects configuration
 		saveRecentProjectsWorkbenchConfiguration();
 	}

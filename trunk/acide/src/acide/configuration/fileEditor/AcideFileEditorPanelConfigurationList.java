@@ -31,7 +31,7 @@ package acide.configuration.fileEditor;
 
 import java.io.Serializable;
 
-import acide.utils.ObjectList;
+import acide.configuration.utils.ObjectList;
 
 /**
  * ACIDE - A Configurable IDE file editor manager configuration file editor

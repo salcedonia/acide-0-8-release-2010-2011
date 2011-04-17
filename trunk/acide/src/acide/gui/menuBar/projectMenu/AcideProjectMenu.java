@@ -47,6 +47,7 @@ import acide.configuration.console.AcideConsoleConfiguration;
 import acide.configuration.fileEditor.AcideFileEditorConfiguration;
 import acide.configuration.grammar.AcideGrammarConfiguration;
 import acide.configuration.lexicon.AcideLexiconConfiguration;
+import acide.configuration.lexiconAssigner.AcideLexiconAssignerConfiguration;
 import acide.configuration.menu.AcideMenuConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.configuration.toolBar.AcideToolBarConfiguration;
@@ -1676,18 +1677,12 @@ public class AcideProjectMenu extends JMenu {
 				if (AcideProjectConfiguration.getInstance().getFileAt(index)
 						.isOpened()) {
 
-					// TODO: Load the predefined extension
-
-					// Creates the lexicon configuration
-					AcideLexiconConfiguration lexiconConfiguration = new AcideLexiconConfiguration();
-
-					// Loads the lexicon configuration
-					lexiconConfiguration
-							.load(AcideLexiconConfiguration.DEFAULT_PATH
-									+ AcideLexiconConfiguration.DEFAULT_NAME);
-
-					// TODO: Load the predefined extension
-
+					// Gets the predefined lexicon configuration
+					AcideLexiconConfiguration lexiconConfiguration = AcideLexiconAssignerConfiguration
+							.getInstance()
+							.getPredifinedLexiconConfiguration(AcideProjectConfiguration.getInstance()
+									.getFileAt(index).getAbsolutePath());
+					
 					// Creates the current grammar configuration
 					AcideGrammarConfiguration currentGrammarConfiguration = new AcideGrammarConfiguration();
 
@@ -1707,7 +1702,7 @@ public class AcideProjectMenu extends JMenu {
 					AcideMainWindow
 							.getInstance()
 							.getFileEditorManager()
-							.updatesTabbedPane(
+							.updateTabbedPane(
 									AcideProjectConfiguration.getInstance()
 											.getFileAt(index).getAbsolutePath(),
 									fileContent,

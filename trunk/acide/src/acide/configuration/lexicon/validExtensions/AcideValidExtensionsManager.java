@@ -32,7 +32,7 @@ package acide.configuration.lexicon.validExtensions;
 import java.io.Serializable;
 import java.util.StringTokenizer;
 
-import acide.utils.ObjectList;
+import acide.configuration.utils.ObjectList;
 
 /**
  * ACIDE - A Configurable IDE lexicon configuration valid extensions manager.

@@ -130,6 +130,10 @@ public class AcideConsolePanelConfigurationPanel extends JPanel {
 		setListeners();
 	}
 
+	/**
+	 * Sets the listeners for the ACIDE - A Configurable IDE console panel
+	 * configuration panel components.
+	 */
 	private void setListeners() {
 
 		// Sets the add button action listener
@@ -142,6 +146,10 @@ public class AcideConsolePanelConfigurationPanel extends JPanel {
 		_table.addMouseListener(new TableMouseListener());
 	}
 
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE console panel
+	 * configuration panel.
+	 */
 	private void addComponents() {
 
 		// Sets the layout
@@ -184,6 +192,10 @@ public class AcideConsolePanelConfigurationPanel extends JPanel {
 		add(_tablePanel, constraints);
 	}
 
+	/**
+	 * Builds the ACIDE - A Configurable IDE console panel configuration panel
+	 * components.
+	 */
 	private void buildComponents() {
 
 		// Creates the table panel
@@ -396,7 +408,7 @@ public class AcideConsolePanelConfigurationPanel extends JPanel {
 	 */
 	public void addCommand(AcideConsolePanelToolBarButtonConf consoleCommand) {
 
-		// Removes the selected row from the model
+		// Adds the selected row to the model
 		((AcideConsolePanelConfigurationPanelTableModel) _table.getModel())
 				.addItem(consoleCommand);
 

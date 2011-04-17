@@ -152,7 +152,7 @@ public class AcideFileEditorManager {
 	 * @param previousGrammarConfiguration
 	 *            file editor previous grammar configuration.
 	 */
-	public void updatesTabbedPane(String filePath, final String fileContent,
+	public void updateTabbedPane(String filePath, final String fileContent,
 			boolean isEditable, AcideProjectFileType fileType,
 			final int caretPosition, int splitPaneDividerLocation,
 			int activeTextEditionArea,

@@ -5,7 +5,7 @@
   <__tokenTypeManager>
     <__list>
       <__list>
-        <acide.configuration.lexicon.tokens.AcideLexiconTokenType>
+        <acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
           <__name>Color: [R: 0, G: 0, B: 255], Font Style: Bold, Case Sensitive: Yes</__name>
           <__color>
             <red>0</red>
@@ -68,8 +68,8 @@
               <string>while</string>
             </__list>
           </__tokenList>
-        </acide.configuration.lexicon.tokens.AcideLexiconTokenType>
-        <acide.configuration.lexicon.tokens.AcideLexiconTokenType>
+        </acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
+        <acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
           <__name>Color: [R: 255, G: 0, B: 0], Font Style: Bold, Case Sensitive: Yes</__name>
           <__color>
             <red>255</red>
@@ -85,8 +85,8 @@
               <string>#pragma</string>
             </__list>
           </__tokenList>
-        </acide.configuration.lexicon.tokens.AcideLexiconTokenType>
-        <acide.configuration.lexicon.tokens.AcideLexiconTokenType>
+        </acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
+        <acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
           <__name>Color: [R: 0, G: 0, B: 0], Font Style: Plain, Case Sensitive: No</__name>
           <__color>
             <red>0</red>
@@ -136,10 +136,10 @@
               <string>]</string>
             </__list>
           </__tokenList>
-        </acide.configuration.lexicon.tokens.AcideLexiconTokenType>
-        <acide.configuration.lexicon.tokens.AcideLexiconTokenType>
+        </acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
+        <acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
           <__name>Color: [R: 0, G: 0, B: 0], Font Style: Bold, Case Sensitive: No</__name>
-          <__color reference="../../acide.configuration.lexicon.tokens.AcideLexiconTokenType[3]/_color"/>
+          <__color reference="../../acide.configuration.lexicon.tokens.AcideLexiconTokenGroup[3]/_color"/>
           <__fontStyle>2</__fontStyle>
           <__isCaseSensitive>false</__isCaseSensitive>
           <__tokenList>
@@ -148,7 +148,7 @@
               <string>}</string>
             </__list>
           </__tokenList>
-        </acide.configuration.lexicon.tokens.AcideLexiconTokenType>
+        </acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
       </__list>
     </__list>
   </__tokenTypeManager>

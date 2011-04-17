@@ -58,16 +58,12 @@ public class AcideNewFileMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// TODO: Load the predefined extension
-
 		// Creates the lexicon configuration
 		AcideLexiconConfiguration lexiconConfiguration = new AcideLexiconConfiguration();
 
 		// Loads the lexicon configuration
 		lexiconConfiguration.load(AcideLexiconConfiguration.DEFAULT_PATH
 				+ AcideLexiconConfiguration.DEFAULT_NAME);
-
-		// TODO: Load the predefined extension
 
 		// Creates the current grammar configuration
 		AcideGrammarConfiguration currentGrammarConfiguration = new AcideGrammarConfiguration();
@@ -87,7 +83,7 @@ public class AcideNewFileMenuItemListener implements ActionListener {
 		AcideMainWindow
 				.getInstance()
 				.getFileEditorManager()
-				.updatesTabbedPane(
+				.updateTabbedPane(
 						AcideLanguageManager.getInstance().getLabels()
 								.getString("s79"), "", true,
 						AcideProjectFileType.NORMAL, 0, 0, 1,

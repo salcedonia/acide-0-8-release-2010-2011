@@ -40,6 +40,7 @@ import javax.swing.tree.TreePath;
 
 import acide.configuration.grammar.AcideGrammarConfiguration;
 import acide.configuration.lexicon.AcideLexiconConfiguration;
+import acide.configuration.lexiconAssigner.AcideLexiconAssignerConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.configuration.workbench.AcideWorkbenchManager;
 import acide.files.AcideFileManager;
@@ -250,17 +251,10 @@ public class AcideAddFileMenuItemListener implements ActionListener {
 				AcideMainWindow.getInstance().getStatusBar()
 						.setStatusMessage(projectFile.getAbsolutePath());
 
-				// TODO: Load the predefined extension
-
-				// Creates the lexicon configuration
-				AcideLexiconConfiguration lexiconConfiguration = new AcideLexiconConfiguration();
-
-				// Loads the lexicon configuration
-				lexiconConfiguration
-						.load(AcideLexiconConfiguration.DEFAULT_PATH
-								+ AcideLexiconConfiguration.DEFAULT_NAME);
-
-				// TODO: Load the predefined extension
+				// Gets the predefined lexicon configuration
+				AcideLexiconConfiguration lexiconConfiguration = AcideLexiconAssignerConfiguration
+						.getInstance()
+						.getPredifinedLexiconConfiguration(projectFile.getAbsolutePath());
 
 				// Creates the current grammar configuration
 				AcideGrammarConfiguration currentGrammarConfiguration = new AcideGrammarConfiguration();
@@ -280,7 +274,7 @@ public class AcideAddFileMenuItemListener implements ActionListener {
 				AcideMainWindow
 						.getInstance()
 						.getFileEditorManager()
-						.updatesTabbedPane(projectFile.getAbsolutePath(),
+						.updateTabbedPane(projectFile.getAbsolutePath(),
 								fileContent, true, projectFileType, 0, 0, 1,
 								lexiconConfiguration,
 								currentGrammarConfiguration,

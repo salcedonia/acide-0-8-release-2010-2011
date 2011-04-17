@@ -132,7 +132,7 @@ public class AcideMain{
 
 				// If it is the expected message, then the application is
 				// already being executed
-				if (CREATION_MESSAGE.equals(message))
+				if (CREATION_MESSAGE.equals(message)){
 
 					// Displays an error message
 					JOptionPane.showMessageDialog(null, AcideLanguageManager
@@ -140,7 +140,10 @@ public class AcideMain{
 							AcideLanguageManager.getInstance().getLabels()
 									.getString("s1023"),
 							JOptionPane.WARNING_MESSAGE);
-
+					
+					// Exits the application
+					System.exit(0);
+				}
 			} catch (IOException ioexception) {
 				// Displays an error message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager

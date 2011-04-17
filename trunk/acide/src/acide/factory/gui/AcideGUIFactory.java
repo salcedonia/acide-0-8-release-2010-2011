@@ -39,7 +39,8 @@ import acide.gui.menuBar.AcideMenuBar;
 import acide.gui.menuBar.configurationMenu.consoleMenu.gui.AcideExternalCommandConfigurationWindow;
 import acide.gui.menuBar.configurationMenu.consoleMenu.gui.AcideConsoleConfigurationWindow;
 import acide.gui.menuBar.configurationMenu.grammarMenu.gui.AcideGrammarConfigurationWindow;
-import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.AcideLexiconConfigurationWindow;
+import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.configurationWindow.AcideLexiconConfigurationWindow;
+import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.predetermineWindow.AcidePredetermineLexiconWindow;
 import acide.gui.menuBar.configurationMenu.menuMenu.gui.AcideMenuConfigurationWindow;
 import acide.gui.menuBar.fileMenu.gui.AcidePrintConfigurationWindow;
 import acide.gui.menuBar.helpMenu.gui.AcideAboutUsWindow;
@@ -173,6 +174,16 @@ public class AcideGUIFactory {
 		return new AcideLexiconConfigurationWindow();
 	}
 
+	/**
+	 * Builds the ACIDE - A Configurable IDE predetermine lexicon window.
+	 * 
+	 * @return the ACIDE - A Configurable IDE predetermine lexicon window.
+	 * @see AcidePredetermineLexiconWindow
+	 */
+	public AcidePredetermineLexiconWindow buildAcidePredetermineLexiconWindow() {
+		return new AcidePredetermineLexiconWindow();
+	}
+	
 	/**
 	 * Builds the ACIDE - A Configurable IDE file editor manager.
 	 * 

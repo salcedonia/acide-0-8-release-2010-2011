@@ -42,6 +42,7 @@ Modify Lexicon = false
 New Lexicon = false
 Save Lexicon = false
 Save Lexicon As = false
+Predetermine Lexicon = false
 New Grammar = false
 Load Grammar = false
 Modify Grammar = false

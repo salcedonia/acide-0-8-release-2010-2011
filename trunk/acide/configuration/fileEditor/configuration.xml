@@ -5,7 +5,7 @@
         <acide.configuration.fileEditor.AcideFileEditorPanelConfiguration>
           <__path>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\aggregates.dl</__path>
           <__type>Normal</__type>
-          <__caretPosition>1865</__caretPosition>
+          <__caretPosition>10</__caretPosition>
           <__splitPaneDividerLocation>204</__splitPaneDividerLocation>
           <__activeTextEditionArea>0</__activeTextEditionArea>
           <__lexiconConfiguration>./configuration/lexicon/default.xml</__lexiconConfiguration>
@@ -15,7 +15,7 @@
         <acide.configuration.fileEditor.AcideFileEditorPanelConfiguration>
           <__path>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\aggregates.sql</__path>
           <__type>Normal</__type>
-          <__caretPosition>559</__caretPosition>
+          <__caretPosition>176</__caretPosition>
           <__splitPaneDividerLocation>111</__splitPaneDividerLocation>
           <__activeTextEditionArea>1</__activeTextEditionArea>
           <__lexiconConfiguration>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\lexicon\des.xml</__lexiconConfiguration>
@@ -32,10 +32,60 @@
           <__previousGrammarConfiguration>./configuration/grammars/bytes.jar</__previousGrammarConfiguration>
           <__currentGrammarConfiguration>./configuration/grammars/bytes.jar</__currentGrammarConfiguration>
         </acide.configuration.fileEditor.AcideFileEditorPanelConfiguration>
+        <acide.configuration.fileEditor.AcideFileEditorPanelConfiguration>
+          <__path>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\mutrecursion.sql</__path>
+          <__type>Normal</__type>
+          <__caretPosition>72</__caretPosition>
+          <__splitPaneDividerLocation>1</__splitPaneDividerLocation>
+          <__activeTextEditionArea>1</__activeTextEditionArea>
+          <__lexiconConfiguration>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\lexicon\des.xml</__lexiconConfiguration>
+          <__previousGrammarConfiguration>./configuration/grammars/bytes.jar</__previousGrammarConfiguration>
+          <__currentGrammarConfiguration>./configuration/grammars/bytes.jar</__currentGrammarConfiguration>
+        </acide.configuration.fileEditor.AcideFileEditorPanelConfiguration>
+        <acide.configuration.fileEditor.AcideFileEditorPanelConfiguration>
+          <__path>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\mutrecursion.dl</__path>
+          <__type>Normal</__type>
+          <__caretPosition>1</__caretPosition>
+          <__splitPaneDividerLocation>1</__splitPaneDividerLocation>
+          <__activeTextEditionArea>1</__activeTextEditionArea>
+          <__lexiconConfiguration>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\lexicon\batch.xml</__lexiconConfiguration>
+          <__previousGrammarConfiguration>./configuration/grammars/bytes.jar</__previousGrammarConfiguration>
+          <__currentGrammarConfiguration>./configuration/grammars/bytes.jar</__currentGrammarConfiguration>
+        </acide.configuration.fileEditor.AcideFileEditorPanelConfiguration>
+        <acide.configuration.fileEditor.AcideFileEditorPanelConfiguration>
+          <__path>C:\Documents and Settings\Salcedonia\Mis documentos\Downloads\TextLineNumber.java</__path>
+          <__type>Normal</__type>
+          <__caretPosition>395</__caretPosition>
+          <__splitPaneDividerLocation>1</__splitPaneDividerLocation>
+          <__activeTextEditionArea>1</__activeTextEditionArea>
+          <__lexiconConfiguration>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\lexicon\latex.xml</__lexiconConfiguration>
+          <__previousGrammarConfiguration>./configuration/grammars/bytes.jar</__previousGrammarConfiguration>
+          <__currentGrammarConfiguration>./configuration/grammars/bytes.jar</__currentGrammarConfiguration>
+        </acide.configuration.fileEditor.AcideFileEditorPanelConfiguration>
+        <acide.configuration.fileEditor.AcideFileEditorPanelConfiguration>
+          <__path>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\jEdit\README.SRC.txt</__path>
+          <__type>Normal</__type>
+          <__caretPosition>0</__caretPosition>
+          <__splitPaneDividerLocation>1</__splitPaneDividerLocation>
+          <__activeTextEditionArea>1</__activeTextEditionArea>
+          <__lexiconConfiguration>./configuration/lexicon/default.xml</__lexiconConfiguration>
+          <__previousGrammarConfiguration>./configuration/grammars/bytes.jar</__previousGrammarConfiguration>
+          <__currentGrammarConfiguration>./configuration/grammars/bytes.jar</__currentGrammarConfiguration>
+        </acide.configuration.fileEditor.AcideFileEditorPanelConfiguration>
+        <acide.configuration.fileEditor.AcideFileEditorPanelConfiguration>
+          <__path>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\flights.dl</__path>
+          <__type>Compilable</__type>
+          <__caretPosition>0</__caretPosition>
+          <__splitPaneDividerLocation>1</__splitPaneDividerLocation>
+          <__activeTextEditionArea>1</__activeTextEditionArea>
+          <__lexiconConfiguration>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\lexicon\batch.xml</__lexiconConfiguration>
+          <__previousGrammarConfiguration>./configuration/grammars/bytes.jar</__previousGrammarConfiguration>
+          <__currentGrammarConfiguration>./configuration/grammars/bytes.jar</__currentGrammarConfiguration>
+        </acide.configuration.fileEditor.AcideFileEditorPanelConfiguration>
       </__list>
     </__list>
   </__fileEditorPanelConfigurationList>
-  <__selectedFileEditorPanelIndex>1</__selectedFileEditorPanelIndex>
+  <__selectedFileEditorPanelIndex>3</__selectedFileEditorPanelIndex>
   <__fontName>Monospaced.plain</__fontName>
   <__fontStyle>0</__fontStyle>
   <__fontSize>12</__fontSize>

@@ -55,9 +55,9 @@ C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\flight
 flights.dl
 prueba
 false
+true
 false
-false
-false
+true
 C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\grammar.dl
 grammar.dl
 prueba
@@ -99,14 +99,14 @@ prueba
 false
 false
 false
-false
+true
 C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\mutrecursion.sql
 mutrecursion.sql
 prueba
 false
 false
 false
-false
+true
 C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\negation.dl
 negation.dl
 prueba

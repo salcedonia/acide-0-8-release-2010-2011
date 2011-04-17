@@ -42,6 +42,7 @@ import javax.swing.KeyStroke;
 
 import acide.configuration.grammar.AcideGrammarConfiguration;
 import acide.configuration.lexicon.AcideLexiconConfiguration;
+import acide.configuration.lexiconAssigner.AcideLexiconAssignerConfiguration;
 import acide.configuration.menu.AcideMenuConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.configuration.workbench.AcideWorkbenchManager;
@@ -710,17 +711,10 @@ public class AcideFileMenu extends JMenu {
 				int fileProjectIndex = AcideProjectConfiguration.getInstance()
 						.getIndexOfFile(filePath);
 
-				// TODO: Load the predefined extension
-
-				// Creates the lexicon configuration
-				AcideLexiconConfiguration lexiconConfiguration = new AcideLexiconConfiguration();
-
-				// Loads the lexicon configuration
-				lexiconConfiguration
-						.load(AcideLexiconConfiguration.DEFAULT_PATH
-								+ AcideLexiconConfiguration.DEFAULT_NAME);
-
-				// TODO: Load the predefined extension
+				// Gets the predefined lexicon configuration
+				AcideLexiconConfiguration lexiconConfiguration = AcideLexiconAssignerConfiguration
+						.getInstance()
+						.getPredifinedLexiconConfiguration(filePath);
 
 				// Creates the current grammar configuration
 				AcideGrammarConfiguration currentGrammarConfiguration = new AcideGrammarConfiguration();
@@ -750,7 +744,7 @@ public class AcideFileMenu extends JMenu {
 				AcideMainWindow
 						.getInstance()
 						.getFileEditorManager()
-						.updatesTabbedPane(filePath, fileContent, true,
+						.updateTabbedPane(filePath, fileContent, true,
 								fileType, 0, 0, 1, lexiconConfiguration,
 								currentGrammarConfiguration,
 								previousGrammarConfiguration);

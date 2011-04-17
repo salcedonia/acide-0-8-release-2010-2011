@@ -31,6 +31,7 @@ package acide.gui.explorerPanel.listeners;
 
 import acide.configuration.grammar.AcideGrammarConfiguration;
 import acide.configuration.lexicon.AcideLexiconConfiguration;
+import acide.configuration.lexiconAssigner.AcideLexiconAssignerConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.files.AcideFileManager;
 import acide.files.project.AcideProjectFile;
@@ -136,7 +137,7 @@ public class AcideExplorerPanelMouseListener extends MouseAdapter {
 					.getUserObject();
 
 			int fileEditorPanelIndex = -1;
-			
+
 			// Searches for the file into the editor files
 			for (int index = 0; index < AcideMainWindow.getInstance()
 					.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
@@ -163,20 +164,12 @@ public class AcideExplorerPanelMouseListener extends MouseAdapter {
 
 						// Searches for the file into the project files list
 						int fileProjectIndex = AcideProjectConfiguration
-								.getInstance().getIndexOfFile(
-										currentProjectFile.getAbsolutePath());
+								.getInstance().getIndexOfFile(currentProjectFile.getAbsolutePath());
 
-						// TODO: Load the predefined extension
-
-						// Creates the lexicon configuration
-						AcideLexiconConfiguration lexiconConfiguration = new AcideLexiconConfiguration();
-
-						// Loads the lexicon configuration
-						lexiconConfiguration
-								.load(AcideLexiconConfiguration.DEFAULT_PATH
-										+ AcideLexiconConfiguration.DEFAULT_NAME);
-
-						// TODO: Load the predefined extension
+						// Gets the predefined lexicon configuration
+						AcideLexiconConfiguration lexiconConfiguration = AcideLexiconAssignerConfiguration
+								.getInstance()
+								.getPredifinedLexiconConfiguration(currentProjectFile.getAbsolutePath());
 
 						// Creates the current grammar configuration
 						AcideGrammarConfiguration currentGrammarConfiguration = new AcideGrammarConfiguration();
@@ -197,7 +190,7 @@ public class AcideExplorerPanelMouseListener extends MouseAdapter {
 						AcideMainWindow
 								.getInstance()
 								.getFileEditorManager()
-								.updatesTabbedPane(
+								.updateTabbedPane(
 										currentProjectFile.getAbsolutePath(),
 										fileContent,
 										true,
@@ -223,9 +216,7 @@ public class AcideExplorerPanelMouseListener extends MouseAdapter {
 				// The file editor is already opened
 
 				// Updates the selected file editor index
-				AcideMainWindow
-						.getInstance()
-						.getFileEditorManager()
+				AcideMainWindow.getInstance().getFileEditorManager()
 						.updateRelatedComponentsAt(fileEditorPanelIndex);
 			}
 		}

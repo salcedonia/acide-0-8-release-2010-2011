@@ -5,7 +5,7 @@
   <_tokenTypeManager>
     <_list>
       <_list>
-        <acide.configuration.lexicon.tokens.AcideLexiconTokenType>
+        <acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
           <_name>Color: [R: 255, G: 0, B: 0], Font Style: Italic and Bold, Case Sensitive: No</_name>
           <_color>
             <red>255</red>
@@ -22,8 +22,8 @@
               <string>string</string>
             </_list>
           </_tokenList>
-        </acide.configuration.lexicon.tokens.AcideLexiconTokenType>
-        <acide.configuration.lexicon.tokens.AcideLexiconTokenType>
+        </acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
+        <acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
           <_name>Color: [R: 0, G: 0, B: 255], Font Style: Italic and Bold, Case Sensitive: No</_name>
           <_color>
             <red>0</red>
@@ -42,8 +42,8 @@
               <string>int</string>
             </_list>
           </_tokenList>
-        </acide.configuration.lexicon.tokens.AcideLexiconTokenType>
-        <acide.configuration.lexicon.tokens.AcideLexiconTokenType>
+        </acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
+        <acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
           <_name>Color: [R: 255, G: 153, B: 51], Font Style: Italic and Bold, Case Sensitive: Yes</_name>
           <_color>
             <red>255</red>
@@ -58,14 +58,15 @@
               <string>import</string>
             </_list>
           </_tokenList>
-        </acide.configuration.lexicon.tokens.AcideLexiconTokenType>
+        </acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
       </_list>
     </_list>
   </_tokenTypeManager>
   <_validExtensionsManager>
     <_list>
       <_list>
-        <string>txt</string>
+        <string>java</string>
+        <string>jav</string>
       </_list>
     </_list>
   </_validExtensionsManager>

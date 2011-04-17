@@ -5,7 +5,7 @@
   <_tokenTypeManager>
     <_list>
       <_list>
-        <acide.configuration.lexicon.tokens.AcideLexiconTokenType>
+        <acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
           <_name>Color: [R: 0, G: 0, B: 0], Font Style: Bold, Case Sensitive: Yes</_name>
           <_color>
             <red>0</red>
@@ -21,8 +21,8 @@
               <string>true</string>
             </_list>
           </_tokenList>
-        </acide.configuration.lexicon.tokens.AcideLexiconTokenType>
-        <acide.configuration.lexicon.tokens.AcideLexiconTokenType>
+        </acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
+        <acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
           <_name>Color: [R: 255, G: 0, B: 0], Font Style: Bold, Case Sensitive: Yes</_name>
           <_color>
             <red>255</red>
@@ -339,8 +339,8 @@
               <string>writeq_to_codes</string>
             </_list>
           </_tokenList>
-        </acide.configuration.lexicon.tokens.AcideLexiconTokenType>
-        <acide.configuration.lexicon.tokens.AcideLexiconTokenType>
+        </acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
+        <acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
           <_name>Color: [R: 204, G: 153, B: 0], Font Style: Bold, Case Sensitive: Yes</_name>
           <_color>
             <red>204</red>
@@ -371,8 +371,8 @@
               <string>\==</string>
             </_list>
           </_tokenList>
-        </acide.configuration.lexicon.tokens.AcideLexiconTokenType>
-        <acide.configuration.lexicon.tokens.AcideLexiconTokenType>
+        </acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
+        <acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
           <_name>Color: [R: 0, G: 0, B: 0], Font Style: Bold, Case Sensitive: No</_name>
           <_color>
             <red>0</red>
@@ -387,7 +387,7 @@
               <string>GNU</string>
             </_list>
           </_tokenList>
-        </acide.configuration.lexicon.tokens.AcideLexiconTokenType>
+        </acide.configuration.lexicon.tokens.AcideLexiconTokenGroup>
       </_list>
     </_list>
   </_tokenTypeManager>

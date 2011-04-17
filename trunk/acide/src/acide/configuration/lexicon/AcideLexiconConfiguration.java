@@ -37,7 +37,7 @@ import javax.swing.JOptionPane;
 
 import acide.configuration.lexicon.delimiters.AcideLexiconDelimitersManager;
 import acide.configuration.lexicon.remarks.AcideLexiconRemarksManager;
-import acide.configuration.lexicon.tokens.AcideLexiconTokenTypeManager;
+import acide.configuration.lexicon.tokens.AcideLexiconTokenManager;
 import acide.configuration.lexicon.validExtensions.AcideValidExtensionsManager;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
@@ -76,7 +76,7 @@ public class AcideLexiconConfiguration {
 	/**
 	 * ACIDE - A Configurable IDE lexicon configuration token type list.
 	 */
-	private AcideLexiconTokenTypeManager _tokenTypeManager;
+	private AcideLexiconTokenManager _tokenTypeManager;
 	/**
 	 * ACIDE - A Configurable IDE lexicon configuration valid extensions.
 	 */
@@ -117,7 +117,7 @@ public class AcideLexiconConfiguration {
 		_path = path;
 
 		// Creates the token type manager
-		_tokenTypeManager = new AcideLexiconTokenTypeManager();
+		_tokenTypeManager = new AcideLexiconTokenManager();
 
 		// Creates the remarks manager
 		_remarksManager = new AcideLexiconRemarksManager();
@@ -323,7 +323,7 @@ public class AcideLexiconConfiguration {
 						.getIsCompiledOrInterpreted();
 
 				// Gets the token type manager
-				AcideLexiconTokenTypeManager tokenTypeManager = lexiconConfiguration
+				AcideLexiconTokenManager tokenTypeManager = lexiconConfiguration
 						.getTokenTypeManager();
 
 				// Gets the valid extensions manager
@@ -399,7 +399,7 @@ public class AcideLexiconConfiguration {
 						.getIsCompiledOrInterpreted();
 
 				// Gets the token type manager
-				AcideLexiconTokenTypeManager tokenTypeManager = lexiconConfiguration
+				AcideLexiconTokenManager tokenTypeManager = lexiconConfiguration
 						.getTokenTypeManager();
 
 				// Gets the valid extensions manager
@@ -535,7 +535,7 @@ public class AcideLexiconConfiguration {
 	 * @return the ACIDE - A Configurable IDE lexicon configuration token type
 	 *         manager.
 	 */
-	public AcideLexiconTokenTypeManager getTokenTypeManager() {
+	public AcideLexiconTokenManager getTokenTypeManager() {
 		return _tokenTypeManager;
 	}
 
@@ -547,7 +547,7 @@ public class AcideLexiconConfiguration {
 	 *            new value to set.
 	 */
 	public void setTokenTypeManager(
-			AcideLexiconTokenTypeManager tokenTypeManager) {
+			AcideLexiconTokenManager tokenTypeManager) {
 		_tokenTypeManager = tokenTypeManager;
 	}
 

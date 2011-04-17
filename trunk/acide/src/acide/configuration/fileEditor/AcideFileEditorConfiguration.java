@@ -424,7 +424,7 @@ public class AcideFileEditorConfiguration {
 
 	/**
 	 * Saves the ACIDE - A Configurable IDE file editor manager configuration in
-	 * a XML file and returns true if the operation was succeed or false in
+	 * a XML file and returns true if the operation succeed or false in
 	 * other case.
 	 * 
 	 * @return true if the operation was succeed or false in other case.

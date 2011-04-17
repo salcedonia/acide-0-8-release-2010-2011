@@ -31,7 +31,7 @@ package acide.configuration.lexicon.delimiters;
 
 import java.io.Serializable;
 
-import acide.utils.ObjectList;
+import acide.configuration.utils.ObjectList;
 
 /**
  * ACIDE - A Configurable IDE lexicon delimiters manager.
@@ -42,13 +42,12 @@ import acide.utils.ObjectList;
 public class AcideLexiconDelimitersManager implements Serializable {
 
 	/**
-	 * ACIDE - A Configurable IDE lexicon delimiters manager class
-	 * serial version UID.
+	 * ACIDE - A Configurable IDE lexicon delimiters manager class serial
+	 * version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * ACIDE - A Configurable IDE lexicon delimiters manager object
-	 * list.
+	 * ACIDE - A Configurable IDE lexicon delimiters manager object list.
 	 */
 	private ObjectList _list;
 
@@ -58,6 +57,8 @@ public class AcideLexiconDelimitersManager implements Serializable {
 	public AcideLexiconDelimitersManager() {
 
 		super();
+
+		// Creates the object list
 		_list = new ObjectList();
 	}
 
@@ -92,7 +93,8 @@ public class AcideLexiconDelimitersManager implements Serializable {
 	}
 
 	/**
-	 * Inserts a new delimiter in the list.
+	 * Inserts a new delimiter in the ACIDE - A Configurable IDE lexicon
+	 * delimiters manager list.
 	 * 
 	 * @param delimiter
 	 *            new delimiter to insert.
@@ -102,7 +104,7 @@ public class AcideLexiconDelimitersManager implements Serializable {
 		boolean found = false;
 
 		for (int index = 0; index < getSize(); index++) {
-			
+
 			// Gets the delimiter at the index
 			String delimiterAtIndex = getDelimiterAt(index);
 
@@ -131,18 +133,30 @@ public class AcideLexiconDelimitersManager implements Serializable {
 	}
 
 	/**
-	 * Resets the list creating a new one.
+	 * Resets the ACIDE - A Configurable IDE lexicon delimiters manager list.
 	 */
 	public void reset() {
 		_list = new ObjectList();
 	}
 
 	/**
-	 * Returns the object list.
+	 * Returns the ACIDE - A Configurable IDE lexicon delimiters manager object
+	 * list.
 	 * 
-	 * @return the object list.
+	 * @return the ACIDE - A Configurable IDE lexicon delimiters manager object
+	 *         list.
 	 */
 	public ObjectList getList() {
 		return _list;
+	}
+
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE lexicon delimiters
+	 * manager object list.
+	 * 
+	 * @return the object list.
+	 */
+	public void setList(ObjectList list) {
+		_list = list;
 	}
 }

@@ -45,7 +45,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import acide.configuration.lexicon.AcideLexiconConfiguration;
-import acide.configuration.lexicon.tokens.AcideLexiconTokenType;
+import acide.configuration.lexicon.tokens.AcideLexiconTokenGroup;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 
@@ -491,7 +491,7 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 		while (!found && index < _keywords.length) {
 
 			if (!_lexiconConfiguration.getTokenTypeManager()
-					.getTokenType(index).isCaseSensitive()) {
+					.getTokenGroupAt(index).isCaseSensitive()) {
 				token = token.toLowerCase();
 			} else {
 				token = tokenAux;
@@ -724,8 +724,8 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 			_keyword[index] = new SimpleAttributeSet();
 
 			// Gets the token type from the list
-			AcideLexiconTokenType tokenType = _lexiconConfiguration
-					.getTokenTypeManager().getTokenType(index);
+			AcideLexiconTokenGroup tokenType = _lexiconConfiguration
+					.getTokenTypeManager().getTokenGroupAt(index);
 
 			// Foreground color as defines the token type of the list
 			StyleConstants.setForeground(_keyword[index], tokenType.getColor());
@@ -762,13 +762,13 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 			_keywords[index1] = new Hashtable<String, Object>();
 
 			// Gets the token type from the list
-			AcideLexiconTokenType tokenType = _lexiconConfiguration
-					.getTokenTypeManager().getTokenType(index1);
+			AcideLexiconTokenGroup tokenType = _lexiconConfiguration
+					.getTokenTypeManager().getTokenGroupAt(index1);
 
-			for (int index2 = 0; index2 < tokenType.getTokenListSize(); index2++) {
+			for (int index2 = 0; index2 < tokenType.getSize(); index2++) {
 
 				// Gets the token
-				String token = tokenType.getToken(index2);
+				String token = tokenType.getTokenAt(index2);
 
 				// If the token is case sensitive
 				if (!tokenType.isCaseSensitive())
