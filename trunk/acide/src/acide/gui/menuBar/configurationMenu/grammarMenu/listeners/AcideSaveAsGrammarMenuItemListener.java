@@ -29,19 +29,17 @@
  */
 package acide.gui.menuBar.configurationMenu.grammarMenu.listeners;
 
-import acide.configuration.grammar.AcideGrammarConfiguration;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JOptionPane;
+
+import acide.files.AcideFileExtensionFilterManager;
+import acide.files.AcideFileManager;
 import acide.files.bytes.AcideByteFileManager;
-import acide.files.text.AcideTextFileExtensionFilterManager;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 
 /**
  * ACIDE - A Configurable IDE save as grammar menu item listener.
@@ -61,45 +59,36 @@ public class AcideSaveAsGrammarMenuItemListener implements ActionListener {
 
 		try {
 
-			// Gets the ACIDE - A Configurable IDE current grammar configuration
-			String currentGrammarConfiguration = AcideMainWindow.getInstance()
-					.getFileEditorManager().getSelectedFileEditorPanel()
-					.getCurrentGrammarConfiguration().getPath();
+			// Selects the extension for the project
+			String[] extensions = new String[] { "jar" };
 
-			// Creates and configures the file chooser
-			JFileChooser fileChooser = new JFileChooser();
+			// Adds the filter to the file chooser
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.addChoosableFileFilter(
+							new AcideFileExtensionFilterManager(extensions,
+									AcideLanguageManager.getInstance()
+											.getLabels().getString("s270")));
 
-			// Creates the file extension filter
-			AcideTextFileExtensionFilterManager filter = new AcideTextFileExtensionFilterManager(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s270"));
+			// Asks the the file to the user
+			String absolutePath = AcideFileManager.getInstance()
+					.askForOpenFile(false);
 
-			// Adds the extension ".jar"
-			filter.addExtension("jar");
-
-			// Sets the filter
-			fileChooser.setFileFilter(filter);
-
-			// Sets the current directory to the grammar configuration folder
-			fileChooser.setCurrentDirectory(new File(
-					AcideGrammarConfiguration.DEFAULT_PATH));
-
-			String absolutePath = "";
-
-			// Asks to the user
-			int returnValue = fileChooser.showSaveDialog(fileChooser);
-
-			// If it is OK
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-
-				// Gets the absolute path
-				absolutePath = fileChooser.getSelectedFile().getAbsolutePath();
+			if (absolutePath != null) {
 
 				// If it does not contains the .jar extension
 				if (!absolutePath.endsWith(".jar"))
 
 					// Adds it
 					absolutePath += ".jar";
+
+				// Gets the ACIDE - A Configurable IDE current grammar
+				// configuration
+				String currentGrammarConfiguration = AcideMainWindow
+						.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanel()
+						.getCurrentGrammarConfiguration().getPath();
 
 				// Copies the file
 				AcideByteFileManager.getInstance().copy(
@@ -135,19 +124,6 @@ public class AcideSaveAsGrammarMenuItemListener implements ActionListener {
 						AcideLanguageManager.getInstance().getLabels()
 								.getString("s941")
 								+ ": " + absolutePath);
-			} else {
-
-				// If it is CANCEL
-				if (returnValue == JFileChooser.CANCEL_OPTION) {
-
-					// Cancels the selection
-					fileChooser.cancelSelection();
-
-					// Updates the log
-					AcideLog.getLog().info(
-							AcideLanguageManager.getInstance().getLabels()
-									.getString("s942"));
-				}
 			}
 		} catch (Exception exception) {
 

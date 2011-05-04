@@ -29,11 +29,11 @@
  */
 package acide.gui.menuBar.configurationMenu.consoleMenu.gui;
 
-import acide.configuration.console.AcideConsoleConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.files.AcideFileManager;
 import acide.gui.listeners.AcideWindowClosingListener;
 import acide.gui.mainWindow.AcideMainWindow;
+import acide.gui.menuBar.projectMenu.gui.newProjectWindow.AcideNewProjectConfigurationWindow;
 
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -62,6 +62,7 @@ import javax.swing.KeyStroke;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 import acide.resources.AcideResourceManager;
+import acide.resources.exception.MissedPropertyException;
 
 /**
  * ACIDE - A Configurable IDE console configuration window.
@@ -220,89 +221,99 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 		// Disables the shell directory label
 		_shellDirectoryLabel.setEnabled(false);
 
-		// Creates the shell directory text field
-		_shellDirectoryTextField = new JTextField(AcideConsoleConfiguration
-				.getInstance().getShellDirectory());
-
-		// Sets the shell directory text field columns
-		_shellDirectoryTextField.setColumns(35);
-		
-		// Disables the shell directory text field
-		_shellDirectoryTextField.setEnabled(false);
-
-		// Creates the manual path check box
-		_manualPathCheckBox = new JCheckBox(AcideLanguageManager.getInstance()
-				.getLabels().getString("s350"));
-
-		// Creates the shell path label
-		_shellPathLabel = new JLabel(AcideLanguageManager.getInstance()
-				.getLabels().getString("s338"), JLabel.LEFT);
-
-		// Creates the shell path text field
-		_shellPathTextField = new JTextField(AcideConsoleConfiguration
-				.getInstance().getShellPath());
-		
-		// Creates the exit command label
-		_exitCommandLabel = new JLabel(AcideLanguageManager.getInstance()
-				.getLabels().getString("s339"), JLabel.LEFT);
-
-		// Creates the exit command text field
-		_exitCommandTextField = new JTextField(AcideConsoleConfiguration
-				.getInstance().getExitCommand());
-
-		// Sets the exit command text field columns
-		_exitCommandTextField.setColumns(5);
-		
 		// Creates the echo command check box
-		_echoCommandCheckBox = new JCheckBox(AcideLanguageManager.getInstance()
-				.getLabels().getString("s340"), AcideConsoleConfiguration
-				.getInstance().getIsEchoCommand());
+		try {
 
-		// Creates the apply button
-		_applyButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s335"));
+			// Creates the shell directory text field
+			_shellDirectoryTextField = new JTextField(AcideResourceManager
+					.getInstance().getProperty("consolePanel.shellDirectory"));
 
-		// Sets the apply button vertical text position as center
-		_applyButton.setVerticalTextPosition(AbstractButton.CENTER);
+			// Sets the shell directory text field columns
+			_shellDirectoryTextField.setColumns(35);
 
-		// Sets the apply button horizontal text position as leading
-		_applyButton.setHorizontalTextPosition(AbstractButton.LEADING);
+			// Disables the shell directory text field
+			_shellDirectoryTextField.setEnabled(false);
 
-		// Sets the apply button mnemonic
-		_applyButton.setMnemonic(KeyEvent.VK_A);
+			// Creates the manual path check box
+			_manualPathCheckBox = new JCheckBox(AcideLanguageManager
+					.getInstance().getLabels().getString("s350"));
 
-		// Sets the apply button tool tip text
-		_applyButton.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s336"));
+			// Creates the shell path label
+			_shellPathLabel = new JLabel(AcideLanguageManager.getInstance()
+					.getLabels().getString("s338"), JLabel.LEFT);
 
-		// Creates the cancel button
-		_cancelButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s178"));
+			// Creates the shell path text field
+			_shellPathTextField = new JTextField(AcideResourceManager
+					.getInstance().getProperty("consolePanel.shellPath"));
 
-		// Sets the cancel button vertical text position as center
-		_cancelButton.setVerticalTextPosition(AbstractButton.CENTER);
+			// Creates the exit command label
+			_exitCommandLabel = new JLabel(AcideLanguageManager.getInstance()
+					.getLabels().getString("s339"), JLabel.LEFT);
 
-		// Sets the cancel button horizontal text position as leading
-		_cancelButton.setHorizontalTextPosition(AbstractButton.LEADING);
+			// Creates the exit command text field
+			_exitCommandTextField = new JTextField(AcideResourceManager
+					.getInstance().getProperty("consolePanel.exitCommand"));
 
-		// Creates the examine shell path button
-		_examineShellPathButton = new JButton(AcideLanguageManager
-				.getInstance().getLabels().getString("s142"));
+			// Sets the exit command text field columns
+			_exitCommandTextField.setColumns(5);
 
-		// Sets the examine shell path button tool tip text
-		_examineShellPathButton.setToolTipText(AcideLanguageManager
-				.getInstance().getLabels().getString("s301"));
+			_echoCommandCheckBox = new JCheckBox(AcideLanguageManager
+					.getInstance().getLabels().getString("s340"),
+					Boolean.parseBoolean(AcideResourceManager.getInstance()
+							.getProperty("consolePanel.isEchoCommand")));
 
-		// Creates the examine shell directory button
-		_examineShellDirectoryButton = new JButton(AcideLanguageManager
-				.getInstance().getLabels().getString("s142"));
+			// Creates the apply button
+			_applyButton = new JButton(AcideLanguageManager.getInstance()
+					.getLabels().getString("s335"));
 
-		// Sets the examine shell directory button tool tip text
-		_examineShellDirectoryButton.setToolTipText(AcideLanguageManager
-				.getInstance().getLabels().getString("s301"));
+			// Sets the apply button vertical text position as center
+			_applyButton.setVerticalTextPosition(AbstractButton.CENTER);
 
-		// Disables the examine shell directory button
-		_examineShellDirectoryButton.setEnabled(false);
+			// Sets the apply button horizontal text position as leading
+			_applyButton.setHorizontalTextPosition(AbstractButton.LEADING);
+
+			// Sets the apply button mnemonic
+			_applyButton.setMnemonic(KeyEvent.VK_A);
+
+			// Sets the apply button tool tip text
+			_applyButton.setToolTipText(AcideLanguageManager.getInstance()
+					.getLabels().getString("s336"));
+
+			// Creates the cancel button
+			_cancelButton = new JButton(AcideLanguageManager.getInstance()
+					.getLabels().getString("s178"));
+
+			// Sets the cancel button vertical text position as center
+			_cancelButton.setVerticalTextPosition(AbstractButton.CENTER);
+
+			// Sets the cancel button horizontal text position as leading
+			_cancelButton.setHorizontalTextPosition(AbstractButton.LEADING);
+
+			// Creates the examine shell path button
+			_examineShellPathButton = new JButton(AcideLanguageManager
+					.getInstance().getLabels().getString("s142"));
+
+			// Sets the examine shell path button tool tip text
+			_examineShellPathButton.setToolTipText(AcideLanguageManager
+					.getInstance().getLabels().getString("s301"));
+
+			// Creates the examine shell directory button
+			_examineShellDirectoryButton = new JButton(AcideLanguageManager
+					.getInstance().getLabels().getString("s142"));
+
+			// Sets the examine shell directory button tool tip text
+			_examineShellDirectoryButton.setToolTipText(AcideLanguageManager
+					.getInstance().getLabels().getString("s301"));
+
+			// Disables the examine shell directory button
+			_examineShellDirectoryButton.setEnabled(false);
+
+		} catch (MissedPropertyException exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
 	}
 
 	/**
@@ -434,7 +445,7 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 		// Sets the examine shell path button action listener
 		_examineShellPathButton
 				.addActionListener(new ExamineShellPathButtonAction());
-		
+
 		// Sets the window closing listener
 		addWindowListener(new AcideWindowClosingListener());
 	}
@@ -469,18 +480,24 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 					// If the selected path exists
 					if (shellPath.exists()) {
 
-						// Exits the output
+						// Exits the shell
 						AcideMainWindow.getInstance().getConsolePanel()
 								.executeExitCommand();
 
 						// If the shell directory is enabled
 						if (_shellDirectoryTextField.isEnabled()) {
 
-							// Sets the shell directory in the console
+							// Sets the shell directory in the resource manager
+							AcideResourceManager.getInstance().setProperty(
+									"consolePanel.shellDirectory",
+									_shellDirectoryTextField.getText());
+
+							// Sets the shell directory in the project
 							// configuration
-							AcideConsoleConfiguration.getInstance()
+							AcideProjectConfiguration.getInstance()
 									.setShellDirectory(
 											_shellDirectoryTextField.getText());
+
 						} else {
 
 							// Gets the shell directory
@@ -502,36 +519,49 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 										+ stringTokenizer.nextToken()
 										+ separator;
 
-							// Sets the shell directory in the console
+							// Sets the shell directory in the resource manager
+							AcideResourceManager.getInstance().setProperty(
+									"consolePanel.shellDirectory",
+									calculatedPath);
+
+							// Sets the shell directory in the project
 							// configuration
-							AcideConsoleConfiguration.getInstance()
+							AcideProjectConfiguration.getInstance()
 									.setShellDirectory(calculatedPath);
 						}
 
-						// Sets the shell path
-						AcideConsoleConfiguration.getInstance().setShellPath(
+						// Sets the shell path in the resource manager
+						AcideResourceManager.getInstance().setProperty(
+								"consolePanel.shellPath",
 								_shellPathTextField.getText());
 
-						// Sets the echo command
-						AcideConsoleConfiguration.getInstance().setEchoCommand(
-								_echoCommandCheckBox.isSelected());
+						// Sets the echo command in the resource manager
+						AcideResourceManager.getInstance().setProperty(
+								"consolePanel.isEchoCommand",
+								String.valueOf(_echoCommandCheckBox
+										.isSelected()));
 
-						// Sets the echo command
-						AcideConsoleConfiguration.getInstance().setExitCommand(
+						// Sets the exit command in the resource manager
+						AcideResourceManager.getInstance().setProperty(
+								"consolePanel.exitCommand",
 								_exitCommandTextField.getText());
 
 						// Resets the console
 						AcideMainWindow.getInstance().getConsolePanel()
 								.resetConsole();
 
-						// Updates the ACIDE - A Configurable IDE console
-						// configuration
-						AcideResourceManager.getInstance().setProperty(
-								"consoleConfiguration",
-								"./configuration/console/configuration.xml");
+						// Sets the shell path in the project configuration
+						AcideProjectConfiguration.getInstance().setShellPath(
+								_shellPathTextField.getText());
 
-						// Saves the console configuration
-						AcideConsoleConfiguration.getInstance().save();
+						// Sets the echo command in the project configuration
+						AcideProjectConfiguration.getInstance()
+								.setIsEchoCommand(
+										_echoCommandCheckBox.isSelected());
+
+						// Sets the exit command in the project configuration
+						AcideProjectConfiguration.getInstance().setExitCommand(
+								_exitCommandTextField.getText());
 
 						// If it is not the default project
 						if (!AcideProjectConfiguration.getInstance()
@@ -543,12 +573,11 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 
 						// If the project window configuration has been
 						// configured
-						if (AcideMainWindow.getInstance()
-								.getNewProjectWindowConfiguration() != null)
+						if (AcideNewProjectConfigurationWindow.getInstance()
+								.isVisible())
 
 							// The paths have been defined
-							AcideMainWindow.getInstance()
-									.getNewProjectWindowConfiguration()
+							AcideNewProjectConfigurationWindow.getInstance()
 									.setAreShellPathsDefined(true);
 
 					} else {
@@ -565,34 +594,46 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 					AcideMainWindow.getInstance().getConsolePanel()
 							.executeExitCommand();
 
-					// Sets the shell directory
-					AcideConsoleConfiguration.getInstance().setShellDirectory(
+					// Sets the shell directory in the resource manager
+					AcideResourceManager.getInstance().setProperty(
+							"consolePanel.shellDirectory",
 							_shellDirectoryTextField.getText());
 
-					// Sets the shell path
-					AcideConsoleConfiguration.getInstance().setShellPath(
+					// Sets the shell path in the resource manager
+					AcideResourceManager.getInstance().setProperty(
+							"consolePanel.shellPath",
 							_shellPathTextField.getText());
 
-					// Sets the echo command
-					AcideConsoleConfiguration.getInstance().setEchoCommand(
-							_echoCommandCheckBox.isSelected());
+					// Sets the echo command in the resource manager
+					AcideResourceManager.getInstance().setProperty(
+							"consolePanel.isEchoCommand",
+							String.valueOf(_echoCommandCheckBox.isSelected()));
 
-					// Sets the echo command
-					AcideConsoleConfiguration.getInstance().setExitCommand(
+					// Sets the exit command in the resource manager
+					AcideResourceManager.getInstance().setProperty(
+							"consolePanel.exitCommand",
 							_exitCommandTextField.getText());
 
 					// Resets the console
 					AcideMainWindow.getInstance().getConsolePanel()
 							.resetConsole();
 
-					// Updates the ACIDE - A Configurable IDE console
+					// Sets the shell directory in the project
 					// configuration
-					AcideResourceManager.getInstance().setProperty(
-							"consoleConfiguration",
-							"./configuration/console/configuration.xml");
+					AcideProjectConfiguration.getInstance().setShellDirectory(
+							_shellDirectoryTextField.getText());
 
-					// Saves the console configuration
-					AcideConsoleConfiguration.getInstance().save();
+					// Sets the shell path in the project configuration
+					AcideProjectConfiguration.getInstance().setShellPath(
+							_shellPathTextField.getText());
+
+					// Sets the echo command in the project configuration
+					AcideProjectConfiguration.getInstance().setIsEchoCommand(
+							_echoCommandCheckBox.isSelected());
+
+					// Sets the exit command in the project configuration
+					AcideProjectConfiguration.getInstance().setExitCommand(
+							_exitCommandTextField.getText());
 
 					// Not default project
 					if (!AcideProjectConfiguration.getInstance()
@@ -604,12 +645,11 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 
 					// If the project window configuration has been
 					// configured
-					if (AcideMainWindow.getInstance()
-							.getNewProjectWindowConfiguration() != null)
+					if (AcideNewProjectConfigurationWindow.getInstance()
+							.isVisible())
 
 						// The paths have been defined
-						AcideMainWindow.getInstance()
-								.getNewProjectWindowConfiguration()
+						AcideNewProjectConfigurationWindow.getInstance()
 								.setAreShellPathsDefined(true);
 				}
 			} catch (Exception exception) {
@@ -685,12 +725,22 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Asks the path to the user
-			String absolutePath = AcideFileManager.getInstance()
-					.askAbsolutePath();
+			// Removes the filter
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.removeChoosableFileFilter(
+							AcideFileManager.getInstance().getFileChooser()
+									.getFileFilter());
 
-			// Updates the shell path text field with the absolute path
-			_shellPathTextField.setText(absolutePath);
+			// Asks the the file to the user
+			String absolutePath = AcideFileManager.getInstance()
+					.askForOpenFile(true);
+
+			if (absolutePath != null)
+
+				// Updates the shell path text field with the absolute path
+				_shellPathTextField.setText(absolutePath);
 		}
 	}
 
@@ -713,12 +763,22 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Asks the path to the user
-			String absolutePath = AcideFileManager.getInstance()
-					.askDirectoryAbsolutePath();
+			// Removes the filter
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.removeChoosableFileFilter(
+							AcideFileManager.getInstance().getFileChooser()
+									.getFileFilter());
 
-			// Updates the shell directory text field with it
-			_shellDirectoryTextField.setText(absolutePath);
+			// Asks the the file to the user
+			String absolutePath = AcideFileManager.getInstance()
+					.askForOpenDirectory();
+
+			if (absolutePath != null)
+
+				// Updates the shell directory text field with it
+				_shellDirectoryTextField.setText(absolutePath);
 		}
 	}
 

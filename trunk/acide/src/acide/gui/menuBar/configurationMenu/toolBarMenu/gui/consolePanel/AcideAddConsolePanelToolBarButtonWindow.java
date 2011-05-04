@@ -486,9 +486,22 @@ public class AcideAddConsolePanelToolBarButtonWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Asks the path to the user
-			String path = AcideFileManager.getInstance().askAbsolutePath();
-			_iconTextField.setText(path);
+			// Removes the filter
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.removeChoosableFileFilter(
+							AcideFileManager.getInstance().getFileChooser()
+									.getFileFilter());
+
+			// Ask the path to the user
+			String absolutePath = AcideFileManager.getInstance()
+					.askForOpenFile(true);
+
+			if (absolutePath != null)
+
+				// Updates the icon text field with the absolute path
+				_iconTextField.setText(absolutePath);
 		}
 	}
 

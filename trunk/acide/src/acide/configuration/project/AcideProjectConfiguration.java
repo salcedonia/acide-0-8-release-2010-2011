@@ -29,9 +29,11 @@
  */
 package acide.configuration.project;
 
+import acide.files.AcideFileManager;
 import acide.files.project.AcideProjectFile;
 import acide.gui.mainWindow.AcideMainWindow;
 
+import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -51,6 +53,10 @@ import acide.resources.AcideResourceManager;
 public class AcideProjectConfiguration {
 
 	/**
+	 * ACIDE - A Configurable IDE project configuration default path.
+	 */
+	public static final String DEFAULT_PATH = "./configuration/project/default.acideProject";
+	/**
 	 * ACIDE - A Configurable IDE project configuration unique class instance.
 	 */
 	private static AcideProjectConfiguration _instance;
@@ -62,19 +68,6 @@ public class AcideProjectConfiguration {
 	 * ACIDE - A Configurable IDE project configuration project path.
 	 */
 	private String _path;
-	/**
-	 * ACIDE - A Configurable IDE project configuration console configuration.
-	 */
-	private String _consoleConfiguration;
-	/**
-	 * ACIDE - A Configurable IDE project configuration file editor
-	 * configuration.
-	 */
-	private String _fileEditorConfiguration;
-	/**
-	 * ACIDE - A Configurable IDE project configuration window configuration.
-	 */
-	private String _windowConfiguration;
 	/**
 	 * Language of the application.
 	 */
@@ -95,6 +88,77 @@ public class AcideProjectConfiguration {
 	 * Arguments for the compiler.
 	 */
 	private String _compilerArguments;
+	/**
+	 * Shell path associated to the project.
+	 */
+	private String _consolePanelShellPath;
+	/**
+	 * Shell directory associated to the project.
+	 */
+	private String _consolePanelShellDirectory;
+	/**
+	 * Indicates if the command fired has to be displayed in the console.
+	 */
+	private boolean _consolePanelIsEchoCommand;
+	/**
+	 * ACIDE - A Configurable IDE console panel configuration console exit
+	 * command.
+	 */
+	private String _consolePanelExitCommand;
+	/**
+	 * ACIDE - A Configurable IDE console panel configuration font name.
+	 */
+	private String _consolePanelFontName;
+	/**
+	 * ACIDE - A Configurable IDE console panel configuration font style.
+	 */
+	private int _consolePanelFontStyle;
+	/**
+	 * ACIDE - A Configurable IDE console panel configuration font size.
+	 */
+	private int _consolePanelFontSize;
+	/**
+	 * ACIDE - A Configurable IDE console panel configuration foreground color.
+	 */
+	private Color _consolePanelForegroundColor;
+	/**
+	 * ACIDE - A Configurable IDE console panel configuration background color.
+	 */
+	private Color _consolePanelBackgroundColor;
+	/**
+	 * Flag that indicates if the explorer panel is showed or not.
+	 */
+	private boolean _isExplorerPanelShowed;
+	/**
+	 * Flag that indicates if the console panel is showed or not.
+	 */
+	private boolean _isConsolePanelShowed;
+	/**
+	 * ACIDE - A Configurable IDE main window width.
+	 */
+	private int _width;
+	/**
+	 * ACIDE - A Configurable IDE main window height.
+	 */
+	private int _height;
+	/**
+	 * ACIDE - A Configurable IDE main window x coordinate.
+	 */
+	private int _xCoordinate;
+	/**
+	 * ACIDE - A Configurable IDE main window y coordinate.
+	 */
+	private int _yCoordinate;
+	/**
+	 * Vertical split pane divider location in the ACIDE - A Configurable IDE
+	 * main window.
+	 */
+	private int _verticalSplitPaneDividerLocation;
+	/**
+	 * Horizontal split pan divider location in the ACIDE - A Configurable IDE
+	 * main window.
+	 */
+	private int _horizontalSplitPaneDividerLocation;
 	/**
 	 * Flag that indicates if the compiler is marked or not.
 	 */
@@ -159,17 +223,66 @@ public class AcideProjectConfiguration {
 		// Adds the path
 		fileContent = fileContent + _path + "\n";
 
-		// Adds the window configuration
-		fileContent = fileContent + _windowConfiguration + "\n";
-
 		// Adds the compiler path
 		fileContent = fileContent + _compilerPath + "\n";
 
 		// Adds the compiler arguments
 		fileContent = fileContent + _compilerArguments + "\n";
 
-		// Adds the console configuration
-		fileContent = fileContent + _consoleConfiguration + "\n";
+		// Adds the console panel shell path
+		fileContent = fileContent + _consolePanelShellPath + "\n";
+
+		// Adds the console panel shell directory
+		fileContent = fileContent + _consolePanelShellDirectory + "\n";
+
+		// Adds the console panel exit command
+		fileContent = fileContent + _consolePanelExitCommand + "\n";
+
+		// Adds the console panel is echo command
+		fileContent = fileContent + _consolePanelIsEchoCommand + "\n";
+
+		// Adds the console panel foreground color
+		fileContent = fileContent
+				+ Integer.toString(_consolePanelForegroundColor.getRGB())
+				+ "\n";
+
+		// Adds the console panel background color
+		fileContent = fileContent
+				+ Integer.toString(_consolePanelBackgroundColor.getRGB())
+				+ "\n";
+
+		// Adds the console panel font name
+		fileContent = fileContent + _consolePanelFontName + "\n";
+
+		// Adds the console panel font style
+		fileContent = fileContent + _consolePanelFontStyle + "\n";
+
+		// Adds the console panel font size
+		fileContent = fileContent + _consolePanelFontSize + "\n";
+
+		// Adds the is explorer panel showed configuration
+		fileContent = fileContent + _isExplorerPanelShowed + "\n";
+
+		// Adds the is console panel showed configuration
+		fileContent = fileContent + _isConsolePanelShowed + "\n";
+
+		// Adds the width
+		fileContent = fileContent + _width + "\n";
+
+		// Adds the height
+		fileContent = fileContent + _height + "\n";
+
+		// Adds the x coordinate
+		fileContent = fileContent + _xCoordinate + "\n";
+
+		// Adds the y coordinate
+		fileContent = fileContent + _yCoordinate + "\n";
+
+		// Adds the vertical split pane divider location
+		fileContent = fileContent + _verticalSplitPaneDividerLocation + "\n";
+
+		// Adds the horizontal split pane divider location
+		fileContent = fileContent + _horizontalSplitPaneDividerLocation + "\n";
 
 		// Adds the language configuration
 		fileContent = fileContent + _languageConfiguration + "\n";
@@ -179,9 +292,6 @@ public class AcideProjectConfiguration {
 
 		// Adds the tool bar configuration
 		fileContent = fileContent + _toolBarConfiguration + "\n";
-
-		// Adds the file editor
-		fileContent = fileContent + _fileEditorConfiguration + "\n";
 
 		// Adds the number of files associated
 		fileContent = fileContent + _fileList.size() + "\n";
@@ -204,7 +314,7 @@ public class AcideProjectConfiguration {
 
 	/**
 	 * Returns true if the current project is
-	 * "./configuration/project/default.acidePrj" or the name is "".
+	 * "./configuration/project/default.acideProject" or the name is "".
 	 * 
 	 * @return true if it has the default project and false in other case.
 	 */
@@ -223,8 +333,7 @@ public class AcideProjectConfiguration {
 			exception.printStackTrace();
 		}
 
-		return projectConfiguration
-				.matches("./configuration/project/default.acidePrj")
+		return projectConfiguration.matches(DEFAULT_PATH)
 				&& AcideProjectConfiguration.getInstance().getName().equals("");
 	}
 
@@ -232,11 +341,41 @@ public class AcideProjectConfiguration {
 	 * Loads the project configuration from the file content given as a
 	 * parameter.
 	 * 
-	 * @param fileContent
-	 *            file content which contains all the project configuration to
-	 *            load.
+	 * @param filePath
+	 *            configuration file path which contains all the project
+	 *            configuration to load.
 	 */
-	public void load(String fileContent) {
+	public void load(String filePath) {
+
+		// Deletes all the files associated to the project
+		AcideProjectConfiguration.getInstance().removeFiles();
+
+		String fileContent = null;
+
+		// Loads its content
+		fileContent = AcideFileManager.getInstance().load(filePath);
+
+		// If it can't find the file
+		if (fileContent == null) {
+
+			// Loads the default file
+			fileContent = AcideFileManager.getInstance().load(
+					AcideProjectConfiguration.DEFAULT_PATH);
+
+			// Updates the ACIDE - A Configurable IDE project configuration
+			AcideResourceManager.getInstance().setProperty(
+					"projectConfiguration",
+					AcideProjectConfiguration.DEFAULT_PATH);
+
+			// Displays an error message
+			JOptionPane.showMessageDialog(
+					null,
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s960")
+							+ filePath
+							+ AcideLanguageManager.getInstance().getLabels()
+									.getString("s959"));
+		}
 
 		int initialPosition = 0;
 		int finalPosition = 0;
@@ -250,12 +389,6 @@ public class AcideProjectConfiguration {
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_path = fileContent.substring(initialPosition, finalPosition);
 
-		// Gets the window configuration
-		initialPosition = finalPosition + 1;
-		finalPosition = fileContent.indexOf("\n", initialPosition);
-		_windowConfiguration = fileContent.substring(initialPosition,
-				finalPosition);
-
 		// Gets the compiler path
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
@@ -267,11 +400,109 @@ public class AcideProjectConfiguration {
 		_compilerArguments = fileContent.substring(initialPosition,
 				finalPosition);
 
-		// Gets the console configuration
+		// Gets the console panel shell path
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
-		_consoleConfiguration = fileContent.substring(initialPosition,
+		_consolePanelShellPath = fileContent.substring(initialPosition,
 				finalPosition);
+
+		// Gets the console panel shell directory
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_consolePanelShellDirectory = fileContent.substring(initialPosition,
+				finalPosition);
+
+		// Gets the console panel exit command
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_consolePanelExitCommand = fileContent.substring(initialPosition,
+				finalPosition);
+
+		// Gets the console panel is echo command
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_consolePanelIsEchoCommand = Boolean.parseBoolean(fileContent
+				.substring(initialPosition, finalPosition));
+
+		// Gets the console panel foreground color
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_consolePanelForegroundColor = new Color(Integer.parseInt(fileContent
+				.substring(initialPosition, finalPosition)));
+
+		// Gets the console panel background color
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_consolePanelBackgroundColor = new Color(Integer.parseInt(fileContent
+				.substring(initialPosition, finalPosition)));
+
+		// Gets the console panel font name
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_consolePanelFontName = fileContent.substring(initialPosition,
+				finalPosition);
+
+		// Gets the console panel font style
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_consolePanelFontStyle = Integer.parseInt(fileContent.substring(
+				initialPosition, finalPosition));
+
+		// Gets the console panel font size
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_consolePanelFontSize = Integer.parseInt(fileContent.substring(
+				initialPosition, finalPosition));
+
+		// Gets the is explorer panel showed flag
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_isExplorerPanelShowed = Boolean.parseBoolean(fileContent.substring(
+				initialPosition, finalPosition));
+
+		// Gets the is console panel showed flag
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_isConsolePanelShowed = Boolean.parseBoolean(fileContent.substring(
+				initialPosition, finalPosition));
+
+		// Gets the ACIDE - A Configurable IDE main window width
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_width = Integer.parseInt(fileContent.substring(initialPosition,
+				finalPosition));
+
+		// Gets the ACIDE - A Configurable IDE main window height
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_height = Integer.parseInt(fileContent.substring(initialPosition,
+				finalPosition));
+
+		// Gets the ACIDE - A Configurable IDE main window x coordinate
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_xCoordinate = Integer.parseInt(fileContent.substring(initialPosition,
+				finalPosition));
+
+		// Gets the ACIDE - A Configurable IDE main window y coordinate
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_yCoordinate = Integer.parseInt(fileContent.substring(initialPosition,
+				finalPosition));
+
+		// Gets the ACIDE - A Configurable IDE main window vertical split pane
+		// divider location
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_verticalSplitPaneDividerLocation = Integer.parseInt(fileContent
+				.substring(initialPosition, finalPosition));
+
+		// Gets the ACIDE - A Configurable IDE main window horizontal split pane
+		// divider location
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_horizontalSplitPaneDividerLocation = Integer.parseInt(fileContent
+				.substring(initialPosition, finalPosition));
 
 		// Gets the language configuration
 		initialPosition = finalPosition + 1;
@@ -289,12 +520,6 @@ public class AcideProjectConfiguration {
 		initialPosition = finalPosition + 1;
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_toolBarConfiguration = fileContent.substring(initialPosition,
-				finalPosition);
-
-		// Gets the file editor configuration
-		initialPosition = finalPosition + 1;
-		finalPosition = fileContent.indexOf("\n", initialPosition);
-		_fileEditorConfiguration = fileContent.substring(initialPosition,
 				finalPosition);
 
 		// Gets the number of files of the project
@@ -410,6 +635,91 @@ public class AcideProjectConfiguration {
 		}
 	}
 
+	/**
+	 * Returns the file from the file list which absolute path matches with the
+	 * path given as a parameter.
+	 * 
+	 * @param absolutePath
+	 *            absolute path to compare with.
+	 * 
+	 * @return the file from the file list which absolute path matches with the
+	 *         path given as a parameter.
+	 */
+	public AcideProjectFile getFileAt(String absolutePath) {
+
+		for (int index = 0; index < _fileList.size(); index++)
+			if (_fileList.get(index).getAbsolutePath().equals(absolutePath))
+				return _fileList.get(index);
+
+		return null;
+	}
+
+	/**
+	 * Returns the index of the file from the file list which absolute path
+	 * matches with the path given as a parameter.
+	 * 
+	 * @param absolutePath
+	 *            absolute path to compare with.
+	 * 
+	 * @return the index of the file from the file list. If it is not at the
+	 *         list then returns -1.
+	 */
+	public int getIndexOfFile(String filePath) {
+
+		for (int index = 0; index < _fileList.size(); index++)
+			if (_fileList.get(index).getAbsolutePath().equals(filePath))
+				return index;
+		return -1;
+	}
+
+	/**
+	 * Asks for saving the project configuration to the user.
+	 * 
+	 * @return false if the cancel option has been selected and true in other
+	 *         case.
+	 */
+	public boolean askForSavingProjectConfiguration() {
+
+		// Are the project configuration modified
+		if (AcideProjectConfiguration.getInstance().isModified()) {
+
+			// Ask the user to save the configuration
+			int returnValue = JOptionPane.showConfirmDialog(
+					null,
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s657"), AcideLanguageManager
+							.getInstance().getLabels().getString("s953"),
+					JOptionPane.YES_NO_CANCEL_OPTION);
+
+			// If it is not the cancel or the closed option
+			if (returnValue != JOptionPane.CANCEL_OPTION
+					&& returnValue != JOptionPane.CLOSED_OPTION) {
+
+				// If it is yes
+				if (returnValue == JOptionPane.YES_OPTION) {
+
+					// If it is not the default project
+					if (!AcideProjectConfiguration.getInstance()
+							.isDefaultProject()) {
+
+						// Enables the menu
+						AcideMainWindow.getInstance().getMenu()
+								.getProjectMenu().getSaveProjectMenuItem()
+								.setEnabled(true);
+
+						// Saves the project
+						AcideMainWindow.getInstance().getMenu()
+								.getProjectMenu().getSaveProjectMenuItem()
+								.doClick();
+					}
+				}
+			} else
+				return false;
+		}
+
+		return true;
+	}
+	
 	/**
 	 * Returns the ACIDE - A Configurable IDE project configuration project
 	 * name.
@@ -751,150 +1061,374 @@ public class AcideProjectConfiguration {
 	}
 
 	/**
-	 * Sets a new value to the ACIDE - A Configurable IDE project configuration
-	 * console configuration.
+	 * Returns the ACIDE - A Configurable IDE project configuration shell path.
 	 * 
-	 * @param consoleConfiguration
-	 *            new value to set.
+	 * @return the ACIDE - A Configurable IDE project configuration shell path.
 	 */
-	public void setOutputConfiguration(String consoleConfiguration) {
-		_consoleConfiguration = consoleConfiguration;
+	public String getShellPath() {
+		return _consolePanelShellPath;
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE project configuration console
-	 * configuration.
+	 * Returns the ACIDE - A Configurable IDE project configuration shell
+	 * directory.
 	 * 
-	 * @return the ACIDE - A Configurable IDE project configuration console
-	 *         configuration.
+	 * @return the ACIDE - A Configurable IDE project configuration shell
+	 *         directory.
 	 */
-	public String getConsoleConfiguration() {
-		return _consoleConfiguration;
-	}
-
-	/**
-	 * Returns the ACIDE - A Configurable IDE project configuration file editor
-	 * configuration.
-	 * 
-	 * @return the ACIDE - A Configurable IDE project configuration file editor
-	 *         configuration.
-	 */
-	public String getFileEditorConfiguration() {
-		return _fileEditorConfiguration;
+	public String getShellDirectory() {
+		return _consolePanelShellDirectory;
 	}
 
 	/**
 	 * Sets a new value to the ACIDE - A Configurable IDE project configuration
-	 * file editor configuration.
+	 * shell path.
 	 * 
-	 * @param fileEditorConfiguration
+	 * @param shellPath
 	 *            new value to set.
 	 */
-	public void setFileEditorConfiguration(String fileEditorConfiguration) {
-		_fileEditorConfiguration = fileEditorConfiguration;
+	public void setShellPath(String shellPath) {
+		_consolePanelShellPath = shellPath;
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE project configuration window
-	 * configuration.
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration font name.
 	 * 
-	 * @return the ACIDE - A Configurable IDE project configuration window
-	 *         configuration.
-	 */
-	public String getWindowConfiguration() {
-		return _windowConfiguration;
-	}
-
-	/**
-	 * Sets a new value to the ACIDE - A Configurable IDE project configuration
-	 * window configuration.
-	 * 
-	 * @param windowConfiguration
+	 * @param fontName
 	 *            new value to set.
 	 */
-	public void setWindowConfiguration(String windowConfiguration) {
-		_windowConfiguration = windowConfiguration;
+	public void setFontName(String fontName) {
+		_consolePanelFontName = fontName;
 	}
 
 	/**
-	 * Returns the file from the file list which absolute path matches with the
-	 * path given as a parameter.
+	 * Returns the ACIDE - A Configurable IDE console panel configuration font
+	 * name.
 	 * 
-	 * @param absolutePath
-	 *            absolute path to compare with.
-	 * 
-	 * @return the file from the file list which absolute path matches with the
-	 *         path given as a parameter.
+	 * @return the ACIDE - A Configurable IDE console panel configuration font
+	 *         name.
 	 */
-	public AcideProjectFile getFileAt(String absolutePath) {
-
-		for (int index = 0; index < _fileList.size(); index++)
-			if (_fileList.get(index).getAbsolutePath().equals(absolutePath))
-				return _fileList.get(index);
-
-		return null;
+	public String getFontName() {
+		return _consolePanelFontName;
 	}
 
 	/**
-	 * Returns the index of the file from the file list which absolute path
-	 * matches with the path given as a parameter.
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration font size.
 	 * 
-	 * @param absolutePath
-	 *            absolute path to compare with.
-	 * 
-	 * @return the index of the file from the file list. If it is not at the
-	 *         list then returns -1.
+	 * @param fontSize
+	 *            new value to set.
 	 */
-	public int getIndexOfFile(String filePath) {
-
-		for (int index = 0; index < _fileList.size(); index++)
-			if (_fileList.get(index).getAbsolutePath().equals(filePath))
-				return index;
-		return -1;
+	public void setFontSize(int fontSize) {
+		_consolePanelFontSize = fontSize;
 	}
 
 	/**
-	 * <p>
-	 * Check if the current project has been modified. If so, asks to the user
-	 * if he wants to save it. In the process stores the
-	 * </p>
+	 * Returns the ACIDE - A Configurable IDE console panel configuration font
+	 * size.
 	 * 
-	 * @return true if the options OK or NO have not been selected and false in
-	 *         other case.
+	 * @return the ACIDE - A Configurable IDE console panel configuration font
+	 *         size.
 	 */
-	public boolean askForSavingProject() {
+	public int getFontSize() {
+		return _consolePanelFontSize;
+	}
 
-		boolean isCancelSelected = false;
+	/**
+	 * Returns the ACIDE - A Configurable IDE console panel configuration font
+	 * style.
+	 * 
+	 * @return the ACIDE - A Configurable IDE console panel configuration font
+	 *         style.
+	 */
+	public int getFontStyle() {
+		return _consolePanelFontStyle;
+	}
 
-		// Is the project configuration modified
-		if (AcideProjectConfiguration.getInstance().isModified()) {
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration font style.
+	 * 
+	 * @param fontStyle
+	 *            new value to set.
+	 */
+	public void setFontStyle(int fontStyle) {
+		_consolePanelFontStyle = fontStyle;
+	}
 
-			// Do you want to save it?
-			int returnValue = JOptionPane.showConfirmDialog(
-					null,
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s657"), AcideLanguageManager
-							.getInstance().getLabels().getString("s953"),
-					JOptionPane.YES_NO_CANCEL_OPTION);
+	/**
+	 * Returns the ACIDE - A Configurable IDE console panel configuration
+	 * foreground color.
+	 * 
+	 * @return the ACIDE - A Configurable IDE console panel configuration
+	 *         foreground color.
+	 */
+	public Color getForegroundColor() {
+		return _consolePanelForegroundColor;
+	}
 
-			// If it is OK
-			if (returnValue == JOptionPane.OK_OPTION) {
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration foreground color.
+	 * 
+	 * @param foregroundColor
+	 *            new value to set.
+	 */
+	public void setForegroundColor(Color foregroundColor) {
+		_consolePanelForegroundColor = foregroundColor;
+	}
 
-				// Enables the save project menu item
-				AcideMainWindow.getInstance().getMenu().getProjectMenu()
-						.getSaveProjectMenuItem().setEnabled(true);
+	/**
+	 * Returns the ACIDE - A Configurable IDE console panel configuration
+	 * background color.
+	 * 
+	 * @return the ACIDE - A Configurable IDE console panel configuration
+	 *         background color.
+	 */
+	public Color getBackgroundColor() {
+		return _consolePanelBackgroundColor;
+	}
 
-				// Save the project
-				AcideMainWindow.getInstance().getMenu().getProjectMenu()
-						.getSaveProjectMenuItem().doClick();
-			} else {
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration background color.
+	 * 
+	 * @param backgroundColor
+	 *            new value to set.
+	 */
+	public void setBackgroundColor(Color backgroundColor) {
+		_consolePanelBackgroundColor = backgroundColor;
+	}
 
-				// If it is not NO
-				if (returnValue != JOptionPane.NO_OPTION)
-					isCancelSelected = true;
-			}
-		}
+	/**
+	 * Returns the ACIDE - A Configurable IDE console panel configuration is
+	 * echo command flag value.
+	 * 
+	 * @return the ACIDE - A Configurable IDE console panel configuration is
+	 *         echo command flag value.
+	 */
+	public boolean getIsEchoCommand() {
+		return _consolePanelIsEchoCommand;
+	}
 
-		return isCancelSelected;
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration is echo command flag.
+	 * 
+	 * @param isEchoCommand
+	 *            new value to set.
+	 */
+	public void setIsEchoCommand(boolean isEchoCommand) {
+		_consolePanelIsEchoCommand = isEchoCommand;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE console panel configuration exit
+	 * command.
+	 * 
+	 * @return the ACIDE - A Configurable IDE console panel configuration exit
+	 *         command.
+	 */
+	public String getExitCommand() {
+		return _consolePanelExitCommand;
+	}
+
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration exit command.
+	 * 
+	 * @param exitCommand
+	 *            new value to set.
+	 */
+	public void setExitCommand(String exitCommand) {
+		_consolePanelExitCommand = exitCommand;
+	}
+
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel
+	 * configuration shell directory.
+	 * 
+	 * @param shellDirectory
+	 *            new value to set.
+	 */
+	public void setShellDirectory(String shellDirectory) {
+		_consolePanelShellDirectory = shellDirectory;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE window configuration window
+	 * height.
+	 * 
+	 * @return the ACIDE - A Configurable IDE window configuration window
+	 *         height.
+	 */
+	public int getWindowHeight() {
+		return _height;
+	}
+
+	/**
+	 * Sets a new value for the ACIDE - A Configurable IDE window configuration
+	 * window height.
+	 * 
+	 * @param height
+	 *            new value to set.
+	 */
+	public void setWindowHeight(int height) {
+		_height = height;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE window configuration window x
+	 * coordinate.
+	 * 
+	 * @return the ACIDE - A Configurable IDE window configuration window x
+	 *         coordinate.
+	 */
+	public int getXCoordinate() {
+		return _xCoordinate;
+	}
+
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE window configuration
+	 * window x coordinate.
+	 * 
+	 * @param xCoordinate
+	 *            new value to set.
+	 */
+	public void setXCoordinate(int xCoordinate) {
+		_xCoordinate = xCoordinate;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE window configuration window y
+	 * coordinate.
+	 * 
+	 * @return the ACIDE - A Configurable IDE window configuration window y
+	 *         coordinate.
+	 */
+	public int getYCoordinate() {
+		return _yCoordinate;
+	}
+
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE window configuration y
+	 * coordinate of the window.
+	 * 
+	 * @param yCoordinate
+	 *            new value to set.
+	 */
+	public void setYCoordinate(int yCoordinate) {
+		_yCoordinate = yCoordinate;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE window configuration is console
+	 * panel showed flag.
+	 * 
+	 * @return the ACIDE - A Configurable IDE window configuration is console
+	 *         panel showed flag.
+	 */
+	public boolean isConsolePanelShowed() {
+		return _isConsolePanelShowed;
+	}
+
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE window configuration
+	 * is console panel showed flag.
+	 * 
+	 * @param isConsolePanelShowed
+	 *            new value to set.
+	 */
+	public void setIsConsolePanelShowed(boolean isConsolePanelShowed) {
+		_isConsolePanelShowed = isConsolePanelShowed;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE window configuration is explorer
+	 * panel showed flag.
+	 * 
+	 * @return the ACIDE - A Configurable IDE window configuration is explorer
+	 *         panel showed flag.
+	 */
+	public boolean isExplorerPanelShowed() {
+		return _isExplorerPanelShowed;
+	}
+
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE window configuration
+	 * is explorer panel showed flag.
+	 * 
+	 * @param isExplorerPanelShowed
+	 *            new value to set.
+	 */
+	public void setIsExplorerPanelShowed(boolean isExplorerPanelShowed) {
+		_isExplorerPanelShowed = isExplorerPanelShowed;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE window configuration window width.
+	 * 
+	 * @return the ACIDE - A Configurable IDE window configuration window width.
+	 */
+	public int getWindowWidth() {
+		return _width;
+	}
+
+	/**
+	 * Sets a new value for the ACIDE - A Configurable IDE window configuration
+	 * window width.
+	 * 
+	 * @param width
+	 *            new value to set.
+	 */
+	public void setWindowWidth(int width) {
+		_width = width;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE window configuration horizontal
+	 * split pane divider location.
+	 * 
+	 * @return the ACIDE - A Configurable IDE window configuration horizontal
+	 *         split pane divider location.
+	 */
+	public int getHorizontalSplitPanelDividerLocation() {
+		return _horizontalSplitPaneDividerLocation;
+	}
+
+	/**
+	 * Sets a new value for the ACIDE - A Configurable IDE window configuration
+	 * horizontal split pane divider location.
+	 * 
+	 * @param horizontalSplitPaneDividerLocation
+	 *            new value to set.
+	 */
+	public void setHorizontalSplitPaneDividerLocation(
+			int horizontalSplitPaneDividerLocation) {
+		_horizontalSplitPaneDividerLocation = horizontalSplitPaneDividerLocation;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE window configuration vertical
+	 * split pane divider location.
+	 * 
+	 * @return the ACIDE - A Configurable IDE window configuration vertical
+	 *         split pane divider location.
+	 */
+	public int getVerticalSplitPaneDividerLocation() {
+		return _verticalSplitPaneDividerLocation;
+	}
+
+	/**
+	 * Sets a new value for the ACIDE - A Configurable IDE window configuration
+	 * vertical split pane divider location.
+	 * 
+	 * @param verticalSplitPaneDividerLocation
+	 *            new value to set.
+	 */
+	public void setVerticalSplitPaneDividerLocation(
+			int verticalSplitPaneDividerLocation) {
+		_verticalSplitPaneDividerLocation = verticalSplitPaneDividerLocation;
 	}
 }

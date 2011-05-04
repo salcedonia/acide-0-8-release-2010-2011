@@ -29,7 +29,6 @@
  */
 package acide.files;
 
-import acide.files.text.AcideTextFileExtensionFilterManager;
 import acide.gui.mainWindow.AcideMainWindow;
 
 import javax.swing.*;
@@ -42,10 +41,13 @@ import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 
 /**
+ * <p>
  * ACIDE - A Configurable IDE file manager.
- * 
+ * </p>
+ * <p>
  * Handles the saving and loading operations over text files, and ask to the
  * user about the files or directories to select in dialogs.
+ * </p>
  * 
  * @version 0.8
  */
@@ -75,175 +77,394 @@ public class AcideFileManager {
 	 * Creates a new ACIDE - A Configurable IDE file manager.
 	 */
 	public AcideFileManager() {
-
 		// Creates the file chooser
 		_fileChooser = new JFileChooser();
 	}
 
 	/**
-	 * Returns absolute path selected by the user in a file chooser dialog.
+	 * <p>
+	 * Asks for open a file to the user with the chosen options given as
+	 * parameters.
+	 * </p>
+	 * <p>
+	 * Returns the absolute paths selected by the user in a file chooser dialog.
+	 * </p>
 	 * 
-	 * @return the absolute path selected by the user in a file chooser dialog.
+	 * @param isFile
+	 *            flag that indicates if the current path has to be extracted
+	 *            and updated from the last file or project directory stored in
+	 *            the ACIDE - A Configurable IDE resource manager.
+	 * 
+	 * @return the absolute paths selected by the user in a file chooser dialog.
 	 */
-	public String askAbsolutePath() {
+	public String askForOpenFile(boolean isFile) {
 
+		File selectedFile = null;
 		String absolutePath = null;
-		String defaultPath = null;
-		File file = null;
+		String lastPath = null;
 
 		try {
 
-			// Gets the default path for the start point
-			defaultPath = AcideResourceManager.getInstance().getProperty(
-					"defaultPath");
-			file = new File(defaultPath);
+			// If is for open a file
+			if (isFile)
+
+				// Gets the ACIDE - A Configurable IDE last opened file
+				// directory
+				lastPath = AcideResourceManager.getInstance().getProperty(
+						"lastOpenedFileDirectory");
+			else
+				// Gets the ACIDE - A Configurable IDE last opened project
+				// directory
+				lastPath = AcideResourceManager.getInstance().getProperty(
+						"lastOpenedProjectDirectory");
 
 			// Sets the title of the file chooser window
 			_fileChooser.setDialogTitle(AcideLanguageManager.getInstance()
 					.getLabels().getString("s9"));
 
 			// Sets the current directory to the default path
-			_fileChooser.setCurrentDirectory(file.getParentFile());
-		} catch (Exception exception) {
+			_fileChooser
+					.setCurrentDirectory(new File(lastPath));
 
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
+			// Clears the previous selected files
+			_fileChooser.setSelectedFiles(new File[0]);
+			
+			// Disables the multiple selection of files
+			_fileChooser.setMultiSelectionEnabled(false);
 
-		// Ask for the file to the user
-		int returnValue = _fileChooser.showOpenDialog(null);
+			// Sets only files
+			_fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-		// If OK
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
+			// Ask for the file to the user
+			int returnValue = _fileChooser.showOpenDialog(null);
 
-			// Gets the absolute path
-			absolutePath = _fileChooser.getSelectedFile().getAbsolutePath();
+			// If it is ok
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
 
-			// Updates the log
-			AcideLog.getLog().info(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s300")
-							+ absolutePath);
-
-			// Updates the RESOURCE MANAGER
-			AcideResourceManager.getInstance().setProperty("defaultPath",
-					absolutePath);
-
-		} else if (returnValue == JFileChooser.CANCEL_OPTION) {
-
-			_fileChooser.cancelSelection();
-
-			// Updates the log
-			AcideLog.getLog().info(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s302"));
-		}
-		return absolutePath;
-	}
-
-	/**
-	 * Returns the array which contains the absolute paths of the file or files
-	 * selected by the user in a file chooser dialog.
-	 * 
-	 * @return the array which contains the absolute paths of the file or files
-	 *         selected by the user in a file chooser dialog.
-	 */
-	public String[] askMultipleAbsolutePath() {
-
-		File[] selectedFiles;
-
-		String absolutePaths[] = null;
-		String text = null;
-		File file = null;
-
-		try {
-
-			// Gets the default path for the start point
-			text = AcideResourceManager.getInstance()
-					.getProperty("defaultPath");
-			file = new File(text);
-
-			// Sets the title for the file chooser window
-			_fileChooser.setDialogTitle(AcideLanguageManager.getInstance()
-					.getLabels().getString("s9"));
-
-			// Sets the current directory to the default path
-			_fileChooser.setCurrentDirectory(file.getParentFile());
-
-			// Enables the multiple selection of files
-			_fileChooser.setMultiSelectionEnabled(true);
-
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Ask for the file to the user
-		int returnValue = _fileChooser.showOpenDialog(null);
-
-		// If OK
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-
-			// Gets the selected files
-			selectedFiles = _fileChooser.getSelectedFiles();
-
-			// Creates the string array
-			absolutePaths = new String[selectedFiles.length];
-
-			// Stores the selected absolute paths in the string array
-			for (int index = 0; index < selectedFiles.length; index++) {
+				// Gets the selected file
+				selectedFile = _fileChooser.getSelectedFile();
 
 				// Gets the absolute path
-				absolutePaths[index] = selectedFiles[index].getAbsolutePath();
+				absolutePath = selectedFile.getAbsolutePath();
 
 				// Updates the log
 				AcideLog.getLog().info(
 						AcideLanguageManager.getInstance().getLabels()
 								.getString("s300")
-								+ absolutePaths[index]);
+								+ absolutePath);
 
-				// Updates the RESOURCE MANAGER
-				AcideResourceManager.getInstance().setProperty("defaultPath",
-						absolutePaths[index]);
+				// If is for open a file
+				if (isFile)
+					// Updates the ACIDE - A Configurable IDE last opened
+					// file
+					// directory
+					AcideResourceManager.getInstance().setProperty(
+							"lastOpenedFileDirectory",
+							absolutePath);
+				else
+					// Updates the ACIDE - A Configurable IDE last opened
+					// project
+					// directory
+					AcideResourceManager.getInstance().setProperty(
+							"lastOpenedProjectDirectory",
+							absolutePath);
+
+			} else if (returnValue == JFileChooser.CANCEL_OPTION) {
+
+				// Cancels the selection
+				_fileChooser.cancelSelection();
+
+				// Updates the log
+				AcideLog.getLog().info(
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s302"));
 			}
 
-		} else if (returnValue == JFileChooser.CANCEL_OPTION) {
-
-			_fileChooser.cancelSelection();
+		} catch (Exception exception) {
 
 			// Updates the log
-			AcideLog.getLog().info(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s302"));
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
 		}
+
+		return absolutePath;
+	}
+
+	/**
+	 * <p>
+	 * Asks for open a file to the user with the chosen options given as
+	 * parameters.
+	 * </p>
+	 * <p>
+	 * Returns the absolute paths selected by the user in a file chooser dialog.
+	 * </p>
+	 * 
+	 * @param currentDirectory
+	 *            current directory to set in the file chooser.
+	 * 
+	 * @return the absolute paths selected by the user in a file chooser dialog.
+	 */
+	public String askForOpenFile(String currentDirectory) {
+
+		File selectedFile = null;
+		String absolutePath = null;
+
+		try {
+
+			// Sets the title of the file chooser window
+			_fileChooser.setDialogTitle(AcideLanguageManager.getInstance()
+					.getLabels().getString("s9"));
+
+			// Sets the current directory
+			_fileChooser.setCurrentDirectory(new File(currentDirectory));
+
+			// Disables the multiple selection of files
+			_fileChooser.setMultiSelectionEnabled(false);
+
+			// Sets only files
+			_fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+			// Clears the previous selected files
+			_fileChooser.setSelectedFiles(new File[0]);
+			
+			// Ask for the file to the user
+			int returnValue = _fileChooser.showOpenDialog(null);
+
+			// If it is ok
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+
+				// Gets the selected file
+				selectedFile = _fileChooser.getSelectedFile();
+
+				// Gets the absolute path
+				absolutePath = selectedFile.getAbsolutePath();
+
+				// Updates the log
+				AcideLog.getLog().info(
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s300")
+								+ absolutePath);
+
+				// Updates the ACIDE - A Configurable IDE last opened
+				// file
+				// directory
+				AcideResourceManager.getInstance().setProperty(
+						"lastOpenedFileDirectory",
+						absolutePath);
+
+			} else if (returnValue == JFileChooser.CANCEL_OPTION) {
+
+				// Cancels the selection
+				_fileChooser.cancelSelection();
+
+				// Updates the log
+				AcideLog.getLog().info(
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s302"));
+			}
+
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+
+		return absolutePath;
+	}
+
+	/**
+	 * <p>
+	 * Asks for open files to the user with the chosen options given as
+	 * parameters.
+	 * </p>
+	 * <p>
+	 * Returns an array that contains the absolute paths selected by the user in
+	 * a file chooser dialog.
+	 * </p>
+	 * 
+	 * @param isFile
+	 *            flag that indicates if the current path has to be extracted
+	 *            and updated from the last file or project directory stored in
+	 *            the ACIDE - A Configurable IDE resource manager.
+	 * 
+	 * @return an array that contains the absolute paths selected by the user in
+	 *         a file chooser dialog.
+	 */
+	public String[] askForOpenFiles(boolean isFile) {
+
+		File[] selectedFiles = null;
+		String absolutePaths[] = null;
+		String lastPath = null;
+
+		try {
+
+			// If is for open a file
+			if (isFile)
+
+				// Gets the ACIDE - A Configurable IDE last opened file
+				// directory
+				lastPath = AcideResourceManager.getInstance().getProperty(
+						"lastOpenedFileDirectory");
+			else
+				// Gets the ACIDE - A Configurable IDE last opened project
+				// directory
+				lastPath = AcideResourceManager.getInstance().getProperty(
+						"lastOpenedProjectDirectory");
+
+			// Sets the title of the file chooser window
+			_fileChooser.setDialogTitle(AcideLanguageManager.getInstance()
+					.getLabels().getString("s9"));
+
+			// Sets the current directory to the default path
+			_fileChooser
+					.setCurrentDirectory(new File(lastPath));
+
+			// Clears the previous selected files
+			_fileChooser.setSelectedFiles(new File[0]);
+			
+			// Enables the multiple selection of files
+			_fileChooser.setMultiSelectionEnabled(true);
+
+			// Sets only files
+			_fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+			// Ask for the file to the user
+			int returnValue = _fileChooser.showOpenDialog(null);
+
+			// If it is ok
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+
+				// Gets the selected files
+				selectedFiles = _fileChooser.getSelectedFiles();
+
+				// Creates the string array
+				absolutePaths = new String[selectedFiles.length];
+
+				// Stores the selected absolute paths in the string array
+				for (int index = 0; index < selectedFiles.length; index++) {
+
+					// Gets the absolute path
+					absolutePaths[index] = selectedFiles[index]
+							.getAbsolutePath();
+
+					// Updates the log
+					AcideLog.getLog().info(
+							AcideLanguageManager.getInstance().getLabels()
+									.getString("s300")
+									+ absolutePaths[index]);
+
+					// If is for open a file
+					if (isFile)
+						// Updates the ACIDE - A Configurable IDE last opened
+						// file
+						// directory
+						AcideResourceManager.getInstance().setProperty(
+								"lastOpenedFileDirectory",
+								absolutePaths[index]);
+					else
+						// Updates the ACIDE - A Configurable IDE last opened
+						// project
+						// directory
+						AcideResourceManager.getInstance().setProperty(
+								"lastOpenedProjectDirectory",
+								absolutePaths[index]);
+				}
+
+			} else if (returnValue == JFileChooser.CANCEL_OPTION) {
+
+				// Cancels the selection
+				_fileChooser.cancelSelection();
+
+				// Updates the log
+				AcideLog.getLog().info(
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s302"));
+			}
+
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+
 		return absolutePaths;
 	}
 
 	/**
-	 * Returns the absolute path of a selected directory which has been selected
-	 * by the user in a file chooser dialog.
+	 * Returns the directory absolute path selected by the user in a file
+	 * chooser dialog.
 	 * 
-	 * @return the absolute path of a selected directory which has been selected
-	 *         by the user in a file chooser dialog.
+	 * @return the directory absolute path selected by the user in a file
+	 *         chooser dialog.
 	 */
-	public String askDirectoryAbsolutePath() {
+	public String askForOpenDirectory() {
 
-		String path = " ";
-		String text = null;
-		File file = null;
+		File selectedFile = null;
+		String absolutePath = null;
+		String lastPath = null;
 
 		try {
 
-			// Gets the default path
-			text = AcideResourceManager.getInstance()
-					.getProperty("defaultPath");
-			file = new File(text);
+			// Gets the ACIDE - A Configurable IDE last opened file
+			// directory
+			lastPath = AcideResourceManager.getInstance().getProperty(
+					"lastOpenedFileDirectory");
 
-			// Sets the current directory to the default path parent directory
-			_fileChooser.setCurrentDirectory(file.getParentFile());
+			// Sets the title of the file chooser window
+			_fileChooser.setDialogTitle(AcideLanguageManager.getInstance()
+					.getLabels().getString("s9"));
+
+			// Sets the current directory to the default path
+			_fileChooser
+					.setCurrentDirectory(new File(lastPath));
+
+			// Clears the previous selected files
+			_fileChooser.setSelectedFiles(new File[0]);
+			
+			// Disables the multiple selection of files
+			_fileChooser.setMultiSelectionEnabled(false);
+
+			// Sets only directories
+			_fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+			// Ask for the file to the user
+			int returnValue = _fileChooser.showOpenDialog(null);
+
+			// If it is ok
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+
+				// Gets the selected file
+				selectedFile = _fileChooser.getSelectedFile();
+
+				// Gets the absolute path
+				absolutePath = selectedFile.getAbsolutePath();
+
+				// Updates the log
+				AcideLog.getLog().info(
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s300")
+								+ absolutePath);
+
+				// Updates the ACIDE - A Configurable IDE last opened
+				// file
+				// directory
+				AcideResourceManager.getInstance().setProperty(
+						"lastOpenedFileDirectory",
+						absolutePath);
+
+			} else if (returnValue == JFileChooser.CANCEL_OPTION) {
+
+				// Cancels the selection
+				_fileChooser.cancelSelection();
+
+				// Updates the log
+				AcideLog.getLog().info(
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s302"));
+			}
+
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -251,109 +472,11 @@ public class AcideFileManager {
 			exception.printStackTrace();
 		}
 
-		// Only directories
-		_fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-		int returnValue = _fileChooser.showOpenDialog(null);
-
-		// If OK
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-
-			// Gets the absolute path of the directory
-			path = _fileChooser.getSelectedFile().getAbsolutePath();
-
-			// Updates the log
-			AcideLog.getLog().info(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s303")
-							+ path);
-
-			// Updates the RESOURCE MANAGER
-			AcideResourceManager.getInstance().setProperty("defaultPath", path);
-
-		} else if (returnValue == JFileChooser.CANCEL_OPTION) {
-
-			_fileChooser.cancelSelection();
-
-			// Updates the log
-			AcideLog.getLog().info(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s304"));
-		}
-		return path;
+		return absolutePath;
 	}
 
 	/**
-	 * Returns the absolute path of a selected directory or file which has been
-	 * selected by the user in a file chooser dialog which only admits the file
-	 * extensions specified by the parameter filter.
-	 * 
-	 * @param filter
-	 *            file extension filter.
-	 * 
-	 * @return the absolute path of a selected directory or file which has been
-	 *         selected by the user in a file chooser dialog which only admits
-	 *         the file extensions specified by the parameter filter.
-	 */
-	public String askAbsolutePathWithFilter(
-			AcideTextFileExtensionFilterManager filter) {
-
-		JFileChooser fileChooser = new JFileChooser();
-		String selectedFileAbsolutePath = " ";
-		String text = null;
-		File file = null;
-		try {
-
-			// Gets the default path
-			text = AcideResourceManager.getInstance()
-					.getProperty("defaultPath");
-			file = new File(text);
-
-			// Sets the selected filter
-			fileChooser.setFileFilter(filter);
-
-			// Sets the current directory to the default path parent directory
-			fileChooser.setCurrentDirectory(file.getParentFile());
-		} catch (Exception exception) {
-
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
-
-		// Asks to the user
-		int returnValue = fileChooser.showOpenDialog(null);
-
-		// If OK
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-
-			// Gets the selected file absolute path
-			selectedFileAbsolutePath = fileChooser.getSelectedFile()
-					.getAbsolutePath();
-
-			// Updates the log
-			AcideLog.getLog().info(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s305")
-							+ selectedFileAbsolutePath);
-
-			// Updates the RESOURCE MANAGER
-			AcideResourceManager.getInstance().setProperty("defaultPath",
-					selectedFileAbsolutePath);
-		} else if (returnValue == JFileChooser.CANCEL_OPTION) {
-
-			fileChooser.cancelSelection();
-
-			// Updates the log
-			AcideLog.getLog().info(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s306"));
-		}
-		return selectedFileAbsolutePath;
-	}
-
-	/**
-	 * Writes on a text file.
+	 * Asks to the user for the path to save a file.
 	 * 
 	 * @param isNewProjectFile
 	 *            flag that indicates if it is the new project file or not for
@@ -361,122 +484,128 @@ public class AcideFileManager {
 	 * 
 	 * @return the absolute file path.
 	 */
-	public String askSavingFileEditorFile(boolean isNewProjectFile) {
+	public String askForSaving(boolean isNewProjectFile) {
 
-		String absoluteFilePath = " ";
-		String defaultPath = null;
-		File file = null;
+		String absoluteFilePath = null;
+		String lastOpenedFileDirectory = null;
 
 		try {
 
-			// Gets the default path
-			defaultPath = AcideResourceManager.getInstance().getProperty(
-					"defaultPath");
-			file = new File(defaultPath);
+			// Gets the ACIDE - A Configurable IDE last opened file directory
+			lastOpenedFileDirectory = AcideResourceManager.getInstance()
+					.getProperty("lastOpenedFileDirectory");
 
-			// Sets the current directory to the default path
-			_fileChooser.setCurrentDirectory(file);
+			// Sets the current directory to the last opened file directory
+			_fileChooser.setCurrentDirectory(new File(lastOpenedFileDirectory)
+					.getParentFile());
+
+			// Clears the previous selected files
+			_fileChooser.setSelectedFiles(new File[0]);
+			
+			// Disables the multiple selection of files
+			_fileChooser.setMultiSelectionEnabled(false);
+
+			// Sets only files
+			_fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+			// Ask to the user for saving the changes
+			int returnValueSaveFile = _fileChooser.showSaveDialog(_fileChooser);
+
+			// Gets the selected file
+			File selectedFile = _fileChooser.getSelectedFile();
+
+			// Ask the user for saving it
+			if (returnValueSaveFile == JFileChooser.APPROVE_OPTION) {
+
+				// If exists
+				if (selectedFile.exists()
+						&& _fileChooser.getDialogType() == JFileChooser.SAVE_DIALOG) {
+
+					// Ask if are you sure about the operation
+					int returnValueAreYouSure = JOptionPane.showConfirmDialog(
+							null, AcideLanguageManager.getInstance()
+									.getLabels().getString("s954"),
+							AcideLanguageManager.getInstance().getLabels()
+									.getString("s953"),
+							JOptionPane.YES_NO_OPTION);
+
+					// If it is ok
+					if (returnValueAreYouSure == JOptionPane.YES_OPTION) {
+
+						// Gets the ACIDE - A Configurable IDE last opened file
+						// directory
+						absoluteFilePath = _fileChooser.getSelectedFile()
+								.getAbsolutePath();
+
+						// Updates the log
+						AcideLog.getLog().info(
+								AcideLanguageManager.getInstance().getLabels()
+										.getString("s307")
+										+ absoluteFilePath);
+
+						// Updates the ACIDE - A Configurable IDE last opened
+						// file
+						// directory
+						AcideResourceManager.getInstance().setProperty(
+								"lastOpenedFileDirectory",
+								absoluteFilePath);
+					}
+
+					// If it is no
+					if (returnValueAreYouSure == JOptionPane.NO_OPTION) {
+
+						// If it is the new project file
+						if (isNewProjectFile) {
+
+							// Removes the tab from the file editor
+							AcideMainWindow
+									.getInstance()
+									.getFileEditorManager()
+									.getTabbedPane()
+									.remove(AcideMainWindow.getInstance()
+											.getFileEditorManager()
+											.getSelectedFileEditorPanelIndex());
+
+							// Validates the changes in the file editor
+							AcideMainWindow.getInstance()
+									.getFileEditorManager().getTabbedPane()
+									.validate();
+						}
+					}
+				}
+			} else if (returnValueSaveFile == JFileChooser.CANCEL_OPTION) {
+
+				// Cancel selection
+				_fileChooser.cancelSelection();
+
+				// Updates the log
+				AcideLog.getLog().info(
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s308"));
+
+				// If it is the new project file
+				if (isNewProjectFile) {
+
+					// Removes the tab in the file editor
+					AcideMainWindow
+							.getInstance()
+							.getFileEditorManager()
+							.getTabbedPane()
+							.remove(AcideMainWindow.getInstance()
+									.getFileEditorManager()
+									.getSelectedFileEditorPanelIndex());
+
+					// Validates the changes in the file editor
+					AcideMainWindow.getInstance().getFileEditorManager()
+							.getTabbedPane().validate();
+				}
+			}
+
 		} catch (Exception exception) {
 
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
 			exception.printStackTrace();
-		}
-
-		boolean isApproved = true;
-
-		// Ask to the user for saving the changes
-		int returnValueSaveFile = _fileChooser.showSaveDialog(_fileChooser);
-
-		// Gets the selected file
-		File selectedFile = _fileChooser.getSelectedFile();
-
-		// Ask the user for saving it
-		if (returnValueSaveFile == JFileChooser.APPROVE_OPTION) {
-
-			// If exists
-			if (selectedFile.exists()
-					&& _fileChooser.getDialogType() == JFileChooser.SAVE_DIALOG) {
-
-				// Ask if are you sure about the operation
-				int returnValueAreYouSure = JOptionPane.showConfirmDialog(null,
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s954"), AcideLanguageManager
-								.getInstance().getLabels().getString("s953"),
-						JOptionPane.YES_NO_OPTION);
-
-				// If YES
-				if (returnValueAreYouSure == JOptionPane.YES_OPTION) {
-					isApproved = true;
-				}
-
-				// If NO
-				if (returnValueAreYouSure == JOptionPane.NO_OPTION) {
-
-					isApproved = false;
-
-					if (isNewProjectFile) {
-
-						// Removes the tab from the file editor
-						AcideMainWindow
-								.getInstance()
-								.getFileEditorManager()
-								.getTabbedPane()
-								.remove(AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.getSelectedFileEditorPanelIndex());
-
-						// Validates the changes in the file editor
-						AcideMainWindow.getInstance().getFileEditorManager()
-								.getTabbedPane().validate();
-					}
-				}
-			} else
-				isApproved = true;
-		} else if (returnValueSaveFile == JFileChooser.CANCEL_OPTION) {
-
-			// Cancel selection
-			_fileChooser.cancelSelection();
-
-			// Updates the log
-			AcideLog.getLog().info(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s308"));
-
-			isApproved = false;
-
-			if (isNewProjectFile) {
-
-				// Removes the tab in the file editor
-				AcideMainWindow
-						.getInstance()
-						.getFileEditorManager()
-						.getTabbedPane()
-						.remove(AcideMainWindow.getInstance()
-								.getFileEditorManager()
-								.getSelectedFileEditorPanelIndex());
-
-				// Validates the changes in the file editor
-				AcideMainWindow.getInstance().getFileEditorManager()
-						.getTabbedPane().validate();
-			}
-		}
-
-		// If YES
-		if (isApproved) {
-
-			// Gets the absolute path
-			absoluteFilePath = _fileChooser.getSelectedFile().getAbsolutePath();
-
-			// Updates the log
-			AcideLog.getLog().info(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s307")
-							+ absoluteFilePath);
-
-			// Updates the RESOURCE MANAGER default path
-			AcideResourceManager.getInstance().setProperty("defaultPath",
-					absoluteFilePath);
 		}
 
 		return absoluteFilePath;

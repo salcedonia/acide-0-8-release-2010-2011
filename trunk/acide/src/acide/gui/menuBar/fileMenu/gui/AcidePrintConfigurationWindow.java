@@ -71,6 +71,11 @@ public class AcidePrintConfigurationWindow extends JFrame {
 	private static final ImageIcon ICON = new ImageIcon(
 			"./resources/images/icon.png");
 	/**
+	 * ACIDE - A Configurable IDE print configuration window unique class
+	 * instance.
+	 */
+	private static AcidePrintConfigurationWindow _instance;
+	/**
 	 * ACIDE - A Configurable IDE print configuration window print button.
 	 */
 	private JButton _printButton;
@@ -108,16 +113,6 @@ public class AcidePrintConfigurationWindow extends JFrame {
 	 * ACIDE - A Configurable IDE print configuration window date check box.
 	 */
 	private JCheckBox _dateCheckBox;
-	/**
-	 * ACIDE - A Configurable IDE print configuration window printer manager.
-	 */
-	private AcidePrinterManager _printerManager;
-
-	/**
-	 * ACIDE - A Configurable IDE print configuration window unique class
-	 * instance.
-	 */
-	private static AcidePrintConfigurationWindow _instance;
 
 	/**
 	 * Returns the ACIDE - A Configurable IDE print configuration window unique
@@ -138,11 +133,6 @@ public class AcidePrintConfigurationWindow extends JFrame {
 	public AcidePrintConfigurationWindow() {
 
 		super();
-
-		// Creates the printer manager
-		_printerManager = new AcidePrinterManager(AcideMainWindow.getInstance()
-				.getFileEditorManager().getSelectedFileEditorPanel()
-				.getActiveTextEditionArea(), false, false);
 
 		// Builds the window components
 		buildComponents();
@@ -421,7 +411,8 @@ public class AcidePrintConfigurationWindow extends JFrame {
 		public void actionPerformed(ActionEvent actionEvent) {
 
 			// Updates the printer manager
-			_printerManager.setShowPage(_pageNumberCheckBox.isSelected());
+			AcidePrinterManager.getInstance().setShowPage(
+					_pageNumberCheckBox.isSelected());
 		}
 	}
 
@@ -445,7 +436,8 @@ public class AcidePrintConfigurationWindow extends JFrame {
 		public void actionPerformed(ActionEvent actionEvent) {
 
 			// Updates the printer manager
-			_printerManager.setDate(_dateCheckBox.isSelected());
+			AcidePrinterManager.getInstance().setDate(
+					_dateCheckBox.isSelected());
 		}
 	}
 
@@ -469,9 +461,9 @@ public class AcidePrintConfigurationWindow extends JFrame {
 		public void actionPerformed(ActionEvent actionEvent) {
 
 			// Configures the page
-			_printerManager.configurePage();
+			AcidePrinterManager.getInstance().configurePage();
 
-			if (_printerManager.getPageFormat() != null) {
+			if (AcidePrinterManager.getInstance().getPageFormat() != null) {
 
 				// Enables the print button
 				_printButton.setEnabled(true);
@@ -505,7 +497,7 @@ public class AcidePrintConfigurationWindow extends JFrame {
 		public void actionPerformed(ActionEvent actionEvent) {
 
 			// Prints
-			_printerManager.print();
+			AcidePrinterManager.getInstance().print();
 
 			// Set the main window enabled again
 			AcideMainWindow.getInstance().setEnabled(true);

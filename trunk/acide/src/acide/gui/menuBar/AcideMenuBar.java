@@ -430,13 +430,13 @@ public class AcideMenuBar extends JMenuBar {
 									AcideMenuConfiguration
 											.getInstance()
 											.loadMenuConfigurationFile(
-													"./configuration/menu/defaultAllOn.menuCfg"));
+													"./configuration/menu/defaultAllOn.menuConfig"));
 
 					// Updates the ACIDE - A Configurable IDE current menu
 					// configuration
 					AcideResourceManager.getInstance().setProperty(
 							"currentMenuConfiguration",
-							"./configuration/menu/defaultAllOn.menuCfg");
+							"./configuration/menu/defaultAllOn.menuConfig");
 
 					// Displays an error message
 					JOptionPane.showMessageDialog(null, AcideLanguageManager
@@ -505,48 +505,6 @@ public class AcideMenuBar extends JMenuBar {
 		AcideLog.getLog()
 				.info(AcideLanguageManager.getInstance().getLabels()
 						.getString("s72"));
-	}
-
-	/**
-	 * Enables the ACIDE - A Configurable IDE menu bar file menu.
-	 */
-	public void enableFileMenu() {
-		_fileMenu.enableMenu();
-	}
-
-	/**
-	 * Disables the ACIDE - A Configurable IDE menu bar file menu.
-	 */
-	public void disableFileMenu() {
-		_fileMenu.disableMenu();
-	}
-
-	/**
-	 * Enables the ACIDE - A Configurable IDE menu bar project menu.
-	 */
-	public void enableProjectMenu() {
-		_projectMenu.enableMenu();
-	}
-
-	/**
-	 * Disables the ACIDE - A Configurable IDE menu bar project menu.
-	 */
-	public void disableProjectMenu() {
-		_projectMenu.disableMenu();
-	}
-
-	/**
-	 * Enables the ACIDE - A Configurable IDE menu bar edit menu.
-	 */
-	public void enableEditMenu() {
-		_editMenu.enableMenu();
-	}
-
-	/**
-	 * Disables the ACIDE - A Configurable IDE menu bar edit menu.
-	 */
-	public void disableEditMenu() {
-		_editMenu.disableMenu();
 	}
 
 	/**

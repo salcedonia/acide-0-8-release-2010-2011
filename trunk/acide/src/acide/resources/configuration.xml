@@ -2,18 +2,28 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <comment>ACIDE Configuration</comment>
-<entry key="fileEditorConfiguration">./configuration/fileEditor/configuration.xml</entry>
-<entry key="previousMenuConfiguration">./configuration/menu/defaultAllOn.menuCfg</entry>
+<entry key="consolePanel.fontName">Monospaced</entry>
 <entry key="lexiconAssignerConfiguration">./configuration/lexiconAssigner/configuration.xml</entry>
-<entry key="currentToolBarConfiguration">C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\toolbar\default.TBcfg</entry>
-<entry key="previousToolBarConfiguration">C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\toolbar\default.TBcfg</entry>
-<entry key="currentMenuConfiguration">./configuration/menu/defaultAllOn.menuCfg</entry>
-<entry key="language">spanish</entry>
-<entry key="windowConfiguration">./configuration/window/configuration.xml</entry>
-<entry key="projectConfiguration">C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\project\prueba.acidePrj</entry>
-<entry key="javaPath">C:\Archivos de programa\Java\jdk1.6.0_21\bin\java.exe</entry>
-<entry key="jarPath">C:\Archivos de programa\Java\jdk1.6.0_21\bin\jar.exe</entry>
-<entry key="defaultPath">C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\jEdit\README.SRC.txt</entry>
-<entry key="consoleConfiguration">./configuration/console/configuration.xml</entry>
+<entry key="workbenchConfiguration">./configuration/workbench/configuration.xml</entry>
+<entry key="lastOpenedFileDirectory">C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\flights.dl</entry>
 <entry key="javacPath">C:\Archivos de programa\Java\jdk1.6.0_21\bin\javac.exe</entry>
+<entry key="jarPath">C:\Archivos de programa\Java\jdk1.6.0_21\bin\jar.exe</entry>
+<entry key="consolePanel.exitCommand">exit</entry>
+<entry key="consolePanel.fontStyle">0</entry>
+<entry key="consolePanel.blackgroundColor">-1</entry>
+<entry key="consolePanel.backgroundColor">-1</entry>
+<entry key="currentMenuConfiguration">./configuration/menu/defaultAllOn.menuConfig</entry>
+<entry key="consolePanel.shellDirectory">C:\WINDOWS\System32\</entry>
+<entry key="consolePanel.shellPath">C:\WINDOWS\System32\cmd.exe</entry>
+<entry key="consolePanel.fontSize">14</entry>
+<entry key="previousToolBarConfiguration">C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\toolbar\des.toolbarConfig</entry>
+<entry key="consolePanel.isEchoCommand">true</entry>
+<entry key="language">spanish</entry>
+<entry key="defaultPath">C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\project\prueba2.acideProject</entry>
+<entry key="currentToolBarConfiguration">C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\toolbar\des.toolbarConfig</entry>
+<entry key="previousMenuConfiguration">./configuration/menu/defaultAllOn.menuConfig</entry>
+<entry key="lastOpenedProjectDirectory">C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\project</entry>
+<entry key="javaPath">C:\Archivos de programa\Java\jdk1.6.0_21\bin\java.exe</entry>
+<entry key="projectConfiguration">C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\project\prueba2.acideProject</entry>
+<entry key="consolePanel.foregroundColor">-16777216</entry>
 </properties>

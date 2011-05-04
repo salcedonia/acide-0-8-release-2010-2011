@@ -82,13 +82,13 @@ public class AcideFileEditorCaretListener implements CaretListener {
 
 		// If the first text editor is focused
 		if (selectedFileEditorPanel.getTextEditionPanelList().get(0)
-				.getTextPane().isFocusOwner())
+				.getTextComponent().isFocusOwner())
 			// The active editor is the first text editor
 			selectedFileEditorPanel.setActiveTextEditionAreaIndex(0);
 
 		// If the second editor is focused
 		if (selectedFileEditorPanel.getTextEditionPanelList().get(1)
-				.getTextPane().isFocusOwner())
+				.getTextComponent().isFocusOwner())
 			// The active editor is the second text editor
 			selectedFileEditorPanel.setActiveTextEditionAreaIndex(1);
 	}

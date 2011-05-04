@@ -29,15 +29,10 @@
  */
 package acide.gui.statusBarPanel.popup;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import acide.gui.mainWindow.AcideMainWindow;
+import acide.gui.statusBarPanel.popup.listeners.AcideCopyMenuItemAction;
 import acide.language.AcideLanguageManager;
 
 /**
@@ -63,34 +58,43 @@ public class AcideStatusBarPopupMenu extends JPopupMenu {
 	 */
 	public AcideStatusBarPopupMenu() {
 
-		// Creates the copy menu item
-		_copyMenuItem = new JMenuItem(AcideLanguageManager.getInstance()
-				.getLabels().getString("s187"));
+		// Builds the components
+		buildComponents();
 
-		// Sets the copy menu item action listener
-		_copyMenuItem.addActionListener(new ActionListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
+		// Adds the components to the popup menu
+		addComponents();
 
-				// Puts the text from the status message in the status bar into the system clipboard
-				StringSelection data = new StringSelection(AcideMainWindow
-						.getInstance().getStatusBar().getStatusMessage()
-						.getText());
+		// Sets the listeners for the popup menu components
+		setListeners();
+	}
 
-				// Sets the contents to the system clipboard
-				Toolkit.getDefaultToolkit().getSystemClipboard()
-						.setContents(data, data);
-			}
-		});
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE status bar popup
+	 * menu.
+	 */
+	private void addComponents() {
 
 		// Adds the copy menu item to the popup menu
 		add(_copyMenuItem);
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE status bar popup menu components.
+	 */
+	private void buildComponents() {
+
+		// Creates the copy menu item
+		_copyMenuItem = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s187"));
+	}
+
+	/**
+	 * Sets the listeners for the ACIDE - A Configurable IDE status bar popup
+	 * menu components.
+	 */
+	private void setListeners() {
+
+		// Sets the copy menu item action listener
+		_copyMenuItem.addActionListener(new AcideCopyMenuItemAction());
 	}
 }

@@ -30,10 +30,12 @@
 package acide.gui.menuBar.configurationMenu.fileEditor;
 
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import acide.configuration.menu.AcideMenuConfiguration;
+import acide.gui.menuBar.configurationMenu.fileEditor.listeners.AcideAutomaticIndentMenuItemAction;
 import acide.gui.menuBar.configurationMenu.fileEditor.listeners.AcideFileEditorDisplayOptionsMenuItemListener;
 import acide.language.AcideLanguageManager;
 
@@ -56,16 +58,31 @@ public class AcideFileEditorMenu extends JMenu {
 	public static final String FILE_EDITOR_DISPLAY_OPTIONS_NAME = "File Editor Display Options";
 	/**
 	 * ACIDE - A Configurable IDE file editor menu file editor display options
+	 * menu item name.
+	 */
+	public static final String AUTOMATIC_INDENT_NAME = "Automatic Indent";
+	/**
+	 * ACIDE - A Configurable IDE file editor menu file editor display options
 	 * menu item image icon.
 	 */
 	private final static ImageIcon CONSOLE_DISPLAY_OPTIONS_IMAGE = new ImageIcon(
 			"./resources/icons/menu/configuration/fileEditor/fileEditorDisplayOptions.png");
 	/**
+	 * ACIDE - A Configurable IDE file editor panel popup menu automatic indent menu item
+	 * image icon.
+	 */
+	private final static ImageIcon AUTOMATIC_INDENT_IMAGE = new ImageIcon(
+			"./resources/icons/menu/configuration/fileEditor/automaticIndent.png");
+	/**
 	 * ACIDE - A Configurable IDE file editor menu file editor display options
 	 * menu item.
 	 */
 	private JMenuItem _fileEditorDisplayOptionsMenuItem;
-
+	/**
+	 * ACIDE - A Configurable IDE file editor panel popup menu automatic indent
+	 * menu item.
+	 */
+	private JCheckBoxMenuItem _automaticIndentCheckBoxMenuItem;
 	/**
 	 * Creates a new ACIDE - A Configurable IDE file editor menu.
 	 */
@@ -88,6 +105,9 @@ public class AcideFileEditorMenu extends JMenu {
 
 		// Adds the file editor display options menu item to the menu
 		add(_fileEditorDisplayOptionsMenuItem);
+		
+		// Adds the automatic indent check box menu item to the menu
+		add(_automaticIndentCheckBoxMenuItem);
 	}
 
 	/**
@@ -102,6 +122,12 @@ public class AcideFileEditorMenu extends JMenu {
 		// Sets the file editor display options menu item name
 		_fileEditorDisplayOptionsMenuItem
 				.setName(FILE_EDITOR_DISPLAY_OPTIONS_NAME);
+		
+		// Creates the automatic indent check box menu item
+		_automaticIndentCheckBoxMenuItem = new JCheckBoxMenuItem(AUTOMATIC_INDENT_IMAGE);
+		
+		// Sets the automatic indent check box menu item name
+		_automaticIndentCheckBoxMenuItem.setName(AUTOMATIC_INDENT_NAME);
 	}
 
 	/**
@@ -113,6 +139,10 @@ public class AcideFileEditorMenu extends JMenu {
 		// Sets the file editor display options menu item text
 		_fileEditorDisplayOptionsMenuItem.setText(AcideLanguageManager
 				.getInstance().getLabels().getString("s1041"));
+		
+		// Sets the automatic indent check box menu item text
+		_automaticIndentCheckBoxMenuItem.setText(AcideLanguageManager
+				.getInstance().getLabels().getString("s1097"));
 	}
 
 	/**
@@ -126,6 +156,12 @@ public class AcideFileEditorMenu extends JMenu {
 		_fileEditorDisplayOptionsMenuItem
 				.setVisible(AcideMenuConfiguration.getInstance()
 						.getIsDisplayed(FILE_EDITOR_DISPLAY_OPTIONS_NAME));
+		
+		// Sets the automatic indent check box menu item to visible or not
+		// visible
+		_automaticIndentCheckBoxMenuItem
+				.setVisible(AcideMenuConfiguration.getInstance()
+						.getIsDisplayed(AUTOMATIC_INDENT_NAME));
 	}
 
 	/**
@@ -136,6 +172,10 @@ public class AcideFileEditorMenu extends JMenu {
 		// Sets the file editor display options menu item action listener
 		_fileEditorDisplayOptionsMenuItem
 				.addActionListener(new AcideFileEditorDisplayOptionsMenuItemListener());
+
+		// Sets the automatic indent check box menu item action listener
+		_automaticIndentCheckBoxMenuItem
+				.addActionListener(new AcideAutomaticIndentMenuItemAction());
 	}
 
 	/**
@@ -147,5 +187,16 @@ public class AcideFileEditorMenu extends JMenu {
 	 */
 	public JMenuItem getFileEditorDisplayOptionsMenuItem() {
 		return _fileEditorDisplayOptionsMenuItem;
+	}
+	
+	/**
+	 * Returns the ACIDE - A Configurable IDE file editor menu file editor
+	 * automatic indent check box menu item.
+	 * 
+	 * @return the ACIDE - A Configurable IDE file editor menu file editor
+	 *         automatic indent check box menu item.
+	 */
+	public JCheckBoxMenuItem getAutomaticIndentCheckBoxMenuItem() {
+		return _automaticIndentCheckBoxMenuItem;
 	}
 }

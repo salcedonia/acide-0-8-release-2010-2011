@@ -768,9 +768,17 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
+			// Removes the filter
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.removeChoosableFileFilter(
+							AcideFileManager.getInstance().getFileChooser()
+									.getFileFilter());
+			
 			// Asks the the file to the user
 			String absolutePath = AcideFileManager.getInstance()
-					.askAbsolutePath();
+					.askForOpenFile(true);
 
 			if (absolutePath != null) {
 
@@ -807,9 +815,17 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
+			// Removes the filter
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.removeChoosableFileFilter(
+							AcideFileManager.getInstance().getFileChooser()
+									.getFileFilter());
+			
 			// Asks to the user for the file path
 			String absolutePath = AcideFileManager.getInstance()
-					.askSavingFileEditorFile(false);
+					.askForSaving(false);
 
 			if (absolutePath != null) {
 
@@ -851,9 +867,17 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
+			// Removes the filter
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.removeChoosableFileFilter(
+							AcideFileManager.getInstance().getFileChooser()
+									.getFileFilter());
+			
 			// Asks the absolute path to the user
 			String absolutePath = AcideFileManager.getInstance()
-					.askAbsolutePath();
+					.askForOpenFile(true);
 
 			if (absolutePath != null) {
 
@@ -890,9 +914,17 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
+			// Removes the filter
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.removeChoosableFileFilter(
+							AcideFileManager.getInstance().getFileChooser()
+									.getFileFilter());
+			
 			// Asks the path to the user
 			String absolutePath = AcideFileManager.getInstance()
-					.askSavingFileEditorFile(false);
+					.askForSaving(false);
 
 			if (absolutePath != null) {
 

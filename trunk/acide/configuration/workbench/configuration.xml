@@ -1,0 +1,165 @@
+<acide.configuration.workbench.AcideWorkbenchConfiguration>
+  <__workbenchLoaded>true</__workbenchLoaded>
+  <__fileEditorConfiguration>
+    <__fileEditorPanelConfigurationList>
+      <__list>
+        <__list>
+          <acide.configuration.workbench.fileEditor.AcideFileEditorPanelConfiguration>
+            <__path>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\aggregates.dl</__path>
+            <__type>Normal</__type>
+            <__caretPosition>0</__caretPosition>
+            <__splitPaneDividerLocation>1</__splitPaneDividerLocation>
+            <__activeTextEditionArea>1</__activeTextEditionArea>
+            <__lexiconConfiguration>./configuration/lexicon/default.xml</__lexiconConfiguration>
+            <__previousGrammarConfiguration>./configuration/grammars/bytes.jar</__previousGrammarConfiguration>
+            <__currentGrammarConfiguration>./configuration/grammars/bytes.jar</__currentGrammarConfiguration>
+          </acide.configuration.workbench.fileEditor.AcideFileEditorPanelConfiguration>
+          <acide.configuration.workbench.fileEditor.AcideFileEditorPanelConfiguration>
+            <__path>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\aggregates.sql</__path>
+            <__type>Normal</__type>
+            <__caretPosition>0</__caretPosition>
+            <__splitPaneDividerLocation>0</__splitPaneDividerLocation>
+            <__activeTextEditionArea>1</__activeTextEditionArea>
+            <__lexiconConfiguration>./configuration/lexicon/default.xml</__lexiconConfiguration>
+            <__previousGrammarConfiguration>./configuration/grammars/bytes.jar</__previousGrammarConfiguration>
+            <__currentGrammarConfiguration>./configuration/grammars/bytes.jar</__currentGrammarConfiguration>
+          </acide.configuration.workbench.fileEditor.AcideFileEditorPanelConfiguration>
+          <acide.configuration.workbench.fileEditor.AcideFileEditorPanelConfiguration>
+            <__path>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\bom.dl</__path>
+            <__type>Normal</__type>
+            <__caretPosition>0</__caretPosition>
+            <__splitPaneDividerLocation>0</__splitPaneDividerLocation>
+            <__activeTextEditionArea>1</__activeTextEditionArea>
+            <__lexiconConfiguration>./configuration/lexicon/default.xml</__lexiconConfiguration>
+            <__previousGrammarConfiguration>./configuration/grammars/bytes.jar</__previousGrammarConfiguration>
+            <__currentGrammarConfiguration>./configuration/grammars/bytes.jar</__currentGrammarConfiguration>
+          </acide.configuration.workbench.fileEditor.AcideFileEditorPanelConfiguration>
+          <acide.configuration.workbench.fileEditor.AcideFileEditorPanelConfiguration>
+            <__path>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\family.dl</__path>
+            <__type>Normal</__type>
+            <__caretPosition>0</__caretPosition>
+            <__splitPaneDividerLocation>0</__splitPaneDividerLocation>
+            <__activeTextEditionArea>1</__activeTextEditionArea>
+            <__lexiconConfiguration>./configuration/lexicon/default.xml</__lexiconConfiguration>
+            <__previousGrammarConfiguration>./configuration/grammars/bytes.jar</__previousGrammarConfiguration>
+            <__currentGrammarConfiguration>./configuration/grammars/bytes.jar</__currentGrammarConfiguration>
+          </acide.configuration.workbench.fileEditor.AcideFileEditorPanelConfiguration>
+          <acide.configuration.workbench.fileEditor.AcideFileEditorPanelConfiguration>
+            <__path>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\family.sql</__path>
+            <__type>Normal</__type>
+            <__caretPosition>0</__caretPosition>
+            <__splitPaneDividerLocation>0</__splitPaneDividerLocation>
+            <__activeTextEditionArea>1</__activeTextEditionArea>
+            <__lexiconConfiguration>./configuration/lexicon/default.xml</__lexiconConfiguration>
+            <__previousGrammarConfiguration>./configuration/grammars/bytes.jar</__previousGrammarConfiguration>
+            <__currentGrammarConfiguration>./configuration/grammars/bytes.jar</__currentGrammarConfiguration>
+          </acide.configuration.workbench.fileEditor.AcideFileEditorPanelConfiguration>
+          <acide.configuration.workbench.fileEditor.AcideFileEditorPanelConfiguration>
+            <__path>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\fib.dl</__path>
+            <__type>Normal</__type>
+            <__caretPosition>0</__caretPosition>
+            <__splitPaneDividerLocation>0</__splitPaneDividerLocation>
+            <__activeTextEditionArea>1</__activeTextEditionArea>
+            <__lexiconConfiguration>./configuration/lexicon/default.xml</__lexiconConfiguration>
+            <__previousGrammarConfiguration>./configuration/grammars/bytes.jar</__previousGrammarConfiguration>
+            <__currentGrammarConfiguration>./configuration/grammars/bytes.jar</__currentGrammarConfiguration>
+          </acide.configuration.workbench.fileEditor.AcideFileEditorPanelConfiguration>
+          <acide.configuration.workbench.fileEditor.AcideFileEditorPanelConfiguration>
+            <__path>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\flights.dl</__path>
+            <__type>Normal</__type>
+            <__caretPosition>0</__caretPosition>
+            <__splitPaneDividerLocation>1</__splitPaneDividerLocation>
+            <__activeTextEditionArea>1</__activeTextEditionArea>
+            <__lexiconConfiguration>./configuration/lexicon/default.xml</__lexiconConfiguration>
+            <__previousGrammarConfiguration>./configuration/grammars/bytes.jar</__previousGrammarConfiguration>
+            <__currentGrammarConfiguration>./configuration/grammars/bytes.jar</__currentGrammarConfiguration>
+          </acide.configuration.workbench.fileEditor.AcideFileEditorPanelConfiguration>
+        </__list>
+      </__list>
+    </__fileEditorPanelConfigurationList>
+    <__selectedFileEditorPanelName>aggregates.dl</__selectedFileEditorPanelName>
+    <__fontName>Monospaced.plain</__fontName>
+    <__fontStyle>0</__fontStyle>
+    <__fontSize>14</__fontSize>
+    <__foregroundColor>
+      <red>0</red>
+      <green>0</green>
+      <blue>0</blue>
+      <alpha>255</alpha>
+    </__foregroundColor>
+    <__backgroundColor>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+      <alpha>255</alpha>
+    </__backgroundColor>
+    <__editionMode>false</__editionMode>
+    <__automaticIndent>true</__automaticIndent>
+  </__fileEditorConfiguration>
+  <__lexiconAssignerConfiguration>
+    <__list>
+      <__list>
+        <__list>
+          <acide.configuration.workbench.lexiconAssigner.AcideLexiconAssigner>
+            <__description>Java</__description>
+            <__extensionList>
+              <string>java</string>
+              <string>jav</string>
+            </__extensionList>
+            <__lexiconConfiguration>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\lexicon\java.xml</__lexiconConfiguration>
+          </acide.configuration.workbench.lexiconAssigner.AcideLexiconAssigner>
+          <acide.configuration.workbench.lexiconAssigner.AcideLexiconAssigner>
+            <__description>C</__description>
+            <__extensionList>
+              <string>cpp</string>
+              <string>c</string>
+              <string>h</string>
+            </__extensionList>
+            <__lexiconConfiguration>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\lexicon\c++.xml</__lexiconConfiguration>
+          </acide.configuration.workbench.lexiconAssigner.AcideLexiconAssigner>
+          <acide.configuration.workbench.lexiconAssigner.AcideLexiconAssigner>
+            <__description>DataLog</__description>
+            <__extensionList>
+              <string>dl</string>
+            </__extensionList>
+            <__lexiconConfiguration>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\lexicon\des.xml</__lexiconConfiguration>
+          </acide.configuration.workbench.lexiconAssigner.AcideLexiconAssigner>
+          <acide.configuration.workbench.lexiconAssigner.AcideLexiconAssigner>
+            <__description>DES</__description>
+            <__extensionList>
+              <string>sql</string>
+            </__extensionList>
+            <__lexiconConfiguration>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\lexicon\sql.xml</__lexiconConfiguration>
+          </acide.configuration.workbench.lexiconAssigner.AcideLexiconAssigner>
+          <acide.configuration.workbench.lexiconAssigner.AcideLexiconAssigner>
+            <__description>Text</__description>
+            <__extensionList>
+              <string>.txt</string>
+            </__extensionList>
+            <__lexiconConfiguration>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\lexicon\default.xml</__lexiconConfiguration>
+          </acide.configuration.workbench.lexiconAssigner.AcideLexiconAssigner>
+        </__list>
+      </__list>
+    </__list>
+  </__lexiconAssignerConfiguration>
+  <__recentFilesConfiguration>
+    <__list>
+      <string>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\license\license</string>
+      <string>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\plterm.dll</string>
+      <string>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\fib.dl</string>
+      <string>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\flights.dl</string>
+      <string>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\grammar.dl</string>
+      <string>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\aggregates.dl</string>
+      <string>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\aggregates.sql</string>
+      <string>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\bom.dl</string>
+      <string>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\family.dl</string>
+      <string>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\des\examples\family.sql</string>
+    </__list>
+  </__recentFilesConfiguration>
+  <__recentProjectsConfiguration>
+    <__list>
+      <string>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\project\prueba.acideProject</string>
+      <string>C:\Documents and Settings\Salcedonia\Mis documentos\Projecto\acide-0-8-release-2010-2011\acide\configuration\project\adsdas.acideProject</string>
+    </__list>
+  </__recentProjectsConfiguration>
+</acide.configuration.workbench.AcideWorkbenchConfiguration>

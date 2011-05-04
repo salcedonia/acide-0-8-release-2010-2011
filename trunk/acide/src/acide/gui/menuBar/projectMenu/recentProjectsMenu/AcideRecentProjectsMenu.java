@@ -37,7 +37,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
-import acide.configuration.workbench.AcideWorkbenchManager;
+import acide.configuration.project.AcideProjectConfiguration;
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
 
@@ -54,8 +55,8 @@ public class AcideRecentProjectsMenu extends JMenu {
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * ACIDE - A Configurable IDE recent projects menu clear recent projects menu
-	 * item.
+	 * ACIDE - A Configurable IDE recent projects menu clear recent projects
+	 * menu item.
 	 */
 	private JMenuItem _clearRecentprojects;
 
@@ -84,11 +85,13 @@ public class AcideRecentProjectsMenu extends JMenu {
 		removeAll();
 
 		// If the recent file list is empty
-		if (AcideWorkbenchManager.getInstance().getRecentProjects().size() == 0) {
+		if (AcideWorkbenchConfiguration.getInstance()
+				.getRecentProjectsConfiguration().getList().size() == 0) {
 
 			// Creates the menu item
-			JMenuItem recentProjectMenuItem = new JMenuItem(AcideLanguageManager
-					.getInstance().getLabels().getString("s1040"));
+			JMenuItem recentProjectMenuItem = new JMenuItem(
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s1040"));
 
 			// Disables it
 			recentProjectMenuItem.setEnabled(false);
@@ -100,8 +103,8 @@ public class AcideRecentProjectsMenu extends JMenu {
 
 			// Builds the menu with the recent file list in the workbench
 			// configuration
-			for (String filePath : AcideWorkbenchManager.getInstance()
-					.getRecentProjects()) {
+			for (String filePath : AcideWorkbenchConfiguration.getInstance()
+					.getRecentProjectsConfiguration().getList()) {
 
 				// Creates the menu item
 				JMenuItem recentProjectMenuItem = new JMenuItem(filePath);
@@ -132,8 +135,8 @@ public class AcideRecentProjectsMenu extends JMenu {
 	}
 
 	/**
-	 * ACIDE - A Configurable IDE recent projects menu recent file menu item action
-	 * listener.
+	 * ACIDE - A Configurable IDE recent projects menu recent file menu item
+	 * action listener.
 	 * 
 	 * @version 0.8
 	 * @see ActionListener
@@ -150,21 +153,52 @@ public class AcideRecentProjectsMenu extends JMenu {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Gets the recent file menu item source
-			JMenuItem recentFileMenuItem = (JMenuItem) actionEvent.getSource();
+			// Asks for saving the project configuration
+			if (AcideProjectConfiguration.getInstance()
+					.askForSavingProjectConfiguration()) {
 
-			// Gets the file path
-			String filePath = recentFileMenuItem.getText();
+				// Saves the file editor configuration
+				if (AcideMainWindow.getInstance().getFileEditorManager()
+						.askForSavingModifiedFiles()) {
 
-			// Opens the project
-			AcideMainWindow.getInstance().getMenu().getProjectMenu()
-					.openProject(filePath);
+					// Gets the recent file menu item source
+					JMenuItem recentFileMenuItem = (JMenuItem) actionEvent.getSource();
+
+					// Gets the file path
+					String filePath = recentFileMenuItem.getText();
+					
+					// Gets the number of file editors
+					int numberOfFileEditorPanels = AcideMainWindow.getInstance()
+					.getFileEditorManager()
+					.getNumberOfFileEditorPanels();
+					
+					// Closes all the files
+					for (int index = 0; index < numberOfFileEditorPanels; index++) {
+
+						// Closes the tab defined by index at the tabbed pane
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getTabbedPane().setSelectedIndex(0);
+
+						// Closes the tab defined by index at the tabbed pane
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getTabbedPane().remove(0);
+						
+						// Closes the tab defined by index at the tabbed pane
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getTabbedPane().validate();
+					}
+
+					// Open the project
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.openProject(filePath);
+				}
+			}
 		}
 	}
 
 	/**
-	 * ACIDE - A Configurable IDE recent projects menu clear list menu item action
-	 * listener.
+	 * ACIDE - A Configurable IDE recent projects menu clear list menu item
+	 * action listener.
 	 * 
 	 * @version 0.8
 	 * @see ActionListener
@@ -182,7 +216,8 @@ public class AcideRecentProjectsMenu extends JMenu {
 		public void actionPerformed(ActionEvent actionEvent) {
 
 			// Clears the recent file list
-			AcideWorkbenchManager.getInstance().getRecentProjects().clear();
+			AcideWorkbenchConfiguration.getInstance()
+					.getRecentProjectsConfiguration().getList().clear();
 
 			// Rebuilds the recent projects menu
 			build();

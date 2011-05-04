@@ -31,9 +31,9 @@ package acide.gui.menuBar.configurationMenu.lexiconMenu.gui.predetermineWindow.u
 
 import java.util.ArrayList;
 
-import acide.configuration.lexiconAssigner.AcideLexiconAssigner;
-import acide.configuration.lexiconAssigner.AcideLexiconAssignerConfigurationList;
-import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.predetermineWindow.AcidePredetermineLexiconWindow;
+import acide.configuration.workbench.lexiconAssigner.AcideLexiconAssigner;
+import acide.configuration.workbench.lexiconAssigner.AcideLexiconAssignerConfigurationList;
+import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.predetermineWindow.AcideDefaultLexiconsWindow;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -75,7 +75,7 @@ public class AcidePredetermineLexiconWindowTableModel extends DefaultTableModel 
 	/**
 	 * ACIDE - A Configurable IDE predetermine lexicon window instance.
 	 */
-	private AcidePredetermineLexiconWindow _predetermineLexiconWindow;
+	private AcideDefaultLexiconsWindow _predetermineLexiconWindow;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE predetermine lexicon
@@ -93,7 +93,7 @@ public class AcidePredetermineLexiconWindowTableModel extends DefaultTableModel 
 	 *            </p>
 	 */
 	public AcidePredetermineLexiconWindowTableModel(
-			AcidePredetermineLexiconWindow predetermineLexiconWindow) {
+			AcideDefaultLexiconsWindow predetermineLexiconWindow) {
 
 		// Stores the predetermine lexicon window instance
 		_predetermineLexiconWindow = predetermineLexiconWindow;

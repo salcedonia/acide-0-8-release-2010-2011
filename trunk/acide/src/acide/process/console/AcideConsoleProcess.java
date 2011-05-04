@@ -29,7 +29,6 @@
  */
 package acide.process.console;
 
-import acide.configuration.console.AcideConsoleConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.gui.consolePanel.AcideConsolePanel;
 import acide.gui.mainWindow.AcideMainWindow;
@@ -41,6 +40,7 @@ import javax.swing.SwingUtilities;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
+import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE console process.
@@ -77,12 +77,13 @@ public class AcideConsoleProcess extends Thread {
 
 		try {
 
-			// Gets the shell path from the console configuration
-			shellPath = AcideConsoleConfiguration.getInstance().getShellPath();
+			// Gets the shell path
+			shellPath = AcideResourceManager.getInstance().getProperty(
+					"consolePanel.shellPath");
 
-			// Gets the directory path from the console configuration
-			shellDirectory = AcideConsoleConfiguration.getInstance()
-					.getShellDirectory();
+			// Gets the shell directory
+			shellDirectory = AcideResourceManager.getInstance().getProperty(
+					"consolePanel.shellDirectory");
 
 			// Checks if both paths exist
 			File shellPathFile = new File(shellPath);
@@ -105,7 +106,7 @@ public class AcideConsoleProcess extends Thread {
 					 */
 					@Override
 					public void run() {
-						
+
 						// As it is a valid console, it is editable
 						AcideMainWindow.getInstance().getConsolePanel()
 								.getTextPane().setEditable(true);
@@ -122,13 +123,13 @@ public class AcideConsoleProcess extends Thread {
 
 				// Creates the error stream
 				AcideConsoleOutputProcess errorGobbler = new AcideConsoleOutputProcess(
-						_process.getErrorStream(), AcideMainWindow.getInstance()
-								.getConsolePanel());
+						_process.getErrorStream(), AcideMainWindow
+								.getInstance().getConsolePanel());
 
 				// Creates the output stream
 				AcideConsoleOutputProcess outputGobbler = new AcideConsoleOutputProcess(
-						_process.getInputStream(), AcideMainWindow.getInstance()
-								.getConsolePanel());
+						_process.getInputStream(), AcideMainWindow
+								.getInstance().getConsolePanel());
 
 				// Starts the error stream
 				errorGobbler.start();
@@ -148,8 +149,8 @@ public class AcideConsoleProcess extends Thread {
 					AcideLog.getLog().error(exception.getMessage());
 					exception.printStackTrace();
 				}
-			}else{
-				
+			} else {
+
 				// Sets the console default configuration
 				setDefaultConfiguration();
 			}
@@ -180,18 +181,34 @@ public class AcideConsoleProcess extends Thread {
 	 * Sets the console default configuration.
 	 */
 	private void setDefaultConfiguration() {
-		
-		// Sets the default console configuration for the shell path
-		AcideConsoleConfiguration.getInstance().setShellPath("");
 
-		// Sets the default console configuration for the shell directory
-		AcideConsoleConfiguration.getInstance().setShellDirectory("");
+		// Sets the default project configuration for the shell path
+		AcideProjectConfiguration.getInstance().setShellPath("");
 
-		// Sets the default console configuration for the exit command
-		AcideConsoleConfiguration.getInstance().setExitCommand("");
+		// Updates the resource manager
+		AcideResourceManager.getInstance().setProperty(
+				"consolePanel.shellPath", "");
 
-		// Sets the default console configuration for the echo command
-		AcideConsoleConfiguration.getInstance().setEchoCommand(false);
+		// Sets the default project configuration for the shell directory
+		AcideProjectConfiguration.getInstance().setShellDirectory("");
+
+		// Updates the resource manager
+		AcideResourceManager.getInstance().setProperty(
+				"consolePanel.shellDirectory", "");
+
+		// Sets the default project configuration for the exit command
+		AcideProjectConfiguration.getInstance().setExitCommand("");
+
+		// Updates the resource manager
+		AcideResourceManager.getInstance().setProperty(
+				"consolePanel.exitCommand", "");
+
+		// Sets the default project configuration for the echo command
+		AcideProjectConfiguration.getInstance().setIsEchoCommand(false);
+
+		// Updates the resource manager
+		AcideResourceManager.getInstance().setProperty(
+				"consolePanel.isEchoCommand", "false");
 
 		SwingUtilities.invokeLater(new Runnable() {
 			/*
@@ -203,8 +220,8 @@ public class AcideConsoleProcess extends Thread {
 			public void run() {
 
 				// Clears the console buffer
-				AcideMainWindow.getInstance().getConsolePanel()
-						.getTextPane().setText("");
+				AcideMainWindow.getInstance().getConsolePanel().getTextPane()
+						.setText("");
 
 				// Validates the changes in the console panel
 				AcideMainWindow.getInstance().getConsolePanel().validate();

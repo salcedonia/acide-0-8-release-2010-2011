@@ -29,17 +29,19 @@
  */
 package acide.main;
 
-import acide.configuration.workbench.AcideWorkbenchManager;
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.splashScreen.AcideSplashScreenWindow;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -52,7 +54,7 @@ import acide.resources.AcideResourceManager;
  * 
  * @version 0.8
  */
-public class AcideMain{
+public class AcideMain {
 
 	/**
 	 * Creation message used for specifying the expected message to determine if
@@ -132,7 +134,7 @@ public class AcideMain{
 
 				// If it is the expected message, then the application is
 				// already being executed
-				if (CREATION_MESSAGE.equals(message)){
+				if (CREATION_MESSAGE.equals(message)) {
 
 					// Displays an error message
 					JOptionPane.showMessageDialog(null, AcideLanguageManager
@@ -140,7 +142,7 @@ public class AcideMain{
 							AcideLanguageManager.getInstance().getLabels()
 									.getString("s1023"),
 							JOptionPane.WARNING_MESSAGE);
-					
+
 					// Exits the application
 					System.exit(0);
 				}
@@ -183,6 +185,7 @@ public class AcideMain{
 
 				// Executes the application
 				executeApplication();
+
 			}
 		}.start();
 
@@ -221,31 +224,63 @@ public class AcideMain{
 	 */
 	private void executeApplication() {
 
-		// Shows the splash screen
-		AcideSplashScreenWindow.getInstance().showSplashScreenWindow();
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				/*
+				 * (non-Javadoc)
+				 * 
+				 * @see java.lang.Runnable#run()
+				 */
+				@Override
+				public void run() {
 
-		// Updates the log
-		AcideLog.getLog().info(
-				AcideLanguageManager.getInstance().getLabels()
-						.getString("s555"));
+					// Shows the splash screen
+					AcideSplashScreenWindow.getInstance()
+							.showSplashScreenWindow();
+				}
+			});
+		} catch (InterruptedException exception) {
+			
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+			
+		} catch (InvocationTargetException exception) {
+			
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
 
-		// Updates the splash screen window
-		AcideSplashScreenWindow.getInstance().setProgressBar(
-				12,
-				AcideLanguageManager.getInstance().getLabels()
-						.getString("s1027"));
+		SwingUtilities.invokeLater(new Runnable() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see java.lang.Runnable#run()
+			 */
+			@Override
+			public void run() {
+				
+				// Updates the log
+				AcideLog.getLog().info(
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s555"));
 
-		// Loads the ACIDE - A Configurable IDE workbench configuration
-		AcideWorkbenchManager.getInstance()
-				.load(
-						AcideWorkbenchManager.getInstance()
-								.getConfigurationFileContent());
+				// Updates the log
+				AcideLog.getLog().info(
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s1027"));
 
-		// Closes the splash screen
-		AcideSplashScreenWindow.getInstance().closeSplashScreenWindow();
+				// Loads the ACIDE - A Configurable IDE workbench configuration
+				AcideWorkbenchConfiguration.getInstance().load();
 
-		// Shows the main window
-		AcideMainWindow.getInstance().showAcideMainWindow();
+				// Closes the splash screen
+				AcideSplashScreenWindow.getInstance().closeSplashScreenWindow();
+
+				// Shows the main window
+				AcideMainWindow.getInstance().showAcideMainWindow();
+			}
+		});
 	}
 
 	/**
@@ -314,16 +349,16 @@ public class AcideMain{
 	 * configuration and builds the main window of the application.
 	 * </p>
 	 * <p>
-	 * Also it is listening for new connections to the port 7777 to determine if 
+	 * Also it is listening for new connections to the port 7777 to determine if
 	 * there is a running instance at that time.
 	 * </p>
-	 * Runs the application in the event dispatching thread to make the access to
-	 * the swing components thread safe.
+	 * Runs the application in the event dispatching thread to make the access
+	 * to the swing components thread safe.
 	 * 
 	 * @param args
 	 *            entry arguments for the application.
 	 */
-	public static void main(String[] args) {		
+	public static void main(String[] args) {
 		new AcideMain();
 	}
 }

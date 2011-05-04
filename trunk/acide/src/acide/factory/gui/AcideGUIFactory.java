@@ -30,23 +30,22 @@
 package acide.factory.gui;
 
 import acide.gui.consolePanel.AcideConsolePanel;
-import acide.gui.consolePanel.utils.AcideConsoleDisplayOptionsWindow;
 import acide.gui.explorerPanel.AcideExplorerPanel;
 import acide.gui.fileEditor.fileEditorManager.AcideFileEditorManager;
-import acide.gui.fileEditor.fileEditorPanel.utils.AcideFileEditorDisplayOptionsWindow;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.AcideMenuBar;
+import acide.gui.menuBar.configurationMenu.consoleMenu.gui.AcideConsoleDisplayOptionsWindow;
 import acide.gui.menuBar.configurationMenu.consoleMenu.gui.AcideExternalCommandConfigurationWindow;
 import acide.gui.menuBar.configurationMenu.consoleMenu.gui.AcideConsoleConfigurationWindow;
+import acide.gui.menuBar.configurationMenu.fileEditor.gui.AcideFileEditorDisplayOptionsWindow;
 import acide.gui.menuBar.configurationMenu.grammarMenu.gui.AcideGrammarConfigurationWindow;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.configurationWindow.AcideLexiconConfigurationWindow;
-import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.predetermineWindow.AcidePredetermineLexiconWindow;
+import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.predetermineWindow.AcideDefaultLexiconsWindow;
 import acide.gui.menuBar.configurationMenu.menuMenu.gui.AcideMenuConfigurationWindow;
 import acide.gui.menuBar.fileMenu.gui.AcidePrintConfigurationWindow;
 import acide.gui.menuBar.helpMenu.gui.AcideAboutUsWindow;
-import acide.gui.menuBar.projectMenu.gui.AcideCompilerConfigurationWindow;
-import acide.gui.menuBar.projectMenu.gui.AcideExecutionConfigurationWindow;
-import acide.gui.menuBar.projectMenu.gui.AcideNewProjectConfigurationWindow;
+import acide.gui.menuBar.projectMenu.gui.compilerWindow.AcideCompilerConfigurationWindow;
+import acide.gui.menuBar.projectMenu.gui.executionWindow.AcideExecutionConfigurationWindow;
 import acide.gui.menuBar.viewMenu.utils.AcideLogTab;
 import acide.gui.statusBarPanel.AcideStatusBar;
 import acide.gui.toolBarPanel.AcideToolBarPanel;
@@ -175,13 +174,13 @@ public class AcideGUIFactory {
 	}
 
 	/**
-	 * Builds the ACIDE - A Configurable IDE predetermine lexicon window.
+	 * Builds the ACIDE - A Configurable IDE default lexicons window.
 	 * 
-	 * @return the ACIDE - A Configurable IDE predetermine lexicon window.
-	 * @see AcidePredetermineLexiconWindow
+	 * @return the ACIDE - A Configurable IDE default lexicons window.
+	 * @see AcideDefaultLexiconsWindow
 	 */
-	public AcidePredetermineLexiconWindow buildAcidePredetermineLexiconWindow() {
-		return new AcidePredetermineLexiconWindow();
+	public AcideDefaultLexiconsWindow buildAcideDefaultLexiconsWindow() {
+		return new AcideDefaultLexiconsWindow();
 	}
 	
 	/**
@@ -203,16 +202,6 @@ public class AcideGUIFactory {
 	 */
 	public AcideLogTab buildAcideLogTab() {
 		return new AcideLogTab();
-	}
-
-	/**
-	 * Builds the ACIDE - A Configurable IDE new project configuration window.
-	 * 
-	 * @return the ACIDE - A Configurable IDE new project configuration window.
-	 * @see AcideNewProjectConfigurationWindow
-	 */
-	public AcideNewProjectConfigurationWindow buildNewProjectConfigurationWindow() {
-		return new AcideNewProjectConfigurationWindow();
 	}
 
 	/**

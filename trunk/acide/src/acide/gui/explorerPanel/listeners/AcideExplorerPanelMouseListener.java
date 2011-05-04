@@ -31,8 +31,8 @@ package acide.gui.explorerPanel.listeners;
 
 import acide.configuration.grammar.AcideGrammarConfiguration;
 import acide.configuration.lexicon.AcideLexiconConfiguration;
-import acide.configuration.lexiconAssigner.AcideLexiconAssignerConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.files.AcideFileManager;
 import acide.files.project.AcideProjectFile;
 import acide.gui.mainWindow.AcideMainWindow;
@@ -164,12 +164,15 @@ public class AcideExplorerPanelMouseListener extends MouseAdapter {
 
 						// Searches for the file into the project files list
 						int fileProjectIndex = AcideProjectConfiguration
-								.getInstance().getIndexOfFile(currentProjectFile.getAbsolutePath());
+								.getInstance().getIndexOfFile(
+										currentProjectFile.getAbsolutePath());
 
 						// Gets the predefined lexicon configuration
-						AcideLexiconConfiguration lexiconConfiguration = AcideLexiconAssignerConfiguration
+						AcideLexiconConfiguration lexiconConfiguration = AcideWorkbenchConfiguration
 								.getInstance()
-								.getPredifinedLexiconConfiguration(currentProjectFile.getAbsolutePath());
+								.getLexiconAssignerConfiguration()
+								.getPredifinedLexiconConfiguration(
+										currentProjectFile.getAbsolutePath());
 
 						// Creates the current grammar configuration
 						AcideGrammarConfiguration currentGrammarConfiguration = new AcideGrammarConfiguration();
@@ -205,10 +208,12 @@ public class AcideExplorerPanelMouseListener extends MouseAdapter {
 						// configuration
 						AcideProjectConfiguration.getInstance()
 								.getFileAt(fileProjectIndex).setIsOpened(true);
-
-						// The project has been modified
-						AcideProjectConfiguration.getInstance().setIsModified(
-								true);
+						
+						// If it is not the default project
+						if(!AcideProjectConfiguration.getInstance().isDefaultProject())
+							
+							// The project configuration has been modified
+							AcideProjectConfiguration.getInstance().setIsModified(true);
 					}
 				}
 			} else {

@@ -377,6 +377,60 @@ public class AcideGrammarMenu extends JMenu {
 	}
 
 	/**
+	 * Enables the ACIDE - A Configurable IDE grammar menu.
+	 */
+	public void enableMenu() {
+
+		// Enables the new grammar menu item
+		_newGrammarMenuItem.setEnabled(true);
+		
+		// Enables the load grammar menu item
+		_loadGrammarMenuItem.setEnabled(true);
+		
+		// Enables the modify grammar menu item
+		_modifyGrammarMenuItem.setEnabled(true);
+		
+		// Enables the save grammar menu item
+		_saveGrammarMenuItem.setEnabled(true);
+		
+		// Enables the save grammar as menu item
+		_saveGrammarAsMenuItem.setEnabled(true);
+		
+		// Enables the set paths menu item
+		_setPathsMenuItem.setEnabled(true);
+		
+		// Enables the auto analysis check box menu item
+		_autoAnalysisCheckBoxMenuItem.setEnabled(true);
+	}
+	
+	/**
+	 * Disables the ACIDE - A Configurable IDE grammar menu.
+	 */
+	public void disableMenu() {
+
+		// Disables the new grammar menu item
+		_newGrammarMenuItem.setEnabled(false);
+		
+		// Disables the load grammar menu item
+		_loadGrammarMenuItem.setEnabled(false);
+		
+		// Disables the modify grammar menu item
+		_modifyGrammarMenuItem.setEnabled(false);
+		
+		// Disables the save grammar menu item
+		_saveGrammarMenuItem.setEnabled(false);
+		
+		// Disables the save grammar as menu item
+		_saveGrammarAsMenuItem.setEnabled(false);
+		
+		// Enables the set paths menu item
+		_setPathsMenuItem.setEnabled(true);
+		
+		// Enables the auto analysis check box menu item
+		_autoAnalysisCheckBoxMenuItem.setEnabled(true);
+	}
+	
+	/**
 	 * Returns the ACIDE - A Configurable IDE grammar menu new grammar menu
 	 * item.
 	 * 

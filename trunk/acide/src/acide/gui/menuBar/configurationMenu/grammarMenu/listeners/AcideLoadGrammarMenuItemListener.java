@@ -29,18 +29,15 @@
  */
 package acide.gui.menuBar.configurationMenu.grammarMenu.listeners;
 
-import acide.configuration.grammar.AcideGrammarConfiguration;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import acide.configuration.project.AcideProjectConfiguration;
-import acide.files.text.AcideTextFileExtensionFilterManager;
+import acide.files.AcideFileExtensionFilterManager;
+import acide.files.AcideFileManager;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-
-import javax.swing.JFileChooser;
 
 /**																
  * ACIDE - A Configurable IDE load grammar menu item listener.
@@ -56,33 +53,23 @@ public class AcideLoadGrammarMenuItemListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Creates and configures the file chooser
-		JFileChooser fileChooser = new JFileChooser();
+		// Selects the extension for the project
+		String[] extensions = new String[] { "jar" };
 
-		// Creates the file extension filter
-		AcideTextFileExtensionFilterManager filter = new AcideTextFileExtensionFilterManager(
-				AcideLanguageManager.getInstance().getLabels()
-						.getString("s270"));
+		// Adds the filter to the file chooser
+		AcideFileManager
+				.getInstance()
+				.getFileChooser()
+				.addChoosableFileFilter(
+						new AcideFileExtensionFilterManager(extensions,
+								AcideLanguageManager.getInstance()
+										.getLabels().getString("s270")));
+		
+		// Asks the the file to the user
+		String absolutePath = AcideFileManager.getInstance()
+				.askForOpenFile(true);
 
-		// Adds the extension ".jar"
-		filter.addExtension("jar");
-
-		// Sets the filter
-		fileChooser.setFileFilter(filter);
-
-		// Sets the current directory to the grammars
-		fileChooser.setCurrentDirectory(new File(
-				AcideGrammarConfiguration.DEFAULT_PATH));
-
-		// Asks to the user
-		int returnValue = fileChooser.showOpenDialog(null);
-
-		// If OK
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-
-			// Gets the absolute path
-			String absolutePath = fileChooser.getSelectedFile()
-					.getAbsolutePath();
+		if (absolutePath != null) {
 
 			// Updates the current grammar configuration path
 			AcideMainWindow.getInstance().getFileEditorManager()
@@ -122,12 +109,6 @@ public class AcideLoadGrammarMenuItemListener implements ActionListener{
 				// The project has been modified
 				AcideProjectConfiguration.getInstance().setIsModified(true);
 			}
-
-		} else if (returnValue == JFileChooser.CANCEL_OPTION) {
-			// Updates the log
-			AcideLog.getLog().info(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s242"));
 		}
 	}
 }

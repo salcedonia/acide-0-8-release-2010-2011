@@ -41,6 +41,10 @@ import java.util.regex.Matcher;
 public class AcideSearchEngine {
 
 	/**
+	 * ACIDE - A Configurable IDE search engine unique class instance.
+	 */
+	private static AcideSearchEngine _instance;
+	/**
 	 * Pattern for regular expressions sequences.
 	 */
 	private Pattern _pattern;
@@ -70,13 +74,36 @@ public class AcideSearchEngine {
 	private static boolean _isCycle;
 
 	/**
+	 * Returns the ACIDE - A Configurable IDE search engine unique class
+	 * instance.
+	 * 
+	 * @return the ACIDE - A Configurable IDE search engine unique class
+	 *         instance.
+	 */
+	public static AcideSearchEngine getInstance() {
+		if (_instance == null)
+			_instance = new AcideSearchEngine();
+		return _instance;
+	}
+
+	/**
 	 * Creates a new ACIDE - A Configurable IDE search engine.
 	 */
 	public AcideSearchEngine() {
+		
+		// Initializes the regular expression
 		_regularExpresion = " ";
+		
+		// Creates the regular expression list
 		_regularExpresionList = new ArrayList<String>();
+		
+		// Initializes the counter
 		_counter = 0;
+		
+		// Initializes the temporal position
 		_temporalPosition = -2;
+		
+		// There is no cycle yet
 		_isCycle = false;
 	}
 
@@ -451,8 +478,8 @@ public class AcideSearchEngine {
 	}
 
 	/**
-	 * Search for the wanted string in the text forwards from the
-	 * current caret position.
+	 * Search for the wanted string in the text forwards from the current caret
+	 * position.
 	 * 
 	 * @param currentCarerPosition
 	 *            current caret position.

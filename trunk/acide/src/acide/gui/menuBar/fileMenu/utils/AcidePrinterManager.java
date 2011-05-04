@@ -36,15 +36,20 @@ import java.text.AttributedString;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.swing.text.JTextComponent;
 
+import acide.gui.mainWindow.AcideMainWindow;
 import acide.log.AcideLog;
 
-/**																
- * ACIDE - A Configurable IDE printer manager.											
- *					
- * @version 0.8																														
+/**
+ * ACIDE - A Configurable IDE printer manager.
+ * 
+ * @version 0.8
  */
 public class AcidePrinterManager {
 
+	/**
+	 * ACIDE - A Configurable IDE printer manager unique class instance.
+	 */
+	private static AcidePrinterManager _instance;
 	/**
 	 * ACIDE - A Configurable IDE printer manager printer job.
 	 */
@@ -75,16 +80,33 @@ public class AcidePrinterManager {
 	private AcidePrinterText _printerText;
 
 	/**
-	 * Creates a new ACIDE - A Configurable IDE printer manager.
+	 * Returns the ACIDE - A Configurable IDE printer manager unique class
+	 * instance.
 	 * 
-	 * @param component text component.
-	 * @param showPage show page flag.
-	 * @param showDate show date flag.
+	 * @return the ACIDE - A Configurable IDE printer manager unique class
+	 *         instance.
 	 */
-	public AcidePrinterManager(JTextComponent component, boolean showPage, boolean showDate) {
-		_printedTextComponent = component;
-		_showPage = showPage;
-		_showDate = showDate;
+	public static AcidePrinterManager getInstance() {
+		if (_instance == null)
+			_instance = new AcidePrinterManager();
+		return _instance;
+	}
+
+	/**
+	 * Creates a new ACIDE - A Configurable IDE printer manager.
+	 */
+	public AcidePrinterManager() {
+
+		// Sets the printed text component
+		_printedTextComponent = AcideMainWindow.getInstance()
+				.getFileEditorManager().getSelectedFileEditorPanel()
+				.getActiveTextEditionArea();
+
+		// Sets the show page
+		_showPage = false;
+
+		// Sets the show date
+		_showDate = false;
 	}
 
 	/**
@@ -99,7 +121,8 @@ public class AcidePrinterManager {
 	/**
 	 * Sets a new value to the ACIDE - A Configurable IDE printer manager style.
 	 * 
-	 * @param style new value to set.
+	 * @param style
+	 *            new value to set.
 	 */
 	public void setStyle(AttributedString style) {
 		_style = style;
@@ -110,19 +133,22 @@ public class AcidePrinterManager {
 	 */
 	public void configurePage() {
 
+		// Creates the style
 		_style = new AttributedString(_printedTextComponent.getText());
 		_pageFormat = null;
-		
+
 		// Gets the PrinterJob object
 		_printerJob = PrinterJob.getPrinterJob();
 		new HashPrintRequestAttributeSet();
-		
+
 		// Gets the default page format, then allows the user to modify it
 		_pageFormat = _printerJob.pageDialog(_printerJob.defaultPage());
-		
-		// Tells the PrinterJob what to print
-		_printerText = new AcidePrinterText(_printedTextComponent, _pageFormat, _showPage, _showDate);
 
+		// Tells the PrinterJob what to print
+		_printerText = new AcidePrinterText(_printedTextComponent, _pageFormat,
+				_showPage, _showDate);
+
+		// Sets the printer job as printable
 		_printerJob.setPrintable(_printerText, _pageFormat);
 	}
 
@@ -130,11 +156,13 @@ public class AcidePrinterManager {
 	 * Prints the page.
 	 */
 	public void print() {
-		
-		try {	
+
+		try {
+
+			// Prints the job
 			_printerJob.print();
 		} catch (PrinterException exception) {
-			
+
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
 			exception.printStackTrace();
@@ -142,19 +170,23 @@ public class AcidePrinterManager {
 	}
 
 	/**
-	 * Sets a new value to the ACIDE - A Configurable IDE printer manager show date flag.
+	 * Sets a new value to the ACIDE - A Configurable IDE printer manager show
+	 * date flag.
 	 * 
-	 * @param showDate new value to set.
+	 * @param showDate
+	 *            new value to set.
 	 */
 	public void setDate(boolean showDate) {
 		_showDate = showDate;
 		_printerText.setDate(_showDate);
 	}
-	
+
 	/**
-	 * Sets a new value to the ACIDE - A Configurable IDE printer manager show page flag.
+	 * Sets a new value to the ACIDE - A Configurable IDE printer manager show
+	 * page flag.
 	 * 
-	 * @param showPage new value to set.
+	 * @param showPage
+	 *            new value to set.
 	 */
 	public void setShowPage(boolean showPage) {
 		_showPage = showPage;

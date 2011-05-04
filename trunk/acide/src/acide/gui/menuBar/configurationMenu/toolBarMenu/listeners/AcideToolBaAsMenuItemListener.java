@@ -31,18 +31,17 @@ package acide.gui.menuBar.configurationMenu.toolBarMenu.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import acide.files.AcideFileExtensionFilterManager;
+import acide.files.AcideFileManager;
+import acide.files.bytes.AcideByteFileManager;
+import acide.gui.mainWindow.AcideMainWindow;
+import acide.gui.menuBar.configurationMenu.toolBarMenu.gui.AcideToolBarConfigurationWindow;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 import acide.resources.AcideResourceManager;
-import acide.files.bytes.AcideByteFileManager;
-import acide.files.text.AcideTextFileExtensionFilterManager;
-import acide.gui.mainWindow.AcideMainWindow;
-import acide.gui.menuBar.configurationMenu.toolBarMenu.gui.AcideToolBarConfigurationWindow;
 
 /**
  * ACIDE - A Configurable IDE tool bar menu save as tool bar listener.
@@ -63,44 +62,34 @@ public class AcideToolBaAsMenuItemListener implements ActionListener {
 
 		try {
 
-			// Gets the ACIDE - A Configurable IDE current tool bar
-			// configuration
-			String currentToolBarConfiguration = AcideResourceManager
-					.getInstance().getProperty("currentToolBarConfiguration");
+			// Selects the extension for the project
+			String[] extensions = new String[] { "toolbarConfig" };
 
-			// Creates and configures the file chooser
-			JFileChooser fileChooser = new JFileChooser();
+			// Adds the filter to the file chooser
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.addChoosableFileFilter(
+							new AcideFileExtensionFilterManager(extensions,
+									AcideLanguageManager.getInstance()
+											.getLabels().getString("s158")));
 
-			// Creates the file extension filter
-			AcideTextFileExtensionFilterManager filter = new AcideTextFileExtensionFilterManager(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s158"));
+			// Asks the the file to the user
+			String absolutePath = AcideFileManager.getInstance()
+					.askForOpenFile("./configuration/toolbar/");
 
-			// Adds the extension ".TBcfg"
-			filter.addExtension("TBcfg");
-
-			// Sets the file filter
-			fileChooser.setFileFilter(filter);
-
-			// Sets the current directory to the tool bar configuration folder
-			fileChooser
-					.setCurrentDirectory(new File("./configuration/toolbar/"));
-
-			// Asks for saving
-			int returnValue = fileChooser.showSaveDialog(fileChooser);
-
-			// If it is OK
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-
-				// Gets the absolute path
-				String absolutePath = fileChooser.getSelectedFile()
-						.getAbsolutePath();
+			if (absolutePath != null) {
 
 				// If it does not contains the valid extension
-				if (!absolutePath.endsWith(".TBcfg"))
+				if (!absolutePath.endsWith(".toolbarConfig"))
 
 					// Adds it
-					absolutePath += ".TBcfg";
+					absolutePath += ".toolbarConfig";
+
+				// Gets the ACIDE - A Configurable IDE current tool bar
+				// configuration
+				String currentToolBarConfiguration = AcideResourceManager
+						.getInstance().getProperty("currentToolBarConfiguration");
 
 				// Copies the files
 				AcideByteFileManager.getInstance().copy(
@@ -126,19 +115,6 @@ public class AcideToolBaAsMenuItemListener implements ActionListener {
 								+ absolutePath
 								+ AcideLanguageManager.getInstance()
 										.getLabels().getString("s901"));
-			} else {
-
-				// If it is CANCEL
-				if (returnValue == JFileChooser.CANCEL_OPTION) {
-
-					// Cancels selection
-					fileChooser.cancelSelection();
-
-					// Updates the log
-					AcideLog.getLog().info(
-							AcideLanguageManager.getInstance().getLabels()
-									.getString("s902"));
-				}
 			}
 		} catch (Exception exception) {
 

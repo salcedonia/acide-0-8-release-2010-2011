@@ -32,8 +32,6 @@ package acide.gui.menuBar.configurationMenu.lexiconMenu.listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JOptionPane;
-
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
@@ -75,21 +73,10 @@ public class AcideSaveLexiconMenuItemListener implements ActionListener {
 			}
 
 			// Saves it
-			boolean result = AcideMainWindow.getInstance()
-					.getFileEditorManager().getSelectedFileEditorPanel()
-					.getLexiconConfiguration().save(name, false);
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().getLexiconConfiguration()
+					.save(name, false);
 
-			// If it could save it
-			if (result)
-				JOptionPane.showMessageDialog(null, AcideLanguageManager
-						.getInstance().getLabels().getString("s451"),
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s450"), 1);
-			else
-				JOptionPane.showMessageDialog(null, AcideLanguageManager
-						.getInstance().getLabels().getString("s452"),
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s450"), 0);
 		} else {
 
 			// Updates the log

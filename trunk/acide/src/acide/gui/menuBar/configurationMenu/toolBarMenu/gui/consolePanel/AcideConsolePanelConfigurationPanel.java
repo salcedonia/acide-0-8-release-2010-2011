@@ -39,10 +39,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -55,6 +53,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import acide.configuration.toolBar.consolePanelToolBar.AcideConsolePanelToolBarButtonConf;
+import acide.files.AcideFileManager;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.gui.consolePanel.utils.AcideComboBoxTableCellEditor;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.gui.consolePanel.utils.AcideComboBoxTableCellRenderer;
 import acide.gui.menuBar.configurationMenu.toolBarMenu.gui.consolePanel.utils.AcideConsolePanelConfigurationPanelTableModel;
@@ -356,15 +355,23 @@ public class AcideConsolePanelConfigurationPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 
-				JFileChooser _fileChooser = new JFileChooser(new File("."));
+				// Removes the filter
+				AcideFileManager
+						.getInstance()
+						.getFileChooser()
+						.removeChoosableFileFilter(
+								AcideFileManager.getInstance().getFileChooser()
+										.getFileFilter());
 
-				// Shows the open file dialog
-				if (_fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				// Ask the path to the user
+				String absolutePath = AcideFileManager.getInstance()
+						.askForOpenFile(true);
 
-					File file = _fileChooser.getSelectedFile();
-					_table.getModel().setValueAt(file.getAbsolutePath(),
-							rowIndex, columnIndex);
-				}
+				if (absolutePath != null)
+
+					// Updates the table model with the absolute path
+					_table.getModel().setValueAt(absolutePath, rowIndex,
+							columnIndex);
 			}
 		});
 		contextMenu.add(loadImageMenuItem);

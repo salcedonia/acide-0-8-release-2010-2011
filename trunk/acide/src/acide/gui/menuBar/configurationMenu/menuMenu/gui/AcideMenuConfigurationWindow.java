@@ -672,9 +672,9 @@ public class AcideMenuConfigurationWindow extends JFrame {
 			// Picks the new name
 			String newName = "";
 			if (_forModifying)
-				newName = "./configuration/menu/lastModified.menuCfg";
+				newName = "./configuration/menu/lastModified.menuConfig";
 			else
-				newName = "./configuration/menu/newMenu.menuCfg";
+				newName = "./configuration/menu/newMenu.menuConfig";
 
 			// Saves the new configuration
 			AcideMenuConfiguration.getInstance().saveMenuConfigurationFile(
@@ -690,9 +690,9 @@ public class AcideMenuConfigurationWindow extends JFrame {
 				if (_changesAreSaved) {
 
 					if (!currentMenuConfiguration
-							.endsWith("lastModified.menuCfg")
+							.endsWith("lastModified.menuConfig")
 							&& !currentMenuConfiguration
-									.endsWith("newMenu.menuCfg")) {
+									.endsWith("newMenu.menuConfig")) {
 
 						// Updates the the ACIDE - A Configurable IDE previous
 						// menu

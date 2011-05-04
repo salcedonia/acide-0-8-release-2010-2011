@@ -38,12 +38,10 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
 import acide.configuration.menu.AcideMenuConfiguration;
-import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideLoadLexiconMenuItemListener;
+import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideDocumentLexiconMenuItemListener;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideModifyLexiconMenuItemListener;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideNewLexiconMenuItemListener;
-import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcidePredetermineLexiconMenuItemListener;
-import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideSaveAsLexiconMenuItemListener;
-import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideSaveLexiconMenuItemListener;
+import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideDefaultLexiconsMenuItemListener;
 import acide.language.AcideLanguageManager;
 
 /**
@@ -67,51 +65,35 @@ public class AcideLexiconMenu extends JMenu {
 	 */
 	public static final String MODIFY_LEXICON_NAME = "Modify Lexicon";
 	/**
-	 * ACIDE - A Configurable IDE lexicon menu save lexicon menu item name.
+	 * ACIDE - A Configurable IDE lexicon menu document lexicon menu item name.
 	 */
-	public static final String SAVE_LEXICON_NAME = "Save Lexicon";
+	public static final String DOCUMENT_LEXICON_NAME = "Document Lexicon";
 	/**
-	 * ACIDE - A Configurable IDE lexicon menu load lexicon menu item name.
-	 */
-	public static final String LOAD_LEXICON_NAME = "Load Lexicon";
-	/**
-	 * ACIDE - A Configurable IDE lexicon menu save lexicon as menu item name.
-	 */
-	public static final String SAVE_LEXICON_AS_NAME = "Save Lexicon As";
-	/**
-	 * ACIDE - A Configurable IDE lexicon menu predetermine lexicon menu item
+	 * ACIDE - A Configurable IDE lexicon menu default lexicons menu item
 	 * name.
 	 */
-	public static final String PREDETERMINE_LEXICON_NAME = "Predetermine Lexicon";
+	public static final String DEFAULT_LEXICONS_NAME = "Default Lexicons";
 	/**
 	 * ACIDE - A Configurable IDE lexicon menu new lexicon menu item.
 	 */
 	private JMenuItem _newLexiconMenuItem;
 	/**
-	 * ACIDE - A Configurable IDE lexicon menu load lexicon menu item.
+	 * ACIDE - A Configurable IDE lexicon menu document lexicon menu item.
 	 */
-	private JMenuItem _loadLexiconMenuItem;
+	private JMenuItem _documentLexiconMenuItem;
 	/**
 	 * ACIDE - A Configurable IDE lexicon menu modify lexicon menu item.
 	 */
 	private JMenuItem _modifyLexiconMenuItem;
 	/**
-	 * ACIDE - A Configurable IDE lexicon menu save lexicon menu item.
-	 */
-	private JMenuItem _saveLexiconMenuItem;
-	/**
-	 * ACIDE - A Configurable IDE lexicon menu save lexicon as menu item.
-	 */
-	private JMenuItem _saveLexiconAsMenuItem;
-	/**
 	 * ACIDE - A Configurable IDE lexicon menu save lexicon as Predetermine
 	 * lexicon separator.
 	 */
-	private JSeparator _saveLexiconAsPredetermineLexiconSeparator;
+	private JSeparator _separator;
 	/**
-	 * ACIDE - A Configurable IDE lexicon menu predetermine lexicon menu item.
+	 * ACIDE - A Configurable IDE lexicon menu default lexicons menu item.
 	 */
-	private JMenuItem _predetermineLexiconMenuItem;
+	private JMenuItem _defaultLexiconsMenuItem;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE lexicon menu.
@@ -136,23 +118,17 @@ public class AcideLexiconMenu extends JMenu {
 		// Adds the new lexicon menu item to the menu
 		add(_newLexiconMenuItem);
 
-		// Adds the load lexicon menu item to the menu
-		add(_loadLexiconMenuItem);
+		// Adds the document lexicon menu item to the menu
+		add(_documentLexiconMenuItem);
 
 		// Adds the modify lexicon menu item to the menu
 		add(_modifyLexiconMenuItem);
 
-		// Adds the save lexicon menu item to the menu
-		add(_saveLexiconMenuItem);
+		// Adds the modify lexicon default lexicons separator
+		add(_separator);
 
-		// Adds the save lexicon as menu item to the menu
-		add(_saveLexiconAsMenuItem);
-
-		// Adds the save lexicon as predetermine lexicon separator
-		add(_saveLexiconAsPredetermineLexiconSeparator);
-
-		// Adds the predetermine lexicon menu item
-		add(_predetermineLexiconMenuItem);
+		// Adds the default lexicons menu item
+		add(_defaultLexiconsMenuItem);
 	}
 
 	/**
@@ -166,11 +142,11 @@ public class AcideLexiconMenu extends JMenu {
 		// Sets the new lexicon menu item name
 		_newLexiconMenuItem.setName(NEW_LEXICON_NAME);
 
-		// Creates the load lexicon menu item
-		_loadLexiconMenuItem = new JMenuItem();
+		// Creates the document lexicon menu item
+		_documentLexiconMenuItem = new JMenuItem();
 
-		// Sets the load lexicon menu item name
-		_loadLexiconMenuItem.setName(LOAD_LEXICON_NAME);
+		// Sets the document lexicon menu item name
+		_documentLexiconMenuItem.setName(DOCUMENT_LEXICON_NAME);
 
 		// Creates the modify lexicon menu item
 		_modifyLexiconMenuItem = new JMenuItem();
@@ -178,26 +154,14 @@ public class AcideLexiconMenu extends JMenu {
 		// Sets the modify lexicon menu item name
 		_modifyLexiconMenuItem.setName(MODIFY_LEXICON_NAME);
 
-		// Creates the save lexicon menu item
-		_saveLexiconMenuItem = new JMenuItem();
+		// Creates the modify lexicon default lexicons separator
+		_separator = new JSeparator();
 
-		// Sets the save lexicon menu item name
-		_saveLexiconMenuItem.setName(SAVE_LEXICON_NAME);
+		// Creates the default lexicons menu item
+		_defaultLexiconsMenuItem = new JMenuItem();
 
-		// Creates the save lexicon as menu item
-		_saveLexiconAsMenuItem = new JMenuItem();
-
-		// Sets the save lexicon as menu item name
-		_saveLexiconAsMenuItem.setName(SAVE_LEXICON_AS_NAME);
-
-		// Creates the save lexicon as predetermine lexicon separator
-		_saveLexiconAsPredetermineLexiconSeparator = new JSeparator();
-
-		// Creates the predetermine lexicon menu item
-		_predetermineLexiconMenuItem = new JMenuItem();
-
-		// Sets the predetermine lexicon menu item name
-		_predetermineLexiconMenuItem.setName(PREDETERMINE_LEXICON_NAME);
+		// Sets the default lexicons menu item name
+		_defaultLexiconsMenuItem.setName(DEFAULT_LEXICONS_NAME);
 	}
 
 	/**
@@ -210,12 +174,12 @@ public class AcideLexiconMenu extends JMenu {
 		_newLexiconMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s249"));
 
-		// Sets the load lexicon menu item text
-		_loadLexiconMenuItem.setText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s35"));
+		// Sets the document lexicon menu item text
+		_documentLexiconMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s1093"));
 
-		// Sets the load lexicon menu item accelerator
-		_loadLexiconMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+		// Sets the document lexicon menu item accelerator
+		_documentLexiconMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_L, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 
 		// Sets the modify lexicon menu item text
@@ -226,16 +190,8 @@ public class AcideLexiconMenu extends JMenu {
 		_modifyLexiconMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_X, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 
-		// Sets the save lexicon menu item text
-		_saveLexiconMenuItem.setText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s250"));
-
-		// Sets the save lexicon as menu item text
-		_saveLexiconAsMenuItem.setText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s286"));
-
-		// Sets the predetermine lexicon menu item text
-		_predetermineLexiconMenuItem.setText(AcideLanguageManager.getInstance()
+		// Sets the default lexicons menu item text
+		_defaultLexiconsMenuItem.setText(AcideLanguageManager.getInstance()
 				.getLabels().getString("s1080"));
 	}
 
@@ -252,21 +208,13 @@ public class AcideLexiconMenu extends JMenu {
 		_modifyLexiconMenuItem
 				.addActionListener(new AcideModifyLexiconMenuItemListener());
 
-		// Sets the load lexicon menu item action listener
-		_loadLexiconMenuItem
-				.addActionListener(new AcideLoadLexiconMenuItemListener());
+		// Sets the document lexicon menu item action listener
+		_documentLexiconMenuItem
+				.addActionListener(new AcideDocumentLexiconMenuItemListener());
 
-		// Sets the save lexicon menu item action listener
-		_saveLexiconMenuItem
-				.addActionListener(new AcideSaveLexiconMenuItemListener());
-
-		// Sets the save lexicon as menu item action listener
-		_saveLexiconAsMenuItem
-				.addActionListener(new AcideSaveAsLexiconMenuItemListener());
-
-		// Sets the predetermine lexicon menu item action listener
-		_predetermineLexiconMenuItem
-				.addActionListener(new AcidePredetermineLexiconMenuItemListener());
+		// Sets the default lexicons menu item action listener
+		_defaultLexiconsMenuItem
+				.addActionListener(new AcideDefaultLexiconsMenuItemListener());
 	}
 
 	/**
@@ -278,43 +226,67 @@ public class AcideLexiconMenu extends JMenu {
 		_newLexiconMenuItem.setVisible(AcideMenuConfiguration.getInstance()
 				.getIsDisplayed(NEW_LEXICON_NAME));
 
-		// Sets the load lexicon menu item to visible or not visible
-		_loadLexiconMenuItem.setVisible(AcideMenuConfiguration.getInstance()
-				.getIsDisplayed(LOAD_LEXICON_NAME));
+		// Sets the document lexicon menu item to visible or not visible
+		_documentLexiconMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(DOCUMENT_LEXICON_NAME));
 
 		// Sets the modify lexicon menu item to visible or not visible
 		_modifyLexiconMenuItem.setVisible(AcideMenuConfiguration.getInstance()
 				.getIsDisplayed(MODIFY_LEXICON_NAME));
 
-		// Sets the save lexicon menu item to visible or not visible
-		_saveLexiconMenuItem.setVisible(AcideMenuConfiguration.getInstance()
-				.getIsDisplayed(SAVE_LEXICON_NAME));
-
-		// Sets the save lexicon as menu item to visible or not visible
-		_saveLexiconAsMenuItem.setVisible(AcideMenuConfiguration.getInstance()
-				.getIsDisplayed(SAVE_LEXICON_AS_NAME));
-
-		// Sets the save lexicon as predetermine lexicon separator to visible or
+		// Sets the save lexicon as default lexicons separator to visible or
 		// not visible
-		_saveLexiconAsPredetermineLexiconSeparator
+		_separator
 				.setVisible(AcideMenuConfiguration.getInstance()
 						.getIsDisplayed(NEW_LEXICON_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-								LOAD_LEXICON_NAME)
+								DOCUMENT_LEXICON_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 								MODIFY_LEXICON_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-								SAVE_LEXICON_NAME)
-						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-								SAVE_LEXICON_AS_NAME)
-						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-								PREDETERMINE_LEXICON_NAME));
+								DEFAULT_LEXICONS_NAME));
 
-		// Sets the predetermine lexicon menu item to visible or not visible
-		_predetermineLexiconMenuItem.setVisible(AcideMenuConfiguration
-				.getInstance().getIsDisplayed(PREDETERMINE_LEXICON_NAME));
+		// Sets the default lexicons menu item to visible or not visible
+		_defaultLexiconsMenuItem.setVisible(AcideMenuConfiguration
+				.getInstance().getIsDisplayed(DEFAULT_LEXICONS_NAME));
 	}
 
+	/**
+	 * Enables the ACIDE - A Configurable IDE lexicon menu.
+	 */
+	public void enableMenu() {
+
+		// Enables the new lexicon menu item
+		_newLexiconMenuItem.setEnabled(true);
+		
+		// Enables the document lexicon menu item
+		_documentLexiconMenuItem.setEnabled(true);
+		
+		// Enables the modify lexicon menu item
+		_modifyLexiconMenuItem.setEnabled(true);
+		
+		// Enables the default lexicons menu item
+		_defaultLexiconsMenuItem.setEnabled(true);
+	}
+	
+	/**
+	 * Disables the ACIDE - A Configurable IDE lexicon menu.
+	 */
+	public void disableMenu() {
+
+		// Disables the new lexicon menu item
+		_newLexiconMenuItem.setEnabled(false);
+		
+		// Disables the document lexicon menu item
+		_documentLexiconMenuItem.setEnabled(false);
+		
+		// Disables the modify lexicon menu item
+		_modifyLexiconMenuItem.setEnabled(false);
+		
+		// Enables the default lexicons menu item
+		_defaultLexiconsMenuItem.setEnabled(true);
+	}
+	
 	/**
 	 * Returns the ACIDE - A Configurable IDE lexicon menu new lexicon menu item
 	 * 
@@ -325,14 +297,14 @@ public class AcideLexiconMenu extends JMenu {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE lexicon menu load lexicon menu
+	 * Returns the ACIDE - A Configurable IDE lexicon menu document lexicon menu
 	 * item.
 	 * 
-	 * @return the ACIDE - A Configurable IDE lexicon menu load lexicon menu
+	 * @return the ACIDE - A Configurable IDE lexicon menu document lexicon menu
 	 *         item.
 	 */
-	public JMenuItem getLoadLexiconMenuItem() {
-		return _loadLexiconMenuItem;
+	public JMenuItem getDocumentLexiconMenuItem() {
+		return _documentLexiconMenuItem;
 	}
 
 	/**
@@ -344,27 +316,5 @@ public class AcideLexiconMenu extends JMenu {
 	 */
 	public JMenuItem getModifyLexiconMenuItem() {
 		return _modifyLexiconMenuItem;
-	}
-
-	/**
-	 * Returns the ACIDE - A Configurable IDE lexicon menu save lexicon menu
-	 * item.
-	 * 
-	 * @return the ACIDE - A Configurable IDE lexicon menu save lexicon menu
-	 *         item.
-	 */
-	public JMenuItem getSaveLexiconMenuItem() {
-		return _saveLexiconMenuItem;
-	}
-
-	/**
-	 * Returns the ACIDE - A Configurable IDE lexicon menu save lexicon as menu
-	 * item.
-	 * 
-	 * @return the ACIDE - A Configurable IDE lexicon menu save lexicon as menu
-	 *         item.
-	 */
-	public JMenuItem getSaveLexiconAsMenuItem() {
-		return _saveLexiconAsMenuItem;
 	}
 }

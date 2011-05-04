@@ -30,7 +30,7 @@
 package acide.gui.menuBar.projectMenu.listeners;
 
 import acide.configuration.project.AcideProjectConfiguration;
-import acide.configuration.workbench.AcideWorkbenchManager;
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.files.project.AcideProjectFile;
 
 import java.awt.event.ActionEvent;
@@ -60,7 +60,7 @@ public class AcideCompileMenuItemListener implements ActionListener {
 	public void actionPerformed(ActionEvent actionEvent) {
 
 		// Saves the file editor panel configuration
-		AcideWorkbenchManager.getInstance().saveFileEditorOpenedFilesConfiguration();
+		AcideWorkbenchConfiguration.getInstance().saveFileEditorOpenedFilesConfiguration();
 
 		try {
 

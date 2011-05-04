@@ -29,7 +29,7 @@
  */
 package acide.gui.mainWindow.listeners;
 
-import acide.configuration.workbench.AcideWorkbenchManager;
+import acide.gui.mainWindow.AcideMainWindow;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -52,7 +52,7 @@ public class AcideMainWindowWindowListener extends WindowAdapter {
 	@Override
 	public void windowClosing(WindowEvent windowEvent) {
 		
-		// Saves the workbench configuration
-		AcideWorkbenchManager.getInstance().saveWorkbenchConfiguration();
+		// Closes the main window
+		AcideMainWindow.getInstance().closeAcideMainWindow();
 	}
 }

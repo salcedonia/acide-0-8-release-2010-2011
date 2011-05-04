@@ -74,10 +74,19 @@ public class AcideResourceManager {
 
 		try {
 
+			// Creates the file input file
 			FileInputStream configurationFile = new FileInputStream(CONFIGURATION_FILE);
+			
+			// Creates the temporal properties file
 			_temporalProperties = new Properties();
+			
+			// Loads the temporal properties from the XML file
 			_temporalProperties.loadFromXML(configurationFile);
+			
+			// Closes the configuration file input stream
 			configurationFile.close();
+			
+			// Creates the properties hash map
 			_properties = new HashMap<Object, Object>(_temporalProperties);
 		} catch (Exception exception) {
 			
@@ -132,15 +141,27 @@ public class AcideResourceManager {
 	public void setProperty(String name, String value) {
 		try {
 			
+			// Sets the property into the temporal property
 			_temporalProperties.setProperty(name, value);
+			
+			// Stores the temporal properties file with XML format
 			_temporalProperties.storeToXML(new FileOutputStream(
 					CONFIGURATION_FILE), "ACIDE Configuration", "UTF-8");
 			try {
 
+				// Creates the file input stream
 				FileInputStream fileInputStream = new FileInputStream(CONFIGURATION_FILE);
+				
+				// Creates a new temporal properties file
 				_temporalProperties = new Properties();
+				
+				// Loads the temporal properties from the XML file
 				_temporalProperties.loadFromXML(fileInputStream);
+				
+				// Closes the file input stream
 				fileInputStream.close();
+				
+				// Creates the properties hash map
 				_properties = new HashMap<Object, Object>(_temporalProperties);
 
 			} catch (Exception exception) {

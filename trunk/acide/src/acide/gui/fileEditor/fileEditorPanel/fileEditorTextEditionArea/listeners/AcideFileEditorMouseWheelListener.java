@@ -29,12 +29,17 @@
  */
 package acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners;
 
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 import javax.swing.JPanel;
+import javax.swing.JViewport;
+import javax.swing.SwingConstants;
 
-import acide.configuration.fileEditor.AcideFileEditorConfiguration;
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
+import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.AcideTextComponent;
 import acide.gui.mainWindow.AcideMainWindow;
 
 /**
@@ -62,28 +67,89 @@ public class AcideFileEditorMouseWheelListener implements MouseWheelListener {
 
 		if (mouseWheelEvent.isControlDown()) {
 
-			// Apply the changes to the opened file editor panels
-			for (int index = 0; index < AcideMainWindow.getInstance()
-					.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
+			// Performs the font zoom action
+			fontZoom(mouseWheelEvent);
+		} else {
 
-				// Sets the new font style
-				AcideMainWindow
-						.getInstance()
-						.getFileEditorManager()
-						.getFileEditorPanelAt(index)
-						.zoomFont(mouseWheelEvent.getScrollAmount(),
-								mouseWheelEvent.getWheelRotation() > 0);
-
-				
-						
-				// Resets the selected file editor text edition area
-				AcideMainWindow.getInstance().getFileEditorManager()
-								.getSelectedFileEditorPanel()
-								.resetStyledDocument();
-			}
-
-			// Saves the file editor configuration
-			AcideFileEditorConfiguration.getInstance().save();
+			// Performs the mouse wheel scrolling
+			mouseWheelScrolling(mouseWheelEvent);
 		}
+	}
+
+	/**
+	 * Performs the scroll pane scrolling with the mouse wheel action.
+	 * 
+	 * @param mouseWheelEvent
+	 *            mouse wheel event.
+	 */
+	private void mouseWheelScrolling(MouseWheelEvent mouseWheelEvent) {
+
+		// Gets the active text edition area
+		AcideTextComponent textPane = AcideMainWindow.getInstance()
+				.getFileEditorManager().getSelectedFileEditorPanel()
+				.getActiveTextEditionArea();
+
+		// Gets the view port from the text pane parent
+		JViewport viewport = (JViewport) textPane.getParent();
+
+		// Gets the view rectangle from it
+		Rectangle rectangle = viewport.getViewRect();
+
+		// Gets the location
+		Point point = rectangle.getLocation();
+
+		// Calculates the increment
+		int increment = textPane.getScrollableBlockIncrement(rectangle,
+				SwingConstants.VERTICAL, mouseWheelEvent.getScrollAmount());
+		
+		// Scroll up
+		if (mouseWheelEvent.getWheelRotation() < 0) {
+
+			// Calculates the new position
+			point.y = (point.y - increment >= 0) ? point.y - increment : 0;
+		} else {
+			
+			// Scroll down
+
+			// Calculates the maximum value for the y coordinate
+			int maxY = viewport.getView().getHeight() - rectangle.height;
+
+			// Calculates the new position
+			point.y = (point.y + increment <= maxY) ? point.y + increment
+					: maxY;
+		}
+
+		// Updates the location
+		viewport.setViewPosition(point);
+	}
+
+	/**
+	 * Performs the font zoom operation based on the mouse wheel value.
+	 * 
+	 * @param mouseWheelEvent
+	 *            mouse wheel event.
+	 */
+	private void fontZoom(MouseWheelEvent mouseWheelEvent) {
+
+		// Apply the changes to the opened file editor panels
+		for (int index = 0; index < AcideMainWindow.getInstance()
+				.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
+
+			// Sets the new font style
+			AcideMainWindow
+					.getInstance()
+					.getFileEditorManager()
+					.getFileEditorPanelAt(index)
+					.zoomFont(mouseWheelEvent.getScrollAmount(),
+							mouseWheelEvent.getWheelRotation() > 0);
+
+			// Resets the selected file editor text edition area
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().resetStyledDocument();
+		}
+
+		// Saves the file editor configuration
+		AcideWorkbenchConfiguration.getInstance().getFileEditorConfiguration()
+				.save();
 	}
 }

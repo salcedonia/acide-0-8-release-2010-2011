@@ -418,9 +418,9 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 		String newName = "";
 
 		if (_forModifying)
-			newName = "./configuration/toolbar/lastModified.TBcfg";
+			newName = "./configuration/toolbar/lastModified.toolbarConfig";
 		else
-			newName = "./configuration/toolbar/newToolBar.TBcfg";
+			newName = "./configuration/toolbar/newToolBar.toolbarConfig";
 
 		// Saves the console panel tool bar configuration final list
 		// into the new tool bar configuration
@@ -441,9 +441,9 @@ public class AcideToolBarConfigurationWindow extends JFrame {
 
 			if (_areChangesSaved) {
 
-				if (!currentToolBarConfiguration.endsWith("lastModified.TBcfg")
+				if (!currentToolBarConfiguration.endsWith("lastModified.toolbarConfig")
 						&& !currentToolBarConfiguration
-								.endsWith("newToolBar.TBcfg")) {
+								.endsWith("newToolBar.toolbarConfig")) {
 
 					// Updates the ACIDE - A Configurable IDE
 					// previous

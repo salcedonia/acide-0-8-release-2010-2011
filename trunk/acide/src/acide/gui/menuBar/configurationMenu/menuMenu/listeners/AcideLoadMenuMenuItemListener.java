@@ -31,21 +31,20 @@ package acide.gui.menuBar.configurationMenu.menuMenu.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
 
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
 import acide.configuration.menu.AcideMenuConfiguration;
 import acide.configuration.menu.AcideMenuItemInformation;
 import acide.configuration.project.AcideProjectConfiguration;
-import acide.files.text.AcideTextFileExtensionFilterManager;
+import acide.files.AcideFileExtensionFilterManager;
+import acide.files.AcideFileManager;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.configurationMenu.menuMenu.gui.AcideMenuConfigurationWindow;
+import acide.language.AcideLanguageManager;
+import acide.log.AcideLog;
+import acide.resources.AcideResourceManager;
 
 /**
  * ACIDE - A Configurable IDE menu menu load menu menu item listener.
@@ -65,32 +64,23 @@ public class AcideLoadMenuMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Creates and configures the file chooser
-		JFileChooser fileChooser = new JFileChooser();
+		// Selects the extension for the project
+		String[] extensions = new String[] { "menuConfig" };
 
-		// Creates the file extension filter
-		AcideTextFileExtensionFilterManager filter = new AcideTextFileExtensionFilterManager(
-				AcideLanguageManager.getInstance().getLabels()
-						.getString("s287"));
+		// Adds the filter to the file chooser
+		AcideFileManager
+				.getInstance()
+				.getFileChooser()
+				.addChoosableFileFilter(
+						new AcideFileExtensionFilterManager(extensions,
+								AcideLanguageManager.getInstance()
+										.getLabels().getString("s287")));
+		
+		// Asks the the file to the user
+		String absolutePath = AcideFileManager.getInstance()
+				.askForOpenFile("./configuration/menu/");
 
-		// Adds the extension ".menuCfg"
-		filter.addExtension("menuCfg");
-
-		// Sets the file filter
-		fileChooser.setFileFilter(filter);
-
-		// Sets the current directory to the menu configuration folder
-		fileChooser.setCurrentDirectory(new File("./configuration/menu/"));
-
-		// Asks to the user
-		int returnValue = fileChooser.showOpenDialog(null);
-
-		// If ok
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-
-			// Gets the absolute path from the selected file
-			String absolutePath = fileChooser.getSelectedFile()
-					.getAbsolutePath();
+		if (absolutePath != null) {
 
 			// Creates the menu item list
 			ArrayList<AcideMenuItemInformation> menuItemList = null;
@@ -152,19 +142,6 @@ public class AcideLoadMenuMenuItemListener implements ActionListener {
 								.getString("s288")
 								+ " " + absolutePath);
 			}
-		} else {
-
-			// If it is CANCEL
-			if (returnValue == JFileChooser.CANCEL_OPTION) {
-				
-				// Cancels the selection
-				fileChooser.cancelSelection();
-				
-				// Updates the log
-				AcideLog.getLog().info(
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s290"));
-			}
-		}
+		} 
 	}
 }

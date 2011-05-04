@@ -31,15 +31,11 @@ package acide.gui.menuBar.fileMenu.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
-import javax.swing.JFileChooser;
-
+import acide.files.AcideFileManager;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
-import acide.resources.exception.MissedPropertyException;
 
 /**
  * ACIDE - A Configurable IDE file menu open file menu item listener.
@@ -59,59 +55,33 @@ public class AcideOpenFileMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Creates and configures the file chooser
-		JFileChooser fileChooser = new JFileChooser();
+		// Removes the filter
+		AcideFileManager
+				.getInstance()
+				.getFileChooser()
+				.removeChoosableFileFilter(
+						AcideFileManager.getInstance().getFileChooser()
+								.getFileFilter());
 
-		File file = null;
-		try {
-			file = new File(AcideResourceManager.getInstance().getProperty(
-					"defaultPath"));
-		} catch (MissedPropertyException exception) {
+		// Ask the path to the user
+		String[] absolutePaths = AcideFileManager.getInstance()
+				.askForOpenFiles(true);
 
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
-		}
+		if (absolutePaths != null) {
 
-		// Sets the current directory to the grammar configuration folder
-		fileChooser.setCurrentDirectory(file);
-
-		// Asks to the user
-		int returnValue = fileChooser.showOpenDialog(fileChooser);
-
-		// If it is OK
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-
-			// Asks for the path to the user
-			String filePath = fileChooser.getSelectedFile().getAbsolutePath();
-
-			// Updates the ACIDE - A Configurable IDE default path
-			AcideResourceManager.getInstance().setProperty("defaultPath",
-					filePath);
-
-			// If the file exists
-			if (filePath != null) {
+			// Opens all the selected files
+			for (int index = 0; index < absolutePaths.length; index++) {
 
 				// Opens the file
 				AcideMainWindow.getInstance().getMenu().getFileMenu()
-						.openFile(filePath);
-			} else {
-
-				// FILE DOESN'T EXISTS
-
-				// Updates the log
-				AcideLog.getLog().info(
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s83"));
+						.openFile(absolutePaths[index]);
 			}
 		} else {
 
-			// If it is CANCEL
-			if (returnValue == JFileChooser.CANCEL_OPTION) {
-
-				// Cancels selection
-				fileChooser.cancelSelection();
-			}
+			// Updates the log
+			AcideLog.getLog().info(
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s83"));
 		}
 	}
 }

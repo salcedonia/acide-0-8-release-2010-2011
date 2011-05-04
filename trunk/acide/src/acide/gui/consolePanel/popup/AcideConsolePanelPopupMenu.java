@@ -29,17 +29,23 @@
  */
 package acide.gui.consolePanel.popup;
 
-import acide.factory.gui.AcideGUIFactory;
-import acide.gui.mainWindow.AcideMainWindow;
-
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.Locale;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 
-
+import acide.gui.consolePanel.popup.listeners.AcideClearConsoleBufferMenuItemAction;
+import acide.gui.consolePanel.popup.listeners.AcideConsoleDisplayOptionsMenuItemAction;
+import acide.gui.consolePanel.popup.listeners.AcideConsolePanelSearchMenuItemAction;
+import acide.gui.consolePanel.popup.listeners.AcideControlCMenuItemAction;
+import acide.gui.consolePanel.popup.listeners.AcideCopyMenuItemAction;
+import acide.gui.consolePanel.popup.listeners.AcideCutMenuItemAction;
+import acide.gui.consolePanel.popup.listeners.AcidePasteMenuItemAction;
+import acide.gui.consolePanel.popup.listeners.AcideResetMenuItemAction;
 import acide.language.AcideLanguageManager;
 
 /**
@@ -74,6 +80,12 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 	 */
 	private final static ImageIcon CUT_IMAGE = new ImageIcon(
 			"./resources/icons/menu/edit/cut.png");
+	/**
+	 * ACIDE - A Configurable IDE console panel popup menu search menu item image
+	 * icon.
+	 */
+	private final static ImageIcon SEARCH_IMAGE = new ImageIcon(
+			"./resources/icons/menu/edit/search.png");
 	/**
 	 * ACIDE - A Configurable IDE console panel popup menu shell display options
 	 * menu item image icon.
@@ -110,71 +122,115 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 	 * menu item.
 	 */
 	private JMenuItem _clearConsoleBufferMenuItem;
+	/**
+	 * ACIDE - A Configurable IDE console panel popup menu search
+	 * menu item.
+	 */
+	private JMenuItem _searchMenuItem;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE console panel popup menu.
 	 */
 	public AcideConsolePanelPopupMenu() {
 
-		// Creates the console display options menu item
-		_consoleDisplayOptionsMenuItem = new JMenuItem(AcideLanguageManager
-				.getInstance().getLabels().getString("s986"),
-				CONSOLE_DISPLAY_OPTIONS_IMAGE);
-		
-		// Adds the console display options to the popup menu
-		add(_consoleDisplayOptionsMenuItem);
-		
-		// Adds a separator to the popup menu
-		addSeparator();
+		// Builds the components
+		buildComponents();
 
-		// Creates the copy menu item
-		_copyMenuItem = new JMenuItem(AcideLanguageManager.getInstance().getLabels()
-				.getString("s187"), COPY_IMAGE);
-		
-		// Adds the copy menu item to the popup menu
-		add(_copyMenuItem);
-
-		// Creates the cut menu item
-		_cutMenuItem = new JMenuItem(AcideLanguageManager.getInstance().getLabels()
-				.getString("s188"), CUT_IMAGE);
-		
-		// Adds the cut menu item to the popup menu
-		add(_cutMenuItem);
-
-		// Creates the paste menu item
-		_pasteMenuItem = new JMenuItem(AcideLanguageManager.getInstance().getLabels()
-				.getString("s189"), PASTE_IMAGE);
-		
-		// Adds the paste menu item to the popup menu
-		add(_pasteMenuItem);
-		
-		// Adds a separator to the popup menu
-		addSeparator();
-
-		// Creates the controlC menu item
-		_controlCMenuItem = new JMenuItem("Ctrl-C");
-		
-		// Adds the controlC menu item to the popup menu
-		add(_controlCMenuItem);
-
-		// Creates the reset menu item
-		_resetMenuItem = new JMenuItem(AcideLanguageManager.getInstance().getLabels()
-				.getString("s987"));
-		
-		// Adds the reset menu item to the popup menu
-		add(_resetMenuItem);
-
-		// Create the clear console buffer menu item
-		_clearConsoleBufferMenuItem = new JMenuItem(AcideLanguageManager.getInstance()
-				.getLabels().getString("s999"));
-		
-		// Adds the clear console buffer menu item to the popup menu
-		add(_clearConsoleBufferMenuItem);
+		// Adds the components to the popup menu
+		addComponents();
 
 		// Sets the listeners of the window components
 		setListeners();
 	}
 
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE console panel popup
+	 * menu.
+	 */
+	private void addComponents() {
+
+		// Adds the console display options to the popup menu
+		add(_consoleDisplayOptionsMenuItem);
+
+		// Adds a separator to the popup menu
+		addSeparator();
+
+		// Adds the copy menu item to the popup menu
+		add(_copyMenuItem);
+
+		// Adds the cut menu item to the popup menu
+		add(_cutMenuItem);
+
+		// Adds the paste menu item to the popup menu
+		add(_pasteMenuItem);
+
+		// Adds a separator to the popup menu
+		addSeparator();
+
+		// Adds the controlC menu item to the popup menu
+		add(_controlCMenuItem);
+
+		// Adds the reset menu item to the popup menu
+		add(_resetMenuItem);
+
+		// Adds the clear console buffer menu item to the popup menu
+		add(_clearConsoleBufferMenuItem);
+		
+		// Adds a separator to the popup menu
+		//addSeparator();
+		
+		// Adds the search menu item to the popup menu
+		//add(_searchMenuItem);		
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE console panel popup menu
+	 * components.
+	 */
+	private void buildComponents() {
+
+		// Creates the console display options menu item
+		_consoleDisplayOptionsMenuItem = new JMenuItem(AcideLanguageManager
+				.getInstance().getLabels().getString("s986"),
+				CONSOLE_DISPLAY_OPTIONS_IMAGE);
+
+		// Creates the copy menu item
+		_copyMenuItem = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s187"), COPY_IMAGE);
+
+		// Creates the cut menu item
+		_cutMenuItem = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s188"), CUT_IMAGE);
+
+		// Creates the paste menu item
+		_pasteMenuItem = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s189"), PASTE_IMAGE);
+
+		// Creates the controlC menu item
+		_controlCMenuItem = new JMenuItem("Ctrl-C");
+
+		// Creates the reset menu item
+		_resetMenuItem = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s987"));
+
+		// Creates the clear console buffer menu item
+		_clearConsoleBufferMenuItem = new JMenuItem(AcideLanguageManager
+				.getInstance().getLabels().getString("s999"));
+		
+		// Creates the search menu item
+		_searchMenuItem = new JMenuItem(AcideLanguageManager
+				.getInstance().getLabels().getString("s556"), SEARCH_IMAGE);
+	
+		// Sets the search menu item accelerator
+		if (AcideLanguageManager.getInstance().getCurrentLocale()
+				.equals(new Locale("en", "EN")))
+			_searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+					KeyEvent.VK_F, ActionEvent.CTRL_MASK));
+		else
+			_searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+					KeyEvent.VK_B, ActionEvent.CTRL_MASK));
+	}
+	
 	/**
 	 * Sets the listeners of the window components.
 	 */
@@ -182,26 +238,30 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 
 		// Sets the console display options menu item action listener
 		_consoleDisplayOptionsMenuItem
-				.addActionListener(new ConsoleDisplayOptionsMenuItemAction());
+				.addActionListener(new AcideConsoleDisplayOptionsMenuItemAction());
 
 		// Sets the copy menu item action listener
-		_copyMenuItem.addActionListener(new CopyMenuItemAction());
+		_copyMenuItem.addActionListener(new AcideCopyMenuItemAction());
 
 		// Sets the cut menu item action listener
-		_cutMenuItem.addActionListener(new CutMenuItemAction());
+		_cutMenuItem.addActionListener(new AcideCutMenuItemAction());
 
 		// Sets the paste menu item action listener
-		_pasteMenuItem.addActionListener(new PasteMenuItemAction());
+		_pasteMenuItem.addActionListener(new AcidePasteMenuItemAction());
 
 		// Sets the controlC menu item action listener
-		_controlCMenuItem.addActionListener(new ControlCMenuItemAction());
+		_controlCMenuItem.addActionListener(new AcideControlCMenuItemAction());
 
 		// Sets the reset menu item action listener
-		_resetMenuItem.addActionListener(new ResetMenuItemAction());
+		_resetMenuItem.addActionListener(new AcideResetMenuItemAction());
 
 		// Sets the clear console buffer menu item action listener
 		_clearConsoleBufferMenuItem
-				.addActionListener(new ClearConsoleBufferMenuItemAction());
+				.addActionListener(new AcideClearConsoleBufferMenuItemAction());
+		
+		// Sets the search menu item action listener
+		_searchMenuItem
+				.addActionListener(new AcideConsolePanelSearchMenuItemAction());	
 	}
 
 	/**
@@ -235,179 +295,5 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 	 */
 	public JMenuItem getPasteMenuItem() {
 		return _pasteMenuItem;
-	}
-
-	/**
-	 * ACIDE - A Configurable IDE console panel popup menu console display
-	 * options menu item action listener.
-	 * 
-	 * @version 0.8
-	 * @see ActionListener
-	 */
-	class ConsoleDisplayOptionsMenuItemAction implements ActionListener {
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
-		 * ActionEvent)
-		 */
-		@Override
-		public void actionPerformed(ActionEvent actionEvent) {
-
-			// Shows the console display options window
-			AcideGUIFactory.getInstance()
-					.buildAcideConsoleDisplayOptionsWindow();
-		}
-	}
-
-	/**
-	 * ACIDE - A Configurable IDE console panel popup menu console copy menu
-	 * item action listener.
-	 * 
-	 * @version 0.8
-	 * @see ActionListener
-	 */
-	class CopyMenuItemAction implements ActionListener {
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
-		 * ActionEvent)
-		 */
-		@Override
-		public void actionPerformed(ActionEvent actionEvent) {
-
-			// Copy
-			AcideMainWindow.getInstance().getConsolePanel().getTextPane().copy();
-		}
-	}
-
-	/**
-	 * ACIDE - A Configurable IDE console panel popup menu console cut menu item
-	 * action listener.
-	 * 
-	 * @version 0.8
-	 * @see ActionListener
-	 */
-	class CutMenuItemAction implements ActionListener {
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
-		 * ActionEvent)
-		 */
-		@Override
-		public void actionPerformed(ActionEvent actionEvent) {
-
-			// If the selection start position is after the prompt position
-			if (AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-					.getSelectionStart() >= AcideMainWindow.getInstance()
-					.getConsolePanel().getPromptCaretPosition())
-
-				// Cuts
-				AcideMainWindow.getInstance().getConsolePanel().getTextPane().cut();
-		}
-	}
-
-	/**
-	 * ACIDE - A Configurable IDE console panel popup menu console paste
-	 * menu item action listener.
-	 * 
-	 * @version 0.8
-	 * @see ActionListener
-	 */
-	class PasteMenuItemAction implements ActionListener {
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
-		 * ActionEvent)
-		 */
-		@Override
-		public void actionPerformed(ActionEvent actionEvent) {
-
-			// If the selection start position is after the prompt position
-			if (AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-					.getSelectionStart() >= AcideMainWindow.getInstance()
-					.getConsolePanel().getPromptCaretPosition())
-
-				// Pastes
-				AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-						.paste();
-		}
-	}
-
-	/**
-	 * ACIDE - A Configurable IDE console panel popup menu console control + c
-	 * menu item action listener.
-	 * 
-	 * @version 0.8
-	 * @see ActionListener
-	 */
-	class ControlCMenuItemAction implements ActionListener {
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
-		 * ActionEvent)
-		 */
-		@Override
-		public void actionPerformed(ActionEvent actionEvent) {
-
-			// Kill the process
-			AcideMainWindow.getInstance().getConsolePanel().killShellProcess();
-
-			// Resets the console again
-			AcideMainWindow.getInstance().getConsolePanel().resetConsole();
-		}
-	}
-
-	/**
-	 * ACIDE - A Configurable IDE console panel popup menu console reset menu
-	 * item action listener.
-	 * 
-	 * @version 0.8
-	 * @see ActionListener
-	 */
-	class ResetMenuItemAction implements ActionListener {
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
-		 * ActionEvent)
-		 */
-		@Override
-		public void actionPerformed(ActionEvent actionEvent) {
-			AcideMainWindow.getInstance().getConsolePanel().resetConsole();
-		}
-	}
-
-	/**
-	 * ACIDE - A Configurable IDE console panel popup menu console clear console
-	 * buffer menu item action listener.
-	 * 
-	 * @version 0.8
-	 * @see ActionListener
-	 */
-	class ClearConsoleBufferMenuItemAction implements ActionListener {
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
-		 * ActionEvent)
-		 */
-		@Override
-		public void actionPerformed(ActionEvent actionEvent) {
-
-			// Clears the console buffer
-			AcideMainWindow.getInstance().getConsolePanel().clearConsoleBuffer();
-		}
 	}
 }

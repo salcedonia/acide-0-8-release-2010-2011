@@ -135,7 +135,10 @@ public class AcideExplorerPanel extends JPanel {
 
 			// Sets the cell renderer
 			_tree.setCellRenderer(new AcideExplorerTreeCellRenderer());
-
+			
+			// Sets the auto scroll as true
+			_tree.setAutoscrolls(true);
+			
 			// Sets the ACIDE - A Configurable IDE explorer panel listeners
 			setListeners();
 
@@ -171,19 +174,20 @@ public class AcideExplorerPanel extends JPanel {
 	 * Sets the ACIDE - A Configurable IDE explorer panel listeners.
 	 */
 	private void setListeners() {
-		
+
 		// Sets the ACIDE - A Configurable IDE explorer panel focus listener
 		_tree.addFocusListener(new AcideExplorerPanelFocusListener());
-				
-		// Sets the ACIDE - A Configurable IDE explorer panel popup menu listener
+
+		// Sets the ACIDE - A Configurable IDE explorer panel popup menu
+		// listener
 		_tree.addMouseListener(new AcideExplorerPanelPopupMenuListener());
-		
+
 		// Sets the ACIDE - A Configurable IDE explorer double click listener
 		_tree.addMouseListener(new AcideExplorerPanelMouseListener());
-		
+
 		// Sets the ACIDE - A Configurable IDE explorer panel keyboard listener
 		_tree.addKeyListener(new AcideExplorerPanelKeyboardListener());
-		
+
 		// Sets the ACIDE - A Configurable IDE status bar keyboard listener
 		_tree.addKeyListener(new AcideStatusBarKeyboardListener());
 	}

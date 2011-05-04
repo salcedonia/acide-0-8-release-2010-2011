@@ -39,7 +39,7 @@ import javax.swing.text.Utilities;
 
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
-import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.AcideTextPane;
+import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.AcideTextComponent;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
@@ -87,7 +87,6 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 		updateStatusBar(tabbedPane);
 	}
 
-
 	/**
 	 * Updates the menu bar depending on the number of opened file editors.
 	 * 
@@ -99,34 +98,34 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 		if (tabbedPane.getSelectedIndex() == -1) {
 
 			// Disables the file menu
-			AcideMainWindow.getInstance().getMenu().disableFileMenu();
+			AcideMainWindow.getInstance().getMenu().getFileMenu().disableMenu();
 
 			// Disables the edit menu
-			AcideMainWindow.getInstance().getMenu().disableEditMenu();
+			AcideMainWindow.getInstance().getMenu().getEditMenu().disableMenu();
 
 			// Disables the lexicon menu
 			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
-					.getLexiconMenu().setEnabled(false);
+					.getLexiconMenu().disableMenu();
 
 			// Disables the grammar menu
 			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
-					.getGrammarMenu().setEnabled(false);
+					.getGrammarMenu().disableMenu();
 
 		} else {
 
 			// Enables the file menu
-			AcideMainWindow.getInstance().getMenu().enableFileMenu();
+			AcideMainWindow.getInstance().getMenu().getFileMenu().enableMenu();
 
 			// Enables the edit menu
-			AcideMainWindow.getInstance().getMenu().enableEditMenu();
+			AcideMainWindow.getInstance().getMenu().getEditMenu().enableMenu();
 
 			// Enables the lexicon menu
 			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
-					.getLexiconMenu().setEnabled(true);
+					.getLexiconMenu().enableMenu();
 
 			// Enables the grammar menu
 			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
-					.getGrammarMenu().setEnabled(true);
+					.getGrammarMenu().enableMenu();
 
 			// Gets the selected file editor panel
 			AcideFileEditorPanel selectedFileEditorPanel = (AcideFileEditorPanel) tabbedPane
@@ -272,7 +271,7 @@ public class AcideFileEditorManagerChangeListener implements ChangeListener {
 					.getSelectedComponent();
 
 			// Gets the active text edition area
-			AcideTextPane activeTextPane = selectedFileEditorPanel
+			AcideTextComponent activeTextPane = selectedFileEditorPanel
 					.getActiveTextEditionArea();
 
 			// Gets the line of the caret position

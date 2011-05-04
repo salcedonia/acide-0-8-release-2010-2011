@@ -199,7 +199,6 @@ public class AcideRemoveFileMenuItemListener implements ActionListener {
 
 					// The project has been modified
 					AcideProjectConfiguration.getInstance().setIsModified(true);
-					return;
 				}
 			}
 		}
@@ -215,7 +214,7 @@ public class AcideRemoveFileMenuItemListener implements ActionListener {
 							AcideMainWindow.getInstance()
 									.getFileEditorManager()
 									.getSelectedFileEditorPanelIndex());
-			
+
 			// Enables the remove file menu item in the explorer popup menu
 			AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
 					.getRemoveFileMenuItem().setEnabled(true);

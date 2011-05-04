@@ -31,16 +31,14 @@ package acide.gui.menuBar.configurationMenu.menuMenu.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 import acide.resources.AcideResourceManager;
+import acide.files.AcideFileExtensionFilterManager;
+import acide.files.AcideFileManager;
 import acide.files.bytes.AcideByteFileManager;
-import acide.files.text.AcideTextFileExtensionFilterManager;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.configurationMenu.menuMenu.gui.AcideMenuConfigurationWindow;
 
@@ -64,43 +62,33 @@ public class AcideSaveMenuAsMenuItemListener implements ActionListener {
 
 		try {
 
-			// Gets the ACIDE - A Configurable IDE current menu configuration
-			String currentMenuConfiguration = AcideResourceManager
-					.getInstance().getProperty("currentMenuConfiguration");
+			// Selects the extension for the project
+			String[] extensions = new String[] { "menuConfig" };
 
-			// Creates and configures the file chooser
-			JFileChooser fileChooser = new JFileChooser();
+			// Adds the filter to the file chooser
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.addChoosableFileFilter(
+							new AcideFileExtensionFilterManager(extensions,
+									AcideLanguageManager.getInstance()
+											.getLabels().getString("s287")));
+			
+			// Asks the the file to the user
+			String absolutePath = AcideFileManager.getInstance()
+					.askForOpenFile("./configuration/menu/");
 
-			// Creates the file extension filter
-			AcideTextFileExtensionFilterManager filter = new AcideTextFileExtensionFilterManager(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s126"));
-
-			// Adds the extension ".menuCfg"
-			filter.addExtension("menuCfg");
-
-			// Sets the file filter
-			fileChooser.setFileFilter(filter);
-
-			// Sets the current directory to the menu configuration folder
-			fileChooser.setCurrentDirectory(new File("./configuration/menu/"));
-
-			String absolutePath = "";
-
-			// Asks to the user
-			int returnValue = fileChooser.showSaveDialog(fileChooser);
-
-			// If it is OK
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-
-				// Gets the absolute path
-				absolutePath = fileChooser.getSelectedFile().getAbsolutePath();
+			if (absolutePath != null) {
 
 				// If it does not contain the extension
-				if (!absolutePath.endsWith(".menuCfg"))
+				if (!absolutePath.endsWith(".menuConfig"))
 
 					// Adds it
-					absolutePath += ".menuCfg";
+					absolutePath += ".menuConfig";
+
+				// Gets the ACIDE - A Configurable IDE current menu configuration
+				String currentMenuConfiguration = AcideResourceManager
+						.getInstance().getProperty("currentMenuConfiguration");
 
 				// Copies the files
 				AcideByteFileManager.getInstance().copy(
@@ -125,21 +113,7 @@ public class AcideSaveMenuAsMenuItemListener implements ActionListener {
 								+ absolutePath
 								+ AcideLanguageManager.getInstance()
 										.getLabels().getString("s529"));
-
-			} else {
-
-				// If it is CANCEL
-				if (returnValue == JFileChooser.CANCEL_OPTION) {
-
-					// Cancel selection
-					fileChooser.cancelSelection();
-
-					// Updates the log
-					AcideLog.getLog().info(
-							AcideLanguageManager.getInstance().getLabels()
-									.getString("s527"));
-				}
-			}
+			} 
 		} catch (Exception exception) {
 
 			// Displays an error message

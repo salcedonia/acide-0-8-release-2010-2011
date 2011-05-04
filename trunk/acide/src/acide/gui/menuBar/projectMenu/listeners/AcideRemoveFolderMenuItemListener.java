@@ -141,7 +141,7 @@ public class AcideRemoveFolderMenuItemListener implements ActionListener {
 							// Updates the ACIDE - A Configurable IDE project configuration
 							AcideResourceManager.getInstance().setProperty(
 									"projectConfiguration",
-									"./configuration/project/default.acidePrj");
+									"./configuration/project/default.acideProject");
 						}
 
 						// Searches for the file in the project configuration

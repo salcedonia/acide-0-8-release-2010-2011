@@ -32,12 +32,9 @@ package acide.gui.menuBar.projectMenu.listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JOptionPane;
-
-import acide.language.AcideLanguageManager;
 import acide.configuration.project.AcideProjectConfiguration;
-import acide.factory.gui.AcideGUIFactory;
 import acide.gui.mainWindow.AcideMainWindow;
+import acide.gui.menuBar.projectMenu.gui.newProjectWindow.AcideNewProjectConfigurationWindow;
 
 /**
  * ACIDE -A Configurable IDE project menu new project menu item listener.
@@ -57,76 +54,17 @@ public class AcideNewProjectMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		boolean cancelOptionSelected = false;
+		// Asks for saving the project configuration
+		if (AcideProjectConfiguration.getInstance()
+				.askForSavingProjectConfiguration()) {
 
-		// Are the project configuration modified or the file editor manager modified?
-		if (AcideProjectConfiguration.getInstance().isModified()
-				|| AcideMainWindow.getInstance().getFileEditorManager()
-						.isModified()) {
+			// Saves the file editor configuration
+			if (AcideMainWindow.getInstance().getFileEditorManager()
+					.askForSavingModifiedFiles()) {
 
-			// Do you want to save it?
-			int returnValue = JOptionPane.showConfirmDialog(
-					null,
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s657"), AcideLanguageManager
-							.getInstance().getLabels().getString("s953"),
-					JOptionPane.YES_NO_CANCEL_OPTION);
-
-			// If it is OK
-			if (returnValue == JOptionPane.OK_OPTION) {
-
-				// Enables the save project menu item
-				AcideMainWindow.getInstance().getMenu().getProjectMenu()
-						.getSaveProjectMenuItem().setEnabled(true);
-
-				// Does the save project menu item action
-				AcideMainWindow.getInstance().getMenu().getProjectMenu()
-						.getSaveProjectMenuItem().doClick();
-			} else {
-
-				// If it is not NO
-				if (returnValue != JOptionPane.NO_OPTION)
-					cancelOptionSelected = true;
-			}
-
-		}
-
-		// Gets the number of file editor panels
-		int numberOfFileEditorPanels = AcideMainWindow.getInstance()
-				.getFileEditorManager().getNumberOfFileEditorPanels();
-
-		// If there are any opened file editor panels
-		if (numberOfFileEditorPanels != 0) {
-			
-			// Saves the modified files in the file editor
-			for (int index = numberOfFileEditorPanels - 1; index >= 0; index--) {
-
-				// If the file is modified
-				if (AcideMainWindow.getInstance().getFileEditorManager()
-						.isRedButton(index)) {
-
-					// Do you want to save it?
-					int returnValue = JOptionPane.showConfirmDialog(null,
-							AcideLanguageManager.getInstance().getLabels()
-									.getString("s643"), AcideLanguageManager
-									.getInstance().getLabels()
-									.getString("s953"),
-							JOptionPane.YES_NO_OPTION);
-
-					// If OK
-					if (returnValue == JOptionPane.OK_OPTION)
-						AcideMainWindow.getInstance().getMenu().getFileMenu()
-								.saveFile(index);
-				}
+				// Shows the new project configuration window
+				AcideNewProjectConfigurationWindow.getInstance().showWindow();
 			}
 		}
-		
-		// Displays the new project configuration window
-		if (!cancelOptionSelected)
-
-			// Shows the project configuration window
-			AcideMainWindow.getInstance().setNewProjectConfigurationWindow(
-					AcideGUIFactory.getInstance()
-							.buildNewProjectConfigurationWindow());
 	}
 }

@@ -33,7 +33,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import acide.configuration.workbench.AcideWorkbenchManager;
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.splashScreen.AcideSplashScreenWindow;
 import acide.language.AcideLanguageManager;
@@ -91,16 +91,13 @@ public class AcideMain1 implements Runnable {
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s555"));
 
-		// Updates the splash screen window
-		AcideSplashScreenWindow.getInstance().setProgressBar(
-				12,
+		// Updates the log
+		AcideLog.getLog().info(
 				AcideLanguageManager.getInstance().getLabels()
 						.getString("s1027"));
 
 		// Loads the ACIDE - A Configurable IDE workbench configuration
-		AcideWorkbenchManager.getInstance().load(
-				AcideWorkbenchManager.getInstance()
-						.getConfigurationFileContent());
+		AcideWorkbenchConfiguration.getInstance().load();
 
 		// Closes the splash screen
 		AcideSplashScreenWindow.getInstance().closeSplashScreenWindow();
@@ -179,9 +176,10 @@ public class AcideMain1 implements Runnable {
 	 * there is a running instance at that time.
 	 * </p>
 	 * <p>
-	 * <b>IMPORTANT:</b> Runs the application in the event dispatching thread to make the access
-	 * to the swing components thread safe.
+	 * <b>IMPORTANT:</b> Runs the application in the event dispatching thread to
+	 * make the access to the swing components thread safe.
 	 * </p>
+	 * 
 	 * @param args
 	 *            entry arguments for the application.
 	 */

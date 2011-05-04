@@ -52,6 +52,7 @@ import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.configurationWindow.p
 import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.configurationWindow.panels.delimiters.utils.AcideDelimitersPanelTableModel;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.configurationWindow.panels.remarks.AcideRemarksPanel;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.configurationWindow.panels.reserverdWords.AcideReservedWordsPanel;
+import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideSaveLexiconAsMenuItemListener;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 
@@ -102,6 +103,10 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 	 * ACIDE - A Configurable IDE lexicon configuration window cancel button.
 	 */
 	private JButton _cancelButton;
+	/**
+	 * ACIDE - A Configurable IDE lexicon configuration window save as button.
+	 */
+	private JButton _saveAsButton;
 	/**
 	 * ACIDE - A Configurable IDE lexicon configuration temporal file path.
 	 */
@@ -253,6 +258,13 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 		_cancelButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s435"));
 
+		// Creates the save as button
+		_saveAsButton = new JButton(AcideLanguageManager.getInstance()
+				.getLabels().getString("s285"));
+
+		// Adds the save as button to the button panel
+		_buttonPanel.add(_saveAsButton);
+
 		// Adds the apply buttons to the button panel
 		_buttonPanel.add(_applyButton);
 
@@ -264,6 +276,10 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 	 * Sets the listeners of the window components.
 	 */
 	private void setListeners() {
+
+		// Sets the save as button action listener
+		_saveAsButton
+				.addActionListener(new AcideSaveLexiconAsMenuItemListener());
 
 		// Sets the apply button action listener
 		_applyButton.addActionListener(new ApplyButtonAction());
@@ -361,6 +377,9 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 		// Resets the selected file editor text edition area
 		AcideMainWindow.getInstance().getFileEditorManager()
 				.getSelectedFileEditorPanel().resetStyledDocument();
+
+		// Saves the changes automatically into its file
+		saveLexicon();
 	}
 
 	/**
@@ -382,6 +401,101 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 	}
 
 	/**
+	 * Asks to the user for saving the changes if any to apply them or cancel
+	 * it.
+	 */
+	private void askForSavingChanges() {
+
+		boolean isCancelSelected = false;
+
+		// If there are changes in any of the panels
+		if (_reservedWordsPanel.getAreThereChanges()
+				|| _delimitersPanel.getAreThereChanges()
+				|| _remarksPanel.getAreThereChanges()) {
+
+			// Asks the user if wants to save the changes
+			int returnValue = JOptionPane.showConfirmDialog(
+					null,
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s1068"), AcideLanguageManager
+							.getInstance().getLabels().getString("s1067"),
+					JOptionPane.YES_NO_CANCEL_OPTION);
+
+			// If it is not the cancel or the closed option
+			if (returnValue != JOptionPane.CANCEL_OPTION
+					&& returnValue != JOptionPane.CLOSED_OPTION) {
+
+				// If it is yes
+				if (returnValue == JOptionPane.YES_OPTION)
+
+					// Applies the changes
+					applyChanges();
+
+				// If it is no
+				else if (returnValue == JOptionPane.NO_OPTION)
+					// Performs the cancel button action
+					_cancelButton.doClick();
+			} else
+				isCancelSelected = true;
+		}
+
+		if (!isCancelSelected) {
+
+			// Closes the window
+			closeWindow();
+		}
+	}
+
+	/**
+	 * Saves the ACIDE - A Configurable IDE lexicon configuration into its file.
+	 */
+	public void saveLexicon() {
+
+		// Gets the lexicon configuration path
+		String path = AcideMainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanel().getLexiconConfiguration()
+				.getPath();
+
+		// If it is ok
+		if (!path.equals(" ")) {
+
+			// Gets the lexicon name
+			int index = path.lastIndexOf("\\");
+			if (index == -1)
+				index = path.lastIndexOf("/");
+			String name = path.substring(index + 1, path.length());
+
+			if (name.contains(".")) {
+				index = name.lastIndexOf(".");
+				name = name.substring(0, index);
+			}
+
+			// Saves it
+			boolean result = AcideMainWindow.getInstance()
+					.getFileEditorManager().getSelectedFileEditorPanel()
+					.getLexiconConfiguration().save(name, false);
+
+			// If it could save it
+			if (result)
+				JOptionPane.showMessageDialog(null, AcideLanguageManager
+						.getInstance().getLabels().getString("s451"),
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s450"), 1);
+			else
+				JOptionPane.showMessageDialog(null, AcideLanguageManager
+						.getInstance().getLabels().getString("s452"),
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s450"), 0);
+		} else {
+
+			// Updates the log
+			AcideLog.getLog().info(
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s92"));
+		}
+	}
+
+	/**
 	 * ACIDE - A Configurable IDE lexicon configuration window escape action
 	 * listener.
 	 * 
@@ -399,8 +513,8 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Closes the window
-			closeWindow();
+			// Asks to the user for saving the changes
+			askForSavingChanges();
 		}
 	}
 
@@ -499,43 +613,8 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 		 */
 		public void windowClosing(WindowEvent windowEvent) {
 
-			boolean isCancelSelected = false;
-
-			// If there are changes in any of the panels
-			if (_reservedWordsPanel.getAreThereChanges()
-					|| _delimitersPanel.getAreThereChanges()
-					|| _remarksPanel.getAreThereChanges()) {
-
-				// Asks the user if wants to save the changes
-				int returnValue = JOptionPane.showConfirmDialog(null,
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s1068"), AcideLanguageManager
-								.getInstance().getLabels().getString("s1067"),
-						JOptionPane.YES_NO_CANCEL_OPTION);
-
-				// If it is not the cancel or the closed option
-				if (returnValue != JOptionPane.CANCEL_OPTION
-						&& returnValue != JOptionPane.CLOSED_OPTION) {
-
-					// If it is yes
-					if (returnValue == JOptionPane.YES_OPTION)
-
-						// Applies the changes
-						applyChanges();
-
-					// If it is no
-					else if (returnValue == JOptionPane.NO_OPTION)
-						// Performs the cancel button action
-						_cancelButton.doClick();
-				} else
-					isCancelSelected = true;
-			}
-
-			if (!isCancelSelected) {
-
-				// Closes the window
-				closeWindow();
-			}
+			// Asks to the user for saving the changes
+			askForSavingChanges();
 		}
 	}
 }

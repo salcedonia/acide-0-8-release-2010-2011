@@ -479,4 +479,12 @@ public class AcideToolBarPanel extends JPanel {
 	public AcideExternalAppsToolBar getExternalAppToolBar() {
 		return _externalAppsToolBar;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public JToolBar getToolBar(){
+		return _toolBar;
+	}
 }

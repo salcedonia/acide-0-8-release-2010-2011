@@ -29,6 +29,7 @@
  */
 package acide.gui.menuBar.fileMenu.listeners;
 
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.files.AcideFileManager;
 import acide.gui.mainWindow.AcideMainWindow;
 
@@ -194,6 +195,11 @@ public class AcideSaveFileMenuItemListener implements ActionListener {
 					// Updates the save project in the menu bar tool bar
 					AcideMainWindow.getInstance().getToolBarPanel()
 							.getMenuBarToolBar().updateStateOfFileButtons();
+
+					// Adds the new file to the recent files list
+					AcideWorkbenchConfiguration.getInstance()
+							.getRecentFilesConfiguration()
+							.addRecentFileToList(file);
 				}
 			}
 		} else

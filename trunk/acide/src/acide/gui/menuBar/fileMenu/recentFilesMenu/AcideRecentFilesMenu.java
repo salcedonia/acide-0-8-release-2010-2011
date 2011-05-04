@@ -37,7 +37,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
-import acide.configuration.workbench.AcideWorkbenchManager;
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
 
@@ -64,11 +64,11 @@ public class AcideRecentFilesMenu extends JMenu {
 	 */
 	public AcideRecentFilesMenu() {
 
-		// CLEAR RECENT FILES MENU ITEM
+		// Creates the clear recent files menu item
 		_clearRecentFiles = new JMenuItem(AcideLanguageManager.getInstance()
 				.getLabels().getString("s1039"));
 
-		// Adds the listener
+		// Adds the clear recent files menu item action listener
 		_clearRecentFiles.addActionListener(new ClearListMenuItemAction());
 
 		// Builds the recent files menu
@@ -84,7 +84,8 @@ public class AcideRecentFilesMenu extends JMenu {
 		removeAll();
 
 		// If the recent file list is empty
-		if (AcideWorkbenchManager.getInstance().getRecentFiles().size() == 0) {
+		if (AcideWorkbenchConfiguration.getInstance().getRecentFilesConfiguration()
+				.getList().size() == 0) {
 
 			// Creates the menu item
 			JMenuItem recentFileMenuItem = new JMenuItem(AcideLanguageManager
@@ -100,8 +101,8 @@ public class AcideRecentFilesMenu extends JMenu {
 
 			// Builds the menu with the recent file list in the workbench
 			// configuration
-			for (String filePath : AcideWorkbenchManager.getInstance()
-					.getRecentFiles()) {
+			for (String filePath : AcideWorkbenchConfiguration.getInstance()
+					.getRecentFilesConfiguration().getList()) {
 
 				// Creates the menu item
 				JMenuItem recentFileMenuItem = new JMenuItem(filePath);
@@ -182,7 +183,8 @@ public class AcideRecentFilesMenu extends JMenu {
 		public void actionPerformed(ActionEvent actionEvent) {
 
 			// Clears the recent file list
-			AcideWorkbenchManager.getInstance().getRecentFiles().clear();
+			AcideWorkbenchConfiguration.getInstance().getRecentFilesConfiguration()
+					.getList().clear();
 
 			// Rebuilds the recent files menu
 			build();

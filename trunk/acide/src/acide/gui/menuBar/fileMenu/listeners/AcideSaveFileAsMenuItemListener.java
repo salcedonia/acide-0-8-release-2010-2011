@@ -63,12 +63,20 @@ public class AcideSaveFileAsMenuItemListener implements ActionListener {
 		if (AcideMainWindow.getInstance().getFileEditorManager()
 				.getNumberOfFileEditorPanels() != 0) {
 
+			// Removes the filter
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.removeChoosableFileFilter(
+							AcideFileManager.getInstance().getFileChooser()
+									.getFileFilter());
+			
 			// Asks for the file path to the user
-			filePath = AcideFileManager.getInstance().askSavingFileEditorFile(
+			filePath = AcideFileManager.getInstance().askForSaving(
 					false);
 
 			// If the file is not empty
-			if (!filePath.equals(" ")) {
+			if (filePath != null) {
 
 				// Try to save the file content
 				boolean savingResult = AcideFileManager.getInstance().write(

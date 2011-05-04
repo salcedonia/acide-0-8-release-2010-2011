@@ -1,6 +1,7 @@
 package acide.gui.menuBar.projectMenu.listeners;
 
 import acide.configuration.project.AcideProjectConfiguration;
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.files.AcideFileManager;
 import acide.files.project.AcideProjectFile;
 import acide.gui.mainWindow.AcideMainWindow;
@@ -40,18 +41,26 @@ public class AcideNewProjectFileMenuItemListener implements ActionListener {
 		AcideMainWindow.getInstance().getMenu().getFileMenu()
 				.getNewFileMenuItem().doClick();
 
-		String filePath = " ";
+		String filePath = null;
 
 		// If the project has no opened file editor panels
 		if (AcideMainWindow.getInstance().getFileEditorManager()
 				.getNumberOfFileEditorPanels() > 0) {
 
+			// Removes the filter
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.removeChoosableFileFilter(
+							AcideFileManager.getInstance().getFileChooser()
+									.getFileFilter());
+			
 			// Asks to the user for saving the file
-			filePath = AcideFileManager.getInstance().askSavingFileEditorFile(
+			filePath = AcideFileManager.getInstance().askForSaving(
 					true);
 
-			// If the user selected something
-			if (filePath.equals(" ")) {
+			// If the user did not selected anything
+			if (filePath == null) {
 
 				// Sets the selected file editor panel at it
 				AcideMainWindow.getInstance().getFileEditorManager()
@@ -130,6 +139,11 @@ public class AcideNewProjectFileMenuItemListener implements ActionListener {
 					// Sets the selected file editor panel at it
 					AcideMainWindow.getInstance().getFileEditorManager()
 							.setSelectedFileEditorPanelAt(selectedFileEditorPanelIndex);
+				
+					// Adds the new file to the recent files list
+					AcideWorkbenchConfiguration.getInstance()
+							.getRecentFilesConfiguration()
+							.addRecentFileToList(filePath);
 				} else {
 
 					// Updates the log

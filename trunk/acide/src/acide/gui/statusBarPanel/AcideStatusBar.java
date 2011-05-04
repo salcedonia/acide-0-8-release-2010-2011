@@ -29,8 +29,8 @@
  */
 package acide.gui.statusBarPanel;
 
-import acide.configuration.fileEditor.AcideFileEditorConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.statusBarPanel.listeners.AcideStatusBarPopupMenuListener;
 import acide.gui.statusBarPanel.popup.AcideStatusBarPopupMenu;
@@ -273,7 +273,7 @@ public class AcideStatusBar extends JPanel {
 		_editionModeMessagePanel.setBorder(BorderFactory.createEtchedBorder());
 		_editionModeMessageLabel = new JLabel();
 		
-		if(AcideFileEditorConfiguration.getInstance().getEditionMode())
+		if(AcideWorkbenchConfiguration.getInstance().getFileEditorConfiguration().getEditionMode())
 			_editionModeMessageLabel.setText("INS");
 		else
 			_editionModeMessageLabel.setText("   ");

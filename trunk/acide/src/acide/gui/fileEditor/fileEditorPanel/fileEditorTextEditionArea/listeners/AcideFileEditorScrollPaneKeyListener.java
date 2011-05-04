@@ -31,14 +31,13 @@ package acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JViewport;
 import javax.swing.SwingConstants;
 
-import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.AcideTextPane;
+import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.AcideTextComponent;
 import acide.gui.mainWindow.AcideMainWindow;
 
 /**
@@ -51,7 +50,7 @@ import acide.gui.mainWindow.AcideMainWindow;
  * </p>
  * 
  * @version 0.8
- * @see AdjustmentListener
+ * @see KeyListener
  */
 public class AcideFileEditorScrollPaneKeyListener implements KeyListener {
 
@@ -72,7 +71,7 @@ public class AcideFileEditorScrollPaneKeyListener implements KeyListener {
 	 */
 	@Override
 	public void keyReleased(KeyEvent keyEvent) {
-		dispatchEvent(keyEvent);
+		//dispatchEvent(keyEvent);
 	}
 
 	/*
@@ -82,7 +81,7 @@ public class AcideFileEditorScrollPaneKeyListener implements KeyListener {
 	 */
 	@Override
 	public void keyTyped(KeyEvent keyEvent) {
-		dispatchEvent(keyEvent);
+		//dispatchEvent(keyEvent);
 	}
 
 	/**
@@ -94,7 +93,7 @@ public class AcideFileEditorScrollPaneKeyListener implements KeyListener {
 	private void dispatchEvent(KeyEvent keyEvent) {
 
 		// Gets the active text edition area
-		AcideTextPane textPane = AcideMainWindow.getInstance()
+		AcideTextComponent textPane = AcideMainWindow.getInstance()
 				.getFileEditorManager().getSelectedFileEditorPanel()
 				.getActiveTextEditionArea();
 
@@ -107,8 +106,8 @@ public class AcideFileEditorScrollPaneKeyListener implements KeyListener {
 		// Gets the location
 		Point point = rectangle.getLocation();
 
-		// Control + Shift + Up key
-		if (keyEvent.isControlDown() && keyEvent.isShiftDown()
+		// Control + Up key
+		if (keyEvent.isControlDown()
 				&& keyEvent.getKeyCode() == KeyEvent.VK_UP) {
 
 			// Calculates the increment
@@ -119,8 +118,8 @@ public class AcideFileEditorScrollPaneKeyListener implements KeyListener {
 			point.y = (point.y - increment >= 0) ? point.y - increment : 0;
 		}
 
-		// Control + Shift + Down key
-		if (keyEvent.isControlDown() && keyEvent.isShiftDown()
+		// Control + Down key
+		if (keyEvent.isControlDown()
 				&& keyEvent.getKeyCode() == KeyEvent.VK_DOWN) {
 
 			// Calculates the increment
@@ -133,34 +132,6 @@ public class AcideFileEditorScrollPaneKeyListener implements KeyListener {
 			// Calculates the new position
 			point.y = (point.y + increment <= maxY) ? point.y + increment
 					: maxY;
-		}
-
-		// Control + Shift + Left key
-		if (keyEvent.isControlDown() && keyEvent.isShiftDown()
-				&& keyEvent.getKeyCode() == KeyEvent.VK_LEFT) {
-
-			// Gets the increment
-			int increment = textPane.getScrollableBlockIncrement(rectangle,
-					SwingConstants.HORIZONTAL, -1);
-
-			// Calculates the new location
-			point.x = (point.x - increment >= 0) ? point.x - increment : 0;
-		}
-
-		// Control + Shift + Right key
-		if (keyEvent.isControlDown() && keyEvent.isShiftDown()
-				&& keyEvent.getKeyCode() == KeyEvent.VK_RIGHT) {
-
-			// Gets the increment
-			int increment = textPane.getScrollableBlockIncrement(rectangle,
-					SwingConstants.HORIZONTAL, 1);
-
-			// Calculates the maximum value for the x coordinate
-			int maxX = viewport.getView().getWidth() - rectangle.width;
-
-			// Calculates the new location
-			point.x = (point.x + increment <= maxX) ? point.x + increment
-					: maxX;
 		}
 
 		// Updates the location

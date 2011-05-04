@@ -29,7 +29,7 @@
  */
 package acide.gui.fileEditor.fileEditorPanel.listeners;
 
-import acide.configuration.workbench.AcideWorkbenchManager;
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
 import acide.gui.mainWindow.AcideMainWindow;
 
@@ -106,7 +106,7 @@ public class AcideFileEditorPanelDocumentListener implements DocumentListener {
 				.getDocument();
 
 		// If the workbench configuration has been loaded
-		if (AcideWorkbenchManager.getInstance().isWorkbenchLoaded()) {
+		if (AcideWorkbenchConfiguration.getInstance().isWorkbenchLoaded()) {
 
 			// Gets the file editor panel index which has to be on focus
 			int indexOnFocus = AcideMainWindow

@@ -29,15 +29,14 @@
  */
 package acide.gui.mainWindow;
 
-import acide.configuration.fileEditor.AcideFileEditorConfiguration;
-import acide.configuration.workbench.AcideWorkbenchManager;
+import acide.configuration.project.AcideProjectConfiguration;
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.factory.gui.AcideGUIFactory;
 import acide.gui.consolePanel.AcideConsolePanel;
 import acide.gui.explorerPanel.AcideExplorerPanel;
 import acide.gui.fileEditor.fileEditorManager.AcideFileEditorManager;
 import acide.gui.mainWindow.listeners.AcideMainWindowWindowListener;
 import acide.gui.menuBar.AcideMenuBar;
-import acide.gui.menuBar.projectMenu.gui.AcideNewProjectConfigurationWindow;
 import acide.gui.statusBarPanel.AcideStatusBar;
 import acide.gui.toolBarPanel.AcideToolBarPanel;
 
@@ -47,7 +46,6 @@ import java.awt.Component;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
-import javax.swing.SwingUtilities;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
@@ -97,10 +95,6 @@ public class AcideMainWindow extends JFrame {
 	 * ACIDE - A Configurable IDE main window tool bar panel.
 	 */
 	private AcideToolBarPanel _toolBarPanel;
-	/**
-	 * ACIDE - A Configurable IDE new project configuration window.
-	 */
-	private AcideNewProjectConfigurationWindow _newProjectConfigurationWindow;
 	/**
 	 * ACIDE - A Configurable IDE main window vertical split panel.
 	 */
@@ -231,6 +225,59 @@ public class AcideMainWindow extends JFrame {
 	}
 
 	/**
+	 * Shows the main window, once the ACIDE - A Configurable IDE workbench
+	 * configuration has been loaded.
+	 */
+	public void showAcideMainWindow() {
+
+		// Centers the window
+		setLocationRelativeTo(null);
+
+		// The workbench has been loaded
+		AcideWorkbenchConfiguration.getInstance().setWorkbenchLoaded(true);
+
+		// Shows the main window
+		AcideMainWindow.getInstance().setVisible(true);
+	}
+
+	/**
+	 * <p>
+	 * Performs the ACIDE - A Configurable IDE closing operation.
+	 * </p>
+	 * <p>
+	 * Asks for saving the changes, if any, in the project configuration.
+	 * Besides if there are any modified file editor opened, asks for saving
+	 * them to the user as well.
+	 * </p>
+	 * <p>
+	 * Once the two previous processes are done, the workbench manager saves its
+	 * configuration.
+	 * </p>
+	 */
+	public void closeAcideMainWindow() {
+
+		// Asks for saving the project configuration
+		if (AcideProjectConfiguration.getInstance()
+				.askForSavingProjectConfiguration()) {
+
+			// Saves the file editor configuration
+			if (AcideMainWindow.getInstance().getFileEditorManager()
+					.askForSavingModifiedFiles()) {
+
+				// Save the rest of the workbench configuration
+				AcideWorkbenchConfiguration.getInstance()
+						.saveComponentsConfiguration();
+
+				// Saves the workbench configuration into its configuration file
+				AcideWorkbenchConfiguration.getInstance().save();
+
+				// Closes the main window
+				System.exit(0);
+			}
+		}
+	}
+
+	/**
 	 * Returns the ACIDE - A Configurable IDE main window console panel.
 	 * 
 	 * @return the ACIDE - A Configurable IDE main window console panel.
@@ -282,26 +329,6 @@ public class AcideMainWindow extends JFrame {
 	 */
 	public void setExplorerPanel(AcideExplorerPanel explorerPanel) {
 		_explorerPanel = explorerPanel;
-	}
-
-	/**
-	 * Returns the ACIDE - A Configurable IDE new project configuration window.
-	 * 
-	 * @return the ACIDE - A Configurable IDE new project configuration window.
-	 */
-	public AcideNewProjectConfigurationWindow getNewProjectWindowConfiguration() {
-		return _newProjectConfigurationWindow;
-	}
-
-	/**
-	 * Sets a new value for the main window projectGUI.
-	 * 
-	 * @param newProjectConfigurationWindow
-	 *            new value to set.
-	 */
-	public void setNewProjectConfigurationWindow(
-			AcideNewProjectConfigurationWindow newProjectConfigurationWindow) {
-		_newProjectConfigurationWindow = newProjectConfigurationWindow;
 	}
 
 	/**
@@ -409,88 +436,5 @@ public class AcideMainWindow extends JFrame {
 		if (_lastElementOnFocus != null)
 			return _lastElementOnFocus;
 		return getConsolePanel().getTextPane();
-	}
-
-	/**
-	 * Shows the main window, once the workbech configuration has been loaded.
-	 * As the main window is already visible, it is possible to paint the caret
-	 * in the selected editor. It also closes the splash screen window and sets
-	 * the workbench configuration loaded attribute to true.
-	 */
-	public void showAcideMainWindow() {
-
-		// Centers the window
-		setLocationRelativeTo(null);
-
-		// Shows the main window
-		AcideMainWindow.getInstance().setVisible(true);
-
-		// The workbench has been loaded
-		AcideWorkbenchManager.getInstance().setWorkbenchLoaded(true);
-
-		// If there are files opened
-		if (AcideMainWindow.getInstance().getFileEditorManager()
-				.getNumberOfFileEditorPanels() > 0) {
-
-			// Sets the selected editor
-			if (AcideFileEditorConfiguration.getInstance()
-					.getSelectedFileEditorPanelIndex() != -1) {
-
-				// If the selected file editor panel is inside the bounds
-				if (AcideFileEditorConfiguration.getInstance()
-						.getSelectedFileEditorPanelIndex() < AcideMainWindow
-						.getInstance().getFileEditorManager().getTabbedPane()
-						.getTabCount())
-
-					// Puts the following into the DispatchEventThread
-					SwingUtilities.invokeLater(new Runnable() {
-
-						@Override
-						public void run() {
-							// Sets the selected file editor from the file
-							// editor
-							// configuration
-							AcideMainWindow
-									.getInstance()
-									.getFileEditorManager()
-									.updateRelatedComponentsAt(
-											AcideFileEditorConfiguration
-													.getInstance()
-													.getSelectedFileEditorPanelIndex());
-						}
-					});
-
-				else
-
-					// Puts the following into the DispatchEventThread
-					SwingUtilities.invokeLater(new Runnable() {
-
-						@Override
-						public void run() {
-							// Sets the selected file editor as the last tab in
-							// the file
-							// editor
-							// Updates the selected file editor index
-							AcideMainWindow
-									.getInstance()
-									.getFileEditorManager()
-									.updateRelatedComponentsAt(
-											AcideMainWindow.getInstance()
-													.getFileEditorManager()
-													.getTabbedPane()
-													.getTabCount() - 1);
-						}
-					});
-			}
-		} else {
-
-			// Selects the explorer tree root node
-			AcideMainWindow.getInstance().getExplorerPanel().getTree()
-					.setSelectionInterval(0, 0);
-
-			// Sets the focus in the explorer panel
-			AcideMainWindow.getInstance().getExplorerPanel()
-					.requestFocusInWindow();
-		}
 	}
 }

@@ -37,8 +37,8 @@ import javax.swing.JScrollPane;
 import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.text.StyleConstants;
 
-import acide.configuration.fileEditor.AcideFileEditorConfiguration;
-import acide.gui.fileEditor.fileEditorManager.utils.gui.AcideLineNumberComponent;
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
+import acide.gui.fileEditor.fileEditorManager.utils.gui.AcideLineNumberComponent2;
 import acide.gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorAdjustmentListener;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorCaretListener;
@@ -47,7 +47,7 @@ import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorMouseWheelListener;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorScrollPaneKeyListener;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorScrollPaneMouseListener;
-import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.AcideTextPane;
+import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.AcideTextComponent;
 import acide.gui.fileEditor.fileEditorPanel.listeners.AcideFileEditorPanelDocumentListener;
 import acide.gui.fileEditor.fileEditorPanel.popup.AcideEditorPanelPopupMenuListener;
 import acide.gui.listeners.AcideMenuBarKeyboardListener;
@@ -74,9 +74,9 @@ public class AcideFileEditorTextEditionArea {
 	 */
 	private JScrollPane _scrollPane;
 	/**
-	 * ACIDE - A Configurable IDE text edition area text pane.
+	 * ACIDE - A Configurable IDE text edition area text component.
 	 */
-	private AcideTextPane _textPane;
+	private AcideTextComponent _textComponent;
 	/**
 	 * ACIDE - A Configurable IDE text edition area vertical value.
 	 */
@@ -88,7 +88,7 @@ public class AcideFileEditorTextEditionArea {
 	/**
 	 * ACIDE - A Configurable IDE text edition area line number panel.
 	 */
-	private AcideLineNumberComponent _lineNumberPanel;
+	private AcideLineNumberComponent2 _lineNumberPanel;
 	/**
 	 * ACIDE - A Configurable IDE text edition area matching element position.
 	 */
@@ -123,11 +123,11 @@ public class AcideFileEditorTextEditionArea {
 	 */
 	public void buildScrollPane() {
 
-		// Creates the scroll pane
-		_scrollPane = new JScrollPane(_textPane);
+		// Creates the scroll pane with the text component
+		_scrollPane = new JScrollPane(_textComponent);
 
-		// Creates the line number
-		_lineNumberPanel = new AcideLineNumberComponent(_textPane);
+		// Creates the line number with the text component
+		_lineNumberPanel = new AcideLineNumberComponent2(_textComponent);
 
 		// Sets the left side of the scroll pane as the line number panel
 		_scrollPane.setRowHeaderView(_lineNumberPanel);
@@ -183,10 +183,11 @@ public class AcideFileEditorTextEditionArea {
 	 */
 	protected void buildTextPane(AcideStyledDocument styledDocument) {
 
-		_textPane = new AcideTextPane(styledDocument) {
+		// Creates the text component
+		_textComponent = new AcideTextComponent(styledDocument) {
 
 			/**
-			 * Class serial version UID.
+			 * ACIDE - A Configurable IDE text component class serial version UID.
 			 */
 			private static final long serialVersionUID = 1L;
 
@@ -225,8 +226,8 @@ public class AcideFileEditorTextEditionArea {
 		};
 
 		// Updates the name
-		_textPane.setName((String) styledDocument.getProperty("name"));
-
+		_textComponent.setName((String) styledDocument.getProperty("name"));
+			
 		// Sets the configuration from the configuration file
 		setConfiguration();
 
@@ -240,76 +241,83 @@ public class AcideFileEditorTextEditionArea {
 	public void setConfiguration() {
 
 		// Sets the font from the file editor configuration
-		_textPane.setFont(new Font(AcideFileEditorConfiguration.getInstance()
-				.getFontName(), AcideFileEditorConfiguration.getInstance()
-				.getFontStyle(), AcideFileEditorConfiguration.getInstance()
-				.getFontSize()));
+		_textComponent.setFont(new Font(AcideWorkbenchConfiguration
+				.getInstance().getFileEditorConfiguration().getFontName(),
+				AcideWorkbenchConfiguration.getInstance()
+						.getFileEditorConfiguration().getFontStyle(),
+				AcideWorkbenchConfiguration.getInstance()
+						.getFileEditorConfiguration().getFontSize()));
 
 		// Sets the foreground color from the file editor configuration
-		_textPane.setForeground(AcideFileEditorConfiguration.getInstance()
-				.getForegroundColor());
+		_textComponent.setForeground(AcideWorkbenchConfiguration.getInstance()
+				.getFileEditorConfiguration().getForegroundColor());
 
 		// Sets the Background color from the file editor configuration
-		_textPane.setBackground(AcideFileEditorConfiguration.getInstance()
-				.getBackgroundColor());
+		_textComponent.setBackground(AcideWorkbenchConfiguration.getInstance()
+				.getFileEditorConfiguration().getBackgroundColor());
 
 		// Sets the caret color from the file editor configuration
-		_textPane.setCaretColor(AcideFileEditorConfiguration.getInstance()
-				.getForegroundColor());
+		_textComponent.setCaretColor(AcideWorkbenchConfiguration.getInstance()
+				.getFileEditorConfiguration().getForegroundColor());
 	}
 
 	/**
-	 * Sets the text pane listeners.
+	 * Sets the ACIDE - A Configurable IDE file editor text edition area text
+	 * component listeners.
 	 */
 	public void setTextPaneListeners() {
 
 		// Sets the ACIDE - A Configurable IDE file editor panel popup menu
 		// listener
-		_textPane.addMouseListener(new AcideEditorPanelPopupMenuListener());
+		_textComponent
+				.addMouseListener(new AcideEditorPanelPopupMenuListener());
 
 		// Sets the ACIDE - A Configurable IDE file editor panel mouse listener
-		_textPane.addMouseListener(new AcideFileEditorMouseListener());
+		_textComponent.addMouseListener(new AcideFileEditorMouseListener());
 
 		// Adds the ACIDE - A Configurable IDE file editor panel document
 		// listener
-		_textPane.getDocument().addDocumentListener(
+		_textComponent.getDocument().addDocumentListener(
 				new AcideFileEditorPanelDocumentListener());
 
 		// Adds the ACIDE - A Configurable IDE file editor panel caret listener
-		_textPane.addCaretListener(new AcideFileEditorCaretListener());
+		_textComponent.addCaretListener(new AcideFileEditorCaretListener());
 
 		// Adds the ACIDE - A Configurable IDE search and replace window
 		// keyboard listener
-		_textPane
+		_textComponent
 				.addKeyListener(new AcideSearchReplaceWindowKeyboardListener());
 
 		// Adds the ACIDE - A Configurable IDE search and replace window mouse
 		// listener
-		_textPane.addMouseListener(new AcideSearchReplaceWindowMouseListener());
+		_textComponent
+				.addMouseListener(new AcideSearchReplaceWindowMouseListener());
 
 		// Adds the ACIDE - A Configurable IDE status bar keyboard listener
-		_textPane.addKeyListener(new AcideStatusBarKeyboardListener());
+		_textComponent.addKeyListener(new AcideStatusBarKeyboardListener());
 
 		// Adds the ACIDE - A Configurable IDE menu bar keyboard listener
-		_textPane.addKeyListener(new AcideMenuBarKeyboardListener());
+		_textComponent.addKeyListener(new AcideMenuBarKeyboardListener());
 
 		// Adds the ACIDE - A Configurable IDE focus listener
-		_textPane.addFocusListener(new AcideFileEditorFocusListener());
-		
+		_textComponent.addFocusListener(new AcideFileEditorFocusListener());
+
 		// Adds the ACIDE - A Configurable IDE file editor mouse wheel listener
-		_textPane.addMouseWheelListener(new AcideFileEditorMouseWheelListener());
-		
+		_textComponent
+				.addMouseWheelListener(new AcideFileEditorMouseWheelListener());
+
 		// Adds the ACIDE - A Configurable IDE file editor scroll pane listener
-		_textPane.addKeyListener(new AcideFileEditorScrollPaneKeyListener());
+		_textComponent
+				.addKeyListener(new AcideFileEditorScrollPaneKeyListener());
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE text edition area text pane.
+	 * Returns the ACIDE - A Configurable IDE text edition area text component.
 	 * 
-	 * @return the ACIDE - A Configurable IDE text edition area text pane.
+	 * @return the ACIDE - A Configurable IDE text edition area text component.
 	 */
-	public AcideTextPane getTextPane() {
-		return _textPane;
+	public AcideTextComponent getTextComponent() {
+		return _textComponent;
 	}
 
 	/**
@@ -319,7 +327,7 @@ public class AcideFileEditorTextEditionArea {
 	 * @return the ACIDE - A Configurable IDE text edition area line number
 	 *         panel.
 	 */
-	public AcideLineNumberComponent getLineNumberPanel() {
+	public AcideLineNumberComponent2 getLineNumberPanel() {
 		return _lineNumberPanel;
 	}
 
@@ -402,6 +410,6 @@ public class AcideFileEditorTextEditionArea {
 	 */
 	@Override
 	public String toString() {
-		return "File editor " + _textPane.getName();
+		return "File editor " + _textComponent.getName();
 	}
 }

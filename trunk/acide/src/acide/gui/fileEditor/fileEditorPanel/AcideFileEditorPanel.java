@@ -34,11 +34,11 @@ import acide.configuration.lexicon.AcideLexiconConfiguration;
 import acide.gui.consolePanel.AcideConsolePanel;
 import acide.gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.AcideFileEditorTextEditionArea;
-import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.AcideTextPane;
+import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.utils.AcideTextComponent;
 import acide.gui.fileEditor.fileEditorPanel.listeners.AcideFileEditorPanelDocumentListener;
 import acide.gui.fileEditor.fileEditorPanel.popup.AcideFileEditorPopupMenu;
 import acide.gui.menuBar.configurationMenu.consoleMenu.gui.AcideExternalCommandConfigurationWindow;
-import acide.gui.menuBar.projectMenu.gui.AcideExecutionConfigurationWindow;
+import acide.gui.menuBar.projectMenu.gui.executionWindow.AcideExecutionConfigurationWindow;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -275,9 +275,9 @@ public class AcideFileEditorPanel extends JPanel {
 	 * @return the ACIDE - A Configurable IDE file editor panel active text
 	 *         edition panel.
 	 */
-	public AcideTextPane getActiveTextEditionArea() {
+	public AcideTextComponent getActiveTextEditionArea() {
 		return _textEditionAreaList.get(_activeTextEditionAreaIndex)
-				.getTextPane();
+				.getTextComponent();
 	}
 
 	/**
@@ -292,14 +292,14 @@ public class AcideFileEditorPanel extends JPanel {
 		for (int index = 0; index < NUM_TEXT_EDITORS; index++) {
 
 			// Removes the document listener
-			_textEditionAreaList.get(index).getTextPane().getDocument()
+			_textEditionAreaList.get(index).getTextComponent().getDocument()
 					.removeDocumentListener(_documentListener);
 
 			// Sets the text content
-			_textEditionAreaList.get(index).getTextPane().setText(fileContent);
+			_textEditionAreaList.get(index).getTextComponent().setText(fileContent);
 
 			// Adds the document listener
-			_textEditionAreaList.get(index).getTextPane().getDocument()
+			_textEditionAreaList.get(index).getTextComponent().getDocument()
 					.addDocumentListener(_documentListener);
 		}
 
@@ -333,18 +333,8 @@ public class AcideFileEditorPanel extends JPanel {
 	 */
 	public void resetStyledDocument() {
 
-		new Thread(new Runnable() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
-				// Initializes the document
-				_styledDocument.init();
-			}
-		}).start();
+		// Initializes the document
+		_styledDocument.init();
 	}
 
 	/**
@@ -356,7 +346,7 @@ public class AcideFileEditorPanel extends JPanel {
 	public void goToLine(int line) {
 
 		// Gets the active text edition area
-		AcideTextPane activeTextEditionArea = getActiveTextEditionArea();
+		AcideTextComponent activeTextEditionArea = getActiveTextEditionArea();
 
 		// Calculates the line
 		Element root = activeTextEditionArea.getDocument()
@@ -378,7 +368,7 @@ public class AcideFileEditorPanel extends JPanel {
 	 */
 	public String getTextEditionAreaContent() {
 		return _textEditionAreaList.get(_activeTextEditionAreaIndex)
-				.getTextPane().getText();
+				.getTextComponent().getText();
 	}
 
 	/**
@@ -522,7 +512,7 @@ public class AcideFileEditorPanel extends JPanel {
 	 *            new value to set.
 	 */
 	public void setEditable(boolean editable) {
-		_textEditionAreaList.get(_activeTextEditionAreaIndex).getTextPane()
+		_textEditionAreaList.get(_activeTextEditionAreaIndex).getTextComponent()
 				.setEditable(editable);
 	}
 
@@ -746,18 +736,18 @@ public class AcideFileEditorPanel extends JPanel {
 			_textEditionAreaList.get(index).getLineNumberPanel().setFont(font);
 
 			// Sets the font
-			_textEditionAreaList.get(index).getTextPane().setFont(font);
+			_textEditionAreaList.get(index).getTextComponent().setFont(font);
 
 			// Sets the foreground color
-			_textEditionAreaList.get(index).getTextPane()
+			_textEditionAreaList.get(index).getTextComponent()
 					.setForeground(foregroundColor);
 
 			// Sets the background color
-			_textEditionAreaList.get(index).getTextPane()
+			_textEditionAreaList.get(index).getTextComponent()
 					.setBackground(backgroundColor);
 
 			// Sets the caret color
-			_textEditionAreaList.get(index).getTextPane()
+			_textEditionAreaList.get(index).getTextComponent()
 					.setCaretColor(foregroundColor);
 		}
 	}
@@ -777,7 +767,7 @@ public class AcideFileEditorPanel extends JPanel {
 		for (int index = 0; index < NUM_TEXT_EDITORS; index++) {
 
 			// Gets the current font
-			Font currentFont = _textEditionAreaList.get(index).getTextPane()
+			Font currentFont = _textEditionAreaList.get(index).getTextComponent()
 					.getFont();
 
 			Font newFont;
@@ -791,7 +781,7 @@ public class AcideFileEditorPanel extends JPanel {
 						currentFont.getStyle(), currentFont.getSize() - zoom);
 
 			// Sets the new font
-			_textEditionAreaList.get(index).getTextPane().setFont(newFont);
+			_textEditionAreaList.get(index).getTextComponent().setFont(newFont);
 		}
 	}
 
@@ -804,7 +794,7 @@ public class AcideFileEditorPanel extends JPanel {
 	public void setEditionMode(final boolean editionMode) {
 
 		for (int index = 0; index < _textEditionAreaList.size(); index++)
-			_textEditionAreaList.get(index).getTextPane()
+			_textEditionAreaList.get(index).getTextComponent()
 					.setEditionMode(editionMode);
 	}
 

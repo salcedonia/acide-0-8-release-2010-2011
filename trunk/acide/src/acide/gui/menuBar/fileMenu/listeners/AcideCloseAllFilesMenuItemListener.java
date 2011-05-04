@@ -57,7 +57,7 @@ public class AcideCloseAllFilesMenuItemListener implements ActionListener {
 				.getFileEditorManager().getNumberOfFileEditorPanels();
 
 		// If there are any opened file editor panels
-		if (numberOfFileEditorPanels != 0) {
+		if (numberOfFileEditorPanels > 0) {
 
 			// Checks the opened editors
 			for (int index = numberOfFileEditorPanels - 1; index >= 0; index--) {

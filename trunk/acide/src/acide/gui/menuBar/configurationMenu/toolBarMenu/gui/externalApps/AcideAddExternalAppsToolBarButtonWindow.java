@@ -139,7 +139,7 @@ public class AcideAddExternalAppsToolBarButtonWindow extends JFrame {
 	 * window examine icon button.
 	 */
 	private JButton _examineIconButton;
-	
+
 	/**
 	 * ACIDE - A Configurable IDE add external applications tool bar button
 	 * window external applications configuration panel.
@@ -189,8 +189,8 @@ public class AcideAddExternalAppsToolBarButtonWindow extends JFrame {
 		_nameTextField = new JTextField();
 
 		// Creates the action label
-		_pathLabel = new JLabel(AcideLanguageManager.getInstance()
-				.getLabels().getString("s134"), JLabel.LEFT);
+		_pathLabel = new JLabel(AcideLanguageManager.getInstance().getLabels()
+				.getString("s134"), JLabel.LEFT);
 
 		// Creates the action text field
 		_pathTextField = new JTextField();
@@ -198,7 +198,7 @@ public class AcideAddExternalAppsToolBarButtonWindow extends JFrame {
 		// Creates the examine path button
 		_examinePathButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s142"));
-		
+
 		// Creates the hint text label
 		_hintTextLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s135"), JLabel.LEFT);
@@ -321,10 +321,10 @@ public class AcideAddExternalAppsToolBarButtonWindow extends JFrame {
 
 		// Adds the examine path button to the command panel
 		_commandPanel.add(_examinePathButton, constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		
+
 		// Adds the hint text label to the command panel
 		_commandPanel.add(_hintTextLabel, constraints);
 
@@ -377,7 +377,7 @@ public class AcideAddExternalAppsToolBarButtonWindow extends JFrame {
 
 		// Sets the examine path button action listener
 		_examinePathButton.addActionListener(new ExaminePathButtonAction());
-		
+
 		// Sets the examine icon button action listener
 		_examineIconButton.addActionListener(new ExamineIconButtonAction());
 
@@ -420,12 +420,25 @@ public class AcideAddExternalAppsToolBarButtonWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Asks the path to the user
-			String path = AcideFileManager.getInstance().askAbsolutePath();
-			_pathTextField.setText(path);
+			// Removes the filter
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.removeChoosableFileFilter(
+							AcideFileManager.getInstance().getFileChooser()
+									.getFileFilter());
+
+			// Ask the path to the user
+			String absolutePath = AcideFileManager.getInstance()
+					.askForOpenFile(true);
+
+			if (absolutePath != null)
+
+				// Updates the path text field with the absolute path
+				_pathTextField.setText(absolutePath);
 		}
 	}
-	
+
 	/**
 	 * ACIDE - A Configurable IDE add external applications tool bar button
 	 * window examine button action listener.
@@ -445,9 +458,22 @@ public class AcideAddExternalAppsToolBarButtonWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Asks the path to the user
-			String path = AcideFileManager.getInstance().askAbsolutePath();
-			_iconTextField.setText(path);
+			// Removes the filter
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.removeChoosableFileFilter(
+							AcideFileManager.getInstance().getFileChooser()
+									.getFileFilter());
+
+			// Ask the path to the user
+			String absolutePath = AcideFileManager.getInstance()
+					.askForOpenFile(true);
+
+			if (absolutePath != null)
+
+				// Updates the icon text field with the absolute path
+				_iconTextField.setText(absolutePath);
 		}
 	}
 

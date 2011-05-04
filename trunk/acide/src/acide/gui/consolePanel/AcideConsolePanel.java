@@ -29,11 +29,11 @@
  */
 package acide.gui.consolePanel;
 
-import acide.configuration.console.AcideConsoleConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
-import acide.gui.consolePanel.listeners.AcideConsolePanelCaretListener;
 import acide.gui.consolePanel.listeners.AcideConsolePanelFocusListener;
 import acide.gui.consolePanel.listeners.AcideConsolePanelKeyboardListener;
+import acide.gui.consolePanel.listeners.AcideConsolePanelMouseListener;
+import acide.gui.consolePanel.listeners.AcideConsolePanelMouseWheelListener;
 import acide.gui.consolePanel.listeners.AcideConsolePanelPopupMenuListener;
 import acide.gui.consolePanel.popup.AcideConsolePanelPopupMenu;
 import acide.gui.mainWindow.AcideMainWindow;
@@ -43,21 +43,19 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
-import javax.swing.text.BadLocationException;
+import javax.swing.KeyStroke;
 import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.Document;
-import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 import acide.process.console.AcideConsoleProcess;
+import acide.resources.AcideResourceManager;
+import acide.resources.exception.MissedPropertyException;
 
 /**
  * ACIDE - A Configurable IDE console panel.
@@ -100,21 +98,9 @@ public class AcideConsolePanel extends JPanel {
 	 */
 	private int _promptCaretPosition;
 	/**
-	 * ACIDE - A Configurable IDE console panel selection size.
-	 */
-	private int _textSelectionSize;
-	/**
-	 * ACIDE - A Configurable IDE console panel historic current index.
-	 */
-	private int _commandRecordCurrentIndex;
-	/**
-	 * ACIDE - A Configurable IDE console panel historic maximum index value.
-	 */
-	private int _commandRecordMaximumIndex;
-	/**
 	 * ACIDE - A Configurable IDE console panel user commands record.
 	 */
-	private ArrayList<String> _commandRecord;
+	private AcideConsolePanelCommandRecord _commandRecord;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE console panel.
@@ -123,14 +109,8 @@ public class AcideConsolePanel extends JPanel {
 
 		super();
 
-		// Creates the command record list
-		_commandRecord = new ArrayList<String>();
-
-		// The command record current index is 0
-		_commandRecordCurrentIndex = 0;
-
-		// The command record maximum index is 0
-		_commandRecordMaximumIndex = 0;
+		// Creates the command record
+		_commandRecord = new AcideConsolePanelCommandRecord();
 
 		try {
 
@@ -151,9 +131,6 @@ public class AcideConsolePanel extends JPanel {
 			// The prompt caret position is not set yet
 			_promptCaretPosition = 0;
 
-			// There is no text selection
-			_textSelectionSize = 0;
-
 			// Sets the font by default to the text pane
 			_textPane.setFont(new Font("Monospaced", Font.PLAIN, 12));
 
@@ -166,6 +143,10 @@ public class AcideConsolePanel extends JPanel {
 			// Sets the background color by default to the text pane
 			_textPane.setBackground(Color.WHITE);
 
+			// This avoids the extra return carriages in the console
+			_textPane.getInputMap()
+					.put(KeyStroke.getKeyStroke("ENTER"), "none");
+
 			// Sets the layout
 			setLayout(new BorderLayout());
 
@@ -174,9 +155,6 @@ public class AcideConsolePanel extends JPanel {
 
 			// Adds the scroll panel to the panel
 			add(_scrollPane);
-
-			// Updates the undo manager so it can handles CTRL-Z and CTRL-Y
-			// AcideUndoRedoManager.getInstance().update(_defaultStyledDocument);
 
 			// Updates the log
 			AcideLog.getLog().info(
@@ -212,35 +190,61 @@ public class AcideConsolePanel extends JPanel {
 		// Sets the ACIDE - A Configurable IDE console panel focus listener
 		_textPane.addFocusListener(new AcideConsolePanelFocusListener());
 
-		// Sets the ACIDE - A Configurable IDE console panel caret listener
-		_textPane.addCaretListener(new AcideConsolePanelCaretListener());
+		// Sets the ACIDE - A Configurable IDE console panel mouse listener
+		_textPane.addMouseListener(new AcideConsolePanelMouseListener());
+
+		// Sets the ACIDE - A Configurable IDE console panel mouse wheel
+		// listener
+		_textPane
+				.addMouseWheelListener(new AcideConsolePanelMouseWheelListener());
 
 		// Sets the ACIDE - A Configurable IDE console panel popup menu listener
 		_textPane.addMouseListener(new AcideConsolePanelPopupMenuListener());
 	}
 
 	/**
-	 * Updates the output visualization.
+	 * Updates the ACIDE - A Configurable IDE console panel look and feel.
 	 */
-	public void updateConsoleDisplayOptions() {
+	public void setLookAndFeel() {
 
-		// Sets the font type
-		setFontName(new Font(AcideConsoleConfiguration.getInstance()
-				.getFontName(), AcideConsoleConfiguration.getInstance()
-				.getFontStyle(), AcideConsoleConfiguration.getInstance()
-				.getFontSize()));
+		Font newFont = null;
+		try {
 
-		// Sets the foreground color
-		setForegroundColor(AcideConsoleConfiguration.getInstance()
-				.getForegroundColor());
+			// Creates the new font to display
+			newFont = new Font(AcideResourceManager.getInstance().getProperty(
+					"consolePanel.fontName"),
+					Integer.parseInt(AcideResourceManager.getInstance()
+							.getProperty("consolePanel.fontStyle")),
+					Integer.parseInt(AcideResourceManager.getInstance()
+							.getProperty("consolePanel.fontSize")));
 
-		// Sets the background color
-		setBackgroundColor(AcideConsoleConfiguration.getInstance()
-				.getBackgroundColor());
+			// Sets the font type
+			_textPane.setFont(newFont);
 
-		// Sets the caret color
-		_textPane.setCaretColor(AcideConsoleConfiguration.getInstance()
-				.getForegroundColor());
+			// Sets the foreground color
+			setForegroundColor(new Color(Integer.parseInt(AcideResourceManager
+					.getInstance().getProperty("consolePanel.foregroundColor"))));
+
+			// Sets the background color
+			setBackgroundColor(new Color(Integer.parseInt(AcideResourceManager
+					.getInstance().getProperty("consolePanel.backgroundColor"))));
+
+			// Sets the caret color
+			_textPane.setCaretColor(new Color(Integer
+					.parseInt(AcideResourceManager.getInstance().getProperty(
+							"consolePanel.foregroundColor"))));
+
+		} catch (NumberFormatException exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		} catch (MissedPropertyException exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
 	}
 
 	/**
@@ -296,57 +300,58 @@ public class AcideConsolePanel extends JPanel {
 	}
 
 	/**
+	 * <p>
 	 * Adds a text given as a parameter to the console text.
+	 * </p>
+	 * <p>
+	 * Once the command has been sent to the console process, the reader in the
+	 * console process sends the text to add to the console panel text as a
+	 * response from the external shell.
+	 * </p>
 	 * 
 	 * @param text
 	 *            text to add.
 	 */
-	public void addText(final String text) {
+	public void addText(String text) {
 
-		SwingUtilities.invokeLater(new Runnable() {
+		// Erases the duplicated command
+		String newText = eraseDuplicatedCommand(text);
 
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
+		// Updates the text in the text pane
+		_textPane.setText(_textPane.getText().concat(newText));
 
-				String newText = null;
-				try {
-					if (!AcideConsoleConfiguration.getInstance()
-							.getIsEchoCommand()
-							&& (_command.length() <= text.length())) {
-						if (text.substring(0, _command.length()).equals(
-								_command)) {
-							newText = text.substring(_command.length(),
-									text.length());
-						}
-					}
-				} catch (Exception exception) {
+		// Updates the prompt caret position
+		_promptCaretPosition = _textPane.getText().length();
 
-					// Updates the log
-					AcideLog.getLog().error(exception.getMessage());
-					exception.printStackTrace();
-				}
+		// Updates the caret position
+		_textPane.setCaretPosition(_textPane.getText().length());
+	}
 
-				// Updates the text in the text pane
-				String auxText = _textPane.getText();
+	/**
+	 * <p>
+	 * Erases the duplicated command from the text to add to the console panel
+	 * after sending a command to the console process.
+	 * </p>
+	 * <p>
+	 * This phenomenon only seems to appear when the loaded shell is the
+	 * operative system one, not with other different shells though.
+	 * </p>
+	 * 
+	 * @param text
+	 *            new text to add.
+	 */
+	public String eraseDuplicatedCommand(String text) {
 
-				if (newText != null)
-					auxText = auxText + newText;
-				else
-					auxText = auxText + text;
-				_textPane.setText(auxText);
+		// Avoids index out of bounds exceptions
+		if (_command.length() <= text.length()) {
 
-				// Updates the prompt caret position
-				_promptCaretPosition = _textPane.getText().length();
+			// If the first thing of the new text is the command
+			if (text.substring(0, _command.length()).equals(_command))
 
-				// Updates the caret position
-				_textPane.setCaretPosition(_promptCaretPosition);
-			}
-		});
+				// Skips it
+				return text.substring(_command.length(), text.length());
+		}
+		return text;
 	}
 
 	/**
@@ -354,42 +359,33 @@ public class AcideConsolePanel extends JPanel {
 	 */
 	public void executeExitCommand() {
 
-		SwingUtilities.invokeLater(new Runnable() {
+		try {
 
-			@Override
-			public void run() {
+			// Gets the exit command
+			_command = AcideResourceManager.getInstance().getProperty(
+					"consolePanel.exitCommand");
 
-				try {
+			// If the writer is initialized
+			if (_consoleProcess.getWriter() != null) {
 
-					// Gets the exit command
-					_command = AcideConsoleConfiguration.getInstance()
-							.getExitCommand();
+				// Sends the exit command to the writer
+				_consoleProcess.getWriter().write(_command + '\n');
 
-					// If the writer is initialized
-					if (_consoleProcess.getWriter() != null) {
-
-						// Sends the exit command to the writer
-						_consoleProcess.getWriter().write(_command + '\n');
-
-						// Flushes the writer
-						_consoleProcess.getWriter().flush();
-					}
-
-					// Kills the process anyway
-					killShellProcess();
-
-					// Clears the text pane content
-					_textPane.setText("");
-				} catch (Exception exception) {
-
-					// The stream is closed
-					
-					// Updates the log
-					AcideLog.getLog().error(exception.getMessage());
-					//exception.printStackTrace();
-				}
+				// Flushes the writer
+				_consoleProcess.getWriter().flush();
 			}
-		});
+
+			// Kills the process anyway
+			killShellProcess();
+
+		} catch (Exception exception) {
+
+			// The stream is closed
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			// exception.printStackTrace();
+		}
 	}
 
 	/**
@@ -398,56 +394,67 @@ public class AcideConsolePanel extends JPanel {
 	 */
 	public void killShellProcess() {
 
-		// Gets the name of the current process
-		String shellPath = AcideConsoleConfiguration.getInstance()
-				.getShellPath();
-
-		int lastIndexOfSlash = shellPath.lastIndexOf("\\");
-		if (lastIndexOfSlash == -1)
-			lastIndexOfSlash = shellPath.lastIndexOf("/");
-
-		// Gets the shell name process
-		String shellName = shellPath.substring(lastIndexOfSlash + 1);
-
-		// Gets the operative system
-		String operativeSystemName = System.getProperty("os.name");
-		String command = "";
-
-		// If it is WINDOWS
-		if (operativeSystemName.toUpperCase().contains("WIN")) {
-			command += "taskkill /im " + shellName + " /f";
-		} else {
-			command += "killall " + shellName;
-		}
-
-		Process killerProcess;
+		String shellPath;
 		try {
 
-			String message = "";
+			// Gets the shell path
+			shellPath = AcideResourceManager.getInstance().getProperty(
+					"consolePanel.shellPath");
 
-			// Executes the killer process
-			killerProcess = Runtime.getRuntime().exec(command);
-			killerProcess.waitFor();
+			// Gets the name of the current process
+			int lastIndexOfSlash = shellPath.lastIndexOf("\\");
+			if (lastIndexOfSlash == -1)
+				lastIndexOfSlash = shellPath.lastIndexOf("/");
 
-			if (killerProcess.exitValue() == 0)
-				message += shellName + " succesfully killed";
-			else
-				message += "Unable to kill " + shellName + ". Exit code: "
-						+ killerProcess.exitValue() + "n";
+			// Gets the shell name process
+			String shellName = shellPath.substring(lastIndexOfSlash + 1);
 
-			// Updates the log
-			AcideLog.getLog().info(message);
+			// Gets the operative system
+			String operativeSystemName = System.getProperty("os.name");
+			String command = "";
 
-			// Destroy the cmd.exe process recently executed
-			killerProcess.destroy();
+			// If it is WINDOWS
+			if (operativeSystemName.toUpperCase().contains("WIN")) {
+				command += "taskkill /im " + shellName + " /f";
+			} else {
+				command += "killall " + shellName;
+			}
 
-		} catch (IOException exception) {
+			Process killerProcess;
+			try {
 
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
+				String message = "";
 
-		} catch (InterruptedException exception) {
+				// Executes the killer process
+				killerProcess = Runtime.getRuntime().exec(command);
+				killerProcess.waitFor();
+
+				if (killerProcess.exitValue() == 0)
+					message += shellName + " succesfully killed";
+				else
+					message += "Unable to kill " + shellName + ". Exit code: "
+							+ killerProcess.exitValue() + "n";
+
+				// Updates the log
+				AcideLog.getLog().info(message);
+
+				// Destroy the cmd.exe process recently executed
+				killerProcess.destroy();
+
+			} catch (IOException exception) {
+
+				// Updates the log
+				AcideLog.getLog().error(exception.getMessage());
+				exception.printStackTrace();
+
+			} catch (InterruptedException exception) {
+
+				// Updates the log
+				AcideLog.getLog().error(exception.getMessage());
+				exception.printStackTrace();
+			}
+
+		} catch (MissedPropertyException exception) {
 
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
@@ -549,7 +556,31 @@ public class AcideConsolePanel extends JPanel {
 					}
 				}
 
-				// Executes the command
+				// Erases the previous text after the prompt
+				_textPane.setText(_textPane.getText().substring(0,
+						_promptCaretPosition));
+
+				// If the parameter is not ""
+				if (!parameter.matches("")) {
+
+					// If it is echo of the command
+					if (Boolean.parseBoolean(AcideResourceManager.getInstance()
+							.getProperty("consolePanel.isEchoCommand")))
+
+						// Adds the command to the text pane text
+						_textPane.setText(_textPane.getText().concat(
+								command + " " + parameter));
+				} else {
+
+					// If it is echo of the command
+					if (Boolean.parseBoolean(AcideResourceManager.getInstance()
+							.getProperty("consolePanel.isEchoCommand")))
+
+						// Adds the command to the text pane text
+						_textPane.setText(_textPane.getText().concat(command));
+				}
+
+				// Sends the command to the console
 				sendCommandToConsole(command, parameter);
 
 			} catch (Exception exception) {
@@ -575,32 +606,30 @@ public class AcideConsolePanel extends JPanel {
 
 			if (_consoleProcess.getWriter() != null) {
 
-				// There is no text selection
-				_textSelectionSize = 0;
-
-				// Updates the command to be executed
-				_command = command;
-
 				// If the parameter is not ""
-				if (!parameter.matches(""))
+				if (!parameter.matches("")) {
+
+					// Updates the command to be executed
+					_command = command + " " + parameter;
+
+					// Sends the command to the output process
+					_consoleProcess.getWriter().write(
+							command + " " + parameter + '\n');
+
+				} else {
+
+					// Updates the command to be executed
+					_command = command;
 
 					// Sends the command to the output shell
-					_consoleProcess.getWriter().write(
-							command + " " + parameter + "\n");
-				else
-					// Sends the command to the output shell
-					_consoleProcess.getWriter().write(command + "\n");
+					_consoleProcess.getWriter().write(command + '\n');
+				}
 
 				// Flushes the writer
 				_consoleProcess.getWriter().flush();
 
-				// If the parameter is not ""
-				if (!parameter.matches(""))
-					// Updates the command record
-					updateCommandRecord(command + " " + parameter);
-				else
-					// Updates the command record
-					updateCommandRecord(command);
+				// Updates the command record
+				updateCommandRecord(_command);
 			}
 		} catch (IOException exception) {
 
@@ -608,7 +637,7 @@ public class AcideConsolePanel extends JPanel {
 
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
-			//exception.printStackTrace();
+			// exception.printStackTrace();
 		}
 	}
 
@@ -619,53 +648,33 @@ public class AcideConsolePanel extends JPanel {
 	 * @param command
 	 *            executed command.
 	 */
-	public void updateCommandRecord(final String command) {
+	public void updateCommandRecord(String command) {
 
-		SwingUtilities.invokeLater(new Runnable() {
+		// The blank command does not count
+		if (!command.matches("\n")) {
 
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
+			// If the command record contains the command
+			if (_commandRecord.contains(command)) {
 
-				try {
-					// Sets the caret at the end of the command
-					_textPane.setCaretPosition(_promptCaretPosition);
+				// Decreases the command record maximum index
+				_commandRecord
+						.setMaximumIndex(_commandRecord.getMaximumIndex() - 1);
 
-				} catch (Exception exception) {
-
-					// Updates the log
-					AcideLog.getLog().error(exception.getMessage());
-				}
-
-				// The blank command does not count
-				if (!command.matches("\n")) {
-
-					// If the command record contains the command
-					if (_commandRecord.contains(command)) {
-
-						// Decreases the command record maximum index
-						_commandRecordMaximumIndex--;
-
-						// Removes the command from the command record
-						_commandRecord.remove(command);
-					}
-
-					// Adds the command to the command record
-					_commandRecord.add(command);
-
-					// Increases the command record maximum index
-					_commandRecordMaximumIndex++;
-
-					// The current command record current index is the maximum
-					// index
-					_commandRecordCurrentIndex = _commandRecordMaximumIndex;
-				}
+				// Removes the command from the command record
+				_commandRecord.remove(command);
 			}
-		});
+
+			// Adds the command to the command record
+			_commandRecord.add(command);
+
+			// Increases the command record maximum index
+			_commandRecord
+					.setMaximumIndex(_commandRecord.getMaximumIndex() + 1);
+
+			// The current command record current index is the maximum
+			// index
+			_commandRecord.setCurrentIndex(_commandRecord.getMaximumIndex());
+		}
 	}
 
 	/**
@@ -674,71 +683,29 @@ public class AcideConsolePanel extends JPanel {
 	 */
 	public void clearConsoleBuffer() {
 
-		SwingUtilities.invokeLater(new Runnable() {
+		// Gets the text from the beginning to the prompt caret position
+		String text = _textPane.getText().substring(0, _promptCaretPosition);
 
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
+		// Splits the text in lines
+		String[] lines = text.split("\n");
 
-				// Gets the last line in the text pane
-				Document document = _textPane.getDocument();
-				Element rootElem = document.getDefaultRootElement();
-				int numLines = rootElem.getElementCount();
-				Element lineElem = rootElem.getElement(numLines - 1);
-				int lineStart = lineElem.getStartOffset();
-				int lineEnd = lineElem.getEndOffset() - 1;
+		// Puts only the last line
+		_textPane.setText(lines[lines.length - 1]);
 
-				String lineText = "";
-				try {
+		// Updates the prompt caret position
+		_promptCaretPosition = _textPane.getText().length();
 
-					// Gets the text until the prompt
-					lineText = document.getText(lineStart, lineEnd - lineStart);
-				} catch (BadLocationException exception) {
-
-					// Updates the log
-					AcideLog.getLog().error(exception.getMessage());
-					exception.printStackTrace();
-				}
-
-				// Puts only the last line in the text pane as the text,
-				// clearing all the rest and without a \n in the beginning
-				_textPane.setText(lineText.replaceFirst("\n", ""));
-
-				// Updates the prompt caret position
-				_promptCaretPosition = _textPane.getText().lastIndexOf(">") + 1;
-
-				// Updates the caret position
-				_textPane.setCaretPosition(_textPane.getText().length());
-			}
-		});
+		// Updates the caret position
+		_textPane.setCaretPosition(_promptCaretPosition);
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE console panel text pane.
-	 * 
-	 * @return the ACIDE - A Configurable IDE console panel text pane.
+	 * Resets the ACIDE - A Configurable IDE console panel.
 	 */
-	public JTextComponent getTextPane() {
-		return _textPane;
-	}
+	public void resetConsole() {
 
-	/**
-	 * Returns the console text pane content.
-	 * 
-	 * @return the console text pane content.
-	 */
-	public String getTextPaneContent() {
-		return _textPane.getText();
-	}
-
-	/**
-	 * Executes the ACIDE - A Configurable IDE console panel process.
-	 */
-	public void executeConsoleProcess() {
+		// Sets the text pane as ""
+		_textPane.setText("");
 
 		// Creates a new console process
 		_consoleProcess = new AcideConsoleProcess();
@@ -748,26 +715,53 @@ public class AcideConsolePanel extends JPanel {
 	}
 
 	/**
-	 * Resets the ACIDE - A Configurable IDE console panel.
+	 * <p>
+	 * Zooms in or out the font size of the ACIDE - A Configurable IDE console
+	 * panel text pane depending on a boolean variable given as a parameter.
+	 * </p>
+	 * <p>
+	 * Also the increment is given as parameter as well.
+	 * </p>
+	 * 
+	 * @param zoom
+	 *            increment to apply.
+	 * @param hasToIncrement
+	 *            indicates if the zoom is in or out.
 	 */
-	public void resetConsole() {
+	public void zoomFont(int zoom, boolean hasToIncrement) {
 
-		SwingUtilities.invokeLater(new Runnable() {
+		// Gets the current font
+		Font currentFont = _textPane.getFont();
 
-			/*
-			 * (non-Javadoc)
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
+		Font newFont;
 
-				// Sets the text pane as ""
-				_textPane.setText("");
+		// If it is zoom out
+		if (hasToIncrement)
+			newFont = new Font(currentFont.getFontName(),
+					currentFont.getStyle(), currentFont.getSize() + zoom);
+		else
+			newFont = new Font(currentFont.getFontName(),
+					currentFont.getStyle(), currentFont.getSize() - zoom);
 
-				// Executes the process thread
-				executeConsoleProcess();
-			}
-		});
+		// Sets the new font
+		_textPane.setFont(newFont);
+	}
+
+	/**
+	 * Selects a text in the ACIDE - A Configurable IDE console panel text pane.
+	 * 
+	 * @param start
+	 *            selection start.
+	 * @param length
+	 *            selection length.
+	 */
+	public void selectText(int start, int length) {
+
+		// Sets the selection start
+		_textPane.setSelectionStart(start);
+
+		// Sets the selection end
+		_textPane.setSelectionEnd(start + length);
 	}
 
 	/**
@@ -814,25 +808,6 @@ public class AcideConsolePanel extends JPanel {
 	}
 
 	/**
-	 * Returns the selection size.
-	 * 
-	 * @return the selection size.
-	 */
-	public int getSelectionSize() {
-		return _textSelectionSize;
-	}
-
-	/**
-	 * Sets a new value to the selection size.
-	 * 
-	 * @param selectionSize
-	 *            new value to set.
-	 */
-	public void setSelectionSize(int selectionSize) {
-		_textSelectionSize = selectionSize;
-	}
-
-	/**
 	 * Returns the default styled document.
 	 * 
 	 * @return the default styled document.
@@ -866,46 +841,8 @@ public class AcideConsolePanel extends JPanel {
 	 * 
 	 * @return the ACIDE - A Configurable IDE console panel command record.
 	 */
-	public ArrayList<String> getCommandRecord() {
+	public AcideConsolePanelCommandRecord getCommandRecord() {
 		return _commandRecord;
-	}
-
-	/**
-	 * Returns the command record current index.
-	 * 
-	 * @return the command record current index.
-	 */
-	public int getCommandRecordCurrentIndex() {
-		return _commandRecordCurrentIndex;
-	}
-
-	/**
-	 * Sets a new value to the command record current index.
-	 * 
-	 * @param commandRecordCurrentIndex
-	 *            new value to set.
-	 */
-	public void setCommandRecordCurrentIndex(int commandRecordCurrentIndex) {
-		_commandRecordCurrentIndex = commandRecordCurrentIndex;
-	}
-
-	/**
-	 * Returns the command record maximum index.
-	 * 
-	 * @return the command record maximum index.
-	 */
-	public int getCommandRecordMaximumIndex() {
-		return _commandRecordMaximumIndex;
-	}
-
-	/**
-	 * Sets the command record maximum index.
-	 * 
-	 * @param commandRecordMaximumIndex
-	 *            new value to set.
-	 */
-	public void setCommandRecordMaximumIndex(int commandRecordMaximumIndex) {
-		_commandRecordMaximumIndex = commandRecordMaximumIndex;
 	}
 
 	/**
@@ -915,5 +852,34 @@ public class AcideConsolePanel extends JPanel {
 	 */
 	public AcideConsolePanelPopupMenu getPopupMenu() {
 		return _popupMenu;
+	}
+
+	/**
+	 * Sets a new value to the command.
+	 * 
+	 * @param command
+	 *            new value to set.
+	 */
+	public void setCommand(String command) {
+		_command = command;
+	}
+
+	/**
+	 * Sets a new value to the prompt caret position.
+	 * 
+	 * @param promptCaretPosition
+	 *            new value to set.
+	 */
+	public void setPromptCaretPosition(int promptCaretPosition) {
+		_promptCaretPosition = promptCaretPosition;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE console panel text pane.
+	 * 
+	 * @return the ACIDE - A Configurable IDE console panel text pane.
+	 */
+	public JTextComponent getTextPane() {
+		return _textPane;
 	}
 }

@@ -36,14 +36,21 @@ import acide.gui.fileEditor.fileEditorManager.listeners.AcideFileEditorManagerCh
 import acide.gui.fileEditor.fileEditorManager.listeners.AcideFileEditorManagerMouseClickListener;
 import acide.gui.fileEditor.fileEditorManager.utils.gui.AcideDragAndDropTabbedPane;
 import acide.gui.fileEditor.fileEditorManager.utils.logic.UI.AcideFileEditorTabbedPaneUI;
+import acide.gui.fileEditor.fileEditorManager.utils.logic.closeButton.AcideFileEditorCloseButton;
 import acide.gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
 import acide.gui.fileEditor.fileEditorPanel.listeners.AcideFileEditorPanelDocumentListener;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.editMenu.utils.AcideUndoManager;
 
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
@@ -79,7 +86,7 @@ public class AcideFileEditorManager {
 	 * 
 	 * Handles the painting for the tabbed pane and the closing buttons.
 	 */
-	private AcideFileEditorTabbedPaneUI _tabbedPanelUI;
+	private AcideFileEditorTabbedPaneUI _tabbedPaneUI;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE file editor manager.
@@ -92,10 +99,13 @@ public class AcideFileEditorManager {
 			_tabbedPane = new AcideDragAndDropTabbedPane();
 
 			// Creates the tabbed pane UI
-			_tabbedPanelUI = new AcideFileEditorTabbedPaneUI();
+			_tabbedPaneUI = new AcideFileEditorTabbedPaneUI();
 
 			// Sets the tabbed pane UI
-			_tabbedPane.setUI(_tabbedPanelUI);
+			_tabbedPane.setUI(_tabbedPaneUI);
+
+			// Removes the tabbed pane bindings
+			removeTabbedPaneBindings();
 
 			// Sets the tabbed pane listeners
 			setListeners();
@@ -108,6 +118,34 @@ public class AcideFileEditorManager {
 							.getString("s315"));
 			exception.printStackTrace();
 		}
+	}
+
+	/**
+	 * Removes the ACIDE - A Configurable IDE file editor manager tabbed pane
+	 * CTRL+UP and CTRL+DOWN bindings.
+	 */
+	private void removeTabbedPaneBindings() {
+
+		// Gets the input map when ancestor of focused component
+		InputMap map = _tabbedPane
+				.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+		// Gets the key stroke CTRL+UP
+		KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_UP,
+				InputEvent.CTRL_MASK, false);
+
+		// Removes its binding
+		map.put(keyStroke, "DoNothing");
+
+		// Gets the input map when focused
+		map = _tabbedPane.getInputMap(JComponent.WHEN_FOCUSED);
+
+		// Gets the key stroke CTRL+DOWN
+		keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN,
+				InputEvent.CTRL_MASK, false);
+
+		// Removes its binding
+		map.put(keyStroke, "DoNothing");
 	}
 
 	/**
@@ -166,6 +204,8 @@ public class AcideFileEditorManager {
 			if (getFileEditorPanelAt(index).getAbsolutePath() == filePath)
 				tabPosition = index;
 
+		final int index = tabPosition;
+
 		// if it is not opened yet
 		if (tabPosition == -1) {
 
@@ -204,7 +244,8 @@ public class AcideFileEditorManager {
 			getSelectedFileEditorPanel().resetStyledDocument();
 
 			// Updates the undo manager
-			AcideUndoManager.getInstance().update();
+			AcideUndoManager.getInstance().setTextComponent(
+					getSelectedFileEditorPanel().getActiveTextEditionArea());
 
 			// Sets the caret position in the position stored in the file editor
 			// configuration
@@ -214,7 +255,7 @@ public class AcideFileEditorManager {
 		} else {
 
 			// Updates the selected file editor index
-			updateRelatedComponentsAt(tabPosition);
+			updateRelatedComponentsAt(index);
 		}
 	}
 
@@ -317,6 +358,69 @@ public class AcideFileEditorManager {
 	}
 
 	/**
+	 * <p>
+	 * Asks for saving the modified files in the file editor.
+	 * </p>
+	 * <p>
+	 * If the user cancels the operation in any moment, it will not continue
+	 * asking for more savings.
+	 * </p>
+	 * 
+	 * @return false if the cancel option has been selected and true in other
+	 *         case.
+	 */
+	public boolean askForSavingModifiedFiles() {
+
+		// If the file editor configuration is modified
+		if (isModified()) {
+
+			// Gets the number of file editor panels
+			int numberOfFileEditorPanels = getNumberOfFileEditorPanels();
+
+			// If there are opened file editor panels
+			if (numberOfFileEditorPanels > 0) {
+
+				int selectedFileEditorPanelIndex = getSelectedFileEditorPanelIndex();
+
+				// Search for modified opened file editors
+				for (int index = numberOfFileEditorPanels - 1; index >= 0; index--) {
+
+					// If it is modified
+					if (isRedButton(index)) {
+
+						// Puts the focus on the current checked file
+						// editor panel
+						setSelectedFileEditorPanelAt(index);
+
+						// Do you want to save it?
+						int returnValue2 = JOptionPane.showConfirmDialog(null,
+								AcideLanguageManager.getInstance().getLabels()
+										.getString("s643"),
+								AcideLanguageManager.getInstance().getLabels()
+										.getString("s953"),
+								JOptionPane.YES_NO_CANCEL_OPTION);
+
+						// If it is OK
+						if (returnValue2 == JOptionPane.OK_OPTION) {
+
+							// Saves the file editor panel
+							AcideMainWindow.getInstance().getMenu()
+									.getFileMenu().saveFile(index);
+						} else if (returnValue2 == JOptionPane.CANCEL_OPTION
+								|| returnValue2 == JOptionPane.CLOSED_OPTION)
+							return false;
+					}
+				}
+
+				// Restores the selected file editor panel
+				setSelectedFileEditorPanelAt(selectedFileEditorPanelIndex);
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Puts the selected index to update the status bar, the menu bar and so on.
 	 * After that puts the focus in window on the active text edition area,
 	 * displays the caret and selects the node in the explorer panel which
@@ -330,6 +434,10 @@ public class AcideFileEditorManager {
 		// Sets the selected file editor at the index
 		setSelectedFileEditorPanelAt(index);
 
+		// Sets the active text edition area
+		getSelectedFileEditorPanel().setActiveTextEditionAreaIndex(
+				getSelectedFileEditorPanel().getActiveTextEditionAreaIndex());
+
 		// Puts the caret position in its place so it can scroll to it
 		getSelectedFileEditorPanel().getActiveTextEditionArea()
 				.setCaretPosition(
@@ -340,10 +448,6 @@ public class AcideFileEditorManager {
 		getSelectedFileEditorPanel().getActiveTextEditionArea().getCaret()
 				.setVisible(true);
 
-		// Puts the focus in the active text edition area
-		getSelectedFileEditorPanel().getActiveTextEditionArea()
-				.requestFocusInWindow();
-
 		// Selects the tree node in the explorer panel
 		AcideMainWindow.getInstance().getExplorerPanel()
 				.selectTreeNodeFromFileEditor();
@@ -351,17 +455,51 @@ public class AcideFileEditorManager {
 		// Updates the save project in the menu bar tool bar
 		AcideMainWindow.getInstance().getToolBarPanel().getMenuBarToolBar()
 				.updateStateOfFileButtons();
+
+		// Puts the focus in the active text edition area
+		getSelectedFileEditorPanel().getActiveTextEditionArea()
+				.requestFocusInWindow();
 	}
 
 	/**
 	 * Closes a ACIDE - A Configurable IDE file editor manager tab in the
 	 * position at the list given as a parameter.
 	 * 
-	 * @param index
+	 * @param fileEditorIndex
 	 *            tab index to be closed.
 	 */
-	public void removeTab(final int index) {
-		_tabbedPanelUI.getCloseButtonAt(index).doClick();
+	public void removeTab(int fileEditorIndex) {
+
+		// Removes the tab from the file editor
+		_tabbedPane.remove(fileEditorIndex);
+
+		// Exchanges the closing buttons
+		for (int index = fileEditorIndex; index < _tabbedPaneUI
+				.getCloseButtons().size() - 1; index++) {
+
+			// Gets the current close button
+			AcideFileEditorCloseButton currentCloseButton = (AcideFileEditorCloseButton) _tabbedPaneUI
+					.getCloseButtons().get(index);
+
+			// Gets the next close button
+			AcideFileEditorCloseButton nextCloseButton = (AcideFileEditorCloseButton) _tabbedPaneUI
+					.getCloseButtons().get(index + 1);
+
+			// If it is red button
+			if (nextCloseButton.isRedButton())
+
+				// Sets the red button
+				currentCloseButton.setRedCloseButton();
+			else
+				// Sets the green button
+				currentCloseButton.setGreenCloseButton();
+
+			// Sets the position
+			_tabbedPaneUI.getCloseButtons().set(index, currentCloseButton);
+		}
+
+		// Validates the changes in the tabbed pane
+		_tabbedPane.validate();
 	}
 
 	/**
@@ -518,14 +656,14 @@ public class AcideFileEditorManager {
 	 * @see AcideFileEditorTabbedPaneUI
 	 */
 	public AcideFileEditorTabbedPaneUI getTabbedPaneUI() {
-		return _tabbedPanelUI;
+		return _tabbedPaneUI;
 	}
 
 	/**
 	 * Sets the close button to green.
 	 */
 	public void setGreenButton() {
-		_tabbedPanelUI.getCloseButtonAt(_tabbedPane.getSelectedIndex())
+		_tabbedPaneUI.getCloseButtonAt(_tabbedPane.getSelectedIndex())
 				.setGreenCloseButton();
 	}
 
@@ -535,7 +673,7 @@ public class AcideFileEditorManager {
 	 * @return true if the button is red and false in the other case.
 	 */
 	public boolean isRedButton() {
-		return _tabbedPanelUI.getCloseButtonAt(_tabbedPane.getSelectedIndex())
+		return _tabbedPaneUI.getCloseButtonAt(_tabbedPane.getSelectedIndex())
 				.isRedButton();
 	}
 
@@ -547,7 +685,7 @@ public class AcideFileEditorManager {
 	 *            button list index to set.
 	 */
 	public void setRedButtonAt(int index) {
-		_tabbedPanelUI.getCloseButtonAt(index).setRedCloseButton();
+		_tabbedPaneUI.getCloseButtonAt(index).setRedCloseButton();
 	}
 
 	/**
@@ -558,7 +696,7 @@ public class AcideFileEditorManager {
 	 *            button list index to set.
 	 */
 	public void setGreenButtonAt(int index) {
-		_tabbedPanelUI.getCloseButtonAt(index).setGreenCloseButton();
+		_tabbedPaneUI.getCloseButtonAt(index).setGreenCloseButton();
 	}
 
 	/**
@@ -570,7 +708,7 @@ public class AcideFileEditorManager {
 	 * @return True if the button is red and false in the other case.
 	 */
 	public boolean isRedButton(int index) {
-		return _tabbedPanelUI.getCloseButtonAt(index).isRedButton();
+		return _tabbedPaneUI.getCloseButtonAt(index).isRedButton();
 	}
 
 	/**

@@ -56,38 +56,58 @@ public class AcideOpenProjectMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Selects the extension for the project
-		String[] extensions = new String[] { "acidePrj" };
-		AcideFileManager
-				.getInstance()
-				.getFileChooser()
-				.addChoosableFileFilter(
-						new AcideFileExtensionFilterManager(extensions,
-								AcideLanguageManager.getInstance().getLabels()
-										.getString("s328")));
+		// Asks for saving the project configuration
+		if (AcideProjectConfiguration.getInstance()
+				.askForSavingProjectConfiguration()) {
 
-		// Asks for the file path to the user
-		final String filePath;
-		filePath = AcideFileManager.getInstance().askAbsolutePath();
+			// Saves the file editor configuration
+			if (AcideMainWindow.getInstance().getFileEditorManager()
+					.askForSavingModifiedFiles()) {
 
-		// If the file content is not empty
-		if (filePath != null) {
+				// Selects the extension for the project
+				String[] extensions = new String[] { "acideProject" };
 
-			// Asks to the user for saving the project
-			boolean isCancelSelected = AcideProjectConfiguration.getInstance()
-					.askForSavingProject();
+				// Adds the filter to the file chooser
+				AcideFileManager
+						.getInstance()
+						.getFileChooser()
+						.addChoosableFileFilter(
+								new AcideFileExtensionFilterManager(extensions,
+										AcideLanguageManager.getInstance()
+												.getLabels().getString("s328")));
 
-			// If in the closing project operation the cancel option has not
-			// been
-			// selected
-			if (!isCancelSelected) {
+				// Asks for the file path to the user
+				String filePath = AcideFileManager.getInstance()
+						.askForOpenFile(false);
 
-				// Close all files in the project
-				AcideMainWindow.getInstance().getMenu().getFileMenu()
-						.getCloseAllFilesMenuItem().doClick();
+				// If the file content is not empty
+				if (filePath != null) {
 
-				// Open the project
-				AcideMainWindow.getInstance().getMenu().getProjectMenu().openProject(filePath);
+					// Gets the number of file editors
+					int numberOfFileEditorPanels = AcideMainWindow
+							.getInstance().getFileEditorManager()
+							.getNumberOfFileEditorPanels();
+
+					// Closes all the files
+					for (int index = 0; index < numberOfFileEditorPanels; index++) {
+
+						// Closes the tab defined by index at the tabbed pane
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getTabbedPane().setSelectedIndex(0);
+
+						// Closes the tab defined by index at the tabbed pane
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getTabbedPane().remove(0);
+
+						// Closes the tab defined by index at the tabbed pane
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getTabbedPane().validate();
+					}
+
+					// Opens the project
+					AcideMainWindow.getInstance().getMenu()
+							.getProjectMenu().openProject(filePath);
+				}
 			}
 		}
 	}

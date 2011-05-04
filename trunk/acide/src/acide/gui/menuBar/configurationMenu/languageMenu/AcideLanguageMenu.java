@@ -208,6 +208,27 @@ public class AcideLanguageMenu extends JMenu {
 	 */
 	public void changeLanguage(String selectedLanguage) {
 
+		// Applies the selected language in the ACIDE - A Configurable IDE main
+		// window components
+		applyLanguage(selectedLanguage);
+
+		// If it is not the default project
+		if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
+
+			// The project configuration has been modified
+			AcideProjectConfiguration.getInstance().setIsModified(true);
+		}
+	}
+
+	/**
+	 * Applies the language to display in the application and reset all the
+	 * components with the new language.
+	 * 
+	 * @param selectedLanguage
+	 *            new language to set.
+	 */
+	public void applyLanguage(String selectedLanguage) {
+
 		// Updates the ACIDE - A Configurable IDE language
 		AcideResourceManager.getInstance().setProperty("language",
 				selectedLanguage);
@@ -238,21 +259,21 @@ public class AcideLanguageMenu extends JMenu {
 
 			// Enables the lexicon menu in the configuration menu
 			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
-					.getLexiconMenu().setEnabled(true);
+					.getLexiconMenu().enableMenu();
 
 			// Enables the grammar menu in the configuration menu
 			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
-					.getGrammarMenu().setEnabled(true);
+					.getGrammarMenu().enableMenu();
 
 		} else {
 
 			// Disables the lexicon menu in the configuration menu
 			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
-					.getLexiconMenu().setEnabled(false);
+					.getLexiconMenu().disableMenu();
 
 			// Disables the grammar menu in the configuration menu
 			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
-					.getGrammarMenu().setEnabled(false);
+					.getGrammarMenu().disableMenu();
 		}
 
 		// Resets the tool bar panel
@@ -307,20 +328,6 @@ public class AcideLanguageMenu extends JMenu {
 			// Updates the number of lines message in the status bar
 			AcideMainWindow.getInstance().getStatusBar()
 					.setNumberOfLinesMessage(numLinesMessage);
-		}
-
-		// If it is not the default project
-		if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
-
-			// Enables the project menu
-			AcideMainWindow.getInstance().getMenu().enableProjectMenu();
-
-			// Enables the open all files menu item
-			AcideMainWindow.getInstance().getMenu().getFileMenu()
-					.getOpenAllFilesMenuItem().setEnabled(true);
-
-			// The project configuration has been modified
-			AcideProjectConfiguration.getInstance().setIsModified(true);
 		}
 	}
 }

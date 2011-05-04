@@ -31,10 +31,15 @@ package acide.gui.consolePanel.listeners;
 
 import acide.gui.mainWindow.AcideMainWindow;
 
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.JViewport;
+import javax.swing.SwingConstants;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.JTextComponent;
 
 import acide.log.AcideLog;
 
@@ -49,323 +54,11 @@ public class AcideConsolePanelKeyboardListener implements KeyListener {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
-	 */
-	@Override
-	public void keyTyped(KeyEvent keyEvent) {
-
-		// If the console pane text pane is initialized
-		if (AcideMainWindow.getInstance().getConsolePanel().getTextPane() != null) {
-
-			// If the caret position is behind the prompt caret position
-			if (AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-					.getCaretPosition() < AcideMainWindow.getInstance()
-					.getConsolePanel().getPromptCaretPosition())
-
-				// Ignores the key
-				keyEvent.consume();
-			else
-				// Updates the selection size
-				AcideMainWindow
-						.getInstance()
-						.getConsolePanel()
-						.setSelectionSize(
-								AcideMainWindow.getInstance().getConsolePanel()
-										.getSelectionSize() + 1);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
 	 */
 	@Override
 	public void keyPressed(KeyEvent keyEvent) {
-
-		// If the console panel text pane is initialized
-		if (AcideMainWindow.getInstance().getConsolePanel().getTextPane() != null) {
-
-			if (!AcideMainWindow.getInstance().getConsolePanel()
-					.getTextPaneContent().matches("")) {
-
-				// If the caret is in the limit with the prompt
-				// and the key is left, up or down
-				if ((AcideMainWindow.getInstance().getConsolePanel()
-						.getTextPane().getCaretPosition() == AcideMainWindow
-						.getInstance().getConsolePanel()
-						.getPromptCaretPosition())
-						&& ((keyEvent.getKeyCode() == KeyEvent.VK_LEFT)
-								|| (keyEvent.getKeyCode() == 8) || keyEvent
-								.getKeyCode() == KeyEvent.VK_UP))
-					// Consumes the key
-					keyEvent.consume();
-
-				// If the caret is behind the prompt
-				if (AcideMainWindow.getInstance().getConsolePanel()
-						.getTextPane().getSelectionStart() < AcideMainWindow
-						.getInstance().getConsolePanel()
-						.getPromptCaretPosition())
-
-					// Consumes the key
-					keyEvent.consume();
-
-				// Gets the command
-				String command = (String) AcideMainWindow
-						.getInstance()
-						.getConsolePanel()
-						.getTextPane()
-						.getText()
-						.subSequence(
-								AcideMainWindow.getInstance().getConsolePanel()
-										.getPromptCaretPosition(),
-								AcideMainWindow.getInstance().getConsolePanel()
-										.getDefaultStyledDocument().getLength());
-
-				switch (keyEvent.getKeyCode()) {
-
-				case KeyEvent.VK_ENTER:
-
-					if (keyEvent.getKeyChar() == '\n') {
-
-						if (AcideMainWindow.getInstance().getConsolePanel()
-								.getProcessThread().getWriter() != null)
-							
-							// Send the command to the console
-							AcideMainWindow.getInstance().getConsolePanel()
-									.sendCommandToConsole(command, "");
-					}
-					break;
-
-				case KeyEvent.VK_UP:
-
-					keyEvent.consume();
-
-					if (AcideMainWindow.getInstance().getConsolePanel()
-							.getProcessThread().getWriter() != null) {
-
-						// If there are commands in the command record
-						if (AcideMainWindow.getInstance().getConsolePanel()
-								.getCommandRecordCurrentIndex() > -1) {
-
-							// If it is the first command
-							if (AcideMainWindow.getInstance().getConsolePanel()
-									.getCommandRecordCurrentIndex() == 0)
-
-								// Sets the last one as the current one
-								AcideMainWindow
-										.getInstance()
-										.getConsolePanel()
-										.setCommandRecordCurrentIndex(
-												AcideMainWindow
-														.getInstance()
-														.getConsolePanel()
-														.getCommandRecordMaximumIndex() - 1);
-							else
-								// Sets the previous one as the current one
-								AcideMainWindow
-										.getInstance()
-										.getConsolePanel()
-										.setCommandRecordCurrentIndex(
-												AcideMainWindow
-														.getInstance()
-														.getConsolePanel()
-														.getCommandRecordCurrentIndex() - 1);
-
-							// Replaces the command by the previous one
-							try {
-
-								// Clears the zone after the prompt caret
-								// position
-								AcideMainWindow
-										.getInstance()
-										.getConsolePanel()
-										.getDefaultStyledDocument()
-										.remove(AcideMainWindow.getInstance()
-												.getConsolePanel()
-												.getPromptCaretPosition(),
-												command.length());
-
-								if (AcideMainWindow.getInstance()
-										.getConsolePanel()
-										.getCommandRecordCurrentIndex() > -1)
-									// Puts the current command in the command
-									// record
-									AcideMainWindow
-											.getInstance()
-											.getConsolePanel()
-											.getDefaultStyledDocument()
-											.insertString(
-													AcideMainWindow
-															.getInstance()
-															.getConsolePanel()
-															.getPromptCaretPosition(),
-													AcideMainWindow
-															.getInstance()
-															.getConsolePanel()
-															.getCommandRecord()
-															.get(AcideMainWindow
-																	.getInstance()
-																	.getConsolePanel()
-																	.getCommandRecordCurrentIndex()),
-													null);
-							} catch (BadLocationException exception) {
-
-								// Updates the log
-								AcideLog.getLog().error(exception.getMessage());
-								exception.printStackTrace();
-							}
-						}
-					}
-					break;
-
-				case KeyEvent.VK_DOWN:
-
-					if (AcideMainWindow.getInstance().getConsolePanel()
-							.getProcessThread().getWriter() != null) {
-
-						// If there are commands in the command record
-						if (AcideMainWindow.getInstance().getConsolePanel()
-								.getCommandRecordCurrentIndex() > -1) {
-
-							// If it is the last command
-							if (AcideMainWindow.getInstance().getConsolePanel()
-									.getCommandRecordCurrentIndex() >= AcideMainWindow
-									.getInstance().getConsolePanel()
-									.getCommandRecordMaximumIndex() - 1)
-
-								// Sets the first one as the current one
-								AcideMainWindow.getInstance().getConsolePanel()
-										.setCommandRecordCurrentIndex(0);
-							else
-
-								// Sets the next one as the current one
-								AcideMainWindow
-										.getInstance()
-										.getConsolePanel()
-										.setCommandRecordCurrentIndex(
-												AcideMainWindow
-														.getInstance()
-														.getConsolePanel()
-														.getCommandRecordCurrentIndex() + 1);
-
-							// Replaces the command by the previous one
-							try {
-
-								// Clears the zone after the prompt caret
-								// position
-								AcideMainWindow
-										.getInstance()
-										.getConsolePanel()
-										.getDefaultStyledDocument()
-										.remove(AcideMainWindow.getInstance()
-												.getConsolePanel()
-												.getPromptCaretPosition(),
-												command.length());
-
-								// Puts the current command in the command
-								// record
-								AcideMainWindow
-										.getInstance()
-										.getConsolePanel()
-										.getDefaultStyledDocument()
-										.insertString(
-												AcideMainWindow
-														.getInstance()
-														.getConsolePanel()
-														.getPromptCaretPosition(),
-												AcideMainWindow
-														.getInstance()
-														.getConsolePanel()
-														.getCommandRecord()
-														.get(AcideMainWindow
-																.getInstance()
-																.getConsolePanel()
-																.getCommandRecordCurrentIndex()),
-												null);
-							} catch (BadLocationException exception) {
-
-								// Updates the log
-								AcideLog.getLog().error(exception.getMessage());
-								exception.printStackTrace();
-							}
-						}
-					}
-					break;
-
-				case KeyEvent.VK_ESCAPE:
-
-					if (AcideMainWindow.getInstance().getConsolePanel()
-							.getProcessThread().getWriter() != null) {
-
-						// Removes the text selection
-						try {
-							AcideMainWindow
-									.getInstance()
-									.getConsolePanel()
-									.getDefaultStyledDocument()
-									.remove(AcideMainWindow.getInstance()
-											.getConsolePanel()
-											.getPromptCaretPosition(),
-											command.length());
-						} catch (BadLocationException exception) {
-
-							// Updates the log
-							AcideLog.getLog().error(exception.getMessage());
-							exception.printStackTrace();
-						}
-					}
-					break;
-
-				case KeyEvent.VK_HOME:
-
-					// Consumes the key
-					keyEvent.consume();
-
-					if (AcideMainWindow.getInstance().getConsolePanel()
-							.getProcessThread().getWriter() != null) {
-						// Sets the caret after the prompt
-						AcideMainWindow
-								.getInstance()
-								.getConsolePanel()
-								.getTextPane()
-								.setCaretPosition(
-										AcideMainWindow.getInstance()
-												.getConsolePanel()
-												.getPromptCaretPosition());
-					}
-					break;
-
-				case KeyEvent.VK_END:
-
-					// Consumes the key
-					keyEvent.consume();
-
-					if (AcideMainWindow.getInstance().getConsolePanel()
-							.getProcessThread().getWriter() != null) {
-						// Sets the caret at the end of the command
-						AcideMainWindow
-								.getInstance()
-								.getConsolePanel()
-								.getTextPane()
-								.setCaretPosition(
-										AcideMainWindow.getInstance()
-												.getConsolePanel()
-												.getPromptCaretPosition()
-												+ command.length());
-					}
-					break;
-
-				case KeyEvent.VK_C:
-
-					// CTRL + C --> COPY
-					if (keyEvent.isControlDown())
-						AcideMainWindow.getInstance().getConsolePanel()
-								.getTextPane().copy();
-					break;
-				}
-			}
-		}
+		dispatchEvent(keyEvent);
 	}
 
 	/*
@@ -375,16 +68,432 @@ public class AcideConsolePanelKeyboardListener implements KeyListener {
 	 */
 	@Override
 	public void keyReleased(KeyEvent keyEvent) {
+		// dispatchEvent(keyEvent);
+	}
 
-		// If the console panel text pane is initialized
-		if (AcideMainWindow.getInstance().getConsolePanel().getTextPane() != null)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
+	 */
+	@Override
+	public void keyTyped(KeyEvent keyEvent) {
+		// dispatchEvent(keyEvent);
+	}
 
-			// If the caret is the not editable zone
-			if (AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-					.getCaretPosition() < AcideMainWindow.getInstance()
+	/**
+	 * Dispatches the key event.
+	 * 
+	 * @param keyEvent
+	 *            key event.
+	 */
+	private void dispatchEvent(KeyEvent keyEvent) {
+
+		if (!AcideMainWindow.getInstance().getConsolePanel().getTextPane()
+				.getText().matches("")) {
+
+			// If the caret is in the limit with the prompt
+			// and the key is left, up or down
+			if ((AcideMainWindow.getInstance().getConsolePanel().getTextPane()
+					.getCaretPosition() == AcideMainWindow.getInstance()
 					.getConsolePanel().getPromptCaretPosition())
+					&& ((keyEvent.getKeyCode() == KeyEvent.VK_LEFT)
+							|| (keyEvent.getKeyCode() == 8) || keyEvent
+							.getKeyCode() == KeyEvent.VK_UP))
+				// Consumes the key
+				keyEvent.consume();
+
+			// Gets the command
+			String command = (String) AcideMainWindow
+					.getInstance()
+					.getConsolePanel()
+					.getTextPane()
+					.getText()
+					.subSequence(
+							AcideMainWindow.getInstance().getConsolePanel()
+									.getPromptCaretPosition(),
+							AcideMainWindow.getInstance().getConsolePanel()
+									.getTextPane().getText().length());
+
+			switch (keyEvent.getKeyCode()) {
+
+			case KeyEvent.VK_ENTER:
+
+				// Sends the command to the console
+				AcideMainWindow.getInstance().getConsolePanel()
+						.sendCommandToConsole(command, "");
+
+				break;
+
+			case KeyEvent.VK_UP:
+
+				// CTRL + UP -> Scroll up
+				if (keyEvent.isControlDown()) {
+
+					// Performs the scroll up
+					scrollUp();
+				} else {
+					// Consumes the key
+					keyEvent.consume();
+
+					// Performs the up key action
+					upKeyAction(command);
+				}
+				break;
+
+			case KeyEvent.VK_DOWN:
+
+				// CTRL + DOWN -> Scroll down
+				if (keyEvent.isControlDown()) {
+
+					// Performs the scroll down
+					scrollDown();
+				} else {
+					// Consumes the key
+					keyEvent.consume();
+
+					// Performs the down key action
+					downKeyAction(command);
+				}
+				break;
+
+			case KeyEvent.VK_ESCAPE:
+
+				// Performs the escape key action
+				escapeKeyAction(command);
+
+				break;
+
+			case KeyEvent.VK_HOME:
 
 				// Consumes the key
 				keyEvent.consume();
+
+				// Performs the home key action
+				homeKeyAction();
+
+				break;
+
+			case KeyEvent.VK_END:
+
+				// Consumes the key
+				keyEvent.consume();
+
+				// Performs the end key action
+				endKeyAction(command);
+
+				break;
+
+			case KeyEvent.VK_C:
+
+				// CTRL + C --> COPY
+				if (keyEvent.isControlDown())
+					AcideMainWindow.getInstance().getConsolePanel()
+							.getTextPane().copy();
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Performs the ACIDE - A Configurable IDE console panel scroll pane scroll
+	 * down action.
+	 */
+	private void scrollDown() {
+
+		// Gets the active text edition area
+		JTextComponent textPane = AcideMainWindow.getInstance()
+				.getConsolePanel().getTextPane();
+
+		// Gets the view port from the text pane parent
+		JViewport viewport = (JViewport) textPane.getParent();
+
+		// Gets the view rectangle from it
+		Rectangle rectangle = viewport.getViewRect();
+
+		// Gets the location
+		Point point = rectangle.getLocation();
+
+		// Calculates the increment
+		int increment = textPane.getScrollableBlockIncrement(rectangle,
+				SwingConstants.VERTICAL, 1);
+
+		// Calculates the maximum value for the y coordinate
+		int maxY = viewport.getView().getHeight() - rectangle.height;
+
+		// Calculates the new position
+		point.y = (point.y + increment <= maxY) ? point.y + increment : maxY;
+
+		// Updates the location
+		viewport.setViewPosition(point);
+	}
+
+	/**
+	 * Performs the ACIDE - A Configurable IDE console panel scroll pane scroll
+	 * up action.
+	 */
+	private void scrollUp() {
+
+		// Gets the active text edition area
+		JTextComponent textPane = AcideMainWindow.getInstance()
+				.getConsolePanel().getTextPane();
+
+		// Gets the view port from the text pane parent
+		JViewport viewport = (JViewport) textPane.getParent();
+
+		// Gets the view rectangle from it
+		Rectangle rectangle = viewport.getViewRect();
+
+		// Gets the location
+		Point point = rectangle.getLocation();
+
+		// Calculates the increment
+		int increment = textPane.getScrollableBlockIncrement(rectangle,
+				SwingConstants.VERTICAL, -1);
+
+		// Calculates the new position
+		point.y = (point.y - increment >= 0) ? point.y - increment : 0;
+
+		// Updates the location
+		viewport.setViewPosition(point);
+	}
+
+	/**
+	 * Performs the end key action.
+	 * 
+	 * @param command
+	 *            command to execute.
+	 */
+	private void endKeyAction(String command) {
+
+		if (AcideMainWindow.getInstance().getConsolePanel().getProcessThread()
+				.getWriter() != null) {
+
+			// Sets the caret at the end of the command
+			AcideMainWindow
+					.getInstance()
+					.getConsolePanel()
+					.getTextPane()
+					.setCaretPosition(
+							AcideMainWindow.getInstance().getConsolePanel()
+									.getPromptCaretPosition()
+									+ command.length());
+		}
+	}
+
+	/**
+	 * Performs the home key action.
+	 * 
+	 * @param command
+	 *            command to execute.
+	 */
+	private void homeKeyAction() {
+
+		if (AcideMainWindow.getInstance().getConsolePanel().getProcessThread()
+				.getWriter() != null) {
+
+			// Sets the caret after the prompt
+			AcideMainWindow
+					.getInstance()
+					.getConsolePanel()
+					.getTextPane()
+					.setCaretPosition(
+							AcideMainWindow.getInstance().getConsolePanel()
+									.getPromptCaretPosition());
+		}
+	}
+
+	/**
+	 * Performs the escape key action.
+	 * 
+	 * @param command
+	 *            command to execute.
+	 */
+	private void escapeKeyAction(String command) {
+
+		if (AcideMainWindow.getInstance().getConsolePanel().getProcessThread()
+				.getWriter() != null) {
+
+			try {
+
+				// Removes the text selection
+				AcideMainWindow
+						.getInstance()
+						.getConsolePanel()
+						.getDefaultStyledDocument()
+						.remove(AcideMainWindow.getInstance().getConsolePanel()
+								.getPromptCaretPosition(), command.length());
+			} catch (BadLocationException exception) {
+
+				// Updates the log
+				AcideLog.getLog().error(exception.getMessage());
+				exception.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * Performs the down key action, updating the command record.
+	 * 
+	 * @param command
+	 *            command to execute.
+	 */
+	private void downKeyAction(String command) {
+
+		if (AcideMainWindow.getInstance().getConsolePanel().getProcessThread()
+				.getWriter() != null) {
+
+			// If there are commands in the command record
+			if (AcideMainWindow.getInstance().getConsolePanel()
+					.getCommandRecord().getCurrentIndex() > -1) {
+
+				// If it is the last command
+				if (AcideMainWindow.getInstance().getConsolePanel()
+						.getCommandRecord().getCurrentIndex() >= AcideMainWindow
+						.getInstance().getConsolePanel().getCommandRecord()
+						.getMaximumIndex() - 1)
+
+					// Sets the first one as the current one
+					AcideMainWindow.getInstance().getConsolePanel()
+							.getCommandRecord().setCurrentIndex(0);
+				else
+
+					// Sets the next one as the current one
+					AcideMainWindow
+							.getInstance()
+							.getConsolePanel()
+							.getCommandRecord()
+							.setCurrentIndex(
+									AcideMainWindow.getInstance()
+											.getConsolePanel()
+											.getCommandRecord()
+											.getCurrentIndex() + 1);
+
+				// Replaces the command by the previous one
+				try {
+
+					// Clears the zone after the prompt caret
+					// position
+					AcideMainWindow
+							.getInstance()
+							.getConsolePanel()
+							.getDefaultStyledDocument()
+							.remove(AcideMainWindow.getInstance()
+									.getConsolePanel().getPromptCaretPosition(),
+									command.length());
+
+					// Puts the current command in the command
+					// record
+					AcideMainWindow
+							.getInstance()
+							.getConsolePanel()
+							.getDefaultStyledDocument()
+							.insertString(
+									AcideMainWindow.getInstance()
+											.getConsolePanel()
+											.getPromptCaretPosition(),
+									AcideMainWindow
+											.getInstance()
+											.getConsolePanel()
+											.getCommandRecord()
+											.get(AcideMainWindow.getInstance()
+													.getConsolePanel()
+													.getCommandRecord()
+													.getCurrentIndex()), null);
+				} catch (BadLocationException exception) {
+
+					// Updates the log
+					AcideLog.getLog().error(exception.getMessage());
+					exception.printStackTrace();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Performs the up key action, updating the command record.
+	 * 
+	 * @param command
+	 *            command to execute.
+	 */
+	private void upKeyAction(String command) {
+
+		if (AcideMainWindow.getInstance().getConsolePanel().getProcessThread()
+				.getWriter() != null) {
+
+			// If there are commands in the command record
+			if (AcideMainWindow.getInstance().getConsolePanel()
+					.getCommandRecord().getCurrentIndex() > -1) {
+
+				// If it is the first command
+				if (AcideMainWindow.getInstance().getConsolePanel()
+						.getCommandRecord().getCurrentIndex() == 0)
+
+					// Sets the last one as the current one
+					AcideMainWindow
+							.getInstance()
+							.getConsolePanel()
+							.getCommandRecord()
+							.setCurrentIndex(
+									AcideMainWindow.getInstance()
+											.getConsolePanel()
+											.getCommandRecord()
+											.getMaximumIndex() - 1);
+				else
+					// Sets the previous one as the current one
+					AcideMainWindow
+							.getInstance()
+							.getConsolePanel()
+							.getCommandRecord()
+							.setCurrentIndex(
+									AcideMainWindow.getInstance()
+											.getConsolePanel()
+											.getCommandRecord()
+											.getCurrentIndex() - 1);
+
+				// Replaces the command by the previous one
+				try {
+
+					// Clears the zone after the prompt caret
+					// position
+					AcideMainWindow
+							.getInstance()
+							.getConsolePanel()
+							.getDefaultStyledDocument()
+							.remove(AcideMainWindow.getInstance()
+									.getConsolePanel().getPromptCaretPosition(),
+									command.length());
+
+					if (AcideMainWindow.getInstance().getConsolePanel()
+							.getCommandRecord().getCurrentIndex() > -1)
+						// Puts the current command in the
+						// command
+						// record
+						AcideMainWindow
+								.getInstance()
+								.getConsolePanel()
+								.getDefaultStyledDocument()
+								.insertString(
+										AcideMainWindow.getInstance()
+												.getConsolePanel()
+												.getPromptCaretPosition(),
+										AcideMainWindow
+												.getInstance()
+												.getConsolePanel()
+												.getCommandRecord()
+												.get(AcideMainWindow
+														.getInstance()
+														.getConsolePanel()
+														.getCommandRecord()
+														.getCurrentIndex()),
+										null);
+				} catch (BadLocationException exception) {
+
+					// Updates the log
+					AcideLog.getLog().error(exception.getMessage());
+					exception.printStackTrace();
+				}
+			}
+		}
 	}
 }

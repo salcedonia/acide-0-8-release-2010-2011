@@ -31,25 +31,19 @@ package acide.gui.menuBar.projectMenu.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
-import javax.swing.JFileChooser;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import acide.configuration.grammar.AcideGrammarConfiguration;
 import acide.configuration.lexicon.AcideLexiconConfiguration;
-import acide.configuration.lexiconAssigner.AcideLexiconAssignerConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
-import acide.configuration.workbench.AcideWorkbenchManager;
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.files.AcideFileManager;
 import acide.files.project.AcideProjectFile;
 import acide.files.project.AcideProjectFileType;
 import acide.gui.mainWindow.AcideMainWindow;
-import acide.log.AcideLog;
-import acide.resources.AcideResourceManager;
-import acide.resources.exception.MissedPropertyException;
 
 /**
  * ACIDE - A Configurable IDE project menu add file menu item listener.
@@ -69,142 +63,101 @@ public class AcideAddFileMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		try {
+		// Removes the filter
+		AcideFileManager
+				.getInstance()
+				.getFileChooser()
+				.removeChoosableFileFilter(
+						AcideFileManager.getInstance().getFileChooser()
+								.getFileFilter());
 
-			// Creates and configures the file chooser
-			JFileChooser fileChooser = new JFileChooser();
+		// Ask the path to the user
+		String[] absolutePaths = AcideFileManager.getInstance()
+				.askForOpenFiles(true);
 
-			File file = null;
-			try {
-				file = new File(AcideResourceManager.getInstance().getProperty(
-						"defaultPath"));
-			} catch (MissedPropertyException exception) {
+		if (absolutePaths != null) {
 
-				// Updates the log
-				AcideLog.getLog().error(exception.getMessage());
-				exception.printStackTrace();
-			}
+			// Gets the selection path from the explorer panel tree
+			TreePath currentSelection = AcideMainWindow.getInstance()
+					.getExplorerPanel().getTree().getSelectionPath();
 
-			// Sets the current directory to the grammar configuration folder
-			fileChooser.setCurrentDirectory(file);
+			// Creates the explorer node
+			DefaultMutableTreeNode currentNode;
 
-			// Files multiple selection enabled
-			fileChooser.setMultiSelectionEnabled(true);
+			// Creates the selected project file
+			AcideProjectFile currentFile;
 
-			// Asks to the user
-			int returnValue = fileChooser.showOpenDialog(fileChooser);
+			if (currentSelection != null) {
 
-			// If it is OK
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				// Gets the selected node last path component
+				currentNode = (DefaultMutableTreeNode) currentSelection
+						.getLastPathComponent();
 
-				// Ask to the user for the file
-				File[] filePaths = fileChooser.getSelectedFiles();
+				// Transforms the selected node into a project file
+				currentFile = (AcideProjectFile) currentNode.getUserObject();
 
-				// If the user selected any
-				if (filePaths != null) {
+				// If it is not a directory
+				if (!currentFile.isDirectory()) {
 
-					// Gets the selection path from the explorer panel tree
-					TreePath currentSelection = AcideMainWindow.getInstance()
-							.getExplorerPanel().getTree().getSelectionPath();
+					// Gets the parent node
+					currentNode = (DefaultMutableTreeNode) ((MutableTreeNode) (currentNode
+							.getParent()));
 
-					// Creates the explorer node
-					DefaultMutableTreeNode currentNode;
-
-					// Creates the selected project file
-					AcideProjectFile currentFile;
-
-					if (currentSelection != null) {
-
-						// Gets the selected node last path component
-						currentNode = (DefaultMutableTreeNode) currentSelection
-								.getLastPathComponent();
-
-						// Transforms the selected node into a project file
-						currentFile = (AcideProjectFile) currentNode
-								.getUserObject();
-
-						// If it is not a directory
-						if (!currentFile.isDirectory()) {
-
-							// Gets the parent node
-							currentNode = (DefaultMutableTreeNode) ((MutableTreeNode) (currentNode
-									.getParent()));
-
-							// Transforms the selected node into a project file
-							currentFile = (AcideProjectFile) currentNode
-									.getUserObject();
-						}
-
-					} else {
-
-						// Gets the info from the project root folder
-						currentNode = AcideMainWindow.getInstance()
-								.getExplorerPanel().getRoot().getNextNode();
-
-						// Gets the info from the next node for the project file
-						currentFile = (AcideProjectFile) currentNode
-								.getUserObject();
-					}
-
-					// Adds the files to the project
-					for (int index = 0; index < filePaths.length; index++) {
-
-						// Gets the absolute path of the current checked file
-						String absolutePath = filePaths[index]
-								.getAbsolutePath();
-
-						// Gets the file name
-						String fileName = "";
-						int lastIndexOfSlash = absolutePath.lastIndexOf("\\");
-						if (lastIndexOfSlash == -1)
-							lastIndexOfSlash = absolutePath.lastIndexOf("/");
-						fileName = absolutePath.substring(lastIndexOfSlash + 1,
-								absolutePath.length());
-
-						// Builds the new project file
-						AcideProjectFile newProjectFile = new AcideProjectFile();
-
-						// Set the path
-						newProjectFile.setAbsolutePath(absolutePath);
-
-						// Sets the name
-						newProjectFile.setName(fileName);
-
-						// Sets the parent
-						newProjectFile.setParent(currentFile.getName());
-
-						// Sets is directory
-						newProjectFile.setIsDirectory(false);
-
-						// Adds it to the project configuration
-						addToExplorerTree(currentNode, newProjectFile);
-
-						// Adds it to the file editor
-						addToFileEditor(newProjectFile);
-
-						// Adds the file to the recent files list
-						AcideWorkbenchManager.getInstance()
-								.addRecentFileToList(absolutePath);
-
-						// Updates the ACIDE - A Configurable IDE default path
-						AcideResourceManager.getInstance().setProperty(
-								"defaultPath", absolutePath);
-					}
+					// Transforms the selected node into a project file
+					currentFile = (AcideProjectFile) currentNode
+							.getUserObject();
 				}
+
 			} else {
 
-				// If it is CANCEL
-				if (returnValue == JFileChooser.CANCEL_OPTION) {
+				// Gets the info from the project root folder
+				currentNode = AcideMainWindow.getInstance().getExplorerPanel()
+						.getRoot().getNextNode();
 
-					// Cancels selection
-					fileChooser.cancelSelection();
-				}
+				// Gets the info from the next node for the project file
+				currentFile = (AcideProjectFile) currentNode.getUserObject();
 			}
-		} catch (Exception exception) {
 
-			// Updates the log
-			AcideLog.getLog().error(exception.getMessage());
-			exception.printStackTrace();
+			// Adds the files to the project
+			for (int index = 0; index < absolutePaths.length; index++) {
+
+				// Gets the absolute path of the current checked file
+				String absolutePath = absolutePaths[index];
+
+				// Gets the file name
+				String fileName = "";
+				int lastIndexOfSlash = absolutePath.lastIndexOf("\\");
+				if (lastIndexOfSlash == -1)
+					lastIndexOfSlash = absolutePath.lastIndexOf("/");
+				fileName = absolutePath.substring(lastIndexOfSlash + 1,
+						absolutePath.length());
+
+				// Builds the new project file
+				AcideProjectFile newProjectFile = new AcideProjectFile();
+
+				// Set the path
+				newProjectFile.setAbsolutePath(absolutePath);
+
+				// Sets the name
+				newProjectFile.setName(fileName);
+
+				// Sets the parent
+				newProjectFile.setParent(currentFile.getName());
+
+				// Sets is directory
+				newProjectFile.setIsDirectory(false);
+
+				// Adds it to the project configuration
+				addToExplorerTree(currentNode, newProjectFile);
+
+				// Adds it to the file editor
+				addToFileEditor(newProjectFile);
+
+				// Adds the file to the recent files list
+				AcideWorkbenchConfiguration.getInstance()
+						.getRecentFilesConfiguration()
+						.addRecentFileToList(absolutePath);
+			}
 		}
 	}
 
@@ -252,9 +205,11 @@ public class AcideAddFileMenuItemListener implements ActionListener {
 						.setStatusMessage(projectFile.getAbsolutePath());
 
 				// Gets the predefined lexicon configuration
-				AcideLexiconConfiguration lexiconConfiguration = AcideLexiconAssignerConfiguration
+				AcideLexiconConfiguration lexiconConfiguration = AcideWorkbenchConfiguration
 						.getInstance()
-						.getPredifinedLexiconConfiguration(projectFile.getAbsolutePath());
+						.getLexiconAssignerConfiguration()
+						.getPredifinedLexiconConfiguration(
+								projectFile.getAbsolutePath());
 
 				// Creates the current grammar configuration
 				AcideGrammarConfiguration currentGrammarConfiguration = new AcideGrammarConfiguration();

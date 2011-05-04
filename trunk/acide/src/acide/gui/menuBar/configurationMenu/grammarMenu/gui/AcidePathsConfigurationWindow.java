@@ -466,7 +466,7 @@ public class AcidePathsConfigurationWindow extends JFrame {
 				"EscapeKey",
 				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
-		
+
 		// Sets the window closing listener
 		addWindowListener(new AcideWindowClosingListener());
 	}
@@ -598,9 +598,22 @@ public class AcidePathsConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
+			// Removes the filter
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.removeChoosableFileFilter(
+							AcideFileManager.getInstance().getFileChooser()
+									.getFileFilter());
+
 			// Ask the path to the user
-			String path = AcideFileManager.getInstance().askAbsolutePath();
-			_jarTextField.setText(path);
+			String absolutePath = AcideFileManager.getInstance()
+					.askForOpenFile(true);
+
+			if (absolutePath != null)
+				
+				// Updates the jar text field with the absolute path
+				_jarTextField.setText(absolutePath);
 		}
 	}
 
@@ -623,9 +636,22 @@ public class AcidePathsConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Asks the path to the user
-			String path = AcideFileManager.getInstance().askAbsolutePath();
-			_javacTextField.setText(path);
+			// Removes the filter
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.removeChoosableFileFilter(
+							AcideFileManager.getInstance().getFileChooser()
+									.getFileFilter());
+
+			// Ask the path to the user
+			String absolutePath = AcideFileManager.getInstance()
+					.askForOpenFile(true);
+			
+			if(absolutePath != null)
+			
+				// Updates the javac text field with te absolute path
+				_javacTextField.setText(absolutePath);
 		}
 	}
 
@@ -648,9 +674,22 @@ public class AcidePathsConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Asks the path to the user
-			String path = AcideFileManager.getInstance().askAbsolutePath();
-			_javaTextField.setText(path);
+			// Removes the filter
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.removeChoosableFileFilter(
+							AcideFileManager.getInstance().getFileChooser()
+									.getFileFilter());
+
+			// Ask the path to the user
+			String absolutePath = AcideFileManager.getInstance()
+					.askForOpenFile(true);
+			
+			if(absolutePath != null)
+				
+				// Updates the java text field with the the absolute path
+				_javaTextField.setText(absolutePath);
 		}
 	}
 

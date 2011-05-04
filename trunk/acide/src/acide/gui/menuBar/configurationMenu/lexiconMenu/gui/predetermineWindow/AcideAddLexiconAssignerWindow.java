@@ -35,20 +35,19 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import acide.configuration.lexiconAssigner.AcideLexiconAssigner;
-import acide.files.text.AcideTextFileExtensionFilterManager;
+import acide.configuration.workbench.lexiconAssigner.AcideLexiconAssigner;
+import acide.files.AcideFileExtensionFilterManager;
+import acide.files.AcideFileManager;
 import acide.gui.listeners.AcideWindowClosingListener;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
@@ -123,7 +122,7 @@ public class AcideAddLexiconAssignerWindow extends JFrame {
 	 * ACIDE - A Configurable IDE add lexicon assigner window predetermine
 	 * lexicon window.
 	 */
-	private AcidePredetermineLexiconWindow _predetermineLexiconWindow;
+	private AcideDefaultLexiconsWindow _predetermineLexiconWindow;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE add console panel tool bar
@@ -134,7 +133,7 @@ public class AcideAddLexiconAssignerWindow extends JFrame {
 	 *            table model.
 	 */
 	public AcideAddLexiconAssignerWindow(
-			AcidePredetermineLexiconWindow predetermineLexiconWindow) {
+			AcideDefaultLexiconsWindow predetermineLexiconWindow) {
 
 		super();
 
@@ -344,10 +343,10 @@ public class AcideAddLexiconAssignerWindow extends JFrame {
 
 		// Brings the predetermined lexicon window to the front
 		_predetermineLexiconWindow.setAlwaysOnTop(true);
-		
+
 		// Closes the window
 		dispose();
-		
+
 		// But not always
 		_predetermineLexiconWindow.setAlwaysOnTop(false);
 	}
@@ -371,38 +370,26 @@ public class AcideAddLexiconAssignerWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Creates a new filter for XML files
-			AcideTextFileExtensionFilterManager filter = new AcideTextFileExtensionFilterManager(
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s327"));
-			filter.addExtension(".xml");
+			// Selects the extension for the project
+			String[] extensions = new String[] { "xml" };
 
-			// Asks the user for the file
-			JFileChooser fileChooser = new JFileChooser();
+			// Adds the filter to the file chooser
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.addChoosableFileFilter(
+							new AcideFileExtensionFilterManager(extensions,
+									AcideLanguageManager.getInstance()
+											.getLabels().getString("s327")));
 
-			// Only admits files
-			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			// Asks the the file to the user
+			String absolutePath = AcideFileManager.getInstance()
+					.askForOpenFile("./configuration/lexicon/");
 
-			// Applies the filter
-			fileChooser.addChoosableFileFilter(filter);
+			if (absolutePath != null)
 
-			// Sets the initial directory
-			fileChooser
-					.setCurrentDirectory(new File("./configuration/lexicon/"));
-
-			// Gets the user result from the file chooser
-			int resultValue = fileChooser.showOpenDialog(fileChooser);
-
-			// If it is ok
-			if (resultValue == JFileChooser.APPROVE_OPTION){
-
-				// Stores the path
-				String filePath = fileChooser.getSelectedFile().getAbsolutePath();
-
-				if(filePath != null)
-					// Updates the default lexicon configuration text field
-					_defaultLexiconConfigurationTextField.setText(filePath);
-			}
+				// Updates the default lexicon configuration text field
+				_defaultLexiconConfigurationTextField.setText(absolutePath);
 		}
 	}
 
@@ -460,7 +447,8 @@ public class AcideAddLexiconAssignerWindow extends JFrame {
 				lexiconAssigner.setExtensionList(parsedExtensions);
 
 				// Sets its lexicon configuration
-				lexiconAssigner.setLexiconConfiguration(defaultLexiconConfiguration);
+				lexiconAssigner
+						.setLexiconConfiguration(defaultLexiconConfiguration);
 
 				// Adds the lexicon assigner
 				_predetermineLexiconWindow.addLexiconAssigner(lexiconAssigner);

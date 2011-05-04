@@ -32,7 +32,7 @@ package acide.gui.menuBar.fileMenu.listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import acide.configuration.workbench.AcideWorkbenchManager;
+import acide.gui.mainWindow.AcideMainWindow;
 
 /**																
  * ACIDE - A Configurable IDE file menu exit menu item listener.											
@@ -52,7 +52,7 @@ public class AcideExitMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 		
-		// Saves the workbench manager
-		AcideWorkbenchManager.getInstance().saveWorkbenchConfiguration();
+		// Closes the main window
+		AcideMainWindow.getInstance().closeAcideMainWindow();
 	}
 }

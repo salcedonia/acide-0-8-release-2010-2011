@@ -298,18 +298,12 @@ public class AcideConfigurationMenu extends JMenu {
 		// Sets the lexicon menu items text
 		_lexiconMenu.setTextOfMenuComponents();
 
-		// Disables the lexicon menu
-		_lexiconMenu.setEnabled(false);
-
 		// Sets the grammar menu text
 		_grammarMenu.setText(AcideLanguageManager.getInstance().getLabels()
 				.getString("s225"));
 
 		// Sets the grammar menu items text
 		_grammarMenu.setTextOfMenuComponents();
-
-		// Disables the grammar menu
-		_grammarMenu.setEnabled(false);
 
 		// Sets the compiler menu item text
 		_compilerMenuItem.setText(AcideLanguageManager.getInstance()
@@ -327,15 +321,13 @@ public class AcideConfigurationMenu extends JMenu {
 
 		// Sets the lexicon menu to visible or not visible
 		_lexiconMenu.setVisible(AcideMenuConfiguration.getInstance()
-				.getIsDisplayed(AcideLexiconMenu.LOAD_LEXICON_NAME)
+				.getIsDisplayed(AcideLexiconMenu.DOCUMENT_LEXICON_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						AcideLexiconMenu.MODIFY_LEXICON_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 						AcideLexiconMenu.NEW_LEXICON_NAME)
 				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideLexiconMenu.SAVE_LEXICON_NAME)
-				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-						AcideLexiconMenu.SAVE_LEXICON_AS_NAME));
+						AcideLexiconMenu.DEFAULT_LEXICONS_NAME));
 
 		// Builds the grammar menu
 		_grammarMenu.updateComponentsVisibility();
@@ -359,7 +351,7 @@ public class AcideConfigurationMenu extends JMenu {
 		// Sets the compiler filer editor separator to visible or not visible
 		_compilerFileEditorSeparator
 				.setVisible((AcideMenuConfiguration.getInstance()
-						.getIsDisplayed(AcideLexiconMenu.LOAD_LEXICON_NAME)
+						.getIsDisplayed(AcideLexiconMenu.DOCUMENT_LEXICON_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 								AcideLexiconMenu.MODIFY_LEXICON_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -371,9 +363,7 @@ public class AcideConfigurationMenu extends JMenu {
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 								COMPILER_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-								AcideLexiconMenu.NEW_LEXICON_NAME)
-						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-								AcideLexiconMenu.SAVE_LEXICON_NAME) || AcideMenuConfiguration
+								AcideLexiconMenu.NEW_LEXICON_NAME) || AcideMenuConfiguration
 						.getInstance().getIsDisplayed(
 								AcideGrammarMenu.SAVE_GRAMMAR_NAME))
 						&& (AcideMenuConfiguration
@@ -404,7 +394,7 @@ public class AcideConfigurationMenu extends JMenu {
 		// Sets the console language separator to visible or not visible
 		_consoleLanguageSeparator
 				.setVisible((AcideMenuConfiguration.getInstance()
-						.getIsDisplayed(AcideLexiconMenu.LOAD_LEXICON_NAME)
+						.getIsDisplayed(AcideLexiconMenu.DOCUMENT_LEXICON_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 								AcideLexiconMenu.MODIFY_LEXICON_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
@@ -423,8 +413,7 @@ public class AcideConfigurationMenu extends JMenu {
 								AcideConsoleMenu.CONSOLE_DISPLAY_OPTIONS_NAME)
 						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
 								AcideLexiconMenu.NEW_LEXICON_NAME)
-						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-								AcideLexiconMenu.SAVE_LEXICON_NAME) || AcideMenuConfiguration
+						|| AcideMenuConfiguration
 						.getInstance().getIsDisplayed(
 								AcideGrammarMenu.SAVE_GRAMMAR_NAME))
 						&& (AcideMenuConfiguration.getInstance()
