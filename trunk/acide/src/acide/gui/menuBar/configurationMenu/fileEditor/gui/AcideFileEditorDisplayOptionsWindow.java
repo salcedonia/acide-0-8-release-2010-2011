@@ -29,6 +29,7 @@
  */
 package acide.gui.menuBar.configurationMenu.fileEditor.gui;
 
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.gui.listeners.AcideWindowClosingListener;
 import acide.gui.mainWindow.AcideMainWindow;
 
@@ -378,7 +379,7 @@ public class AcideFileEditorDisplayOptionsWindow extends JFrame {
 
 		// Adds the restore default configuration button to the controls panel
 		_controlsPanel.add(_restoreDefaultConfiguration, constraints);
-		
+
 		// Adds the controls panel to the window
 		add(_controlsPanel, BorderLayout.NORTH);
 
@@ -459,7 +460,7 @@ public class AcideFileEditorDisplayOptionsWindow extends JFrame {
 		// Creates the restore default configuration
 		_restoreDefaultConfiguration = new JButton(AcideLanguageManager
 				.getInstance().getLabels().getString("s1095"));
-		
+
 		// Builds the button panel
 		buildButtonPanel();
 	}
@@ -736,17 +737,42 @@ public class AcideFileEditorDisplayOptionsWindow extends JFrame {
 			for (int index = 0; index < AcideMainWindow.getInstance()
 					.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
 
-				// Sets the new font style
+				// Updates the ACIDE - A Configurable IDE file editor
+				// configuration font name
+				AcideWorkbenchConfiguration.getInstance()
+						.getFileEditorConfiguration()
+						.setFontName(_displayArea.getFontName());
+
+				// Updates the ACIDE - A Configurable IDE file editor
+				// configuration font style
+				AcideWorkbenchConfiguration.getInstance()
+						.getFileEditorConfiguration()
+						.setFontStyle(_displayArea.getFontStyle());
+				
+				// Updates the ACIDE - A Configurable IDE file editor
+				// configuration font size
+				AcideWorkbenchConfiguration.getInstance()
+						.getFileEditorConfiguration()
+						.setFontSize(_displayArea.getFontSize());
+				
+				// Updates the ACIDE - A Configurable IDE file editor
+				// configuration background color
+				AcideWorkbenchConfiguration.getInstance()
+						.getFileEditorConfiguration()
+						.setBackgroundColor(_displayArea.getBackground());
+				
+				// Updates the ACIDE - A Configurable IDE file editor
+				// configuration foreground color
+				AcideWorkbenchConfiguration.getInstance()
+						.getFileEditorConfiguration()
+						.setForegroundColor(_displayArea.getForeground());
+				
+				// Sets the look and feel on the file editor panel
 				AcideMainWindow
 						.getInstance()
 						.getFileEditorManager()
 						.getFileEditorPanelAt(index)
-						.setDisplayOptions(
-								new Font(_displayArea.getFontName(),
-										_displayArea.getFontStyle(),
-										_displayArea.getFontSize()),
-								_displayArea.getBackground(),
-								_displayArea.getForeground());
+						.setLookAndFeel();
 
 				// Resets the selected file editor text edition area
 				AcideMainWindow.getInstance().getFileEditorManager()
@@ -910,10 +936,10 @@ public class AcideFileEditorDisplayOptionsWindow extends JFrame {
 			_displayArea.setFontName((String) _fontComboBox.getSelectedItem());
 		}
 	}
-	
+
 	/**
-	 * ACIDE - A Configurable IDE file editor display options window restore default
-	 * configuration action listener.
+	 * ACIDE - A Configurable IDE file editor display options window restore
+	 * default configuration action listener.
 	 * 
 	 * @version 0.8
 	 * @see ActionListener
@@ -931,10 +957,10 @@ public class AcideFileEditorDisplayOptionsWindow extends JFrame {
 
 			// Sets the default font name
 			_displayArea.setFontName("monospaced");
-			
+
 			// Sets the default font style
 			_displayArea.setFontStyle(Font.PLAIN);
-			
+
 			// Sets the default font size
 			_displayArea.setFontSize(12);
 

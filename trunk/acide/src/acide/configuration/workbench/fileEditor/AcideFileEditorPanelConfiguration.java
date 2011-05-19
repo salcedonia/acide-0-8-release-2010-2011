@@ -71,15 +71,17 @@ public class AcideFileEditorPanelConfiguration implements Serializable {
 	 */
 	private int _activeTextEditionArea;
 	/**
-	 * ACIDE - A Configurable IDE project configuration lexicon configuration.
+	 * ACIDE - A Configurable IDE file editor configuration lexicon configuration.
 	 */
 	private String _lexiconConfiguration;
 	/**
-	 * ACIDE - A Configurable IDE project configuration previous grammar configuration.
+	 * ACIDE - A Configurable IDE file editor configuration previous grammar
+	 * configuration.
 	 */
 	private String _previousGrammarConfiguration;
 	/**
-	 * ACIDE - A Configurable IDE project configuration current grammar configuration.
+	 * ACIDE - A Configurable IDE file editor configuration current grammar
+	 * configuration.
 	 */
 	private String _currentGrammarConfiguration;
 
@@ -89,13 +91,30 @@ public class AcideFileEditorPanelConfiguration implements Serializable {
 	public AcideFileEditorPanelConfiguration() {
 
 		super();
+
+		// Sets the default path
 		_path = "";
+
+		// Sets the default type
 		_type = "Normal";
+
+		// Sets the default caret position at 0
 		_caretPosition = 0;
+
+		// Sets the default split pane divider location at 0
 		_splitPaneDividerLocation = 0;
+
+		// Sets the default active text edition area at 1
 		_activeTextEditionArea = 1;
+
+		// Sets the default lexicon configuration
 		_lexiconConfiguration = "";
+
+		// Sets the default current grammar configuration
 		_currentGrammarConfiguration = "";
+
+		// Sets the default previous grammar configuration
+		_previousGrammarConfiguration = "";
 	}
 
 	/**
@@ -222,7 +241,8 @@ public class AcideFileEditorPanelConfiguration implements Serializable {
 	}
 
 	/**
-	 * Sets a new value for the lexicon configuration.
+	 * Sets a new value for the ACIDE - A Configurable IDE file editor
+	 * configuration lexicon configuration.
 	 * 
 	 * @param lexiconConfiguration
 	 *            new value to set.
@@ -232,11 +252,11 @@ public class AcideFileEditorPanelConfiguration implements Serializable {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE file editor configuration current grammar
-	 * configuration.
+	 * Returns the ACIDE - A Configurable IDE file editor configuration current
+	 * grammar configuration.
 	 * 
-	 * @return the ACIDE - A Configurable IDE file editor configuration current grammar
-	 *         configuration.
+	 * @return the ACIDE - A Configurable IDE file editor configuration current
+	 *         grammar configuration.
 	 */
 	public String getCurrentGrammarConfiguration() {
 		return _currentGrammarConfiguration;
@@ -249,16 +269,17 @@ public class AcideFileEditorPanelConfiguration implements Serializable {
 	 * @param currentGrammarConfiguration
 	 *            new value to set.
 	 */
-	public void setCurrentGrammarConfiguration(String currentGrammarConfiguration) {
+	public void setCurrentGrammarConfiguration(
+			String currentGrammarConfiguration) {
 		_currentGrammarConfiguration = currentGrammarConfiguration;
 	}
-	
+
 	/**
-	 * Returns the ACIDE - A Configurable IDE file editor configuration previous grammar
-	 * configuration.
+	 * Returns the ACIDE - A Configurable IDE file editor configuration previous
+	 * grammar configuration.
 	 * 
-	 * @return the ACIDE - A Configurable IDE file editor configuration previous grammar
-	 *         configuration.
+	 * @return the ACIDE - A Configurable IDE file editor configuration previous
+	 *         grammar configuration.
 	 */
 	public String getPreviousGrammarConfiguration() {
 		return _previousGrammarConfiguration;
@@ -271,7 +292,8 @@ public class AcideFileEditorPanelConfiguration implements Serializable {
 	 * @param previousGrammarConfiguration
 	 *            new value to set.
 	 */
-	public void setPreviousGrammarConfiguration(String previousGrammarConfiguration) {
+	public void setPreviousGrammarConfiguration(
+			String previousGrammarConfiguration) {
 		_previousGrammarConfiguration = previousGrammarConfiguration;
 	}
 }

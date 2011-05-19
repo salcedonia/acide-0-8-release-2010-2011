@@ -906,7 +906,7 @@ public class AcideExternalCommandConfigurationWindow extends JFrame {
 
 			// Asks the path to the user
 			String absolutePath = AcideFileManager.getInstance()
-					.askForOpenDirectory();
+					.askForOpenDirectory(true);
 
 			if (absolutePath != null) {
 				

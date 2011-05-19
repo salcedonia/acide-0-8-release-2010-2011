@@ -29,6 +29,13 @@
  */
 package acide.gui.mainWindow;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JSplitPane;
+
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.factory.gui.AcideGUIFactory;
@@ -39,14 +46,6 @@ import acide.gui.mainWindow.listeners.AcideMainWindowWindowListener;
 import acide.gui.menuBar.AcideMenuBar;
 import acide.gui.statusBarPanel.AcideStatusBar;
 import acide.gui.toolBarPanel.AcideToolBarPanel;
-
-import java.awt.BorderLayout;
-import java.awt.Component;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JSplitPane;
-
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 
@@ -124,6 +123,39 @@ public class AcideMainWindow extends JFrame {
 	 */
 	public AcideMainWindow() {
 
+		// Builds the window components
+		buildComponents();
+
+		// Adds the components to the window
+		addComponents();
+
+		// Sets the listeners
+		setListeners();
+
+		// Sets the window configuration
+		setWindowConfiguration();
+	}
+
+	/**
+	 * Adds the components to the ACIDE - A Configurable IDE main window.
+	 */
+	private void addComponents() {
+
+		// Sets the menu bar
+		setJMenuBar(_menu);
+
+		// Adds the horizontal split panel to the window
+		add(_horizontalSplitPanel, BorderLayout.CENTER);
+
+		// Adds the status bar to the window
+		add(_statusBar, BorderLayout.SOUTH);
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE main window components.
+	 */
+	private void buildComponents() {
+
 		// Updates the log
 		AcideLog.getLog()
 				.info(AcideLanguageManager.getInstance().getLabels()
@@ -131,9 +163,6 @@ public class AcideMainWindow extends JFrame {
 
 		// Builds the menu
 		_menu = AcideGUIFactory.getInstance().buildAcideMenu();
-
-		// Sets the menu bar
-		setJMenuBar(_menu);
 
 		// Sets the menu listeners
 		setMenuListeners();
@@ -179,15 +208,12 @@ public class AcideMainWindow extends JFrame {
 		// split
 		// pane
 		_horizontalSplitPanel.setContinuousLayout(true);
+	}
 
-		// Adds the horizontal split panel to the window
-		add(_horizontalSplitPanel, BorderLayout.CENTER);
-
-		// Adds the status bar to the window
-		add(_statusBar, BorderLayout.SOUTH);
-
-		// Adds the Listeners
-		addWindowListener(new AcideMainWindowWindowListener());
+	/**
+	 * Sets the ACIDE - A Configurable IDE main window window configuration.
+	 */
+	private void setWindowConfiguration() {
 
 		// Sets the title
 		setTitle(AcideLanguageManager.getInstance().getLabels()
@@ -203,6 +229,16 @@ public class AcideMainWindow extends JFrame {
 		AcideLog.getLog()
 				.info(AcideLanguageManager.getInstance().getLabels()
 						.getString("s66"));
+	}
+
+	/**
+	 * Sets the listeners for the ACIDE - A Configurable IDE main window.
+	 */
+	private void setListeners() {
+
+		// Adds the window listener to the ACIDE - A Configurable IDE main
+		// window
+		addWindowListener(new AcideMainWindowWindowListener());
 	}
 
 	/**
@@ -230,9 +266,6 @@ public class AcideMainWindow extends JFrame {
 	 */
 	public void showAcideMainWindow() {
 
-		// Centers the window
-		setLocationRelativeTo(null);
-
 		// The workbench has been loaded
 		AcideWorkbenchConfiguration.getInstance().setWorkbenchLoaded(true);
 
@@ -256,23 +289,50 @@ public class AcideMainWindow extends JFrame {
 	 */
 	public void closeAcideMainWindow() {
 
-		// Asks for saving the project configuration
-		if (AcideProjectConfiguration.getInstance()
-				.askForSavingProjectConfiguration()) {
+		// If it is the default project
+		if (AcideProjectConfiguration.getInstance().isDefaultProject()) {
 
 			// Saves the file editor configuration
 			if (AcideMainWindow.getInstance().getFileEditorManager()
 					.askForSavingModifiedFiles()) {
 
+				// Saves the default configuration
+				AcideWorkbenchConfiguration.getInstance()
+						.saveDefaultConfiguration();
+
 				// Save the rest of the workbench configuration
 				AcideWorkbenchConfiguration.getInstance()
 						.saveComponentsConfiguration();
 
-				// Saves the workbench configuration into its configuration file
+				// Saves the workbench configuration into its configuration
+				// file
 				AcideWorkbenchConfiguration.getInstance().save();
 
 				// Closes the main window
 				System.exit(0);
+			}
+
+		} else {
+
+			// Asks for saving the project configuration
+			if (AcideProjectConfiguration.getInstance()
+					.askForSavingProjectConfiguration()) {
+
+				// Saves the file editor configuration
+				if (AcideMainWindow.getInstance().getFileEditorManager()
+						.askForSavingModifiedFiles()) {
+
+					// Save the rest of the workbench configuration
+					AcideWorkbenchConfiguration.getInstance()
+							.saveComponentsConfiguration();
+
+					// Saves the workbench configuration into its configuration
+					// file
+					AcideWorkbenchConfiguration.getInstance().save();
+
+					// Closes the main window
+					System.exit(0);
+				}
 			}
 		}
 	}

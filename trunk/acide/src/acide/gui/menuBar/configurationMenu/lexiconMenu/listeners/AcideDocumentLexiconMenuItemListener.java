@@ -33,7 +33,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import acide.language.AcideLanguageManager;
-import acide.configuration.project.AcideProjectConfiguration;
 import acide.files.AcideFileExtensionFilterManager;
 import acide.files.AcideFileManager;
 import acide.gui.mainWindow.AcideMainWindow;
@@ -64,44 +63,18 @@ public class AcideDocumentLexiconMenuItemListener implements ActionListener {
 				.getFileChooser()
 				.addChoosableFileFilter(
 						new AcideFileExtensionFilterManager(extensions,
-								AcideLanguageManager.getInstance()
-										.getLabels().getString("s327")));
-		
+								AcideLanguageManager.getInstance().getLabels()
+										.getString("s327")));
+
 		// Asks the the file to the user
-		String absolutePath = AcideFileManager.getInstance()
-				.askForOpenFile("./configuration/lexicon/");
+		String absolutePath = AcideFileManager.getInstance().askForOpenFile(
+				"./configuration/lexicon/");
 
 		if (absolutePath != null) {
-		
-			// Loads the lexicon configuration
-			AcideMainWindow.getInstance().getFileEditorManager()
-					.getSelectedFileEditorPanel().getLexiconConfiguration()
-					.load(absolutePath);
 
-			// Resets the selected file editor text edition area
-			AcideMainWindow.getInstance().getFileEditorManager()
-					.getSelectedFileEditorPanel().resetStyledDocument();
-
-			// Updates the lexicon message status bar
-			AcideMainWindow
-					.getInstance()
-					.getStatusBar()
-					.setLexiconMessage(
-							AcideLanguageManager.getInstance().getLabels()
-									.getString("s449")
-									+ " "
-									+ AcideMainWindow.getInstance()
-											.getFileEditorManager()
-											.getSelectedFileEditorPanel()
-											.getLexiconConfiguration()
-											.getName());
-
-			// If it is not the default project
-			if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
-
-				// The project has been modified
-				AcideProjectConfiguration.getInstance().setIsModified(true);
-			}
+			// Documents the lexicon configuration
+			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+					.getLexiconMenu().documentLexicon(absolutePath);
 		}
 	}
 }

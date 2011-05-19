@@ -38,6 +38,7 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
 import acide.configuration.menu.AcideMenuConfiguration;
+import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideDocumentLexiconMenuItemListener;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideModifyLexiconMenuItemListener;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.listeners.AcideNewLexiconMenuItemListener;
@@ -69,8 +70,7 @@ public class AcideLexiconMenu extends JMenu {
 	 */
 	public static final String DOCUMENT_LEXICON_NAME = "Document Lexicon";
 	/**
-	 * ACIDE - A Configurable IDE lexicon menu default lexicons menu item
-	 * name.
+	 * ACIDE - A Configurable IDE lexicon menu default lexicons menu item name.
 	 */
 	public static final String DEFAULT_LEXICONS_NAME = "Default Lexicons";
 	/**
@@ -227,8 +227,8 @@ public class AcideLexiconMenu extends JMenu {
 				.getIsDisplayed(NEW_LEXICON_NAME));
 
 		// Sets the document lexicon menu item to visible or not visible
-		_documentLexiconMenuItem.setVisible(AcideMenuConfiguration.getInstance()
-				.getIsDisplayed(DOCUMENT_LEXICON_NAME));
+		_documentLexiconMenuItem.setVisible(AcideMenuConfiguration
+				.getInstance().getIsDisplayed(DOCUMENT_LEXICON_NAME));
 
 		// Sets the modify lexicon menu item to visible or not visible
 		_modifyLexiconMenuItem.setVisible(AcideMenuConfiguration.getInstance()
@@ -236,15 +236,14 @@ public class AcideLexiconMenu extends JMenu {
 
 		// Sets the save lexicon as default lexicons separator to visible or
 		// not visible
-		_separator
-				.setVisible(AcideMenuConfiguration.getInstance()
-						.getIsDisplayed(NEW_LEXICON_NAME)
-						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-								DOCUMENT_LEXICON_NAME)
-						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-								MODIFY_LEXICON_NAME)
-						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
-								DEFAULT_LEXICONS_NAME));
+		_separator.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(NEW_LEXICON_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						DOCUMENT_LEXICON_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						MODIFY_LEXICON_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						DEFAULT_LEXICONS_NAME));
 
 		// Sets the default lexicons menu item to visible or not visible
 		_defaultLexiconsMenuItem.setVisible(AcideMenuConfiguration
@@ -258,17 +257,17 @@ public class AcideLexiconMenu extends JMenu {
 
 		// Enables the new lexicon menu item
 		_newLexiconMenuItem.setEnabled(true);
-		
+
 		// Enables the document lexicon menu item
 		_documentLexiconMenuItem.setEnabled(true);
-		
+
 		// Enables the modify lexicon menu item
 		_modifyLexiconMenuItem.setEnabled(true);
-		
+
 		// Enables the default lexicons menu item
 		_defaultLexiconsMenuItem.setEnabled(true);
 	}
-	
+
 	/**
 	 * Disables the ACIDE - A Configurable IDE lexicon menu.
 	 */
@@ -276,17 +275,48 @@ public class AcideLexiconMenu extends JMenu {
 
 		// Disables the new lexicon menu item
 		_newLexiconMenuItem.setEnabled(false);
-		
+
 		// Disables the document lexicon menu item
 		_documentLexiconMenuItem.setEnabled(false);
-		
+
 		// Disables the modify lexicon menu item
 		_modifyLexiconMenuItem.setEnabled(false);
-		
+
 		// Enables the default lexicons menu item
 		_defaultLexiconsMenuItem.setEnabled(true);
 	}
-	
+
+	/**
+	 * Documents the ACIDE - A Configurable IDE lexicon configuration in the
+	 * selected file editor panel.
+	 * 
+	 * @param absolutePath new lexicon configuration to set.
+	 */
+	public void documentLexicon(String absolutePath) {
+
+		// Loads the lexicon configuration
+		AcideMainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanel().getLexiconConfiguration()
+				.load(absolutePath);
+
+		// Resets the selected file editor text edition area
+		AcideMainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanel().resetStyledDocument();
+
+		// Updates the lexicon message status bar
+		AcideMainWindow
+				.getInstance()
+				.getStatusBar()
+				.setLexiconMessage(
+						AcideLanguageManager.getInstance().getLabels()
+								.getString("s449")
+								+ " "
+								+ AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getSelectedFileEditorPanel()
+										.getLexiconConfiguration().getName());
+	}
+
 	/**
 	 * Returns the ACIDE - A Configurable IDE lexicon menu new lexicon menu item
 	 * 

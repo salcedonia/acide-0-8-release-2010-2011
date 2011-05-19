@@ -50,7 +50,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.factory.gui.AcideGUIFactory;
-import acide.files.AcideFileExtensionFilterManager;
 import acide.files.AcideFileManager;
 import acide.files.project.AcideProjectFile;
 import acide.gui.listeners.AcideWindowClosingListener;
@@ -447,18 +446,37 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 
 		// The compiler paths are not defined yet
 		_areCompilerPathsDefined = false;
-		
+
 		// The shell paths are not defined yet
 		_areShellPathsDefined = false;
-		
+
 		// Empties the name text field
 		_nameTextField.setText("");
-		
+
 		// Empties the workspace text field
 		_workspaceTextField.setText("");
-		
+
 		// Displays the window
 		setVisible(true);
+	}
+
+	/**
+	 * Closes the ACIDE - A Configurable IDE new project configuration window.
+	 */
+
+	public void closeWindow() {
+
+		// Enables the main window again
+		AcideMainWindow.getInstance().setEnabled(true);
+
+		// Closes the window
+		setVisible(false);
+
+		// Brings the main window to the front
+		AcideMainWindow.getInstance().setAlwaysOnTop(true);
+
+		// But not permanently
+		AcideMainWindow.getInstance().setAlwaysOnTop(false);
 	}
 
 	/**
@@ -601,99 +619,82 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 	 */
 	public void updateProjectConfiguration() {
 
-		// Sets the project name
-		AcideProjectConfiguration.getInstance().setName(
-				_nameTextField.getText());
-
-		// Is not the first save
-		AcideProjectConfiguration.getInstance().setFirstSave(false);
-
-		// If the compiler paths are not defined
-		if (!_areCompilerPathsDefined) {
-
-			// Sets the compiler path in the configuration as
-			// null
-			AcideProjectConfiguration.getInstance().setCompilerPath(null);
-
-			// Sets the compiler arguments in the configuration
-			// as null
-			AcideProjectConfiguration.getInstance().setCompilerArguments(null);
-		} else {
-
-			// Sets the compiler path in the configuration as
-			// null
-			if (AcideProjectConfiguration.getInstance().getCompilerPath()
-					.equals(""))
-				AcideProjectConfiguration.getInstance().setCompilerPath(null);
-
-			// Sets the compiler arguments in the configuration
-			// as null
-			if (AcideProjectConfiguration.getInstance().getCompilerArguments()
-					.equals(""))
-				AcideProjectConfiguration.getInstance().setCompilerArguments(
-						null);
-		}
-
 		try {
 
-			// If it is not the default project
-			if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
+			// Gets the last index of slash
+			String separator = "\\";
+			int lastIndexOfSlash = _workspaceTextField.getText().lastIndexOf(
+					separator);
+			if (lastIndexOfSlash == -1)
+				separator = "/";
 
-				// Adds the extension
-				String[] askExtension = new String[] { "acideProject" };
-				AcideFileManager
-						.getInstance()
-						.getFileChooser()
-						.addChoosableFileFilter(
-								new AcideFileExtensionFilterManager(
-										askExtension, AcideLanguageManager
-												.getInstance().getLabels()
-												.getString("s328")));
+			// Builds the file path
+			String filePath = _workspaceTextField.getText() + separator
+					+ _nameTextField.getText();
 
-				// Gets the last index of slash
-				String separator = "\\";
-				int lastIndexOfSlash = _workspaceTextField.getText()
-						.lastIndexOf(separator);
-				if (lastIndexOfSlash == -1)
-					separator = "/";
+			// If the file path does not content the extension
+			if (!filePath.contains(".acideProject"))
 
-				// Builds the name
-				String fileName = _workspaceTextField.getText() + separator
-						+ _nameTextField.getText();
+				// Adds it to the file path
+				filePath = filePath + ".acideProject";
 
-				// If the name does not content the extension
-				if (!fileName.contains(".acideProject"))
+			// Gets the previous project name
+			String previousProjectName = AcideProjectConfiguration
+					.getInstance().getName();
 
-					// Adds it
-					fileName = fileName + ".acideProject";
+			// Sets the project name in the ACIDE - A Configurable IDE
+			// project configuration
+			AcideProjectConfiguration.getInstance().setName(
+					_nameTextField.getText());
 
-				// Sets the project path in the project configuration
-				AcideProjectConfiguration.getInstance().setPath(fileName);
+			// Sets the project path in the ACIDE - A
+			// Configurable IDE project configuration
+			AcideProjectConfiguration.getInstance().setProjectPath(filePath);
 
-				// Saves the content in the project configuration file
-				String fileContent = AcideProjectConfiguration.getInstance()
-						.save();
+			// If the compiler paths are not defined
+			if (!_areCompilerPathsDefined) {
 
-				// Saves the file
-				AcideFileManager.getInstance().write(
-						AcideProjectConfiguration.getInstance()
-								.getProjectPath(), fileContent);
+				// Sets the compiler path in the configuration as
+				// null
+				AcideProjectConfiguration.getInstance().setCompilerPath(null);
 
-				// It is the first time the project has been saved
-				AcideProjectConfiguration.getInstance().setFirstSave(true);
+				// Sets the compiler arguments in the configuration
+				// as null
+				AcideProjectConfiguration.getInstance().setCompilerArguments(
+						null);
+			} else {
 
-				// Updates the ACIDE - A Configurable IDE project configuration
-				AcideResourceManager.getInstance().setProperty(
-						"projectConfiguration", fileName);
+				// Sets the compiler path in the configuration as
+				// null
+				if (AcideProjectConfiguration.getInstance().getCompilerPath()
+						.equals(""))
+					AcideProjectConfiguration.getInstance().setCompilerPath(
+							null);
 
-				// Updates the RESOURCE MANAGER default path
-				AcideResourceManager.getInstance().setProperty("defaultPath",
-						fileName);
-
-				// The project configuration has not been
-				// modified yet
-				AcideProjectConfiguration.getInstance().setIsModified(false);
+				// Sets the compiler arguments in the configuration
+				// as null
+				if (AcideProjectConfiguration.getInstance()
+						.getCompilerArguments().equals(""))
+					AcideProjectConfiguration.getInstance()
+							.setCompilerArguments(null);
 			}
+			
+			// Updates the file list
+			AcideProjectConfiguration.getInstance()
+					.updateFileListProjectConfiguration(previousProjectName,
+							_nameTextField.getText());
+
+			// Saves the content in the project configuration file
+			String fileContent = AcideProjectConfiguration.getInstance().save();
+
+			// Saves the file content into the project file
+			AcideFileManager.getInstance().write(
+					AcideProjectConfiguration.getInstance().getProjectPath(),
+					fileContent);
+
+			// Updates the ACIDE - A Configurable IDE project configuration
+			AcideResourceManager.getInstance().setProperty(
+					"projectConfiguration", filePath);
 		} catch (Exception exception) {
 
 			// Updates the log
@@ -747,6 +748,70 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 	}
 
 	/**
+	 * Updates the ACIDE - A Configurable IDE console panel.
+	 */
+	public void updateConsolePanel() {
+
+		// Exits the console
+		AcideMainWindow.getInstance().getConsolePanel().executeExitCommand();
+
+		// Sets the shell directory in the resource manager from the
+		AcideResourceManager.getInstance().setProperty(
+				"consolePanel.shellDirectory",
+				AcideProjectConfiguration.getInstance().getShellDirectory());
+
+		// Sets the shell path in the resource manager
+		AcideResourceManager.getInstance().setProperty(
+				"consolePanel.shellPath",
+				AcideProjectConfiguration.getInstance().getShellPath());
+
+		// Sets the echo command in the resource manager
+		AcideResourceManager.getInstance().setProperty(
+				"consolePanel.isEchoCommand",
+				String.valueOf(AcideProjectConfiguration.getInstance()
+						.getIsEchoCommand()));
+
+		// Sets the exit command in the resource manager
+		AcideResourceManager.getInstance().setProperty(
+				"consolePanel.exitCommand",
+				AcideProjectConfiguration.getInstance().getExitCommand());
+
+		// Sets the font name in the resource manager
+		AcideResourceManager.getInstance().setProperty("consolePanel.fontName",
+				AcideProjectConfiguration.getInstance().getFontName());
+
+		// Sets the font style in the resource manager
+		AcideResourceManager.getInstance().setProperty(
+				"consolePanel.fontStyle",
+				String.valueOf(AcideProjectConfiguration.getInstance()
+						.getFontStyle()));
+
+		// Sets the font size in the resource manager
+		AcideResourceManager.getInstance().setProperty(
+				"consolePanel.fontSize",
+				String.valueOf(AcideProjectConfiguration.getInstance()
+						.getFontSize()));
+
+		// Sets the foreground color in the resource manager
+		AcideResourceManager.getInstance().setProperty(
+				"consolePanel.foregroundColor",
+				Integer.toString(AcideProjectConfiguration.getInstance()
+						.getForegroundColor().getRGB()));
+
+		// Sets the background color in the resource manager
+		AcideResourceManager.getInstance().setProperty(
+				"consolePanel.backgroundColor",
+				Integer.toString(AcideProjectConfiguration.getInstance()
+						.getBackgroundColor().getRGB()));
+
+		// Resets the console panel
+		AcideMainWindow.getInstance().getConsolePanel().resetConsole();
+
+		// Updates the look and feel
+		AcideMainWindow.getInstance().getConsolePanel().setLookAndFeel();
+	}
+
+	/**
 	 * Updates the ACIDE - A Configurable IDE main window configuration.
 	 */
 	public void updateMainWindowConfiguration() {
@@ -758,28 +823,26 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 						+ " - " + _nameTextField.getText());
 
 		// Sets the is explorer panel showed flag as true
-		AcideProjectConfiguration.getInstance()
-				.setIsExplorerPanelShowed(true);
+		AcideProjectConfiguration.getInstance().setIsExplorerPanelShowed(true);
 
 		// Sets the is console panel showed flag as true
-		AcideProjectConfiguration.getInstance()
-				.setIsConsolePanelShowed(true);
+		AcideProjectConfiguration.getInstance().setIsConsolePanelShowed(true);
 
 		// Sets the window width
-		AcideProjectConfiguration.getInstance()
-				.setWindowWidth(AcideMainWindow.getInstance().getWidth());
+		AcideProjectConfiguration.getInstance().setWindowWidth(
+				AcideMainWindow.getInstance().getWidth());
 
 		// Sets the window height
-		AcideProjectConfiguration.getInstance()
-				.setWindowHeight(AcideMainWindow.getInstance().getHeight());
+		AcideProjectConfiguration.getInstance().setWindowHeight(
+				AcideMainWindow.getInstance().getHeight());
 
 		// Sets the window x coordinate
-		AcideProjectConfiguration.getInstance()
-				.setXCoordinate(AcideMainWindow.getInstance().getX());
+		AcideProjectConfiguration.getInstance().setXCoordinate(
+				AcideMainWindow.getInstance().getX());
 
 		// Sets the window y coordinate
-		AcideProjectConfiguration.getInstance()
-				.setYCoordinate(AcideMainWindow.getInstance().getY());
+		AcideProjectConfiguration.getInstance().setYCoordinate(
+				AcideMainWindow.getInstance().getY());
 
 		// Sets the vertical split pane divider location
 		AcideProjectConfiguration.getInstance()
@@ -815,18 +878,6 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 		// Expands the explorer tree
 		AcideMainWindow.getInstance().getExplorerPanel().expandTree();
 
-		// Enables the main window
-		AcideMainWindow.getInstance().setEnabled(true);
-
-		// Closes the window
-		setVisible(false);
-
-		// Brings the main window to the front
-		AcideMainWindow.getInstance().setAlwaysOnTop(true);
-
-		// But not permanently
-		AcideMainWindow.getInstance().setAlwaysOnTop(false);
-
 		// If the show explorer panel menu item is not selected
 		if (!AcideMainWindow.getInstance().getMenu().getViewMenu()
 				.getShowExplorerPanelCheckBoxMenuItem().isSelected())
@@ -851,113 +902,6 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 		// Enables the open all files menu item
 		AcideMainWindow.getInstance().getMenu().getFileMenu()
 				.getOpenAllFilesMenuItem().setEnabled(true);
-	}
-
-	/**
-	 * Updates the ACIDE - Configurable IDE console configuration.
-	 */
-	public void updateConsoleConfiguration() {
-
-		/*
-		 * // Sets the shell path in the configuration // as null
-		 * AcideWorkbenchConfiguration
-		 * .getInstance().getConsoleConfiguration().setShellPath(
-		 * AcideWorkbenchConfiguration
-		 * .getInstance().getConsoleConfiguration().getShellPath());
-		 * 
-		 * // Sets the shell directory in the configuration // as null
-		 * AcideWorkbenchConfiguration
-		 * .getInstance().getConsoleConfiguration().setShellDirectory(
-		 * AcideWorkbenchConfiguration
-		 * .getInstance().getConsoleConfiguration().getShellDirectory());
-		 * 
-		 * // Sets the exit command by default
-		 * AcideWorkbenchConfiguration.getInstance
-		 * ().getConsoleConfiguration().setExitCommand(
-		 * AcideWorkbenchConfiguration
-		 * .getInstance().getConsoleConfiguration().getExitCommand());
-		 * 
-		 * // Sets the console echo command as false
-		 * AcideWorkbenchConfiguration.
-		 * getInstance().getConsoleConfiguration().setEchoCommand(
-		 * AcideWorkbenchConfiguration
-		 * .getInstance().getConsoleConfiguration().getIsEchoCommand());
-		 * 
-		 * // Sets the console panel background color
-		 * AcideWorkbenchConfiguration
-		 * .getInstance().getConsoleConfiguration().setBackgroundColor(
-		 * AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-		 * .getBackground());
-		 * 
-		 * // Sets the console panel foreground color
-		 * AcideWorkbenchConfiguration
-		 * .getInstance().getConsoleConfiguration().setForegroundColor(
-		 * AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-		 * .getForeground());
-		 * 
-		 * // Sets the console panel font name
-		 * AcideWorkbenchConfiguration.getInstance
-		 * ().getConsoleConfiguration().setFontName(
-		 * AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-		 * .getFont().getFontName());
-		 * 
-		 * // Sets the console panel font style
-		 * AcideWorkbenchConfiguration.getInstance
-		 * ().getConsoleConfiguration().setFontStyle(
-		 * AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-		 * .getFont().getStyle());
-		 * 
-		 * // Sets the console panel font size
-		 * AcideWorkbenchConfiguration.getInstance
-		 * ().getConsoleConfiguration().setFontSize(
-		 * AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-		 * .getFont().getSize());
-		 */
-	}
-
-	/**
-	 * Gets the project name and if it exists ask to the user for saving the
-	 * changes. If the user says YES, then we are overwriting the project.
-	 * 
-	 * @return true if the user said yes to the saving action if the project
-	 *         already existed and false in other case.
-	 */
-	private boolean overwriteProject() {
-
-		// Gets the project name to check if we are overwriting it
-		String txtFile = "";
-		String separator = "\\";
-
-		int lastIndexOfSlash = _workspaceTextField.getText().lastIndexOf(
-				separator);
-		if (lastIndexOfSlash == -1)
-			separator = "/";
-
-		txtFile = _workspaceTextField.getText() + separator
-				+ _nameTextField.getText();
-
-		if (!txtFile.contains(".acideProject"))
-			txtFile = txtFile + ".acideProject";
-
-		File fileProject = new File(txtFile);
-
-		// If the file exists
-		if (fileProject.exists()) {
-
-			// Ask to the user if he wants to save it
-			int resultValueSaving = JOptionPane.showConfirmDialog(
-					null,
-					AcideLanguageManager.getInstance().getLabels()
-							.getString("s955"), AcideLanguageManager
-							.getInstance().getLabels().getString("s953"),
-					JOptionPane.YES_NO_OPTION);
-
-			// If NO
-			if (resultValueSaving == JOptionPane.NO_OPTION)
-				return false;
-		}
-
-		return true;
 	}
 
 	/**
@@ -1055,9 +999,9 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 
 			// Ask the path to the user
 			String absolutePath = AcideFileManager.getInstance()
-					.askForOpenDirectory();
-			
-			if(absolutePath != null)
+					.askForOpenDirectory(false);
+
+			if (absolutePath != null)
 
 				// Sets the workspace path
 				_workspacePath = absolutePath;
@@ -1095,20 +1039,63 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 			// If the required parameters are set
 			if (!_nameTextField.getText().equals("")) {
 
-				// If we are overwriting
-				if (overwriteProject()) {
+				// Gets the project name to check if we are overwriting it
+				String filePath = "";
+				String separator = "\\";
+				int lastIndexOfSlash = _workspaceTextField.getText()
+						.lastIndexOf(separator);
+				if (lastIndexOfSlash == -1)
+					separator = "/";
+
+				// Compounds the file path
+				filePath = _workspaceTextField.getText() + separator
+						+ _nameTextField.getText();
+
+				// If it does not contain the extension
+				if (!filePath.contains(".acideProject"))
+
+					// Adds it to the name
+					filePath = filePath + ".acideProject";
+
+				// Checks if the project already exists
+				File fileProject = new File(filePath);
+
+				// If the file exists
+				if (fileProject.exists()) {
+
+					// Ask to the user if he wants to save it
+					int resultValueSaving = JOptionPane.showConfirmDialog(null,
+							AcideLanguageManager.getInstance().getLabels()
+									.getString("s955"), AcideLanguageManager
+									.getInstance().getLabels()
+									.getString("s953"),
+							JOptionPane.YES_NO_OPTION);
+
+					// If it yes
+					if (resultValueSaving == JOptionPane.YES_OPTION) {
+
+						// Overwrites the file
+						AcideMainWindow.getInstance().getMenu()
+								.getProjectMenu().saveProjectAs(filePath);
+						
+						// Closes the window
+						closeWindow();
+					}
+				} else {
+
+					// Updates the main window with the configuration
 
 					// Updates the project configuration
 					updateProjectConfiguration();
-					
-					// Updates the console configuration
-					updateConsoleConfiguration();
 
 					// Updates the menu configuration
 					updateMenuConfiguration();
 
 					// Updates the tool bar configuration
 					updateToolBarConfiguration();
+
+					// Updates the console panel
+					updateConsolePanel();
 
 					// Updates the explorer panel
 					updateExplorerPanel();
@@ -1117,15 +1104,20 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 					updateFileEditor();
 
 					// Updates the main window configuration
-					updateMainWindowConfiguration();		
+					updateMainWindowConfiguration();
 					
-					// It is the first time the project has been saved
+					// Sets the is not the first save flag in the ACIDE - A
+					// Configurable IDE project configuration
 					AcideProjectConfiguration.getInstance().setFirstSave(true);
 
-					// The project configuration has not been
-					// modified yet
+					// The ACIDE - A Configurable IDE project configuration has not
+					// been modified yet
 					AcideProjectConfiguration.getInstance().setIsModified(false);
+					
+					// Closes the window
+					closeWindow();
 				}
+
 			} else {
 
 				// If the project name is empty
@@ -1164,17 +1156,8 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 					AcideLanguageManager.getInstance().getLabels()
 							.getString("s614"));
 
-			// Enables the main window again
-			AcideMainWindow.getInstance().setEnabled(true);
-
 			// Closes the window
-			setVisible(false);
-
-			// Brings the main window to the front
-			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-
-			// But not permanently
-			AcideMainWindow.getInstance().setAlwaysOnTop(false);
+			closeWindow();
 		}
 	}
 

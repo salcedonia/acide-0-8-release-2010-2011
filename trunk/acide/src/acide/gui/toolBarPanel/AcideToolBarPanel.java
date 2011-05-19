@@ -95,7 +95,7 @@ public class AcideToolBarPanel extends JPanel {
 	 * ACIDE - A Configurable IDE tool bar panel external applications tool bar.
 	 */
 	private AcideExternalAppsToolBar _externalAppsToolBar;
-	
+
 	/**
 	 * ACIDE - A Configurable IDE tool bar panel button left panel.
 	 * 
@@ -158,13 +158,13 @@ public class AcideToolBarPanel extends JPanel {
 
 		// The tool bar is static and it can not be moved
 		_toolBar.setFloatable(false);
-		
+
 		// Creates the menu bar tool bar
 		_menuBarToolBar = new AcideMenuBarToolBar();
-		
+
 		// Creates the console panel tool bar
 		_consolePanelToolBar = new AcideConsolePanelToolBar();
-		
+
 		// Creates the external applications tool bar
 		_externalAppsToolBar = new AcideExternalAppsToolBar();
 	}
@@ -341,6 +341,47 @@ public class AcideToolBarPanel extends JPanel {
 						.getString("s125"));
 	}
 
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE tool bar panel menu bar tool bar.
+	 * 
+	 * @return the ACIDE - A Configurable IDE tool bar panel menu bar tool bar.
+	 */
+	public AcideMenuBarToolBar getMenuBarToolBar() {
+		return _menuBarToolBar;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE tool bar panel console panel tool
+	 * bar.
+	 * 
+	 * @return the ACIDE - A Configurable IDE tool bar panel console panel tool
+	 *         bar.
+	 */
+	public AcideConsolePanelToolBar getConsolePanelToolBar() {
+		return _consolePanelToolBar;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE tool bar panel external
+	 * applications tool bar.
+	 * 
+	 * @return the ACIDE - A Configurable IDE tool bar panel external
+	 *         applications tool bar.
+	 */
+	public AcideExternalAppsToolBar getExternalAppToolBar() {
+		return _externalAppsToolBar;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE tool bar panel tool bar.
+	 * 
+	 * @return the ACIDE - A Configurable IDE tool bar panel tool bar.
+	 */
+	public JToolBar getToolBar() {
+		return _toolBar;
+	}
+	
 	/**
 	 * ACIDE - A Configurable IDE tool bar scroll pane component listener.
 	 * 
@@ -441,7 +482,7 @@ public class AcideToolBarPanel extends JPanel {
 
 			// If it is below the bounds
 			if (_pointX + INCREMENT < _toolBarScrollPane.getVisibleRect().width)
-				
+
 				// Increments normally
 				_pointX += INCREMENT;
 
@@ -454,37 +495,5 @@ public class AcideToolBarPanel extends JPanel {
 			// Tells to the scroll pane to move there
 			_toolBarScrollPane.validate();
 		}
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public AcideMenuBarToolBar getMenuBarToolBar() {
-		return _menuBarToolBar;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public AcideConsolePanelToolBar getConsolePanelToolBar() {
-		return _consolePanelToolBar;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public AcideExternalAppsToolBar getExternalAppToolBar() {
-		return _externalAppsToolBar;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public JToolBar getToolBar(){
-		return _toolBar;
 	}
 }

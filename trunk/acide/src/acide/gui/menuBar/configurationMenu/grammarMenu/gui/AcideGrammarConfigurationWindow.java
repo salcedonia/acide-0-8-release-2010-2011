@@ -50,7 +50,6 @@ import javax.swing.KeyStroke;
 import javax.swing.border.TitledBorder;
 
 import acide.configuration.grammar.AcideGrammarConfiguration;
-import acide.configuration.project.AcideProjectConfiguration;
 import acide.files.AcideFileManager;
 import acide.files.bytes.AcideByteFileManager;
 import acide.gui.listeners.AcideWindowClosingListener;
@@ -703,13 +702,6 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 
 				// Updates the log
 				AcideLog.getLog().error(exception.getMessage());
-			}
-
-			// If it is not the default project
-			if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
-
-				// The project has been modified
-				AcideProjectConfiguration.getInstance().setIsModified(true);
 			}
 		}
 	}

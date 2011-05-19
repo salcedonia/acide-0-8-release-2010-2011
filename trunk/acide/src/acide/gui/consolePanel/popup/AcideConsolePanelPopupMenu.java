@@ -39,11 +39,13 @@ import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
 import acide.gui.consolePanel.popup.listeners.AcideClearConsoleBufferMenuItemAction;
+import acide.gui.consolePanel.popup.listeners.AcideCloseConsoleMenuItemAction;
 import acide.gui.consolePanel.popup.listeners.AcideConsoleDisplayOptionsMenuItemAction;
 import acide.gui.consolePanel.popup.listeners.AcideConsolePanelSearchMenuItemAction;
 import acide.gui.consolePanel.popup.listeners.AcideControlCMenuItemAction;
 import acide.gui.consolePanel.popup.listeners.AcideCopyMenuItemAction;
 import acide.gui.consolePanel.popup.listeners.AcideCutMenuItemAction;
+import acide.gui.consolePanel.popup.listeners.AcideDocumentLexiconMenuItemAction;
 import acide.gui.consolePanel.popup.listeners.AcidePasteMenuItemAction;
 import acide.gui.consolePanel.popup.listeners.AcideResetMenuItemAction;
 import acide.language.AcideLanguageManager;
@@ -81,17 +83,49 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 	private final static ImageIcon CUT_IMAGE = new ImageIcon(
 			"./resources/icons/menu/edit/cut.png");
 	/**
-	 * ACIDE - A Configurable IDE console panel popup menu search menu item image
-	 * icon.
+	 * ACIDE - A Configurable IDE console panel popup menu search menu item
+	 * image icon.
 	 */
 	private final static ImageIcon SEARCH_IMAGE = new ImageIcon(
 			"./resources/icons/menu/edit/search.png");
+
+	/**
+	 * ACIDE - A Configurable IDE console panel popup menu control+C menu item
+	 * image icon.
+	 */
+	private final static ImageIcon CONTROL_C_IMAGE = new ImageIcon(
+			"./resources/icons/menu/configuration/console/controlC.png");
+
+	/**
+	 * ACIDE - A Configurable IDE console panel popup menu clear console buffer
+	 * menu item image icon.
+	 */
+	private final static ImageIcon CLEAR_CONSOLE_BUFFER_IMAGE = new ImageIcon(
+			"./resources/icons/menu/configuration/console/clearConsoleBuffer.png");
+	/**
+	 * ACIDE - A Configurable IDE console panel popup menu reset console menu
+	 * item image icon.
+	 */
+	private final static ImageIcon RESET_CONSOLE_IMAGE = new ImageIcon(
+			"./resources/icons/menu/configuration/console/resetConsole.png");
+	/**
+	 * ACIDE - A Configurable IDE console panel popup menu close console menu
+	 * item image icon.
+	 */
+	private final static ImageIcon CLOSE_CONSOLE_IMAGE = new ImageIcon(
+			"./resources/icons/menu/configuration/console/closeConsole.png");
 	/**
 	 * ACIDE - A Configurable IDE console panel popup menu shell display options
 	 * menu item image icon.
 	 */
 	private final static ImageIcon CONSOLE_DISPLAY_OPTIONS_IMAGE = new ImageIcon(
 			"./resources/icons/menu/configuration/console/consoleDisplayOptions.png");
+	/**
+	 * ACIDE - A Configurable IDE console panel popup menu document lexicon menu
+	 * item image icon.
+	 */
+	private final static ImageIcon DOCUMENT_LEXICON_IMAGE = new ImageIcon(
+			"./resources/icons/menu/configuration/console/documentLexicon.png");
 	/**
 	 * ACIDE - A Configurable IDE console panel popup menu copy menu item.
 	 */
@@ -110,6 +144,11 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 	 */
 	private JMenuItem _consoleDisplayOptionsMenuItem;
 	/**
+	 * ACIDE - A Configurable IDE console panel popup menu document lexicon menu
+	 * item.
+	 */
+	private JMenuItem _documentLexiconMenuItem;
+	/**
 	 * ACIDE - A Configurable IDE console panel popup menu reset menu item.
 	 */
 	private JMenuItem _resetMenuItem;
@@ -123,10 +162,14 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 	 */
 	private JMenuItem _clearConsoleBufferMenuItem;
 	/**
-	 * ACIDE - A Configurable IDE console panel popup menu search
-	 * menu item.
+	 * ACIDE - A Configurable IDE console panel popup menu search menu item.
 	 */
 	private JMenuItem _searchMenuItem;
+	/**
+	 * ACIDE - A Configurable IDE console panel popup menu close console menu
+	 * item.
+	 */
+	private JMenuItem _closeConsoleMenuItem;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE console panel popup menu.
@@ -155,6 +198,12 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 		// Adds a separator to the popup menu
 		addSeparator();
 
+		// Adds the document lexicon menu item to the popup menu
+		add(_documentLexiconMenuItem);
+		
+		// Adds a separator to the popup menu
+		addSeparator();
+		
 		// Adds the copy menu item to the popup menu
 		add(_copyMenuItem);
 
@@ -175,12 +224,18 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 
 		// Adds the clear console buffer menu item to the popup menu
 		add(_clearConsoleBufferMenuItem);
-		
+
 		// Adds a separator to the popup menu
-		//addSeparator();
-		
+		addSeparator();
+
 		// Adds the search menu item to the popup menu
-		//add(_searchMenuItem);		
+		add(_searchMenuItem);
+
+		// Adds a separator to the popup menu
+		addSeparator();
+
+		// Adds the close console menu item to the popup menu
+		add(_closeConsoleMenuItem);
 	}
 
 	/**
@@ -194,6 +249,11 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 				.getInstance().getLabels().getString("s986"),
 				CONSOLE_DISPLAY_OPTIONS_IMAGE);
 
+		// Creates the document lexicon menu item
+		_documentLexiconMenuItem = new JMenuItem(AcideLanguageManager
+				.getInstance().getLabels().getString("s1093"),
+				DOCUMENT_LEXICON_IMAGE);
+		
 		// Creates the copy menu item
 		_copyMenuItem = new JMenuItem(AcideLanguageManager.getInstance()
 				.getLabels().getString("s187"), COPY_IMAGE);
@@ -207,30 +267,38 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 				.getLabels().getString("s189"), PASTE_IMAGE);
 
 		// Creates the controlC menu item
-		_controlCMenuItem = new JMenuItem("Ctrl-C");
+		_controlCMenuItem = new JMenuItem("Ctrl-C", CONTROL_C_IMAGE);
 
 		// Creates the reset menu item
 		_resetMenuItem = new JMenuItem(AcideLanguageManager.getInstance()
-				.getLabels().getString("s987"));
+				.getLabels().getString("s987"), RESET_CONSOLE_IMAGE);
 
 		// Creates the clear console buffer menu item
 		_clearConsoleBufferMenuItem = new JMenuItem(AcideLanguageManager
-				.getInstance().getLabels().getString("s999"));
-		
+				.getInstance().getLabels().getString("s999"),
+				CLEAR_CONSOLE_BUFFER_IMAGE);
+
 		// Creates the search menu item
-		_searchMenuItem = new JMenuItem(AcideLanguageManager
-				.getInstance().getLabels().getString("s556"), SEARCH_IMAGE);
-	
+		_searchMenuItem = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s556"), SEARCH_IMAGE);
+
 		// Sets the search menu item accelerator
 		if (AcideLanguageManager.getInstance().getCurrentLocale()
 				.equals(new Locale("en", "EN")))
 			_searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-					KeyEvent.VK_F, ActionEvent.CTRL_MASK));
+					KeyEvent.VK_F, ActionEvent.CTRL_MASK
+							+ ActionEvent.SHIFT_MASK));
 		else
 			_searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-					KeyEvent.VK_B, ActionEvent.CTRL_MASK));
+					KeyEvent.VK_B, ActionEvent.CTRL_MASK
+							+ ActionEvent.SHIFT_MASK));
+
+		// Creates the close console menu item
+		_closeConsoleMenuItem = new JMenuItem(AcideLanguageManager
+				.getInstance().getLabels().getString("s1099"),
+				CLOSE_CONSOLE_IMAGE);
 	}
-	
+
 	/**
 	 * Sets the listeners of the window components.
 	 */
@@ -239,6 +307,10 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 		// Sets the console display options menu item action listener
 		_consoleDisplayOptionsMenuItem
 				.addActionListener(new AcideConsoleDisplayOptionsMenuItemAction());
+
+		// Sets the document lexicon menu item action listener
+		_documentLexiconMenuItem
+				.addActionListener(new AcideDocumentLexiconMenuItemAction());
 
 		// Sets the copy menu item action listener
 		_copyMenuItem.addActionListener(new AcideCopyMenuItemAction());
@@ -258,10 +330,14 @@ public class AcideConsolePanelPopupMenu extends JPopupMenu {
 		// Sets the clear console buffer menu item action listener
 		_clearConsoleBufferMenuItem
 				.addActionListener(new AcideClearConsoleBufferMenuItemAction());
-		
+
 		// Sets the search menu item action listener
 		_searchMenuItem
-				.addActionListener(new AcideConsolePanelSearchMenuItemAction());	
+				.addActionListener(new AcideConsolePanelSearchMenuItemAction());
+
+		// Sets the close console menu item action listener
+		_closeConsoleMenuItem
+				.addActionListener(new AcideCloseConsoleMenuItemAction());
 	}
 
 	/**

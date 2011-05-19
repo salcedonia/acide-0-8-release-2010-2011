@@ -134,12 +134,18 @@ public class AcideSearchEngine {
 		// If regular expressions are selected
 		if (isRegularExpresion) {
 
+			// If it is not case sensitive
 			if (!isCaseSensitive)
+				
+				// Compiles the pattern with case insensitive
 				_pattern = Pattern.compile(wantedString,
 						Pattern.CASE_INSENSITIVE);
 			else
+				
+				// Compile the pattern with case sensitive
 				_pattern = Pattern.compile(wantedString);
 
+			// Gets the matcher
 			_matcher = _pattern.matcher(text);
 			_regularExpresion = " ";
 
@@ -220,7 +226,7 @@ public class AcideSearchEngine {
 
 		int position = -1;
 
-		// CASE SENSITIVE
+		// If it is case sensitive
 		if (isCaseSensitive) {
 
 			if ((!isRegularExpresion) && (!isCompleted))

@@ -313,6 +313,37 @@ public class AcideProjectConfiguration {
 	}
 
 	/**
+	 * <p>
+	 * Updates the name of the project in the files which depends on the root
+	 * node with the name of the project.
+	 * </p>
+	 * <p>
+	 * When a project has been saved with other name, it changes the parent
+	 * nodes which name matches with the old name for the new one.
+	 * </p>
+	 * 
+	 * @param previousProjectName
+	 *            previousProjectName previous project name to be renamed.
+	 * @param newProjectName
+	 *            newProjectName previous project name to be set.
+	 */
+	public void updateFileListProjectConfiguration(String previousProjectName,
+			String newProjectName) {
+
+		for (int index = 0; index < _fileList.size(); index++) {
+
+			// Gets the ACIDE - A Configurable file from the list
+			AcideProjectFile file = (AcideProjectFile) _fileList.get(index);
+
+			// If the node depended on the node with the previous project name
+			if (file.getParent().matches(previousProjectName))
+
+				// Updates its parent
+				file.setParent(newProjectName);
+		}
+	}
+
+	/**
 	 * Returns true if the current project is
 	 * "./configuration/project/default.acideProject" or the name is "".
 	 * 
@@ -719,7 +750,7 @@ public class AcideProjectConfiguration {
 
 		return true;
 	}
-	
+
 	/**
 	 * Returns the ACIDE - A Configurable IDE project configuration project
 	 * name.
@@ -805,7 +836,7 @@ public class AcideProjectConfiguration {
 	 * @param path
 	 *            new value to set.
 	 */
-	public void setPath(String path) {
+	public void setProjectPath(String path) {
 		_path = path;
 	}
 

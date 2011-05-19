@@ -253,6 +253,33 @@ public class AcideLanguageMenu extends JMenu {
 		// Resets the text of the menu bar
 		AcideMainWindow.getInstance().getMenu().setTextOfMenuComponents();
 
+		// Updates the lexicon and grammar menu
+		updateLexiconGrammarMenu();
+
+		// Resets the tool bar panel
+		AcideMainWindow.getInstance().buildToolBarPanel();
+
+		// Updates the popup menus
+		updatesPopupMenus();
+
+		// Updates the search/replace window
+		updateSearchReplaceWindow();
+
+		// Updates the status bar
+		updateStatusBar();
+		
+		// Validates the changes in the main window
+		AcideMainWindow.getInstance().validate();
+
+		// Repaints the main window
+		AcideMainWindow.getInstance().repaint();
+	}
+
+	/**
+	 * Updates the ACIDE - A Configurable IDE lexicon and grammar menus.
+	 */
+	public void updateLexiconGrammarMenu() {
+		
 		// If there are opened file editors
 		if (AcideMainWindow.getInstance().getFileEditorManager()
 				.getNumberOfFileEditorPanels() > 0) {
@@ -275,32 +302,13 @@ public class AcideLanguageMenu extends JMenu {
 			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
 					.getGrammarMenu().disableMenu();
 		}
+	}
 
-		// Resets the tool bar panel
-		AcideMainWindow.getInstance().buildToolBarPanel();
-
-		// Resets the explorer panel popup menu
-		AcideMainWindow.getInstance().getExplorerPanel().buildPopupMenu();
-
-		// Resets the console panel popup menu
-		AcideMainWindow.getInstance().getConsolePanel().buildPopupMenu();
-
-		// Resets the status bar popup menu
-		AcideMainWindow.getInstance().getStatusBar().buildPopupMenu();
-
-		for (int index = 0; index < AcideMainWindow.getInstance()
-				.getFileEditorManager().getNumberOfFileEditorPanels(); index++)
-
-			// Updates the file editor panel popup menus
-			AcideMainWindow.getInstance().getFileEditorManager()
-					.getFileEditorPanelAt(index).buildPopupMenu();
-
-		// Validates the changes in the main window
-		AcideMainWindow.getInstance().validate();
-
-		// Repaints the main window
-		AcideMainWindow.getInstance().repaint();
-
+	/**
+	 * Updates the ACIDE - A Configurable IDE search/replace window.
+	 */
+	public void updateSearchReplaceWindow() {
+		
 		// Resets the search/replace window
 		AcideSearchReplaceWindow.getInstance().initialize();
 
@@ -309,7 +317,13 @@ public class AcideLanguageMenu extends JMenu {
 
 		// Repaints the search/replace window
 		AcideSearchReplaceWindow.getInstance().repaint();
+	}
 
+	/**
+	 * Updates the ACIDE - A Configurable IDE status bar.
+	 */
+	public void updateStatusBar() {
+		
 		// Gets the current lines number message
 		String currentNumLinesMessage = AcideMainWindow.getInstance()
 				.getStatusBar().getNumberOfLinesMessage();
@@ -329,5 +343,27 @@ public class AcideLanguageMenu extends JMenu {
 			AcideMainWindow.getInstance().getStatusBar()
 					.setNumberOfLinesMessage(numLinesMessage);
 		}
+	}
+
+	/**
+	 * Updates all the ACIDE - A Configurable IDE popup menus.
+	 */
+	public void updatesPopupMenus() {
+		
+		// Resets the explorer panel popup menu
+		AcideMainWindow.getInstance().getExplorerPanel().buildPopupMenu();
+
+		// Resets the console panel popup menu
+		AcideMainWindow.getInstance().getConsolePanel().buildPopupMenu();
+
+		// Resets the status bar popup menu
+		AcideMainWindow.getInstance().getStatusBar().buildPopupMenu();
+
+		for (int index = 0; index < AcideMainWindow.getInstance()
+				.getFileEditorManager().getNumberOfFileEditorPanels(); index++)
+
+			// Updates the file editor panel popup menus
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.getFileEditorPanelAt(index).buildPopupMenu();
 	}
 }

@@ -32,6 +32,9 @@ package acide.gui.menuBar.configurationMenu.lexiconMenu.gui.predetermineWindow;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,24 +43,26 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import acide.configuration.project.AcideProjectConfiguration;
 import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.configuration.workbench.lexiconAssigner.AcideLexiconAssigner;
 import acide.files.AcideFileExtensionFilterManager;
@@ -84,9 +89,9 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 	private static final ImageIcon ICON = new ImageIcon(
 			"./resources/images/icon.png");
 	/**
-	 * ACIDE - A Configurable IDE default lexicons window main panel.
+	 * ACIDE - A Configurable IDE default lexicons window file editor configuration panel.
 	 */
-	private JPanel _mainPanel;
+	private JPanel _fileEditorConfigurationPanel;
 	/**
 	 * ACIDE - A Configurable IDE default lexicons window table.
 	 */
@@ -99,6 +104,25 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 	 * ACIDE - A Configurable IDE default lexicons window table button panel.
 	 */
 	private JPanel _tableButtonPanel;
+	/**
+	 * ACIDE - A Configurable IDE default lexicons window console configuration
+	 * panel.
+	 */
+	private JPanel _consoleConfigurationPanel;
+	/**
+	 * ACIDE - A Configurable IDE default lexicons window console lexicon label.
+	 */
+	private JLabel _consoleLexiconLabel;
+	/**
+	 * ACIDE - A Configurable IDE default lexicons window console lexicon text
+	 * field.
+	 */
+	private JTextField _consoleLexiconTextField;
+	/**
+	 * ACIDE - A Configurable IDE default lexicons window examine console
+	 * lexicon button.
+	 */
+	private JButton _examineConsoleLexiconButton;
 	/**
 	 * ACIDE - A Configurable IDE default lexicons window add lexicon assigner
 	 * button.
@@ -121,6 +145,11 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 	 * ACIDE - A Configurable IDE default lexicons window cancel button.
 	 */
 	private JButton _cancelButton;
+	/**
+	 * ACIDE - A Configurable IDE default lexicons window apply lexicon to
+	 * console check box.
+	 */
+	private JCheckBox _applyLexiconToConsoleCheckBox;
 	/**
 	 * ACIDE - A Configurable IDE default lexicons window are there changes
 	 * flag.
@@ -155,14 +184,39 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 	 */
 	private void buildComponents() {
 
-		// Creates the main panel
-		_mainPanel = new JPanel(new BorderLayout());
+		// Creates the file editor configuration panel
+		_fileEditorConfigurationPanel = new JPanel(new BorderLayout());
 
+		// Sets the file editor configuration panel border
+		_fileEditorConfigurationPanel.setBorder(BorderFactory
+				.createTitledBorder(AcideLanguageManager.getInstance()
+						.getLabels().getString("s2001")));
+		
 		// Builds the table
 		buildTable();
 
 		// Creates the table button panel
 		_tableButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+		// Creates the console configuration panel
+		_consoleConfigurationPanel = new JPanel(new GridBagLayout());
+
+		// Sets the console configuration panel border
+		_consoleConfigurationPanel.setBorder(BorderFactory
+				.createTitledBorder(AcideLanguageManager.getInstance()
+						.getLabels().getString("s2002")));
+		
+		// Creates the console lexicon label
+		_consoleLexiconLabel = new JLabel(AcideLanguageManager.getInstance()
+				.getLabels().getString("s1098"));
+
+		// Creates the console lexicon text field
+		_consoleLexiconTextField = new JTextField(AcideWorkbenchConfiguration
+				.getInstance().getLexiconAssignerConfiguration()
+				.getConsoleLexiconConfiguration(), 50);
+
+		// Creates the examine console lexicon button
+		_examineConsoleLexiconButton = new JButton("...");
 
 		// Creates the add lexicon assigner button
 		_addLexiconAssignerButton = new JButton(AcideLanguageManager
@@ -182,6 +236,15 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 		// Creates the cancel button
 		_cancelButton = new JButton(AcideLanguageManager.getInstance()
 				.getLabels().getString("s369"));
+
+		// Creates the apply lexicon to console check box
+		_applyLexiconToConsoleCheckBox = new JCheckBox(AcideLanguageManager
+				.getInstance().getLabels().getString("s2000"));
+
+		// Sets its selected state
+		_applyLexiconToConsoleCheckBox.setSelected(AcideWorkbenchConfiguration
+				.getInstance().getLexiconAssignerConfiguration()
+				.getApplyLexiconToConsole());
 	}
 
 	/**
@@ -259,17 +322,62 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 		// Sets the layout
 		setLayout(new BorderLayout());
 
-		// Builds the main panel
+		// Builds the file editor configuration panel
 		buildMainPanel();
 
-		// Adds the main panel to the window
-		add(_mainPanel, BorderLayout.CENTER);
+		// Adds the file editor configuration panel to the window
+		add(_fileEditorConfigurationPanel, BorderLayout.NORTH);
+
+		// Builds the console configuration panel
+		buildConsoleConfigurationPanel();
+
+		// Adds the console configuration panel to the window
+		add(_consoleConfigurationPanel, BorderLayout.CENTER);
 
 		// Builds the button panel
 		buildButtonPanel();
 
 		// Adds the button panel to the window
 		add(_buttonPanel, BorderLayout.SOUTH);
+	}
+
+	/**
+	 * Builds the ACIDE - A Configurable IDE default lexicons window console
+	 * configuration panel.
+	 */
+	private void buildConsoleConfigurationPanel() {
+
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.anchor = GridBagConstraints.WEST;
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.insets = new Insets(5, 5, 5, 5);
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+
+		// Adds the apply lexicon to console check box to the console
+		// configuration panel
+		_consoleConfigurationPanel.add(_applyLexiconToConsoleCheckBox,
+				constraints);
+
+		constraints.gridy = 1;
+
+		// Adds the console lexicon label to the console configuration panel
+		_consoleConfigurationPanel.add(_consoleLexiconLabel, constraints);
+
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.gridx = 1;
+
+		// Adds the console lexicon text field to the console configuration
+		// panel
+		_consoleConfigurationPanel.add(_consoleLexiconTextField, constraints);
+
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.gridx = 2;
+
+		// Adds the examine console lexicon button to the console configuration
+		// panel
+		_consoleConfigurationPanel.add(_examineConsoleLexiconButton,
+				constraints);
 	}
 
 	/**
@@ -286,18 +394,18 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 	}
 
 	/**
-	 * Builds the ACIDE - A Configurable IDE default lexicons window main panel.
+	 * Builds the ACIDE - A Configurable IDE default lexicons window file editor configuration panel.
 	 */
 	private void buildMainPanel() {
 
 		// Builds the table button panel
 		buildTableButtonPanel();
 
-		// Adds the table button panel to the main panel
-		_mainPanel.add(_tableButtonPanel, BorderLayout.NORTH);
+		// Adds the table button panel to the file editor configuration panel
+		_fileEditorConfigurationPanel.add(_tableButtonPanel, BorderLayout.NORTH);
 
-		// Adds the table scroll pane to the main panel
-		_mainPanel.add(_tableScrollPane, BorderLayout.CENTER);
+		// Adds the table scroll pane to the file editor configuration panel
+		_fileEditorConfigurationPanel.add(_tableScrollPane, BorderLayout.CENTER);
 	}
 
 	/**
@@ -338,6 +446,9 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 		// Sets the remove file type button action listener
 		_removeLexiconAssignerButton
 				.addActionListener(new RemoveLexiconAssignerButtonAction());
+
+		_examineConsoleLexiconButton
+				.addActionListener(new ExamineConsoleLexiconButtonAction());
 
 		// Sets the table mouse listener
 		_table.addMouseListener(new TableMouseListener());
@@ -392,11 +503,22 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 						((AcidePredetermineLexiconWindowTableModel) _table
 								.getModel()).getItems());
 
-		// If it is not the default project
-		if (!AcideProjectConfiguration.getInstance().isDefaultProject())
+		// Updates the console lexicon configuration in the lexicon assigner
+		// configuration
+		AcideWorkbenchConfiguration
+				.getInstance()
+				.getLexiconAssignerConfiguration()
+				.setConsoleLexiconConfiguration(
+						_consoleLexiconTextField.getText());
 
-			// The project has been modified
-			AcideProjectConfiguration.getInstance().setIsModified(true);
+		// Updates the apply lexicon to console flag in the lexicon assigner
+		// configuration
+		AcideWorkbenchConfiguration
+				.getInstance()
+				.getLexiconAssignerConfiguration()
+				.setApplyLexiconToConsole(
+						_applyLexiconToConsoleCheckBox.isSelected());
+
 	}
 
 	/**
@@ -803,6 +925,52 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 							contextMenu.show(_table, point.x, point.y);
 					}
 				}
+			}
+		}
+	}
+
+	/**
+	 * ACIDE - A Configurable IDE default lexicons window examine console
+	 * lexicon button action listener.
+	 * 
+	 * @version 0.8
+	 * @see ActionListener
+	 */
+	class ExamineConsoleLexiconButtonAction implements ActionListener {
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent
+		 * )
+		 */
+		@Override
+		public void actionPerformed(ActionEvent actionEvent) {
+
+			// Selects the extension for the project
+			String[] extensions = new String[] { "xml" };
+
+			// Adds the filter to the file chooser
+			AcideFileManager
+					.getInstance()
+					.getFileChooser()
+					.addChoosableFileFilter(
+							new AcideFileExtensionFilterManager(extensions,
+									AcideLanguageManager.getInstance()
+											.getLabels().getString("s327")));
+
+			// Asks the the file to the user
+			String absolutePath = AcideFileManager.getInstance()
+					.askForOpenFile("./configuration/lexicon/");
+
+			if (absolutePath != null) {
+
+				// There are changes
+				_areThereChanges = true;
+
+				// Updates the console lexicon text field
+				_consoleLexiconTextField.setText(absolutePath);
 			}
 		}
 	}

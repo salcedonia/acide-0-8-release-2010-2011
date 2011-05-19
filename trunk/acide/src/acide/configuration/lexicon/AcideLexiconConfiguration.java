@@ -39,6 +39,7 @@ import acide.configuration.lexicon.delimiters.AcideLexiconDelimitersManager;
 import acide.configuration.lexicon.remarks.AcideLexiconRemarksManager;
 import acide.configuration.lexicon.tokens.AcideLexiconTokenManager;
 import acide.configuration.lexicon.validExtensions.AcideValidExtensionsManager;
+import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 
@@ -105,13 +106,13 @@ public class AcideLexiconConfiguration {
 	 */
 	public void newLexicon(String path) {
 
-		// Gets the name
-		int index = path.lastIndexOf("\\");
-		if (index == -1)
-			index = path.lastIndexOf("/");
-
+		// Gets the last index of slash
+		int lastIndexOfSlash = path.lastIndexOf("\\");
+		if (lastIndexOfSlash == -1)
+			lastIndexOfSlash = path.lastIndexOf("/");
+		
 		// Sets the language name
-		_name = path.substring(index + 1, path.length());
+		_name = path.substring(lastIndexOfSlash + 1, path.lastIndexOf("."));
 
 		// Sets the language path
 		_path = path;
@@ -130,6 +131,10 @@ public class AcideLexiconConfiguration {
 
 		// Saves it
 		save(_name, false);
+		
+		// Documents the lexicon configuration
+		AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+				.getLexiconMenu().documentLexicon(path);
 	}
 
 	/**

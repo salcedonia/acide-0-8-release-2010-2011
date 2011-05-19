@@ -32,15 +32,19 @@ package acide.gui.consolePanel.popup.listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import acide.files.AcideFileExtensionFilterManager;
+import acide.files.AcideFileManager;
 import acide.gui.mainWindow.AcideMainWindow;
+import acide.language.AcideLanguageManager;
 
 /**
- * ACIDE - A Configurable IDE console panel search menu item action.
+ * ACIDE - A Configurable IDE console panel popup menu document lexicon menu
+ * item action listener.
  * 
  * @version 0.8
  * @see ActionListener
  */
-public class AcideConsolePanelSearchMenuItemAction implements ActionListener {
+public class AcideDocumentLexiconMenuItemAction implements ActionListener {
 
 	/*
 	 * (non-Javadoc)
@@ -51,8 +55,33 @@ public class AcideConsolePanelSearchMenuItemAction implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Performs the search console menu item action in the ACIDE - A Configurable IDE menu 
-		AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
-				.getConsoleMenu().getSearchConsoleMenuItem().doClick();
+		// Selects the extension for the project
+		String[] extensions = new String[] { "xml" };
+
+		// Adds the filter to the file chooser
+		AcideFileManager
+				.getInstance()
+				.getFileChooser()
+				.addChoosableFileFilter(
+						new AcideFileExtensionFilterManager(extensions,
+								AcideLanguageManager.getInstance().getLabels()
+										.getString("s327")));
+
+		// Asks the the file to the user
+		String absolutePath = AcideFileManager.getInstance().askForOpenFile(
+				"./configuration/lexicon/");
+
+		if (absolutePath != null) {
+
+			// Loads the lexicon configuration in the ACIDE - A Configurable IDE
+			// console panel
+			AcideMainWindow.getInstance().getConsolePanel()
+					.getLexiconConfiguration().load(absolutePath);
+
+			// Applies the highlighting in the ACIDE - A Configurable IDE
+			// console panel
+			AcideMainWindow.getInstance().getConsolePanel()
+					.resetStyledDocument();
+		}
 	}
 }

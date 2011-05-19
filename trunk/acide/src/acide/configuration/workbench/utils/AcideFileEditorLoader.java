@@ -44,7 +44,6 @@ import acide.files.project.AcideProjectFile;
 import acide.gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
 
 /**
  * <p>
@@ -106,11 +105,6 @@ public class AcideFileEditorLoader {
 	 */
 	public void run(AcideFileEditorConfiguration fileEditorConfiguration) {
 
-		// Updates the log
-		AcideLog.getLog().info(
-				AcideLanguageManager.getInstance().getLabels()
-						.getString("s1033"));
-
 		// Loads the project files
 		loadProjectFiles();
 
@@ -119,6 +113,18 @@ public class AcideFileEditorLoader {
 
 		// Sets the selected file editor
 		setSelectedFileEditor();
+
+		/*
+		 * IMPORTANT: Without this, when a configuration with any file editors
+		 * opened, the menu options will not be initialized properly, and it is
+		 * mandatory not to remove this line.
+		 */
+
+		// If there are not file editors
+		if (AcideMainWindow.getInstance().getFileEditorManager()
+				.getNumberOfFileEditorPanels() == 0)
+			// Updates the menu bar
+			AcideMainWindow.getInstance().getMenu().updateMenuEnableOrDisable();
 
 		// Updates the edition mode status bar
 		if (fileEditorConfiguration.getEditionMode())
@@ -309,6 +315,49 @@ public class AcideFileEditorLoader {
 											.getFileEditorManager()
 											.getFileEditorPanelAt(fileName));
 
+					// Loads the lexicon configuration
+					fileEditorPanel.getLexiconConfiguration().load(
+							fileEditorConfiguration.getFileAt(index)
+									.getLexiconConfiguration());
+
+					// Resets the lexicon configuration
+					fileEditorPanel.resetStyledDocument();
+
+					// Updates the lexicon message status bar
+					AcideMainWindow
+							.getInstance()
+							.getStatusBar()
+							.setLexiconMessage(
+									AcideLanguageManager.getInstance()
+											.getLabels().getString("s449")
+											+ " "
+											+ fileEditorPanel
+													.getLexiconConfiguration()
+													.getName());
+
+					// Creates the current grammar configuration
+					AcideGrammarConfiguration currentGrammarConfiguration = new AcideGrammarConfiguration();
+
+					// Sets the current grammar configuration path
+					currentGrammarConfiguration.setPath(fileEditorConfiguration
+							.getFileAt(index).getCurrentGrammarConfiguration());
+
+					// Creates the previous grammar configuration
+					AcideGrammarConfiguration previousGrammarConfiguration = new AcideGrammarConfiguration();
+
+					// Sets the previous grammar configuration path
+					previousGrammarConfiguration
+							.setPath(fileEditorConfiguration.getFileAt(index)
+									.getPreviousGrammarConfiguration());
+
+					// Updates its current grammar configuration
+					fileEditorPanel
+							.setCurrentGrammarConfiguration(currentGrammarConfiguration);
+
+					// Updates its previous grammar configuration
+					fileEditorPanel
+							.setPreviousGrammarConfiguration(previousGrammarConfiguration);
+
 					// Sets the split pane divider location
 					fileEditorPanel.getHorizontalSplitPane()
 							.setDividerLocation(
@@ -332,14 +381,9 @@ public class AcideFileEditorLoader {
 				// If the file does not exist
 				if (!file.exists()) {
 
-					// Gets the file project index
-					int fileProjectIndex = AcideProjectConfiguration
-							.getInstance().getIndexOfFile(
-									fileEditorConfiguration.getFileAt(index)
-											.getPath());
-
-					// If the file does not belongs to the project
-					if (fileProjectIndex == -1)
+					// If the file does not belong to the project
+					if (AcideProjectConfiguration.getInstance().getFileAt(
+							fileEditorConfiguration.getFileAt(index).getPath()) == null)
 
 						// Displays an error message
 						JOptionPane
@@ -353,10 +397,7 @@ public class AcideFileEditorLoader {
 														.getInstance()
 														.getLabels()
 														.getString("s1021"),
-										"Warning", JOptionPane.WARNING_MESSAGE);
-
-					// The project configuration has been modified
-					AcideProjectConfiguration.getInstance().setIsModified(true);
+										"Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		}
@@ -384,8 +425,10 @@ public class AcideFileEditorLoader {
 									.getSelectedFileEditorPanelName());
 
 			// If the selected file editor panel is inside the bounds
-			if (selectedFileEditorIndex < AcideMainWindow.getInstance()
-					.getFileEditorManager().getTabbedPane().getTabCount())
+			if (selectedFileEditorIndex >= 0
+					&& selectedFileEditorIndex < AcideMainWindow.getInstance()
+							.getFileEditorManager().getTabbedPane()
+							.getTabCount())
 
 				SwingUtilities.invokeLater(new Runnable() {
 
@@ -396,7 +439,7 @@ public class AcideFileEditorLoader {
 					 */
 					@Override
 					public void run() {
-						
+
 						// Sets the selected file editor from the file
 						// editor configuration
 						AcideMainWindow
@@ -409,6 +452,11 @@ public class AcideFileEditorLoader {
 
 			else
 
+				/*
+				 * NOTE: By default the selected file editor panel is the last
+				 * one opened in the tabbed pane.
+				 */
+
 				SwingUtilities.invokeLater(new Runnable() {
 
 					/*
@@ -418,7 +466,8 @@ public class AcideFileEditorLoader {
 					 */
 					@Override
 					public void run() {
-						// Updates the selected file editor index
+
+						// Sets the selected file editor panel
 						AcideMainWindow
 								.getInstance()
 								.getFileEditorManager()

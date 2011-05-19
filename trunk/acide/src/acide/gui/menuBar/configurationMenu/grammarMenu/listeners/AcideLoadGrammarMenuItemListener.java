@@ -32,7 +32,6 @@ package acide.gui.menuBar.configurationMenu.grammarMenu.listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import acide.configuration.project.AcideProjectConfiguration;
 import acide.files.AcideFileExtensionFilterManager;
 import acide.files.AcideFileManager;
 import acide.gui.mainWindow.AcideMainWindow;
@@ -102,13 +101,6 @@ public class AcideLoadGrammarMenuItemListener implements ActionListener{
 			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
 					.getGrammarMenu().getSaveGrammarMenuItem()
 					.setEnabled(false);
-
-			// If it is not the default project
-			if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
-
-				// The project has been modified
-				AcideProjectConfiguration.getInstance().setIsModified(true);
-			}
 		}
 	}
 }

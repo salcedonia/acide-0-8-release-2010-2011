@@ -33,7 +33,7 @@ import acide.configuration.lexicon.AcideLexiconConfiguration;
 
 /**
  * <p>
- * ACIDE - A Configurable IDE lexicon assigner manager.
+ * ACIDE - A Configurable IDE lexicon assigner configuration.
  * </p>
  * <p>
  * Handles the classes and methods for the automatic assignment of the lexicon
@@ -45,17 +45,27 @@ import acide.configuration.lexicon.AcideLexiconConfiguration;
 public class AcideLexiconAssignerConfiguration {
 
 	/**
-	 * ACIDE - A Configurable IDE lexicon assigner manager default path
+	 * ACIDE - A Configurable IDE lexicon assigner configuration default path
 	 * constant.
 	 */
 	public static final String DEFAULT_PATH = "./configuration/lexiconAssigner/configuration.xml";
 	/**
-	 * ACIDE - A Configurable IDE lexicon assigner manager list.
+	 * ACIDE - A Configurable IDE lexicon assigner configuration list.
 	 */
 	private AcideLexiconAssignerConfigurationList _list;
+	/**
+	 * ACIDE - A Configurable IDE lexicon assigner configuration console lexicon
+	 * configuration.
+	 */
+	private String _consoleLexiconConfiguration;
+	/**
+	 * ACIDE - A Configurable IDE lexicon assigner configuration apply lexicon
+	 * to console flag.
+	 */
+	private boolean _applyLexiconToConsole;
 
 	/**
-	 * Creates a new ACIDE - A Configurable IDE lexicon assigner manager.
+	 * Creates a new ACIDE - A Configurable IDE lexicon assigner configuration.
 	 */
 	public AcideLexiconAssignerConfiguration() {
 
@@ -98,9 +108,9 @@ public class AcideLexiconAssignerConfiguration {
 	}
 
 	/**
-	 * Returns the ACIDE - A Configurable IDE lexicon assigner manager list.
+	 * Returns the ACIDE - A Configurable IDE lexicon assigner configuration list.
 	 * 
-	 * @return the ACIDE - A Configurable IDE lexicon assigner manager list.
+	 * @return the ACIDE - A Configurable IDE lexicon assigner configuration list.
 	 */
 	public AcideLexiconAssignerConfigurationList getList() {
 		return _list;
@@ -108,7 +118,7 @@ public class AcideLexiconAssignerConfiguration {
 
 	/**
 	 * Sets a new value to the ACIDE - A Configurable IDE lexicon assigner
-	 * manager list.
+	 * configuration list.
 	 * 
 	 * @param list
 	 *            new value to set.
@@ -148,8 +158,8 @@ public class AcideLexiconAssignerConfiguration {
 		if (lastIndexOfDot != -1) {
 
 			// Gets the lexicon configuration path from the lexicon assigner
-			String lexiconConfigurationPath = getLexiconConfiguration(
-							filePath.substring(lastIndexOfDot + 1));
+			String lexiconConfigurationPath = getLexiconConfiguration(filePath
+					.substring(lastIndexOfDot + 1));
 
 			// If it is defined
 			if (lexiconConfigurationPath != null)
@@ -169,5 +179,50 @@ public class AcideLexiconAssignerConfiguration {
 					+ AcideLexiconConfiguration.DEFAULT_NAME);
 		}
 		return lexiconConfiguration;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE lexicon assigner configuration
+	 * console lexicon configuration.
+	 * 
+	 * @return the ACIDE - A Configurable IDE lexicon assigner configuration
+	 *         console lexicon configuration.
+	 */
+	public String getConsoleLexiconConfiguration() {
+		return _consoleLexiconConfiguration;
+	}
+
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE lexicon assigner
+	 * configuration console lexicon configuration.
+	 * 
+	 * @param consoleLexiconConfiguration
+	 *            new value to set.
+	 */
+	public void setConsoleLexiconConfiguration(
+			String consoleLexiconConfiguration) {
+		_consoleLexiconConfiguration = consoleLexiconConfiguration;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE lexicon assigner configuration
+	 * apply lexicon to console flag.
+	 * 
+	 * @return the ACIDE - A Configurable IDE lexicon assigner configuration
+	 *         apply lexicon to console flag
+	 */
+	public boolean getApplyLexiconToConsole() {
+		return _applyLexiconToConsole;
+	}
+
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE lexicon assigner
+	 * configuration apply lexicon to console flag.
+	 * 
+	 * @param applyLexiconToConsole
+	 *            new value to set.
+	 */
+	public void setApplyLexiconToConsole(boolean applyLexiconToConsole) {
+		_applyLexiconToConsole = applyLexiconToConsole;
 	}
 }

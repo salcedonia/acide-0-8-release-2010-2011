@@ -41,7 +41,6 @@ import acide.gui.menuBar.configurationMenu.consoleMenu.gui.AcideExternalCommandC
 import acide.gui.menuBar.projectMenu.gui.executionWindow.AcideExecutionConfigurationWindow;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 
@@ -296,7 +295,8 @@ public class AcideFileEditorPanel extends JPanel {
 					.removeDocumentListener(_documentListener);
 
 			// Sets the text content
-			_textEditionAreaList.get(index).getTextComponent().setText(fileContent);
+			_textEditionAreaList.get(index).getTextComponent()
+					.setText(fileContent);
 
 			// Adds the document listener
 			_textEditionAreaList.get(index).getTextComponent().getDocument()
@@ -512,8 +512,8 @@ public class AcideFileEditorPanel extends JPanel {
 	 *            new value to set.
 	 */
 	public void setEditable(boolean editable) {
-		_textEditionAreaList.get(_activeTextEditionAreaIndex).getTextComponent()
-				.setEditable(editable);
+		_textEditionAreaList.get(_activeTextEditionAreaIndex)
+				.getTextComponent().setEditable(editable);
 	}
 
 	/**
@@ -717,38 +717,14 @@ public class AcideFileEditorPanel extends JPanel {
 	}
 
 	/**
-	 * Applies the display options to the file editor in both text edition
-	 * areas.
-	 * 
-	 * @param font
-	 *            new font to set.
-	 * @param backgroundColor
-	 *            background color to set.
-	 * @param foregroundColor
-	 *            foreground color to set.
+	 * Applies the look and feel to the file editor in both text edition areas.
 	 */
-	public void setDisplayOptions(Font font, Color backgroundColor,
-			Color foregroundColor) {
+	public void setLookAndFeel() {
 
 		for (int index = 0; index < NUM_TEXT_EDITORS; index++) {
 
-			// Updates the line number panel font
-			_textEditionAreaList.get(index).getLineNumberPanel().setFont(font);
-
-			// Sets the font
-			_textEditionAreaList.get(index).getTextComponent().setFont(font);
-
-			// Sets the foreground color
-			_textEditionAreaList.get(index).getTextComponent()
-					.setForeground(foregroundColor);
-
-			// Sets the background color
-			_textEditionAreaList.get(index).getTextComponent()
-					.setBackground(backgroundColor);
-
-			// Sets the caret color
-			_textEditionAreaList.get(index).getTextComponent()
-					.setCaretColor(foregroundColor);
+			// Sets the look and feel
+			_textEditionAreaList.get(index).setLookAndFeel();
 		}
 	}
 
@@ -767,8 +743,8 @@ public class AcideFileEditorPanel extends JPanel {
 		for (int index = 0; index < NUM_TEXT_EDITORS; index++) {
 
 			// Gets the current font
-			Font currentFont = _textEditionAreaList.get(index).getTextComponent()
-					.getFont();
+			Font currentFont = _textEditionAreaList.get(index)
+					.getTextComponent().getFont();
 
 			Font newFont;
 
@@ -821,6 +797,18 @@ public class AcideFileEditorPanel extends JPanel {
 	}
 
 	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE file editor panel
+	 * lexicon configuration.
+	 * 
+	 * @param lexiconConfiguration
+	 *            new value to set.
+	 */
+	public void setLexiconConfiguration(
+			AcideLexiconConfiguration lexiconConfiguration) {
+		_lexiconConfiguration = lexiconConfiguration;
+	}
+	
+	/**
 	 * Returns the ACIDE - A Configurable IDE file editor panel current grammar
 	 * configuration.
 	 * 
@@ -840,5 +828,29 @@ public class AcideFileEditorPanel extends JPanel {
 	 */
 	public AcideGrammarConfiguration getPreviousGrammarConfiguration() {
 		return _previousGrammarConfiguration;
+	}
+
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE file editor panel
+	 * current grammar configuration.
+	 * 
+	 * @param currentGrammarConfiguration
+	 *            new value to set.
+	 */
+	public void setCurrentGrammarConfiguration(
+			AcideGrammarConfiguration currentGrammarConfiguration) {
+		_currentGrammarConfiguration = currentGrammarConfiguration;
+	}
+	
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE file editor panel
+	 * previous grammar configuration.
+	 * 
+	 * @param previousGrammarConfiguration
+	 *            new value to set.
+	 */
+	public void setPreviousGrammarConfiguration(
+			AcideGrammarConfiguration previousGrammarConfiguration) {
+		_previousGrammarConfiguration = previousGrammarConfiguration;
 	}
 }

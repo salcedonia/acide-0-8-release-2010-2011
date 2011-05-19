@@ -29,14 +29,22 @@
  */
 package acide.gui.menuBar.configurationMenu.consoleMenu;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.Locale;
+
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
 
 import acide.configuration.menu.AcideMenuConfiguration;
+import acide.gui.menuBar.configurationMenu.consoleMenu.listeners.AcideCloseConsoleMenuItemListener;
 import acide.gui.menuBar.configurationMenu.consoleMenu.listeners.AcideConfigureMenuItemListener;
 import acide.gui.menuBar.configurationMenu.consoleMenu.listeners.AcideConsoleDisplayOptionsMenuItemListener;
 import acide.gui.menuBar.configurationMenu.consoleMenu.listeners.AcideExternalCommandMenuItemListener;
+import acide.gui.menuBar.configurationMenu.consoleMenu.listeners.AcideSearchConsoleMenuItemListener;
 import acide.language.AcideLanguageManager;
 
 /**
@@ -65,6 +73,14 @@ public class AcideConsoleMenu extends JMenu {
 	 */
 	public static final String CONSOLE_DISPLAY_OPTIONS_NAME = "Console Display Options";
 	/**
+	 * ACIDE - A Configurable IDE console menu search console menu item name.
+	 */
+	public static final String SEARCH_CONSOLE_NAME = "Search Console";
+	/**
+	 * ACIDE - A Configurable IDE console menu close console menu item name.
+	 */
+	public static final String CLOSE_CONSOLE_NAME = "Close Console";
+	/**
 	 * ACIDE - A Configurable IDE console menu configure menu item image icon.
 	 */
 	private final static ImageIcon CONFIGURE_IMAGE = new ImageIcon(
@@ -82,6 +98,18 @@ public class AcideConsoleMenu extends JMenu {
 	private final static ImageIcon CONSOLE_DISPLAY_OPTIONS_IMAGE = new ImageIcon(
 			"./resources/icons/menu/configuration/console/consoleDisplayOptions.png");
 	/**
+	 * ACIDE - A Configurable IDE console panel popup menu search menu item
+	 * image icon.
+	 */
+	private final static ImageIcon SEARCH_CONSOLE_IMAGE = new ImageIcon(
+			"./resources/icons/menu/edit/search.png");
+	/**
+	 * ACIDE - A Configurable IDE console menu close console menu item image
+	 * icon.
+	 */
+	private final static ImageIcon CLOSE_CONSOLE_IMAGE = new ImageIcon(
+			"./resources/icons/menu/configuration/console/closeConsole.png");
+	/**
 	 * ACIDE - A Configurable IDE console menu configure menu item.
 	 */
 	private JMenuItem _configureMenuItem;
@@ -94,6 +122,23 @@ public class AcideConsoleMenu extends JMenu {
 	 * item.
 	 */
 	private JMenuItem _consoleDisplayOptionsMenuItem;
+	/**
+	 * ACIDE - A Configurable IDE console menu search console menu item.
+	 */
+	private JMenuItem _searchConsoleMenuItem;
+	/**
+	 * ACIDE - A Configurable IDE console menu close console menu item.
+	 */
+	private JMenuItem _closeConsoleMenuItem;
+	/**
+	 * ACIDE - A Configurable IDE console menu close search console separator.
+	 */
+	private JSeparator _searchCloseConsoleSeparator;
+	/**
+	 * ACIDE - A Configurable IDE console menu console display options search
+	 * console separator.
+	 */
+	private JSeparator _consoleDisplayOptionsSearchConsoleSeparator;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE console menu.
@@ -123,6 +168,18 @@ public class AcideConsoleMenu extends JMenu {
 
 		// Adds the console display options menu item
 		add(_consoleDisplayOptionsMenuItem);
+
+		// Adds the console display options search console separator
+		add(_consoleDisplayOptionsSearchConsoleSeparator);
+
+		// Adds the search console menu item
+		add(_searchConsoleMenuItem);
+
+		// Adds the separator
+		add(_searchCloseConsoleSeparator);
+
+		// Adds the close console menu item
+		add(_closeConsoleMenuItem);
 	}
 
 	/**
@@ -146,8 +203,37 @@ public class AcideConsoleMenu extends JMenu {
 		_consoleDisplayOptionsMenuItem = new JMenuItem(
 				CONSOLE_DISPLAY_OPTIONS_IMAGE);
 
-		// Sets the console display options menu item
+		// Sets the console display options menu item name
 		_consoleDisplayOptionsMenuItem.setName(CONSOLE_DISPLAY_OPTIONS_NAME);
+
+		// Creates the display options search console separator
+		_consoleDisplayOptionsSearchConsoleSeparator = new JSeparator();
+
+		// Creates the search console menu item
+		_searchConsoleMenuItem = new JMenuItem(SEARCH_CONSOLE_IMAGE);
+
+		// Sets the search console menu item name
+		_searchConsoleMenuItem.setName(SEARCH_CONSOLE_NAME);
+
+		// Sets the search console menu item accelerator
+		if (AcideLanguageManager.getInstance().getCurrentLocale()
+				.equals(new Locale("en", "EN")))
+			_searchConsoleMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+					KeyEvent.VK_F, ActionEvent.CTRL_MASK
+							+ ActionEvent.SHIFT_MASK));
+		else
+			_searchConsoleMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+					KeyEvent.VK_B, ActionEvent.CTRL_MASK
+							+ ActionEvent.SHIFT_MASK));
+
+		// Creates the search console separator
+		_searchCloseConsoleSeparator = new JSeparator();
+
+		// Creates the close console menu item
+		_closeConsoleMenuItem = new JMenuItem(CLOSE_CONSOLE_IMAGE);
+
+		// Sets the close console menu item
+		_closeConsoleMenuItem.setName(CLOSE_CONSOLE_NAME);
 	}
 
 	/**
@@ -167,6 +253,14 @@ public class AcideConsoleMenu extends JMenu {
 		// Sets the console display options menu item text
 		_consoleDisplayOptionsMenuItem.setText(AcideLanguageManager
 				.getInstance().getLabels().getString("s977"));
+
+		// Sets the search console menu item text
+		_searchConsoleMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s556"));
+
+		// Sets the close console menu item text
+		_closeConsoleMenuItem.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s1099"));
 	}
 
 	/**
@@ -186,6 +280,38 @@ public class AcideConsoleMenu extends JMenu {
 		// Sets the console display options menu item to visible or not visible
 		_consoleDisplayOptionsMenuItem.setVisible(AcideMenuConfiguration
 				.getInstance().getIsDisplayed(CONSOLE_DISPLAY_OPTIONS_NAME));
+
+		// Sets the console display options search console separator to visible
+		// or not visible
+		_consoleDisplayOptionsSearchConsoleSeparator
+				.setVisible(AcideMenuConfiguration.getInstance()
+						.getIsDisplayed(CONFIGURE_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								EXTERNAL_COMMAND_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								CONSOLE_DISPLAY_OPTIONS_NAME)
+						|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+								SEARCH_CONSOLE_NAME));
+
+		// Sets the search console menu item to visible or not visible
+		_searchConsoleMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(SEARCH_CONSOLE_NAME));
+
+		// Sets the search close console separator to visible or not visible
+		_searchCloseConsoleSeparator.setVisible(AcideMenuConfiguration
+				.getInstance().getIsDisplayed(CONFIGURE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						EXTERNAL_COMMAND_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						CONSOLE_DISPLAY_OPTIONS_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						SEARCH_CONSOLE_NAME)
+				|| AcideMenuConfiguration.getInstance().getIsDisplayed(
+						CLOSE_CONSOLE_NAME));
+
+		// Sets the close console menu item to visible or not visible
+		_closeConsoleMenuItem.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(CLOSE_CONSOLE_NAME));
 	}
 
 	/**
@@ -204,6 +330,14 @@ public class AcideConsoleMenu extends JMenu {
 		// Sets the console display options menu item action listener
 		_consoleDisplayOptionsMenuItem
 				.addActionListener(new AcideConsoleDisplayOptionsMenuItemListener());
+
+		// Sets the search console menu item action listener
+		_searchConsoleMenuItem
+				.addActionListener(new AcideSearchConsoleMenuItemListener());
+
+		// Sets the close console menu item action listener
+		_closeConsoleMenuItem
+				.addActionListener(new AcideCloseConsoleMenuItemListener());
 	}
 
 	/**
@@ -235,5 +369,27 @@ public class AcideConsoleMenu extends JMenu {
 	 */
 	public JMenuItem getConsoleDisplayOptionsMenuItem() {
 		return _consoleDisplayOptionsMenuItem;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE console menu close console menu
+	 * item.
+	 * 
+	 * @return the ACIDE - A Configurable IDE console menu close console menu
+	 *         item.
+	 */
+	public JMenuItem getCloseConsoleMenuItem() {
+		return _closeConsoleMenuItem;
+	}
+	
+	/**
+	 * Returns the ACIDE - A Configurable IDE console menu search console menu
+	 * item.
+	 * 
+	 * @return the ACIDE - A Configurable IDE console menu search console menu
+	 *         item.
+	 */
+	public JMenuItem getSearchConsoleMenuItem() {
+		return _searchConsoleMenuItem;
 	}
 }

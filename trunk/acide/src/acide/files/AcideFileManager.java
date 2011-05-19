@@ -396,10 +396,15 @@ public class AcideFileManager {
 	 * Returns the directory absolute path selected by the user in a file
 	 * chooser dialog.
 	 * 
+	 * @param isFile
+	 *            flag that indicates if the current path has to be extracted
+	 *            and updated from the last file or project directory stored in
+	 *            the ACIDE - A Configurable IDE resource manager.
+
 	 * @return the directory absolute path selected by the user in a file
 	 *         chooser dialog.
 	 */
-	public String askForOpenDirectory() {
+	public String askForOpenDirectory(boolean isFile) {
 
 		File selectedFile = null;
 		String absolutePath = null;
@@ -407,11 +412,19 @@ public class AcideFileManager {
 
 		try {
 
-			// Gets the ACIDE - A Configurable IDE last opened file
-			// directory
-			lastPath = AcideResourceManager.getInstance().getProperty(
-					"lastOpenedFileDirectory");
+			// If is for open a file
+			if (isFile)
 
+				// Gets the ACIDE - A Configurable IDE last opened file
+				// directory
+				lastPath = AcideResourceManager.getInstance().getProperty(
+						"lastOpenedFileDirectory");
+			else
+				// Gets the ACIDE - A Configurable IDE last opened project
+				// directory
+				lastPath = AcideResourceManager.getInstance().getProperty(
+						"lastOpenedProjectDirectory");
+			
 			// Sets the title of the file chooser window
 			_fileChooser.setDialogTitle(AcideLanguageManager.getInstance()
 					.getLabels().getString("s9"));
@@ -447,12 +460,21 @@ public class AcideFileManager {
 								.getString("s300")
 								+ absolutePath);
 
-				// Updates the ACIDE - A Configurable IDE last opened
-				// file
-				// directory
-				AcideResourceManager.getInstance().setProperty(
-						"lastOpenedFileDirectory",
-						absolutePath);
+				// If is for open a file
+				if (isFile)
+					// Updates the ACIDE - A Configurable IDE last opened
+					// file
+					// directory
+					AcideResourceManager.getInstance().setProperty(
+							"lastOpenedFileDirectory",
+							absolutePath);
+				else
+					// Updates the ACIDE - A Configurable IDE last opened
+					// project
+					// directory
+					AcideResourceManager.getInstance().setProperty(
+							"lastOpenedProjectDirectory",
+							absolutePath);
 
 			} else if (returnValue == JFileChooser.CANCEL_OPTION) {
 

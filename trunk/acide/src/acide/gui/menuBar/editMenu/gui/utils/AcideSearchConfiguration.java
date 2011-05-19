@@ -27,32 +27,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package acide.gui.consolePanel.popup.listeners;
+package acide.gui.menuBar.editMenu.gui.utils;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import acide.gui.mainWindow.AcideMainWindow;
 
 /**
- * ACIDE - A Configurable IDE console panel search menu item action.
+ * ACIDE - A Configurable IDE search configuration.
  * 
  * @version 0.8
- * @see ActionListener
  */
-public class AcideConsolePanelSearchMenuItemAction implements ActionListener {
+public class AcideSearchConfiguration {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-	@Override
-	public void actionPerformed(ActionEvent actionEvent) {
-
-		// Performs the search console menu item action in the ACIDE - A Configurable IDE menu 
-		AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
-				.getConsoleMenu().getSearchConsoleMenuItem().doClick();
+	public AcideSearchConfiguration(){
+		
 	}
 }

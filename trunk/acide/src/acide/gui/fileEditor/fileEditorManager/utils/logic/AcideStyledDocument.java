@@ -66,21 +66,23 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	 */
 	private Element _rootElement;
 	/**
-	 * ACIDE - A Configurable IDE styled document mutable attribute set normal.
+	 * ACIDE - A Configurable IDE styled document normal mutable attribute set.
 	 */
 	private MutableAttributeSet _normalAttributeSet;
 	/**
-	 * ACIDE - A Configurable IDE styled document mutable attribute set remark.
+	 * ACIDE - A Configurable IDE styled document single remarks mutable
+	 * attribute set.
 	 */
-	private MutableAttributeSet _remarkAttributeSet;
+	private MutableAttributeSet _singleRemarksAttributeSet;
 	/**
-	 * ACIDE - A Configurable IDE styled document mutable attribute set brace.
+	 * ACIDE - A Configurable IDE styled document matching elements mutable
+	 * attribute set.
 	 */
 	private MutableAttributeSet _matchingElementsAttributeSet;
 	/**
-	 * ACIDE - A Configurable IDE styled document mutable attribute set keyword.
+	 * ACIDE - A Configurable IDE styled document keyword mutable attribute set.
 	 */
-	private MutableAttributeSet[] _keyword;
+	private MutableAttributeSet[] _keywordAttributeSet;
 	/**
 	 * ACIDE - A Configurable IDE styled document keywords available.
 	 */
@@ -140,16 +142,16 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 		// The string "\t" inserts 8 blank spaces
 		putProperty(DefaultEditorKit.insertTabAction, "\t");
 
-		// NORMAL
+		// Builds the normal attributes set
 		buildNormaAttributeSet();
 
-		// REMARK
-		buildRemarkAttributeSet();
+		// Builds the single remarks attribute set
+		buildSingleRemarksAttributeSet();
 
-		// MATCH
-		buildMatchAttributeSet();
+		// Builds the matching elements attributes set
+		buildMatchingElementsAttributeSet();
 
-		// KEYWORD
+		// Builds the keywords attributes set
 		buildKeywordAttributeSet();
 	}
 
@@ -279,19 +281,20 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 		int startLine = _rootElement.getElementIndex(offset);
 		int endLine = _rootElement.getElementIndex(offset + length);
 
-		// Does the actual highlighting
-		for (int index = startLine; index <= endLine; index++) {
+		// Does the actual highlighting line by line
+		for (int line = startLine; line <= endLine; line++) {
 
 			// Applies the highlighting
-			applyHighlighting(content, index);
-
+			applyHighlighting(content, line);
+			
 			// If there is a defined remark
 			if (_lexiconConfiguration.getRemarksManager().getSymbol() != "")
+				
 				// Applies the remark highlighting
-				applyRemarkStyle(index);
+				applyRemarkStyle(line);
 		}
 	}
-
+	
 	/**
 	 * Parses the line to determine the appropriate highlighting.
 	 * 
@@ -323,7 +326,7 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 		// set normal attributes for the line
 		setCharacterAttributes(startOffset, lineLength, _normalAttributeSet,
 				true);
-
+		
 		// check for tokens for the highlighting
 		applyStyles(content, startOffset, endOffset);
 	}
@@ -392,7 +395,7 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 
 			// Applies the keyword style
 			setCharacterAttributes(startOffset, endOfToken - startOffset,
-					_keyword[index - 1], false);
+					_keywordAttributeSet[index - 1], false);
 
 		return endOfToken + 1;
 	}
@@ -456,7 +459,8 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 											- delimiter.indexOf(character,
 													position),
 									delimiterAux.length(),
-									_keyword[delimiterPosition - 1], false);
+									_keywordAttributeSet[delimiterPosition - 1],
+									false);
 						}
 						return true;
 					}
@@ -468,10 +472,13 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	}
 
 	/**
+	 * <p>
 	 * Checks if a token given as a parameter is a keyword.
-	 * 
+	 * </p>
+	 * <p>
 	 * If it is a keyword returns the index in the keyword list and -1 in other
 	 * case.
+	 * </p>
 	 * 
 	 * @param token
 	 *            token to check.
@@ -506,15 +513,6 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 			index++;
 		}
 		return tokenFound == null ? (-1) : index;
-	}
-
-	/**
-	 * Returns the escape string.
-	 * 
-	 * @return the escape string.
-	 */
-	protected String getEscapeString(String quoteDelimiter) {
-		return "\\" + quoteDelimiter;
 	}
 
 	/**
@@ -586,7 +584,7 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 		int endOffset = _rootElement.getElement(line).getEndOffset() - 1;
 		int lineLength = endOffset - startOffset;
 
-		// If the line lenght is positive
+		// If the line length is positive
 		if (lineLength > 0) {
 
 			try {
@@ -602,7 +600,7 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 
 					// Applies the remark style
 					setCharacterAttributes(startOffset + position, lineLength
-							- position, _remarkAttributeSet, true);
+							- position, _singleRemarksAttributeSet, true);
 			} catch (BadLocationException exception) {
 
 				// Updates the log
@@ -653,9 +651,12 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	}
 
 	/**
+	 * <p>
 	 * Removes the element highlighting at the position given as a parameter.
-	 * 
+	 * </p>
+	 * <p>
 	 * It consist of set that position in the style that it had before.
+	 * </p>
 	 * 
 	 * @param offset
 	 *            brace position to be removed.
@@ -681,8 +682,8 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 					if (index != -1)
 
 						// Applies the keyword style
-						setCharacterAttributes(offset, 1, _keyword[index - 1],
-								true);
+						setCharacterAttributes(offset, 1,
+								_keywordAttributeSet[index - 1], true);
 					else
 
 						// Applies the normal style
@@ -714,44 +715,45 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	public void buildKeywordAttributeSet() {
 
 		// Creates the keyword attribute set
-		_keyword = new MutableAttributeSet[_lexiconConfiguration
+		_keywordAttributeSet = new MutableAttributeSet[_lexiconConfiguration
 				.getTokenTypeManager().getSize()];
 
 		// Adds the keywords to the attribute set list
 		for (int index = 0; index < _lexiconConfiguration.getTokenTypeManager()
 				.getSize(); index++) {
 
-			_keyword[index] = new SimpleAttributeSet();
+			_keywordAttributeSet[index] = new SimpleAttributeSet();
 
-			// Gets the token type from the list
-			AcideLexiconTokenGroup tokenType = _lexiconConfiguration
+			// Gets the token group from the list
+			AcideLexiconTokenGroup tokenGroup = _lexiconConfiguration
 					.getTokenTypeManager().getTokenGroupAt(index);
 
 			// Foreground color as defines the token type of the list
-			StyleConstants.setForeground(_keyword[index], tokenType.getColor());
+			StyleConstants.setForeground(_keywordAttributeSet[index],
+					tokenGroup.getColor());
 
-			switch (tokenType.getFontStyle()) {
+			switch (tokenGroup.getFontStyle()) {
 
 			case Font.PLAIN:
-				StyleConstants.setItalic(_keyword[index], false);
-				StyleConstants.setBold(_keyword[index], false);
+				StyleConstants.setItalic(_keywordAttributeSet[index], false);
+				StyleConstants.setBold(_keywordAttributeSet[index], false);
 				break;
 			case Font.ITALIC:
-				StyleConstants.setItalic(_keyword[index], true);
-				StyleConstants.setBold(_keyword[index], false);
+				StyleConstants.setItalic(_keywordAttributeSet[index], true);
+				StyleConstants.setBold(_keywordAttributeSet[index], false);
 				break;
 			case Font.BOLD:
-				StyleConstants.setItalic(_keyword[index], false);
-				StyleConstants.setBold(_keyword[index], true);
+				StyleConstants.setItalic(_keywordAttributeSet[index], false);
+				StyleConstants.setBold(_keywordAttributeSet[index], true);
 				break;
 			case Font.BOLD + Font.ITALIC:
-				StyleConstants.setItalic(_keyword[index], true);
-				StyleConstants.setBold(_keyword[index], true);
+				StyleConstants.setItalic(_keywordAttributeSet[index], true);
+				StyleConstants.setBold(_keywordAttributeSet[index], true);
 				break;
 			}
 		}
 
-		// KEYWORDS
+		// Creates the keywords hash map
 		_keywords = new Hashtable[_lexiconConfiguration.getTokenTypeManager()
 				.getSize()];
 		Object dummyObject = new Object();
@@ -783,7 +785,7 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	/**
 	 * Builds and configure the matching elements attribute set.
 	 */
-	public void buildMatchAttributeSet() {
+	public void buildMatchingElementsAttributeSet() {
 
 		// Creates the matching elements attribute set
 		_matchingElementsAttributeSet = new SimpleAttributeSet();
@@ -801,13 +803,16 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	}
 
 	/**
+	 * <p>
 	 * Builds and configure the normal attribute set. In this case it is
 	 * important to mention that if some style is applied to the attribute set
 	 * then it will affect directly on the file editor configuration.
-	 * 
+	 * </p>
+	 * <p>
 	 * For instance, if we are interested in changing the foreground color, then
 	 * it is mandatory not to add the foreground property to the normal
 	 * attribute set.
+	 * </p>
 	 */
 	public void buildNormaAttributeSet() {
 
@@ -816,40 +821,63 @@ public class AcideStyledDocument extends DefaultStyledDocument {
 	}
 
 	/**
-	 * Builds and configure the remark attribute set.
+	 * Builds and configure the single remarks attribute set.
 	 */
-	public void buildRemarkAttributeSet() {
+	public void buildSingleRemarksAttributeSet() {
 
-		// Creates the remark attribute set
-		_remarkAttributeSet = new SimpleAttributeSet();
+		// Creates the single remarks attribute set
+		_singleRemarksAttributeSet = new SimpleAttributeSet();
 
 		// Set its foreground color as defines the remarks manager in the
 		// lexicon configuration
-		StyleConstants.setForeground(_remarkAttributeSet, _lexiconConfiguration
-				.getRemarksManager().getColor());
+		StyleConstants.setForeground(_singleRemarksAttributeSet,
+				_lexiconConfiguration.getRemarksManager().getColor());
 
 		switch (_lexiconConfiguration.getRemarksManager().getFontStyle()) {
 
 		case Font.PLAIN:
-			StyleConstants.setBold(_remarkAttributeSet, false);
-			StyleConstants.setItalic(_remarkAttributeSet, false);
+			StyleConstants.setBold(_singleRemarksAttributeSet, false);
+			StyleConstants.setItalic(_singleRemarksAttributeSet, false);
 			break;
 		case Font.BOLD:
-			StyleConstants.setBold(_remarkAttributeSet, true);
-			StyleConstants.setItalic(_remarkAttributeSet, false);
+			StyleConstants.setBold(_singleRemarksAttributeSet, true);
+			StyleConstants.setItalic(_singleRemarksAttributeSet, false);
 			break;
 		case Font.ITALIC:
-			StyleConstants.setBold(_remarkAttributeSet, false);
-			StyleConstants.setItalic(_remarkAttributeSet, true);
+			StyleConstants.setBold(_singleRemarksAttributeSet, false);
+			StyleConstants.setItalic(_singleRemarksAttributeSet, true);
 			break;
 		case Font.BOLD + Font.ITALIC:
-			StyleConstants.setBold(_remarkAttributeSet, true);
-			StyleConstants.setItalic(_remarkAttributeSet, true);
+			StyleConstants.setBold(_singleRemarksAttributeSet, true);
+			StyleConstants.setItalic(_singleRemarksAttributeSet, true);
 			break;
 		}
 
 		// If it is case sensitive then parses it to lower case
 		if (_lexiconConfiguration.getRemarksManager().getIsCaseSensitive())
 			_lexiconConfiguration.getRemarksManager().getSymbol().toLowerCase();
+	}
+	
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE styled document
+	 * lexicon configuration.
+	 * 
+	 * @param lexiconConfiguration
+	 *            new value to set.
+	 */
+	public void setLexiconConfiguration(
+			AcideLexiconConfiguration lexiconConfiguration) {
+		_lexiconConfiguration = lexiconConfiguration;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE styled document lexicon
+	 * configuration.
+	 * 
+	 * @return the ACIDE - A Configurable IDE styled document lexicon
+	 *         configuration.
+	 */
+	public AcideLexiconConfiguration getLexiconConfiguration() {
+		return _lexiconConfiguration;
 	}
 }

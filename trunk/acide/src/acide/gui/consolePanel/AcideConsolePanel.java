@@ -29,13 +29,16 @@
  */
 package acide.gui.consolePanel;
 
+import acide.configuration.lexicon.AcideLexiconConfiguration;
 import acide.configuration.project.AcideProjectConfiguration;
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.gui.consolePanel.listeners.AcideConsolePanelFocusListener;
 import acide.gui.consolePanel.listeners.AcideConsolePanelKeyboardListener;
 import acide.gui.consolePanel.listeners.AcideConsolePanelMouseListener;
 import acide.gui.consolePanel.listeners.AcideConsolePanelMouseWheelListener;
 import acide.gui.consolePanel.listeners.AcideConsolePanelPopupMenuListener;
 import acide.gui.consolePanel.popup.AcideConsolePanelPopupMenu;
+import acide.gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
 import acide.gui.mainWindow.AcideMainWindow;
 
 import java.awt.BorderLayout;
@@ -80,7 +83,7 @@ public class AcideConsolePanel extends JPanel {
 	/**
 	 * ACIDE - A Configurable IDE console panel text handler.
 	 */
-	private DefaultStyledDocument _styledDocument;
+	private AcideStyledDocument _styledDocument;
 	/**
 	 * ACIDE - A Configurable IDE console panel process thread.
 	 */
@@ -101,6 +104,10 @@ public class AcideConsolePanel extends JPanel {
 	 * ACIDE - A Configurable IDE console panel user commands record.
 	 */
 	private AcideConsolePanelCommandRecord _commandRecord;
+	/**
+	 * ACIDE - A Configurable IDE console panel lexicon configuration.
+	 */
+	private AcideLexiconConfiguration _lexiconConfiguration;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE console panel.
@@ -179,6 +186,78 @@ public class AcideConsolePanel extends JPanel {
 	}
 
 	/**
+	 * Builds the ACIDE - A Configurable IDE console text component.
+	 * 
+	 * @return the ACIDE - A Configurable IDE console text component.
+	 * @see JTextComponent
+	 */
+	protected JTextComponent buildConsole() {
+
+		// Creates and loads the lexicon configuration from the lexicon assigner
+		_lexiconConfiguration = new AcideLexiconConfiguration();
+
+		// If the lexicon has to be applied to the console
+		if (AcideWorkbenchConfiguration.getInstance()
+				.getLexiconAssignerConfiguration().getApplyLexiconToConsole()) {
+
+			// If there is no a lexicon configuration defined for the console
+			if (AcideWorkbenchConfiguration.getInstance()
+					.getLexiconAssignerConfiguration()
+					.getConsoleLexiconConfiguration().matches(""))
+
+				// Loads the default lexicon configuration by default
+				_lexiconConfiguration
+						.load(AcideLexiconConfiguration.DEFAULT_PATH
+								+ AcideLexiconConfiguration.DEFAULT_NAME);
+			else
+				// Loads the defined lexicon configuration
+				_lexiconConfiguration.load(AcideWorkbenchConfiguration
+						.getInstance().getLexiconAssignerConfiguration()
+						.getConsoleLexiconConfiguration());
+		} else
+
+			// Loads the default lexicon configuration by default
+			_lexiconConfiguration.load(AcideLexiconConfiguration.DEFAULT_PATH
+					+ AcideLexiconConfiguration.DEFAULT_NAME);
+
+		// Creates the styled document
+		_styledDocument = new AcideStyledDocument(_lexiconConfiguration);
+
+		// Creates the text area
+		JTextPane textArea = new JTextPane(_styledDocument) {
+
+			/**
+			 * Text area class serial version UID.
+			 */
+			private static final long serialVersionUID = 1L;
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see java.awt.Component#setSize(java.awt.Dimension)
+			 */
+			@Override
+			public void setSize(Dimension d) {
+				if (d.width < getParent().getSize().width)
+					d.width = getParent().getSize().width;
+
+				super.setSize(d);
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see javax.swing.JEditorPane#getScrollableTracksViewportWidth()
+			 */
+			@Override
+			public boolean getScrollableTracksViewportWidth() {
+				return false;
+			}
+		};
+		return textArea;
+	}
+
+	/**
 	 * Sets the listeners of the ACIDE - A Configurable IDE console panel text
 	 * pane.
 	 */
@@ -252,51 +331,6 @@ public class AcideConsolePanel extends JPanel {
 	 */
 	public void buildPopupMenu() {
 		_popupMenu = new AcideConsolePanelPopupMenu();
-	}
-
-	/**
-	 * Builds the ACIDE - A Configurable IDE console text component.
-	 * 
-	 * @return the ACIDE - A Configurable IDE console text component.
-	 * @see JTextComponent
-	 */
-	protected JTextComponent buildConsole() {
-
-		// Creates the styled document
-		_styledDocument = new DefaultStyledDocument();
-
-		// Creates the text area
-		JTextPane textArea = new JTextPane(_styledDocument) {
-
-			/**
-			 * Text area class serial version UID.
-			 */
-			private static final long serialVersionUID = 1L;
-
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.awt.Component#setSize(java.awt.Dimension)
-			 */
-			@Override
-			public void setSize(Dimension d) {
-				if (d.width < getParent().getSize().width)
-					d.width = getParent().getSize().width;
-
-				super.setSize(d);
-			}
-
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see javax.swing.JEditorPane#getScrollableTracksViewportWidth()
-			 */
-			@Override
-			public boolean getScrollableTracksViewportWidth() {
-				return false;
-			}
-		};
-		return textArea;
 	}
 
 	/**
@@ -704,6 +738,33 @@ public class AcideConsolePanel extends JPanel {
 	 */
 	public void resetConsole() {
 
+		// If the lexicon has to be applied to the console
+		if (AcideWorkbenchConfiguration.getInstance()
+				.getLexiconAssignerConfiguration().getApplyLexiconToConsole()) {
+
+			// If there is no a lexicon configuration defined for the console
+			if (AcideWorkbenchConfiguration.getInstance()
+					.getLexiconAssignerConfiguration()
+					.getConsoleLexiconConfiguration().matches(""))
+
+				// Loads the default lexicon configuration by default
+				_lexiconConfiguration
+						.load(AcideLexiconConfiguration.DEFAULT_PATH
+								+ AcideLexiconConfiguration.DEFAULT_NAME);
+			else
+				// Loads the defined lexicon configuration
+				_lexiconConfiguration.load(AcideWorkbenchConfiguration
+						.getInstance().getLexiconAssignerConfiguration()
+						.getConsoleLexiconConfiguration());
+		} else
+
+			// Loads the default lexicon configuration by default
+			_lexiconConfiguration.load(AcideLexiconConfiguration.DEFAULT_PATH
+					+ AcideLexiconConfiguration.DEFAULT_NAME);
+
+		// Applies the highlighting
+		resetStyledDocument();
+
 		// Sets the text pane as ""
 		_textPane.setText("");
 
@@ -765,6 +826,16 @@ public class AcideConsolePanel extends JPanel {
 	}
 
 	/**
+	 * Resets the styled document of the text pane in the ACIDE - A Configurable
+	 * IDE console panel.
+	 */
+	public void resetStyledDocument() {
+
+		// Initializes the document
+		_styledDocument.init();
+	}
+
+	/**
 	 * Returns the prompt caret position.
 	 * 
 	 * @return the prompt caret position.
@@ -823,7 +894,7 @@ public class AcideConsolePanel extends JPanel {
 	 *            new value to set.
 	 */
 	public void setDefaultStyledDocument(
-			DefaultStyledDocument defaultStyledDocument) {
+			AcideStyledDocument defaultStyledDocument) {
 		_styledDocument = defaultStyledDocument;
 	}
 
@@ -881,5 +952,16 @@ public class AcideConsolePanel extends JPanel {
 	 */
 	public JTextComponent getTextPane() {
 		return _textPane;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE console panel lexicon
+	 * configuration.
+	 * 
+	 * @return the ACIDE - A Configurable IDE console panel lexicon
+	 *         configuration.
+	 */
+	public AcideLexiconConfiguration getLexiconConfiguration() {
+		return _lexiconConfiguration;
 	}
 }

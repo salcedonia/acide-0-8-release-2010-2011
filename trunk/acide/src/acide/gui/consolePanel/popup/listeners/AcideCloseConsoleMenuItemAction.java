@@ -35,24 +35,30 @@ import java.awt.event.ActionListener;
 import acide.gui.mainWindow.AcideMainWindow;
 
 /**
- * ACIDE - A Configurable IDE console panel search menu item action.
+ * <p>
+ * ACIDE - A Configurable IDE console panel popup menu console close console
+ * menu item action listener.
+ * </p>
+ * <p>
+ * Closes the current ACIDE - A Configurable IDE console panel.
+ * </p>
  * 
  * @version 0.8
  * @see ActionListener
  */
-public class AcideConsolePanelSearchMenuItemAction implements ActionListener {
+public class AcideCloseConsoleMenuItemAction implements ActionListener {
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.
+	 * ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Performs the search console menu item action in the ACIDE - A Configurable IDE menu 
+		// Performs the action of its menu option
 		AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
-				.getConsoleMenu().getSearchConsoleMenuItem().doClick();
+				.getConsoleMenu().getCloseConsoleMenuItem().doClick();
 	}
 }

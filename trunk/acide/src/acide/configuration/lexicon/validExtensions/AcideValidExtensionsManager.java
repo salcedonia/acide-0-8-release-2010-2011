@@ -78,7 +78,10 @@ public class AcideValidExtensionsManager implements Serializable {
 	 * extensions manager.
 	 */
 	public AcideValidExtensionsManager() {
+		
 		super();
+		
+		// Creates the object list
 		_list = new ObjectList();
 	}
 

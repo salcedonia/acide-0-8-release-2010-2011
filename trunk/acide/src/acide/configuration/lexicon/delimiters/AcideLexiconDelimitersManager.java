@@ -133,13 +133,6 @@ public class AcideLexiconDelimitersManager implements Serializable {
 	}
 
 	/**
-	 * Resets the ACIDE - A Configurable IDE lexicon delimiters manager list.
-	 */
-	public void reset() {
-		_list = new ObjectList();
-	}
-
-	/**
 	 * Returns the ACIDE - A Configurable IDE lexicon delimiters manager object
 	 * list.
 	 * 

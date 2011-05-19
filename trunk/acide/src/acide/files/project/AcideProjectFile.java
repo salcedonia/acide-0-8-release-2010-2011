@@ -300,7 +300,7 @@ public class AcideProjectFile {
 	public TreePath getTreePath() {
 		return _treePath;
 	}
-
+	
 	/**
 	 * Returns the type of file.
 	 * 

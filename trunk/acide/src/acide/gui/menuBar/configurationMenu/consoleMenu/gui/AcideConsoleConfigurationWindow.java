@@ -773,7 +773,7 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 
 			// Asks the the file to the user
 			String absolutePath = AcideFileManager.getInstance()
-					.askForOpenDirectory();
+					.askForOpenDirectory(true);
 
 			if (absolutePath != null)
 

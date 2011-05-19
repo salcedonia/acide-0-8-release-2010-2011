@@ -69,7 +69,20 @@ public class AcideLexiconRemarksManager implements Serializable {
 	 * Creates a new ACIDE - A Configurable IDE lexicon configuration remarks manager.
 	 */
 	public AcideLexiconRemarksManager() {
+		
 		super();
+		
+		// The symbol by default is ""
+		_symbol = "";
+		
+		// Sets the is case sensitive flag as false by default
+		_isCaseSensitive = false;
+		
+		// Sets the color as black by default
+		_color = Color.BLACK;
+		
+		// The font style is plain by default
+		_fontStyle = Font.PLAIN;
 	}
 
 	/**
@@ -114,17 +127,6 @@ public class AcideLexiconRemarksManager implements Serializable {
 	 */
 	public void setColor(Color color) {
 		_color = color;
-	}
-
-	/**
-	 * Resets the ACIDE - A Configurable IDE lexicon configuration remarks
-	 * manager.
-	 */
-	public void reset() {
-		_symbol = "";
-		_isCaseSensitive = false;
-		_color = Color.BLACK;
-		_fontStyle = Font.PLAIN;
 	}
 
 	/**

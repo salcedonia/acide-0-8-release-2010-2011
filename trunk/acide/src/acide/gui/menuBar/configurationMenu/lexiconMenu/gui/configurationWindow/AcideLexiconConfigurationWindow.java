@@ -380,6 +380,32 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 
 		// Saves the changes automatically into its file
 		saveLexicon();
+		
+		// If the current console panel lexicon configuration matches with the
+		// selected editor
+		if (AcideMainWindow
+				.getInstance()
+				.getConsolePanel()
+				.getLexiconConfiguration()
+				.getName()
+				.matches(
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.getLexiconConfiguration().getName())) {
+
+			// Loads the lexicon configuration in the ACIDE - A Configurable IDE
+			// console panel
+			AcideMainWindow
+					.getInstance()
+					.getConsolePanel()
+					.getLexiconConfiguration()
+					.load(AcideMainWindow.getInstance().getConsolePanel()
+							.getLexiconConfiguration().getPath());
+
+			// Applies the highlighting to the console panel
+			AcideMainWindow.getInstance().getConsolePanel()
+					.resetStyledDocument();
+		}
 	}
 
 	/**
@@ -471,21 +497,10 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 			}
 
 			// Saves it
-			boolean result = AcideMainWindow.getInstance()
-					.getFileEditorManager().getSelectedFileEditorPanel()
-					.getLexiconConfiguration().save(name, false);
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().getLexiconConfiguration()
+					.save(name, false);
 
-			// If it could save it
-			if (result)
-				JOptionPane.showMessageDialog(null, AcideLanguageManager
-						.getInstance().getLabels().getString("s451"),
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s450"), 1);
-			else
-				JOptionPane.showMessageDialog(null, AcideLanguageManager
-						.getInstance().getLabels().getString("s452"),
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s450"), 0);
 		} else {
 
 			// Updates the log

@@ -187,7 +187,8 @@ public class AcideFileEditorTextEditionArea {
 		_textComponent = new AcideTextComponent(styledDocument) {
 
 			/**
-			 * ACIDE - A Configurable IDE text component class serial version UID.
+			 * ACIDE - A Configurable IDE text component class serial version
+			 * UID.
 			 */
 			private static final long serialVersionUID = 1L;
 
@@ -227,19 +228,27 @@ public class AcideFileEditorTextEditionArea {
 
 		// Updates the name
 		_textComponent.setName((String) styledDocument.getProperty("name"));
-			
-		// Sets the configuration from the configuration file
-		setConfiguration();
+
+		// Sets the look and feel from the configuration file
+		setLookAndFeel();
 
 		// Sets the text pane listeners
 		setTextPaneListeners();
 	}
 
 	/**
-	 * Sets the configuration from the configuration file.
+	 * Sets the configuration from the ACIDE - A Configurable IDE file editor
+	 * configuration.
 	 */
-	public void setConfiguration() {
+	public void setLookAndFeel() {
 
+		/*_lineNumberPanel.setFont(new Font(AcideWorkbenchConfiguration
+				.getInstance().getFileEditorConfiguration().getFontName(),
+				AcideWorkbenchConfiguration.getInstance()
+						.getFileEditorConfiguration().getFontStyle(),
+				AcideWorkbenchConfiguration.getInstance()
+						.getFileEditorConfiguration().getFontSize()));
+		*/
 		// Sets the font from the file editor configuration
 		_textComponent.setFont(new Font(AcideWorkbenchConfiguration
 				.getInstance().getFileEditorConfiguration().getFontName(),

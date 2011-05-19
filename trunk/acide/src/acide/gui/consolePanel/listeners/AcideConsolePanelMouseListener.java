@@ -44,28 +44,34 @@ public class AcideConsolePanelMouseListener extends MouseAdapter {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.MouseAdapter#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent) {
-		
-		// Checks if there is text selected
-		boolean thereIsTextSelected = AcideMainWindow.getInstance().getConsolePanel()
-		.getTextPane().getSelectedText() == null;
-		
-		// If the caret position is before the prompt caret position
+
+		// If the console panel text pane is editable
 		if (AcideMainWindow.getInstance().getConsolePanel().getTextPane()
-				.getCaretPosition() < AcideMainWindow.getInstance()
-				.getConsolePanel().getPromptCaretPosition()
-				&& thereIsTextSelected)
-			
-			// Puts the caret position after the prompt caret position
-			AcideMainWindow
-					.getInstance()
-					.getConsolePanel()
-					.getTextPane()
-					.setCaretPosition(
-							AcideMainWindow.getInstance().getConsolePanel()
-									.getPromptCaretPosition());
+				.isEditable()) {
+
+			// Checks if there is text selected
+			boolean thereIsTextSelected = AcideMainWindow.getInstance()
+					.getConsolePanel().getTextPane().getSelectedText() == null;
+
+			// If the caret position is before the prompt caret position
+			if (AcideMainWindow.getInstance().getConsolePanel().getTextPane()
+					.getCaretPosition() < AcideMainWindow.getInstance()
+					.getConsolePanel().getPromptCaretPosition()
+					&& thereIsTextSelected)
+
+				// Puts the caret position after the prompt caret position
+				AcideMainWindow
+						.getInstance()
+						.getConsolePanel()
+						.getTextPane()
+						.setCaretPosition(
+								AcideMainWindow.getInstance().getConsolePanel()
+										.getPromptCaretPosition());
+		}
 	}
 }

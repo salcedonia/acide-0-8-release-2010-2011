@@ -29,6 +29,7 @@
  */
 package acide.gui.menuBar.projectMenu;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -76,6 +77,7 @@ import acide.gui.menuBar.projectMenu.recentProjectsMenu.AcideRecentProjectsMenu;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 import acide.resources.AcideResourceManager;
+import acide.resources.exception.MissedPropertyException;
 
 /**
  * ACIDE - A Configurable IDE project menu.
@@ -1407,6 +1409,12 @@ public class AcideProjectMenu extends JMenu {
 					"currentMenuConfiguration", menuConfiguration);
 		} catch (Exception exception) {
 
+			// If it is not the default project
+			if (!AcideProjectConfiguration.getInstance().isDefaultProject())
+
+				// The project has been modified
+				AcideProjectConfiguration.getInstance().setIsModified(true);
+
 			// Updates the log
 			AcideLog.getLog().error(exception.getMessage());
 			exception.printStackTrace();
@@ -1566,10 +1574,10 @@ public class AcideProjectMenu extends JMenu {
 			String currentToolBarConfiguration = AcideProjectConfiguration
 					.getInstance().getToolBarConfiguration();
 
-			// Loads the command list from the configuration file
-			AcideToolBarConfiguration.getInstance()
-					.getConsolePanelToolBarConfiguration()
-					.loadFinalList(currentToolBarConfiguration);
+			// Loads the ACIDE - A Configurable IDE tool bar configuration from
+			// the current tool bar configuration
+			AcideToolBarConfiguration.getInstance().load(
+					currentToolBarConfiguration);
 
 			// Updates the ACIDE - A Configurable IDE current tool bar
 			// configuration
@@ -1595,10 +1603,15 @@ public class AcideProjectMenu extends JMenu {
 							currentToolBarConfiguration.length());
 			try {
 
-				// Loads the command list from the configuration file
-				AcideToolBarConfiguration.getInstance()
-						.getConsolePanelToolBarConfiguration()
-						.loadFinalList(name);
+				// Loads the ACIDE - A Configurable IDE tool bar configuration
+				// from the current tool bar configuration
+				AcideToolBarConfiguration.getInstance().load(name);
+
+				// If it is not the default project
+				if (!AcideProjectConfiguration.getInstance().isDefaultProject())
+
+					// The project has been modified
+					AcideProjectConfiguration.getInstance().setIsModified(true);
 
 				// Displays an error message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
@@ -1618,12 +1631,19 @@ public class AcideProjectMenu extends JMenu {
 
 				try {
 
-					// Loads the command list from the configuration file
-					AcideToolBarConfiguration
-							.getInstance()
-							.getConsolePanelToolBarConfiguration()
-							.loadFinalList(
-									"./configuration/toolbar/default.toolbarConfig");
+					// Loads the ACIDE - A Configurable IDE tool bar
+					// configuration from the current tool bar configuration
+					AcideToolBarConfiguration.getInstance().load(
+							"./configuration/toolbar/default.toolbarConfig");
+
+					// If it is not the default project
+					if (!AcideProjectConfiguration.getInstance()
+							.isDefaultProject())
+
+						// The project has been modified
+						AcideProjectConfiguration.getInstance().setIsModified(
+								true);
+
 				} catch (Exception exception2) {
 
 					// Updates the log
@@ -1728,14 +1748,9 @@ public class AcideProjectMenu extends JMenu {
 		for (int index = 0; index < AcideProjectConfiguration.getInstance()
 				.getNumberOfFilesFromList(); index++) {
 
-			// Checks if the file really exists
-			File file = new File(AcideProjectConfiguration.getInstance()
-					.getFileAt(index).getAbsolutePath());
-
-			// If the file is not a directory and exists
+			// If the file is not a directory
 			if (!AcideProjectConfiguration.getInstance().getFileAt(index)
-					.isDirectory()
-					&& file.exists()) {
+					.isDirectory()) {
 
 				// Loads the file content
 				String fileContent = null;
@@ -1788,34 +1803,6 @@ public class AcideProjectMenu extends JMenu {
 
 				// The project configuration has been modified
 				AcideProjectConfiguration.getInstance().setIsModified(false);
-			} else {
-
-				// If the file does not exist
-				if (!file.exists()) {
-
-					// If the file is not a directory
-					if (!AcideProjectConfiguration.getInstance()
-							.getFileAt(index).isDirectory()) {
-
-						// Displays an error message
-						JOptionPane
-								.showMessageDialog(
-										null,
-										AcideLanguageManager.getInstance()
-												.getLabels().getString("s1020")
-												+ file.getAbsolutePath()
-												+ " "
-												+ AcideLanguageManager
-														.getInstance()
-														.getLabels()
-														.getString("s1021"),
-										"Warning", JOptionPane.WARNING_MESSAGE);
-
-						// The project configuration has been modified
-						AcideProjectConfiguration.getInstance().setIsModified(
-								true);
-					}
-				}
 			}
 		}
 	}
@@ -1888,6 +1875,10 @@ public class AcideProjectMenu extends JMenu {
 		// Sets the project name as empty
 		AcideProjectConfiguration.getInstance().setName("");
 
+		// Sets the project path
+		AcideProjectConfiguration.getInstance().setProjectPath(
+				"./configuration/project/default.acideProject");
+
 		// The project has not been modified yet
 		AcideProjectConfiguration.getInstance().setIsModified(false);
 
@@ -1896,6 +1887,282 @@ public class AcideProjectMenu extends JMenu {
 
 		// Repaints the main window
 		AcideMainWindow.getInstance().repaint();
+	}
+
+	/**
+	 * Save the project configuration with other name into the file.
+	 * 
+	 * @param filePath
+	 *            file path to save the new configuration.
+	 */
+	public void saveProjectAs(String filePath) {
+
+		try {
+
+			// Gets the new project name
+			int lastIndexOfSlash = filePath.lastIndexOf("\\");
+			if (lastIndexOfSlash == -1)
+				lastIndexOfSlash = filePath.lastIndexOf("/");
+			String newProjectName = filePath.substring(lastIndexOfSlash + 1,
+					filePath.lastIndexOf("."));
+
+			// Gets the current project name
+			String currentProjectName = AcideProjectConfiguration.getInstance()
+					.getName();
+
+			// Sets the ACIDE - A Configurable IDE project configuration name
+			AcideProjectConfiguration.getInstance().setName(newProjectName);
+
+			// Sets the ACIDE - A Configurable IDE project configuration path
+			AcideProjectConfiguration.getInstance().setProjectPath(filePath);
+
+			// Updates the ACIDE - A Configurable IDE project configuration file
+			// list
+			AcideProjectConfiguration.getInstance()
+					.updateFileListProjectConfiguration(currentProjectName,
+							newProjectName);
+
+			// Gets the file content
+			String fileContent = AcideProjectConfiguration.getInstance().save();
+
+			// Writes the file content on it
+			AcideFileManager.getInstance().write(
+					AcideProjectConfiguration.getInstance().getProjectPath(),
+					fileContent);
+
+			// Updates the explorer tree
+			updateExplorerTree();
+
+			// Updates the main window title
+			AcideMainWindow.getInstance()
+					.setTitle(
+							AcideLanguageManager.getInstance().getLabels()
+									.getString("s425")
+									+ " - "
+									+ AcideProjectConfiguration.getInstance()
+											.getName());
+
+			// Is the first time that the project has been saved
+			AcideProjectConfiguration.getInstance().setFirstSave(true);
+
+			// Sets the ACIDE - A Configurable IDE language configuration
+			AcideProjectConfiguration.getInstance().setLanguageConfiguration(
+					AcideResourceManager.getInstance().getProperty("language"));
+
+			// Sets the ACIDE - A Configurable current menu configuration
+			AcideProjectConfiguration.getInstance().setMenuConfiguration(
+					AcideResourceManager.getInstance().getProperty(
+							"currentMenuConfiguration"));
+
+			// Sets the ACIDE - A Configurable IDE current tool bar
+			// configuration
+			AcideProjectConfiguration.getInstance().setToolBarConfiguration(
+					AcideResourceManager.getInstance().getProperty(
+							"currentToolBarConfiguration"));
+
+			// Sets the ACIDE - A Configurable IDE console panel shell path
+			AcideProjectConfiguration.getInstance().setShellPath(
+					AcideResourceManager.getInstance().getProperty(
+							"consolePanel.shellPath"));
+
+			// Sets the ACIDE - A Configurable IDE console panel shell
+			// directory
+			AcideProjectConfiguration.getInstance().setShellDirectory(
+					AcideResourceManager.getInstance().getProperty(
+							"consolePanel.shellDirectory"));
+
+			// Sets the ACIDE - A Configurable IDE console panel exit
+			// command
+			AcideProjectConfiguration.getInstance().setExitCommand(
+					AcideResourceManager.getInstance().getProperty(
+							"consolePanel.exitCommand"));
+
+			// Sets the ACIDE - A Configurable IDE console panel is echo
+			// command
+			AcideProjectConfiguration.getInstance().setIsEchoCommand(
+					Boolean.parseBoolean(AcideResourceManager.getInstance()
+							.getProperty("consolePanel.isEchoCommand")));
+
+			// Sets the ACIDE - A Configurable IDE console panel foreground
+			// color
+			AcideProjectConfiguration.getInstance().setForegroundColor(
+					new Color(Integer.parseInt(AcideResourceManager
+							.getInstance().getProperty(
+									"consolePanel.foregroundColor"))));
+
+			// Sets the ACIDE - A Configurable IDE console panel background
+			// color
+			AcideProjectConfiguration.getInstance().setBackgroundColor(
+					new Color(Integer.parseInt(AcideResourceManager
+							.getInstance().getProperty(
+									"consolePanel.backgroundColor"))));
+
+			// Sets the ACIDE - A Configurable IDE console panel font name
+			AcideProjectConfiguration.getInstance().setFontName(
+					AcideResourceManager.getInstance().getProperty(
+							"consolePanel.fontName"));
+
+			// Sets the ACIDE - A Configurable IDE console panel font style
+			AcideProjectConfiguration.getInstance().setFontStyle(
+					Integer.parseInt(AcideResourceManager.getInstance()
+							.getProperty("consolePanel.fontStyle")));
+
+			// Sets the ACIDE - A Configurable IDE console panel font size
+			AcideProjectConfiguration.getInstance().setFontSize(
+					Integer.parseInt(AcideResourceManager.getInstance()
+							.getProperty("consolePanel.fontSize")));
+
+			// Updates the ACIDE - A Configurable IDE project configuration
+			AcideResourceManager.getInstance().setProperty(
+					"projectConfiguration", filePath);
+
+			// Updates the ACIDE - A Configurable IDE last opened project
+			// directory
+			AcideResourceManager.getInstance().setProperty(
+					"lastOpenedProjectDirectory",
+					new File(filePath).getParent());
+
+			// The project has not been modified yet
+			AcideProjectConfiguration.getInstance().setIsModified(false);
+
+		} catch (Exception exception) {
+
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
+	}
+
+	/**
+	 * Rebuilds the explorer tree with the new project name when a project has
+	 * been renamed.
+	 */
+	private void updateExplorerTree() {
+
+		// Creates the new project file
+		AcideProjectFile projectFile = new AcideProjectFile();
+		projectFile.setAbsolutePath(AcideProjectConfiguration.getInstance()
+				.getProjectPath());
+		projectFile.setName(AcideProjectConfiguration.getInstance().getName());
+		projectFile.setParent(null);
+		projectFile.setIsDirectory(true);
+
+		// Enables add file menu item in the explorer popup menu
+		AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
+				.getAddFileMenuItem().setEnabled(true);
+
+		// Enables the remove file menu item in the explorer popup menu
+		AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
+				.getRemoveFileMenuItem().setEnabled(true);
+
+		// Builds the EXPLORER TREE with all the associated files
+		AcideMainWindow.getInstance().getExplorerPanel().getRoot()
+				.removeAllChildren();
+
+		// Creates the new explorer node
+		DefaultMutableTreeNode defaultMutableTreeNode = new DefaultMutableTreeNode(
+				projectFile);
+
+		// Adds the new node to the explorer tree root
+		AcideMainWindow.getInstance().getExplorerPanel().getRoot()
+				.add(defaultMutableTreeNode);
+
+		// Creates the directory list
+		ArrayList<DefaultMutableTreeNode> directoryList = new ArrayList<DefaultMutableTreeNode>();
+
+		for (int index = 0; index < AcideProjectConfiguration.getInstance()
+				.getNumberOfFilesFromList(); index++) {
+
+			// Gets the node
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode(
+					AcideProjectConfiguration.getInstance().getFileAt(index));
+
+			// Checks if the file really exists
+			File file = new File(AcideProjectConfiguration.getInstance()
+					.getFileAt(index).getAbsolutePath());
+
+			// If exists
+			if (file.exists()) {
+
+				// Directory?
+				if (AcideProjectConfiguration.getInstance().getFileAt(index)
+						.isDirectory()) {
+
+					// Allows children in the tree
+					node.setAllowsChildren(true);
+
+					// Adds the node
+					directoryList.add(node);
+				} else
+					// No children are allowed
+					node.setAllowsChildren(false);
+
+				// If the file already exists in the level above
+				if (AcideProjectConfiguration
+						.getInstance()
+						.getFileAt(index)
+						.getParent()
+						.equals(AcideProjectConfiguration.getInstance()
+								.getName())) {
+
+					// Adds the new node
+					defaultMutableTreeNode.add(node);
+				} else {
+
+					// Searches for the node
+					DefaultMutableTreeNode defaultMutableTreeNode1 = AcideMainWindow
+							.getInstance()
+							.getExplorerPanel()
+							.searchDirectoryList(
+									directoryList,
+									AcideProjectConfiguration.getInstance()
+											.getFileAt(index).getParent());
+
+					// Adds the new node
+					defaultMutableTreeNode1.add(node);
+				}
+			}
+		}
+
+		// Updates the explorer tree
+		AcideMainWindow.getInstance().getExplorerPanel().getTreeModel()
+				.reload();
+
+		// Repaint the explorer tree
+		AcideMainWindow.getInstance().getExplorerPanel().expandTree();
+
+		// Enables the add file menu item in the popup menu
+		AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
+				.getAddFileMenuItem().setEnabled(true);
+
+		// Enables the save project menu item in the popup menu
+		AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
+				.getSaveProjectMenuItem().setEnabled(true);
+
+		// If it has more than 0 files associated
+		if (AcideProjectConfiguration.getInstance().getNumberOfFilesFromList() > 0)
+
+			// Allows to remove files in the EXPLORER menu
+			AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
+					.getRemoveFileMenuItem().setEnabled(true);
+		else
+			// Removing files in the EXPLORER menu is not allowed
+			AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
+					.getRemoveFileMenuItem().setEnabled(false);
+
+		// Saves the default configuration
+		AcideProjectConfiguration.getInstance().setFirstSave(true);
+
+		try {
+			// Updates the ACIDE - A Configurable IDE project configuration
+			AcideProjectConfiguration.getInstance().setProjectPath(
+					AcideResourceManager.getInstance().getProperty(
+							"projectConfiguration"));
+		} catch (MissedPropertyException exception) {
+			// Updates the log
+			AcideLog.getLog().error(exception.getMessage());
+			exception.printStackTrace();
+		}
 	}
 
 	/**

@@ -35,11 +35,15 @@ import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 
 import acide.configuration.menu.AcideMenuConfiguration;
+import acide.configuration.project.AcideProjectConfiguration;
 
 import acide.resources.AcideResourceManager;
 
 import java.awt.HeadlessException;
 
+import acide.gui.fileEditor.fileEditorManager.listeners.AcideFileEditorManagerChangeListener;
+import acide.gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
+import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.configurationMenu.AcideConfigurationMenu;
 import acide.gui.menuBar.editMenu.AcideEditMenu;
 import acide.gui.menuBar.fileMenu.AcideFileMenu;
@@ -138,7 +142,7 @@ public class AcideMenuBar extends JMenuBar {
 
 		// Adds the configuration menu to the menu
 		add(_configurationMenu);
-		
+
 		// Adds the help menu to the menu
 		add(_helpMenu);
 	}
@@ -232,6 +236,192 @@ public class AcideMenuBar extends JMenuBar {
 
 		// Sets the help menu items text
 		_helpMenu.setTextOfMenuComponents();
+	}
+
+	/**
+	 * <p>
+	 * Updates the ACIDE - A Configurable IDE menu bar enable or disable
+	 * features based on the ACIDE - A Configurable IDE configuration.
+	 * </p>
+	 * <p>
+	 * It is called by the {@link AcideFileEditorManagerChangeListener}.
+	 * </p>
+	 */
+	public void updateMenuEnableOrDisable() {
+
+		if (AcideMainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanelIndex() == -1) {
+
+			// Disables the file menu
+			AcideMainWindow.getInstance().getMenu().getFileMenu().disableMenu();
+
+			// Disables the edit menu
+			AcideMainWindow.getInstance().getMenu().getEditMenu().disableMenu();
+
+			// Disables the lexicon menu
+			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+					.getLexiconMenu().disableMenu();
+
+			// Disables the grammar menu
+			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+					.getGrammarMenu().disableMenu();
+
+		} else {
+
+			// Enables the file menu
+			AcideMainWindow.getInstance().getMenu().getFileMenu().enableMenu();
+
+			// Enables the edit menu
+			AcideMainWindow.getInstance().getMenu().getEditMenu().enableMenu();
+
+			// Enables the lexicon menu
+			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+					.getLexiconMenu().enableMenu();
+
+			// Enables the grammar menu
+			AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+					.getGrammarMenu().enableMenu();
+
+			// Gets the selected file editor panel
+			AcideFileEditorPanel selectedFileEditorPanel = AcideMainWindow
+					.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel();
+
+			// If the current grammar configuration is lastModified or
+			// newGrammar
+			if (selectedFileEditorPanel.getCurrentGrammarConfiguration()
+					.getName().matches("newGrammar")
+					|| selectedFileEditorPanel.getCurrentGrammarConfiguration()
+							.getName().matches("lastModified"))
+
+				// Enables the save grammar menu
+				AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+						.getGrammarMenu().getSaveGrammarMenuItem()
+						.setEnabled(true);
+			else
+				// Disables the save grammar menu
+				AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
+						.getGrammarMenu().getSaveGrammarMenuItem()
+						.setEnabled(false);
+		}
+		
+		// Updates the project menu enable or disable
+		updateProjectMenuEnableOrDisable();
+	}
+
+	/**
+	 * Updates the project menu in the menu bar.
+	 */
+	private void updateProjectMenuEnableOrDisable() {
+
+		// Disables the remove file menu item
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getRemoveFileMenuItem().setEnabled(false);
+
+		// Disables the delete file menu item
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getDeleteFileMenuItem().setEnabled(false);
+
+		// Disables the set compilable menu item
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getSetCompilableFileMenuItem().setEnabled(false);
+
+		// Disables the unset compilable menu item
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getUnsetCompilableFileMenuItem().setEnabled(false);
+
+		// Disables the set main menu item
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getSetMainFileMenuItem().setEnabled(false);
+
+		// Disables the unset main menu item
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getUnsetMainFileMenuItem().setEnabled(false);
+
+		// If there are opened file editors
+		if (AcideMainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanelIndex() != -1) {
+
+			// Gets the selected file editor panel
+			AcideFileEditorPanel selectedFileEditorPanel = AcideMainWindow
+					.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel();
+
+			// If it is not the NEW FILE or the LOG TAB
+			if (!AcideMainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().isNewFile()
+					&& !AcideMainWindow.getInstance().getFileEditorManager()
+							.getSelectedFileEditorPanel().isLogFile()) {
+
+				if (!selectedFileEditorPanel.isMainFile())
+					// Enables the set main menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getSetMainFileMenuItem().setEnabled(true);
+				if (selectedFileEditorPanel.isMainFile())
+					// Enables the unset main menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getUnsetMainFileMenuItem().setEnabled(true);
+				if (!selectedFileEditorPanel.isCompilableFile()
+						|| (selectedFileEditorPanel.isCompilableFile() && selectedFileEditorPanel
+								.isMainFile()))
+					// Enables the set compilable menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getSetCompilableFileMenuItem().setEnabled(true);
+				if (selectedFileEditorPanel.isCompilableFile()
+						&& !selectedFileEditorPanel.isMainFile())
+					// Enables the unset compilable menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getUnsetCompilableFileMenuItem().setEnabled(true);
+
+				// Gets the file editor panel absolute path
+				String fileAbsolutePath = AcideMainWindow
+						.getInstance()
+						.getFileEditorManager()
+						.getFileEditorPanelAt(
+								AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getSelectedFileEditorPanelIndex())
+						.getAbsolutePath();
+
+				// Searches for the file in the project configuration list
+				int fileProjectIndex = AcideProjectConfiguration.getInstance()
+						.getIndexOfFile(fileAbsolutePath);
+
+				// If belongs to the project configuration
+				if (fileProjectIndex != -1) {
+
+					// Enables the delete file menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getDeleteFileMenuItem().setEnabled(true);
+
+					// Enables the remove file menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getRemoveFileMenuItem().setEnabled(true);
+
+				} else {
+
+					// Disables the remove file menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getRemoveFileMenuItem().setEnabled(false);
+
+					// Enables the delete file menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getDeleteFileMenuItem().setEnabled(false);
+				}
+			}
+		}
+		
+		// If it is not the default project
+		if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
+
+			// Enables the project menu
+			AcideMainWindow.getInstance().getMenu().getProjectMenu()
+					.enableMenu();
+
+			// Enables the open all files menu item
+			AcideMainWindow.getInstance().getMenu().getFileMenu()
+					.getOpenAllFilesMenuItem().setEnabled(true);
+		}
 	}
 
 	/**
@@ -350,7 +540,7 @@ public class AcideMenuBar extends JMenuBar {
 	 * Loads the ACIDE - A Configurable IDE menu configuration.
 	 */
 	private void loadMenuConfiguration() {
-		
+
 		String currentMenuConfiguration = null;
 
 		try {

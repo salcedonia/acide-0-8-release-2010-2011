@@ -272,14 +272,6 @@ public class AcideLexiconTokenManager implements Serializable {
 	}
 
 	/**
-	 * Resets the ACIDE - A Configurable IDE lexicon configuration token manager
-	 * object list.
-	 */
-	public void reset() {
-		_list = new ObjectList();
-	}
-
-	/**
 	 * Returns the ACIDE - A Configurable IDE lexicon configuration token
 	 * manager object list.
 	 * 

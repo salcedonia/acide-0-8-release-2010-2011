@@ -93,15 +93,18 @@ public class AcideToolBarConfiguration {
 	 * 
 	 * @param filePath
 	 *            file path.
+	 * 
+	 * @throws Exception
+	 *             when something unusual occurs.
 	 */
-	public void load(String filePath) {
+	public void load(String filePath) throws Exception {
 
 		// Loads the menu bar tool bar configuration
 		_menuBarToolBarConfiguration.load(filePath);
-		
+
 		// Loads the console panel tool bar configuration final list
 		_consolePanelToolBarConfiguration.loadLists(filePath);
-			
+
 		// Loads the external applications tool bar configuration
 		_externalAppsToolBarConfiguration.loadLists(filePath);
 	}

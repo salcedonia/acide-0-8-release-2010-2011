@@ -34,7 +34,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 import acide.language.AcideLanguageManager;
-import acide.configuration.project.AcideProjectConfiguration;
 import acide.gui.mainWindow.AcideMainWindow;
 
 /**
@@ -78,31 +77,7 @@ public class AcideNewLexiconMenuItemListener implements ActionListener {
 			AcideMainWindow.getInstance().getFileEditorManager()
 					.getSelectedFileEditorPanel().getLexiconConfiguration()
 					.newLexicon(lexiconConfiguration);
-
-			// Resets the selected file editor text edition area
-			AcideMainWindow.getInstance().getFileEditorManager()
-					.getSelectedFileEditorPanel().resetStyledDocument();
-
-			// Updates the lexicon message in the status bar
-			AcideMainWindow
-					.getInstance()
-					.getStatusBar()
-					.setLexiconMessage(
-							AcideLanguageManager.getInstance().getLabels()
-									.getString("s449")
-									+ " "
-									+ AcideMainWindow.getInstance()
-											.getFileEditorManager()
-											.getSelectedFileEditorPanel()
-											.getLexiconConfiguration()
-											.getName());
-
-			// If it is not the default project
-			if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
-
-				// The project has been modified
-				AcideProjectConfiguration.getInstance().setIsModified(true);
-			}
+			
 		} else {
 
 			// Displays a "missing name" warning message
