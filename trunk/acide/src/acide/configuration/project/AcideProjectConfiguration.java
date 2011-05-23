@@ -89,6 +89,18 @@ public class AcideProjectConfiguration {
 	 */
 	private String _compilerArguments;
 	/**
+	 * Flag that indicates if the compiler compiles all the files.
+	 */
+	private boolean _compileAllFiles;
+	/**
+	 * File separator for the compiler.
+	 */
+	private String _fileSeparator;
+	/**
+	 * File extensions valid for the project.
+	 */
+	private String _fileExtension;
+	/**
 	 * Shell path associated to the project.
 	 */
 	private String _consolePanelShellPath;
@@ -160,18 +172,6 @@ public class AcideProjectConfiguration {
 	 */
 	private int _horizontalSplitPaneDividerLocation;
 	/**
-	 * Flag that indicates if the compiler is marked or not.
-	 */
-	private boolean _checkCompiler;
-	/**
-	 * Separator file for the compiler.
-	 */
-	private String _separatorFile;
-	/**
-	 * File extensions valid for the project.
-	 */
-	private String _fileExtension;
-	/**
 	 * Flag that indicates if it is the first time that the configuration has
 	 * been saved or not.
 	 */
@@ -228,6 +228,15 @@ public class AcideProjectConfiguration {
 
 		// Adds the compiler arguments
 		fileContent = fileContent + _compilerArguments + "\n";
+
+		// Adds the compile all files
+		fileContent = fileContent + _compileAllFiles + "\n";
+
+		// Adds the file separator
+		fileContent = fileContent + _fileSeparator + "\n";
+
+		// Adds the file extension
+		fileContent = fileContent + _fileExtension + "\n";
 
 		// Adds the console panel shell path
 		fileContent = fileContent + _consolePanelShellPath + "\n";
@@ -430,6 +439,22 @@ public class AcideProjectConfiguration {
 		finalPosition = fileContent.indexOf("\n", initialPosition);
 		_compilerArguments = fileContent.substring(initialPosition,
 				finalPosition);
+
+		// Gets the compile all files
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_compileAllFiles = Boolean.parseBoolean(fileContent.substring(
+				initialPosition, finalPosition));
+
+		// Gets the file separator
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_fileSeparator = fileContent.substring(initialPosition, finalPosition);
+		
+		// Gets the file extension
+		initialPosition = finalPosition + 1;
+		finalPosition = fileContent.indexOf("\n", initialPosition);
+		_fileExtension = fileContent.substring(initialPosition, finalPosition);
 
 		// Gets the console panel shell path
 		initialPosition = finalPosition + 1;
@@ -913,44 +938,47 @@ public class AcideProjectConfiguration {
 	}
 
 	/**
-	 * Returns the is check compiler flag.
+	 * Returns the ACIDE - A Configurable IDE project configuration compile all
+	 * files flag.
 	 * 
-	 * @return the is check compiler flag.
+	 * @return the ACIDE - A Configurable IDE project configuration compile all
+	 *         files flag.
 	 */
-	public boolean isCheckCompiler() {
-		return _checkCompiler;
-	}
-
-	/**
-	 * Sets a new value to the is check compiler flag.
-	 * 
-	 * @param checkCompiler
-	 *            new value to set.
-	 */
-	public void setCheckCompiler(boolean checkCompiler) {
-		_checkCompiler = checkCompiler;
-	}
-
-	/**
-	 * Returns the the ACIDE - A Configurable IDE project configuration
-	 * separator file.
-	 * 
-	 * @return the the ACIDE - A Configurable IDE project configuration
-	 *         separator file.
-	 */
-	public String getSeparatorFile() {
-		return _separatorFile;
+	public boolean getCompileAllFiles() {
+		return _compileAllFiles;
 	}
 
 	/**
 	 * Sets a new value to the ACIDE - A Configurable IDE project configuration
-	 * separator file.
+	 * compile all files flag.
 	 * 
-	 * @param separatorFile
+	 * @param compileAllFiles
 	 *            new value to set.
 	 */
-	public void setSeparatorFile(String separatorFile) {
-		_separatorFile = separatorFile;
+	public void setCompileAllFiles(boolean compileAllFiles) {
+		_compileAllFiles = compileAllFiles;
+	}
+
+	/**
+	 * Returns the the ACIDE - A Configurable IDE project configuration file
+	 * separator.
+	 * 
+	 * @return the the ACIDE - A Configurable IDE project configuration file
+	 *         separator.
+	 */
+	public String getFileSeparator() {
+		return _fileSeparator;
+	}
+
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE project configuration
+	 * file separator.
+	 * 
+	 * @param fileSeparator
+	 *            new value to set.
+	 */
+	public void setFileSeparator(String fileSeparator) {
+		_fileSeparator = fileSeparator;
 	}
 
 	/**
@@ -993,7 +1021,7 @@ public class AcideProjectConfiguration {
 	 * @param firstSave
 	 *            new value to set.
 	 */
-	public void setFirstSave(boolean firstSave) {
+	public void setIsFirstSave(boolean firstSave) {
 		_isFirstSave = firstSave;
 	}
 

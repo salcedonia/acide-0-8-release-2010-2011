@@ -41,6 +41,7 @@ import acide.resources.AcideResourceManager;
 
 import java.awt.HeadlessException;
 
+import acide.files.project.AcideProjectFile;
 import acide.gui.fileEditor.fileEditorManager.listeners.AcideFileEditorManagerChangeListener;
 import acide.gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
 import acide.gui.mainWindow.AcideMainWindow;
@@ -304,7 +305,7 @@ public class AcideMenuBar extends JMenuBar {
 						.getGrammarMenu().getSaveGrammarMenuItem()
 						.setEnabled(false);
 		}
-		
+
 		// Updates the project menu enable or disable
 		updateProjectMenuEnableOrDisable();
 	}
@@ -347,11 +348,18 @@ public class AcideMenuBar extends JMenuBar {
 					.getInstance().getFileEditorManager()
 					.getSelectedFileEditorPanel();
 
-			// If it is not the NEW FILE or the LOG TAB
+			// Checks if the selected file editor panel belongs to the project
+			AcideProjectFile projectFile = AcideProjectConfiguration
+					.getInstance().getFileAt(
+							selectedFileEditorPanel.getAbsolutePath());
+
+			// If it is not the NEW FILE or the LOG TAB and belongs to the
+			// project
 			if (!AcideMainWindow.getInstance().getFileEditorManager()
 					.getSelectedFileEditorPanel().isNewFile()
 					&& !AcideMainWindow.getInstance().getFileEditorManager()
-							.getSelectedFileEditorPanel().isLogFile()) {
+							.getSelectedFileEditorPanel().isLogFile()
+					&& projectFile != null) {
 
 				if (!selectedFileEditorPanel.isMainFile())
 					// Enables the set main menu item
@@ -373,44 +381,29 @@ public class AcideMenuBar extends JMenuBar {
 					AcideMainWindow.getInstance().getMenu().getProjectMenu()
 							.getUnsetCompilableFileMenuItem().setEnabled(true);
 
-				// Gets the file editor panel absolute path
-				String fileAbsolutePath = AcideMainWindow
-						.getInstance()
-						.getFileEditorManager()
-						.getFileEditorPanelAt(
-								AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.getSelectedFileEditorPanelIndex())
-						.getAbsolutePath();
-
-				// Searches for the file in the project configuration list
-				int fileProjectIndex = AcideProjectConfiguration.getInstance()
-						.getIndexOfFile(fileAbsolutePath);
-
-				// If belongs to the project configuration
-				if (fileProjectIndex != -1) {
-
-					// Enables the delete file menu item
-					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				// Enables the delete file menu item
+				AcideMainWindow.getInstance().getMenu().getProjectMenu()
 							.getDeleteFileMenuItem().setEnabled(true);
 
-					// Enables the remove file menu item
-					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getRemoveFileMenuItem().setEnabled(true);
+				// Enables the remove file menu item
+				AcideMainWindow.getInstance().getMenu().getProjectMenu()
+						.getRemoveFileMenuItem().setEnabled(true);
+		
+			}else
+				
+				// If the selected file editor panel does not belong to the project
+				if(projectFile == null){
 
-				} else {
+				// Disables the remove file menu item
+				AcideMainWindow.getInstance().getMenu().getProjectMenu()
+						.getRemoveFileMenuItem().setEnabled(false);
 
-					// Disables the remove file menu item
-					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getRemoveFileMenuItem().setEnabled(false);
-
-					// Enables the delete file menu item
-					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getDeleteFileMenuItem().setEnabled(false);
-				}
+				// Enables the delete file menu item
+				AcideMainWindow.getInstance().getMenu().getProjectMenu()
+						.getDeleteFileMenuItem().setEnabled(false);
 			}
 		}
-		
+
 		// If it is not the default project
 		if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
 

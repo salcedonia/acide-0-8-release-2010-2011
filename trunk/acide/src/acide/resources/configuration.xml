@@ -2,26 +2,26 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <comment>ACIDE Configuration</comment>
-<entry key="consolePanel.fontName">Monospaced</entry>
+<entry key="consolePanel.fontName">monospaced</entry>
 <entry key="workbenchConfiguration">./configuration/workbench/configuration.xml</entry>
-<entry key="lastOpenedFileDirectory">C:\Documents and Settings\Salcedonia\Mis documentos\Proyecto\acide-0-8-release-2010-2011\acide\configuration\lexicon\des.xml</entry>
+<entry key="lastOpenedFileDirectory">C:\Documents and Settings\Salcedonia\Mis documentos\Proyecto\acide-0-8-release-2010-2011\acide\configuration\toolbar\default.toolbarConfig</entry>
 <entry key="javacPath">null</entry>
 <entry key="jarPath">null</entry>
-<entry key="consolePanel.exitCommand">/exit</entry>
+<entry key="consolePanel.exitCommand">exit</entry>
 <entry key="consolePanel.fontStyle">0</entry>
-<entry key="consolePanel.blackgroundColor">-6710887</entry>
-<entry key="consolePanel.backgroundColor">-6710887</entry>
+<entry key="consolePanel.blackgroundColor">-1</entry>
+<entry key="consolePanel.backgroundColor">-1</entry>
 <entry key="currentMenuConfiguration">.\configuration\menu\defaultAllOn.menuConfig</entry>
-<entry key="consolePanel.shellDirectory">C:\Documents and Settings\Salcedonia\Mis documentos\Proyecto\des\</entry>
-<entry key="consolePanel.shellPath">C:\Documents and Settings\Salcedonia\Mis documentos\Proyecto\des\des.exe</entry>
-<entry key="consolePanel.fontSize">14</entry>
-<entry key="previousToolBarConfiguration">.\configuration\toolbar\default.toolbarConfig</entry>
+<entry key="consolePanel.shellDirectory">C:\WINDOWS\System32\</entry>
+<entry key="consolePanel.shellPath">C:\WINDOWS\System32\cmd.exe</entry>
+<entry key="consolePanel.fontSize">12</entry>
+<entry key="previousToolBarConfiguration">C:\Documents and Settings\Salcedonia\Mis documentos\Proyecto\acide-0-8-release-2010-2011\acide\configuration\toolbar\default.toolbarConfig</entry>
 <entry key="consolePanel.isEchoCommand">true</entry>
 <entry key="language">spanish</entry>
-<entry key="currentToolBarConfiguration">C:\Documents and Settings\Salcedonia\Mis documentos\Proyecto\acide-0-8-release-2010-2011\acide\configuration\toolbar\des.toolbarConfig</entry>
+<entry key="currentToolBarConfiguration">C:\Documents and Settings\Salcedonia\Mis documentos\Proyecto\acide-0-8-release-2010-2011\acide\configuration\toolbar\default.toolbarConfig</entry>
 <entry key="previousMenuConfiguration">./configuration/menu/defaultAllOn.menuConfig</entry>
 <entry key="lastOpenedProjectDirectory">C:\Documents and Settings\Salcedonia\Mis documentos\Proyecto\acide-0-8-release-2010-2011\acide\configuration\project</entry>
 <entry key="javaPath">null</entry>
-<entry key="projectConfiguration">C:\Documents and Settings\Salcedonia\Mis documentos\Proyecto\acide-0-8-release-2010-2011\acide\configuration\project\prueba.acideProject</entry>
-<entry key="consolePanel.foregroundColor">-1</entry>
+<entry key="projectConfiguration">C:\Documents and Settings\Salcedonia\Mis documentos\Proyecto\acide-0-8-release-2010-2011\acide\configuration\project\prueba1.acideProject</entry>
+<entry key="consolePanel.foregroundColor">-16777216</entry>
 </properties>

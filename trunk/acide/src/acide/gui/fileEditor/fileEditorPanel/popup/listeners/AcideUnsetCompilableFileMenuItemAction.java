@@ -33,6 +33,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import acide.configuration.project.AcideProjectConfiguration;
+import acide.files.project.AcideProjectFile;
 import acide.gui.mainWindow.AcideMainWindow;
 
 /**
@@ -91,23 +92,19 @@ public class AcideUnsetCompilableFileMenuItemAction implements ActionListener {
 				// The project has been modified
 				AcideProjectConfiguration.getInstance().setIsModified(true);
 
-				// Searches for the file into the project configuration file
-				// list
-				for (int index = 0; index < AcideProjectConfiguration
-						.getInstance().getNumberOfFilesFromList(); index++) {
+				// Search for the file into the project configuration
+				AcideProjectFile projectFile = AcideProjectConfiguration
+						.getInstance().getFileAt(
+								AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getSelectedFileEditorPanel()
+										.getAbsolutePath());
 
-					if (AcideProjectConfiguration
-							.getInstance()
-							.getFileAt(index)
-							.getAbsolutePath()
-							.equals(AcideMainWindow.getInstance()
-									.getFileEditorManager()
-									.getSelectedFileEditorPanel()
-									.getAbsolutePath()))
-						// Sets the COMPILABLE FILE as false
-						AcideProjectConfiguration.getInstance()
-								.getFileAt(index)
-								.setIsCompilableFile(false);
+				// If it belongs to the project
+				if (projectFile != null) {
+
+					// Marks it as COMPILABLE FILE
+					projectFile.setIsCompilableFile(false);
 				}
 			}
 		}

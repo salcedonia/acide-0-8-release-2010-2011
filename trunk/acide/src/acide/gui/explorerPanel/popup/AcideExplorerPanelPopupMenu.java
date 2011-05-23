@@ -31,6 +31,7 @@ package acide.gui.explorerPanel.popup;
 
 import acide.gui.explorerPanel.popup.listeners.AcideAddFileMenuItemAction;
 import acide.gui.explorerPanel.popup.listeners.AcideAddFolderMenuItemAction;
+import acide.gui.explorerPanel.popup.listeners.AcideAddOpenedFilesMenuItemAction;
 import acide.gui.explorerPanel.popup.listeners.AcideDeleteFileMenuItemAction;
 import acide.gui.explorerPanel.popup.listeners.AcideNewProjectFileMenuItemAction;
 import acide.gui.explorerPanel.popup.listeners.AcideNewProjectMenuItemAction;
@@ -92,6 +93,12 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 	 */
 	private static final ImageIcon ADD_FILE_IMAGE = new ImageIcon(
 			"./resources/icons/menu/project/addFile.png");
+	/**
+	 * ACIDE - A Configurable IDE explorer panel popup menu add opened files
+	 * menu item image.
+	 */
+	public static final ImageIcon ADD_OPENED_FILES_IMAGE = new ImageIcon(
+			"./resources/icons/menu/project/addOpenedFiles.png");
 	/**
 	 * ACIDE - A Configurable IDE explorer panel popup menu remove file menu
 	 * item image icon.
@@ -155,6 +162,11 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 	 * item.
 	 */
 	private JMenuItem _saveProjectMenuItem;
+	/**
+	 * ACIDE - A Configurable IDE explorer panel popup menu add opened files
+	 * menu item.
+	 */
+	private JMenuItem _addOpenedFilesMenuItem;
 	/**
 	 * ACIDE - A Configurable IDE explorer panel popup menu add file menu item.
 	 */
@@ -225,28 +237,31 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 	 * popup menu.
 	 */
 	private void addComponents() {
-		
+
 		// Adds the new project menu item to the popup menu
 		add(_newProjectMenuItem);
-		
+
 		// Adds the open project menu item to the popup menu
 		add(_openProjectMenuItem);
-		
+
 		// Adds the save project menu item to the popup menu
 		add(_saveProjectMenuItem);
 
 		// Adds a separator to the popup menu
 		addSeparator();
+
+		// Adds the add opened files menu item to the popup menu
+		add(_addOpenedFilesMenuItem);
 		
 		// Adds the new project file menu item to the popup menu
 		add(_newProjectFileMenuItem);
-		
+
 		// Adds the add file to the popup menu
 		add(_addFileMenuItem);
-		
+
 		// Adds the remove file menu item to the popup menu
 		add(_removeFileMenuItem);
-		
+
 		// Adds the delete file menu item to the popup menu
 		add(_deleteFileMenuItem);
 
@@ -276,7 +291,8 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 	}
 
 	/**
-	 * Builds the ACIDE - A Configurable IDE explorer panel popup menu components.
+	 * Builds the ACIDE - A Configurable IDE explorer panel popup menu
+	 * components.
 	 */
 	private void buildComponents() {
 
@@ -292,6 +308,10 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 		_saveProjectMenuItem = new JMenuItem(AcideLanguageManager.getInstance()
 				.getLabels().getString("s16"), SAVE_PROJECT_IMAGE);
 
+		// Creates the add opened files menu item
+		_addOpenedFilesMenuItem = new JMenuItem(AcideLanguageManager.getInstance()
+				.getLabels().getString("s1094"), ADD_OPENED_FILES_IMAGE);
+		
 		// Creates the new project file menu item
 		_newProjectFileMenuItem = new JMenuItem(AcideLanguageManager
 				.getInstance().getLabels().getString("s947"), NEW_FILE_IMAGE);
@@ -354,6 +374,10 @@ public class AcideExplorerPanelPopupMenu extends JPopupMenu {
 		_saveProjectMenuItem
 				.addActionListener(new AcideSaveProjectMenuItemAction());
 
+		// Sets the add opened files menu item action listener
+		_addOpenedFilesMenuItem
+				.addActionListener(new AcideAddOpenedFilesMenuItemAction());
+		
 		// Sets the new project file menu item action listener
 		_newProjectFileMenuItem
 				.addActionListener(new AcideNewProjectFileMenuItemAction());

@@ -29,10 +29,6 @@
  */
 package acide.gui.menuBar.configurationMenu.consoleMenu.gui;
 
-import acide.configuration.project.AcideProjectConfiguration;
-import acide.gui.listeners.AcideWindowClosingListener;
-import acide.gui.mainWindow.AcideMainWindow;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -43,7 +39,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -54,16 +49,17 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import acide.configuration.project.AcideProjectConfiguration;
+import acide.gui.listeners.AcideWindowClosingListener;
+import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
-
 import acide.resources.AcideResourceManager;
 import acide.utils.PreviewPanel;
 
@@ -126,13 +122,13 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 	private JPanel _previewPanel;
 	/**
 	 * ACIDE - A Configurable IDE console display options window font size
-	 * slider.
+	 * combo box.
 	 */
-	private JSlider _sizeSlider;
+	private JComboBox _fontSizeComboBox;
 	/**
-	 * ACIDE - A Configurable IDE console display options window font combo box.
+	 * ACIDE - A Configurable IDE console display options window font name combo box.
 	 */
-	private JComboBox _fontComboBox;
+	private JComboBox _fontNameComboBox;
 	/**
 	 * ACIDE - A Configurable IDE console display options window controls panel.
 	 */
@@ -155,9 +151,9 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 	 */
 	private JButton _cancelButton;
 	/**
-	 * ACIDE - A Configurable IDE console display options window font label.
+	 * ACIDE - A Configurable IDE console display options window font name label.
 	 */
-	private JLabel _fontLabel;
+	private JLabel _fontNameLabel;
 	/**
 	 * ACIDE - A Configurable IDE console display options window background
 	 * label.
@@ -169,9 +165,9 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 	 */
 	private JLabel _foregroundColorLabel;
 	/**
-	 * ACIDE - A Configurable IDE console display options window size label.
+	 * ACIDE - A Configurable IDE console display options window font size label.
 	 */
-	private JLabel _sizeLabel;
+	private JLabel _fontSizeLabel;
 	/**
 	 * ACIDE - A Configurable IDE console display options window font type
 	 * label.
@@ -272,8 +268,8 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 		// Creates the color buttons panel
 		_colorButtonsPanel = new JPanel(new GridBagLayout());
 
-		// Creates the font label
-		_fontLabel = new JLabel(AcideLanguageManager.getInstance().getLabels()
+		// Creates the font name label
+		_fontNameLabel = new JLabel(AcideLanguageManager.getInstance().getLabels()
 				.getString("s981"));
 
 		// Creates the font combo box
@@ -286,12 +282,12 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 		// Create the font style combo box
 		getFontStyleComboBox();
 
-		// Creates the size lable
-		_sizeLabel = new JLabel(AcideLanguageManager.getInstance().getLabels()
+		// Creates the font size lable
+		_fontSizeLabel = new JLabel(AcideLanguageManager.getInstance().getLabels()
 				.getString("s982"));
 
-		// Creates the size slider
-		createSizeSlider();
+		// Creates the font size combo box
+		createFontSizeComboBox();
 
 		// Creates the foreground color label
 		_foregroundColorLabel = new JLabel(AcideLanguageManager.getInstance()
@@ -359,26 +355,26 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 
-		// Adds the font label to the controls panel
-		_controlsPanel.add(_fontLabel, constraints);
+		// Adds the font name label to the controls panel
+		_controlsPanel.add(_fontNameLabel, constraints);
 
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 
-		// Adds the font combo box to the controls panel
-		_controlsPanel.add(_fontComboBox, constraints);
+		// Adds the font name combo box to the controls panel
+		_controlsPanel.add(_fontNameComboBox, constraints);
 
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 
-		// Adds the size label to the controls panel
-		_controlsPanel.add(_sizeLabel, constraints);
+		// Adds the font size label to the controls panel
+		_controlsPanel.add(_fontSizeLabel, constraints);
 
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 
 		// Adds the size slider to the controls panel
-		_controlsPanel.add(_sizeSlider, constraints);
+		_controlsPanel.add(_fontSizeComboBox, constraints);
 
 		constraints.fill = GridBagConstraints.NONE;
 		constraints.gridwidth = 2;
@@ -479,10 +475,10 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 		_fontStyleComboBox.addActionListener(new FontStyleComboBoxAction());
 
 		// Sets the size slider change listener
-		_sizeSlider.addChangeListener(new SizeSliderChangeListener());
+		_fontSizeComboBox.addActionListener(new SizeSliderChangeListener());
 
-		// Sets the font combo box action listener
-		_fontComboBox.addActionListener(new FontComboBoxAction());
+		// Sets the font name combo box action listener
+		_fontNameComboBox.addActionListener(new FontComboBoxAction());
 
 		// Sets the restore default configuration action listener
 		_restoreDefaultConfiguration
@@ -563,24 +559,22 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 	}
 
 	/**
-	 * Creates and configures the size slider.
+	 * Creates and configures the font size combo box.
 	 */
-	public void createSizeSlider() {
+	public void createFontSizeComboBox() {
 
-		// Creates the size slider
-		_sizeSlider = new JSlider(JSlider.HORIZONTAL, 5, 60, _initialSize);
+		// Creates the values for the combo box
+		String[] values = { "8", "9", "10", "11", "12", "14", "16", "20", "24",
+				"32", "48", "72" };
 
-		// Sets its major tick spacing as 10
-		_sizeSlider.setMajorTickSpacing(10);
+		// Creates the font size combo box
+		_fontSizeComboBox = new JComboBox(values);
 
-		// Sets its minor tick spacing as 1
-		_sizeSlider.setMinorTickSpacing(1);
+		// Sets the font size combo box as editable
+		_fontSizeComboBox.setEditable(true);
 
-		// Paints its ticks
-		_sizeSlider.setPaintTicks(true);
-
-		// Paints its labels
-		_sizeSlider.setPaintLabels(true);
+		// Selects the font size combo box selected item as the initial size
+		_fontSizeComboBox.setSelectedItem(String.valueOf(_initialSize));
 	}
 
 	/**
@@ -604,11 +598,11 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 				availableFonts.add(fontName);
 		}
 
-		// Creates the font combo box
-		_fontComboBox = new JComboBox(availableFonts);
+		// Creates the font name combo box
+		_fontNameComboBox = new JComboBox(availableFonts);
 
 		// Selects the item that corresponds
-		_fontComboBox.setSelectedItem(_initialFontname);
+		_fontNameComboBox.setSelectedItem(_initialFontname);
 	}
 
 	/**
@@ -870,7 +864,7 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 	 * @version 0.8
 	 * @see ChangeListener
 	 */
-	class SizeSliderChangeListener implements ChangeListener {
+	class SizeSliderChangeListener implements ActionListener {
 
 		/*
 		 * (non-Javadoc)
@@ -879,8 +873,34 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 		 * .ChangeEvent)
 		 */
 		@Override
-		public void stateChanged(ChangeEvent changeEvent) {
-			_displayArea.setFontSize(_sizeSlider.getValue());
+		public void actionPerformed(ActionEvent actionEvent) {
+			
+			try {
+
+				// Try to parse it
+				int newValue = Integer.parseInt((String) _fontSizeComboBox
+						.getSelectedItem());
+
+				if (newValue > 0)
+
+					// Updates the display area
+					_displayArea.setFontSize(newValue);
+				else
+					// Displays an error message
+					JOptionPane.showMessageDialog(null, AcideLanguageManager
+							.getInstance().getLabels().getString("s2003"), "Error",
+							JOptionPane.ERROR_MESSAGE);
+
+			} catch (Exception exception) {
+
+				// Displays an error message
+				JOptionPane.showMessageDialog(null, AcideLanguageManager
+						.getInstance().getLabels().getString("s2003"), "Error",
+						JOptionPane.ERROR_MESSAGE);
+
+				// Updates the log
+				AcideLog.getLog().info(exception.getMessage());
+			}
 		}
 	}
 
@@ -901,7 +921,7 @@ public class AcideConsoleDisplayOptionsWindow extends JFrame {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
-			_displayArea.setFontName((String) _fontComboBox.getSelectedItem());
+			_displayArea.setFontName((String) _fontNameComboBox.getSelectedItem());
 		}
 	}
 

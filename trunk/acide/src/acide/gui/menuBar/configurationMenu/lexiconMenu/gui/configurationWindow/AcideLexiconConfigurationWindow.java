@@ -323,12 +323,27 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 	}
 
 	/**
-	 * Applies the changes in the lexicon configuration and on the selected file
-	 * editor panel.
+	 * <p>
+	 * Applies the changes in the ACIDE - A Configurable IDE lexicon
+	 * configuration and saves it automatically.
+	 * </p>
+	 * <p>
+	 * Updates the the ACIDE - A Configurable IDE lexicon configuration on the
+	 * opened file editors that have the current modified ACIDE - A Configurable
+	 * IDE lexicon configuration. Aditionally, it also updates the ACIDE - A
+	 * Configurable IDE console panel lexicon configuration if it matches with
+	 * the current modified ACIDE - A Configurable IDE lexicon configuration.
+	 * </p>
+	 * <p>
+	 * First, it modifies the selected file editor panel lexicon configuration
+	 * and updates the configuration file. Then the others just load the
+	 * configuration from the new file configuration in order to apply the
+	 * changes on them.
+	 * </p>
 	 */
 	private void applyChanges() {
 
-		// Updates the delimiters manager
+		// Updates its delimiters manager
 		AcideMainWindow
 				.getInstance()
 				.getFileEditorManager()
@@ -339,20 +354,19 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 						((AcideDelimitersPanelTableModel) _delimitersPanel
 								.getTable().getModel()).getItems());
 
-		// Gets the text from the remarks panel text field
+		// Updates its remarks manager symbol
 		AcideMainWindow.getInstance().getFileEditorManager()
 				.getSelectedFileEditorPanel().getLexiconConfiguration()
 				.getRemarksManager()
 				.setSymbol(_remarksPanel.getRemarkSymbolTextField().getText());
 
-		// Gets the color from the remarks panel preview text field
+		// Updates its remarks manager foreground color
 		AcideMainWindow.getInstance().getFileEditorManager()
 				.getSelectedFileEditorPanel().getLexiconConfiguration()
 				.getRemarksManager()
 				.setColor(_remarksPanel.getPreviewTextField().getForeground());
 
-		// Gets the is case sensitive from the remarks panel is case
-		// sensitive check box
+		// Updates its remarks manager is case sensitive flag
 		AcideMainWindow
 				.getInstance()
 				.getFileEditorManager()
@@ -362,8 +376,7 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 				.setIsCaseSensitive(
 						_remarksPanel.getIsCaseSensitiveCheckBox().isSelected());
 
-		// Gets the font style from the remarks panel preview text
-		// field
+		// Updates its remarks manager style
 		AcideMainWindow
 				.getInstance()
 				.getFileEditorManager()
@@ -380,18 +393,49 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 
 		// Saves the changes automatically into its file
 		saveLexicon();
-		
+
+		// Gets the lexicon configuration name
+		String lexiconConfigurationName = AcideMainWindow.getInstance()
+				.getFileEditorManager().getSelectedFileEditorPanel()
+				.getLexiconConfiguration().getName();
+
+		// Updates the opened file editors
+		for (int index = 0; index < AcideMainWindow.getInstance()
+				.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
+
+			// If the current checked file editor has the modified lexicon
+			// configuration
+			if (index != AcideMainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanelIndex()
+					&&
+
+					AcideMainWindow.getInstance().getFileEditorManager()
+							.getFileEditorPanelAt(index)
+							.getLexiconConfiguration().getName()
+							.matches(lexiconConfigurationName)) {
+
+				// Loads the lexicon configuration
+				AcideMainWindow
+						.getInstance()
+						.getFileEditorManager()
+						.getFileEditorPanelAt(index)
+						.getLexiconConfiguration()
+						.load(AcideMainWindow.getInstance()
+								.getFileEditorManager()
+								.getFileEditorPanelAt(index)
+								.getLexiconConfiguration().getPath());
+
+				// Resets the selected file editor text edition area
+				AcideMainWindow.getInstance().getFileEditorManager()
+						.getFileEditorPanelAt(index).resetStyledDocument();
+			}
+		}
+
 		// If the current console panel lexicon configuration matches with the
 		// selected editor
-		if (AcideMainWindow
-				.getInstance()
-				.getConsolePanel()
-				.getLexiconConfiguration()
-				.getName()
-				.matches(
-						AcideMainWindow.getInstance().getFileEditorManager()
-								.getSelectedFileEditorPanel()
-								.getLexiconConfiguration().getName())) {
+		if (AcideMainWindow.getInstance().getConsolePanel()
+				.getLexiconConfiguration().getName()
+				.matches(lexiconConfigurationName)) {
 
 			// Loads the lexicon configuration in the ACIDE - A Configurable IDE
 			// console panel
@@ -570,7 +614,6 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 											.getSelectedFileEditorPanel()
 											.getLexiconConfiguration()
 											.getName());
-
 		}
 	}
 

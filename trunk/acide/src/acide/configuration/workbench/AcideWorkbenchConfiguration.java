@@ -560,11 +560,11 @@ public class AcideWorkbenchConfiguration {
 				AcideToolBarConfiguration.getInstance().load(name);
 
 				// If it is not the default project
-				if(!AcideProjectConfiguration.getInstance().isDefaultProject())
-					
+				if (!AcideProjectConfiguration.getInstance().isDefaultProject())
+
 					// The project has been modified
 					AcideProjectConfiguration.getInstance().setIsModified(true);
-				
+
 				// Information message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
 						.getInstance().getLabels().getString("s958")
@@ -591,11 +591,13 @@ public class AcideWorkbenchConfiguration {
 							"./configuration/toolbar/default.toolbarConfig");
 
 					// If it is not the default project
-					if(!AcideProjectConfiguration.getInstance().isDefaultProject())
-						
+					if (!AcideProjectConfiguration.getInstance()
+							.isDefaultProject())
+
 						// The project has been modified
-						AcideProjectConfiguration.getInstance().setIsModified(true);
-					
+						AcideProjectConfiguration.getInstance().setIsModified(
+								true);
+
 					// Information message
 					JOptionPane.showMessageDialog(null, AcideLanguageManager
 							.getInstance().getLabels().getString("s958")
@@ -681,19 +683,49 @@ public class AcideWorkbenchConfiguration {
 						.getString("s1035"));
 
 		// If the ACIDE - A Configurable IDE explorer panel has not to be showed
-		if (!AcideProjectConfiguration.getInstance().isExplorerPanelShowed())
+		if (!AcideProjectConfiguration.getInstance().isExplorerPanelShowed()) {
 
-			// Shows the ACIDE - A Configurable IDE explorer panel
-			AcideMainWindow.getInstance().getMenu().getViewMenu()
-					.getShowExplorerPanelCheckBoxMenuItem().doClick();
+			// Hides the explorer panel
+			AcideMainWindow.getInstance().getExplorerPanel()
+					.disposeExplorerPanel();
+		} else {
+
+			// Displays the explorer panel
+			AcideMainWindow.getInstance().getExplorerPanel()
+					.showExplorerPanel();
+		}
+
+		// Updates the show explorer panel check box menu item state
+		AcideMainWindow
+				.getInstance()
+				.getMenu()
+				.getViewMenu()
+				.getShowExplorerPanelCheckBoxMenuItem()
+				.setSelected(
+						AcideProjectConfiguration.getInstance()
+								.isExplorerPanelShowed());
 
 		// If the ACIDE - A Configurable IDE console panel has not to be showed
 		if (!AcideProjectConfiguration.getInstance().isConsolePanelShowed())
 
-			// Shows the ACIDE - A Configurable IDE console panel
-			AcideMainWindow.getInstance().getMenu().getViewMenu()
-					.getShowConsolePanelCheckBoxMenuItem().doClick();
+			// Hides the console panel
+			AcideMainWindow.getInstance().getConsolePanel()
+					.disposeConsolePanel();
+		else
 
+			// Shows the console panel
+			AcideMainWindow.getInstance().getConsolePanel().showConsolePanel();
+
+		// Updates the show console panel check box menu item state
+		AcideMainWindow
+				.getInstance()
+				.getMenu()
+				.getViewMenu()
+				.getShowConsolePanelCheckBoxMenuItem()
+				.setSelected(
+						AcideProjectConfiguration.getInstance()
+								.isConsolePanelShowed());
+		
 		// Sets the ACIDE - A Configurable IDE main window preferred size
 		AcideMainWindow.getInstance().setPreferredSize(
 				new Dimension(AcideProjectConfiguration.getInstance()
@@ -875,7 +907,7 @@ public class AcideWorkbenchConfiguration {
 							.setEnabled(false);
 
 				// Saves the ACIDE - A Configurable IDE project configuration
-				AcideProjectConfiguration.getInstance().setFirstSave(true);
+				AcideProjectConfiguration.getInstance().setIsFirstSave(true);
 
 				// Updates the ACIDE - A Configurable IDE project configuration
 				AcideProjectConfiguration.getInstance().setProjectPath(
@@ -898,13 +930,17 @@ public class AcideWorkbenchConfiguration {
 	/**
 	 * Loads the console configuration and applies it to the Output in the main
 	 * window.
-	 * @param consolePanelConfiguration ACIDE - A Configurable IDE workbench configuration console panel configuration.
+	 * 
+	 * @param consolePanelConfiguration
+	 *            ACIDE - A Configurable IDE workbench configuration console
+	 *            panel configuration.
 	 */
-	public void loadConsolePanelConfiguration(AcideConsolePanelConfiguration consolePanelConfiguration) {
+	public void loadConsolePanelConfiguration(
+			AcideConsolePanelConfiguration consolePanelConfiguration) {
 
 		// Sets the console panel configuration
 		_consolePanelConfiguration = consolePanelConfiguration;
-		
+
 		// Updates the log
 		AcideLog.getLog().info(
 				AcideLanguageManager.getInstance().getLabels()
@@ -1281,7 +1317,7 @@ public class AcideWorkbenchConfiguration {
 			exception.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Sets a new value to the ACIDE - A Configurable IDE workbench
 	 * configuration loaded flag.

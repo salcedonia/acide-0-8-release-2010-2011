@@ -185,16 +185,17 @@ public class AcideRemoveFileMenuItemListener implements ActionListener {
 									}
 								}
 							}
+							
+
+							// Closes the editor tab
+							AcideMainWindow.getInstance().getFileEditorManager()
+									.getTabbedPane().remove(fileEditorPanelIndex);
+
+							// Validates the changes in the file editor manager
+							// tabbed pane
+							AcideMainWindow.getInstance().getFileEditorManager()
+									.getTabbedPane().validate();
 						}
-
-						// Closes the editor tab
-						AcideMainWindow.getInstance().getFileEditorManager()
-								.getTabbedPane().remove(fileEditorPanelIndex);
-
-						// Validates the changes in the file editor manager
-						// tabbed pane
-						AcideMainWindow.getInstance().getFileEditorManager()
-								.getTabbedPane().validate();
 					}
 
 					// The project has been modified

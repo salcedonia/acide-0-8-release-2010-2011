@@ -67,11 +67,11 @@ public class AcideSaveLexiconAsMenuItemListener implements ActionListener {
 				.addChoosableFileFilter(
 						new AcideFileExtensionFilterManager(extensions,
 								AcideLanguageManager.getInstance()
-										.getLabels().getString("s287")));
+										.getLabels().getString("s327")));
 		
 		// Asks the the file to the user
 		String absolutePath = AcideFileManager.getInstance()
-				.askForSaving(false);
+				.askForSaving("./configuration/lexicon/");
 		
 		if (absolutePath != null) {
 			
@@ -81,11 +81,16 @@ public class AcideSaveLexiconAsMenuItemListener implements ActionListener {
 				index = absolutePath.lastIndexOf("/");
 			String fileName = absolutePath.substring(index + 1,
 					absolutePath.length());
-
 			if (fileName.contains(".")) {
 				index = fileName.lastIndexOf(".");
 				fileName = fileName.substring(0, index);
 			}
+			
+			// If it does not contain the extension
+			if (!absolutePath.contains(".xml"))
+
+				// Adds it to the name
+				absolutePath = absolutePath + ".xml";
 
 			// Save lexicon as
 			boolean isSaved = AcideMainWindow.getInstance()

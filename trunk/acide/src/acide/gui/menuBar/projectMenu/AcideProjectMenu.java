@@ -982,9 +982,6 @@ public class AcideProjectMenu extends JMenu {
 		// Enables the close project menu item
 		_closeProjectMenuItem.setEnabled(true);
 
-		// Enables the save project menu item
-		_saveProjectMenuItem.setEnabled(false);
-
 		// Enables the save project as menu item
 		_saveProjectAsMenuItem.setEnabled(true);
 
@@ -997,35 +994,14 @@ public class AcideProjectMenu extends JMenu {
 		// Enables the add file menu item
 		_addFileMenuItem.setEnabled(true);
 
-		// Enables the remove file menu item
-		_removeFileMenuItem.setEnabled(false);
-
-		// Enables the delete file menu item
-		_deleteFileMenuItem.setEnabled(false);
-
 		// Enables the add folder menu item
 		_addFolderMenuItem.setEnabled(true);
-
-		// Enables the remove folder menu item
-		_removeFolderMenuItem.setEnabled(false);
 
 		// Enables the compile menu item
 		_compileMenuItem.setEnabled(true);
 
 		// Enables the execute menu item
 		_executeMenuItem.setEnabled(true);
-
-		// Disables the set main file menu item
-		_setMainFileMenuItem.setEnabled(false);
-
-		// Disables the unset main file menu item
-		_unsetMainFileMenuItem.setEnabled(false);
-
-		// Disables the set compilable file menu item
-		_setCompilableFileMenuItem.setEnabled(false);
-
-		// Disables the unset compilable file menu item
-		_unsetCompilableFileMenuItem.setEnabled(false);
 	}
 
 	/**
@@ -1126,7 +1102,7 @@ public class AcideProjectMenu extends JMenu {
 		AcideProjectConfiguration.getInstance().setIsModified(false);
 
 		// This is the first time that it is saved
-		AcideProjectConfiguration.getInstance().setFirstSave(true);
+		AcideProjectConfiguration.getInstance().setIsFirstSave(true);
 
 		// Enables the project menu
 		AcideMainWindow.getInstance().getMenu().getProjectMenu().enableMenu();
@@ -1357,17 +1333,6 @@ public class AcideProjectMenu extends JMenu {
 			AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
 					.getDeleteFileMenuItem().setEnabled(false);
 		}
-
-		// If the show explorer panel is selected
-		if (!AcideMainWindow.getInstance().getMenu().getViewMenu()
-				.getShowExplorerPanelCheckBoxMenuItem().isSelected())
-			// Shows the explorer
-			AcideMainWindow.getInstance().getExplorerPanel()
-					.showExplorerPanel();
-
-		// Enables the show explorer panel menu item
-		AcideMainWindow.getInstance().getMenu().getViewMenu()
-				.getShowExplorerPanelCheckBoxMenuItem().setSelected(true);
 	}
 
 	/**
@@ -1697,20 +1662,50 @@ public class AcideProjectMenu extends JMenu {
 	 */
 	public void loadMainWindowConfiguration() {
 
-		// Is explorer panel showed?
-		if (!AcideProjectConfiguration.getInstance().isExplorerPanelShowed())
+		// If the ACIDE - A Configurable IDE explorer panel has not to be showed
+		if (!AcideProjectConfiguration.getInstance().isExplorerPanelShowed()) {
 
-			// Shows the explorer panel
-			AcideMainWindow.getInstance().getMenu().getViewMenu()
-					.getShowExplorerPanelCheckBoxMenuItem().doClick();
+			// Hides the explorer panel
+			AcideMainWindow.getInstance().getExplorerPanel()
+					.disposeExplorerPanel();
+		} else {
 
-		// Is console panel showed?
+			// Displays the explorer panel
+			AcideMainWindow.getInstance().getExplorerPanel()
+					.showExplorerPanel();
+		}
+
+		// Updates the show explorer panel check box menu item state
+		AcideMainWindow
+				.getInstance()
+				.getMenu()
+				.getViewMenu()
+				.getShowExplorerPanelCheckBoxMenuItem()
+				.setSelected(
+						AcideProjectConfiguration.getInstance()
+								.isExplorerPanelShowed());
+
+		// If the ACIDE - A Configurable IDE console panel has not to be showed
 		if (!AcideProjectConfiguration.getInstance().isConsolePanelShowed())
 
-			// Shows the console panel
-			AcideMainWindow.getInstance().getMenu().getViewMenu()
-					.getShowConsolePanelCheckBoxMenuItem().doClick();
+			// Hides the console panel
+			AcideMainWindow.getInstance().getConsolePanel()
+					.disposeConsolePanel();
+		else
 
+			// Shows the console panel
+			AcideMainWindow.getInstance().getConsolePanel().showConsolePanel();
+
+		// Updates the show console panel check box menu item state
+		AcideMainWindow
+				.getInstance()
+				.getMenu()
+				.getViewMenu()
+				.getShowConsolePanelCheckBoxMenuItem()
+				.setSelected(
+						AcideProjectConfiguration.getInstance()
+								.isConsolePanelShowed());
+		
 		// Sets the main window size
 		AcideMainWindow.getInstance().setSize(
 				AcideProjectConfiguration.getInstance().getWindowWidth(),
@@ -1943,7 +1938,7 @@ public class AcideProjectMenu extends JMenu {
 											.getName());
 
 			// Is the first time that the project has been saved
-			AcideProjectConfiguration.getInstance().setFirstSave(true);
+			AcideProjectConfiguration.getInstance().setIsFirstSave(true);
 
 			// Sets the ACIDE - A Configurable IDE language configuration
 			AcideProjectConfiguration.getInstance().setLanguageConfiguration(
@@ -2151,7 +2146,7 @@ public class AcideProjectMenu extends JMenu {
 					.getRemoveFileMenuItem().setEnabled(false);
 
 		// Saves the default configuration
-		AcideProjectConfiguration.getInstance().setFirstSave(true);
+		AcideProjectConfiguration.getInstance().setIsFirstSave(true);
 
 		try {
 			// Updates the ACIDE - A Configurable IDE project configuration

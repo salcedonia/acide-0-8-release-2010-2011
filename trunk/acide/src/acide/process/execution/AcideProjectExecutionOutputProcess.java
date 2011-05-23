@@ -27,59 +27,62 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package acide.process.console;
+package acide.process.execution;
 
-import acide.gui.consolePanel.AcideConsolePanel;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import acide.log.AcideLog;
+import acide.process.gui.AcideProgressWindow;
 
 /**
  * <p>
- * Handles the ACIDE - A Configurable IDE output process thread.
+ * Handles the ACIDE - A Configurable IDE project execution output process
+ * thread.
  * </p>
  * <p>
- * Prints the output of the ACIDE - A Configurable IDE console panel process
- * into the text pane of the ACIDE - A Configurable IDE console panel.
+ * Prints the output of the project execution process into the ACIDE - A
+ * Configurable IDE progress window.
  * </p>
  * 
  * @version 0.8
  * @see Thread
  */
-class AcideConsoleOutputProcess extends Thread {
+public class AcideProjectExecutionOutputProcess extends Thread {
 
 	/**
 	 * ACIDE - A Configurable IDE input stream.
 	 */
 	private InputStream _inputStream;
 	/**
-	 * ACIDE - A Configurable IDE console panel.
+	 * ACIDE - A Configurable IDE progress window.
 	 */
-	private AcideConsolePanel _consolePanel;
+	private AcideProgressWindow _progressWindow;
 	/**
 	 * ACIDE - A Configurable IDE
 	 */
 	private StringBuffer _stringBuffer;
 
 	/**
-	 * Creates a new ACIDE - A Configurable IDE console process thread.
+	 * Creates a new ACIDE - A Configurable IDE project execution output process
+	 * thread.
 	 * 
 	 * @param inputStream
 	 *            input stream.
-	 * @param consolePanel
-	 *            ACIDE - A Configurable IDE console panel.
+	 * @param progressWindow
+	 *            ACIDE - A Configurable IDE progress window.
 	 * @see InputStream
-	 * @see AcideConsolePanel
+	 * @see AcideProgressWindow
 	 */
-	public AcideConsoleOutputProcess(InputStream inputStream,
-			AcideConsolePanel consolePanel) {
+	public AcideProjectExecutionOutputProcess(InputStream inputStream,
+			AcideProgressWindow progressWindow) {
 
 		// Stores the input stream
 		_inputStream = inputStream;
 
-		// Stores the console panel
-		_consolePanel = consolePanel;
+		// Stores the progress window
+		_progressWindow = progressWindow;
 	}
 
 	/*
@@ -115,7 +118,7 @@ class AcideConsoleOutputProcess extends Thread {
 				if (!bufferedReader.ready()) {
 
 					// Adds the text to the console panel
-					_consolePanel.addText(_stringBuffer.toString());
+					_progressWindow.setText(_stringBuffer.toString());
 
 					// Clears the buffer
 					_stringBuffer.delete(0, _stringBuffer.length());

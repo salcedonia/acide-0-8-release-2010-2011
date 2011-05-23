@@ -33,6 +33,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import acide.configuration.project.AcideProjectConfiguration;
+import acide.files.project.AcideProjectFile;
 import acide.gui.mainWindow.AcideMainWindow;
 
 /**
@@ -57,6 +58,10 @@ public class AcideUnsetMainFileMenuItemAction implements ActionListener {
 		if (AcideMainWindow.getInstance().getFileEditorManager()
 				.getSelectedFileEditorPanel().isMainFile()) {
 
+			// Sets the COMPILABLE FILE as false
+			AcideMainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().setCompilableFile(false);
+			
 			// Sets the MAIN FILE as false
 			AcideMainWindow.getInstance().getFileEditorManager()
 					.getSelectedFileEditorPanel().setMainFile(false);
@@ -88,23 +93,23 @@ public class AcideUnsetMainFileMenuItemAction implements ActionListener {
 				// The project has been modified
 				AcideProjectConfiguration.getInstance().setIsModified(true);
 
-				// Searches for the file into the project configuration file
-				// list
-				for (int index = 0; index < AcideProjectConfiguration
-						.getInstance().getNumberOfFilesFromList(); index++) {
+				// Search for the file into the project configuration
+				AcideProjectFile projectFile = AcideProjectConfiguration
+						.getInstance().getFileAt(
+								AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getSelectedFileEditorPanel()
+										.getAbsolutePath());
 
-					// If exists
-					if (AcideProjectConfiguration
-							.getInstance()
-							.getFileAt(index)
-							.getAbsolutePath()
-							.equals(AcideMainWindow.getInstance()
-									.getFileEditorManager()
-									.getSelectedFileEditorPanel()
-									.getAbsolutePath()))
-						// Sets MAIN FILE as false
-						AcideProjectConfiguration.getInstance()
-								.getFileAt(index).setIsMainFile(false);
+				// If it belongs to the project
+				if (projectFile != null) {
+
+					// Sets it as MAIN FILE
+					projectFile.setIsMainFile(false);
+
+					// Sets it as COMPILABLE FILE
+					projectFile.setIsCompilableFile(false);
+
 				}
 			}
 		}

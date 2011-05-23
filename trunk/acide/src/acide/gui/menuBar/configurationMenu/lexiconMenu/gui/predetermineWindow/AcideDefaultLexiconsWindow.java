@@ -63,10 +63,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import acide.configuration.lexicon.AcideLexiconConfiguration;
 import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.configuration.workbench.lexiconAssigner.AcideLexiconAssigner;
 import acide.files.AcideFileExtensionFilterManager;
 import acide.files.AcideFileManager;
+import acide.gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.configurationMenu.lexiconMenu.gui.predetermineWindow.utils.AcidePredetermineLexiconWindowTableModel;
 import acide.language.AcideLanguageManager;
@@ -89,7 +91,8 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 	private static final ImageIcon ICON = new ImageIcon(
 			"./resources/images/icon.png");
 	/**
-	 * ACIDE - A Configurable IDE default lexicons window file editor configuration panel.
+	 * ACIDE - A Configurable IDE default lexicons window file editor
+	 * configuration panel.
 	 */
 	private JPanel _fileEditorConfigurationPanel;
 	/**
@@ -191,7 +194,7 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 		_fileEditorConfigurationPanel.setBorder(BorderFactory
 				.createTitledBorder(AcideLanguageManager.getInstance()
 						.getLabels().getString("s2001")));
-		
+
 		// Builds the table
 		buildTable();
 
@@ -205,7 +208,7 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 		_consoleConfigurationPanel.setBorder(BorderFactory
 				.createTitledBorder(AcideLanguageManager.getInstance()
 						.getLabels().getString("s2002")));
-		
+
 		// Creates the console lexicon label
 		_consoleLexiconLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s1098"));
@@ -394,7 +397,8 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 	}
 
 	/**
-	 * Builds the ACIDE - A Configurable IDE default lexicons window file editor configuration panel.
+	 * Builds the ACIDE - A Configurable IDE default lexicons window file editor
+	 * configuration panel.
 	 */
 	private void buildMainPanel() {
 
@@ -402,10 +406,12 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 		buildTableButtonPanel();
 
 		// Adds the table button panel to the file editor configuration panel
-		_fileEditorConfigurationPanel.add(_tableButtonPanel, BorderLayout.NORTH);
+		_fileEditorConfigurationPanel
+				.add(_tableButtonPanel, BorderLayout.NORTH);
 
 		// Adds the table scroll pane to the file editor configuration panel
-		_fileEditorConfigurationPanel.add(_tableScrollPane, BorderLayout.CENTER);
+		_fileEditorConfigurationPanel
+				.add(_tableScrollPane, BorderLayout.CENTER);
 	}
 
 	/**
@@ -519,6 +525,61 @@ public class AcideDefaultLexiconsWindow extends JFrame {
 				.setApplyLexiconToConsole(
 						_applyLexiconToConsoleCheckBox.isSelected());
 
+		// Updates the opened file editors and the console panel with the new
+		// changes.
+		updateOpenedFileEditorsAndConsolePanel();
+	}
+
+	/**
+	 * <p>
+	 * Updates the opened file editors and the ACIDE - A Configurable IDE
+	 * console panel with the changes.
+	 * </p>
+	 */
+	private void updateOpenedFileEditorsAndConsolePanel() {
+
+		for (int index = 0; index < AcideMainWindow.getInstance()
+				.getFileEditorManager().getNumberOfFileEditorPanels(); index++) {
+
+			// Gets the current file editor panel
+			AcideFileEditorPanel fileEditorPanel = AcideMainWindow
+					.getInstance().getFileEditorManager()
+					.getFileEditorPanelAt(index);
+
+			// Loads the new default lexicon configuration
+			fileEditorPanel.getLexiconConfiguration().load(
+					AcideWorkbenchConfiguration
+							.getInstance()
+							.getLexiconAssignerConfiguration()
+							.getLexiconConfiguration(
+									fileEditorPanel.getFileExtension()));
+
+			// Applies the highlighting
+			fileEditorPanel.resetStyledDocument();
+		}
+
+		// If the changes has to been applied to the console panel
+		if (_applyLexiconToConsoleCheckBox.isSelected()) {
+
+			// Loads the default configuration
+			AcideMainWindow
+					.getInstance()
+					.getConsolePanel()
+					.getLexiconConfiguration()
+					.load(_consoleLexiconTextField.getText());
+		} else {
+
+			// Loads the default configuration
+			AcideMainWindow
+					.getInstance()
+					.getConsolePanel()
+					.getLexiconConfiguration()
+					.load(AcideLexiconConfiguration.DEFAULT_PATH
+							+ AcideLexiconConfiguration.DEFAULT_NAME);
+		}
+
+		// Applies the highlighting
+		AcideMainWindow.getInstance().getConsolePanel().resetStyledDocument();
 	}
 
 	/**

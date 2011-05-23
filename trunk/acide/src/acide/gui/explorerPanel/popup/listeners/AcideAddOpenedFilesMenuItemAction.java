@@ -27,23 +27,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package acide.gui.menuBar.viewMenu.listeners;
-
-import acide.configuration.project.AcideProjectConfiguration;
-import acide.gui.mainWindow.AcideMainWindow;
+package acide.gui.explorerPanel.popup.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import acide.gui.mainWindow.AcideMainWindow;
+
 /**
- * ACIDE - A Configurable IDE view menu show explorer panel check box menu item
- * listener.
+ * ACIDE - A Configurable IDE explorer panel popup menu add opened files menu
+ * item action listener.
  * 
  * @version 0.8
  * @see ActionListener
  */
-public class AcideShowAcideExplorerPanelMenuItemListener implements
-		ActionListener {
+public class AcideAddOpenedFilesMenuItemAction implements ActionListener {
 
 	/*
 	 * (non-Javadoc)
@@ -54,23 +52,8 @@ public class AcideShowAcideExplorerPanelMenuItemListener implements
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// If the show explorer check box menu item is selected
-		if (AcideMainWindow.getInstance().getMenu().getViewMenu()
-				.getShowExplorerPanelCheckBoxMenuItem().isSelected())
-
-			// Shows the explorer panel
-			AcideMainWindow.getInstance().getExplorerPanel()
-					.showExplorerPanel();
-		else
-
-			// Hides the explorer panel
-			AcideMainWindow.getInstance().getExplorerPanel()
-					.disposeExplorerPanel();
-
-		// If it is not the default project
-		if (!AcideProjectConfiguration.getInstance().isDefaultProject())
-
-			// The project has been modified
-			AcideProjectConfiguration.getInstance().setIsModified(true);
+		// Performs the add opened files menu item action in the project menu
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getAddOpenedFilesMenuItem().doClick();
 	}
 }

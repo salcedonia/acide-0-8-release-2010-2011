@@ -31,15 +31,14 @@ package acide.gui.menuBar.listeners;
 
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.files.project.AcideProjectFile;
+import acide.gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.menuBar.editMenu.utils.AcideUndoManager;
+import acide.language.AcideLanguageManager;
 
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 
 /**
  * ACIDE - A Configurable IDE menu bar mouse click listener.
@@ -231,7 +230,7 @@ public class AcideMenuBarMouseClickListener extends MouseAdapter {
 				.getNumberOfFileEditorPanels() > 0) {
 
 			// Enables or disables the save file menu item if the selected file
-			// editor is modified or not
+			// editor is modified or not or it is the NEW FILE
 			AcideMainWindow
 					.getInstance()
 					.getMenu()
@@ -239,7 +238,15 @@ public class AcideMenuBarMouseClickListener extends MouseAdapter {
 					.getSaveFileMenuItem()
 					.setEnabled(
 							AcideMainWindow.getInstance()
-									.getFileEditorManager().isRedButton());
+									.getFileEditorManager().isRedButton()
+									|| AcideMainWindow
+											.getInstance()
+											.getFileEditorManager()
+											.getSelectedFileEditorPanel()
+											.getAbsolutePath()
+											.equals(AcideLanguageManager
+													.getInstance().getLabels()
+													.getString("s79")));
 
 			// Checks the opened file editors
 			boolean isAnyModified = false;
@@ -263,10 +270,6 @@ public class AcideMenuBarMouseClickListener extends MouseAdapter {
 	 */
 	public void configureProjectMenu() {
 
-		// Disables the save project menu item
-		AcideMainWindow.getInstance().getMenu().getProjectMenu()
-				.getSaveProjectMenuItem().setEnabled(false);
-
 		// Disables the remove file menu item
 		AcideMainWindow.getInstance().getMenu().getProjectMenu()
 				.getRemoveFileMenuItem().setEnabled(false);
@@ -275,15 +278,7 @@ public class AcideMenuBarMouseClickListener extends MouseAdapter {
 		AcideMainWindow.getInstance().getMenu().getProjectMenu()
 				.getDeleteFileMenuItem().setEnabled(false);
 
-		// Disables the set main file menu item
-		AcideMainWindow.getInstance().getMenu().getProjectMenu()
-				.getSetMainFileMenuItem().setEnabled(false);
-
-		// Disables the unset main file menu item
-		AcideMainWindow.getInstance().getMenu().getProjectMenu()
-				.getUnsetMainFileMenuItem().setEnabled(false);
-
-		// Disables the set compilable file menu item
+		// Disables the set compilable menu item
 		AcideMainWindow.getInstance().getMenu().getProjectMenu()
 				.getSetCompilableFileMenuItem().setEnabled(false);
 
@@ -291,119 +286,89 @@ public class AcideMenuBarMouseClickListener extends MouseAdapter {
 		AcideMainWindow.getInstance().getMenu().getProjectMenu()
 				.getUnsetCompilableFileMenuItem().setEnabled(false);
 
-		// Disables the remove folder menu item
+		// Disables the set main menu item
 		AcideMainWindow.getInstance().getMenu().getProjectMenu()
-				.getRemoveFolderMenuItem().setEnabled(false);
+				.getSetMainFileMenuItem().setEnabled(false);
 
-		// If the project configuration has been modified
-		if (AcideProjectConfiguration.getInstance().isModified())
+		// Disables the unset main menu item
+		AcideMainWindow.getInstance().getMenu().getProjectMenu()
+				.getUnsetMainFileMenuItem().setEnabled(false);
 
-			// Enables the save project menu item
-			AcideMainWindow.getInstance().getMenu().getProjectMenu()
-					.getSaveProjectMenuItem().setEnabled(true);
+		// If there are opened file editors
+		if (AcideMainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanelIndex() != -1) {
 
-		// Gets the selection path from the explorer tree
-		TreePath treeSelection = AcideMainWindow.getInstance()
-				.getExplorerPanel().getTree().getSelectionPath();
+			// Gets the selected file editor panel
+			AcideFileEditorPanel selectedFileEditorPanel = AcideMainWindow
+					.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel();
 
-		// If there is anything selected in the explorer tree
-		if (treeSelection != null) {
+			// Checks if the selected file editor panel belongs to the project
+			AcideProjectFile projectFile = AcideProjectConfiguration
+					.getInstance().getFileAt(
+							selectedFileEditorPanel.getAbsolutePath());
 
-			// Gets the node from the explorer tree from the tree selection
-			DefaultMutableTreeNode fileNode = (DefaultMutableTreeNode) treeSelection
-					.getLastPathComponent();
+			// If it is not the NEW FILE or the LOG TAB and belongs to the
+			// project
+			if (!AcideMainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().isNewFile()
+					&& !AcideMainWindow.getInstance().getFileEditorManager()
+							.getSelectedFileEditorPanel().isLogFile()
+					&& projectFile != null) {
 
-			// Gets the project file from the file node info
-			AcideProjectFile projectFile = (AcideProjectFile) fileNode
-					.getUserObject();
-
-			// It is not a directory
-			if (!projectFile.isDirectory()) {
-
-				// Enables the remove file menu item
-				AcideMainWindow.getInstance().getMenu().getProjectMenu()
-						.getRemoveFileMenuItem().setEnabled(true);
+				if (!selectedFileEditorPanel.isMainFile())
+					// Enables the set main menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getSetMainFileMenuItem().setEnabled(true);
+				if (selectedFileEditorPanel.isMainFile())
+					// Enables the unset main menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getUnsetMainFileMenuItem().setEnabled(true);
+				if (!selectedFileEditorPanel.isCompilableFile()
+						|| (selectedFileEditorPanel.isCompilableFile() && selectedFileEditorPanel
+								.isMainFile()))
+					// Enables the set compilable menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getSetCompilableFileMenuItem().setEnabled(true);
+				if (selectedFileEditorPanel.isCompilableFile()
+						&& !selectedFileEditorPanel.isMainFile())
+					// Enables the unset compilable menu item
+					AcideMainWindow.getInstance().getMenu().getProjectMenu()
+							.getUnsetCompilableFileMenuItem().setEnabled(true);
 
 				// Enables the delete file menu item
 				AcideMainWindow.getInstance().getMenu().getProjectMenu()
 						.getDeleteFileMenuItem().setEnabled(true);
 
-				if (!projectFile.isMainFile())
-					// Enables the set main menu item
-					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getSetMainFileMenuItem().setEnabled(true);
-
-				if (projectFile.isMainFile())
-					// Enables the unset main menu item
-					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getUnsetMainFileMenuItem().setEnabled(true);
-
-				if (!projectFile.isCompilableFile()
-						|| (projectFile.isCompilableFile() && projectFile
-								.isMainFile()))
-					// Enables the set compilable menu item
-					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getSetCompilableFileMenuItem().setEnabled(true);
-
-				if (projectFile.isCompilableFile() && !projectFile.isMainFile())
-					// Enables the unset compilable menu item
-					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getUnsetCompilableFileMenuItem().setEnabled(true);
-			} else {
-
-				// Enables the remove folder menu item
+				// Enables the remove file menu item
 				AcideMainWindow.getInstance().getMenu().getProjectMenu()
-						.getRemoveFolderMenuItem().setEnabled(true);
+						.getRemoveFileMenuItem().setEnabled(true);
+
+			} else
+
+			// If the selected file editor panel does not belong to the project
+			if (projectFile == null) {
+
+				// Disables the remove file menu item
+				AcideMainWindow.getInstance().getMenu().getProjectMenu()
+						.getRemoveFileMenuItem().setEnabled(false);
+
+				// Enables the delete file menu item
+				AcideMainWindow.getInstance().getMenu().getProjectMenu()
+						.getDeleteFileMenuItem().setEnabled(false);
 			}
 		}
 
 		// If it is not the default project
 		if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
 
-			// Gets the number of the file editor panels
-			int numberOfFileEditorPanels = AcideMainWindow.getInstance()
-					.getFileEditorManager().getNumberOfFileEditorPanels();
+			// Enables the project menu
+			AcideMainWindow.getInstance().getMenu().getProjectMenu()
+					.enableMenu();
 
-			// If there are opened editor
-			if (numberOfFileEditorPanels > 0) {
-
-				if (!AcideMainWindow.getInstance().getFileEditorManager()
-						.getSelectedFileEditorPanel().isMainFile())
-
-					// Enables the set main menu item
-					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getSetMainFileMenuItem().setEnabled(true);
-
-				if (AcideMainWindow.getInstance().getFileEditorManager()
-						.getSelectedFileEditorPanel().isMainFile())
-
-					// Enables the unset main menu item
-					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getUnsetMainFileMenuItem().setEnabled(true);
-
-				if (!AcideMainWindow.getInstance().getFileEditorManager()
-						.getSelectedFileEditorPanel().isCompilableFile()
-						|| (AcideMainWindow.getInstance()
-								.getFileEditorManager()
-								.getSelectedFileEditorPanel()
-								.isCompilableFile() && AcideMainWindow
-								.getInstance().getFileEditorManager()
-								.getSelectedFileEditorPanel().isMainFile()))
-
-					// Enables the set compilable menu item
-					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getSetCompilableFileMenuItem().setEnabled(true);
-
-				if (AcideMainWindow.getInstance().getFileEditorManager()
-						.getSelectedFileEditorPanel().isCompilableFile()
-						&& !AcideMainWindow.getInstance()
-								.getFileEditorManager()
-								.getSelectedFileEditorPanel().isMainFile())
-
-					// Enables the unset compilable menu item
-					AcideMainWindow.getInstance().getMenu().getProjectMenu()
-							.getUnsetCompilableFileMenuItem().setEnabled(true);
-			}
+			// Enables the open all files menu item
+			AcideMainWindow.getInstance().getMenu().getFileMenu()
+					.getOpenAllFilesMenuItem().setEnabled(true);
 		}
 	}
 }

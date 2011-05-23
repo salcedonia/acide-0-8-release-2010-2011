@@ -43,6 +43,7 @@ import acide.gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorAdjustmentListener;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorCaretListener;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorFocusListener;
+import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorKeyboardListener;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorMouseListener;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorMouseWheelListener;
 import acide.gui.fileEditor.fileEditorPanel.fileEditorTextEditionArea.listeners.AcideFileEditorScrollPaneKeyListener;
@@ -308,6 +309,9 @@ public class AcideFileEditorTextEditionArea {
 		// Adds the ACIDE - A Configurable IDE menu bar keyboard listener
 		_textComponent.addKeyListener(new AcideMenuBarKeyboardListener());
 
+		// Adds the ACIDE - A Configurable IDE file editor keyboard listener
+		_textComponent.addKeyListener(new AcideFileEditorKeyboardListener());
+		
 		// Adds the ACIDE - A Configurable IDE focus listener
 		_textComponent.addFocusListener(new AcideFileEditorFocusListener());
 

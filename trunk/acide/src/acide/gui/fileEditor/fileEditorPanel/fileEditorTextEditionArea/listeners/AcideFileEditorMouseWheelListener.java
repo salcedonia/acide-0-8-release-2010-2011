@@ -141,7 +141,7 @@ public class AcideFileEditorMouseWheelListener implements MouseWheelListener {
 					.getFileEditorManager()
 					.getFileEditorPanelAt(index)
 					.zoomFont(mouseWheelEvent.getScrollAmount(),
-							mouseWheelEvent.getWheelRotation() > 0);
+							mouseWheelEvent.getWheelRotation() < 0);
 
 			// Resets the selected file editor text edition area
 			AcideMainWindow.getInstance().getFileEditorManager()

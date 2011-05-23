@@ -44,6 +44,7 @@ import acide.gui.fileEditor.fileEditorPanel.popup.listeners.AcidePasteMenuItemAc
 import acide.gui.fileEditor.fileEditorPanel.popup.listeners.AcidePrintFileMenuItemAction;
 import acide.gui.fileEditor.fileEditorPanel.popup.listeners.AcideRemoveFileMenuItemAction;
 import acide.gui.fileEditor.fileEditorPanel.popup.listeners.AcideSelectAllMenuItemAction;
+import acide.gui.fileEditor.fileEditorPanel.popup.listeners.AcideSendFileContentToConsoleMenuItemAction;
 import acide.gui.fileEditor.fileEditorPanel.popup.listeners.AcideSetCompilableFileMenuItemAction;
 import acide.gui.fileEditor.fileEditorPanel.popup.listeners.AcideSetMainFileMenuItemAction;
 import acide.gui.fileEditor.fileEditorPanel.popup.listeners.AcideShowDisplayOptionsWindowAction;
@@ -83,6 +84,12 @@ public class AcideFileEditorPopupMenu extends JPopupMenu {
 	 */
 	private final static ImageIcon DOCUMENT_LEXICON_IMAGE = new ImageIcon(
 			"./resources/icons/menu/configuration/fileEditor/documentLexicon.png");
+	/**
+	 * ACIDE - A Configurable IDE file editor menu send file content to console
+	 * menu item image icon.
+	 */
+	private final static ImageIcon SEND_FILE_CONTENT_TO_CONSOLE_IMAGE = new ImageIcon(
+			"./resources/icons/menu/configuration/fileEditor/sendFileContentToConsole.png");
 	/**
 	 * ACIDE - A Configurable IDE file editor panel popup menu copy menu item
 	 * image icon.
@@ -227,6 +234,11 @@ public class AcideFileEditorPopupMenu extends JPopupMenu {
 	 * menu item.
 	 */
 	private JCheckBoxMenuItem _automaticIndentCheckBoxMenuItem;
+	/**
+	 * ACIDE - A Configurable IDE file editor panel popup menu send file content
+	 * to console menu item.
+	 */
+	private JMenuItem _sendFileContentToConsoleMenuItem;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE file editor panel popup menu.
@@ -260,6 +272,12 @@ public class AcideFileEditorPopupMenu extends JPopupMenu {
 
 		// Adds the document lexicon menu item to the popup menu
 		add(_documentLexiconMenuItem);
+
+		// Adds a separator to the popup menu
+		addSeparator();
+
+		// Adds the send file content to console menu item to the popup menu
+		add(_sendFileContentToConsoleMenuItem);
 
 		// Adds a separator to the popup menu
 		addSeparator();
@@ -335,6 +353,11 @@ public class AcideFileEditorPopupMenu extends JPopupMenu {
 				.getInstance().getLabels().getString("s1093"),
 				DOCUMENT_LEXICON_IMAGE);
 
+		// Creates the file send file content menu item
+		_sendFileContentToConsoleMenuItem = new JMenuItem(AcideLanguageManager
+				.getInstance().getLabels().getString("s2005"),
+				SEND_FILE_CONTENT_TO_CONSOLE_IMAGE);
+
 		// Creates the copy menu item
 		_copyMenuItem = new JMenuItem(AcideLanguageManager.getInstance()
 				.getLabels().getString("s187"), COPY_IMAGE);
@@ -403,6 +426,10 @@ public class AcideFileEditorPopupMenu extends JPopupMenu {
 		// Sets the document lexicon menu item action listener
 		_documentLexiconMenuItem
 				.addActionListener(new AcideDocumentLexiconMenuItemListener());
+
+		// Sets the send file content to console menu item action listener
+		_sendFileContentToConsoleMenuItem
+				.addActionListener(new AcideSendFileContentToConsoleMenuItemAction());
 
 		// Sets the copy menu item action listener
 		_copyMenuItem.addActionListener(new AcideCopyMenuItemAction());
@@ -568,6 +595,17 @@ public class AcideFileEditorPopupMenu extends JPopupMenu {
 	 */
 	public JMenuItem getDocumentLexiconMenuItem() {
 		return _documentLexiconMenuItem;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE file editor panel popup menu send
+	 * file content to console menu item.
+	 * 
+	 * @return the ACIDE - A Configurable IDE file editor panel popup menu send
+	 *         file content to console menu item.
+	 */
+	public JMenuItem getSendFileContentToConsoleMenuItem() {
+		return _sendFileContentToConsoleMenuItem;
 	}
 
 	/**

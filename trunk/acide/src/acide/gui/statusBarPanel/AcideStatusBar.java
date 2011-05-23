@@ -29,7 +29,6 @@
  */
 package acide.gui.statusBarPanel;
 
-import acide.configuration.project.AcideProjectConfiguration;
 import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.gui.statusBarPanel.listeners.AcideStatusBarPopupMenuListener;
@@ -272,12 +271,13 @@ public class AcideStatusBar extends JPanel {
 		_editionModeMessagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		_editionModeMessagePanel.setBorder(BorderFactory.createEtchedBorder());
 		_editionModeMessageLabel = new JLabel();
-		
-		if(AcideWorkbenchConfiguration.getInstance().getFileEditorConfiguration().getEditionMode())
+
+		if (AcideWorkbenchConfiguration.getInstance()
+				.getFileEditorConfiguration().getEditionMode())
 			_editionModeMessageLabel.setText("INS");
 		else
 			_editionModeMessageLabel.setText("   ");
-				
+
 		_editionModeMessageLabel.setToolTipText("INS");
 		_editionModeMessageLabel.setForeground(Color.BLACK);
 		_editionModeMessagePanel.add(_editionModeMessageLabel);
@@ -593,81 +593,53 @@ public class AcideStatusBar extends JPanel {
 		if (AcideMainWindow.getInstance().getFileEditorManager()
 				.getSelectedFileEditorPanel() != null) {
 
-			// Updates the status message in the status bar
-			AcideMainWindow
-					.getInstance()
-					.getStatusBar()
-					.setStatusMessage(
-							AcideMainWindow.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel()
-									.getAbsolutePath());
+			// If it is COMPILABLE file
+			if (AcideMainWindow.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().isCompilableFile())
 
-			// If it is not the default project
-			if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
+				// If it is MAIN file
+				if (AcideMainWindow.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanel().isMainFile())
 
-				for (int index = 0; index < AcideProjectConfiguration
-						.getInstance().getNumberOfFilesFromList(); index++) {
-
-					if (AcideProjectConfiguration
+					// Updates the status message in the status bar with
+					// <MAIN>
+					AcideMainWindow
 							.getInstance()
-							.getFileAt(index)
-							.getAbsolutePath()
-							.equals(AcideMainWindow.getInstance()
-									.getFileEditorManager()
-									.getSelectedFileEditorPanel()
-									.getAbsolutePath()))
+							.getStatusBar()
+							.setStatusMessage(
+									AcideMainWindow.getInstance()
+											.getFileEditorManager()
+											.getSelectedFileEditorPanel()
+											.getAbsolutePath()
+											+ " <MAIN>");
+				else
 
-						if (AcideProjectConfiguration.getInstance()
-								.getFileAt(index).isCompilableFile())
+					// Updates the status message in the status bar with
+					// <COMPILABLE>
+					AcideMainWindow
+							.getInstance()
+							.getStatusBar()
+							.setStatusMessage(
+									AcideMainWindow.getInstance()
+											.getFileEditorManager()
+											.getSelectedFileEditorPanel()
+											.getAbsolutePath()
+											+ " <COMPILABLE>");
+			else
 
-							if (AcideProjectConfiguration.getInstance()
-									.getFileAt(index).isMainFile())
+				// Updates the status message in the status bar
+				AcideMainWindow
+						.getInstance()
+						.getStatusBar()
+						.setStatusMessage(
+								AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getSelectedFileEditorPanel()
+										.getAbsolutePath());
+		} else {
 
-								// MAIN FILE
-								AcideMainWindow
-										.getInstance()
-										.getStatusBar()
-										.setStatusMessage(
-												AcideMainWindow
-														.getInstance()
-														.getFileEditorManager()
-														.getSelectedFileEditorPanel()
-														.getAbsolutePath()
-														+ " <MAIN>");
-							else
-
-								// COMPILABLE FILE
-								AcideMainWindow
-										.getInstance()
-										.getStatusBar()
-										.setStatusMessage(
-												AcideMainWindow
-														.getInstance()
-														.getFileEditorManager()
-														.getSelectedFileEditorPanel()
-														.getAbsolutePath()
-														+ " <COMPILABLE>");
-						else
-
-							// Updates the status message in the status bar
-							AcideMainWindow
-									.getInstance()
-									.getStatusBar()
-									.setStatusMessage(
-											AcideMainWindow
-													.getInstance()
-													.getFileEditorManager()
-													.getSelectedFileEditorPanel()
-													.getAbsolutePath());
-				}
-			}
-		}else{
-			
 			// Updates the status message in the status bar
-			AcideMainWindow
-					.getInstance()
-					.getStatusBar()
-					.setStatusMessage(" ");
+			AcideMainWindow.getInstance().getStatusBar().setStatusMessage(" ");
 		}
 	}
 }

@@ -99,10 +99,6 @@ public class AcideViewMenu extends JMenu {
 	 * item.
 	 */
 	private JCheckBoxMenuItem _showConsolePanelCheckBoxMenuItem;
-	/**
-	 * ACIDE - A Configurable IDE view menu console size.
-	 */
-	private int _consoleSize;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE view menu.
@@ -256,25 +252,5 @@ public class AcideViewMenu extends JMenu {
 	 */
 	public JCheckBoxMenuItem getShowConsolePanelCheckBoxMenuItem() {
 		return _showConsolePanelCheckBoxMenuItem;
-	}
-
-	/**
-	 * Returns the ACIDE - A Configurable IDE view menu console size.
-	 * 
-	 * @return the ACIDE - A Configurable IDE view menu console size.
-	 */
-	public int getConsoleSize() {
-		return _consoleSize;
-	}
-
-	/**
-	 * Sets a new value to the ACIDE - A Configurable IDE view menu console
-	 * size.
-	 * 
-	 * @param consoleSize
-	 *            new value to set.
-	 */
-	public void setConsoleSize(int consoleSize) {
-		_consoleSize = consoleSize;
 	}
 }

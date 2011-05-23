@@ -830,11 +830,10 @@ public class AcideFileMenu extends JMenu {
 					// Saves the file
 					AcideMainWindow.getInstance().getMenu().getFileMenu()
 							.saveFile(fileEditorIndex);
-				} 
-				
+				}
+
 				// If it is not the default project
-				if (!AcideProjectConfiguration.getInstance()
-						.isDefaultProject()) {
+				if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
 
 					// Gets the file project index
 					int fileProjectIndex = AcideProjectConfiguration
@@ -852,12 +851,11 @@ public class AcideFileMenu extends JMenu {
 						// Sets the file as not opened in the project
 						// configuration
 						AcideProjectConfiguration.getInstance()
-								.getFileAt(fileProjectIndex)
-								.setIsOpened(false);
+								.getFileAt(fileProjectIndex).setIsOpened(false);
 
 						// Sets the project to modified
-						AcideProjectConfiguration.getInstance()
-								.setIsModified(true);
+						AcideProjectConfiguration.getInstance().setIsModified(
+								true);
 					}
 				}
 
@@ -876,13 +874,11 @@ public class AcideFileMenu extends JMenu {
 			if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
 
 				// Gets the file project index
-				int fileProjectIndex = AcideProjectConfiguration
-						.getInstance().getIndexOfFile(
-								AcideMainWindow
-										.getInstance()
+				int fileProjectIndex = AcideProjectConfiguration.getInstance()
+						.getIndexOfFile(
+								AcideMainWindow.getInstance()
 										.getFileEditorManager()
-										.getFileEditorPanelAt(
-												fileEditorIndex)
+										.getFileEditorPanelAt(fileEditorIndex)
 										.getAbsolutePath());
 
 				// If it belongs to the project
@@ -891,12 +887,10 @@ public class AcideFileMenu extends JMenu {
 					// Sets the file as not opened in the project
 					// configuration
 					AcideProjectConfiguration.getInstance()
-							.getFileAt(fileProjectIndex)
-							.setIsOpened(false);
+							.getFileAt(fileProjectIndex).setIsOpened(false);
 
 					// Sets the project to modified
-					AcideProjectConfiguration.getInstance()
-							.setIsModified(true);
+					AcideProjectConfiguration.getInstance().setIsModified(true);
 				}
 			}
 
@@ -926,7 +920,7 @@ public class AcideFileMenu extends JMenu {
 	 * Enables the ACIDE - A Configurable IDE file menu.
 	 */
 	public void enableMenu() {
-	
+
 		// Enables the close file menu item
 		_closeFileMenuItem.setEnabled(true);
 

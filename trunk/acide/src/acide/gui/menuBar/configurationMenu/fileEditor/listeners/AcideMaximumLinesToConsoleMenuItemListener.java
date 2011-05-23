@@ -27,25 +27,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package acide.gui.menuBar.editMenu.listeners;
-
-import acide.gui.mainWindow.AcideMainWindow;
+package acide.gui.menuBar.configurationMenu.fileEditor.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
+import acide.configuration.workbench.AcideWorkbenchConfiguration;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
 
 /**
- * ACIDE - A Configurable IDE edit menu go to line menu item listener.
+ * ACIDE - A Configurable IDE file editor panel popup menu maximum lines to
+ * console menu item action listener.
  * 
  * @version 0.8
  * @see ActionListener
  */
-public class AcideGoToLineMenuItemListener implements ActionListener {
+public class AcideMaximumLinesToConsoleMenuItemListener implements
+		ActionListener {
 
 	/*
 	 * (non-Javadoc)
@@ -56,44 +57,46 @@ public class AcideGoToLineMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Ask the user for the line number
-		String lineNumberString = (String) JOptionPane.showInputDialog(null,
+		// Ask the user for the maximum number of lines
+		String maximumNumberOfLines = (String) JOptionPane.showInputDialog(
+				null,
 				AcideLanguageManager.getInstance().getLabels()
-						.getString("s448"), AcideLanguageManager.getInstance()
-						.getLabels().getString("s447"),
-				JOptionPane.YES_NO_CANCEL_OPTION, null, null, null);
+						.getString("s2008"), AcideLanguageManager.getInstance()
+						.getLabels().getString("s2007"),
+				JOptionPane.YES_NO_CANCEL_OPTION, null, null,
+				AcideWorkbenchConfiguration.getInstance()
+						.getFileEditorConfiguration()
+						.getMaximumLinesToConsole());
 
-		if ((lineNumberString != null)) {
+		// If the user selected something
+		if (maximumNumberOfLines != null) {
+
 			try {
 
-				// If there are file editors opened
-				if (AcideMainWindow.getInstance().getFileEditorManager()
-						.getNumberOfFileEditorPanels() > 0){
-					
-					// Parses the number of line
-					int lineNumberInteger = Integer.parseInt(lineNumberString);
+				// Parses the number of lines
+				int numberOfLines = Integer.parseInt(maximumNumberOfLines);
 
-					// If the number of lines is positive
-					if (lineNumberInteger > 0) {
+				// If the number of lines is positive
+				if (numberOfLines > 0) {
 
-						// Go to line in the selected one
-						AcideMainWindow.getInstance().getFileEditorManager()
-								.getSelectedFileEditorPanel()
-								.goToLine(lineNumberInteger);
-					} else
+					// Updates the maximum lines to the console
+					AcideWorkbenchConfiguration.getInstance()
+							.getFileEditorConfiguration()
+							.setMaximumLinesToConsole(numberOfLines);
+				} else
 
-						// Displays an error message
-						JOptionPane.showMessageDialog(null, AcideLanguageManager
-								.getInstance().getLabels().getString("s2010"),
-								"Error", JOptionPane.ERROR_MESSAGE);
-				}
+					// Displays an error message
+					JOptionPane.showMessageDialog(null, AcideLanguageManager
+							.getInstance().getLabels().getString("s2009"),
+							"Error", JOptionPane.ERROR_MESSAGE);
+
 			} catch (Exception exception) {
 
 				// Displays an error message
 				JOptionPane.showMessageDialog(null, AcideLanguageManager
-						.getInstance().getLabels().getString("s2010"),
-						"Error", JOptionPane.ERROR_MESSAGE);
-				
+						.getInstance().getLabels().getString("s2009"), "Error",
+						JOptionPane.ERROR_MESSAGE);
+
 				// Updates the log
 				AcideLog.getLog().error(exception.getMessage());
 			}

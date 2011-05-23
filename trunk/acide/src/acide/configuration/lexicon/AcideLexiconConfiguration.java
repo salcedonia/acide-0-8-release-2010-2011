@@ -110,7 +110,7 @@ public class AcideLexiconConfiguration {
 		int lastIndexOfSlash = path.lastIndexOf("\\");
 		if (lastIndexOfSlash == -1)
 			lastIndexOfSlash = path.lastIndexOf("/");
-		
+
 		// Sets the language name
 		_name = path.substring(lastIndexOfSlash + 1, path.lastIndexOf("."));
 
@@ -131,7 +131,7 @@ public class AcideLexiconConfiguration {
 
 		// Saves it
 		save(_name, false);
-		
+
 		// Documents the lexicon configuration
 		AcideMainWindow.getInstance().getMenu().getConfigurationMenu()
 				.getLexiconMenu().documentLexicon(path);
@@ -203,8 +203,20 @@ public class AcideLexiconConfiguration {
 		// If the name is already set by the user
 		if ((_name != null) && (!_name.trim().equalsIgnoreCase(""))) {
 
+			// Gets the current configuration name
+			String currentName = _name;
+
+			// Gets the current configuration path
+			String currentPath = _path;
+
+			// Gets the current configuration is compiled or interpreted
+			boolean currentIsCompiledOrInterpreted = _isCompiledOrInterpreted;
+
 			// Stores the name
 			_name = name;
+
+			// Stores the path
+			_path = path;
 
 			// Stores the is compiled or interpreted flag
 			_isCompiledOrInterpreted = IsCompiledOrInterpreted;
@@ -222,6 +234,17 @@ public class AcideLexiconConfiguration {
 
 				// Closes the file output stream
 				fileOutputStream.close();
+
+				// Restores the previous configuration name
+				_name = currentName;
+
+				// Restores the previous configuration path
+				_path = currentPath;
+
+				// Restores the previous configuration is compiled or
+				// interpreted
+				_isCompiledOrInterpreted = currentIsCompiledOrInterpreted;
+
 			} catch (Exception exception) {
 
 				// Updates the log
@@ -230,6 +253,7 @@ public class AcideLexiconConfiguration {
 				return false;
 			}
 		}
+
 		return true;
 	}
 
@@ -551,8 +575,7 @@ public class AcideLexiconConfiguration {
 	 * @param tokenTypeManager
 	 *            new value to set.
 	 */
-	public void setTokenTypeManager(
-			AcideLexiconTokenManager tokenTypeManager) {
+	public void setTokenTypeManager(AcideLexiconTokenManager tokenTypeManager) {
 		_tokenTypeManager = tokenTypeManager;
 	}
 

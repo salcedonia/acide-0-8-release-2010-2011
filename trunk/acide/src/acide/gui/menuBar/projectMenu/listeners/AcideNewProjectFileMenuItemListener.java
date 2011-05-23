@@ -9,14 +9,30 @@ import acide.gui.mainWindow.AcideMainWindow;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
+import acide.resources.AcideResourceManager;
 
 /**
+ * <p>
  * ACIDE -A Configurable IDE project menu new project file menu item listener.
+ * </p>
+ * <p>
+ * There are four cases to be contemplated:
+ * <ul>
+ * <li>The new file belongs to the project and it is opened.</li>
+ * <li>The new file belongs to the project and it is not opened.</li>
+ * <li>The new file does not belong to the project and it is opened.</li>
+ * <li>The new file does not belong to the project and it is not opened.</li>
+ * </ul>
+ * </p>
  * 
  * @version 0.8
  * @see ActionListener
@@ -33,126 +49,285 @@ public class AcideNewProjectFileMenuItemListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// Gets the selected file editor panel index
-		int selectedFileEditorPanelIndex = AcideMainWindow.getInstance()
-				.getFileEditorManager().getSelectedFileEditorPanelIndex();
-
 		// Creates a new NEW FILE tab in the file editor manager tabbed pane
 		AcideMainWindow.getInstance().getMenu().getFileMenu()
 				.getNewFileMenuItem().doClick();
-
-		String filePath = null;
 
 		// If the project has no opened file editor panels
 		if (AcideMainWindow.getInstance().getFileEditorManager()
 				.getNumberOfFileEditorPanels() > 0) {
 
-			// Removes the filter
-			AcideFileManager
-					.getInstance()
-					.getFileChooser()
-					.removeChoosableFileFilter(
-							AcideFileManager.getInstance().getFileChooser()
-									.getFileFilter());
-			
-			// Asks to the user for saving the file
-			filePath = AcideFileManager.getInstance().askForSaving(
-					true);
+			String absoluteFilePath = null;
+			String lastOpenedFileDirectory = null;
 
-			// If the user did not selected anything
-			if (filePath == null) {
+			// Creates the file chooser
+			JFileChooser fileChooser = new JFileChooser();
 
-				// Sets the selected file editor panel at it
-				AcideMainWindow.getInstance().getFileEditorManager()
-						.setSelectedFileEditorPanelAt(selectedFileEditorPanelIndex);
+			try {
 
-				// Updates the log
-				AcideLog.getLog().info(
-						AcideLanguageManager.getInstance().getLabels()
-								.getString("s92"));
-			} else {
+				// Gets the ACIDE - A Configurable IDE last opened file
+				// directory
+				lastOpenedFileDirectory = AcideResourceManager.getInstance()
+						.getProperty("lastOpenedFileDirectory");
 
-				// Saves the file
-				boolean savingResult = AcideFileManager.getInstance().write(
-						filePath,
-						AcideMainWindow.getInstance().getFileEditorManager()
+				// Sets the current directory to the last opened file directory
+				fileChooser.setCurrentDirectory(new File(
+						lastOpenedFileDirectory));
+
+				// Clears the previous selected files
+				fileChooser.setSelectedFiles(new File[0]);
+
+				// Disables the multiple selection of files
+				fileChooser.setMultiSelectionEnabled(false);
+
+				// Sets only files
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+				// Ask to the user for saving the changes
+				int returnValueSaveFile = fileChooser.showSaveDialog(null);
+
+				// Gets the selected file
+				File selectedFile = fileChooser.getSelectedFile();
+
+				// Ask the user for saving it
+				if (returnValueSaveFile == JFileChooser.APPROVE_OPTION) {
+
+					// Gets the ACIDE - A Configurable IDE last opened
+					// file
+					// directory
+					absoluteFilePath = fileChooser.getSelectedFile()
+							.getAbsolutePath();
+
+					// If the user selected something
+					if (absoluteFilePath != null) {
+
+						// Gets the name
+						int index = absoluteFilePath.lastIndexOf("\\");
+						if (index == -1)
+							index = absoluteFilePath.lastIndexOf("/");
+						String name = absoluteFilePath.substring(index + 1,
+								absoluteFilePath.length());
+
+						// Gets the overwritten index
+						int overwrittenIndex = AcideMainWindow.getInstance()
+								.getFileEditorManager()
+								.getFileEditorPanelAt(name);
+
+						// Gets the current file content
+						String currentFileContent = AcideMainWindow
+								.getInstance().getFileEditorManager()
 								.getSelectedFileEditorPanel()
-								.getTextEditionAreaContent());
+								.getTextEditionAreaContent();
 
-				// If it could save it
-				if (savingResult) {
+						// If exists
+						if (selectedFile.exists()) {
 
-					// Updates the log
-					AcideLog.getLog().info(
-							AcideLanguageManager.getInstance().getLabels()
-									.getString("s93")
-									+ filePath
-									+ AcideLanguageManager.getInstance()
-											.getLabels().getString("s94"));
+							// Ask if are you sure about the operation
+							int returnValueAreYouSure = JOptionPane
+									.showConfirmDialog(
+											null,
+											AcideLanguageManager.getInstance()
+													.getLabels()
+													.getString("s954"),
+											AcideLanguageManager.getInstance()
+													.getLabels()
+													.getString("s953"),
+											JOptionPane.YES_NO_OPTION);
 
-					// Sets the green button to the editor
-					AcideMainWindow.getInstance().getFileEditorManager()
-							.setGreenButton();
+							// If it is ok
+							if (returnValueAreYouSure == JOptionPane.YES_OPTION) {
 
-					// Gets the name
-					int index = filePath.lastIndexOf("\\");
-					if (index == -1)
-						index = filePath.lastIndexOf("/");
-					String name = filePath.substring(index + 1,
-							filePath.length());
+								// If the overwritten file exists in the tabbed
+								// pane
+								if (overwrittenIndex != -1) {
 
-					// Sets the title
-					AcideMainWindow
-							.getInstance()
-							.getFileEditorManager()
-							.getTabbedPane()
-							.setTitleAt(
+									// Removes the tab in the file editor
+									AcideMainWindow
+											.getInstance()
+											.getFileEditorManager()
+											.getTabbedPane()
+											.remove(AcideMainWindow
+													.getInstance()
+													.getFileEditorManager()
+													.getSelectedFileEditorPanelIndex());
+
+									// Validates the changes in the file editor
 									AcideMainWindow.getInstance()
 											.getFileEditorManager()
-											.getTabbedPane().getSelectedIndex(),
-									name);
+											.getTabbedPane().validate();
 
-					// Sets the file editor panel absolute path
-					AcideMainWindow.getInstance().getFileEditorManager()
-							.getSelectedFileEditorPanel()
-							.setAbsolutePath(filePath);
+									// Sets the tab that is overwritten from
+									// the file
+									// editor
+									AcideMainWindow
+											.getInstance()
+											.getFileEditorManager()
+											.setSelectedFileEditorPanelAt(
+													overwrittenIndex);
 
-					// Sets the file editor panel tool tip text
-					AcideMainWindow.getInstance().getFileEditorManager()
-							.getTabbedPane().setToolTipText(filePath);
+									// Updates the components related to the
+									// file panel
+									AcideMainWindow
+											.getInstance()
+											.getFileEditorManager()
+											.updateRelatedComponentsAt(
+													overwrittenIndex);
+								}
 
-					// Builds the file to get the last changes
-					File file = new File(AcideMainWindow.getInstance()
-							.getFileEditorManager()
-							.getSelectedFileEditorPanel().getAbsolutePath());
+								// Saves the file
+								boolean savingResult = AcideFileManager
+										.getInstance().write(absoluteFilePath,
+												currentFileContent);
 
-					// Sets the last modification change
-					AcideMainWindow.getInstance().getFileEditorManager()
-							.getSelectedFileEditorPanel()
-							.setLastChange(file.lastModified());
+								// If it could save it
+								if (savingResult) {
 
-					// Sets the last length change
-					AcideMainWindow.getInstance().getFileEditorManager()
-							.getSelectedFileEditorPanel()
-							.setLastChange(file.length());
+									// Overwrites the opened file editor
+									overwriteOpenedFileEditor(absoluteFilePath);
+								} else {
 
-					// Sets the selected file editor panel at it
-					AcideMainWindow.getInstance().getFileEditorManager()
-							.setSelectedFileEditorPanelAt(selectedFileEditorPanelIndex);
-				
-					// Adds the new file to the recent files list
-					AcideWorkbenchConfiguration.getInstance()
-							.getRecentFilesConfiguration()
-							.addRecentFileToList(filePath);
-				} else {
+									// Updates the log
+									AcideLog.getLog().info(
+											AcideLanguageManager.getInstance()
+													.getLabels()
+													.getString("s95")
+													+ absoluteFilePath);
+								}
 
-					// Updates the log
-					AcideLog.getLog().info(
-							AcideLanguageManager.getInstance().getLabels()
-									.getString("s95")
-									+ filePath);
+							} else if (returnValueAreYouSure == JOptionPane.NO_OPTION) {
+
+								// If the overwritten file exists in the tabbed
+								// pane
+								if (overwrittenIndex != -1) {
+
+									// Removes the tab in the file editor
+									AcideMainWindow
+											.getInstance()
+											.getFileEditorManager()
+											.getTabbedPane()
+											.remove(AcideMainWindow
+													.getInstance()
+													.getFileEditorManager()
+													.getSelectedFileEditorPanelIndex());
+
+									// Validates the changes in the file editor
+									AcideMainWindow.getInstance()
+											.getFileEditorManager()
+											.getTabbedPane().validate();
+
+									// Removes the tab that is overwritten from
+									// the file
+									// editor
+									AcideMainWindow
+											.getInstance()
+											.getFileEditorManager()
+											.setSelectedFileEditorPanelAt(
+													overwrittenIndex);
+
+									// Updates its type
+
+									// Updates the components related to the
+									// file panel
+									AcideMainWindow
+											.getInstance()
+											.getFileEditorManager()
+											.updateRelatedComponentsAt(
+													overwrittenIndex);
+								}
+
+								// Overwrites the opened file editor
+								overwriteOpenedFileEditor(absoluteFilePath);
+							}
+						} else {
+
+							// If the overwritten file exists in the tabbed
+							// pane
+							if (overwrittenIndex != -1) {
+
+								// Removes the tab in the file editor
+								AcideMainWindow
+										.getInstance()
+										.getFileEditorManager()
+										.getTabbedPane()
+										.remove(AcideMainWindow
+												.getInstance()
+												.getFileEditorManager()
+												.getSelectedFileEditorPanelIndex());
+
+								// Validates the changes in the file editor
+								AcideMainWindow.getInstance()
+										.getFileEditorManager().getTabbedPane()
+										.validate();
+
+								// Removes the tab that is overwritten from the
+								// file
+								// editor
+								AcideMainWindow
+										.getInstance()
+										.getFileEditorManager()
+										.setSelectedFileEditorPanelAt(
+												overwrittenIndex);
+
+								// Updates the components related to the file
+								// panel
+								AcideMainWindow
+										.getInstance()
+										.getFileEditorManager()
+										.updateRelatedComponentsAt(
+												overwrittenIndex);
+							}
+
+							// Saves the file
+							boolean savingResult = AcideFileManager
+									.getInstance().write(absoluteFilePath,
+											currentFileContent);
+
+							// If it could save it
+							if (savingResult) {
+
+								// Overwrites the opened file editor
+								overwriteOpenedFileEditor(absoluteFilePath);
+							} else {
+
+								// Updates the log
+								AcideLog.getLog().info(
+										AcideLanguageManager.getInstance()
+												.getLabels().getString("s95")
+												+ absoluteFilePath);
+							}
+						}
+					} else if (returnValueSaveFile == JFileChooser.CANCEL_OPTION) {
+
+						// Cancel selection
+						fileChooser.cancelSelection();
+
+						// Updates the log
+						AcideLog.getLog().info(
+								AcideLanguageManager.getInstance().getLabels()
+										.getString("s308"));
+
+						// Removes the tab in the file editor
+						AcideMainWindow
+								.getInstance()
+								.getFileEditorManager()
+								.getTabbedPane()
+								.remove(AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getSelectedFileEditorPanelIndex());
+
+						// Validates the changes in the file editor
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getTabbedPane().validate();
+					}
 				}
+
+			} catch (Exception exception) {
+
+				// Updates the log
+				AcideLog.getLog().error(exception.getMessage());
+				exception.printStackTrace();
 			}
+
 		} else {
 
 			// Updates the log
@@ -160,9 +335,202 @@ public class AcideNewProjectFileMenuItemListener implements ActionListener {
 					AcideLanguageManager.getInstance().getLabels()
 							.getString("s89"));
 		}
+	}
 
-		// Adds the new file to the explorer tree
-		addFileToExplorerTree(filePath);
+	/**
+	 * <p>
+	 * Overwrites an opened file editor with the new project file.
+	 * </p>
+	 * <p>
+	 * If the selected file is opened in the tabbed pane, then updates its
+	 * properties, whereas if it is not opened it updates its properties and
+	 * adds it to the explorer tree.
+	 * </p>
+	 * 
+	 * @param filePath
+	 *            chosen file path.
+	 */
+	private void overwriteOpenedFileEditor(String filePath) {
+
+		// Updates the log
+		AcideLog.getLog().info(
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s307")
+						+ filePath);
+
+		// Updates the log
+		AcideLog.getLog().info(
+				AcideLanguageManager.getInstance().getLabels().getString("s93")
+						+ filePath
+						+ AcideLanguageManager.getInstance().getLabels()
+								.getString("s94"));
+
+		// Gets the file name
+		int lastIndexOfSlash = filePath.lastIndexOf("\\");
+		if (lastIndexOfSlash == -1)
+			lastIndexOfSlash = filePath.lastIndexOf("/");
+		String fileName = filePath.substring(lastIndexOfSlash + 1,
+				filePath.length());
+
+		// Updates the name property
+		AcideMainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanel().getStyledDocument()
+				.putProperty("name", fileName);
+
+		// Sets the title
+		AcideMainWindow
+				.getInstance()
+				.getFileEditorManager()
+				.getTabbedPane()
+				.setTitleAt(
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getTabbedPane().getSelectedIndex(), fileName);
+
+		// Sets the file editor panel absolute path
+		AcideMainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanel().setAbsolutePath(filePath);
+
+		// Sets the file editor panel tool tip text
+		AcideMainWindow.getInstance().getFileEditorManager().getTabbedPane()
+				.setToolTipText(filePath);
+
+		// Builds the file to get the last changes
+		File file = new File(AcideMainWindow.getInstance()
+				.getFileEditorManager().getSelectedFileEditorPanel()
+				.getAbsolutePath());
+
+		// Sets the last modification change
+		AcideMainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanel()
+				.setLastChange(file.lastModified());
+
+		// Sets the last length change
+		AcideMainWindow.getInstance().getFileEditorManager()
+				.getSelectedFileEditorPanel().setLastChange(file.length());
+
+		// Adds the new file to the recent files list
+		AcideWorkbenchConfiguration.getInstance().getRecentFilesConfiguration()
+				.addRecentFileToList(filePath);
+
+		// Updates the ACIDE - A Configurable IDE last
+		// opened
+		// file
+		// directory
+		AcideResourceManager.getInstance().setProperty(
+				"lastOpenedFileDirectory", filePath);
+
+		// Gets the project file
+		AcideProjectFile projectFile = AcideProjectConfiguration.getInstance()
+				.getFileAt(filePath);
+
+		// If the selected file belongs to the project
+		if (projectFile != null) {
+
+			// If the file is not opened
+			if (!projectFile.isOpened()) {
+
+				// The file now is opened
+				projectFile.setIsOpened(true);
+
+				// Creates the image icon to set
+				ImageIcon imageIcon = null;
+
+				// Updates its type
+				switch (projectFile.getType()) {
+
+				case NORMAL:
+
+					// It is not a main file
+					AcideMainWindow.getInstance().getFileEditorManager()
+							.getSelectedFileEditorPanel().setMainFile(false);
+
+					// It is not a compilable file
+					AcideMainWindow.getInstance().getFileEditorManager()
+							.getSelectedFileEditorPanel()
+							.setCompilableFile(false);
+					break;
+				case COMPILABLE:
+
+					// It is not a main file
+					AcideMainWindow.getInstance().getFileEditorManager()
+							.getSelectedFileEditorPanel().setMainFile(false);
+
+					// It is a compilable file
+					AcideMainWindow.getInstance().getFileEditorManager()
+							.getSelectedFileEditorPanel()
+							.setCompilableFile(true);
+
+					// Creates the COMPILABLE image icon to set
+					imageIcon = new ImageIcon(
+							"./resources/icons/editor/compilable.png");
+
+					break;
+				case MAIN:
+
+					// It is a main file
+					AcideMainWindow.getInstance().getFileEditorManager()
+							.getSelectedFileEditorPanel().setMainFile(true);
+
+					// It is a compilable file
+					AcideMainWindow.getInstance().getFileEditorManager()
+							.getSelectedFileEditorPanel()
+							.setCompilableFile(true);
+
+					// Creates the MAIN image icon to set
+					imageIcon = new ImageIcon(
+							"./resources/icons/editor/main.png");
+
+					break;
+				}
+
+				// Sets the icon in the selected file editor panel
+				AcideMainWindow
+						.getInstance()
+						.getFileEditorManager()
+						.getTabbedPane()
+						.setIconAt(
+								AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getSelectedFileEditorPanelIndex(),
+								imageIcon);
+
+				// If it is not the default project
+				if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
+
+					// The project has been modified
+					AcideProjectConfiguration.getInstance().setIsModified(true);
+				}
+			}
+		} else {
+
+			// Updates the explorer tree
+			addFileToExplorerTree(filePath);
+
+			// Updates the components related to the
+			// file panel
+			AcideMainWindow
+					.getInstance()
+					.getFileEditorManager()
+					.updateRelatedComponentsAt(
+							AcideMainWindow.getInstance()
+									.getFileEditorManager()
+									.getSelectedFileEditorPanelIndex());
+
+			// If it is not the default project
+			if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
+
+				// The project has been modified
+				AcideProjectConfiguration.getInstance().setIsModified(true);
+			}
+		}
+		
+		// Updates the related components
+		AcideMainWindow
+				.getInstance()
+				.getFileEditorManager()
+				.updateRelatedComponentsAt(
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanelIndex());
 	}
 
 	/**
@@ -241,6 +609,16 @@ public class AcideNewProjectFileMenuItemListener implements ActionListener {
 				// Sets the parent
 				newProjectFile.setParent(currentProjectFile.getName());
 
+				// Sets the main file
+				newProjectFile.setIsMainFile(AcideMainWindow.getInstance()
+						.getFileEditorManager().getSelectedFileEditorPanel()
+						.isMainFile());
+
+				// Sets the compilable file
+				newProjectFile.setIsCompilableFile(AcideMainWindow
+						.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanel().isCompilableFile());
+
 				// Adds the file to the project file list
 				AcideProjectConfiguration.getInstance().addFile(newProjectFile);
 
@@ -279,8 +657,11 @@ public class AcideNewProjectFileMenuItemListener implements ActionListener {
 				AcideMainWindow.getInstance().getExplorerPanel().getPopupMenu()
 						.getDeleteFileMenuItem().setEnabled(true);
 
-				// The project configuration has been modified
-				AcideProjectConfiguration.getInstance().setIsModified(true);
+				// If it is not the default project
+				if (!AcideProjectConfiguration.getInstance().isDefaultProject())
+
+					// The project configuration has been modified
+					AcideProjectConfiguration.getInstance().setIsModified(true);
 
 				// Updates the status message in the status bar
 				AcideMainWindow.getInstance().getStatusBar()

@@ -817,7 +817,7 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 			
 			// Asks to the user for the file path
 			String absolutePath = AcideFileManager.getInstance()
-					.askForSaving(false);
+					.askForSaving();
 
 			if (absolutePath != null) {
 
@@ -916,7 +916,7 @@ public class AcideGrammarConfigurationWindow extends JFrame {
 			
 			// Asks the path to the user
 			String absolutePath = AcideFileManager.getInstance()
-					.askForSaving(false);
+					.askForSaving();
 
 			if (absolutePath != null) {
 

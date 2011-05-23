@@ -39,6 +39,7 @@ import acide.gui.consolePanel.listeners.AcideConsolePanelMouseWheelListener;
 import acide.gui.consolePanel.listeners.AcideConsolePanelPopupMenuListener;
 import acide.gui.consolePanel.popup.AcideConsolePanelPopupMenu;
 import acide.gui.fileEditor.fileEditorManager.utils.logic.AcideStyledDocument;
+import acide.gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
 import acide.gui.mainWindow.AcideMainWindow;
 
 import java.awt.BorderLayout;
@@ -75,7 +76,7 @@ public class AcideConsolePanel extends JPanel {
 	/**
 	 * ACIDE - A Configurable IDE console panel text component.
 	 */
-	private JTextComponent _textPane;
+	private JTextPane _textPane;
 	/**
 	 * ACIDE - A Configurable IDE console panel scroll pane.
 	 */
@@ -108,6 +109,10 @@ public class AcideConsolePanel extends JPanel {
 	 * ACIDE - A Configurable IDE console panel lexicon configuration.
 	 */
 	private AcideLexiconConfiguration _lexiconConfiguration;
+	/**
+	 * ACIDE - A Configurable IDE console panel size.
+	 */
+	private int _size;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE console panel.
@@ -191,7 +196,7 @@ public class AcideConsolePanel extends JPanel {
 	 * @return the ACIDE - A Configurable IDE console text component.
 	 * @see JTextComponent
 	 */
-	protected JTextComponent buildConsole() {
+	protected JTextPane buildConsole() {
 
 		// Creates and loads the lexicon configuration from the lexicon assigner
 		_lexiconConfiguration = new AcideLexiconConfiguration();
@@ -507,23 +512,32 @@ public class AcideConsolePanel extends JPanel {
 	public void executeCommand(String command, String parameter) {
 
 		if (_consoleProcess.getWriter() != null) {
+
 			try {
 
+				// If there are opened file editors
 				if (AcideMainWindow.getInstance().getFileEditorManager()
 						.getNumberOfFileEditorPanels() > 0) {
 
+					// Replaces the active file variable for its real value
 					command = command.replace("$activeFile$", AcideMainWindow
 							.getInstance().getFileEditorManager()
 							.getSelectedFileEditorPanel().getAbsolutePath());
+
+					// Replaces the active file path variable for its real value
 					command = command
 							.replace("$activeFilePath$", AcideMainWindow
 									.getInstance().getFileEditorManager()
 									.getSelectedFileEditorPanel().getFilePath());
+
+					// Replaces the active files extension for its real value
 					command = command.replace("$activeFileExt$",
 							AcideMainWindow.getInstance()
 									.getFileEditorManager()
 									.getSelectedFileEditorPanel()
 									.getFileExtension());
+
+					// Replaces the active files name for its real value
 					command = command.replace("$activeFileName$",
 							AcideMainWindow.getInstance()
 									.getFileEditorManager()
@@ -534,33 +548,41 @@ public class AcideConsolePanel extends JPanel {
 				// If it is the default project
 				if (AcideProjectConfiguration.getInstance().isDefaultProject()) {
 
-					// If it has a MAIN FILE
-					if (AcideMainWindow.getInstance().getFileEditorManager()
-							.getMainFileEditorPanel() != null) {
+					// Gets the main file editor panel
+					AcideFileEditorPanel mainFileEditorPanel = AcideMainWindow
+							.getInstance().getFileEditorManager()
+							.getMainFileEditorPanel();
 
-						command = command.replace("$mainFile$", AcideMainWindow
-								.getInstance().getFileEditorManager()
-								.getMainFileEditorPanel().getAbsolutePath());
-						command = command
-								.replace("$mainFilePath$", AcideMainWindow
-										.getInstance().getFileEditorManager()
-										.getMainFileEditorPanel().getFilePath());
+					// If exists
+					if (mainFileEditorPanel != null) {
+
+						// Replaces the $mainFile$ variable for its real value
+						command = command.replace("$mainFile$",
+								mainFileEditorPanel.getAbsolutePath());
+
+						// Replaces the $mainFilePath$ variable for its real
+						// value
+						command = command.replace("$mainFilePath$",
+								mainFileEditorPanel.getFilePath());
+
+						// Replaces the $mainFileExt$ variable for its real
+						// value
 						command = command.replace("$mainFileExt$",
-								AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.getMainFileEditorPanel()
-										.getFileExtension());
+								mainFileEditorPanel.getFileExtension());
+
+						// Replaces the $mainFileName$ variable for its real
+						// value
 						command = command.replace("$mainFileName$",
-								AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.getMainFileEditorPanel()
+								mainFileEditorPanel
 										.getFileNameWithoutExtension());
 					}
 				} else {
 
 					// Not default project
 
-					// Searches for the MAIN FILE
+					// Searches for the MAIN file into the ACIDE - A
+					// Configurable IDE
+					// project configuration
 					int mainFileEditorPanelIndex = -1;
 					for (int index = 0; index < AcideProjectConfiguration
 							.getInstance().getNumberOfFilesFromList(); index++) {
@@ -571,18 +593,29 @@ public class AcideConsolePanel extends JPanel {
 
 					// If exists
 					if (mainFileEditorPanelIndex != -1) {
+
+						// Replaces the $mainFile$ variable for its real value
 						command = command.replace("$mainFile$",
 								AcideProjectConfiguration.getInstance()
 										.getFileAt(mainFileEditorPanelIndex)
 										.getAbsolutePath());
+
+						// Replaces the $mainFilePath$ variable for its real
+						// value
 						command = command.replace("$mainFilePath$",
 								AcideProjectConfiguration.getInstance()
 										.getFileAt(mainFileEditorPanelIndex)
 										.getRelativePath());
+
+						// Replaces the $mainFileExt$ variable for its real
+						// value
 						command = command.replace("$mainFileExt$",
 								AcideProjectConfiguration.getInstance()
 										.getFileAt(mainFileEditorPanelIndex)
 										.getFileExtension());
+
+						// Replaces the $mainFileName$ variable for its real
+						// value
 						command = command.replace("$mainFileName$",
 								AcideProjectConfiguration.getInstance()
 										.getFileAt(mainFileEditorPanelIndex)
@@ -663,7 +696,7 @@ public class AcideConsolePanel extends JPanel {
 				_consoleProcess.getWriter().flush();
 
 				// Updates the command record
-				updateCommandRecord(_command);
+				updateCommandRecord();
 			}
 		} catch (IOException exception) {
 
@@ -676,38 +709,52 @@ public class AcideConsolePanel extends JPanel {
 	}
 
 	/**
+	 * <p>
 	 * Updates the ACIDE - A Configurable IDE console command record with the
 	 * new executed command.
-	 * 
-	 * @param command
-	 *            executed command.
+	 * </p>
+	 * <p>
+	 * In case the command contains more than one line, the method splits it
+	 * into different lines and stores them as separated commands into the
+	 * console command record.
+	 * </p>
 	 */
-	public void updateCommandRecord(String command) {
+	public void updateCommandRecord() {
 
 		// The blank command does not count
-		if (!command.matches("\n")) {
+		if (!_command.matches("\n")) {
 
-			// If the command record contains the command
-			if (_commandRecord.contains(command)) {
+			// Splits the command in lines
+			String[] lines = _command.split("\n");
 
-				// Decreases the command record maximum index
+			for (int index = 0; index < lines.length; index++) {
+
+				// If the command record contains the command
+				if (_commandRecord.contains(lines[index])) {
+
+					// Decreases the command record maximum index
+					_commandRecord.setMaximumIndex(_commandRecord
+							.getMaximumIndex() - 1);
+
+					// Removes the command from the command record
+					_commandRecord.remove(lines[index]);
+				}
+
+				// Adds the command to the command record
+				_commandRecord.add(lines[index]);
+
+				// Increases the command record maximum index
 				_commandRecord
-						.setMaximumIndex(_commandRecord.getMaximumIndex() - 1);
+						.setMaximumIndex(_commandRecord.getMaximumIndex() + 1);
 
-				// Removes the command from the command record
-				_commandRecord.remove(command);
+				// The current command record current index is the maximum
+				// index
+				_commandRecord
+						.setCurrentIndex(_commandRecord.getMaximumIndex());
 			}
 
-			// Adds the command to the command record
-			_commandRecord.add(command);
-
-			// Increases the command record maximum index
-			_commandRecord
-					.setMaximumIndex(_commandRecord.getMaximumIndex() + 1);
-
-			// The current command record current index is the maximum
-			// index
-			_commandRecord.setCurrentIndex(_commandRecord.getMaximumIndex());
+			// The last command in execution was the last line of it
+			_command = lines[lines.length - 1];
 		}
 	}
 
@@ -737,6 +784,9 @@ public class AcideConsolePanel extends JPanel {
 	 * Resets the ACIDE - A Configurable IDE console panel.
 	 */
 	public void resetConsole() {
+
+		// Kills the previous process
+		executeExitCommand();
 
 		// If the lexicon has to be applied to the console
 		if (AcideWorkbenchConfiguration.getInstance()
@@ -833,6 +883,38 @@ public class AcideConsolePanel extends JPanel {
 
 		// Initializes the document
 		_styledDocument.init();
+	}
+
+	/**
+	 * Shows the ACIDE - A Configurable IDE console panel.
+	 */
+	public void showConsolePanel() {
+
+		// Sets the horizontal split panel divider location to the end
+		AcideMainWindow.getInstance().getHorizontalSplitPane()
+				.setDividerLocation(_size);
+
+		// Hides the console panel
+		AcideMainWindow.getInstance().getHorizontalSplitPane()
+				.getBottomComponent().setVisible(true);
+	}
+
+	/**
+	 * Disposes the ACIDE - A Configurable IDE console panel.
+	 */
+	public void disposeConsolePanel() {
+
+		// Sets the ACIDE - A Configurable IDE console panel size
+		_size = AcideMainWindow.getInstance().getHorizontalSplitPane()
+				.getDividerLocation();
+
+		// Sets the horizontal split panel divider location to 0
+		AcideMainWindow.getInstance().getHorizontalSplitPane()
+				.setDividerLocation(0);
+
+		// Shows the console panel
+		AcideMainWindow.getInstance().getHorizontalSplitPane()
+				.getBottomComponent().setVisible(false);
 	}
 
 	/**
@@ -963,5 +1045,24 @@ public class AcideConsolePanel extends JPanel {
 	 */
 	public AcideLexiconConfiguration getLexiconConfiguration() {
 		return _lexiconConfiguration;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE console panel size.
+	 * 
+	 * @return the ACIDE - A Configurable IDE console panel size.
+	 */
+	public int getConsoleSize() {
+		return _size;
+	}
+
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE console panel size.
+	 * 
+	 * @param size
+	 *            new value to set.
+	 */
+	public void setConsoleSize(int size) {
+		_size = size;
 	}
 }

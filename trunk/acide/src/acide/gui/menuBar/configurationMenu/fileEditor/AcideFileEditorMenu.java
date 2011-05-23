@@ -37,6 +37,7 @@ import javax.swing.JMenuItem;
 import acide.configuration.menu.AcideMenuConfiguration;
 import acide.gui.menuBar.configurationMenu.fileEditor.listeners.AcideAutomaticIndentMenuItemAction;
 import acide.gui.menuBar.configurationMenu.fileEditor.listeners.AcideFileEditorDisplayOptionsMenuItemListener;
+import acide.gui.menuBar.configurationMenu.fileEditor.listeners.AcideMaximumLinesToConsoleMenuItemListener;
 import acide.language.AcideLanguageManager;
 
 /**
@@ -62,17 +63,28 @@ public class AcideFileEditorMenu extends JMenu {
 	 */
 	public static final String AUTOMATIC_INDENT_NAME = "Automatic Indent";
 	/**
+	 * ACIDE - A Configurable IDE file editor menu maximum lines to console menu
+	 * item name.
+	 */
+	public static final String MAXIMUM_LINES_TO_CONSOLE_NAME = "Maximum Lines To Console";
+	/**
 	 * ACIDE - A Configurable IDE file editor menu file editor display options
 	 * menu item image icon.
 	 */
 	private final static ImageIcon CONSOLE_DISPLAY_OPTIONS_IMAGE = new ImageIcon(
 			"./resources/icons/menu/configuration/fileEditor/fileEditorDisplayOptions.png");
 	/**
-	 * ACIDE - A Configurable IDE file editor panel popup menu automatic indent menu item
-	 * image icon.
+	 * ACIDE - A Configurable IDE file editor panel popup menu automatic indent
+	 * menu item image icon.
 	 */
 	private final static ImageIcon AUTOMATIC_INDENT_IMAGE = new ImageIcon(
 			"./resources/icons/menu/configuration/fileEditor/automaticIndent.png");
+	/**
+	 * ACIDE - A Configurable IDE file editor panel popup menu maximum lines to
+	 * console menu item image icon.
+	 */
+	private final static ImageIcon MAXIMUM_LINES_TO_CONSOLE_IMAGE = new ImageIcon(
+			"./resources/icons/menu/configuration/fileEditor/maximumLinesToConsole.png");
 	/**
 	 * ACIDE - A Configurable IDE file editor menu file editor display options
 	 * menu item.
@@ -83,6 +95,12 @@ public class AcideFileEditorMenu extends JMenu {
 	 * menu item.
 	 */
 	private JCheckBoxMenuItem _automaticIndentCheckBoxMenuItem;
+	/**
+	 * ACIDE - A Configurable IDE file editor panel popup menu maximum lines to
+	 * console menu item.
+	 */
+	private JMenuItem _maximumLinesToConsole;
+
 	/**
 	 * Creates a new ACIDE - A Configurable IDE file editor menu.
 	 */
@@ -105,9 +123,12 @@ public class AcideFileEditorMenu extends JMenu {
 
 		// Adds the file editor display options menu item to the menu
 		add(_fileEditorDisplayOptionsMenuItem);
-		
+
 		// Adds the automatic indent check box menu item to the menu
 		add(_automaticIndentCheckBoxMenuItem);
+
+		// Adds the maximum lines to console menu item to the menu
+		add(_maximumLinesToConsole);
 	}
 
 	/**
@@ -122,12 +143,19 @@ public class AcideFileEditorMenu extends JMenu {
 		// Sets the file editor display options menu item name
 		_fileEditorDisplayOptionsMenuItem
 				.setName(FILE_EDITOR_DISPLAY_OPTIONS_NAME);
-		
+
 		// Creates the automatic indent check box menu item
-		_automaticIndentCheckBoxMenuItem = new JCheckBoxMenuItem(AUTOMATIC_INDENT_IMAGE);
-		
+		_automaticIndentCheckBoxMenuItem = new JCheckBoxMenuItem(
+				AUTOMATIC_INDENT_IMAGE);
+
 		// Sets the automatic indent check box menu item name
 		_automaticIndentCheckBoxMenuItem.setName(AUTOMATIC_INDENT_NAME);
+
+		// Creates the maximum lines to console menu item
+		_maximumLinesToConsole = new JMenuItem(MAXIMUM_LINES_TO_CONSOLE_IMAGE);
+
+		// Creates the maximum lines to console menu item name
+		_maximumLinesToConsole.setName(MAXIMUM_LINES_TO_CONSOLE_NAME);
 	}
 
 	/**
@@ -139,10 +167,14 @@ public class AcideFileEditorMenu extends JMenu {
 		// Sets the file editor display options menu item text
 		_fileEditorDisplayOptionsMenuItem.setText(AcideLanguageManager
 				.getInstance().getLabels().getString("s1041"));
-		
+
 		// Sets the automatic indent check box menu item text
 		_automaticIndentCheckBoxMenuItem.setText(AcideLanguageManager
 				.getInstance().getLabels().getString("s1097"));
+
+		// Sets the maximum lines to console menu item text
+		_maximumLinesToConsole.setText(AcideLanguageManager.getInstance()
+				.getLabels().getString("s2007"));
 	}
 
 	/**
@@ -156,12 +188,16 @@ public class AcideFileEditorMenu extends JMenu {
 		_fileEditorDisplayOptionsMenuItem
 				.setVisible(AcideMenuConfiguration.getInstance()
 						.getIsDisplayed(FILE_EDITOR_DISPLAY_OPTIONS_NAME));
-		
+
 		// Sets the automatic indent check box menu item to visible or not
 		// visible
-		_automaticIndentCheckBoxMenuItem
-				.setVisible(AcideMenuConfiguration.getInstance()
-						.getIsDisplayed(AUTOMATIC_INDENT_NAME));
+		_automaticIndentCheckBoxMenuItem.setVisible(AcideMenuConfiguration
+				.getInstance().getIsDisplayed(AUTOMATIC_INDENT_NAME));
+
+		// Sets the maximum lines to console menu item to visible or not
+		// visible
+		_maximumLinesToConsole.setVisible(AcideMenuConfiguration.getInstance()
+				.getIsDisplayed(MAXIMUM_LINES_TO_CONSOLE_NAME));
 	}
 
 	/**
@@ -176,8 +212,12 @@ public class AcideFileEditorMenu extends JMenu {
 		// Sets the automatic indent check box menu item action listener
 		_automaticIndentCheckBoxMenuItem
 				.addActionListener(new AcideAutomaticIndentMenuItemAction());
+	
+		// Sets the maximum lines to console menu item action listener
+		_maximumLinesToConsole
+				.addActionListener(new AcideMaximumLinesToConsoleMenuItemListener());
 	}
-
+	
 	/**
 	 * Returns the ACIDE - A Configurable IDE file editor menu file editor
 	 * display options menu item.
@@ -188,7 +228,7 @@ public class AcideFileEditorMenu extends JMenu {
 	public JMenuItem getFileEditorDisplayOptionsMenuItem() {
 		return _fileEditorDisplayOptionsMenuItem;
 	}
-	
+
 	/**
 	 * Returns the ACIDE - A Configurable IDE file editor menu file editor
 	 * automatic indent check box menu item.
@@ -198,5 +238,16 @@ public class AcideFileEditorMenu extends JMenu {
 	 */
 	public JCheckBoxMenuItem getAutomaticIndentCheckBoxMenuItem() {
 		return _automaticIndentCheckBoxMenuItem;
+	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE file editor menu maximum lines to
+	 * console menu item.
+	 * 
+	 * @return the ACIDE - A Configurable IDE file editor menu maximum lines to
+	 *         console menu item.
+	 */
+	public JMenuItem getMaximumLinesToConsoleMenuItem() {
+		return _maximumLinesToConsole;
 	}
 }

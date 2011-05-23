@@ -878,14 +878,6 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 		// Expands the explorer tree
 		AcideMainWindow.getInstance().getExplorerPanel().expandTree();
 
-		// If the show explorer panel menu item is not selected
-		if (!AcideMainWindow.getInstance().getMenu().getViewMenu()
-				.getShowExplorerPanelCheckBoxMenuItem().isSelected())
-
-			// Shows the explorer panel
-			AcideMainWindow.getInstance().getExplorerPanel()
-					.showExplorerPanel();
-
 		// Sets the show explorer panel check box menu item as
 		// selected
 		AcideMainWindow.getInstance().getMenu().getViewMenu()
@@ -1108,7 +1100,7 @@ public class AcideNewProjectConfigurationWindow extends JFrame {
 					
 					// Sets the is not the first save flag in the ACIDE - A
 					// Configurable IDE project configuration
-					AcideProjectConfiguration.getInstance().setFirstSave(true);
+					AcideProjectConfiguration.getInstance().setIsFirstSave(true);
 
 					// The ACIDE - A Configurable IDE project configuration has not
 					// been modified yet

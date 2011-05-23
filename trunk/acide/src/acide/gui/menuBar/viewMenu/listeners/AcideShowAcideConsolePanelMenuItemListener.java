@@ -35,46 +35,40 @@ import acide.gui.mainWindow.AcideMainWindow;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**																
+/**
  * ACIDE - A Configurable IDE view menu show console panel menu item listener.
- *					
- * @version 0.8		
- * @see ActionListener																												
+ * 
+ * @version 0.8
+ * @see ActionListener
  */
-public class AcideShowAcideConsolePanelMenuItemListener implements ActionListener{
-	
+public class AcideShowAcideConsolePanelMenuItemListener implements
+		ActionListener {
+
 	/*
 	 * (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
-		
+
 		// If the show console panel check box menu item is selected
-		if (AcideMainWindow.getInstance().getMenu().getViewMenu().getShowConsolePanelCheckBoxMenuItem().isSelected()) {
-			
-			// Sets the horizontal split panel divider location to the end
-			AcideMainWindow.getInstance().getHorizontalSplitPane().setDividerLocation(AcideMainWindow.getInstance().getMenu().getViewMenu().getConsoleSize());
-			
-			// Hides the console panel
-			AcideMainWindow.getInstance().getHorizontalSplitPane().getBottomComponent()
-					.setVisible(true);
-		} else {
-			
-			// Sets the console size
-			AcideMainWindow.getInstance().getMenu().getViewMenu().setConsoleSize(AcideMainWindow.getInstance().getHorizontalSplitPane().getDividerLocation());
-			
-			// Sets the horizontal split panel divider location to 0
-			AcideMainWindow.getInstance().getHorizontalSplitPane().setDividerLocation(0);
-			
+		if (AcideMainWindow.getInstance().getMenu().getViewMenu()
+				.getShowConsolePanelCheckBoxMenuItem().isSelected()) {
+
 			// Shows the console panel
-			AcideMainWindow.getInstance().getHorizontalSplitPane().getBottomComponent()
-					.setVisible(false);
+			AcideMainWindow.getInstance().getConsolePanel().showConsolePanel();
+		} else {
+
+			// Disposes the console panel
+			AcideMainWindow.getInstance().getConsolePanel()
+					.disposeConsolePanel();
 		}
-		
+
 		// If it is not the default project
 		if (!AcideProjectConfiguration.getInstance().isDefaultProject())
-			
+
 			// The project has been modified
 			AcideProjectConfiguration.getInstance().setIsModified(true);
 	}

@@ -94,7 +94,7 @@ public class AcideSaveProjectMenuItemListener implements ActionListener {
 				// configuration
 				// into the project configuration
 				saveMainWindowConfiguration();
-				
+
 				// Saves the configuration into the file
 				String fileContent = AcideProjectConfiguration.getInstance()
 						.save();
@@ -137,12 +137,14 @@ public class AcideSaveProjectMenuItemListener implements ActionListener {
 	 */
 	public void saveMainWindowConfiguration() {
 
-		// Sets the is explorer panel showed flag as true
+		// Sets the is explorer panel showed flag as  as the value of the show
+		// explorer panel check box menu item
 		AcideProjectConfiguration.getInstance().setIsExplorerPanelShowed(
 				AcideMainWindow.getInstance().getMenu().getViewMenu()
 						.getShowExplorerPanelCheckBoxMenuItem().isSelected());
 
-		// Sets the is console panel showed flag as true
+		// Sets the is console panel showed flag as the value of the show
+		// console panel check box menu item
 		AcideProjectConfiguration.getInstance().setIsConsolePanelShowed(
 				AcideMainWindow.getInstance().getMenu().getViewMenu()
 						.getShowConsolePanelCheckBoxMenuItem().isSelected());

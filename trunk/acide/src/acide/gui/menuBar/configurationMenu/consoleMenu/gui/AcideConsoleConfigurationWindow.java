@@ -451,6 +451,24 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 	}
 
 	/**
+	 * Closes the ACIDE - A Configurable IDE console configuration window.
+	 */
+	private void closeWindow() {
+
+		// Set the main window enabled again
+		AcideMainWindow.getInstance().setEnabled(true);
+
+		// Closes the window
+		dispose();
+
+		// Brings the main window to the front
+		AcideMainWindow.getInstance().setAlwaysOnTop(true);
+
+		// But not permanently
+		AcideMainWindow.getInstance().setAlwaysOnTop(false);
+	}
+
+	/**
 	 * ACIDE - A Configurable IDE console configuration window apply button
 	 * action listener.
 	 * 
@@ -580,6 +598,9 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 							AcideNewProjectConfigurationWindow.getInstance()
 									.setAreShellPathsDefined(true);
 
+						// Closes the window
+						closeWindow();
+						
 					} else {
 
 						// Displays an error message
@@ -651,6 +672,9 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 						// The paths have been defined
 						AcideNewProjectConfigurationWindow.getInstance()
 								.setAreShellPathsDefined(true);
+					
+					// Closes the window
+					closeWindow();
 				}
 			} catch (Exception exception) {
 
@@ -658,18 +682,6 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 				AcideLog.getLog().error(exception.getMessage());
 				exception.printStackTrace();
 			}
-
-			// Set the main window enabled again
-			AcideMainWindow.getInstance().setEnabled(true);
-
-			// Closes the window
-			dispose();
-
-			// Brings the main window to the front
-			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-
-			// But not permanently
-			AcideMainWindow.getInstance().setAlwaysOnTop(false);
 		}
 	}
 
@@ -692,17 +704,8 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Set the main window enabled again
-			AcideMainWindow.getInstance().setEnabled(true);
-
 			// Closes the window
-			dispose();
-
-			// Brings the main window to the front
-			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-
-			// But not permanently
-			AcideMainWindow.getInstance().setAlwaysOnTop(false);
+			closeWindow();
 		}
 	}
 
@@ -843,17 +846,8 @@ public class AcideConsoleConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Set the main window enabled again
-			AcideMainWindow.getInstance().setEnabled(true);
-
 			// Closes the window
-			dispose();
-
-			// Brings the main window to the front
-			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-
-			// But not permanently
-			AcideMainWindow.getInstance().setAlwaysOnTop(false);
+			closeWindow();
 		}
 	}
 }

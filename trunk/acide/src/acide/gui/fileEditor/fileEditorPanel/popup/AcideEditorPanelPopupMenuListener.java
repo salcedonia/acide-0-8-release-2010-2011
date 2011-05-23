@@ -111,12 +111,12 @@ public class AcideEditorPanelPopupMenuListener extends MouseAdapter {
 
 				if (!selectedFileEditorPanel.isMainFile())
 					// Enables the set main menu item
-					selectedFileEditorPanel.getPopupMenu().getSetMainFileMenuItem()
-							.setEnabled(true);
+					selectedFileEditorPanel.getPopupMenu()
+							.getSetMainFileMenuItem().setEnabled(true);
 				if (selectedFileEditorPanel.isMainFile())
 					// Enables the unset main menu item
-					selectedFileEditorPanel.getPopupMenu().getUnsetMainFileMenuItem()
-							.setEnabled(true);
+					selectedFileEditorPanel.getPopupMenu()
+							.getUnsetMainFileMenuItem().setEnabled(true);
 				if (!selectedFileEditorPanel.isCompilableFile()
 						|| (selectedFileEditorPanel.isCompilableFile() && selectedFileEditorPanel
 								.isMainFile()))
@@ -139,38 +139,42 @@ public class AcideEditorPanelPopupMenuListener extends MouseAdapter {
 										.getSelectedFileEditorPanelIndex())
 						.getAbsolutePath();
 
-				// Searches for the file in the project configuration list
-				int fileProjectIndex = AcideProjectConfiguration.getInstance()
-						.getIndexOfFile(fileAbsolutePath);
+				// If it is not the default project
+				if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
 
-				// If belongs to the project configuration
-				if (fileProjectIndex != -1) {
+					// Searches for the file in the project configuration list
+					int fileProjectIndex = AcideProjectConfiguration
+							.getInstance().getIndexOfFile(fileAbsolutePath);
 
-					// Enables the delete file menu item
-					selectedFileEditorPanel.getPopupMenu().getDeleteFileMenuItem()
-							.setEnabled(true);
+					// If belongs to the project configuration
+					if (fileProjectIndex != -1) {
 
-					// Enables the remove file menu item
-					selectedFileEditorPanel.getPopupMenu().getRemoveFileMenuItem()
-							.setEnabled(true);
+						// Enables the delete file menu item
+						selectedFileEditorPanel.getPopupMenu()
+								.getDeleteFileMenuItem().setEnabled(true);
 
-					// Enables the add file menu item
-					selectedFileEditorPanel.getPopupMenu().getAddFileMenuItem()
-							.setEnabled(false);
+						// Enables the remove file menu item
+						selectedFileEditorPanel.getPopupMenu()
+								.getRemoveFileMenuItem().setEnabled(true);
 
-				} else {
+						// Enables the add file menu item
+						selectedFileEditorPanel.getPopupMenu()
+								.getAddFileMenuItem().setEnabled(false);
 
-					// Disables the remove file menu item
-					selectedFileEditorPanel.getPopupMenu().getRemoveFileMenuItem()
-							.setEnabled(false);
+					} else {
 
-					// Enables the delete file menu item
-					selectedFileEditorPanel.getPopupMenu().getDeleteFileMenuItem()
-							.setEnabled(false);
+						// Disables the remove file menu item
+						selectedFileEditorPanel.getPopupMenu()
+								.getRemoveFileMenuItem().setEnabled(false);
 
-					// Disables the add file menu item
-					selectedFileEditorPanel.getPopupMenu().getAddFileMenuItem()
-							.setEnabled(true);
+						// Enables the delete file menu item
+						selectedFileEditorPanel.getPopupMenu()
+								.getDeleteFileMenuItem().setEnabled(false);
+
+						// Disables the add file menu item
+						selectedFileEditorPanel.getPopupMenu()
+								.getAddFileMenuItem().setEnabled(true);
+					}
 				}
 			}
 
@@ -195,16 +199,20 @@ public class AcideEditorPanelPopupMenuListener extends MouseAdapter {
 	public void disableMenuItems(AcideFileEditorPanel selectedFileEditorPanel) {
 
 		// Disables the copy menu item
-		selectedFileEditorPanel.getPopupMenu().getCopyMenuItem().setEnabled(false);
+		selectedFileEditorPanel.getPopupMenu().getCopyMenuItem()
+				.setEnabled(false);
 
 		// Disables the cut menu item
-		selectedFileEditorPanel.getPopupMenu().getCutMenuItem().setEnabled(false);
+		selectedFileEditorPanel.getPopupMenu().getCutMenuItem()
+				.setEnabled(false);
 
 		// Disables the paste menu item
-		selectedFileEditorPanel.getPopupMenu().getPasteMenuItem().setEnabled(false);
+		selectedFileEditorPanel.getPopupMenu().getPasteMenuItem()
+				.setEnabled(false);
 
 		// Disables the add file menu item
-		selectedFileEditorPanel.getPopupMenu().getAddFileMenuItem().setEnabled(false);
+		selectedFileEditorPanel.getPopupMenu().getAddFileMenuItem()
+				.setEnabled(false);
 
 		// Disables the remove file menu item
 		selectedFileEditorPanel.getPopupMenu().getRemoveFileMenuItem()

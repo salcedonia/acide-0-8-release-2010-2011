@@ -79,6 +79,11 @@ public class AcideFileEditorConfiguration {
 	 * ACIDE - A Configurable IDE file editor configuration automatic indent.
 	 */
 	private boolean _automaticIndent;
+	/**
+	 * ACIDE - A Configurable IDE file editor configuration maximum lines to
+	 * send to the console.
+	 */
+	private int _maximumLinesToConsole;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE file editor configuration.
@@ -96,6 +101,9 @@ public class AcideFileEditorConfiguration {
 
 		// The automatic indent is activated
 		_automaticIndent = true;
+
+		// Sets the maximum lines to send to the console
+		_maximumLinesToConsole = 30;
 	}
 
 	/**
@@ -208,16 +216,16 @@ public class AcideFileEditorConfiguration {
 			// Sets the edition mode
 			_editionMode = AcideMainWindow.getInstance().getFileEditorManager()
 					.getSelectedFileEditorPanel().getEditionMode();
-		
+
 			// Sets the selected file editor panel name
 			_selectedFileEditorPanelName = AcideMainWindow.getInstance()
 					.getFileEditorManager().getSelectedFileEditorPanel()
 					.getFileNameWithExtension();
-		}else{
-			
+		} else {
+
 			// Sets the selected file editor panel name
 			_selectedFileEditorPanelName = "";
-		}	
+		}
 	}
 
 	/**
@@ -442,4 +450,27 @@ public class AcideFileEditorConfiguration {
 	public boolean getAutomaticIndent() {
 		return _automaticIndent;
 	}
+
+	/**
+	 * Returns the ACIDE - A Configurable IDE file editor configuration maximum
+	 * lines to send to the console.
+	 * 
+	 * @return the ACIDE - A Configurable IDE file editor configuration maximum
+	 *         lines to send to the console.
+	 */
+	public int getMaximumLinesToConsole() {
+		return _maximumLinesToConsole;
+	}
+
+	/**
+	 * Sets a new value to the ACIDE - A Configurable IDE file editor maximum
+	 * lines to send to the console.
+	 * 
+	 * @param maximumLinesToConsole
+	 *            new value to set.
+	 */
+	public void setMaximumLinesToConsole(int maximumLinesToConsole) {
+		_maximumLinesToConsole = maximumLinesToConsole;
+	}
+
 }

@@ -78,29 +78,30 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 	private static final ImageIcon ICON = new ImageIcon(
 			"./resources/images/icon.png");
 	/**
-	 * ACIDE - A Configurable IDE compiler configuration window shell name text
-	 * field.
+	 * ACIDE - A Configurable IDE compiler configuration window compiler path
+	 * text field.
 	 */
-	private JTextField _shellNameTextField;
+	private JTextField _compilerPathTextField;
 	/**
-	 * ACIDE - A Configurable IDE compiler configuration window examine path
-	 * button.
+	 * ACIDE - A Configurable IDE compiler configuration window examine compiler
+	 * path button.
 	 */
-	private JButton _examinePathButton;
+	private JButton _examineCompilerPathButton;
 	/**
-	 * ACIDE - A Configurable IDE compiler configuration window arguments text
-	 * field.
+	 * ACIDE - A Configurable IDE compiler configuration window compiler
+	 * arguments text field.
 	 */
-	private JTextField _argumentsTextField;
+	private JTextField _compilerArgumentsTextField;
 	/**
-	 * ACIDE - A Configurable IDE compiler configuration window shell name
+	 * ACIDE - A Configurable IDE compiler configuration window compiler path
 	 * label.
 	 */
-	private JLabel _shellNameLabel;
+	private JLabel _compilerPathLabel;
 	/**
-	 * ACIDE - A Configurable IDE compiler configuration window arguments label.
+	 * ACIDE - A Configurable IDE compiler configuration window compiler
+	 * arguments label.
 	 */
-	private JLabel _argumentsLabel;
+	private JLabel _compilerArgumentsLabel;
 	/**
 	 * ACIDE - A Configurable IDE compiler configuration window configuration
 	 * panel.
@@ -115,32 +116,30 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 	 */
 	private JPanel _buttonPanel;
 	/**
-	 * ACIDE - A Configurable IDE compiler configuration window compiler check
-	 * box.
+	 * ACIDE - A Configurable IDE compiler configuration window compile all
+	 * files check box.
 	 */
-	private JCheckBox _compilerCheckBox;
+	private JCheckBox _compileAllFilesCheckBox;
 	/**
-	 * ACIDE - A Configurable IDE compiler configuration window check label.
+	 * ACIDE - A Configurable IDE compiler configuration window file separator
+	 * label.
 	 */
-	private JLabel _checkLabel;
+	private JLabel _fileSeparatorLabel;
 	/**
-	 * ACIDE - A Configurable IDE compiler configuration window separator label.
+	 * ACIDE - A Configurable IDE compiler configuration window file separator
+	 * text field.
 	 */
-	private JLabel _separatorLabel;
+	private JTextField _fileSeparatorTextField;
 	/**
-	 * ACIDE - A Configurable IDE compiler configuration window separator text
-	 * field.
+	 * ACIDE - A Configurable IDE compiler configuration window file extension
+	 * label.
 	 */
-	private JTextField _separatorTextField;
+	private JLabel _fileExtensionLabel;
 	/**
-	 * ACIDE - A Configurable IDE compiler configuration window extension label.
+	 * ACIDE - A Configurable IDE compiler configuration window file extension
+	 * text field.
 	 */
-	private JLabel _extensionLabel;
-	/**
-	 * ACIDE - A Configurable IDE compiler configuration window extension text
-	 * field.
-	 */
-	private JTextField _extensionTextField;
+	private JTextField _fileExtensionTextField;
 	/**
 	 * ACIDE - A Configurable IDE compiler configuration window accept button.
 	 */
@@ -156,14 +155,6 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 	public AcideCompilerConfigurationWindow() {
 
 		super();
-
-		// The compiler has not been checked yet
-		AcideProjectConfiguration.getInstance().setCheckCompiler(false);
-
-		// Updates the log
-		AcideLog.getLog().info(
-				AcideLanguageManager.getInstance().getLabels()
-						.getString("s646"));
 
 		// Builds the window components
 		buildComponents();
@@ -183,6 +174,11 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 	 * components.
 	 */
 	private void buildComponents() {
+
+		// Updates the log
+		AcideLog.getLog().info(
+				AcideLanguageManager.getInstance().getLabels()
+						.getString("s646"));
 
 		// Creates the configuration panel
 		_configurationPanel = new JPanel(new GridBagLayout());
@@ -205,74 +201,96 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 		// Creates the button panel
 		_buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-		// Creates the shell name label
-		_shellNameLabel = new JLabel(AcideLanguageManager.getInstance()
+		// Creates the compiler path label
+		_compilerPathLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s606"));
 
-		// Creates the shell name text field
-		_shellNameTextField = new JTextField();
+		if (AcideProjectConfiguration.getInstance().getCompilerPath()
+				.matches("null"))
+			// Creates the compiler path text field
+			_compilerPathTextField = new JTextField();
+		else
+			// Creates the compiler path text field
+			_compilerPathTextField = new JTextField(AcideProjectConfiguration
+					.getInstance().getCompilerPath());
 
-		// Sets the shell name text field
-		_shellNameTextField.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s607"));
+		// Sets the compiler path text field
+		_compilerPathTextField.setToolTipText(AcideLanguageManager
+				.getInstance().getLabels().getString("s607"));
 
-		// Creates the arguments label
-		_argumentsLabel = new JLabel(AcideLanguageManager.getInstance()
+		// Creates the compiler arguments label
+		_compilerArgumentsLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s609"));
 
-		// Creates the arguments text field
-		_argumentsTextField = new JTextField();
+		if (AcideProjectConfiguration.getInstance().getCompilerArguments()
+				.matches("null"))
 
-		// Sets the arguments text field tool tip text
-		_argumentsTextField.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s610"));
+			// Creates the compiler arguments text field
+			_compilerArgumentsTextField = new JTextField();
+		else
+			// Creates the compiler arguments text field
+			_compilerArgumentsTextField = new JTextField(
+					AcideProjectConfiguration.getInstance()
+							.getCompilerArguments());
 
-		// Creates the check label
-		_checkLabel = new JLabel(AcideLanguageManager.getInstance().getLabels()
-				.getString("s650"));
+		// Sets the compiler arguments text field tool tip text
+		_compilerArgumentsTextField.setToolTipText(AcideLanguageManager
+				.getInstance().getLabels().getString("s610"));
 
-		// Creates the extension label
-		_extensionLabel = new JLabel(AcideLanguageManager.getInstance()
+		// Creates the file extension label
+		_fileExtensionLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s653"));
 
-		// Creates the extension text field
-		_extensionTextField = new JTextField(7);
+		if (AcideProjectConfiguration.getInstance().getFileExtension()
+				.matches("null"))
+			// Creates the file extension text field
+			_fileExtensionTextField = new JTextField(7);
+		else
+			// Creates the file extension text field
+			_fileExtensionTextField = new JTextField(AcideProjectConfiguration
+					.getInstance().getFileExtension(), 7);
 
-		// Sets the extension text field
-		_extensionTextField.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s652"));
+		// Sets the file extension text field
+		_fileExtensionTextField.setToolTipText(AcideLanguageManager
+				.getInstance().getLabels().getString("s652"));
 
-		// Creates the compiler check box
-		_compilerCheckBox = new JCheckBox();
+		// Creates the compile all files check box
+		_compileAllFilesCheckBox = new JCheckBox(AcideLanguageManager
+				.getInstance().getLabels().getString("s650"),
+				AcideProjectConfiguration.getInstance().getCompileAllFiles());
 
-		// Sets the compiler check box tool tip text
-		_compilerCheckBox.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s650"));
+		// Sets the compile all files check box tool tip text
+		_compileAllFilesCheckBox.setToolTipText(AcideLanguageManager
+				.getInstance().getLabels().getString("s650"));
 
-		// Creates the separator label
-		_separatorLabel = new JLabel(AcideLanguageManager.getInstance()
+		// Creates the file separator label
+		_fileSeparatorLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s649"));
 
-		// Creates the separator text field
-		_separatorTextField = new JTextField(1);
+		if (AcideProjectConfiguration.getInstance().getFileSeparator()
+				.matches("null"))
 
-		// Sets the separator text field tool tip text
-		_separatorTextField.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s651"));
+			// Creates the file separator text field
+			_fileSeparatorTextField = new JTextField(1);
+		else
+			// Creates the file separator text field
+			_fileSeparatorTextField = new JTextField(AcideProjectConfiguration
+					.getInstance().getFileSeparator(), 1);
 
-		// Disables the separator text field
-		_separatorTextField.setEnabled(false);
+		// Sets the file separator text field tool tip text
+		_fileSeparatorTextField.setToolTipText(AcideLanguageManager
+				.getInstance().getLabels().getString("s651"));
 
-		// Creates the examine path button
-		_examinePathButton = new JButton(AcideLanguageManager.getInstance()
-				.getLabels().getString("s596"));
+		// Creates the examine compiler path button
+		_examineCompilerPathButton = new JButton(AcideLanguageManager
+				.getInstance().getLabels().getString("s596"));
 
-		// Sets the examine path button horizontal alignment as center
-		_examinePathButton.setHorizontalAlignment(JButton.CENTER);
+		// Sets the examine compiler path button horizontal alignment as center
+		_examineCompilerPathButton.setHorizontalAlignment(JButton.CENTER);
 
-		// Sets the examine path button tool tip text
-		_examinePathButton.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s641"));
+		// Sets the examine compiler path button tool tip text
+		_examineCompilerPathButton.setToolTipText(AcideLanguageManager
+				.getInstance().getLabels().getString("s641"));
 
 		// Creates the accept button
 		_acceptButton = new JButton(AcideLanguageManager.getInstance()
@@ -319,33 +337,33 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 
-		// Adds the shell name label to the configuration panel
-		_configurationPanel.add(_shellNameLabel, constraints);
+		// Adds the compiler path label to the configuration panel
+		_configurationPanel.add(_compilerPathLabel, constraints);
 
 		constraints.gridx = 1;
 		constraints.ipadx = 200;
 
-		// Adds the shell name text field to the configuration panel
-		_configurationPanel.add(_shellNameTextField, constraints);
+		// Adds the compiler path text field to the configuration panel
+		_configurationPanel.add(_compilerPathTextField, constraints);
 
 		constraints.ipadx = 0;
 		constraints.gridx = 2;
 		constraints.ipadx = 0;
 
-		// Adds the examine path button to the configuration panel
-		_configurationPanel.add(_examinePathButton, constraints);
+		// Adds the examine compiler path button to the configuration panel
+		_configurationPanel.add(_examineCompilerPathButton, constraints);
 
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 
-		// Adds the arguments label to the configuration panel
-		_configurationPanel.add(_argumentsLabel, constraints);
+		// Adds the compiler arguments label to the configuration panel
+		_configurationPanel.add(_compilerArgumentsLabel, constraints);
 
 		constraints.gridx = 1;
 		constraints.ipadx = 150;
 
-		// Adds the arguments text field to the configuration panel
-		_configurationPanel.add(_argumentsTextField, constraints);
+		// Adds the compiler arguments text field to the configuration panel
+		_configurationPanel.add(_compilerArgumentsTextField, constraints);
 
 		constraints.ipadx = 0;
 		constraints.gridx = 0;
@@ -354,37 +372,35 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 		// Adds the configuration panel to the window
 		add(_configurationPanel, constraints);
 
-		// Adds the check label to the options panel
-		optionsPanel.add(_checkLabel, constraints);
+		constraints.gridwidth = 4;
 
-		constraints.gridx = 1;
+		// Adds the compile all files check box to the options panel
+		optionsPanel.add(_compileAllFilesCheckBox, constraints);
 
-		// Adds the compiler check box to the options panel
-		optionsPanel.add(_compilerCheckBox, constraints);
-
+		constraints.gridwidth = 1;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 
-		// Adds the separator label to the options panel
-		optionsPanel.add(_separatorLabel, constraints);
+		// Adds the file separator label to the options panel
+		optionsPanel.add(_fileSeparatorLabel, constraints);
 
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 
-		// Adds the separator text field to the options panel
-		optionsPanel.add(_separatorTextField, constraints);
+		// Adds the file separator text field to the options panel
+		optionsPanel.add(_fileSeparatorTextField, constraints);
 
 		constraints.gridx = 2;
 		constraints.gridy = 1;
 
-		// Adds the extension label to the options panel
-		optionsPanel.add(_extensionLabel, constraints);
+		// Adds the file extension label to the options panel
+		optionsPanel.add(_fileExtensionLabel, constraints);
 
 		constraints.gridx = 3;
 		constraints.gridy = 1;
 
-		// Adds the extension text field to the options panel
-		optionsPanel.add(_extensionTextField, constraints);
+		// Adds the file extension text field to the options panel
+		optionsPanel.add(_fileExtensionTextField, constraints);
 
 		constraints.gridx = 0;
 		constraints.gridy = 1;
@@ -445,21 +461,42 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 		// Sets the cancel button action listener
 		_cancelButton.addActionListener(new CancelButtonAction());
 
-		// Sets the examine path button action listener
-		_examinePathButton.addActionListener(new ExaminePathButtonAction());
+		// Sets the examine compiler path button action listener
+		_examineCompilerPathButton
+				.addActionListener(new ExamineCompilerPathButtonAction());
 
-		// Sets the separator text field action listener
-		_separatorTextField.addActionListener(new SeparatorTextFieldAction());
+		// Sets the file separator text field action listener
+		_fileSeparatorTextField
+				.addActionListener(new FileSeparatorTextFieldAction());
 
-		// Sets the compiler check box action listener
-		_compilerCheckBox
-				.addActionListener(new CompilerCheckBoxActionListener());
+		// Sets the compile all files check box action listener
+		_compileAllFilesCheckBox
+				.addActionListener(new CompileAllFilesCheckBoxActionListener());
 
 		// Adds the keyboard listener
 		addKeyListener(new AcideCompilerConfigurationWindowKeyListener());
 
 		// Sets the window closing listener
 		addWindowListener(new AcideWindowClosingListener());
+	}
+
+	/**
+	 * Closes the ACIDE - A Configurable IDE compiler configuration window
+	 * components
+	 */
+	private void closeWindow() {
+
+		// Enable the main window
+		AcideMainWindow.getInstance().setEnabled(true);
+
+		// Closes this window
+		dispose();
+
+		// Brings the main window to the front
+		AcideMainWindow.getInstance().setAlwaysOnTop(true);
+
+		// But not permanently
+		AcideMainWindow.getInstance().setAlwaysOnTop(false);
 	}
 
 	/**
@@ -480,21 +517,28 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Sets the compiler path
+			// Sets the compiler path text field in the ACIDE - A Configurable
+			// IDE
+			// project configuration
 			AcideProjectConfiguration.getInstance().setCompilerPath(
-					_shellNameTextField.getText());
+					_compilerPathTextField.getText());
 
-			// Sets the compiler arguments
+			// Sets the compiler arguments in the ACIDE - A Configurable IDE
+			// project configuration
 			AcideProjectConfiguration.getInstance().setCompilerArguments(
-					_argumentsTextField.getText());
+					_compilerArgumentsTextField.getText());
 
-			// Sets the extension text field
+			// Sets the file extension text field in the ACIDE - A Configurable
+			// IDE
+			// project configuration
 			AcideProjectConfiguration.getInstance().setFileExtension(
-					_extensionTextField.getText());
+					_fileExtensionTextField.getText());
 
-			// Sets the separator text field
-			AcideProjectConfiguration.getInstance().setSeparatorFile(
-					_separatorTextField.getText());
+			// Sets the file separator text field in the ACIDE - A Configurable
+			// IDE
+			// project configuration
+			AcideProjectConfiguration.getInstance().setFileSeparator(
+					_fileSeparatorTextField.getText());
 
 			// If the new project configuration window is visible
 			if (AcideNewProjectConfigurationWindow.getInstance().isVisible())
@@ -502,18 +546,17 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 				// The compiler paths are defined
 				AcideNewProjectConfigurationWindow.getInstance()
 						.setAreCompilerPathsDefined(true);
-
-			// Enables the main window
-			AcideMainWindow.getInstance().setEnabled(true);
-
+			else{
+				
+				// If it is not the default project
+				if(!AcideProjectConfiguration.getInstance().isDefaultProject())
+					
+					// The project configuration has been modified
+					AcideProjectConfiguration.getInstance().setIsModified(true);
+			}
+				
 			// Closes the window
-			dispose();
-
-			// Brings the main window to the front
-			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-
-			// But not permanently
-			AcideMainWindow.getInstance().setAlwaysOnTop(false);
+			closeWindow();
 		}
 	}
 
@@ -535,28 +578,19 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Enables the main window
-			AcideMainWindow.getInstance().setEnabled(true);
-
 			// Closes the window
-			dispose();
-
-			// Brings the main window to the front
-			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-
-			// But not permanently
-			AcideMainWindow.getInstance().setAlwaysOnTop(false);
+			closeWindow();
 		}
 	}
 
 	/**
-	 * ACIDE - A Configurable IDE compiler configuration window examine path
-	 * button action listener.
+	 * ACIDE - A Configurable IDE compiler configuration window examine compiler
+	 * path button action listener.
 	 * 
 	 * @version 0.8
 	 * @see ActionListener
 	 */
-	class ExaminePathButtonAction implements ActionListener {
+	class ExamineCompilerPathButtonAction implements ActionListener {
 
 		/*
 		 * (non-Javadoc)
@@ -582,19 +616,19 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 
 			if (absolutePath != null)
 
-				// Updates the shell name text field with the absolute path
-				_shellNameTextField.setText(absolutePath);
+				// Updates the compiler path text field with the absolute path
+				_compilerPathTextField.setText(absolutePath);
 		}
 	}
 
 	/**
-	 * ACIDE - A Configurable IDE compiler configuration window separator text
-	 * field action listener.
+	 * ACIDE - A Configurable IDE compiler configuration window file separator
+	 * text field action listener.
 	 * 
 	 * @version 0.8
 	 * @see ActionListener
 	 */
-	class SeparatorTextFieldAction implements ActionListener {
+	class FileSeparatorTextFieldAction implements ActionListener {
 
 		/*
 		 * (non-Javadoc)
@@ -605,20 +639,21 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Sets the separator text field text from the project configuration
-			AcideProjectConfiguration.getInstance().setSeparatorFile(
-					_separatorTextField.getText());
+			// Sets the separator text field text in the ACIDE - A Configurable
+			// IDE project configuration
+			AcideProjectConfiguration.getInstance().setFileSeparator(
+					_fileSeparatorTextField.getText());
 		}
 	}
 
 	/**
-	 * ACIDE - A Configurable IDE compiler configuration window compiler check
-	 * box action listener.
+	 * ACIDE - A Configurable IDE compiler configuration window compile all
+	 * files check box action listener.
 	 * 
 	 * @version 0.8
 	 * @see ActionListener
 	 */
-	class CompilerCheckBoxActionListener implements ActionListener {
+	class CompileAllFilesCheckBoxActionListener implements ActionListener {
 
 		/*
 		 * (non-Javadoc)
@@ -629,28 +664,46 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			if (_compilerCheckBox.isSelected()) {
-				AcideProjectConfiguration.getInstance().setCheckCompiler(true);
-				_extensionTextField.setText("");
-				_extensionTextField.setEnabled(false);
-				_separatorTextField.setEnabled(true);
+			if (_compileAllFilesCheckBox.isSelected()) {
+
+				// All files are ready for the compilation
+				AcideProjectConfiguration.getInstance()
+						.setCompileAllFiles(true);
+
+				// Sets the file extension text field as ""
+				_fileExtensionTextField.setText("");
+
+				// Disables the file extension text field
+				_fileExtensionTextField.setEnabled(false);
+
+				// Enables the file separator text field
+				_fileSeparatorTextField.setEnabled(true);
 			} else {
-				AcideProjectConfiguration.getInstance().setCheckCompiler(false);
-				_separatorTextField.setText("");
-				_separatorTextField.setEnabled(false);
-				_extensionTextField.setEnabled(true);
+
+				// All the files are not ready for the compilation
+				AcideProjectConfiguration.getInstance().setCompileAllFiles(
+						false);
+
+				// Sets the file separator text field as ""
+				_fileSeparatorTextField.setText("");
+
+				// Disables the file separator text field
+				_fileSeparatorTextField.setEnabled(false);
+
+				// Enables the file extension text field
+				_fileExtensionTextField.setEnabled(true);
 			}
 		}
 	}
 
 	/**
-	 * ACIDE - A Configurable IDE compiler configuration window extension text
-	 * field action listener.
+	 * ACIDE - A Configurable IDE compiler configuration window file extension
+	 * text field action listener.
 	 * 
 	 * @version 0.8
 	 * @see ActionListener
 	 */
-	class ExtensionTextField implements ActionListener {
+	class FileExtensionTextField implements ActionListener {
 
 		/*
 		 * (non-Javadoc)
@@ -660,8 +713,12 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
+
+			// Sets the file extension text field text in the ACIDE - A
+			// Configurable
+			// IDE project configuration
 			AcideProjectConfiguration.getInstance().setFileExtension(
-					_extensionTextField.getText());
+					_fileExtensionTextField.getText());
 		}
 	}
 
@@ -682,17 +739,8 @@ public class AcideCompilerConfigurationWindow extends JFrame {
 
 			if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
 
-				// Enable the main window
-				AcideMainWindow.getInstance().setEnabled(true);
-
-				// Closes this window
-				dispose();
-
-				// Brings the main window to the front
-				AcideMainWindow.getInstance().setAlwaysOnTop(true);
-
-				// But not permanently
-				AcideMainWindow.getInstance().setAlwaysOnTop(false);
+				// Closes the window
+				closeWindow();
 			}
 		}
 	}

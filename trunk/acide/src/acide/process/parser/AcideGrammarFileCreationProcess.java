@@ -38,7 +38,7 @@ import acide.files.bytes.AcideByteFileManager;
 import acide.gui.mainWindow.AcideMainWindow;
 import acide.language.AcideLanguageManager;
 import acide.log.AcideLog;
-import acide.process.parser.gui.AcideProgressWindow;
+import acide.process.gui.AcideProgressWindow;
 import acide.resources.AcideResourceManager;
 
 /**
@@ -68,7 +68,11 @@ public class AcideGrammarFileCreationProcess extends Thread {
 	 */
 	public AcideGrammarFileCreationProcess(String grammarName,
 			boolean verboseProcess) {
+
+		// Stores the grammar name
 		_grammarName = grammarName;
+
+		// Stores the verbose process flag
 		_verboseProcess = verboseProcess;
 	}
 
@@ -81,10 +85,16 @@ public class AcideGrammarFileCreationProcess extends Thread {
 	public void run() {
 
 		// If the verbose flag is true then
-		if (_verboseProcess)
+		if (_verboseProcess) {
+
+			// Sets the initial text in the progress window
+			AcideProgressWindow.getInstance().setInitialText(
+					AcideLanguageManager.getInstance().getLabels()
+							.getString("s1063"));
+
 			// Shows the progress window
 			AcideProgressWindow.getInstance().showWindow();
-
+		}
 		// Executes the antlr to obtain the .java files from the grammar
 		executeAntlr();
 
@@ -523,7 +533,7 @@ public class AcideGrammarFileCreationProcess extends Thread {
 		file = new File("acide");
 		deleteSubdirectories(file);
 		file.delete();
-		
+
 		// Updates the progress window
 		AcideProgressWindow.getInstance().setText(
 				AcideLanguageManager.getInstance().getLabels()
@@ -559,7 +569,8 @@ public class AcideGrammarFileCreationProcess extends Thread {
 	 * deletes all the files in each sub directory from the original directory
 	 * using recursion.
 	 * 
-	 * @param directory directory to delete.
+	 * @param directory
+	 *            directory to delete.
 	 */
 	private void deleteSubdirectories(File directory) {
 

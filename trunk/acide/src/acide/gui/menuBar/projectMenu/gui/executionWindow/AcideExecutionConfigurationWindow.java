@@ -37,7 +37,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 
 import acide.configuration.project.AcideProjectConfiguration;
 import acide.files.AcideFileExtensionFilterManager;
@@ -50,16 +49,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import acide.language.AcideLanguageManager;
-import acide.log.AcideLog;
+import acide.process.execution.AcideProjectExecutionProcess;
 
 /**
- * ACIDE - A Configurable IDE execution configuration window.
+ * ACIDE - A Configurable IDE executable path configuration window.
  * 
  * @version 0.8
  * @see JFrame
@@ -67,56 +65,61 @@ import acide.log.AcideLog;
 public class AcideExecutionConfigurationWindow extends JFrame {
 
 	/**
-	 * ACIDE - A Configurable IDE execution configuration window class serial
-	 * version UID.
+	 * ACIDE - A Configurable IDE executable path configuration window class
+	 * serial version UID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * ACIDE - A Configurable IDE execution configuration window image icon.
+	 * ACIDE - A Configurable IDE executable path configuration window image
+	 * icon.
 	 */
 	private static final ImageIcon ICON = new ImageIcon(
 			"./resources/images/icon.png");
 	/**
-	 * ACIDE - A Configurable IDE execution configuration window main panel.
+	 * ACIDE - A Configurable IDE executable path configuration window main
+	 * panel.
 	 */
 	private JPanel _mainPanel;
 	/**
-	 * ACIDE - A Configurable IDE execution configuration window execution
-	 * label.
+	 * ACIDE - A Configurable IDE executable path configuration window
+	 * executable path label.
 	 */
-	private JLabel _executionLabel;
+	private JLabel _executablePathLabel;
 	/**
-	 * ACIDE - A Configurable IDE execution configuration window examine path
-	 * button.
+	 * ACIDE - A Configurable IDE executable path configuration window examine
+	 * path button.
 	 */
 	private JButton _examinePathButton;
 	/**
-	 * ACIDE - A Configurable IDE execution configuration window arguments
+	 * ACIDE - A Configurable IDE executable path configuration window arguments
 	 * label.
 	 */
 	private JLabel _argumentsLabel;
 	/**
-	 * ACIDE - A Configurable IDE execution configuration window arguments text
-	 * field.
+	 * ACIDE - A Configurable IDE executable path configuration window arguments
+	 * text field.
 	 */
 	private JTextField _argumentsTextField;
 	/**
-	 * ACIDE - A Configurable IDE execution configuration window run button.
+	 * ACIDE - A Configurable IDE executable path configuration window run
+	 * button.
 	 */
 	private JButton _runButton;
 	/**
-	 * ACIDE - A Configurable IDE execution configuration window cancel button.
+	 * ACIDE - A Configurable IDE executable path configuration window cancel
+	 * button.
 	 */
 	private JButton _cancelButton;
 	/**
-	 * ACIDE - A Configurable IDE execution configuration window button panel.
+	 * ACIDE - A Configurable IDE executable path configuration window button
+	 * panel.
 	 */
 	private JPanel _buttonPanel;
 	/**
-	 * ACIDE - A Configurable IDE execution configuration window execution text
-	 * field.
+	 * ACIDE - A Configurable IDE executable path configuration window
+	 * executable path text field.
 	 */
-	private JTextField _executionTextField;
+	private JTextField _executablePathTextField;
 
 	/**
 	 * Creates a new ACIDE - A Configurable IDE execution configuration window.
@@ -183,14 +186,14 @@ public class AcideExecutionConfigurationWindow extends JFrame {
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 
-		// Adds the execution label to the main panel
-		_mainPanel.add(_executionLabel, constraints);
+		// Adds the executable path label to the main panel
+		_mainPanel.add(_executablePathLabel, constraints);
 
 		constraints.gridx = 1;
 		constraints.ipadx = 200;
 
-		// Adds the execution text field to the main panel
-		_mainPanel.add(_executionTextField, constraints);
+		// Adds the executable path text field to the main panel
+		_mainPanel.add(_executablePathTextField, constraints);
 
 		constraints.ipadx = 0;
 		constraints.gridx = 2;
@@ -244,16 +247,16 @@ public class AcideExecutionConfigurationWindow extends JFrame {
 		// Creates the button panel
 		_buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-		// Creates the execution label
-		_executionLabel = new JLabel(AcideLanguageManager.getInstance()
+		// Creates the executable path label
+		_executablePathLabel = new JLabel(AcideLanguageManager.getInstance()
 				.getLabels().getString("s606"));
 
-		// Creates the execution text field
-		_executionTextField = new JTextField();
+		// Creates the executable path text field
+		_executablePathTextField = new JTextField();
 
-		// Sets the execution text field tool tip text
-		_executionTextField.setToolTipText(AcideLanguageManager.getInstance()
-				.getLabels().getString("s638"));
+		// Sets the executable path text field tool tip text
+		_executablePathTextField.setToolTipText(AcideLanguageManager
+				.getInstance().getLabels().getString("s638"));
 
 		// Creates the arguments label
 		_argumentsLabel = new JLabel(AcideLanguageManager.getInstance()
@@ -307,7 +310,8 @@ public class AcideExecutionConfigurationWindow extends JFrame {
 	}
 
 	/**
-	 * Sets the listeners of the window components.
+	 * Sets the listeners of the ACIDE - A Configurable IDE execution
+	 * configuration window components.
 	 */
 	private void setListeners() {
 
@@ -332,8 +336,8 @@ public class AcideExecutionConfigurationWindow extends JFrame {
 		_cancelButton
 				.addKeyListener(new ExecutionConfigurationWindowKeyListener());
 
-		// Sets the execution text field key listener
-		_executionTextField
+		// Sets the executable path text field key listener
+		_executablePathTextField
 				.addKeyListener(new ExecutionConfigurationWindowKeyListener());
 
 		// Sets the arguments text field key listener
@@ -342,6 +346,24 @@ public class AcideExecutionConfigurationWindow extends JFrame {
 
 		// Sets the window closing listener
 		addWindowListener(new AcideWindowClosingListener());
+	}
+
+	/**
+	 * Closes the ACIDE - A Configurable IDE execution configuration window.
+	 */
+	private void closeWindow() {
+
+		// Enables the main window
+		AcideMainWindow.getInstance().setEnabled(true);
+
+		// Closes the configuration window
+		dispose();
+
+		// Brings the main window to the front
+		AcideMainWindow.getInstance().setAlwaysOnTop(true);
+
+		// Only this time
+		AcideMainWindow.getInstance().setAlwaysOnTop(false);
 	}
 
 	/**
@@ -378,14 +400,14 @@ public class AcideExecutionConfigurationWindow extends JFrame {
 
 			if (absolutePath != null)
 
-				// Updates the execution text field with the absolute path
-				_executionTextField.setText(absolutePath);
+				// Updates the executable path text field with the absolute path
+				_executablePathTextField.setText(absolutePath);
 		}
 	}
 
 	/**
-	 * ACIDE - A Configurable IDE execution configuration window run button
-	 * action listener.
+	 * ACIDE - A Configurable IDE execution configuration window window run
+	 * button action listener.
 	 * 
 	 * @version 0.8
 	 * @see ActionListener
@@ -402,174 +424,151 @@ public class AcideExecutionConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			try {
+			// Gets the executable path
+			String executablePath = _executablePathTextField.getText();
 
-				String execution = _executionTextField.getText();
-				String arguments = _argumentsTextField.getText();
+			// Gets the arguments
+			String arguments = _argumentsTextField.getText();
 
-				if (AcideMainWindow.getInstance().getFileEditorManager()
-						.getNumberOfFileEditorPanels() > 0) {
+			if (AcideMainWindow.getInstance().getFileEditorManager()
+					.getNumberOfFileEditorPanels() > 0) {
 
-					execution = execution.replace("$activeFile$",
-							AcideMainWindow.getInstance()
-									.getFileEditorManager()
-									.getSelectedFileEditorPanel()
-									.getAbsolutePath());
-					execution = execution
-							.replace("$activeFilePath$", AcideMainWindow
-									.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel().getFilePath());
-					execution = execution.replace("$activeFileExt$",
-							AcideMainWindow.getInstance()
-									.getFileEditorManager()
-									.getSelectedFileEditorPanel()
-									.getFileExtension());
-					execution = execution.replace("$activeFileName$",
-							AcideMainWindow.getInstance()
-									.getFileEditorManager()
-									.getSelectedFileEditorPanel()
-									.getFileNameWithoutExtension());
+				executablePath = executablePath
+						.replace("$activeFile$", AcideMainWindow.getInstance()
+								.getFileEditorManager()
+								.getSelectedFileEditorPanel().getAbsolutePath());
+				executablePath = executablePath.replace("$activeFilePath$",
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel().getFilePath());
+				executablePath = executablePath.replace("$activeFileExt$",
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.getFileExtension());
+				executablePath = executablePath.replace("$activeFileName$",
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.getFileNameWithoutExtension());
 
-					arguments = arguments.replace("$activeFile$",
-							AcideMainWindow.getInstance()
-									.getFileEditorManager()
-									.getSelectedFileEditorPanel()
-									.getAbsolutePath());
-					arguments = arguments
-							.replace("$activeFilePath$", AcideMainWindow
-									.getInstance().getFileEditorManager()
-									.getSelectedFileEditorPanel().getFilePath());
-					arguments = arguments.replace("$activeFileExt$",
-							AcideMainWindow.getInstance()
-									.getFileEditorManager()
-									.getSelectedFileEditorPanel()
-									.getFileExtension());
-					arguments = arguments.replace("$activeFileName$",
-							AcideMainWindow.getInstance()
-									.getFileEditorManager()
-									.getSelectedFileEditorPanel()
-									.getFileNameWithoutExtension());
-				}
-
-				// If it is the default project
-				if (AcideProjectConfiguration.getInstance().isDefaultProject()) {
-
-					// If there is a main file in the file editor
-					if (AcideMainWindow.getInstance().getFileEditorManager()
-							.getMainFileEditorPanel() != null) {
-
-						arguments = arguments.replace("$mainFile$",
-								AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.getMainFileEditorPanel()
-										.getAbsolutePath());
-						execution = execution.replace("$mainFile$",
-								AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.getMainFileEditorPanel()
-										.getAbsolutePath());
-						arguments = arguments
-								.replace("$mainFilePath$", AcideMainWindow
-										.getInstance().getFileEditorManager()
-										.getMainFileEditorPanel().getFilePath());
-						execution = execution
-								.replace("$mainFilePath$", AcideMainWindow
-										.getInstance().getFileEditorManager()
-										.getMainFileEditorPanel().getFilePath());
-						arguments = arguments.replace("$mainFileExt$",
-								AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.getMainFileEditorPanel()
-										.getFileExtension());
-						execution = execution.replace("$mainFileExt$",
-								AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.getMainFileEditorPanel()
-										.getFileExtension());
-						arguments = arguments.replace("$mainFileName$",
-								AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.getMainFileEditorPanel()
-										.getFileNameWithoutExtension());
-						execution = execution.replace("$mainFileName$",
-								AcideMainWindow.getInstance()
-										.getFileEditorManager()
-										.getMainFileEditorPanel()
-										.getFileNameWithoutExtension());
-					}
-				} else {
-
-					// Searches for the main file in the project configuration
-					int mainFileIndex = -1;
-					for (int index = 0; index < AcideProjectConfiguration
-							.getInstance().getNumberOfFilesFromList(); index++) {
-						if (AcideProjectConfiguration.getInstance()
-								.getFileAt(index).isMainFile())
-							mainFileIndex = index;
-					}
-
-					// If there is a main file in the project configuration
-					if (mainFileIndex != -1) {
-						arguments = arguments.replace("$mainFile$",
-								AcideProjectConfiguration.getInstance()
-										.getFileAt(mainFileIndex)
-										.getAbsolutePath());
-						execution = execution.replace("$mainFile$",
-								AcideProjectConfiguration.getInstance()
-										.getFileAt(mainFileIndex)
-										.getAbsolutePath());
-						arguments = arguments.replace("$mainFilePath$",
-								AcideProjectConfiguration.getInstance()
-										.getFileAt(mainFileIndex)
-										.getRelativePath());
-						execution = execution.replace("$mainFilePath$",
-								AcideProjectConfiguration.getInstance()
-										.getFileAt(mainFileIndex)
-										.getRelativePath());
-						arguments = arguments.replace("$mainFileExt$",
-								AcideProjectConfiguration.getInstance()
-										.getFileAt(mainFileIndex)
-										.getFileExtension());
-						execution = execution.replace("$mainFileExt$",
-								AcideProjectConfiguration.getInstance()
-										.getFileAt(mainFileIndex)
-										.getFileExtension());
-						arguments = arguments
-								.replace("$mainFileName$",
-										AcideProjectConfiguration.getInstance()
-												.getFileAt(mainFileIndex)
-												.getFileName());
-						execution = execution
-								.replace("$mainFileName$",
-										AcideProjectConfiguration.getInstance()
-												.getFileAt(mainFileIndex)
-												.getFileName());
-					}
-				}
-
-				// Executes the command
-				Runtime.getRuntime().exec(execution + " " + arguments);
-
-			} catch (IOException exception) {
-
-				// Updates the log
-				AcideLog.getLog().error(exception.getMessage());
-
-				// Displays an error message
-				JOptionPane.showMessageDialog(null, exception.getMessage());
+				arguments = arguments.replace("$activeFile$", AcideMainWindow
+						.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanel().getAbsolutePath());
+				arguments = arguments.replace("$activeFilePath$",
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel().getFilePath());
+				arguments = arguments.replace("$activeFileExt$",
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.getFileExtension());
+				arguments = arguments.replace("$activeFileName$",
+						AcideMainWindow.getInstance().getFileEditorManager()
+								.getSelectedFileEditorPanel()
+								.getFileNameWithoutExtension());
 			}
 
-			// Set the main window enabled again
-			AcideMainWindow.getInstance().setEnabled(true);
+			// If it is the default project
+			if (AcideProjectConfiguration.getInstance().isDefaultProject()) {
+
+				// If there is a main file in the file editor
+				if (AcideMainWindow.getInstance().getFileEditorManager()
+						.getMainFileEditorPanel() != null) {
+
+					arguments = arguments.replace("$mainFile$", AcideMainWindow
+							.getInstance().getFileEditorManager()
+							.getMainFileEditorPanel().getAbsolutePath());
+					executablePath = executablePath
+							.replace("$mainFile$", AcideMainWindow
+									.getInstance().getFileEditorManager()
+									.getMainFileEditorPanel().getAbsolutePath());
+					arguments = arguments.replace("$mainFilePath$",
+							AcideMainWindow.getInstance()
+									.getFileEditorManager()
+									.getMainFileEditorPanel().getFilePath());
+					executablePath = executablePath.replace("$mainFilePath$",
+							AcideMainWindow.getInstance()
+									.getFileEditorManager()
+									.getMainFileEditorPanel().getFilePath());
+					arguments = arguments.replace("$mainFileExt$",
+							AcideMainWindow.getInstance()
+									.getFileEditorManager()
+									.getMainFileEditorPanel()
+									.getFileExtension());
+					executablePath = executablePath.replace("$mainFileExt$",
+							AcideMainWindow.getInstance()
+									.getFileEditorManager()
+									.getMainFileEditorPanel()
+									.getFileExtension());
+					arguments = arguments.replace("$mainFileName$",
+							AcideMainWindow.getInstance()
+									.getFileEditorManager()
+									.getMainFileEditorPanel()
+									.getFileNameWithoutExtension());
+					executablePath = executablePath.replace("$mainFileName$",
+							AcideMainWindow.getInstance()
+									.getFileEditorManager()
+									.getMainFileEditorPanel()
+									.getFileNameWithoutExtension());
+				}
+			} else {
+
+				// Searches for the main file in the project configuration
+				int mainFileIndex = -1;
+				for (int index = 0; index < AcideProjectConfiguration
+						.getInstance().getNumberOfFilesFromList(); index++) {
+					if (AcideProjectConfiguration.getInstance()
+							.getFileAt(index).isMainFile())
+						mainFileIndex = index;
+				}
+
+				// If there is a main file in the project configuration
+				if (mainFileIndex != -1) {
+					arguments = arguments
+							.replace("$mainFile$", AcideProjectConfiguration
+									.getInstance().getFileAt(mainFileIndex)
+									.getAbsolutePath());
+					executablePath = executablePath
+							.replace("$mainFile$", AcideProjectConfiguration
+									.getInstance().getFileAt(mainFileIndex)
+									.getAbsolutePath());
+					arguments = arguments
+							.replace("$mainFilePath$",
+									AcideProjectConfiguration.getInstance()
+											.getFileAt(mainFileIndex)
+											.getRelativePath());
+					executablePath = executablePath
+							.replace("$mainFilePath$",
+									AcideProjectConfiguration.getInstance()
+											.getFileAt(mainFileIndex)
+											.getRelativePath());
+					arguments = arguments.replace(
+							"$mainFileExt$",
+							AcideProjectConfiguration.getInstance()
+									.getFileAt(mainFileIndex)
+									.getFileExtension());
+					executablePath = executablePath.replace(
+							"$mainFileExt$",
+							AcideProjectConfiguration.getInstance()
+									.getFileAt(mainFileIndex)
+									.getFileExtension());
+					arguments = arguments.replace(
+							"$mainFileName$",
+							AcideProjectConfiguration.getInstance()
+									.getFileAt(mainFileIndex).getFileName());
+					executablePath = executablePath.replace(
+							"$mainFileName$",
+							AcideProjectConfiguration.getInstance()
+									.getFileAt(mainFileIndex).getFileName());
+				}
+			}
+
+			// Creates the project execution process
+			AcideProjectExecutionProcess process = new AcideProjectExecutionProcess(
+					executablePath, arguments);
+
+			// Starts the process
+			process.start();
 
 			// Closes the window
-			dispose();
-
-			// Brings the main window to the front
-			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-
-			// But not permanently
-			AcideMainWindow.getInstance().setAlwaysOnTop(false);
+			closeWindow();
 		}
 	}
 
@@ -592,17 +591,8 @@ public class AcideExecutionConfigurationWindow extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 
-			// Set the main window enabled again
-			AcideMainWindow.getInstance().setEnabled(true);
-
 			// Closes the window
-			dispose();
-
-			// Brings the main window to the front
-			AcideMainWindow.getInstance().setAlwaysOnTop(true);
-
-			// But not permanently
-			AcideMainWindow.getInstance().setAlwaysOnTop(false);
+			closeWindow();
 		}
 	}
 
@@ -623,17 +613,8 @@ public class AcideExecutionConfigurationWindow extends JFrame {
 
 			if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
 
-				// Enables the main window
-				AcideMainWindow.getInstance().setEnabled(true);
-
-				// Closes the configuration window
-				dispose();
-
-				// Brings the main window to the front
-				AcideMainWindow.getInstance().setAlwaysOnTop(true);
-
-				// Only this time
-				AcideMainWindow.getInstance().setAlwaysOnTop(false);
+				// Closes the window
+				closeWindow();
 			}
 		}
 	}

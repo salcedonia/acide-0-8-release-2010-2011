@@ -65,7 +65,7 @@ public class AcideCompileMenuItemListener implements ActionListener {
 		try {
 
 			// Is it possible to compile
-			if (AcideProjectConfiguration.getInstance().isCheckCompiler()) {
+			if (AcideProjectConfiguration.getInstance().getCompileAllFiles()) {
 
 				String fileToCompile = "";
 
@@ -76,13 +76,13 @@ public class AcideCompileMenuItemListener implements ActionListener {
 					if (AcideProjectConfiguration.getInstance()
 							.getFileAt(index).isCompilableFile()) {
 
-						fileToCompile = fileToCompile
+						fileToCompile = "\"" + fileToCompile + "\""
 								+ "\""
 								+ AcideProjectConfiguration.getInstance()
 										.getFileAt(index).getAbsolutePath()
 								+ "\""
 								+ AcideProjectConfiguration.getInstance()
-										.getSeparatorFile();
+										.getFileSeparator();
 					}
 				}
 
@@ -145,6 +145,15 @@ public class AcideCompileMenuItemListener implements ActionListener {
 												+ " \""
 												+ fileAbsolutePath
 												+ "\"");
+								System.out.println(AcideProjectConfiguration.getInstance()
+										.getCompilerPath()
+										+ " "
+										+ AcideProjectConfiguration
+												.getInstance()
+												.getCompilerArguments()
+										+ " \""
+										+ fileAbsolutePath
+										+ "\"");
 							}
 						}
 					}

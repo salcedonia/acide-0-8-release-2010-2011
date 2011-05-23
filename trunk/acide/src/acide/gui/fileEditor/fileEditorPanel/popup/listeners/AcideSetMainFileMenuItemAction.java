@@ -35,11 +35,12 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 
 import acide.configuration.project.AcideProjectConfiguration;
+import acide.files.project.AcideProjectFile;
 import acide.gui.mainWindow.AcideMainWindow;
 
 /**
- * ACIDE - A Configurable IDE file editor panel popup menu set main file
- * menu item action listener.
+ * ACIDE - A Configurable IDE file editor panel popup menu set main file menu
+ * item action listener.
  * 
  * @version 0.8
  * @see ActionListener
@@ -55,7 +56,7 @@ public class AcideSetMainFileMenuItemAction implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 
-		// IF it is not MAIN FILE
+		// If it is not MAIN FILE
 		if (!AcideMainWindow.getInstance().getFileEditorManager()
 				.getSelectedFileEditorPanel().isMainFile()) {
 
@@ -104,83 +105,80 @@ public class AcideSetMainFileMenuItemAction implements ActionListener {
 			// If it is not the default project
 			if (!AcideProjectConfiguration.getInstance().isDefaultProject()) {
 
-				// Search for the file into the project configuration file
-				// list
-				for (int index1 = 0; index1 < AcideProjectConfiguration
-						.getInstance().getNumberOfFilesFromList(); index1++) {
+				// Removes the previous MAIN FILE from the project
+				// configuration
+				for (int index = 0; index < AcideProjectConfiguration
+						.getInstance().getFileListSize(); index++) {
 
-					// If exists
-					if (AcideProjectConfiguration
-							.getInstance()
-							.getFileAt(index1)
-							.getAbsolutePath()
-							.equals(AcideMainWindow.getInstance()
-									.getFileEditorManager()
-									.getSelectedFileEditorPanel()
-									.getAbsolutePath())) {
+					// MAIN FILE?
+					if (AcideProjectConfiguration.getInstance()
+							.getFileAt(index).isMainFile()) {
 
-						// The project has been modified
+						// Sets MAIN FILE to false
 						AcideProjectConfiguration.getInstance()
-								.setIsModified(true);
+								.getFileAt(index).setIsMainFile(false);
 
-						// Removes the previous MAIN FILE from the project
-						// configuration
-						for (int index2 = 0; index2 < AcideProjectConfiguration
-								.getInstance().getFileListSize(); index2++) {
-
-							// MAIN FILE?
-							if (AcideProjectConfiguration.getInstance()
-									.getFileAt(index2).isMainFile()) {
-
-								// Sets MAIN FILE to false
-								AcideProjectConfiguration.getInstance()
-										.getFileAt(index2)
-										.setIsMainFile(false);
-
-								// Sets COMPILABLE FILE to false
-								AcideProjectConfiguration.getInstance()
-										.getFileAt(index2)
-										.setIsCompilableFile(false);
-							}
-						}
-
-						// Sets it as MAIN FILE
+						// Sets COMPILABLE FILE to false
 						AcideProjectConfiguration.getInstance()
-								.getFileAt(index1).setIsMainFile(true);
-
-						// Sets it as COMPILABLE FILE
-						AcideProjectConfiguration.getInstance()
-								.getFileAt(index1)
-								.setIsCompilableFile(true);
-
-						// Puts the MAIN icon in the selected file editor
-						// panel
-						AcideMainWindow
-								.getInstance()
-								.getFileEditorManager()
-								.getTabbedPane()
-								.setIconAt(
-										AcideMainWindow
-												.getInstance()
-												.getFileEditorManager()
-												.getSelectedFileEditorPanelIndex(),
-										new ImageIcon(
-												"./resources/icons/editor/main.png"));
-
-						// Updates the status message in the status bar
-						AcideMainWindow
-								.getInstance()
-								.getStatusBar()
-								.setStatusMessage(
-										AcideMainWindow
-												.getInstance()
-												.getFileEditorManager()
-												.getSelectedFileEditorPanel()
-												.getAbsolutePath()
-												+ " <MAIN>");
-
+								.getFileAt(index)
+								.setIsCompilableFile(false);
 					}
 				}
+				
+				// Search for the file into the project configuration
+				AcideProjectFile projectFile = AcideProjectConfiguration
+						.getInstance().getFileAt(
+								AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getSelectedFileEditorPanel()
+										.getAbsolutePath());
+
+				// If it belongs to the project
+				if (projectFile != null) {
+
+					// Sets it as MAIN FILE
+					projectFile.setIsMainFile(true);
+
+					// Sets it as COMPILABLE FILE
+					projectFile.setIsCompilableFile(true);
+
+				}
+
+				// Sets MAIN FILE as true in the file editor
+				AcideMainWindow.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanel().setMainFile(true);
+
+				// Sets COMPILER FILE as true in the file editor
+				AcideMainWindow.getInstance().getFileEditorManager()
+						.getSelectedFileEditorPanel()
+						.setCompilableFile(true);
+				
+				// Puts the MAIN icon in the selected file editor
+				// panel
+				AcideMainWindow
+						.getInstance()
+						.getFileEditorManager()
+						.getTabbedPane()
+						.setIconAt(
+								AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getSelectedFileEditorPanelIndex(),
+								new ImageIcon(
+										"./resources/icons/editor/main.png"));
+
+				// Updates the status message in the status bar
+				AcideMainWindow
+						.getInstance()
+						.getStatusBar()
+						.setStatusMessage(
+								AcideMainWindow.getInstance()
+										.getFileEditorManager()
+										.getSelectedFileEditorPanel()
+										.getAbsolutePath()
+										+ " <MAIN>");
+				// The project has been modified
+				AcideProjectConfiguration.getInstance().setIsModified(true);
+				
 			} else {
 
 				// DEFAULT CONFIGURATION
