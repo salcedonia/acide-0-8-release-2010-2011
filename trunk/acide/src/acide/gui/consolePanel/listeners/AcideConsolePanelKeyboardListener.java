@@ -29,6 +29,8 @@
  */
 package acide.gui.consolePanel.listeners;
 
+import acide.configuration.project.AcideProjectConfiguration;
+import acide.gui.fileEditor.fileEditorPanel.AcideFileEditorPanel;
 import acide.gui.mainWindow.AcideMainWindow;
 
 import java.awt.Point;
@@ -119,9 +121,9 @@ public class AcideConsolePanelKeyboardListener implements KeyListener {
 
 			case KeyEvent.VK_ENTER:
 
-				// Sends the command to the console
+				// Sends the parsed command to the console
 				AcideMainWindow.getInstance().getConsolePanel()
-						.sendCommandToConsole(command, "");
+						.sendCommandToConsole(parseAcideVariables(command), "");
 
 				break;
 
@@ -193,6 +195,127 @@ public class AcideConsolePanelKeyboardListener implements KeyListener {
 				break;
 			}
 		}
+	}
+
+	/**
+	 * Parses the ACIDE - A Configurable IDE variables to real paths in order to
+	 * send them properly to the ACIDE - A Configurable IDE console panel for
+	 * its execution.
+	 * 
+	 * @param rawCommand
+	 *            raw command to execute from ACIDE - A Configurable IDE console
+	 *            panel.
+	 * 
+	 * @return the parsed string that contains to command to execute in the
+	 *         ACIDE - A Configurable IDE console panel.
+	 */
+	private String parseAcideVariables(String buttonAction) {
+
+		// Gets the command to execute
+		String command = buttonAction;
+
+		// If there are opened file editors
+		if (AcideMainWindow.getInstance().getFileEditorManager()
+				.getNumberOfFileEditorPanels() > 0) {
+
+			// Replaces the active file variable for its real value
+			command = command.replace("$activeFile$", AcideMainWindow
+					.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().getAbsolutePath());
+
+			// Replaces the active file path variable for its real value
+			command = command.replace("$activeFilePath$", AcideMainWindow
+					.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().getFilePath());
+
+			// Replaces the active files extension for its real value
+			command = command.replace("$activeFileExt$", AcideMainWindow
+					.getInstance().getFileEditorManager()
+					.getSelectedFileEditorPanel().getFileExtension());
+
+			// Replaces the active files name for its real value
+			command = command
+					.replace("$activeFileName$", AcideMainWindow.getInstance()
+							.getFileEditorManager()
+							.getSelectedFileEditorPanel()
+							.getFileNameWithoutExtension());
+		}
+
+		// If it is the default project
+		if (AcideProjectConfiguration.getInstance().isDefaultProject()) {
+
+			// Gets the main file editor panel
+			AcideFileEditorPanel mainFileEditorPanel = AcideMainWindow
+					.getInstance().getFileEditorManager()
+					.getMainFileEditorPanel();
+
+			// If exists
+			if (mainFileEditorPanel != null) {
+
+				// Replaces the $mainFile$ variable for its real value
+				command = command.replace("$mainFile$",
+						mainFileEditorPanel.getAbsolutePath());
+
+				// Replaces the $mainFilePath$ variable for its real value
+				command = command.replace("$mainFilePath$",
+						mainFileEditorPanel.getFilePath());
+
+				// Replaces the $mainFileExt$ variable for its real value
+				command = command.replace("$mainFileExt$",
+						mainFileEditorPanel.getFileExtension());
+
+				// Replaces the $mainFileName$ variable for its real value
+				command = command.replace("$mainFileName$",
+						mainFileEditorPanel.getFileNameWithoutExtension());
+			}
+		} else {
+
+			// Not default project
+
+			// Searches for the MAIN file into the ACIDE - A Configurable IDE
+			// project configuration
+			int mainFileEditorPanelIndex = -1;
+			for (int index = 0; index < AcideProjectConfiguration.getInstance()
+					.getNumberOfFilesFromList(); index++) {
+				if (AcideProjectConfiguration.getInstance().getFileAt(index)
+						.isMainFile())
+					mainFileEditorPanelIndex = index;
+			}
+
+			// If exists
+			if (mainFileEditorPanelIndex != -1) {
+
+				// Replaces the $mainFile$ variable for its real value
+				command = command.replace(
+						"$mainFile$",
+						AcideProjectConfiguration.getInstance()
+								.getFileAt(mainFileEditorPanelIndex)
+								.getAbsolutePath());
+
+				// Replaces the $mainFilePath$ variable for its real value
+				command = command.replace(
+						"$mainFilePath$",
+						AcideProjectConfiguration.getInstance()
+								.getFileAt(mainFileEditorPanelIndex)
+								.getRelativePath());
+
+				// Replaces the $mainFileExt$ variable for its real value
+				command = command.replace(
+						"$mainFileExt$",
+						AcideProjectConfiguration.getInstance()
+								.getFileAt(mainFileEditorPanelIndex)
+								.getFileExtension());
+
+				// Replaces the $mainFileName$ variable for its real value
+				command = command.replace(
+						"$mainFileName$",
+						AcideProjectConfiguration.getInstance()
+								.getFileAt(mainFileEditorPanelIndex)
+								.getFileName());
+			}
+		}
+
+		return command;
 	}
 
 	/**

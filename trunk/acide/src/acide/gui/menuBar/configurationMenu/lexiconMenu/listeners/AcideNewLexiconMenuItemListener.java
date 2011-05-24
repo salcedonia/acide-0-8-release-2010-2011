@@ -66,10 +66,14 @@ public class AcideNewLexiconMenuItemListener implements ActionListener {
 		// If it is ok
 		if (!lexiconConfigurationName.equals("")) {
 
+			// If it contains the .xml extension
 			if (lexiconConfigurationName.contains(".xml"))
+				
+				// Compounds the full path
 				lexiconConfiguration = "./configuration/lexicon/"
 						+ lexiconConfigurationName;
 			else
+				// Adds it to the path
 				lexiconConfiguration = "./configuration/lexicon/"
 						+ lexiconConfigurationName + ".xml";
 

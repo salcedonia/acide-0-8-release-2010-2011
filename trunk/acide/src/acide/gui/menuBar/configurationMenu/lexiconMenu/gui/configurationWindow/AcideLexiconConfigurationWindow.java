@@ -387,12 +387,23 @@ public class AcideLexiconConfigurationWindow extends JFrame {
 						_remarksPanel.getPreviewTextField().getFont()
 								.getStyle());
 
+		// Saves the changes automatically into its file
+		saveLexicon();
+		
+		// Loads the lexicon configuration
+		AcideMainWindow
+				.getInstance()
+				.getFileEditorManager()
+				.getSelectedFileEditorPanel()
+				.getLexiconConfiguration()
+				.load(AcideMainWindow.getInstance()
+						.getFileEditorManager()
+						.getSelectedFileEditorPanel()
+						.getLexiconConfiguration().getPath());
+		
 		// Resets the selected file editor text edition area
 		AcideMainWindow.getInstance().getFileEditorManager()
 				.getSelectedFileEditorPanel().resetStyledDocument();
-
-		// Saves the changes automatically into its file
-		saveLexicon();
 
 		// Gets the lexicon configuration name
 		String lexiconConfigurationName = AcideMainWindow.getInstance()

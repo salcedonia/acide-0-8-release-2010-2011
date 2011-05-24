@@ -1080,9 +1080,6 @@ public class AcideProjectMenu extends JMenu {
 		// Loads the language
 		loadLanguage();
 
-		// Loads the main window configuration
-		loadMainWindowConfiguration();
-
 		// Loads the menu configuration
 		loadMenuConfiguration();
 
@@ -1098,6 +1095,9 @@ public class AcideProjectMenu extends JMenu {
 		// Loads the file editor configuration
 		loadFileEditorConfiguration();
 
+		// Loads the main window configuration
+		loadMainWindowConfiguration();
+		
 		// The project has not been modified
 		AcideProjectConfiguration.getInstance().setIsModified(false);
 
