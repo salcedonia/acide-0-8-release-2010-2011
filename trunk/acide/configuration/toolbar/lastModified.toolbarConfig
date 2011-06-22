@@ -1,0 +1,139 @@
+// buttonConfiguration run
+name = run
+action = /run($activeFile$)
+hintText = Compile and execute the selected file
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration cflpr
+name = cflpr
+action = /cflpr
+hintText = Enables arithmetical constraint solving
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration nocflpr
+name = nocflpr
+action = /nocflpr
+hintText = Disables arithmetical constraint solving
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration cflpfd
+name = cflpfd
+action = /cflpfd
+hintText = Enables finite domain constraint solving
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration nocflpfd
+name = nocflpfd
+action = /nocflpfd
+hintText = Disables finite domain constraint solving
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration prop
+name = prop
+action = /prop
+hintText = Enables constraint propagation
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration noprop
+name = noprop
+action = /noprop
+hintText = Disables constraint propagation
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration cd
+name = cd
+action = /cd
+hintText = Sets the working directory to the installation directory
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration ls
+name = ls
+action = /ls
+hintText = Lists the contents of the current folder
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration pwd
+name = pwd
+action = /pwd
+hintText = Displays the current folder
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration tot
+name = tot
+action = /tot
+hintText = Enables displaying totality constraints
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration notot
+name = notot
+action = /notot
+hintText = Disables displaying totality constraints
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration cut
+name = cut
+action = /cut
+hintText = Enables compilation with dynamic cut optimization
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration nocut
+name = nocut
+action = /nocut
+hintText = Disables compilation with dynamic cut optimization
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration status
+name = status
+action = /status
+hintText = Lists the loaded libraries
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration version
+name = version
+action = /version
+hintText = Displays software version
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration help
+name = help
+action = /help
+hintText = Shows the help
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// End Of Console Panel Tool Bar Button Configuration
+
+// End Of External Applications Tool Bar Button Configuration

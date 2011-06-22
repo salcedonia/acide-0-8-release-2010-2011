@@ -1,0 +1,46 @@
+20 jun 2011 21:12:05,661 [main] INFO  LogAcide - Usando LookAndFeel de su sistema
+20 jun 2011 21:12:05,894 [AWT-EventQueue-0] INFO  LogAcide - Iniciando aplicación...
+20 jun 2011 21:12:05,894 [AWT-EventQueue-0] INFO  LogAcide - Cargando la configuración del espacio de trabajo de ACIDE - A Configurable IDE
+20 jun 2011 21:12:06,127 [AWT-EventQueue-0] INFO  LogAcide - Cargando la configuración del asignador de configuraciones léxicas de ACIDE - A Configurable IDE
+20 jun 2011 21:12:06,127 [AWT-EventQueue-0] INFO  LogAcide - Cargando la configuración del asignador de configuraciones léxicas de ACIDE - A Configurable IDE
+20 jun 2011 21:12:06,914 [AWT-EventQueue-0] INFO  LogAcide - Cargando la configuración de la barra de herramientas de ACIDE - A Configurable IDE
+20 jun 2011 21:12:06,973 [AWT-EventQueue-0] INFO  LogAcide - Cargando la configuración del menú de ACIDE - A Configurable IDE
+20 jun 2011 21:12:06,973 [AWT-EventQueue-0] INFO  LogAcide - Cargando la configuración del lenguage de ACIDE - A Configurable IDE
+20 jun 2011 21:12:07,011 [AWT-EventQueue-0] INFO  LogAcide - Inicializando ventana principal de la aplicación...
+20 jun 2011 21:12:07,021 [AWT-EventQueue-0] INFO  LogAcide - Inicializando menú...
+20 jun 2011 21:12:07,614 [AWT-EventQueue-0] INFO  LogAcide - Configuración de menú cargada: .\\configuration\\menu\\defaultAllOn.menuConfig
+20 jun 2011 21:12:07,624 [AWT-EventQueue-0] INFO  LogAcide - Menú creado
+20 jun 2011 21:12:07,663 [AWT-EventQueue-0] INFO  LogAcide - Oyentes de menú establecidos
+20 jun 2011 21:12:07,672 [AWT-EventQueue-0] INFO  LogAcide - Generando el árbol del directorio de trabajo
+20 jun 2011 21:12:07,731 [AWT-EventQueue-0] INFO  LogAcide - Árbol del directorio de trabajo generado
+20 jun 2011 21:12:07,779 [AWT-EventQueue-0] INFO  LogAcide - Creando salida de texto...
+20 jun 2011 21:12:07,847 [AWT-EventQueue-0] INFO  LogAcide - Creando la sintaxis...
+20 jun 2011 21:12:07,847 [AWT-EventQueue-0] INFO  LogAcide - Sintaxis creada
+20 jun 2011 21:12:07,867 [AWT-EventQueue-0] INFO  LogAcide - Salida de texto creado
+20 jun 2011 21:12:07,983 [AWT-EventQueue-0] INFO  LogAcide - Inicializando iconos...
+20 jun 2011 21:12:08,041 [AWT-EventQueue-0] INFO  LogAcide - Iconos creados
+20 jun 2011 21:12:08,041 [AWT-EventQueue-0] INFO  LogAcide - Iconos creados
+20 jun 2011 21:12:08,041 [AWT-EventQueue-0] INFO  LogAcide - Inicializando barra de herramientas configurable...
+20 jun 2011 21:12:08,051 [AWT-EventQueue-0] INFO  LogAcide - Barra de herramientas editable creada
+20 jun 2011 21:12:08,051 [AWT-EventQueue-0] INFO  LogAcide - Inicializando barra de herramientas configurable...
+20 jun 2011 21:12:08,051 [AWT-EventQueue-0] INFO  LogAcide - Iconos creados
+20 jun 2011 21:12:08,051 [AWT-EventQueue-0] INFO  LogAcide - Barra de herramientas editable creada
+20 jun 2011 21:12:08,051 [AWT-EventQueue-0] INFO  LogAcide - Ventana principal creada
+20 jun 2011 21:12:08,061 [AWT-EventQueue-0] INFO  LogAcide - Cargado idioma español
+20 jun 2011 21:12:08,061 [AWT-EventQueue-0] INFO  LogAcide - Inicializando iconos...
+20 jun 2011 21:12:08,061 [AWT-EventQueue-0] INFO  LogAcide - Iconos creados
+20 jun 2011 21:12:08,061 [AWT-EventQueue-0] INFO  LogAcide - Iconos creados
+20 jun 2011 21:12:08,061 [AWT-EventQueue-0] INFO  LogAcide - Inicializando barra de herramientas configurable...
+20 jun 2011 21:12:08,061 [AWT-EventQueue-0] INFO  LogAcide - Barra de herramientas editable creada
+20 jun 2011 21:12:08,061 [AWT-EventQueue-0] INFO  LogAcide - Inicializando barra de herramientas configurable...
+20 jun 2011 21:12:08,061 [AWT-EventQueue-0] INFO  LogAcide - Iconos creados
+20 jun 2011 21:12:08,061 [AWT-EventQueue-0] INFO  LogAcide - Barra de herramientas editable creada
+20 jun 2011 21:12:08,129 [AWT-EventQueue-0] INFO  LogAcide - Cargando la configuración del explorador de archivos de ACIDE - A Configurable IDE
+20 jun 2011 21:12:08,129 [AWT-EventQueue-0] INFO  LogAcide - Cargando la configuración de la consola de ACIDE - A Configurable IDE
+20 jun 2011 21:12:08,139 [AWT-EventQueue-0] ERROR LogAcide - 
+20 jun 2011 21:12:08,178 [AWT-EventQueue-0] INFO  LogAcide - Cargando la configuración de los archivos recientes de ACIDE - A Configurable IDE
+20 jun 2011 21:12:08,178 [AWT-EventQueue-0] INFO  LogAcide - Cargando la configuración de los proyectos recientes de ACIDE - A Configurable IDE
+20 jun 2011 21:12:08,178 [AWT-EventQueue-0] INFO  LogAcide - Cargando la configuración del editor de archivos de ACIDE - A Configurable IDE
+20 jun 2011 21:12:08,207 [AWT-EventQueue-0] INFO  LogAcide - Cargando la configuración de la ventana principal de ACIDE - A Configurable IDE
+20 jun 2011 21:12:32,490 [AWT-EventQueue-0] INFO  LogAcide - archivo guardado correctamente: ./configuration/project/default.acideProject
+20 jun 2011 21:12:32,650 [AWT-EventQueue-0] INFO  LogAcide - Unable to kill . Exit code: 1n

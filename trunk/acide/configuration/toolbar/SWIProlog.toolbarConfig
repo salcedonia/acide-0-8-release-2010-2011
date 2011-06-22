@@ -1,0 +1,35 @@
+// buttonConfiguration consult
+name = consult
+action = consult($activeFile$).
+hintText = Consults the selected file
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration listing
+name = listing
+action = listing.
+hintText = Lists the contents of the database
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration shell
+name = shell
+action = shell.
+hintText = Opens an OS shell
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration pwd
+name = pwd
+action = working_directory(X,X).
+hintText = Displays the current folder
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// End Of Console Panel Tool Bar Button Configuration
+
+// End Of External Applications Tool Bar Button Configuration
