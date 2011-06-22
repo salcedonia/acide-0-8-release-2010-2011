@@ -1,0 +1,19 @@
+// buttonConfiguration show options
+name = show options
+action = bcc32
+hintText = show options
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration compile
+name = compile
+action = bcc32 -tW $activeFile$
+hintText = compile a file
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// End Of Console Panel Tool Bar Button Configuration
+
+// End Of External Applications Tool Bar Button Configuration

@@ -1,0 +1,11 @@
+// buttonConfiguration dir
+name = dir
+action = dir
+hintText = asd
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// End Of Console Panel Tool Bar Button Configuration
+
+// End Of External Applications Tool Bar Button Configuration

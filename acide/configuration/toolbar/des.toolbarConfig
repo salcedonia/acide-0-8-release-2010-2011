@@ -1,0 +1,147 @@
+// buttonConfiguration consult
+name = consult
+action = /consult $activeFile$
+hintText = Consults the selected file
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration listing
+name = listing
+action = /listing
+hintText = Lists the contents of the database
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration pdg
+name = pdg
+action = /pdg
+hintText = Lists the predicate dependency graph
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration strata
+name = strata
+action = /strata
+hintText = Lists the strata
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration abolish
+name = abolish
+action = /abolish
+hintText = Abolish all the database rules
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration list_et
+name = list_et
+action = /list_et
+hintText = List the extension table contents
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration clear_et
+name = clear_et
+action = /clear_et
+hintText = Clear the extension table
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration cd
+name = cd
+action = /cd
+hintText = Sets the current folder to the installation folder
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration ls
+name = ls
+action = /ls
+hintText = Lists the contents of the current folder
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration pwd
+name = pwd
+action = /pwd
+hintText = Displays the current folder
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration log
+name = log
+action = /log
+hintText = Displays the current log, if any
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration nolog
+name = nolog
+action = /nolog
+hintText = Disables logging
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration verbose
+name = verbose
+action = /verbose
+hintText = Enables verbose output
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration noverbose
+name = noverbose
+action = /noverbose
+hintText = Disables verbose output
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration version
+name = version
+action = /version
+hintText = Displays the current system version
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration builtins
+name = builtins
+action = /builtins
+hintText = Lists predefined operators
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration help
+name = help
+action = /help
+hintText = Shows the help
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// buttonConfiguration exit
+name = exit
+action = /exit
+hintText = Exit the output
+icon = 
+parameterType = NONE
+isExecutedInSytemShell = false
+
+// End Of Console Panel Tool Bar Button Configuration
+
+// End Of External Applications Tool Bar Button Configuration

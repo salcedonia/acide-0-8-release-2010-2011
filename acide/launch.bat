@@ -1,0 +1,1 @@
+java -jar acide.jar -XX:+UseParallelGC -Xms512m -Xmx512m
